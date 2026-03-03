@@ -47,7 +47,7 @@ export default async function CheckoutPage({
                     bot={{
                         id: bot.id,
                         name: bot.name,
-                        price: bot.price,
+                        price: Number(bot.price),
                         description: bot.description
                     }}
                     isTrial={isTrial}

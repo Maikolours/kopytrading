@@ -1,11 +1,31 @@
 "use client";
 
-import { useState, useTransition, useMemo } from "react";
+import { useState, useTransition, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
+// Componente principal con protección de hidratación
 export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial?: boolean }) {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) {
+        return (
+            <div className="flex flex-col items-center justify-center py-12 space-y-4">
+                <div className="w-8 h-8 border-2 border-brand-light border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-text-muted text-xs">Cargando sistema de pago...</p>
+            </div>
+        );
+    }
+
+    return <CheckoutFormContent bot={bot} isTrial={isTrial} />;
+}
+
+function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [email, setEmail] = useState("");
@@ -14,7 +34,6 @@ export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial
 
     const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "";
 
-    // Estabilizar opciones de PayPal para evitar bucles de renderizado
     const paypalOptions = useMemo(() => ({
         clientId: PAYPAL_CLIENT_ID,
         currency: "USD",
@@ -30,7 +49,6 @@ export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial
         label: "pay"
     }), []);
 
-    // Crear orden PayPal
     async function createOrder(_data: any, actions: any) {
         return actions.order.create({
             purchase_units: [{
@@ -38,15 +56,12 @@ export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial
                     value: Number(bot.price).toFixed(2),
                     currency_code: "USD"
                 },
-                description: `KOPYTRADE — ${bot.name}`,
-                payee: {
-                    email_address: "rakerusan@yahoo.es"
-                }
+                description: `KOPYTRADE Bot: ${bot.name}`,
+                payee: { email_address: "rakerusan@yahoo.es" }
             }]
         });
     }
 
-    // Pago aprobado
     async function onApprove(_data: any, actions: any) {
         const details = await actions.order.capture();
         startTransition(async () => {
@@ -57,14 +72,10 @@ export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial
                 formData.append("paypalOrderId", details.id);
                 formData.append("paypalPayer", details.payer?.email_address || email);
 
-                const res = await fetch("/api/checkout/mock", {
-                    method: "POST",
-                    body: formData,
-                });
+                const res = await fetch("/api/checkout/mock", { method: "POST", body: formData });
+                if (!res.ok) throw new Error("Error en el registro");
 
-                if (!res.ok) throw new Error("Error registrando compra");
                 const data = await res.json();
-
                 if (data.success && data.autoLogin) {
                     await signIn("credentials", {
                         email: data.autoLogin.email,
@@ -72,17 +83,20 @@ export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial
                         redirect: false,
                     });
                     setStep("success");
-                    setTimeout(() => router.push("/dashboard"), 2000);
-                    router.refresh();
+                    setTimeout(() => router.push("/dashboard"), 1500);
                 }
             } catch (err) {
-                setError("Hubo un error al registrar tu compra. Escríbenos a soporte@kopytrade.com");
+                setError("Pago recibido pero hubo un error al crear tu cuenta. Contacta con soporte.");
             }
         });
     }
 
-    // Activación de Prueba
-    async function handleTrialActivation() {
+    async function handleTrialAction() {
+        if (!email.includes("@")) {
+            setError("Email inválido");
+            return;
+        }
+        setError("");
         startTransition(async () => {
             try {
                 const formData = new FormData();
@@ -90,11 +104,10 @@ export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial
                 formData.append("email", email);
 
                 const res = await fetch("/api/trial", { method: "POST", body: formData });
-                if (!res.ok) {
-                    const data = await res.json();
-                    throw new Error(data.error || "Error activando prueba");
-                }
                 const data = await res.json();
+
+                if (!res.ok) throw new Error(data.error || "Error al activar");
+
                 if (data.success && data.autoLogin) {
                     await signIn("credentials", {
                         email: data.autoLogin.email,
@@ -102,8 +115,7 @@ export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial
                         redirect: false,
                     });
                     setStep("success");
-                    setTimeout(() => router.push("/dashboard"), 2000);
-                    router.refresh();
+                    setTimeout(() => router.push("/dashboard"), 1500);
                 }
             } catch (err: any) {
                 setError(err.message);
@@ -113,76 +125,91 @@ export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial
 
     if (step === "success") {
         return (
-            <div className="text-center py-8 space-y-4">
-                <div className="text-5xl">🎉</div>
-                <h2 className="text-2xl font-bold text-white">¡Todo listo!</h2>
-                <div className="bg-success/10 border border-success/20 rounded-xl p-4 my-4">
-                    <p className="text-success text-sm font-semibold mb-1">¡Cuenta activada!</p>
-                    <p className="text-text-muted text-xs">Accediendo a tu panel para descargar el bot...</p>
-                </div>
+            <div className="text-center py-10 space-y-4">
+                <div className="text-4xl">🚀</div>
+                <h2 className="text-xl font-bold text-white">¡Activación Exitosa!</h2>
+                <p className="text-text-muted text-sm px-4">Redirigiendo a tu panel de control para que descargues el bot...</p>
             </div>
         );
     }
 
     return (
-        <PayPalScriptProvider options={paypalOptions}>
-            <div className="space-y-6">
-                {step === "email" && (
-                    <div className="space-y-4">
-                        <div className="space-y-1">
-                            <label className="text-sm text-text-muted">Tu correo electrónico</label>
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
-                                className="w-full bg-surface-light/30 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-light transition-colors"
-                                placeholder="tu@email.com"
-                                disabled={isPending}
-                            />
+        <div className="space-y-6">
+            {step === "email" && (
+                <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <div className="space-y-2">
+                        <label className="text-xs font-semibold text-text-muted uppercase tracking-wider">Tu Correo Electrónico</label>
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                            className="w-full bg-surface-light/40 border border-white/10 rounded-xl px-4 py-4 text-white placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-brand/50 transition-all"
+                            placeholder="ejemplo@correo.com"
+                            autoComplete="email"
+                        />
+                    </div>
+
+                    <button
+                        onClick={() => isTrial ? handleTrialAction() : setStep("paypal")}
+                        disabled={isPending || !email.includes("@")}
+                        className="w-full bg-brand hover:bg-brand-bright disabled:opacity-50 disabled:hover:translate-y-0 text-white font-bold py-4 rounded-xl shadow-lg shadow-brand/20 transition-all hover:-translate-y-1 active:scale-[0.98]"
+                    >
+                        {isPending ? "Procesando..." : isTrial ? "🎁 Activar Prueba Gratis" : "Continuar con PayPal →"}
+                    </button>
+
+                    <p className="text-[10px] text-text-muted/60 text-center italic">
+                        Usaremos este correo para enviarte las instrucciones y actualizaciones.
+                    </p>
+                </div>
+            )}
+
+            {step === "paypal" && !isTrial && (
+                <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    {!PAYPAL_CLIENT_ID || PAYPAL_CLIENT_ID === "test" ? (
+                        <div className="p-6 bg-danger/5 border border-danger/20 rounded-2xl text-center space-y-3">
+                            <p className="text-danger font-bold">⚠️ Configuración Pendiente</p>
+                            <p className="text-xs text-text-muted">El sistema de pagos PayPal no está activo en este momento.</p>
+                            <button onClick={() => setStep("email")} className="text-xs underline text-brand-light">Volver atrás</button>
                         </div>
-                        <button
-                            disabled={isPending || !email.includes("@")}
-                            onClick={() => isTrial ? handleTrialActivation() : setStep("paypal")}
-                            className="w-full py-3.5 rounded-xl font-semibold bg-brand text-white shadow-lg shadow-brand/20 hover:-translate-y-1 transition-all"
-                        >
-                            {isPending ? "Procesando..." : (isTrial ? "Activar Prueba Gratis →" : "Continuar al Pago →")}
-                        </button>
-                    </div>
-                )}
-
-                {step === "paypal" && !isTrial && (
-                    <div className="space-y-4">
-                        {!PAYPAL_CLIENT_ID || PAYPAL_CLIENT_ID === "test" ? (
-                            <div className="p-4 bg-danger/10 border border-danger/20 rounded-xl text-center text-danger text-sm">
-                                PayPal no está configurado correctamente.
+                    ) : (
+                        <>
+                            <div className="p-4 bg-white/5 rounded-xl border border-white/5 flex justify-between items-center text-xs">
+                                <span className="text-text-muted">Pagando con: <span className="text-white font-medium">{email}</span></span>
+                                <button onClick={() => setStep("email")} className="text-brand-light hover:underline">Cambiar</button>
                             </div>
-                        ) : (
-                            <div className="min-h-[150px]">
-                                <p className="text-text-muted text-xs text-center mb-4">Pagando como: {email}</p>
-                                <PayPalButtons
-                                    style={paypalButtonStyle}
-                                    createOrder={createOrder}
-                                    onApprove={onApprove}
-                                    onError={(err) => {
-                                        console.error("PayPal error", err);
-                                        setError("Error con PayPal. Inténtalo de nuevo.");
-                                    }}
-                                />
+
+                            <div className="min-h-[200px] bg-white/5 rounded-2xl p-6 border border-white/5 relative">
+                                <p className="text-[10px] text-center text-text-muted mb-6 uppercase tracking-widest font-bold">Pago Seguro por PayPal</p>
+                                <PayPalScriptProvider options={paypalOptions}>
+                                    <PayPalButtons
+                                        style={paypalButtonStyle}
+                                        createOrder={createOrder}
+                                        onApprove={onApprove}
+                                        onError={() => setError("Error en la conexión con PayPal. Intenta de nuevo.")}
+                                    />
+                                </PayPalScriptProvider>
                             </div>
-                        )}
-                        <button onClick={() => setStep("email")} className="w-full text-xs text-text-muted hover:text-white underline">
-                            Volver a cambiar email
-                        </button>
-                    </div>
-                )}
+                        </>
+                    )}
+                </div>
+            )}
 
-                {error && <div className="p-3 bg-danger/10 border border-danger/20 rounded-xl text-danger text-xs text-center">⚠️ {error}</div>}
+            {error && (
+                <div className="p-4 bg-danger/10 border border-danger/20 rounded-xl text-danger text-xs text-center animate-in zoom-in duration-200">
+                    ⚠️ {error}
+                </div>
+            )}
 
-                <div className="border-t border-white/5 pt-4 text-[10px] text-text-muted space-y-1">
-                    <p>✓ Descarga inmediata tras confirmación</p>
-                    <p>✓ Soporte técnico incluido: soporte@kopytrade.com</p>
+            <div className="grid grid-cols-2 gap-3 pt-4 border-t border-white/5">
+                <div className="flex flex-col gap-1">
+                    <span className="text-[10px] text-text-muted uppercase font-bold tracking-tighter">Acceso</span>
+                    <span className="text-xs text-white">Inmediato 📩</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                    <span className="text-[10px] text-text-muted uppercase font-bold tracking-tighter">Soporte</span>
+                    <span className="text-xs text-white">Directo 🔧</span>
                 </div>
             </div>
-        </PayPalScriptProvider>
+        </div>
     );
 }
