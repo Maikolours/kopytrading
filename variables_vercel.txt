@@ -1,0 +1,11 @@
+KEY: DATABASE_URL
+VALUE: mysql://u471920480_kopytrading:Dogi007759@193.203.168.60:3306/u471920480_kopytrading
+
+KEY: NEXTAUTH_URL
+VALUE: https://kopytrading.com
+
+KEY: NEXTAUTH_SECRET
+VALUE: kopytrading_master_key_2026_super_secret
+
+KEY: NODE_ENV
+VALUE: production

@@ -9,11 +9,14 @@ import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const viewport = {
+  themeColor: "#000000",
+};
+
 export const metadata: Metadata = {
   title: "KopyTrading | Bots de Trading Avanzados",
   description: "Marketplace de bots de trading descargables para MetaTrader 5",
   manifest: "/manifest.json",
-  themeColor: "#000000",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
