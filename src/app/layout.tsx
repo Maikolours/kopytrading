@@ -28,6 +28,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { MaintenanceMode } from "@/components/MaintenanceMode";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -73,6 +75,7 @@ export default function RootLayout({
           </footer>
           <CookieBanner />
           <FloatingChat />
+          <MaintenanceMode />
         </Providers>
       </body>
     </html>
