@@ -3,7 +3,7 @@
 import { useState, useTransition, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { PayPalButtons } from "@paypal/react-paypal-js";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 // Componente principal con protección de hidratación
 export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial?: boolean }) {
@@ -22,7 +22,25 @@ export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial
         );
     }
 
-    return <CheckoutFormContent bot={bot} isTrial={isTrial} />;
+    return <CheckoutFormWithPaypal bot={bot} isTrial={isTrial} />;
+}
+
+function CheckoutFormWithPaypal({ bot, isTrial }: { bot: any, isTrial: boolean }) {
+    const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "";
+
+    const paypalOptions = useMemo(() => ({
+        clientId: PAYPAL_CLIENT_ID,
+        currency: "USD",
+        intent: "capture",
+        components: "buttons",
+        "disable-funding": "card,credit,applepay"
+    }), [PAYPAL_CLIENT_ID]);
+
+    return (
+        <PayPalScriptProvider options={paypalOptions}>
+            <CheckoutFormContent bot={bot} isTrial={isTrial} />
+        </PayPalScriptProvider>
+    );
 }
 
 function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
@@ -177,7 +195,7 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
             )}
 
             {error && (
-                <div className="p-4 bg-danger/10 border border-danger/20 rounded-2xl text-danger text-xs text-center animate-in shake duration-300">
+                <div className="p-4 bg-danger/10 border border-danger/20 rounded-xl text-danger text-xs text-center animate-in shake duration-300">
                     ⚠️ {error}
                 </div>
             )}
