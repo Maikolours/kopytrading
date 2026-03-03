@@ -1,0 +1,136 @@
+import Link from "next/link";
+import { prisma } from "@/lib/prisma";
+import { Card, CardContent, CardTitle, CardHeader, CardFooter } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+
+export const dynamic = "force-dynamic";
+
+export default async function BotsPage({ searchParams }: { searchParams: Promise<{ asset?: string }> }) {
+    const { asset } = await searchParams;
+
+    const whereClause: any = { isActive: true };
+    if (asset) {
+        whereClause.instrument = { contains: asset };
+    }
+
+    const bots = await prisma.botProduct.findMany({
+        where: whereClause,
+        orderBy: { createdAt: 'desc' }
+    });
+
+    const categories = [
+        { id: "", label: "Todos" },
+        { id: "XAUUSD", label: "Oro (XAUUSD)" },
+        { id: "EURUSD", label: "EURUSD" },
+        { id: "USDJPY", label: "USDJPY" },
+        { id: "BTCUSD", label: "Bitcoin" }
+    ];
+
+    return (
+        <div className="min-h-screen pt-12 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-brand-light/5 blur-[120px] rounded-full pointer-events-none" />
+
+            {/* === BANNER PRUEBA GRATIS === */}
+            <div className="mb-10">
+                <Link href="#bot-catalog" className="block group">
+                    <div className="relative overflow-hidden rounded-2xl border border-brand/40 bg-gradient-to-r from-brand/20 via-brand-dark/30 to-brand/20 p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-brand-light/60 transition-all duration-300 hover:shadow-[0_0_40px_rgba(139,92,246,0.3)]">
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/5 to-transparent animate-gradient-sweep pointer-events-none" />
+                        <div className="flex items-center gap-4 z-10">
+                            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-success to-emerald-600 flex items-center justify-center shadow-lg shadow-success/30 flex-shrink-0">
+                                <span className="text-2xl sm:text-3xl">🎁</span>
+                            </div>
+                            <div>
+                                <h2 className="text-base sm:text-lg font-bold text-white">Prueba cualquier Bot GRATIS durante 30 días</h2>
+                                <p className="text-xs sm:text-sm text-text-muted">Sin tarjeta de crédito · Sin compromiso · Acceso completo al bot</p>
+                            </div>
+                        </div>
+                        <div className="flex-shrink-0 z-10">
+                            <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-success text-white font-semibold text-sm shadow-lg shadow-success/30 group-hover:bg-emerald-500 transition-colors">
+                                Empezar Prueba Gratis →
+                            </span>
+                        </div>
+                    </div>
+                </Link>
+            </div>
+
+            <div id="bot-catalog" className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
+                <div>
+                    <h1 className="text-4xl font-bold text-white tracking-tight mb-2">Marketplace de Bots</h1>
+                    <p className="text-text-muted">Encuentra los algoritmos más precisos para MetaTrader 5.</p>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                    {categories.map((cat) => (
+                        <Link key={cat.id} href={cat.id ? `/bots?asset=${cat.id}` : "/bots"}>
+                            <span className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${(asset === cat.id || (!asset && cat.id === ""))
+                                ? "bg-brand text-white shadow-[0_0_15px_rgba(139,92,246,0.4)]"
+                                : "bg-surface-light border border-white/5 text-text-muted hover:text-white hover:border-brand/50"
+                                }`}>
+                                {cat.label}
+                            </span>
+                        </Link>
+                    ))}
+                </div>
+            </div>
+
+            {bots.length === 0 ? (
+                <div className="text-center py-20 px-4 glass-card border border-dashed border-white/20">
+                    <h3 className="text-xl font-medium text-white mb-2">Aún no hay bots disponibles para esta categoría</h3>
+                    <p className="text-text-muted mb-6">Sigue explorando otros activos o vuelve pronto.</p>
+                    <Link href="/bots"><Button variant="outline">Ver todos los bots</Button></Link>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {bots.map((bot: any) => (
+                        <Card key={bot.id} interactive className="flex flex-col h-full bg-surface-light/20">
+                            <CardHeader>
+                                <div className="flex justify-between items-start mb-2">
+                                    <CardTitle className="text-xl">{bot.name}</CardTitle>
+                                    <span className="bg-gradient-to-br from-brand-light to-brand text-white px-2 py-1 rounded text-xs font-bold tracking-wider shadow-[0_0_10px_rgba(139,92,246,0.5)]">
+                                        {bot.instrument}
+                                    </span>
+                                </div>
+                                <p className="text-sm text-text-muted line-clamp-2">{bot.description}</p>
+                            </CardHeader>
+
+                            <CardContent className="flex-grow">
+                                <div className="space-y-3 bg-black/20 p-4 rounded-xl border border-white/5">
+                                    <div className="flex justify-between items-center text-sm pb-2 border-b border-white/5">
+                                        <span className="text-text-muted">Estrategia</span>
+                                        <span className="font-medium text-white">{bot.strategyType}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center text-sm pb-2 border-b border-white/5">
+                                        <span className="text-text-muted">Riesgo</span>
+                                        <span className={`font-medium flex items-center gap-1 ${bot.riskLevel === 'Low' ? 'text-success'
+                                            : bot.riskLevel === 'High' ? 'text-danger'
+                                                : 'text-amber-400'
+                                            }`}>
+                                            <span className={`w-1.5 h-1.5 rounded-full ${bot.riskLevel === 'Low' ? 'bg-success' : bot.riskLevel === 'High' ? 'bg-danger' : 'bg-amber-400'}`}></span>
+                                            {bot.riskLevel}
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between items-center text-sm">
+                                        <span className="text-text-muted">Timeframes</span>
+                                        <span className="font-medium text-white">{bot.timeframes || '-'}</span>
+                                    </div>
+                                </div>
+                            </CardContent>
+
+                            <CardFooter className="justify-between items-center mt-auto border-t border-white/10 pt-4">
+                                <div className="flex flex-col">
+                                    <div className="text-2xl font-bold text-white tracking-tight">
+                                        ${bot.price.toFixed(2)}
+                                    </div>
+                                    <div className="text-[10px] text-success font-semibold tracking-wider uppercase">1 Mes Gratis</div>
+                                </div>
+                                <Link href={`/bots/${bot.id}`}>
+                                    <Button size="sm" className="shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:shadow-[0_0_20px_rgba(139,92,246,0.6)]">Descargar</Button>
+                                </Link>
+                            </CardFooter>
+                        </Card>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}

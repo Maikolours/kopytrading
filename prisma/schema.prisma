@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String     @id @default(cuid())
+  name          String?
+  email         String?    @unique
+  emailVerified DateTime?
+  password      String?
+  role          String     @default("USER")
+  image         String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  purchases     Purchase[]
+}
+
+model BotProduct {
+  id              String     @id @default(cuid())
+  name            String
+  description     String
+  instrument      String
+  strategyType    String
+  riskLevel       String
+  price           Float
+  version         String     @default("1.0")
+  ex5FilePath     String?
+  pdfFilePath     String?
+  isActive        Boolean    @default(true)
+  timeframes      String?
+  minCapital      Float?
+  backtestResults String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  purchases       Purchase[]
+}
+
+model Purchase {
+  id                    String     @id @default(cuid())
+  userId                String
+  botProductId          String
+  amount                Float
+  status                String     @default("COMPLETED")
+  lastDownloadedVersion String?
+  createdAt             DateTime   @default(now())
+  expiresAt             DateTime?
+  botProduct            BotProduct @relation(fields: [botProductId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
+}
