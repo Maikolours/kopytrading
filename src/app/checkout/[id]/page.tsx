@@ -43,7 +43,15 @@ export default async function CheckoutPage({
                     </p>
                 </div>
 
-                <CheckoutClientForm bot={bot} isTrial={isTrial} />
+                <CheckoutClientForm
+                    bot={{
+                        id: bot.id,
+                        name: bot.name,
+                        price: bot.price,
+                        description: bot.description
+                    }}
+                    isTrial={isTrial}
+                />
             </div>
         </div>
     );

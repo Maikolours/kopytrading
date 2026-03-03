@@ -5,15 +5,15 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
-// PayPal Sandbox Client ID
-const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "test";
-
 export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial?: boolean }) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [email, setEmail] = useState("");
     const [step, setStep] = useState<"email" | "paypal" | "success">("email");
     const [error, setError] = useState("");
+
+    // Obtener ID con seguridad
+    const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "";
 
     // Crear orden PayPal (solo para venta normal)
     function createOrder(_data: any, actions: any) {
@@ -183,46 +183,51 @@ export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial
             {/* Paso 2: Botones PayPal (Solo visible en venta normal) */}
             {step === "paypal" && !isTrial && (
                 <div className="space-y-4">
-                    <div className="bg-surface/50 rounded-xl p-3 border border-white/5 flex justify-between items-center">
-                        <span className="text-xs text-text-muted">Pagando como: <span className="text-brand-light">{email}</span></span>
-                        <button onClick={() => setStep("email")} className="text-xs text-text-muted hover:text-white transition-colors">← Cambiar</button>
-                    </div>
+                    {(!PAYPAL_CLIENT_ID || PAYPAL_CLIENT_ID === "test") ? (
+                        <div className="bg-danger/10 p-4 rounded-xl text-center border border-danger/20">
+                            <p className="text-danger text-sm font-semibold">⚠️ Sistema en mantenimiento técnica</p>
+                            <p className="text-[10px] text-text-muted mt-2">Error: Configuración de PayPal incompleta en el servidor.</p>
+                            <button onClick={() => setStep("email")} className="mt-4 text-xs underline text-brand-light">Volver atrás</button>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="bg-surface/50 rounded-xl p-3 border border-white/5 flex justify-between items-center">
+                                <span className="text-xs text-text-muted">Pagando como: <span className="text-brand-light">{email}</span></span>
+                                <button onClick={() => setStep("email")} className="text-xs text-text-muted hover:text-white transition-colors">← Cambiar</button>
+                            </div>
 
-                    <div className="text-center py-2 relative min-h-[150px]">
-                        <p className="text-text-muted text-xs mb-4">Pago 100% seguro procesado por PayPal</p>
-                        <PayPalScriptProvider options={{
-                            clientId: PAYPAL_CLIENT_ID,
-                            currency: "USD",
-                            intent: "capture",
-                            components: "buttons",
-                            "disable-funding": "card,credit,venmo"
-                        }}>
-                            <PayPalButtons
-                                fundingSource="paypal"
-                                style={{ layout: "vertical", color: "gold", shape: "rect", label: "pay" }}
-                                createOrder={createOrder}
-                                onApprove={onApprove}
-                                onError={onError}
-                                onCancel={() => setError("Pago cancelado. Puedes intentarlo de nuevo cuando quieras.")}
-                                onClick={(data, actions) => {
-                                    // Este log aparecerá en consola si se pulsa, confirmando el click
-                                    console.log("Iniciando flujo PayPal...");
-                                    return actions.resolve();
-                                }}
-                            />
-                        </PayPalScriptProvider>
-                    </div>
+                            <div className="text-center py-2 relative min-h-[150px]">
+                                <p className="text-text-muted text-xs mb-4">Pago 100% seguro procesado por PayPal</p>
+                                <PayPalScriptProvider options={{
+                                    clientId: PAYPAL_CLIENT_ID,
+                                    currency: "USD",
+                                    intent: "capture",
+                                    components: "buttons",
+                                    "disable-funding": "card,credit,venmo"
+                                }}>
+                                    <PayPalButtons
+                                        fundingSource="paypal"
+                                        style={{ layout: "vertical", color: "gold", shape: "rect", label: "pay" }}
+                                        createOrder={createOrder}
+                                        onApprove={onApprove}
+                                        onError={onError}
+                                        onCancel={() => setError("Pago cancelado. Puedes intentarlo de nuevo cuando quieras.")}
+                                    />
+                                </PayPalScriptProvider>
+                            </div>
 
-                    <div className="flex items-center gap-3 text-xs text-text-muted/60">
-                        <div className="flex-1 h-px bg-white/5"></div>
-                        <span>o</span>
-                        <div className="flex-1 h-px bg-white/5"></div>
-                    </div>
+                            <div className="flex items-center gap-3 text-xs text-text-muted/60">
+                                <div className="flex-1 h-px bg-white/5"></div>
+                                <span>o</span>
+                                <div className="flex-1 h-px bg-white/5"></div>
+                            </div>
 
-                    <p className="text-center text-xs text-text-muted">
-                        ¿Problemas con el pago? Escríbenos a{" "}
-                        <a href="mailto:soporte@kopytrade.com" className="text-brand-light hover:underline">soporte@kopytrade.com</a>
-                    </p>
+                            <p className="text-center text-xs text-text-muted">
+                                ¿Problemas con el pago? Escríbenos a{" "}
+                                <a href="mailto:soporte@kopytrade.com" className="text-brand-light hover:underline">soporte@kopytrade.com</a>
+                            </p>
+                        </>
+                    )}
                 </div>
             )}
 
