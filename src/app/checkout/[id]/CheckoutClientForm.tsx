@@ -20,7 +20,8 @@ export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any,
         return {
             clientId: id || "test",
             currency: "USD",
-            intent: "capture"
+            intent: "capture",
+            environment: "production" as const
         };
     }, []);
 
