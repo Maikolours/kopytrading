@@ -3,7 +3,7 @@
 import { useState, useTransition, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { PayPalButtons } from "@paypal/react-paypal-js";
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 // Componente principal con protección de hidratación
 export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial?: boolean }) {
@@ -22,7 +22,17 @@ export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial
         );
     }
 
-    return <CheckoutFormContent bot={bot} isTrial={isTrial} />;
+    const paypalOptions = {
+        clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "test",
+        currency: "USD",
+        intent: "capture"
+    };
+
+    return (
+        <PayPalScriptProvider options={paypalOptions}>
+            <CheckoutFormContent bot={bot} isTrial={isTrial} />
+        </PayPalScriptProvider>
+    );
 }
 
 function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
