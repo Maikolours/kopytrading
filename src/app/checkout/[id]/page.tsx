@@ -63,7 +63,6 @@ export default async function CheckoutPage({
                         id: bot.id,
                         name: bot.name,
                         price: Number(bot.price),
-                        description: bot.description
                     }}
                     isTrial={isTrial}
                 />
