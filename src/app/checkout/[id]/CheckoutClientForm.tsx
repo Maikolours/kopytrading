@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 // Componente principal con protección de hidratación
-export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial?: boolean }) {
+export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial?: boolean }) {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
