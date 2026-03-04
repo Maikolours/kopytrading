@@ -2,69 +2,93 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import dynamic from "next/dynamic";
 
-const CheckoutClientForm = dynamic<any>(
-    () => import("./CheckoutClientForm"),
-    {
-        ssr: false,
-        loading: () => (
-            <div className="flex flex-col items-center justify-center py-12 space-y-4">
-                <div className="w-8 h-8 border-2 border-brand-light border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-text-muted text-xs font-medium">Iniciando sistema de seguridad...</p>
-            </div>
-        )
-    }
-);
+// IMPORTANTE: Cargamos el formulario SOLO en el cliente (ssr: false)
+// Esto evita que Vercel intente buscar PayPal durante la compilación
+const CheckoutClientForm = dynamic(() => import("./CheckoutClientForm"), {
+    ssr: false,
+    loading: () => (
+        <div className="flex flex-col items-center justify-center py-20">
+            <div className="w-10 h-10 border-4 border-brand-light border-t-transparent rounded-full animate-spin"></div>
+            <p className="mt-4 text-text-muted animate-pulse">Cargando pasarela segura...</p>
+        </div>
+    )
+});
 
 export default async function CheckoutPage({
     params,
-    searchParams
 }: {
-    params: Promise<{ id: string }>,
-    searchParams: Promise<{ trial?: string }>
+    params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
-    const { trial } = await searchParams;
-    const isTrial = trial === 'true';
 
+    // Buscamos el bot en la base de datos
     const bot = await prisma.botProduct.findUnique({
-        where: { id: id }
+        where: { id },
     });
 
-    if (!bot) notFound();
+    if (!bot) {
+        notFound();
+    }
+
+    // Convertimos el bot a un objeto plano para evitar errores de serialización
+    const plainBot = {
+        id: bot.id,
+        name: bot.name,
+        price: Number(bot.price), // Forzamos número aquí
+        description: bot.description,
+        image: bot.image
+    };
 
     return (
-        <div className="min-h-screen pt-24 pb-12 px-4 flex items-center justify-center">
-            <div className="max-w-md w-full glass-card p-8 border border-white/10 relative overflow-hidden">
-                <div className="absolute -top-20 -right-20 w-40 h-40 bg-brand/30 blur-[50px] rounded-full pointer-events-none"></div>
+        <main className="min-h-screen pt-24 pb-12 px-4">
+            <div className="max-w-4xl mx-auto">
+                <div className="bg-surface-dark/50 backdrop-blur-xl border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                    <div className="grid md:grid-cols-2">
+                        {/* Panel Izquierdo: Info del Bot */}
+                        <div className="p-8 md:p-12 bg-gradient-to-br from-brand/10 to-transparent border-r border-white/5">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/10 border border-brand/20 mb-6">
+                                <span className="w-2 h-2 rounded-full bg-brand animate-pulse"></span>
+                                <span className="text-[10px] font-bold text-brand uppercase tracking-wider">Compra Segura</span>
+                            </div>
 
-                <h1 className="text-2xl font-bold text-white mb-2">
-                    {isTrial ? "Activar Prueba Gratis" : "Finalizar Compra"}
-                </h1>
-                <p className="text-text-muted text-sm mb-8">
-                    {isTrial ? "Estás a un paso de probar gratis tu bot." : "Estás a un paso de descargar tu bot."}
-                </p>
+                            <h1 className="text-3xl md:text-4xl font-black text-white mb-4">
+                                {plainBot.name}
+                            </h1>
+                            <p className="text-text-muted leading-relaxed mb-8">
+                                Estás a un paso de obtener tu licencia de {plainBot.name}. Acceso instantáneo tras el pago.
+                            </p>
 
-                <div className="bg-surface/50 rounded-xl p-4 mb-8 border border-white/5">
-                    <div className="flex justify-between items-center mb-2">
-                        <span className="font-medium text-white">{bot.name}</span>
-                        <span className={`font-bold text-lg ${isTrial ? "text-success" : "text-white"}`}>
-                            {isTrial ? "GRATIS" : `$${Number(bot.price).toFixed(2)}`}
-                        </span>
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-3 text-white/80">
+                                    <span className="text-brand">✓</span>
+                                    <span className="text-sm">Licencia de por vida</span>
+                                </div>
+                                <div className="flex items-center gap-3 text-white/80">
+                                    <span className="text-brand">✓</span>
+                                    <span className="text-sm">Actualizaciones gratis</span>
+                                </div>
+                                <div className="flex items-center gap-3 text-white/80">
+                                    <span className="text-brand">✓</span>
+                                    <span className="text-sm">Soporte técnico 24/7</span>
+                                </div>
+                            </div>
+
+                            <div className="mt-12 pt-8 border-t border-white/10">
+                                <p className="text-xs text-text-muted uppercase font-black tracking-widest mb-1">Precio Total</p>
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-5xl font-black text-white">${plainBot.price}</span>
+                                    <span className="text-text-muted font-medium">USD</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Panel Derecho: Formulario */}
+                        <div className="p-8 md:p-12 flex flex-col justify-center">
+                            <CheckoutClientForm bot={plainBot} />
+                        </div>
                     </div>
-                    <p className={`text-xs ${isTrial ? "text-success" : "text-brand-light"}`}>
-                        {isTrial ? "Licencia temporal 30 días" : "Licencia de por vida (.ex5 + Manual)"}
-                    </p>
                 </div>
-
-                <CheckoutClientForm
-                    bot={{
-                        id: bot.id,
-                        name: bot.name,
-                        price: Number(bot.price),
-                    }}
-                    isTrial={isTrial}
-                />
             </div>
-        </div>
+        </main>
     );
 }
