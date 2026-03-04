@@ -4,9 +4,17 @@ import dynamic from "next/dynamic";
 
 // Cargamos el formulario de forma dinámica eliminando el renderizado en servidor (SSR)
 // Esto soluciona de raíz el error "Client-side exception" de PayPal en Vercel.
-const CheckoutClientForm = dynamic(
+const CheckoutClientForm = dynamic<any>(
     () => import("./CheckoutClientForm").then(mod => mod.CheckoutClientForm),
-    { ssr: false }
+    {
+        ssr: false,
+        loading: () => (
+            <div className="flex flex-col items-center justify-center py-12 space-y-4">
+                <div className="w-8 h-8 border-2 border-brand-light border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-text-muted text-xs font-medium">Iniciando sistema de pago...</p>
+            </div>
+        )
+    }
 );
 
 export default async function CheckoutPage({

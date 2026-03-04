@@ -50,5 +50,8 @@ model Purchase {
   createdAt             DateTime   @default(now())
   expiresAt             DateTime?
   botProduct            BotProduct @relation(fields: [botProductId], references: [id])
-  user         User       @relation(fields: [userId], references: [id])
+  user                  User       @relation(fields: [userId], references: [id])
+
+  @@index([botProductId], map: "Purchase_botProductId_fkey")
+  @@index([userId], map: "Purchase_userId_fkey")
 }
