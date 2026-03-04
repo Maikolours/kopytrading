@@ -21,7 +21,6 @@ interface PageProps {
 }
 
 export default async function CheckoutPage({ params, searchParams }: PageProps) {
-    // Next.js 15 requiere await para ambos
     const { id } = await params;
     const { trial } = await searchParams;
     const isTrial = trial === 'true';
@@ -45,32 +44,20 @@ export default async function CheckoutPage({ params, searchParams }: PageProps) 
                     <div className="grid md:grid-cols-2">
                         <div className="p-8 md:p-12 bg-gradient-to-br from-brand/10 to-transparent border-r border-white/5">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/10 border border-brand/20 mb-6">
-                                <span className="w-2 h-2 rounded-full bg-brand animate-pulse"></span>
+                                <span className="w-2 h-2 rounded-full bg-brand"></span>
                                 <span className="text-[10px] font-bold text-brand uppercase tracking-wider">
-                                    {isTrial ? "Activación de Prueba" : "Compra Segura"}
+                                    {isTrial ? "Prueba Gratuita" : "Compra Segura"}
                                 </span>
                             </div>
-
-                            <h1 className="text-3xl md:text-4xl font-black text-white mb-4">
-                                {plainBot.name}
-                            </h1>
-                            <p className="text-text-muted leading-relaxed mb-8">
-                                {isTrial 
-                                    ? "Estás a un paso de probar gratis tu bot por 30 días. Sin compromiso."
-                                    : `Estás a un paso de obtener tu licencia de ${plainBot.name}. Acceso instantáneo.`}
-                            </p>
-
+                            <h1 className="text-3xl md:text-4xl font-black text-white mb-4">{plainBot.name}</h1>
                             <div className="mt-12 pt-8 border-t border-white/10">
-                                <p className="text-xs text-text-muted uppercase font-black tracking-widest mb-1">Total a pagar</p>
+                                <p className="text-xs text-text-muted uppercase font-black tracking-widest mb-1">Total</p>
                                 <div className="flex items-baseline gap-2">
-                                    <span className="text-5xl font-black text-white">
-                                        {isTrial ? "0" : plainBot.price}
-                                    </span>
+                                    <span className="text-5xl font-black text-white">{isTrial ? "0" : plainBot.price}</span>
                                     <span className="text-text-muted font-medium">EUR (€)</span>
                                 </div>
                             </div>
                         </div>
-
                         <div className="p-8 md:p-12 flex flex-col justify-center">
                             <CheckoutClientForm bot={plainBot} isTrial={isTrial} />
                         </div>
