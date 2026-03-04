@@ -1,6 +1,13 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { CheckoutClientForm } from "./CheckoutClientForm";
+import dynamic from "next/dynamic";
+
+// Cargamos el formulario de forma dinámica eliminando el renderizado en servidor (SSR)
+// Esto soluciona de raíz el error "Client-side exception" de PayPal en Vercel.
+const CheckoutClientForm = dynamic(
+    () => import("./CheckoutClientForm").then(mod => mod.CheckoutClientForm),
+    { ssr: false }
+);
 
 export default async function CheckoutPage({
     params,
