@@ -4,9 +4,7 @@ import { useState, useTransition, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
-import Script from "next/script";
 
-// Componente principal con protección de hidratación
 export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial?: boolean }) {
     const [mounted, setMounted] = useState(false);
 
@@ -16,12 +14,11 @@ export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any,
 
     const paypalOptions = useMemo(() => {
         const id = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
-        console.log("Configurando PayPal con ID:", id ? (id.substring(0, 5) + "...") : "MISSING");
         return {
             clientId: id || "test",
             currency: "USD",
-            intent: "capture",
-            environment: "production" as const
+            intent: "capture" as const,
+            // Eliminamos environment manual para que la librería lo detecte sola por la ID
         };
     }, []);
 
@@ -48,9 +45,6 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
     const [step, setStep] = useState<"email" | "paypal" | "success">("email");
     const [error, setError] = useState("");
 
-    // Verificamos si la ID de PayPal existe
-    const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
-
     const paypalButtonStyle = useMemo<any>(() => ({
         layout: "vertical",
         color: "gold",
@@ -59,11 +53,7 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
     }), []);
 
     async function createOrder(_data: any, actions: any) {
-        // Aseguramos que el precio sea un STRING con formato "0.00"
         const priceString = parseFloat(bot.price.toString()).toFixed(2);
-
-        console.log("Creando orden para PayPal:", { price: priceString, name: bot.name });
-
         return actions.order.create({
             purchase_units: [{
                 amount: {
@@ -170,44 +160,27 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
                     >
                         {isPending ? "Procesando..." : isTrial ? "🎁 Activar Prueba Gratis" : "Continuar con PayPal →"}
                     </button>
-
-                    <p className="text-[10px] text-text-muted/50 text-center italic px-4 leading-relaxed">
-                        Te enviaremos los archivos y el manual inmediatamente a este correo.
-                    </p>
                 </div>
             )}
 
             {step === "paypal" && !isTrial && (
                 <div className="space-y-5 animate-in fade-in slide-in-from-bottom-3 duration-500">
-                    {!PAYPAL_CLIENT_ID ? (
-                        <div className="p-6 bg-danger/5 border border-danger/20 rounded-2xl text-center space-y-3">
-                            <p className="text-danger font-bold text-sm">⚠️ Configuración Pendiente</p>
-                            <p className="text-[11px] text-text-muted leading-relaxed">
-                                Falta la variable <code className="bg-white/10 px-1 rounded text-white">NEXT_PUBLIC_PAYPAL_CLIENT_ID</code> en Vercel.
-                                <br />Añádela en <strong>Settings - Env Vars</strong> y haz un <strong>Redeploy</strong>.
-                            </p>
-                            <button onClick={() => setStep("email")} className="text-xs underline text-brand-light">Volver atrás</button>
-                        </div>
-                    ) : (
-                        <>
-                            <div className="p-4 bg-white/5 rounded-xl border border-white/5 flex justify-between items-center text-xs">
-                                <span className="text-text-muted">Correo: <span className="text-white font-semibold">{email}</span></span>
-                                <button onClick={() => setStep("email")} className="text-brand-light hover:underline font-bold">Cambiar</button>
-                            </div>
+                    <div className="p-4 bg-white/5 rounded-xl border border-white/5 flex justify-between items-center text-xs">
+                        <span className="text-text-muted">Correo: <span className="text-white font-semibold">{email}</span></span>
+                        <button onClick={() => setStep("email")} className="text-brand-light hover:underline font-bold">Cambiar</button>
+                    </div>
 
-                            <div className="min-h-[220px] bg-white/5 rounded-3xl p-6 border border-white/5 relative flex flex-col items-center">
-                                <p className="text-[9px] text-center text-text-muted mb-8 uppercase tracking-[0.2em] font-black opacity-60">Pago Seguro — PayPal</p>
-                                <div className="w-full max-w-[300px]">
-                                    <PayPalButtons
-                                        style={paypalButtonStyle}
-                                        createOrder={createOrder}
-                                        onApprove={onApprove}
-                                        onError={() => setError("No se pudo conectar con PayPal. Revisa la Client ID.")}
-                                    />
-                                </div>
-                            </div>
-                        </>
-                    )}
+                    <div className="min-h-[220px] bg-white/5 rounded-3xl p-6 border border-white/5 relative flex flex-col items-center">
+                        <p className="text-[9px] text-center text-text-muted mb-8 uppercase tracking-[0.2em] font-black opacity-60">Pago Seguro — PayPal</p>
+                        <div className="w-full max-w-[300px]">
+                            <PayPalButtons
+                                style={paypalButtonStyle}
+                                createOrder={createOrder}
+                                onApprove={onApprove}
+                                onError={() => setError("No se pudo conectar con PayPal. Revisa la Client ID.")}
+                            />
+                        </div>
+                    </div>
                 </div>
             )}
 
