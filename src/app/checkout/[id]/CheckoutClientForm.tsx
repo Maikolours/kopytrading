@@ -54,10 +54,15 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
     }), []);
 
     async function createOrder(_data: any, actions: any) {
+        // Aseguramos que el precio sea un STRING con formato "0.00"
+        const priceString = parseFloat(bot.price.toString()).toFixed(2);
+
+        console.log("Creando orden para PayPal:", { price: priceString, name: bot.name });
+
         return actions.order.create({
             purchase_units: [{
                 amount: {
-                    value: Number(bot.price).toFixed(2),
+                    value: priceString,
                     currency_code: "USD"
                 },
                 description: `KOPYTRADE Bot: ${bot.name}`,
