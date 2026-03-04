@@ -3,17 +3,22 @@
 import { useState, useTransition, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { PayPalButtons } from "@paypal/react-paypal-js";
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import Script from "next/script";
 
 // Componente principal con protección de hidratación
 export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial?: boolean }) {
     const [mounted, setMounted] = useState(false);
-    const [sdkReady, setSdkReady] = useState(false);
 
     useEffect(() => {
         setMounted(true);
     }, []);
+
+    const paypalOptions = useMemo(() => ({
+        clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "test",
+        currency: "USD",
+        intent: "capture"
+    }), []);
 
     if (!mounted) {
         return (
@@ -24,20 +29,14 @@ export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any,
         );
     }
 
-    const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "test";
-
     return (
-        <>
-            <Script
-                src={`https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`}
-                onLoad={() => setSdkReady(true)}
-            />
-            <CheckoutFormContent bot={bot} isTrial={isTrial} sdkReady={sdkReady} />
-        </>
+        <PayPalScriptProvider options={paypalOptions}>
+            <CheckoutFormContent bot={bot} isTrial={isTrial} />
+        </PayPalScriptProvider>
     );
 }
 
-function CheckoutFormContent({ bot, isTrial, sdkReady }: { bot: any, isTrial: boolean, sdkReady: boolean }) {
+function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [email, setEmail] = useState("");
@@ -189,19 +188,12 @@ function CheckoutFormContent({ bot, isTrial, sdkReady }: { bot: any, isTrial: bo
                             <div className="min-h-[220px] bg-white/5 rounded-3xl p-6 border border-white/5 relative flex flex-col items-center">
                                 <p className="text-[9px] text-center text-text-muted mb-8 uppercase tracking-[0.2em] font-black opacity-60">Pago Seguro — PayPal</p>
                                 <div className="w-full max-w-[300px]">
-                                    {sdkReady ? (
-                                        <PayPalButtons
-                                            style={paypalButtonStyle}
-                                            createOrder={createOrder}
-                                            onApprove={onApprove}
-                                            onError={() => setError("No se pudo conectar con PayPal. Revisa la Client ID.")}
-                                        />
-                                    ) : (
-                                        <div className="flex flex-col items-center justify-center space-y-3 py-10">
-                                            <div className="w-6 h-6 border-2 border-brand-light border-t-transparent rounded-full animate-spin"></div>
-                                            <p className="text-[10px] text-text-muted">Conectando con PayPal...</p>
-                                        </div>
-                                    )}
+                                    <PayPalButtons
+                                        style={paypalButtonStyle}
+                                        createOrder={createOrder}
+                                        onApprove={onApprove}
+                                        onError={() => setError("No se pudo conectar con PayPal. Revisa la Client ID.")}
+                                    />
                                 </div>
                             </div>
                         </>
