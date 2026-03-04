@@ -35,7 +35,7 @@ export default async function CheckoutPage({
                     <div className="flex justify-between items-center mb-2">
                         <span className="font-medium text-white">{bot.name}</span>
                         <span className={`font-bold text-lg ${isTrial ? "text-success" : "text-white"}`}>
-                            {isTrial ? "GRATIS" : `$${bot.price.toFixed(2)}`}
+                            {isTrial ? "GRATIS" : `$${Number(bot.price).toFixed(2)}`}
                         </span>
                     </div>
                     <p className={`text-xs ${isTrial ? "text-success" : "text-brand-light"}`}>

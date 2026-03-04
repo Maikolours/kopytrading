@@ -13,6 +13,12 @@ export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any,
         setMounted(true);
     }, []);
 
+    const paypalOptions = useMemo(() => ({
+        clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "test",
+        currency: "USD",
+        intent: "capture"
+    }), []);
+
     if (!mounted) {
         return (
             <div className="flex flex-col items-center justify-center py-12 space-y-4">
@@ -21,12 +27,6 @@ export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any,
             </div>
         );
     }
-
-    const paypalOptions = {
-        clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "test",
-        currency: "USD",
-        intent: "capture"
-    };
 
     return (
         <PayPalScriptProvider options={paypalOptions}>
