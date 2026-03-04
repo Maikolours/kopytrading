@@ -15,7 +15,7 @@ export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any,
     const paypalOptions = useMemo(() => {
         return {
             clientId: "ATwXHaXEpQJVPzy2s67f6LijDlQ5plkcI8z6yjtPfo3v5oNP9Sy3moLMSW-LGGRHv_gaAlrH1k9rZrdX",
-            currency: "USD",
+            currency: "EUR", // <--- CAMBIADO A EUROS
             intent: "capture" as const,
         };
     }, []);
@@ -43,11 +43,11 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
     const [step, setStep] = useState<"email" | "paypal" | "success">("email");
     const [error, setError] = useState("");
 
-    const paypalButtonStyle = useMemo<any>(() => ({
-        layout: "vertical",
-        color: "gold",
-        shape: "rect",
-        label: "pay"
+    const paypalButtonStyle = useMemo(() => ({
+        layout: "vertical" as const,
+        color: "gold" as const,
+        shape: "rect" as const,
+        label: "pay" as const
     }), []);
 
     async function createOrder(_data: any, actions: any) {
@@ -56,7 +56,7 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
             purchase_units: [{
                 amount: {
                     value: priceString,
-                    currency_code: "USD"
+                    currency_code: "EUR" // <--- CAMBIADO A EUROS
                 },
                 description: `KOPYTRADE Bot: ${bot.name}`,
                 payee: { email_address: "rakerusan@yahoo.es" }
@@ -139,7 +139,7 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
     return (
         <div className="space-y-6">
             {step === "email" && (
-                <div className="space-y-4 animate-in fade-in slide-in-from-bottom-3 duration-500">
+                <div className="space-y-4">
                     <div className="space-y-2">
                         <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest pl-1">Tu Correo Electrónico</label>
                         <input
@@ -154,7 +154,7 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
                     <button
                         onClick={() => isTrial ? handleTrialAction() : setStep("paypal")}
                         disabled={isPending || !email.includes("@")}
-                        className="w-full bg-brand hover:bg-brand-bright disabled:opacity-40 disabled:hover:translate-y-0 text-white font-bold py-4.5 rounded-2xl shadow-xl shadow-brand/20 transition-all hover:-translate-y-1 active:scale-[0.97]"
+                        className="w-full bg-brand hover:bg-brand-bright disabled:opacity-40 text-white font-bold py-4.5 rounded-2xl shadow-xl shadow-brand/20 transition-all hover:-translate-y-1 active:scale-[0.97]"
                     >
                         {isPending ? "Procesando..." : isTrial ? "🎁 Activar Prueba Gratis" : "Continuar con PayPal →"}
                     </button>
@@ -162,14 +162,14 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
             )}
 
             {step === "paypal" && !isTrial && (
-                <div className="space-y-5 animate-in fade-in slide-in-from-bottom-3 duration-500">
+                <div className="space-y-5">
                     <div className="p-4 bg-white/5 rounded-xl border border-white/5 flex justify-between items-center text-xs">
                         <span className="text-text-muted">Correo: <span className="text-white font-semibold">{email}</span></span>
                         <button onClick={() => setStep("email")} className="text-brand-light hover:underline font-bold">Cambiar</button>
                     </div>
 
                     <div className="min-h-[220px] bg-white/5 rounded-3xl p-6 border border-white/5 relative flex flex-col items-center">
-                        <p className="text-[9px] text-center text-text-muted mb-8 uppercase tracking-[0.2em] font-black opacity-60">Pago Seguro — PayPal</p>
+                        <p className="text-[9px] text-center text-text-muted mb-8 uppercase tracking-[0.2em] font-black opacity-60">Pago Seguro — PayPal (EUR)</p>
                         <div className="w-full max-w-[300px]">
                             <PayPalButtons
                                 style={paypalButtonStyle}
@@ -187,17 +187,6 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
                     ⚠️ {error}
                 </div>
             )}
-
-            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
-                <div className="flex flex-col gap-1 items-center">
-                    <span className="text-[9px] text-text-muted uppercase font-black tracking-widest">Acceso</span>
-                    <span className="text-xs text-white font-medium">Instante 📩</span>
-                </div>
-                <div className="flex flex-col gap-1 items-center">
-                    <span className="text-[9px] text-text-muted uppercase font-black tracking-widest">Garantía</span>
-                    <span className="text-xs text-white font-medium">Soporte 🔧</span>
-                </div>
-            </div>
         </div>
     );
 }
