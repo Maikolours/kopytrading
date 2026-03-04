@@ -13,12 +13,10 @@ export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any,
     }, []);
 
     const paypalOptions = useMemo(() => {
-        const id = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
         return {
-            clientId: id || "test",
+            clientId: "ATwXHaXEpQJVPzy2s67f6LijDlQ5plkcI8z6yjtPfo3v5oNP9Sy3moLMSW-LGGRHv_gaAlrH1k9rZrdX",
             currency: "USD",
             intent: "capture" as const,
-            // Eliminamos environment manual para que la librería lo detecte sola por la ID
         };
     }, []);
 
