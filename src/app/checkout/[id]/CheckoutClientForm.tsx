@@ -14,11 +14,15 @@ export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any,
         setMounted(true);
     }, []);
 
-    const paypalOptions = useMemo(() => ({
-        clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "test",
-        currency: "USD",
-        intent: "capture"
-    }), []);
+    const paypalOptions = useMemo(() => {
+        const id = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+        console.log("Configurando PayPal con ID:", id ? (id.substring(0, 5) + "...") : "MISSING");
+        return {
+            clientId: id || "test",
+            currency: "USD",
+            intent: "capture"
+        };
+    }, []);
 
     if (!mounted) {
         return (
