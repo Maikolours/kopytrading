@@ -3,7 +3,7 @@
 import { useState, useTransition, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { PayPalButtons } from "@paypal/react-paypal-js";
 
 // Componente principal con protección de hidratación
 export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial?: boolean }) {
@@ -17,30 +17,12 @@ export function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial
         return (
             <div className="flex flex-col items-center justify-center py-12 space-y-4">
                 <div className="w-8 h-8 border-2 border-brand-light border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-text-muted text-xs font-medium">Iniciando sistema seguro...</p>
+                <p className="text-text-muted text-xs font-medium">Iniciando sistema de pago...</p>
             </div>
         );
     }
 
-    return <CheckoutFormWithPaypal bot={bot} isTrial={isTrial} />;
-}
-
-function CheckoutFormWithPaypal({ bot, isTrial }: { bot: any, isTrial: boolean }) {
-    const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "";
-
-    const paypalOptions = useMemo(() => ({
-        clientId: PAYPAL_CLIENT_ID,
-        currency: "USD",
-        intent: "capture",
-        components: "buttons",
-        "disable-funding": "card,credit,applepay"
-    }), [PAYPAL_CLIENT_ID]);
-
-    return (
-        <PayPalScriptProvider options={paypalOptions}>
-            <CheckoutFormContent bot={bot} isTrial={isTrial} />
-        </PayPalScriptProvider>
-    );
+    return <CheckoutFormContent bot={bot} isTrial={isTrial} />;
 }
 
 function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
@@ -49,6 +31,9 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
     const [email, setEmail] = useState("");
     const [step, setStep] = useState<"email" | "paypal" | "success">("email");
     const [error, setError] = useState("");
+
+    // Verificamos si la ID de PayPal existe
+    const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 
     const paypalButtonStyle = useMemo<any>(() => ({
         layout: "vertical",
@@ -81,9 +66,8 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
                 formData.append("paypalPayer", details.payer?.email_address || email);
 
                 const res = await fetch("/api/checkout/mock", { method: "POST", body: formData });
-                if (!res.ok) throw new Error("Error en el registro");
-
                 const data = await res.json();
+
                 if (data.success && data.autoLogin) {
                     await signIn("credentials", {
                         email: data.autoLogin.email,
@@ -92,16 +76,18 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
                     });
                     setStep("success");
                     setTimeout(() => router.push("/dashboard"), 1500);
+                } else {
+                    throw new Error("Error registrando la compra");
                 }
             } catch (err) {
-                setError("Pago aceptado. Error al crear cuenta. Escribe a soporte@kopytrade.com");
+                setError("Pago recibido. Error al crear cuenta. Escribe a soporte@kopytrade.com");
             }
         });
     }
 
     async function handleTrialAction() {
         if (!email.includes("@")) {
-            setError("Por favor, introduce un email válido.");
+            setError("Email inválido");
             return;
         }
         setError("");
@@ -133,13 +119,10 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
 
     if (step === "success") {
         return (
-            <div className="text-center py-10 space-y-4 animate-in zoom-in duration-300">
+            <div className="text-center py-10 space-y-4">
                 <div className="text-5xl">🚀</div>
-                <h2 className="text-2xl font-bold text-white">¡Listo!</h2>
-                <div className="bg-success/10 border border-success/20 rounded-xl p-4">
-                    <p className="text-success text-sm font-semibold">Activación realizada con éxito.</p>
-                    <p className="text-text-muted text-xs mt-1">Redirigiendo a tu panel...</p>
-                </div>
+                <h2 className="text-2xl font-bold text-white">¡Éxito!</h2>
+                <p className="text-text-muted text-sm">Redirigiendo a tu panel...</p>
             </div>
         );
     }
@@ -164,38 +147,51 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
                         disabled={isPending || !email.includes("@")}
                         className="w-full bg-brand hover:bg-brand-bright disabled:opacity-40 disabled:hover:translate-y-0 text-white font-bold py-4.5 rounded-2xl shadow-xl shadow-brand/20 transition-all hover:-translate-y-1 active:scale-[0.97]"
                     >
-                        {isPending ? "Procesando..." : isTrial ? "🎁 Activar Prueba Gratis" : "Pagar con PayPal"}
+                        {isPending ? "Procesando..." : isTrial ? "🎁 Activar Prueba Gratis" : "Continuar con PayPal →"}
                     </button>
 
                     <p className="text-[10px] text-text-muted/50 text-center italic px-4 leading-relaxed">
-                        Te enviaremos los archivos y el manual de instalación a este correo de forma inmediata.
+                        Te enviaremos los archivos y el manual inmediatamente a este correo.
                     </p>
                 </div>
             )}
 
             {step === "paypal" && !isTrial && (
                 <div className="space-y-5 animate-in fade-in slide-in-from-bottom-3 duration-500">
-                    <div className="p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center text-xs">
-                        <span className="text-text-muted">Correo: <span className="text-white font-semibold">{email}</span></span>
-                        <button onClick={() => setStep("email")} className="text-brand-light hover:underline font-bold">Cambiar</button>
-                    </div>
-
-                    <div className="min-h-[220px] bg-white/5 rounded-3xl p-6 border border-white/5 relative flex flex-col items-center">
-                        <p className="text-[9px] text-center text-text-muted mb-8 uppercase tracking-[0.2em] font-black opacity-60">Pago Cifrado — Seguridad PayPal</p>
-                        <div className="w-full max-w-[300px]">
-                            <PayPalButtons
-                                style={paypalButtonStyle}
-                                createOrder={createOrder}
-                                onApprove={onApprove}
-                                onError={() => setError("No se pudo conectar con PayPal. Revisa tu conexión.")}
-                            />
+                    {!PAYPAL_CLIENT_ID ? (
+                        <div className="p-6 bg-danger/5 border border-danger/20 rounded-2xl text-center space-y-3">
+                            <p className="text-danger font-bold text-sm">⚠️ Configuración Pendiente</p>
+                            <p className="text-[11px] text-text-muted leading-relaxed">
+                                Falta la variable <code className="bg-white/10 px-1 rounded text-white">NEXT_PUBLIC_PAYPAL_CLIENT_ID</code> en Vercel.
+                                <br />Añádela en <strong>Settings - Env Vars</strong> y haz un <strong>Redeploy</strong>.
+                            </p>
+                            <button onClick={() => setStep("email")} className="text-xs underline text-brand-light">Volver atrás</button>
                         </div>
-                    </div>
+                    ) : (
+                        <>
+                            <div className="p-4 bg-white/5 rounded-xl border border-white/5 flex justify-between items-center text-xs">
+                                <span className="text-text-muted">Correo: <span className="text-white font-semibold">{email}</span></span>
+                                <button onClick={() => setStep("email")} className="text-brand-light hover:underline font-bold">Cambiar</button>
+                            </div>
+
+                            <div className="min-h-[220px] bg-white/5 rounded-3xl p-6 border border-white/5 relative flex flex-col items-center">
+                                <p className="text-[9px] text-center text-text-muted mb-8 uppercase tracking-[0.2em] font-black opacity-60">Pago Seguro — PayPal</p>
+                                <div className="w-full max-w-[300px]">
+                                    <PayPalButtons
+                                        style={paypalButtonStyle}
+                                        createOrder={createOrder}
+                                        onApprove={onApprove}
+                                        onError={() => setError("No se pudo conectar con PayPal. Revisa la Client ID.")}
+                                    />
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
             )}
 
             {error && (
-                <div className="p-4 bg-danger/10 border border-danger/20 rounded-xl text-danger text-xs text-center animate-in shake duration-300">
+                <div className="p-4 bg-danger/10 border border-danger/20 rounded-2xl text-danger text-xs text-center">
                     ⚠️ {error}
                 </div>
             )}
