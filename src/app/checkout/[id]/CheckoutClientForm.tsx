@@ -9,7 +9,7 @@ export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any,
     const [mounted, setMounted] = useState(false);
 
     // 🚧 MODO MANTENIMIENTO FORZADO (Cámbialo a false cuando quieras abrir la tienda)
-    const isMaintenance = true; 
+    const isMaintenance = false; 
 
     useEffect(() => {
         setMounted(true);
