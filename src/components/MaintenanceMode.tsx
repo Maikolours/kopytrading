@@ -1,22 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export function MaintenanceMode() {
-    const [isMaintenance, setIsMaintenance] = useState(false);
-
     useEffect(() => {
-        // Solo activamos si la variable de entorno es 'true'
-        if (process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true") {
-            setIsMaintenance(true);
-            document.body.style.overflow = "hidden";
-        } else {
-            setIsMaintenance(false);
+        // Bloqueamos el scroll al mostrarse
+        document.body.style.overflow = "hidden";
+        return () => {
             document.body.style.overflow = "auto";
-        }
+        };
     }, []);
-
-    if (!isMaintenance) return null;
 
     return (
         <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center p-6 text-center">
