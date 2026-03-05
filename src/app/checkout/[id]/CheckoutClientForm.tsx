@@ -8,33 +8,41 @@ import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial?: boolean }) {
     const [mounted, setMounted] = useState(false);
 
-    // COMPROBAMOS EL MANTENIMIENTO DESDE LA VARIABLE DE VERCEL
-    const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
+    // 🚧 MODO MANTENIMIENTO FORZADO (Cámbialo a false cuando quieras abrir la tienda)
+    const isMaintenance = true; 
 
     useEffect(() => {
         setMounted(true);
     }, []);
 
     const paypalOptions = useMemo(() => {
-        const id = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+        // Tu ID Real de PayPal que vimos en el .env
         const REAL_ID = "AdOlLwffHIryQIuGjqfUHUtZaFLrkMZA6yNO35Wo8SHGwJ9THPTXc2NWzeY0G0sW8gm_RXtlQF5dsvH4";
 
         return {
-            clientId: id || REAL_ID,
-            currency: "EUR", // CORREGIDO A EUROS
+            clientId: REAL_ID,
+            currency: "EUR",
             intent: "capture" as const,
         };
     }, []);
 
     if (!mounted) return null;
 
-    // SI ESTÁ ACTIVADO EL MANTENIMIENTO, BLOQUEAMOS AQUÍ
+    // BLOQUEO DE MANTENIMIENTO: Esto evita que salga la pantalla negra de error
     if (isMaintenance) {
         return (
-            <div className="p-8 text-center bg-brand/10 border border-brand/20 rounded-3xl space-y-4">
-                <div className="text-4xl">🚧</div>
-                <h2 className="text-xl font-bold text-white">Sistema en Mantenimiento</h2>
-                <p className="text-sm text-text-muted">Estamos ajustando los últimos detalles de los bots. Volvemos en unos minutos.</p>
+            <div className="p-10 text-center bg-white/5 border border-white/10 rounded-[32px] space-y-4 my-4 animate-in fade-in zoom-in duration-500">
+                <div className="text-5xl mb-2">🚧</div>
+                <h2 className="text-2xl font-bold text-white tracking-tight">Sistema en Mantenimiento</h2>
+                <p className="text-text-muted text-sm leading-relaxed">
+                    Estamos actualizando los precios y configuraciones de los bots para garantizar la mejor experiencia. 
+                    <br /><span className="text-brand-light font-medium">Volveremos a estar operativos en unos minutos.</span>
+                </p>
+                <div className="pt-4">
+                    <div className="inline-block px-4 py-1 rounded-full bg-brand/10 border border-brand/20 text-[10px] text-brand uppercase tracking-widest font-bold">
+                        Actualización en curso
+                    </div>
+                </div>
             </div>
         );
     }
@@ -67,7 +75,7 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
             purchase_units: [{
                 amount: {
                     value: priceString,
-                    currency_code: "EUR" // CORREGIDO A EUROS
+                    currency_code: "EUR"
                 },
                 description: `KOPYTRADE Bot: ${bot.name}`,
             }]
@@ -99,39 +107,7 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
                     throw new Error("Error registrando la compra");
                 }
             } catch (err) {
-                setError("Pago recibido. Error al crear cuenta. Escribe a soporte@kopytrade.com");
-            }
-        });
-    }
-
-    async function handleTrialAction() {
-        if (!email.includes("@")) {
-            setError("Email inválido");
-            return;
-        }
-        setError("");
-        startTransition(async () => {
-            try {
-                const formData = new FormData();
-                formData.append("botId", bot.id);
-                formData.append("email", email);
-
-                const res = await fetch("/api/trial", { method: "POST", body: formData });
-                const data = await res.json();
-
-                if (!res.ok) throw new Error(data.error || "Error al activar");
-
-                if (data.success && data.autoLogin) {
-                    await signIn("credentials", {
-                        email: data.autoLogin.email,
-                        password: data.autoLogin.password,
-                        redirect: false,
-                    });
-                    setStep("success");
-                    setTimeout(() => router.push("/dashboard"), 1500);
-                }
-            } catch (err: any) {
-                setError(err.message);
+                setError("Pago recibido con éxito, pero hubo un error al crear tu cuenta. Contacta a soporte@kopytrade.com");
             }
         });
     }
@@ -139,9 +115,9 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
     if (step === "success") {
         return (
             <div className="text-center py-10 space-y-4">
-                <div className="text-5xl">🚀</div>
-                <h2 className="text-2xl font-bold text-white">¡Éxito!</h2>
-                <p className="text-text-muted text-sm">Redirigiendo a tu panel...</p>
+                <div className="text-5xl animate-bounce">🚀</div>
+                <h2 className="text-2xl font-bold text-white">¡Compra completada!</h2>
+                <p className="text-text-muted text-sm">Preparando tu acceso al panel de control...</p>
             </div>
         );
     }
@@ -162,16 +138,16 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
                     </div>
 
                     <button
-                        onClick={() => isTrial ? handleTrialAction() : setStep("paypal")}
+                        onClick={() => setStep("paypal")}
                         disabled={isPending || !email.includes("@")}
-                        className="w-full bg-brand hover:bg-brand-bright disabled:opacity-40 disabled:hover:translate-y-0 text-white font-bold py-4.5 rounded-2xl shadow-xl shadow-brand/20 transition-all hover:-translate-y-1 active:scale-[0.97]"
+                        className="w-full bg-brand hover:bg-brand-bright disabled:opacity-40 text-white font-bold py-4.5 rounded-2xl shadow-xl shadow-brand/20 transition-all hover:-translate-y-1 active:scale-[0.97]"
                     >
-                        {isPending ? "Procesando..." : isTrial ? "🎁 Activar Prueba Gratis" : "Continuar con PayPal →"}
+                        {isPending ? "Procesando..." : "Continuar con PayPal →"}
                     </button>
                 </div>
             )}
 
-            {step === "paypal" && !isTrial && (
+            {step === "paypal" && (
                 <div className="space-y-5 animate-in fade-in slide-in-from-bottom-3 duration-500">
                     <div className="p-4 bg-white/5 rounded-xl border border-white/5 flex justify-between items-center text-xs">
                         <span className="text-text-muted">Correo: <span className="text-white font-semibold">{email}</span></span>
@@ -179,13 +155,13 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
                     </div>
 
                     <div className="min-h-[220px] bg-white/5 rounded-3xl p-6 border border-white/5 relative flex flex-col items-center">
-                        <p className="text-[9px] text-center text-text-muted mb-8 uppercase tracking-[0.2em] font-black opacity-60">Pago Seguro — PayPal</p>
+                        <p className="text-[9px] text-center text-text-muted mb-8 uppercase tracking-[0.2em] font-black opacity-60 font-mono">Pago Seguro Encriptado</p>
                         <div className="w-full max-w-[300px]">
                             <PayPalButtons
                                 style={paypalButtonStyle}
                                 createOrder={createOrder}
                                 onApprove={onApprove}
-                                onError={() => setError("No se pudo conectar con PayPal. Revisa la Client ID.")}
+                                onError={() => setError("Error de conexión con PayPal. Inténtalo de nuevo.")}
                             />
                         </div>
                     </div>
@@ -193,7 +169,7 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
             )}
 
             {error && (
-                <div className="p-4 bg-danger/10 border border-danger/20 rounded-2xl text-danger text-xs text-center">
+                <div className="p-4 bg-danger/10 border border-danger/20 rounded-2xl text-danger text-xs text-center font-medium">
                     ⚠️ {error}
                 </div>
             )}
