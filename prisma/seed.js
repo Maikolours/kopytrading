@@ -63,6 +63,20 @@ async function main() {
             ex5FilePath: '/uploads/KOPYTRADE_BTCUSD_BTCStormRider.mq5',
             pdfFilePath: '/uploads/Manual_BTCStormRider.pdf',
             isActive: true,
+        },
+        {
+            name: 'GoldSentinel Pro 🛡️ (XAUUSD)',
+            description: '🧠 **Inteligencia Adaptativa para el Oro (v1.0).** El bot más inteligente de KOPYTRADE. Utiliza un sistema de Multi-Confirmación con 4 indicadores simultáneos (EMA200, EMA21/55, RSI, ATR) para encontrar solo las entradas de máxima probabilidad.\\n\\n📊 **Gestión ATR Dinámica:** Stop Loss y Take Profit se adaptan automáticamente a la volatilidad real del mercado. Sin grid, sin martingala. 1 operación limpia con ratio Riesgo:Beneficio 1:2.\\n\\n⏰ **Sesiones Inteligentes:** Solo opera durante Londres y Nueva York, las horas más rentables para el Oro.',
+            instrument: 'XAUUSD',
+            strategyType: 'Multi-Confirmación Trend Following',
+            riskLevel: 'Medium',
+            price: 69.00,
+            version: '1.0',
+            timeframes: 'M30 (Recomendado), H1',
+            minCapital: 500,
+            ex5FilePath: '/uploads/KOPYTRADE_XAUUSD_GoldSentinelPro.mq5',
+            pdfFilePath: '/uploads/Manual_GoldSentinelPro.pdf',
+            isActive: true,
         }
     ];
 
