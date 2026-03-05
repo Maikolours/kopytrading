@@ -8,27 +8,33 @@ import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial?: boolean }) {
     const [mounted, setMounted] = useState(false);
 
+    // COMPROBAMOS EL MANTENIMIENTO DESDE LA VARIABLE DE VERCEL
+    const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
+
     useEffect(() => {
         setMounted(true);
     }, []);
 
     const paypalOptions = useMemo(() => {
         const id = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
-        // ID REAL como salvavidas si la variable de Vercel falla
         const REAL_ID = "AdOlLwffHIryQIuGjqfUHUtZaFLrkMZA6yNO35Wo8SHGwJ9THPTXc2NWzeY0G0sW8gm_RXtlQF5dsvH4";
 
         return {
             clientId: id || REAL_ID,
-            currency: "USD",
+            currency: "EUR", // CORREGIDO A EUROS
             intent: "capture" as const,
         };
     }, []);
 
-    if (!mounted) {
+    if (!mounted) return null;
+
+    // SI ESTÁ ACTIVADO EL MANTENIMIENTO, BLOQUEAMOS AQUÍ
+    if (isMaintenance) {
         return (
-            <div className="flex flex-col items-center justify-center py-12 space-y-4">
-                <div className="w-8 h-8 border-2 border-brand-light border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-text-muted text-xs font-medium">Iniciando sistema de pago...</p>
+            <div className="p-8 text-center bg-brand/10 border border-brand/20 rounded-3xl space-y-4">
+                <div className="text-4xl">🚧</div>
+                <h2 className="text-xl font-bold text-white">Sistema en Mantenimiento</h2>
+                <p className="text-sm text-text-muted">Estamos ajustando los últimos detalles de los bots. Volvemos en unos minutos.</p>
             </div>
         );
     }
@@ -61,10 +67,9 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
             purchase_units: [{
                 amount: {
                     value: priceString,
-                    currency_code: "USD"
+                    currency_code: "EUR" // CORREGIDO A EUROS
                 },
                 description: `KOPYTRADE Bot: ${bot.name}`,
-                payee: { email_address: "rakerusan@yahoo.es" }
             }]
         });
     }
@@ -192,17 +197,6 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
                     ⚠️ {error}
                 </div>
             )}
-
-            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
-                <div className="flex flex-col gap-1 items-center">
-                    <span className="text-[9px] text-text-muted uppercase font-black tracking-widest">Acceso</span>
-                    <span className="text-xs text-white font-medium">Instante 📩</span>
-                </div>
-                <div className="flex flex-col gap-1 items-center">
-                    <span className="text-[9px] text-text-muted uppercase font-black tracking-widest">Garantía</span>
-                    <span className="text-xs text-white font-medium">Soporte 🔧</span>
-                </div>
-            </div>
         </div>
     );
 }
