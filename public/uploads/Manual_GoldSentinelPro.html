@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoldSentinel Pro v1.0 — Manual KOPYTRADE</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  
+  :root {
+    --gold: #D4AF37;
+    --gold-light: #F5E6A3;
+    --gold-dark: #A67C00;
+    --bg-dark: #0A0A0F;
+    --bg-card: #12121A;
+    --bg-card2: #1A1A2E;
+    --text: #E8E8F0;
+    --text-dim: #8888A0;
+    --accent-green: #00D474;
+    --accent-red: #FF4757;
+    --accent-blue: #4A90D9;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  .page { 
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 40px;
+    page-break-after: always;
+  }
+
+  /* COVER PAGE */
+  .cover {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    text-align: center;
+    background: linear-gradient(135deg, #0A0A0F 0%, #1A1A2E 50%, #0A0A0F 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at center, rgba(212,175,55,0.08) 0%, transparent 70%);
+  }
+  .cover .shield { font-size: 120px; margin-bottom: 20px; position: relative; }
+  .cover h1 {
+    font-size: 48px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+    position: relative;
+  }
+  .cover .version {
+    font-size: 18px;
+    color: var(--gold);
+    font-weight: 600;
+    margin-top: 8px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+  .cover .subtitle {
+    font-size: 16px;
+    color: var(--text-dim);
+    margin-top: 30px;
+    max-width: 500px;
+  }
+  .cover .badge {
+    margin-top: 40px;
+    padding: 12px 32px;
+    border: 1px solid var(--gold);
+    border-radius: 30px;
+    color: var(--gold);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+  .cover .footer-cover {
+    position: absolute;
+    bottom: 40px;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  /* SECTIONS */
+  h2 {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 50px 0 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--gold);
+    color: var(--gold-light);
+  }
+  h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold);
+    margin: 30px 0 12px;
+  }
+  p { margin-bottom: 16px; color: var(--text); font-size: 15px; }
+
+  /* RISK WARNING */
+  .warning-box {
+    background: linear-gradient(135deg, rgba(255,71,87,0.1), rgba(255,71,87,0.05));
+    border-left: 4px solid var(--accent-red);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 30px 0;
+  }
+  .warning-box .title { color: var(--accent-red); font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+  .warning-box p { color: #ccc; font-size: 13px; margin-bottom: 0; }
+
+  /* INFO BOX */
+  .info-box {
+    background: linear-gradient(135deg, rgba(74,144,217,0.1), rgba(74,144,217,0.05));
+    border-left: 4px solid var(--accent-blue);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .info-box .title { color: var(--accent-blue); font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+  .info-box p { color: #ccc; font-size: 13px; margin-bottom: 0; }
+
+  /* FEATURE CARDS */
+  .features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .feature-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(212,175,55,0.15);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .feature-card .icon { font-size: 28px; margin-bottom: 8px; }
+  .feature-card .name { font-weight: 700; font-size: 15px; color: var(--gold-light); margin-bottom: 4px; }
+  .feature-card .desc { font-size: 13px; color: var(--text-dim); }
+
+  /* TABLES */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 14px;
+  }
+  thead th {
+    background: var(--bg-card2);
+    color: var(--gold);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  thead th:first-child { border-radius: 8px 0 0 0; }
+  thead th:last-child { border-radius: 0 8px 0 0; }
+  tbody td {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: var(--text);
+  }
+  tbody tr:hover { background: rgba(212,175,55,0.03); }
+  code {
+    background: rgba(212,175,55,0.1);
+    color: var(--gold);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* STRATEGY DIAGRAM */
+  .strategy-box {
+    background: var(--bg-card);
+    border: 1px solid rgba(212,175,55,0.2);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+  }
+  .filter-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .filter-step:last-child { border-bottom: none; }
+  .filter-num {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px; color: #000;
+    flex-shrink: 0;
+  }
+  .filter-label { font-weight: 600; font-size: 14px }
+  .filter-desc { font-size: 13px; color: var(--text-dim); }
+  .result-arrow {
+    text-align: center;
+    font-size: 24px;
+    color: var(--accent-green);
+    margin: 16px 0 8px;
+    font-weight: 800;
+  }
+  .result-text {
+    text-align: center;
+    font-size: 16px;
+    color: var(--accent-green);
+    font-weight: 700;
+  }
+
+  /* STEPS */
+  .step {
+    display: flex;
+    gap: 16px;
+    margin: 12px 0;
+    align-items: flex-start;
+  }
+  .step-num {
+    width: 28px; height: 28px;
+    background: var(--bg-card2);
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px; color: var(--gold);
+    flex-shrink: 0;
+  }
+  .step-text { font-size: 14px; padding-top: 3px; }
+
+  .golden-rule {
+    background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05));
+    border: 1px solid rgba(212,175,55,0.3);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    text-align: center;
+  }
+  .golden-rule p { color: var(--gold-light); font-weight: 600; margin-bottom: 0; }
+
+  @media print {
+    body { background: #0A0A0F; }
+    .page { padding: 20px; }
+    .cover { min-height: 90vh; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover page">
+  <div class="shield">🛡️</div>
+  <h1>GoldSentinel Pro</h1>
+  <div class="version">Versión 1.0</div>
+  <p class="subtitle">Inteligencia Adaptativa para el Oro<br>Sistema Multi-Confirmación con Gestión ATR Dinámica</p>
+  <div class="badge">XAUUSD · M30 · METATRADER 5</div>
+  <div class="footer-cover">© 2026 KOPYTRADE · kopytrade.com · Todos los derechos reservados</div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+  <div class="warning-box">
+    <div class="title">⚠️ AVISO DE RIESGO LEGAL OBLIGATORIO</div>
+    <p>El Oro (XAUUSD) es extremadamente volátil. Opere únicamente con capital que pueda permitirse perder. Pruebe SIEMPRE en cuenta Demo antes de operar en real. Rentabilidades pasadas no garantizan resultados futuros.</p>
+  </div>
+
+  <h2>🧠 ¿Qué es GoldSentinel Pro?</h2>
+  <p>Es el bot más inteligente de KOPYTRADE para operar en Oro. A diferencia de otros bots que disparan a todo lo que se mueve, GoldSentinel Pro espera al <strong>"tiro perfecto"</strong>: solo entra cuando 4 indicadores están de acuerdo al mismo tiempo.</p>
+  <p><strong>Filosofía:</strong> Calidad sobre cantidad. Menos operaciones, más precisas.</p>
+
+  <div class="features">
+    <div class="feature-card">
+      <div class="icon">🧠</div>
+      <div class="name">Multi-Confirmación</div>
+      <div class="desc">4 indicadores deben coincidir para abrir una operación</div>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📊</div>
+      <div class="name">Gestión ATR Dinámica</div>
+      <div class="desc">SL y TP se adaptan a la volatilidad REAL del mercado</div>
+    </div>
+    <div class="feature-card">
+      <div class="icon">⏰</div>
+      <div class="name">Filtro de Sesiones</div>
+      <div class="desc">Solo opera en Londres y Nueva York</div>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🔒</div>
+      <div class="name">Break Even + Trailing</div>
+      <div class="desc">Protege ganancias automáticamente</div>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🛡️</div>
+      <div class="name">Sin Grid / Martingala</div>
+      <div class="desc">1 operación limpia con SL/TP definidos</div>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📈</div>
+      <div class="name">Ratio 1:2</div>
+      <div class="desc">Take Profit es siempre el doble del riesgo</div>
+    </div>
+  </div>
+
+  <h3>Expectativas de Operación</h3>
+  <table>
+    <thead><tr><th>Escenario</th><th>Frecuencia</th></tr></thead>
+    <tbody>
+      <tr><td>Normal</td><td>3-5 operaciones/día</td></tr>
+      <tr><td>Alta Volatilidad</td><td>5-6 operaciones/día</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- PAGE 3: STRATEGY -->
+<div class="page">
+  <h2>📊 Estrategia Técnica</h2>
+  <h3>Los 4 Filtros de Confirmación</h3>
+  <p>El bot usa un sistema de 4 cerraduras. Solo abre cuando TODAS están "en verde":</p>
+
+  <div class="strategy-box">
+    <div class="filter-step">
+      <div class="filter-num">1</div>
+      <div>
+        <div class="filter-label">🌍 Tendencia Global — EMA 200</div>
+        <div class="filter-desc">¿El mercado sube o baja a largo plazo?</div>
+      </div>
+    </div>
+    <div class="filter-step">
+      <div class="filter-num">2</div>
+      <div>
+        <div class="filter-label">🔀 Momentum — EMA 21 vs EMA 55</div>
+        <div class="filter-desc">¿Se acaba de producir un cruce? (señal de entrada)</div>
+      </div>
+    </div>
+    <div class="filter-step">
+      <div class="filter-num">3</div>
+      <div>
+        <div class="filter-label">📉 Fuerza — RSI 14</div>
+        <div class="filter-desc">¿No estamos en zona peligrosa? (sobrecompra/sobreventa)</div>
+      </div>
+    </div>
+    <div class="filter-step">
+      <div class="filter-num">4</div>
+      <div>
+        <div class="filter-label">🔥 Volatilidad — ATR 14</div>
+        <div class="filter-desc">¿Hay suficiente movimiento para ganar dinero?</div>
+      </div>
+    </div>
+    <div class="result-arrow">↓</div>
+    <div class="result-text">✅ EJECUTAR OPERACIÓN</div>
+  </div>
+
+  <h3>Gestión de Riesgo Dinámica</h3>
+  <table>
+    <thead><tr><th>Elemento</th><th>Cálculo</th><th>Propósito</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Stop Loss</strong></td><td>1.5× ATR</td><td>Se adapta a la volatilidad real</td></tr>
+      <tr><td><strong>Take Profit</strong></td><td>3× ATR</td><td>Ratio Riesgo:Beneficio 1:2</td></tr>
+      <tr><td><strong>Break Even</strong></td><td>1× ATR</td><td>Protege ganancias</td></tr>
+      <tr><td><strong>Trailing Stop</strong></td><td>1× ATR</td><td>Persigue el beneficio</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Para Supervisar en el Gráfico</h3>
+  <p>Añade estos indicadores para "ver" lo que hace el bot:</p>
+  <div class="step"><div class="step-num">1</div><div class="step-text"><strong>EMA 200</strong> (Gris/Blanco) — La "autopista" de la tendencia</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-text"><strong>EMA 21</strong> (Verde) — La señal rápida</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-text"><strong>EMA 55</strong> (Rojo) — La confirmación</div></div>
+</div>
+
+<!-- PAGE 4: PARAMETERS -->
+<div class="page">
+  <h2>⚙️ Guía de Parámetros</h2>
+  <div class="info-box">
+    <div class="title">💡 Cómo acceder</div>
+    <p>Pulsa <strong>F7</strong> en MT5 para ajustar los parámetros. Los valores por defecto son los optimizados por KOPYTRADE.</p>
+  </div>
+
+  <h3>🔑 Licencia KOPYTRADE</h3>
+  <table>
+    <thead><tr><th>Parámetro</th><th>Default</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><code>CuentaDemo</code></td><td>0</td><td>Tu número de cuenta DEMO</td></tr>
+      <tr><td><code>CuentaReal</code></td><td>0</td><td>Tu número de cuenta REAL (solo compra)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>⏰ Sesiones de Mercado</h3>
+  <table>
+    <thead><tr><th>Parámetro</th><th>Default</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><code>SesionLondres_Inicio</code></td><td>8</td><td>Inicio sesión Londres</td></tr>
+      <tr><td><code>SesionLondres_Fin</code></td><td>11</td><td>Fin sesión Londres</td></tr>
+      <tr><td><code>SesionNY_Inicio</code></td><td>14</td><td>Inicio sesión NY</td></tr>
+      <tr><td><code>SesionNY_Fin</code></td><td>17</td><td>Fin sesión NY</td></tr>
+    </tbody>
+  </table>
+
+  <h3>🛡️ Gestión de Riesgo</h3>
+  <table>
+    <thead><tr><th>Parámetro</th><th>Default</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><code>LoteInicial</code></td><td>0.01</td><td>Tamaño de posición</td></tr>
+      <tr><td><code>MaxRiesgoPorTrade_USD</code></td><td>30.0</td><td>Máxima pérdida en $</td></tr>
+      <tr><td><code>ATR_Multiplicador_SL</code></td><td>1.5</td><td>SL = X veces ATR</td></tr>
+      <tr><td><code>ATR_Multiplicador_TP</code></td><td>3.0</td><td>TP = X veces ATR</td></tr>
+    </tbody>
+  </table>
+
+  <h3>📊 Estrategia</h3>
+  <table>
+    <thead><tr><th>Parámetro</th><th>Default</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><code>EMA_Tendencia</code></td><td>200</td><td>EMA de fondo</td></tr>
+      <tr><td><code>EMA_Rapida</code></td><td>21</td><td>EMA rápida (señal)</td></tr>
+      <tr><td><code>EMA_Lenta</code></td><td>55</td><td>EMA lenta (confirmación)</td></tr>
+      <tr><td><code>RSI_Periodo</code></td><td>14</td><td>Período RSI</td></tr>
+      <tr><td><code>RSI_Compra_Min/Max</code></td><td>40/65</td><td>Rango RSI para comprar</td></tr>
+      <tr><td><code>RSI_Venta_Min/Max</code></td><td>35/60</td><td>Rango RSI para vender</td></tr>
+      <tr><td><code>ATR_Periodo</code></td><td>14</td><td>Período ATR</td></tr>
+      <tr><td><code>ATR_Minimo_USD</code></td><td>2.0</td><td>Volatilidad mínima</td></tr>
+    </tbody>
+  </table>
+
+  <h3>🔒 Break Even + 📈 Trailing</h3>
+  <table>
+    <thead><tr><th>Parámetro</th><th>Default</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><code>ActivarBE</code></td><td>true</td><td>Activar Break Even</td></tr>
+      <tr><td><code>BE_ATR_Multiplicador</code></td><td>1.0</td><td>BE al ganar X veces ATR</td></tr>
+      <tr><td><code>BE_Garantia_USD</code></td><td>0.5</td><td>Ganancia asegurada</td></tr>
+      <tr><td><code>ActivarTrailing</code></td><td>true</td><td>Activar Trailing Stop</td></tr>
+      <tr><td><code>Trailing_ATR_Mult</code></td><td>1.0</td><td>Distancia trailing en ATR</td></tr>
+      <tr><td><code>Trailing_Salto</code></td><td>20</td><td>Salto mínimo en puntos</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- PAGE 5: INSTALLATION + SCALING -->
+<div class="page">
+  <h2>🔧 Instalación</h2>
+  <div class="step"><div class="step-num">1</div><div class="step-text">Descarga el archivo <code>.ex5</code> desde tu Dashboard en <strong>kopytrade.com</strong></div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-text">En MT5: <strong>Archivo → Abrir Carpeta de Datos → MQL5 → Experts</strong></div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-text">Copia el archivo <code>.ex5</code> en esa carpeta</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-text">Abre un gráfico <strong>XAUUSD</strong> en temporalidad <strong>M30</strong></div></div>
+  <div class="step"><div class="step-num">5</div><div class="step-text">Arrastra el bot desde el <strong>Navegador</strong> al gráfico</div></div>
+  <div class="step"><div class="step-num">6</div><div class="step-text">Activa <strong>AlgoTrading</strong> (botón verde arriba a la derecha)</div></div>
+  <div class="step"><div class="step-num">7</div><div class="step-text">Configura tus parámetros con <strong>F7</strong> si lo deseas</div></div>
+
+  <h2>💰 Escalado de Capital</h2>
+  <table>
+    <thead><tr><th>Tu Capital</th><th>Lote</th><th>Riesgo Máx/Trade</th></tr></thead>
+    <tbody>
+      <tr><td>500$</td><td>0.01</td><td>30$</td></tr>
+      <tr><td>1.000$</td><td>0.02</td><td>50$</td></tr>
+      <tr><td>2.500$</td><td>0.05</td><td>75$</td></tr>
+      <tr><td>5.000$</td><td>0.10</td><td>100$</td></tr>
+      <tr><td>10.000$</td><td>0.20</td><td>150$</td></tr>
+    </tbody>
+  </table>
+
+  <div class="golden-rule">
+    <p>🏆 Regla de oro: Nunca arriesgues más del 2-3% de tu capital en una sola operación.</p>
+  </div>
+
+  <h2>🔄 Actualización y Reset</h2>
+  <div class="warning-box">
+    <div class="title">⚠️ ANTES DE ACTUALIZAR</div>
+    <p>Copia tu bot antiguo a una carpeta de seguridad. Si la nueva versión no te convence, podrás volver a la anterior.</p>
+  </div>
+  <p><strong>Actualizar:</strong> Descarga la nueva versión → Reemplaza en MQL5 > Experts → Reinicia MT5</p>
+  <p><strong>Reset:</strong> Pulsa F7 → Botón "Restablecer" → Los valores vuelven a la configuración KOPYTRADE</p>
+
+  <h2>❓ FAQ</h2>
+  <p><strong>¿Por qué no abre operaciones?</strong><br>Puede estar fuera de sesión (Londres 8-11h / NY 14-17h) o la volatilidad es muy baja.</p>
+  <p><strong>¿Puedo usarlo en otros pares?</strong><br>Está optimizado para XAUUSD. Otros pares pueden dar resultados impredecibles.</p>
+  <p><strong>¿Compatible con Prop Firms?</strong><br>Sí. Sin grid, sin martingala, SL/TP definidos.</p>
+
+  <br><br>
+  <div style="text-align:center; color: var(--text-dim); font-size: 13px;">
+    <p>Manual revisado: Marzo 2026 | KOPYTRADE GoldSentinel Pro v1.0</p>
+    <p>© 2026 KOPYTRADE. Todos los derechos reservados.</p>
+    <p style="margin-top: 12px; color: var(--gold);">kopytrade.com</p>
+  </div>
+</div>
+
+</body>
+</html>

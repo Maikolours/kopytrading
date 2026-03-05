@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTC Storm Rider v3.0 — Manual KOPYTRADE</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        :root {
+            --btc: #F7931A;
+            --btc-light: #FFD093;
+            --btc-dark: #C76B00;
+            --bg-dark: #07070D;
+            --bg-card: #10101A;
+            --bg-card2: #181828;
+            --text: #E8E8F0;
+            --text-dim: #8888A0;
+            --accent-green: #00D474;
+            --accent-red: #FF4757;
+            --accent-blue: #4A90D9;
+            --electric: #7B68EE;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        .page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            page-break-after: always;
+        }
+
+        /* COVER */
+        .cover {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            background: linear-gradient(135deg, #07070D 0%, #181828 40%, #07070D 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, rgba(247, 147, 26, 0.08) 0%, transparent 70%);
+        }
+
+        .cover .icon {
+            font-size: 120px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .cover h1 {
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--btc-light), var(--btc), var(--btc-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+            position: relative;
+        }
+
+        .cover .version {
+            font-size: 18px;
+            color: var(--btc);
+            font-weight: 600;
+            margin-top: 8px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .cover .subtitle {
+            font-size: 16px;
+            color: var(--text-dim);
+            margin-top: 30px;
+            max-width: 500px;
+        }
+
+        .cover .badge {
+            margin-top: 40px;
+            padding: 12px 32px;
+            border: 1px solid var(--btc);
+            border-radius: 30px;
+            color: var(--btc);
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+
+        .cover .footer-cover {
+            position: absolute;
+            bottom: 40px;
+            color: var(--text-dim);
+            font-size: 13px;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 50px 0 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--btc);
+            color: var(--btc-light);
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--btc);
+            margin: 30px 0 12px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: var(--text);
+            font-size: 15px;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, rgba(255, 71, 87, 0.1), rgba(255, 71, 87, 0.05));
+            border-left: 4px solid var(--accent-red);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin: 30px 0;
+        }
+
+        .warning-box .title {
+            color: var(--accent-red);
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .warning-box p {
+            color: #ccc;
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(74, 144, 217, 0.1), rgba(74, 144, 217, 0.05));
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin: 20px 0;
+        }
+
+        .info-box .title {
+            color: var(--accent-blue);
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            color: #ccc;
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+
+        .anti-racha-box {
+            background: linear-gradient(135deg, rgba(123, 104, 238, 0.12), rgba(123, 104, 238, 0.04));
+            border: 1px solid rgba(123, 104, 238, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .anti-racha-box .title {
+            color: var(--electric);
+            font-weight: 800;
+            font-size: 17px;
+            margin-bottom: 12px;
+        }
+
+        .anti-racha-box .rule {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+
+        .anti-racha-box .rule .emoji {
+            font-size: 20px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(247, 147, 26, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .feature-card .icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .feature-card .name {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--btc-light);
+            margin-bottom: 4px;
+        }
+
+        .feature-card .desc {
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 24px;
+            font-size: 14px;
+        }
+
+        thead th {
+            background: var(--bg-card2);
+            color: var(--btc);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        thead th:first-child {
+            border-radius: 8px 0 0 0;
+        }
+
+        thead th:last-child {
+            border-radius: 0 8px 0 0;
+        }
+
+        tbody td {
+            padding: 10px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text);
+        }
+
+        tbody tr:hover {
+            background: rgba(247, 147, 26, 0.03);
+        }
+
+        code {
+            background: rgba(247, 147, 26, 0.1);
+            color: var(--btc);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .strategy-box {
+            background: var(--bg-card);
+            border: 1px solid rgba(247, 147, 26, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .filter-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .filter-step:last-child {
+            border-bottom: none;
+        }
+
+        .filter-num {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--btc), var(--btc-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            color: #000;
+            flex-shrink: 0;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .filter-desc {
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        .result-arrow {
+            text-align: center;
+            font-size: 24px;
+            color: var(--accent-green);
+            margin: 16px 0 8px;
+            font-weight: 800;
+        }
+
+        .result-text {
+            text-align: center;
+            font-size: 16px;
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+        .step {
+            display: flex;
+            gap: 16px;
+            margin: 12px 0;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            width: 28px;
+            height: 28px;
+            background: var(--bg-card2);
+            border: 1px solid var(--btc);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--btc);
+            flex-shrink: 0;
+        }
+
+        .step-text {
+            font-size: 14px;
+            padding-top: 3px;
+        }
+
+        .golden-rule {
+            background: linear-gradient(135deg, rgba(247, 147, 26, 0.15), rgba(247, 147, 26, 0.05));
+            border: 1px solid rgba(247, 147, 26, 0.3);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .golden-rule p {
+            color: var(--btc-light);
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        @media print {
+            body {
+                background: #07070D;
+            }
+
+            .page {
+                padding: 20px;
+            }
+
+            .cover {
+                min-height: 90vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- COVER -->
+    <div class="cover page">
+        <div class="icon">⚡</div>
+        <h1>BTC Storm Rider</h1>
+        <div class="version">Versión 3.0</div>
+        <p class="subtitle">Breakout Confirmado + Inteligencia Adaptativa<br>Sistema Anti-Racha con Gestión ATR Dinámica
+            para Bitcoin</p>
+        <div class="badge">BTCUSD · H1 · METATRADER 5</div>
+        <div class="footer-cover">© 2026 KOPYTRADE · kopytrade.com · Todos los derechos reservados</div>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div class="page">
+        <div class="warning-box">
+            <div class="title">⚠️ AVISO DE RIESGO LEGAL</div>
+            <p>Bitcoin (BTCUSD) es el activo más volátil del mercado financiero. Opere únicamente con capital que pueda
+                permitirse perder. Pruebe SIEMPRE en cuenta Demo. Rentabilidades pasadas no garantizan resultados
+                futuros.</p>
+        </div>
+
+        <h2>⚡ ¿Qué es BTC Storm Rider?</h2>
+        <p><strong>BTC Storm Rider v3.0</strong> es la evolución definitiva del bot de Bitcoin de KOPYTRADE. Combina la
+            potencia del <strong>Breakout de Rango</strong> con un sistema de <strong>5 filtros de confirmación</strong>
+            y una revolucionaria <strong>protección Anti-Racha</strong>.</p>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="icon">🎯</div>
+                <div class="name">Breakout Confirmado</div>
+                <div class="desc">Solo entra cuando la ruptura es REAL (5 filtros)</div>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📊</div>
+                <div class="name">ATR Dinámico</div>
+                <div class="desc">SL/TP se adaptan a la volatilidad de Bitcoin</div>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🚨</div>
+                <div class="name">Anti-Racha</div>
+                <div class="desc">Límite de pérdida diaria + máx ops/día</div>
+            </div>
+            <div class="feature-card">
+                <div class="icon">⏰</div>
+                <div class="name">Filtro Sesiones</div>
+                <div class="desc">Europa + USA (donde hay volumen real)</div>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🔒</div>
+                <div class="name">BE + Trailing ATR</div>
+                <div class="desc">Protege y persigue ganancias</div>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🛡️</div>
+                <div class="name">Sin Grid / Martingala</div>
+                <div class="desc">1 operación limpia, ratio 1:2</div>
+            </div>
+        </div>
+
+        <h3>Expectativas</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Escenario</th>
+                    <th>Frecuencia</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Tendencia Clara</td>
+                    <td>2-3 ops/día</td>
+                </tr>
+                <tr>
+                    <td>Mercado Lateral</td>
+                    <td>0-1 ops/día</td>
+                </tr>
+                <tr>
+                    <td>Alta Volatilidad</td>
+                    <td>1-3 ops (protección activa)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PAGE 3: STRATEGY -->
+    <div class="page">
+        <h2>📊 Estrategia Técnica</h2>
+        <h3>Los 5 Filtros de Entrada</h3>
+
+        <div class="strategy-box">
+            <div class="filter-step">
+                <div class="filter-num">1</div>
+                <div>
+                    <div class="filter-label">💥 Breakout de Rango</div>
+                    <div class="filter-desc">¿El precio ha roto el máximo/mínimo de las últimas 24 velas?</div>
+                </div>
+            </div>
+            <div class="filter-step">
+                <div class="filter-num">2</div>
+                <div>
+                    <div class="filter-label">🌍 Tendencia — EMA 200</div>
+                    <div class="filter-desc">¿El precio está del lado correcto de la tendencia?</div>
+                </div>
+            </div>
+            <div class="filter-step">
+                <div class="filter-num">3</div>
+                <div>
+                    <div class="filter-label">🔀 Momentum — EMA 21 vs 55</div>
+                    <div class="filter-desc">¿La EMA rápida confirma la dirección?</div>
+                </div>
+            </div>
+            <div class="filter-step">
+                <div class="filter-num">4</div>
+                <div>
+                    <div class="filter-label">📉 Fuerza — RSI 14</div>
+                    <div class="filter-desc">¿No estamos en zona de sobrecompra/sobreventa?</div>
+                </div>
+            </div>
+            <div class="filter-step">
+                <div class="filter-num">5</div>
+                <div>
+                    <div class="filter-label">🔥 Volatilidad — ATR 14</div>
+                    <div class="filter-desc">¿Hay suficiente movimiento para justificar la entrada?</div>
+                </div>
+            </div>
+            <div class="result-arrow">↓</div>
+            <div class="result-text">✅ BREAKOUT CONFIRMADO → EJECUTAR</div>
+        </div>
+
+        <h3>🚨 Sistema Anti-Racha (EXCLUSIVO v3.0)</h3>
+        <div class="anti-racha-box">
+            <div class="title">🚨 PROTECCIÓN DE CUENTA</div>
+            <div class="rule"><span class="emoji">💸</span> Si pierdes más de <strong>$100 en un día</strong> → El bot
+                PARA automáticamente</div>
+            <div class="rule"><span class="emoji">🔢</span> Si haces <strong>3 operaciones en un día</strong> → El bot
+                PARA automáticamente</div>
+            <div class="rule"><span class="emoji">🌅</span> Se <strong>reactiva al día siguiente</strong> → Protege
+                contra el "revenge trading"</div>
+        </div>
+
+        <h3>Gestión ATR Dinámica</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Elemento</th>
+                    <th>Cálculo</th>
+                    <th>Propósito</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Stop Loss</strong></td>
+                    <td>2× ATR</td>
+                    <td>BTC necesita más espacio</td>
+                </tr>
+                <tr>
+                    <td><strong>Take Profit</strong></td>
+                    <td>4× ATR</td>
+                    <td>Ratio 1:2</td>
+                </tr>
+                <tr>
+                    <td><strong>Break Even</strong></td>
+                    <td>1× ATR</td>
+                    <td>Proteger ganancias</td>
+                </tr>
+                <tr>
+                    <td><strong>Trailing</strong></td>
+                    <td>1.5× ATR</td>
+                    <td>Perseguir beneficio</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PAGE 4: PARAMETERS -->
+    <div class="page">
+        <h2>⚙️ Parámetros</h2>
+        <div class="info-box">
+            <div class="title">💡 Accede con F7 en MT5</div>
+            <p>Los valores por defecto son los optimizados por KOPYTRADE. Modifícalos solo si sabes lo que haces.</p>
+        </div>
+
+        <h3>🔑 Licencia</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parámetro</th>
+                    <th>Default</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>CuentaDemo</code></td>
+                    <td>0</td>
+                    <td>Nº cuenta DEMO</td>
+                </tr>
+                <tr>
+                    <td><code>CuentaReal</code></td>
+                    <td>0</td>
+                    <td>Nº cuenta REAL (solo compra)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>⏰ Sesiones</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parámetro</th>
+                    <th>Default</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>SesionEuropa_Inicio/Fin</code></td>
+                    <td>8/16</td>
+                    <td>Sesión Europa</td>
+                </tr>
+                <tr>
+                    <td><code>SesionUS_Inicio/Fin</code></td>
+                    <td>14/22</td>
+                    <td>Sesión USA</td>
+                </tr>
+                <tr>
+                    <td><code>OperarEnAsia</code></td>
+                    <td>false</td>
+                    <td>Sesión asiática (menos volumen)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>🛡️ Riesgo + 🚨 Anti-Racha</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parámetro</th>
+                    <th>Default</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>LoteInicial</code></td>
+                    <td>0.01</td>
+                    <td>Tamaño posición</td>
+                </tr>
+                <tr>
+                    <td><code>MaxRiesgoPorTrade_USD</code></td>
+                    <td>50.0</td>
+                    <td>Máx pérdida por trade</td>
+                </tr>
+                <tr>
+                    <td><code>ATR_Multiplicador_SL</code></td>
+                    <td>2.0</td>
+                    <td>SL = X × ATR</td>
+                </tr>
+                <tr>
+                    <td><code>ATR_Multiplicador_TP</code></td>
+                    <td>4.0</td>
+                    <td>TP = X × ATR</td>
+                </tr>
+                <tr>
+                    <td><code>MaxPerdidaDiaria_USD</code></td>
+                    <td>100</td>
+                    <td>Límite pérdida diaria</td>
+                </tr>
+                <tr>
+                    <td><code>MaxOperacionesDia</code></td>
+                    <td>3</td>
+                    <td>Máx ops por día</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>📊 Estrategia</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parámetro</th>
+                    <th>Default</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>VelasRango</code></td>
+                    <td>24</td>
+                    <td>Velas para breakout</td>
+                </tr>
+                <tr>
+                    <td><code>FiltroMinRango_USD</code></td>
+                    <td>500</td>
+                    <td>Rango mínimo</td>
+                </tr>
+                <tr>
+                    <td><code>EMA_Tendencia</code></td>
+                    <td>200</td>
+                    <td>EMA de fondo</td>
+                </tr>
+                <tr>
+                    <td><code>EMA_Rapida/Lenta</code></td>
+                    <td>21/55</td>
+                    <td>Cruces momentum</td>
+                </tr>
+                <tr>
+                    <td><code>RSI_Periodo</code></td>
+                    <td>14</td>
+                    <td>Período RSI</td>
+                </tr>
+                <tr>
+                    <td><code>RSI_Compra_Min/Max</code></td>
+                    <td>45/70</td>
+                    <td>Rango compra</td>
+                </tr>
+                <tr>
+                    <td><code>RSI_Venta_Min/Max</code></td>
+                    <td>30/55</td>
+                    <td>Rango venta</td>
+                </tr>
+                <tr>
+                    <td><code>ATR_Periodo</code></td>
+                    <td>14</td>
+                    <td>Período ATR</td>
+                </tr>
+                <tr>
+                    <td><code>ATR_Minimo_USD</code></td>
+                    <td>300</td>
+                    <td>Volatilidad mínima</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>🔒 BE + 📈 Trailing</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parámetro</th>
+                    <th>Default</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>ActivarBE</code></td>
+                    <td>true</td>
+                    <td>Break Even</td>
+                </tr>
+                <tr>
+                    <td><code>BE_ATR_Multiplicador</code></td>
+                    <td>1.0</td>
+                    <td>BE al ganar X × ATR</td>
+                </tr>
+                <tr>
+                    <td><code>ActivarTrailing</code></td>
+                    <td>true</td>
+                    <td>Trailing Stop</td>
+                </tr>
+                <tr>
+                    <td><code>Trailing_ATR_Mult</code></td>
+                    <td>1.5</td>
+                    <td>Distancia trailing</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PAGE 5: INSTALL + SCALING -->
+    <div class="page">
+        <h2>🔧 Instalación</h2>
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">Descarga <code>.ex5</code> desde tu Dashboard en <strong>kopytrade.com</strong></div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text"><strong>Archivo → Abrir Carpeta de Datos → MQL5 → Experts</strong></div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">Copia el archivo en esa carpeta</div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-text">Abre gráfico <strong>BTCUSD H1</strong></div>
+        </div>
+        <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-text">Arrastra el bot y activa <strong>AlgoTrading</strong></div>
+        </div>
+
+        <h2>💰 Escalado de Capital</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Capital</th>
+                    <th>Lote</th>
+                    <th>Max Pérdida Diaria</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2.000$</td>
+                    <td>0.01</td>
+                    <td>$100</td>
+                </tr>
+                <tr>
+                    <td>5.000$</td>
+                    <td>0.03</td>
+                    <td>$150</td>
+                </tr>
+                <tr>
+                    <td>10.000$</td>
+                    <td>0.06</td>
+                    <td>$200</td>
+                </tr>
+                <tr>
+                    <td>25.000$</td>
+                    <td>0.15</td>
+                    <td>$400</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="golden-rule">
+            <p>🏆 Nunca arriesgues más del 2% de tu capital por operación.</p>
+        </div>
+
+        <h2>❓ FAQ</h2>
+        <p><strong>¿Qué es la Protección Anti-Racha?</strong><br>Si pierdes $100 en un día o haces 3 ops, el bot para.
+            Evita que una mala racha destruya tu cuenta.</p>
+        <p><strong>¿Por qué no abre operaciones?</strong><br>Fuera de sesión, ATR bajo, o protección anti-racha activa.
+            Revisa el panel.</p>
+        <p><strong>¿Compatible con Prop Firms?</strong><br>Sí. Sin martingala, sin grid, SL/TP definidos, drawdown
+            controlado.</p>
+
+        <br><br>
+        <div style="text-align:center; color: var(--text-dim); font-size: 13px;">
+            <p>Manual revisado: Marzo 2026 | KOPYTRADE BTC Storm Rider v3.0</p>
+            <p>© 2026 KOPYTRADE. Todos los derechos reservados.</p>
+            <p style="margin-top: 12px; color: var(--btc);">kopytrade.com</p>
+        </div>
+    </div>
+
+</body>
+
+</html>
