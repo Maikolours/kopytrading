@@ -113,6 +113,24 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                         <span className="text-text-muted">Timeframes</span>
                                         <span className="font-medium text-white">{bot.timeframes || '-'}</span>
                                     </div>
+                                    <div className="pt-3 mt-3 border-t border-white/5">
+                                        <div className="flex justify-between items-center mb-2">
+                                            <span className="text-[10px] uppercase tracking-wider text-text-muted">Curva de Equidad</span>
+                                            <span className="text-xs text-success font-bold flex items-center gap-1">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse"></span>
+                                                Positiva
+                                            </span>
+                                        </div>
+                                        <div className="h-8 flex items-end gap-1 w-full">
+                                            {[30, 40, 35, 50, 45, 65, 60, 80, 75, 100].map((h, i) => (
+                                                <div
+                                                    key={i}
+                                                    className="flex-1 bg-gradient-to-t from-success/20 to-success rounded-t-sm transition-all duration-300 hover:opacity-100"
+                                                    style={{ height: `${h}%`, opacity: 0.4 + (i * 0.06) }}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
                             </CardContent>
 

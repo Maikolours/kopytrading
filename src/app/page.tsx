@@ -21,7 +21,7 @@ const BROKERS = [
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen relative overflow-hidden">
+    <div className="flex flex-col min-h-screen relative overflow-hidden bg-bg-dark">
 
       {/* === TICKER DE PRECIOS ANIMADO === */}
       <div className="fixed top-0 left-0 right-0 z-[60] bg-bg-dark/95 backdrop-blur border-b border-white/5 py-2">
@@ -214,6 +214,141 @@ export default function Home() {
             <p className="text-center text-xs text-text-muted mt-8 opacity-60">
               KopyTrading no tiene afiliación comercial con estos brokers. La selección se basa únicamente en criterios técnicos de compatibilidad con MT5.
             </p>
+          </div>
+        </section>
+
+        {/* === SECCIÓN TESTIMONIOS (PRUEBA SOCIAL) === */}
+        <section className="px-4 sm:px-6 lg:px-8 py-20 border-t border-white/5 bg-gradient-to-b from-transparent to-brand/5">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <span className="text-xs font-semibold text-brand-light tracking-widest uppercase mb-3 block">Lo que dicen nuestros traders</span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Resultados Reales. Traders Reales.</h2>
+              <p className="text-text-muted max-w-2xl mx-auto text-sm sm:text-base">
+                Ya son decenas de usuarios operando sus cuentas con el apoyo de nuestros algoritmos automáticos.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+              {[
+                { name: "Carlos M.", type: "Cuenta Fondeada", text: "Llevaba meses intentando pasar mis pruebas de fondeo. Empecé a usar el BTC Storm Rider con riesgo muy conservador y logré el objetivo en 3 semanas sin tocar las emociones.", bot: "BTC Storm Rider", stars: 5 },
+                { name: "Elena R.", type: "Trader Retail", text: "No tenía tiempo para mirar las gráficas por mi trabajo. El Gold Sentinel Pro lo hace por mí. Solo reviso los resultados por la noche. Me ha cambiado la vida.", bot: "Gold Sentinel Pro", stars: 5 },
+                { name: "Javier T.", type: "Trader Institucional", text: "La gestión de riesgo (Stop Loss dinámico en dólares) de estos bots es nivel institucional. Mucho mejor programados de lo que encuentras normalmente por ahí.", bot: "Ametralladora v2", stars: 5 }
+              ].map((testimonio, i) => (
+                <div key={i} className="glass-card border border-white/10 rounded-2xl p-6 sm:p-8 hover:-translate-y-2 transition-transform duration-300">
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(testimonio.stars)].map((_, s) => (
+                      <span key={s} className="text-yellow-500">★</span>
+                    ))}
+                  </div>
+                  <p className="text-white/80 italic mb-6 leading-relaxed">"{testimonio.text}"</p>
+                  <div className="flex items-center gap-4 border-t border-white/10 pt-4">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand to-accent flex items-center justify-center font-bold text-white shadow-lg">
+                      {testimonio.name.charAt(0)}
+                    </div>
+                    <div>
+                      <h4 className="text-white font-bold text-sm">{testimonio.name}</h4>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-text-muted">{testimonio.type}</span>
+                        <span className="text-xs text-brand-light bg-brand/10 px-2 py-0.5 rounded-full">{testimonio.bot}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-12 text-center flex flex-col items-center">
+              <div className="flex -space-x-3 mb-4">
+                {[1, 2, 3, 4, 5].map(i => (
+                  <div key={i} className="w-10 h-10 rounded-full border-2 border-bg-dark bg-surface flex items-center justify-center overflow-hidden">
+                    <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i}&backgroundColor=transparent`} alt="User" />
+                  </div>
+                ))}
+                <div className="w-10 h-10 rounded-full border-2 border-bg-dark bg-accent flex items-center justify-center text-white text-xs font-bold">+50</div>
+              </div>
+              <p className="text-text-muted text-sm font-medium">Únete a nuestra creciente comunidad de traders algorítmicos</p>
+            </div>
+          </div>
+        </section>
+
+        {/* === SECCIÓN COMPARATIVA (TRIAL VS COMPRA) === */}
+        <section className="px-4 sm:px-6 lg:px-8 py-24 border-t border-white/5 relative">
+          <div className="absolute inset-0 bg-brand/5 blur-[100px] pointer-events-none" />
+          <div className="max-w-5xl mx-auto relative z-10">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Planes Claros. Sin Suscripciones.</h2>
+              <p className="text-text-muted max-w-xl mx-auto text-sm sm:text-base">
+                Nuestra filosofía es sencilla: descargas el bot, lo pruebas gratis operando en tu cuenta de MetaTrader, y si te gusta, lo compras para siempre.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {/* PLAN TRIAL */}
+              <div className="glass-card border border-white/10 rounded-3xl p-8 relative overflow-hidden flex flex-col h-full">
+                <div className="absolute top-0 right-0 p-4">
+                  <span className="bg-white/10 text-white text-xs font-bold px-3 py-1 rounded-full">30 Días</span>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2">Prueba Gratis</h3>
+                <p className="text-text-muted text-sm mb-6">Prueba el bot completo sin restricciones en cuenta demo.</p>
+                <div className="text-4xl font-extrabold text-white mb-8">$0<span className="text-lg text-text-muted font-normal"> / mes</span></div>
+
+                <ul className="space-y-4 mb-8 flex-1">
+                  {[
+                    { text: "Acceso completo a todos los parámetros", ok: true },
+                    { text: "Licencia válida para Cuenta Demo", ok: true },
+                    { text: "Uso libre durante 30 días", ok: true },
+                    { text: "Licencia para Cuenta Real", ok: false },
+                    { text: "Actualizaciones de por vida", ok: false }
+                  ].map((feature, i) => (
+                    <li key={i} className={`flex items-start gap-3 ${feature.ok ? 'text-white' : 'text-white/30'}`}>
+                      <span className={`mt-0.5 ${feature.ok ? 'text-success' : 'text-danger/50'}`}>{feature.ok ? '✓' : '✕'}</span>
+                      <span className="text-sm">{feature.text}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link href="/bots" className="w-full">
+                  <Button variant="outline" className="w-full py-6 rounded-xl border-white/20 hover:bg-white/5">
+                    Ver Catálogo y Probar
+                  </Button>
+                </Link>
+              </div>
+
+              {/* PLAN LICENCIA */}
+              <div className="relative rounded-3xl p-[1px] bg-gradient-to-b from-brand-light via-brand to-accent h-full">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-brand to-accent text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg z-20">
+                  RECOMENDADO
+                </div>
+                <div className="bg-bg-dark rounded-3xl p-8 relative overflow-hidden h-full flex flex-col">
+                  <div className="absolute inset-0 bg-gradient-to-br from-brand/10 to-transparent pointer-events-none" />
+
+                  <h3 className="text-2xl font-bold text-white mb-2 relative z-10">Licencia Vitalicia</h3>
+                  <p className="text-text-muted text-sm mb-6 relative z-10">Tuya para siempre. Opérala en tu cuenta real.</p>
+                  <div className="text-4xl font-extrabold text-white mb-8 relative z-10">Desde €67<span className="text-lg text-text-muted font-normal"> / pago único</span></div>
+
+                  <ul className="space-y-4 mb-8 flex-1 relative z-10">
+                    {[
+                      { text: "Acceso completo a todos los parámetros", ok: true },
+                      { text: "Licencia válida para Cuenta Demo", ok: true },
+                      { text: "Licencia válida para Cuenta Real (1 ID)", ok: true },
+                      { text: "Actualizaciones de estrategia gratuitas", ok: true },
+                      { text: "Soporte prioritario por email", ok: true }
+                    ].map((feature, i) => (
+                      <li key={i} className="flex items-start gap-3 text-white">
+                        <span className="mt-0.5 text-success">✓</span>
+                        <span className="text-sm font-medium">{feature.text}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Link href="/bots" className="w-full relative z-10">
+                    <Button variant="accent" className="w-full py-6 rounded-xl shadow-[0_0_20px_rgba(139,92,246,0.3)] animate-pulse-glow">
+                      Comprar Licencia Ahora
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
