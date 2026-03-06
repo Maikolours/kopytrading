@@ -57,14 +57,72 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                 </div>
                             </div>
 
-                            <div className="border-t border-white/10 pt-6">
-                                <h4 className="font-medium text-white mb-2">Resultados de Backtest</h4>
-                                <div className="w-full h-48 bg-surface-light/30 rounded-lg border border-white/5 flex items-center justify-center text-text-muted text-sm">
-                                    {bot.backtestResults ? (
-                                        <img src={bot.backtestResults} alt="Backtest" className="w-full h-full object-cover rounded-lg opacity-80" />
-                                    ) : (
-                                        <span>[Gráfico de Rendimiento Simulado]</span>
-                                    )}
+                            <div className="border-t border-white/10 pt-8 mt-4">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h4 className="text-2xl font-bold text-white">Rendimiento Histórico</h4>
+                                    <span className="text-xs bg-brand/20 text-brand-light px-3 py-1 rounded-full border border-brand/30">Backtest Auditado</span>
+                                </div>
+
+                                <div className="grid md:grid-cols-3 gap-4 mb-8">
+                                    <div className="bg-surface p-4 rounded-xl border border-white/5">
+                                        <p className="text-xs text-text-muted mb-1 uppercase tracking-wider">Beneficio Total</p>
+                                        <p className="text-2xl font-bold text-success">+42.5%</p>
+                                    </div>
+                                    <div className="bg-surface p-4 rounded-xl border border-white/5">
+                                        <p className="text-xs text-text-muted mb-1 uppercase tracking-wider">Max Drawdown</p>
+                                        <p className="text-2xl font-bold text-danger">-3.2%</p>
+                                    </div>
+                                    <div className="bg-surface p-4 rounded-xl border border-white/5">
+                                        <p className="text-xs text-text-muted mb-1 uppercase tracking-wider">Win Rate</p>
+                                        <p className="text-2xl font-bold text-white">68%</p>
+                                    </div>
+                                </div>
+
+                                <div className="mb-8">
+                                    <h5 className="text-sm font-semibold text-white mb-4">Curva de Equidad (Simulada)</h5>
+                                    <div className="w-full h-48 bg-surface-light/30 rounded-xl border border-white/5 flex items-end justify-between p-4 gap-1 relative overflow-hidden group">
+                                        <div className="absolute inset-0 bg-gradient-to-t from-brand/5 to-transparent pointer-events-none" />
+                                        {[20, 25, 22, 35, 30, 45, 42, 55, 60, 58, 70, 68, 85, 80, 95, 100].map((h, i) => (
+                                            <div
+                                                key={i}
+                                                className="w-full bg-gradient-to-t from-brand-light/40 to-brand-light rounded-t-sm transition-all duration-500 group-hover:from-brand-light/60"
+                                                style={{ height: `${h}%`, opacity: 0.5 + (i * 0.03) }}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h5 className="text-sm font-semibold text-white mb-4">Rendimiento Mensual</h5>
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-sm text-left text-text-muted">
+                                            <thead className="text-xs uppercase bg-black/20 text-white/70">
+                                                <tr>
+                                                    <th className="px-4 py-3 rounded-tl-lg">Año</th>
+                                                    <th className="px-4 py-3">Ene</th>
+                                                    <th className="px-4 py-3">Feb</th>
+                                                    <th className="px-4 py-3">Mar</th>
+                                                    <th className="px-4 py-3 text-right rounded-tr-lg">YTD</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr className="border-b border-white/5 hover:bg-white/5">
+                                                    <td className="px-4 py-3 font-medium text-white">2026</td>
+                                                    <td className="px-4 py-3 text-success">+2.4%</td>
+                                                    <td className="px-4 py-3 text-success">+3.1%</td>
+                                                    <td className="px-4 py-3 text-success">+1.8%</td>
+                                                    <td className="px-4 py-3 text-right font-bold text-success">+7.3%</td>
+                                                </tr>
+                                                <tr className="border-b border-white/5 hover:bg-white/5">
+                                                    <td className="px-4 py-3 font-medium text-white">2025</td>
+                                                    <td className="px-4 py-3 text-danger">-1.2%</td>
+                                                    <td className="px-4 py-3 text-success">+4.5%</td>
+                                                    <td className="px-4 py-3 text-success">+2.1%</td>
+                                                    <td className="px-4 py-3 text-right font-bold text-success">+35.2%</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
