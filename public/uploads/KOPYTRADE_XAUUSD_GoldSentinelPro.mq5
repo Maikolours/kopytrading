@@ -45,13 +45,14 @@ input double   ATR_Minimo_USD    = 2.0;       // Volatilidad mínima para operar
 //=== BREAK EVEN ===
 input group "=== 🔒 BREAK EVEN ==="
 input bool     ActivarBE              = true;  // ¿Activar Break Even?
-input double   BE_ATR_Multiplicador   = 1.0;   // Activar BE al ganar X veces ATR
-input double   BE_Garantia_USD        = 0.5;   // Ganancia asegurada tras BE ($)
+input double   BE_Activar_USD         = 3.0;   // Activar BE cuando ganes X dólares
+input double   BE_Garantia_USD        = 1.0;   // Ganancia asegurada tras BE ($)
 
 //=== TRAILING STOP ===
-input group "=== 📈 TRAILING STOP ADAPTATIVO ==="
+input group "=== 📈 TRAILING STOP ==="
 input bool     ActivarTrailing             = true;  // ¿Activar Trailing Stop?
-input double   Trailing_ATR_Multiplicador  = 1.0;   // Distancia trailing = X veces ATR
+input double   Trailing_Activar_USD        = 3.0;   // Activar trailing cuando ganes X dólares
+input double   Trailing_Distancia_USD      = 2.0;   // Distancia del trailing en dólares
 input int      Trailing_Salto_Puntos       = 20;    // Puntos mínimos para mover trailing
 
 //=== CONFIGURACIÓN AVANZADA ===
@@ -284,42 +285,37 @@ void GestionarPosiciones() {
       
       // ===== BREAK EVEN =====
       if(ActivarBE) {
-         double beThreshold = atrValueCurrent * BE_ATR_Multiplicador;
          double garantia = BE_Garantia_USD * _Point * 10;
          
          if(tipo == POSITION_TYPE_BUY) {
-            double precioActualDist = bid - pOpen;
-            if(precioActualDist >= beThreshold) {
+            if(profit >= BE_Activar_USD) {
                double newSL = pOpen + garantia;
                newSL = NormalizeDouble(newSL, _Digits);
                if(sl < newSL) {
                   trade.PositionModify(ticket, newSL, tp);
-                  Print("🔒 BE ACTIVADO [BUY] Ticket: ", ticket, " | Nuevo SL: ", newSL);
+                  Print("🔒 BE ACTIVADO [BUY] Ticket: ", ticket, " | Profit: $", profit, " | Nuevo SL: ", newSL);
                }
             }
          }
          else if(tipo == POSITION_TYPE_SELL) {
-            double precioActualDist = pOpen - ask;
-            if(precioActualDist >= beThreshold) {
+            if(profit >= BE_Activar_USD) {
                double newSL = pOpen - garantia;
                newSL = NormalizeDouble(newSL, _Digits);
                if(sl == 0 || sl > newSL) {
                   trade.PositionModify(ticket, newSL, tp);
-                  Print("🔒 BE ACTIVADO [SELL] Ticket: ", ticket, " | Nuevo SL: ", newSL);
+                  Print("🔒 BE ACTIVADO [SELL] Ticket: ", ticket, " | Profit: $", profit, " | Nuevo SL: ", newSL);
                }
             }
          }
       }
       
-      // ===== TRAILING STOP ADAPTATIVO (ATR) =====
+      // ===== TRAILING STOP (USD) =====
       if(ActivarTrailing) {
-         double trailDist = atrValueCurrent * Trailing_ATR_Multiplicador;
+         double trailDist = Trailing_Distancia_USD * _Point * 10;
          double salto = Trailing_Salto_Puntos * _Point;
          
          if(tipo == POSITION_TYPE_BUY) {
-            double precioActualDist = bid - pOpen;
-            double beThreshold = atrValueCurrent * BE_ATR_Multiplicador;
-            if(precioActualDist >= beThreshold) {
+            if(profit >= Trailing_Activar_USD) {
                double newSL = NormalizeDouble(bid - trailDist, _Digits);
                if(newSL > sl + salto && newSL > pOpen) {
                   trade.PositionModify(ticket, newSL, tp);
@@ -328,9 +324,7 @@ void GestionarPosiciones() {
             }
          }
          else if(tipo == POSITION_TYPE_SELL) {
-            double precioActualDist = pOpen - ask;
-            double beThreshold = atrValueCurrent * BE_ATR_Multiplicador;
-            if(precioActualDist >= beThreshold) {
+            if(profit >= Trailing_Activar_USD) {
                double newSL = NormalizeDouble(ask + trailDist, _Digits);
                if(sl == 0 || (newSL < sl - salto && newSL < pOpen)) {
                   trade.PositionModify(ticket, newSL, tp);
