@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
-//|          KOPYTRADE_XAUUSD_GoldSentinelPro v1.0                  |
-//|    MULTI-CONFIRMATION TREND FOLLOWING · ATR DYNAMIC RISK         |
+//|          KOPYTRADE_XAUUSD_GoldSentinelPro v1.1                  |
+//|   TREND ALIGNMENT + MULTI-CONFIRMATION · ATR DYNAMIC RISK        |
 //+------------------------------------------------------------------+
 #property copyright "KOPYTRADE - Bot Oficial"
-#property version   "1.00"
+#property version   "1.10"
 #property strict
 #property description "GoldSentinel Pro | Inteligencia Adaptativa para el Oro"
 #property description "Estrategia Multi-Confirmación con Gestión ATR Dinámica"
@@ -69,6 +69,7 @@ int    emaLentHandle  = INVALID_HANDLE;
 int    rsiHandle      = INVALID_HANDLE;
 int    atrHandle      = INVALID_HANDLE;
 double atrValueCurrent = 0;
+ulong  lastBarTime     = 0;
 
 //+------------------------------------------------------------------+
 //| SISTEMA DE TRIAL Y LICENCIA                                       |
@@ -132,7 +133,7 @@ int OnInit() {
    trade.SetExpertMagicNumber(MagicNumber);
    trade.SetTypeFillingBySymbol(_Symbol);
    
-   Print("✅ GoldSentinel Pro v1.0 ACTIVADO en ", _Symbol);
+   Print("✅ GoldSentinel Pro v1.1 ACTIVADO en ", _Symbol);
    Print("   EMA Tendencia: ", EMA_Tendencia, " | EMA Rápida: ", EMA_Rapida, " | EMA Lenta: ", EMA_Lenta);
    Print("   RSI: ", RSI_Periodo, " | ATR: ", ATR_Periodo);
    Print("   SL Multiplicador: ", ATR_Multiplicador_SL, "x ATR | TP Multiplicador: ", ATR_Multiplicador_TP, "x ATR");
@@ -166,9 +167,14 @@ void OnTick() {
    // Gestionar posiciones abiertas
    GestionarPosiciones();
    
-   // Buscar nueva entrada si hay espacio y estamos en sesión
-   if(ContarPosiciones() < MaxPosiciones && EstaEnSesion())
-      BuscarEntrada();
+   // Buscar nueva entrada solo al inicio de cada vela nueva
+   if(ContarPosiciones() < MaxPosiciones && EstaEnSesion()) {
+      datetime barActual = iTime(_Symbol, _Period, 0);
+      if(barActual != (datetime)lastBarTime) {
+         lastBarTime = barActual;
+         BuscarEntrada();
+      }
+   }
    
    // Panel visual
    if(MostrarPanel) DibujarPanel();
@@ -210,16 +216,16 @@ void BuscarEntrada() {
    double slUSD = (slDistance / tickSize) * tickValue * LoteInicial;
    if(slUSD > MaxRiesgoPorTrade_USD) return;
    
-   // Detectar cruce de EMAs
-   bool cruceAlcista = (emaRap[1] <= emaLent[1]) && (emaRap[0] > emaLent[0]);
-   bool cruceBajista = (emaRap[1] >= emaLent[1]) && (emaRap[0] < emaLent[0]);
+   // Comprobar alineación de EMAs (no cruce exacto)
+   bool emaAlcista = (emaRap[0] > emaLent[0]);
+   bool emaBajista = (emaRap[0] < emaLent[0]);
    
    // ===== SEÑAL DE COMPRA =====
    // 1. Precio > EMA200 (tendencia alcista)
-   // 2. EMA21 cruza por encima de EMA55 (momentum)
-   // 3. RSI entre 40-65 (no sobrecomprado)
+   // 2. EMA21 > EMA55 (momentum positivo)
+   // 3. RSI entre 35-72 (no sobrecomprado)
    // 4. ATR > mínimo (hay volatilidad)
-   if(bid > emaTend[0] && cruceAlcista && 
+   if(bid > emaTend[0] && emaAlcista && 
       rsi[0] >= RSI_Compra_Min && rsi[0] <= RSI_Compra_Max) {
       
       double sl = ask - slDistance;
@@ -237,10 +243,10 @@ void BuscarEntrada() {
    
    // ===== SEÑAL DE VENTA =====
    // 1. Precio < EMA200 (tendencia bajista)
-   // 2. EMA21 cruza por debajo de EMA55 (momentum)
-   // 3. RSI entre 35-60 (no sobrevendido)
+   // 2. EMA21 < EMA55 (momentum negativo)
+   // 3. RSI entre 28-65 (no sobrevendido)
    // 4. ATR > mínimo (hay volatilidad)
-   if(bid < emaTend[0] && cruceBajista && 
+   if(bid < emaTend[0] && emaBajista && 
       rsi[0] >= RSI_Venta_Min && rsi[0] <= RSI_Venta_Max) {
       
       double sl = bid + slDistance;
@@ -393,7 +399,7 @@ void DibujarPanel() {
    
    string panel = "";
    panel += "╔══════════════════════════════════╗\n";
-   panel += "║   🛡️ GOLDSENTINEL PRO v1.0       ║\n";
+   panel += "║   🛡️ GOLDSENTINEL PRO v1.1       ║\n";
    panel += "║        KOPYTRADE.COM              ║\n";
    panel += "╠══════════════════════════════════╣\n";
    panel += "║ Tendencia EMA" + IntegerToString(EMA_Tendencia) + ": " + tendencia + "      \n";
