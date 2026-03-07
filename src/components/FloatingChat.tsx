@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     {
         keywords: ["hola", "hello", "buenas", "hey", "qué tal", "que tal", "saludos"],
-        response: "¡Hola! Soy KopyBot 🤖, el asistente experto de KOPYTRADE. Puedo ayudarte con consultas técnicas, MetaTrader 5, nuestros bots, brokers y gestión de riesgo. ¿En qué te puedo ayudar?"
+        response: "¡Hola! Soy KopyBot 🤖, el asistente experto de KopyTrading. Puedo ayudarte con consultas técnicas, MetaTrader 5, nuestros bots, brokers y gestión de riesgo. ¿En qué te puedo ayudar?"
     },
     {
         keywords: ["recomiendas", "recomienda", "empezar", "primer bot", "cuál compro", "cual compro", "para principiante", "soy nuevo", "nunca he", "novato", "recomendación", "mejor para"],
@@ -41,7 +41,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["broker", "vantage", "vtmarkets", "pepperstone", "ic markets", "dónde", "donde", "qué broker", "que broker", "mt5 broker"],
-        response: "🏦 **Brokers 100% Compatibles con KOPYTRADE:**\n\n• **Vantage Markets**: Gran broker ECN, sin limites en XAU.\n• **Pepperstone**: Extrema liquidez, ideal para bots (Regulado EU/US/AU).\n• **IC Markets**: Favorito mundial por latencia hiperbaja.\n• **VT Markets**: Muy buena ejecución de pares Forex.\n\n(Recomendamos usar tipos de cuenta 'RAW' o 'PRO' para tener spreads desde 0.0 pips)."
+        response: "🏦 **Brokers 100% Compatibles con KopyTrading:**\n\n• **Vantage Markets**: Gran broker ECN, sin limites en XAU.\n• **Pepperstone**: Extrema liquidez, ideal para bots (Regulado EU/US/AU).\n• **IC Markets**: Favorito mundial por latencia hiperbaja.\n• **VT Markets**: Muy buena ejecución de pares Forex.\n\n(Recomendamos usar tipos de cuenta 'RAW' o 'PRO' para tener spreads desde 0.0 pips)."
     },
     {
         keywords: ["licencia", "clave", "número de cuenta", "cuenta mt5", "cómo activar", "autorizada", "identidad"],
@@ -65,7 +65,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["qué es kopytrade", "quiénes sois", "sobre vosotros", "la empresa", "kopytrade"],
-        response: "🏢 **Sobre nosotros KOPYTRADE:**\n\nEvitamos los sistemas piramidales, las mensualidades, las Martingalas destructivas y el marketing vende-húmos.\n\nSolo proporcionamos algoritmos matemáticos probados, que nosotros mismos operamos, directamente de las manos del desarrollador a la gráfica del trader. Trading puro, duro y aburrido (consistente)."
+        response: "🏢 **Sobre nosotros KopyTrading:**\n\nEvitamos los sistemas piramidales, las mensualidades, las Martingalas destructivas y el marketing vende-húmos.\n\nSolo proporcionamos algoritmos matemáticos probados, que nosotros mismos operamos, directamente de las manos del desarrollador a la gráfica del trader. Trading puro, duro y aburrido (consistente)."
     },
     {
         keywords: ["break even", "breakeven", "empate", "proteger"],
@@ -164,16 +164,43 @@ function speakText(text: string) {
 
     window.speechSynthesis.cancel();
 
-    const cleanText = text
+    let cleanText = text
         .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F1E6}-\u{1F1FF}\u{1F004}\u{1F0CF}\u{1F170}-\u{1F251}]/gu, '')
         .replace(/\*\*/g, '')
         .replace(/\|/g, '')
         .replace(/—/g, '')
         .replace(/\n+/g, '. ');
 
+    // Forzar pronunciación correcta para que no lo deletree "K O P Y T R A D I N G"
+    cleanText = cleanText.replace(/KopyTrading/gi, 'Copy Trading');
+
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = 'es-ES';
     utterance.rate = 1.0;
+    utterance.pitch = 0.9;
+
+    // Intentar buscar una voz masculina en español
+    const voices = window.speechSynthesis.getVoices();
+    const esVoices = voices.filter(v => v.lang.startsWith('es'));
+    const maleVoice = esVoices.find(v =>
+        v.name.toLowerCase().includes('pablo') ||
+        v.name.toLowerCase().includes('alonso') ||
+        v.name.toLowerCase().includes('federico') ||
+        v.name.toLowerCase().includes('male') ||
+        v.name.toLowerCase().includes('hombre') ||
+        v.name.toLowerCase().includes('diego') ||
+        v.name.toLowerCase().includes('carlos')
+    );
+
+    if (maleVoice) {
+        utterance.voice = maleVoice;
+    } else if (esVoices.length > 0) {
+        // Evitar explícitamente voces de femeninas típicas de Microsoft si es posible
+        const otherMale = esVoices.find(v => !v.name.toLowerCase().includes('helena') && !v.name.toLowerCase().includes('laura') && !v.name.toLowerCase().includes('zira') && !v.name.toLowerCase().includes('sabella'));
+        if (otherMale) utterance.voice = otherMale;
+        else utterance.voice = esVoices[0]; // fallback total
+    }
+
     window.speechSynthesis.speak(utterance);
 }
 
@@ -184,7 +211,7 @@ export default function FloatingChat() {
     const [messages, setMessages] = useState<Message[]>([
         {
             from: "bot",
-            text: "¡Hola! Soy KopyBot 🤖, el asistente experto de KOPYTRADE. ¿En qué puedo ayudarte hoy? Pregúntame sobre bots, trading, instalación o brokers.",
+            text: "¡Hola! Soy KopyBot 🤖, el asistente experto de KopyTrading. ¿En qué puedo ayudarte hoy? Pregúntame sobre bots, trading, instalación o brokers.",
             time: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
         }
     ]);
@@ -231,15 +258,16 @@ export default function FloatingChat() {
 
             {/* Panel del chat */}
             {open && (
-                <div className="fixed bottom-24 right-6 z-[998] w-80 sm:w-96 glass-card border border-brand/30 rounded-2xl shadow-[0_0_50px_rgba(139,92,246,0.3)] flex flex-col overflow-hidden" style={{ height: '520px' }}>
+                <div className="fixed bottom-24 left-4 right-4 sm:left-auto sm:right-6 z-[998] sm:w-96 glass-card border border-brand/30 rounded-2xl shadow-[0_0_50px_rgba(139,92,246,0.3)] flex flex-col overflow-hidden" style={{ height: '520px' }}>
                     {/* Header */}
                     <div className="bg-gradient-to-r from-brand-dark to-brand p-4 flex items-center justify-between gap-3 flex-shrink-0">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-xl">🤖</div>
-                            <div>
-                                <div className="font-semibold text-white text-sm">KopyBot — Asistente KOPYTRADE</div>
+                        <div className="flex items-center gap-3 min-w-0">
+                            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-xl flex-shrink-0">🤖</div>
+                            <div className="min-w-0">
+                                <div className="font-semibold text-white text-sm truncate">KopyBot — Asistente</div>
                                 <div className="text-xs text-white/60 flex items-center gap-1">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-success inline-block"></span> Disponible ahora
+                                    <span className="w-1.5 h-1.5 rounded-full bg-success inline-block flex-shrink-0"></span>
+                                    <span className="truncate">Disponible ahora</span>
                                 </div>
                             </div>
                         </div>
@@ -250,7 +278,7 @@ export default function FloatingChat() {
                                     window.speechSynthesis.cancel();
                                 }
                             }}
-                            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors text-sm"
+                            className="w-10 h-10 flex-shrink-0 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors text-lg"
                             title={voiceEnabled ? "Desactivar voz" : "Activar voz"}
                         >
                             {voiceEnabled ? "🔊" : "🔇"}
