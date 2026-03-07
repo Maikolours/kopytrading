@@ -108,24 +108,22 @@ function AccordionItem({ question, answer }: { question: string; answer: string 
 
 export default function FAQPage() {
     return (
-        <div className="min-h-screen pt-36 sm:pt-40 pb-24 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen pt-28 md:pt-32 pb-24 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
-                <div className="mb-8">
-                    <Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-white transition-colors mb-6">
+                <div className="mb-4">
+                    <Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-white transition-colors">
                         <span>←</span> Volver al inicio
                     </Link>
                 </div>
-                <div className="text-center mb-16">
-                    <span className="text-sm font-semibold text-brand-light tracking-widest uppercase mb-3 block">Soporte & Educación</span>
+                <div className="text-center mb-12">
                     <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Preguntas Frecuentes</h1>
                     <p className="text-text-muted max-w-xl mx-auto">
                         Todo lo que necesitas saber antes de empezar con el trading algorítmico y los bots de KOPYTRADE.
                     </p>
-                    <p className="mt-4 text-xs text-warning/80 border border-warning/20 inline-block px-4 py-2 rounded-full mb-10">
+                    <p className="mt-4 text-xs text-warning/80 border border-warning/20 inline-block px-4 py-2 rounded-full mb-6">
                         ⚠️ El trading conlleva un alto riesgo de pérdida de capital. Rendimientos pasados no garantizan resultados futuros.
                     </p>
-
                 </div>
 
                 {/* FAQ Sections */}

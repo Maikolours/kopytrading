@@ -27,10 +27,10 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
     ];
 
     return (
-        <div className="min-h-screen pt-36 md:pt-40 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="min-h-screen pt-28 md:pt-32 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
             <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-brand-light/5 blur-[120px] rounded-full pointer-events-none" />
 
-            <div className="max-w-7xl mx-auto relative z-10 mb-8">
+            <div className="max-w-7xl mx-auto relative z-10 mb-4">
                 <Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-white transition-colors">
                     <span>←</span> Volver al inicio
                 </Link>

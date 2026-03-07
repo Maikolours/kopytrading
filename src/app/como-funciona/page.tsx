@@ -3,16 +3,16 @@ import Link from "next/link";
 
 export default function ComoFuncionaPage() {
     return (
-        <div className="min-h-screen pt-36 md:pt-40 pb-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="min-h-screen pt-28 md:pt-32 pb-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
             {/* Background radial sutil */}
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand/10 blur-[150px] rounded-full mix-blend-screen pointer-events-none" />
 
             <div className="max-w-4xl mx-auto z-10 relative">
-                <Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-white transition-colors mb-10">
+                <Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-white transition-colors mb-4">
                     <span>←</span> Volver al inicio
                 </Link>
 
-                <div className="text-center mb-20">
+                <div className="text-center mb-16">
                     <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter text-white mb-6 leading-tight">
                         Cómo Funciona <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-white to-accent">KopyTrading</span>
                     </h1>
