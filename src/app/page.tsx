@@ -189,68 +189,70 @@ export default function Home() {
           <div className="absolute inset-0 bg-brand/5 backdrop-blur-3xl -z-10" />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-px bg-gradient-to-r from-transparent via-brand-light to-transparent opacity-30" />
 
-          <div className="max-w-5xl mx-auto text-center relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/10 border border-brand/20 text-brand-light text-xs font-semibold tracking-widest uppercase mb-6">
-              <span className="w-2 h-2 rounded-full bg-brand animate-pulse" />
-              Educación de Trading
-            </div>
-
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6 tracking-tight drop-shadow-sm">
-              Aprende Trading Algorítmico
-            </h2>
-            <p className="text-text-muted text-lg sm:text-xl max-w-2xl mx-auto mb-12 font-light">
-              Descubre cómo operan los algoritmos automatizados y domina los conceptos clave para triunfar en los mercados.
-            </p>
-
-            {/* TV Player Design */}
-            <div className="relative mx-auto max-w-4xl">
-              {/* Outer TV Bezel */}
-              <div className="relative rounded-[2rem] sm:rounded-[2.5rem] bg-gradient-to-b from-gray-800 to-gray-900 p-2 sm:p-3 pb-4 sm:pb-6 shadow-2xl border border-gray-700/50 group">
-                {/* Screen glass effect container */}
-                <div className="relative rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden bg-black aspect-video ring-1 ring-white/10 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
-
-                  {/* The Interactive Trading Simulation */}
-                  <div className="w-full h-full relative z-10 scale-[1.01]">
-                    <AutomatedTradingSim />
-                  </div>
-
-                  {/* TV Reflections & Glare */}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none z-20" />
-                  <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-white/10 to-transparent pointer-events-none z-20 opacity-50" />
-                </div>
-
-                {/* TV Stand/Bottom Details */}
-                <div className="absolute bottom-1.5 sm:bottom-2.5 left-1/2 -translate-x-1/2 flex items-center gap-3 opacity-60">
-                  <div className="w-1.5 h-1.5 rounded-full bg-red-500/80 shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
-                  <div className="w-1 h-1 rounded-full bg-gray-600" />
-                  <div className="w-1 h-1 rounded-full bg-gray-600" />
-                </div>
+          <div className="max-w-6xl mx-auto relative z-10">
+            <div className="text-center md:text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/10 border border-brand/20 text-brand-light text-xs font-semibold tracking-widest uppercase mb-6">
+                <span className="w-2 h-2 rounded-full bg-brand animate-pulse" />
+                Educación de Trading
               </div>
 
-              {/* Glow Behind TV */}
-              <div className="absolute -inset-4 bg-brand/20 blur-[60px] rounded-[3rem] -z-10 group-hover:bg-brand/30 transition-colors duration-700" />
+              <h2 className="text-4xl sm:text-5xl font-extrabold text-white mb-6 tracking-tight drop-shadow-sm">
+                Aprende Trading Algorítmico
+              </h2>
+              <p className="text-text-muted text-lg max-w-2xl mb-12 font-light">
+                Descubre cómo operan los algoritmos automatizados y domina los conceptos clave para triunfar en los mercados.
+              </p>
             </div>
 
-            {/* Educational Quick Links */}
-            <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto text-left">
-              <Link href="/articulos/indicadores-volatilidad-atr" className="glass-card p-5 rounded-2xl border border-white/10 hover:border-brand/50 group transition-all hover:bg-white/5 relative overflow-hidden">
-                <div className="absolute -inset-2 bg-gradient-to-br from-brand/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="text-2xl mb-2">📈</div>
-                <h3 className="text-white font-bold mb-1 relative z-10">Volatilidad y ATR</h3>
-                <p className="text-xs text-text-muted relative z-10">Descubre cómo los bots miden la fuerza del mercado para ajustar el Stop Loss dinámicamente.</p>
-              </Link>
-              <Link href="/articulos/trading-algoritmico-vs-manual" className="glass-card p-5 rounded-2xl border border-white/10 hover:border-brand/50 group transition-all hover:bg-white/5 relative overflow-hidden">
-                <div className="absolute -inset-2 bg-gradient-to-br from-brand/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="text-2xl mb-2">🤖</div>
-                <h3 className="text-white font-bold mb-1 relative z-10">Algo vs Manual</h3>
-                <p className="text-xs text-text-muted relative z-10">El futuro de la gestión. Por qué la consistencia matemática supera la psicología humana.</p>
-              </Link>
-              <Link href="/faq" className="glass-card p-5 rounded-2xl border border-white/10 hover:border-brand/50 group transition-all hover:bg-white/5 relative overflow-hidden">
-                <div className="absolute -inset-2 bg-gradient-to-br from-brand/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="text-2xl mb-2">📚</div>
-                <h3 className="text-white font-bold mb-1 relative z-10">Glosario Técnico</h3>
-                <p className="text-xs text-text-muted relative z-10">Break Even, Trailing Stop, Pips, Latencia... Entiende los términos clave que usan los algoritmos.</p>
-              </Link>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center">
+              {/* Visual Engine - Smaller and to the left */}
+              <div className="relative w-full max-w-lg mx-auto md:mx-0">
+                <div className="relative rounded-[2rem] bg-gradient-to-b from-gray-800 to-gray-900 p-2 sm:p-3 pb-4 shadow-2xl border border-gray-700/50 group">
+                  <div className="relative rounded-[1.5rem] overflow-hidden bg-black aspect-video ring-1 ring-white/10 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+                    <div className="w-full h-full relative z-10 scale-[1.01]">
+                      <AutomatedTradingSim />
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none z-20" />
+                  </div>
+                  <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 flex items-center gap-3 opacity-60">
+                    <div className="w-1.5 h-1.5 rounded-full bg-red-500/80 shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+                    <div className="w-1 h-1 rounded-full bg-gray-600" />
+                    <div className="w-1 h-1 rounded-full bg-gray-600" />
+                  </div>
+                </div>
+                <div className="absolute -inset-4 bg-brand/20 blur-[60px] rounded-[3rem] -z-10 group-hover:bg-brand/30 transition-colors duration-700" />
+              </div>
+
+              {/* Educational Quick Links - Vertical List */}
+              <div className="flex flex-col gap-4">
+                <Link href="/articulos/indicadores-volatilidad-atr" className="glass-card p-4 sm:p-5 rounded-2xl border border-white/10 hover:border-brand/50 group transition-all hover:bg-white/5 flex items-center gap-5 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                  <div className="text-3xl sm:text-4xl shrink-0 drop-shadow-[0_0_15px_rgba(167,139,250,0.3)]">📈</div>
+                  <div>
+                    <h3 className="text-white font-bold text-base sm:text-lg mb-1 group-hover:text-brand-light transition-colors">Volatilidad y ATR</h3>
+                    <p className="text-xs sm:text-sm text-text-muted">Descubre cómo los bots miden la fuerza del mercado para ajustar el Stop Loss fluidamente.</p>
+                  </div>
+                </Link>
+                <Link href="/articulos/trading-algoritmico-vs-manual" className="glass-card p-4 sm:p-5 rounded-2xl border border-white/10 hover:border-brand/50 group transition-all hover:bg-white/5 flex items-center gap-5 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                  <div className="text-3xl sm:text-4xl shrink-0 drop-shadow-[0_0_15px_rgba(167,139,250,0.3)]">🤖</div>
+                  <div>
+                    <h3 className="text-white font-bold text-base sm:text-lg mb-1 group-hover:text-brand-light transition-colors">Algo vs Manual</h3>
+                    <p className="text-xs sm:text-sm text-text-muted">Por qué la consistencia matemática supera casi siempre a la psicología humana.</p>
+                  </div>
+                </Link>
+                <Link href="/articulos/gestion-riesgo" className="glass-card p-4 sm:p-5 rounded-2xl border border-white/10 hover:border-brand/50 group transition-all hover:bg-white/5 flex items-center gap-5 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                  <div className="text-3xl sm:text-4xl shrink-0 drop-shadow-[0_0_15px_rgba(167,139,250,0.3)]">🛡️</div>
+                  <div>
+                    <h3 className="text-white font-bold text-base sm:text-lg mb-1 group-hover:text-brand-light transition-colors">Gestión de Riesgo</h3>
+                    <p className="text-xs sm:text-sm text-text-muted">Reglas de oro institucionales y técnicas para evitar quemar tu cuenta.</p>
+                  </div>
+                </Link>
+                <Link href="/articulos" className="mt-2 text-center text-sm font-semibold text-brand-light hover:text-white transition-colors">
+                  Ver todos los artículos de la Academia →
+                </Link>
+              </div>
             </div>
           </div>
         </section>

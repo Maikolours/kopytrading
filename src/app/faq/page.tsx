@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { AutomatedTradingSim } from "@/components/AutomatedTradingSim";
 
 const FAQS = [
     {
@@ -121,21 +120,6 @@ export default function FAQPage() {
                         ⚠️ El trading conlleva un alto riesgo de pérdida de capital. Rendimientos pasados no garantizan resultados futuros.
                     </p>
 
-                    {/* Interactive Video Section */}
-                    <div className="relative mt-8 mb-16 max-w-3xl mx-auto text-left group">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-brand-light to-brand rounded-[2rem] blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-                        <div className="relative glass-card border border-white/10 rounded-[2rem] overflow-hidden p-3 sm:p-5 bg-bg-dark/80">
-                            <div className="flex items-center gap-3 mb-4 px-2">
-                                <span className="bg-brand text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">🕹️</span>
-                                <h3 className="text-xl font-bold text-white">Guía Interactiva en Vídeo</h3>
-                            </div>
-                            <div className="relative aspect-video rounded-xl overflow-hidden bg-black ring-1 ring-white/10 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
-                                <div className="w-full h-full relative z-10">
-                                    <AutomatedTradingSim />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 {/* FAQ Sections */}
