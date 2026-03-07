@@ -28,7 +28,7 @@ export function Navbar() {
                 </Link>
 
                 {/* Desktop Nav */}
-                <nav className="hidden xl:flex items-center gap-6">
+                <nav className="hidden lg:flex items-center gap-6">
                     <Link
                         href="/bots"
                         className={`text-sm font-medium transition-colors ${pathname === "/bots" ? "text-white border-b border-brand-light/50 pb-0.5" : "text-text-muted hover:text-white"}`}
@@ -62,7 +62,7 @@ export function Navbar() {
                 <div className="flex items-center gap-2 sm:gap-4">
                     {isLoggedIn ? (
                         <div className="flex items-center gap-3">
-                            <span className="text-[10px] text-text-muted hidden xl:block opacity-50">{session.user?.email}</span>
+                            <span className="text-[10px] text-text-muted hidden lg:block opacity-50">{session.user?.email}</span>
                             <Button variant="outline" size="sm" onClick={() => signOut()} className="hidden md:flex text-[10px] h-8 border-white/10 text-white hover:bg-danger/10 hover:border-danger/30">Cerrar Sesión</Button>
                         </div>
                     ) : (
@@ -75,7 +75,7 @@ export function Navbar() {
                     {/* Mobile Menu Toggle */}
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="xl:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none z-50 rounded-xl bg-white/5 border border-white/10"
+                        className="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none z-50 rounded-xl bg-white/5 border border-white/10"
                     >
                         <span className={`w-5 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? "rotate-45 translate-y-2" : ""}`} />
                         <span className={`w-5 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? "opacity-0" : ""}`} />
@@ -85,7 +85,7 @@ export function Navbar() {
             </div>
 
             {/* Mobile Menu Overlay */}
-            <div className={`xl:hidden fixed inset-0 z-40 transition-all duration-500 flex flex-col ${isMenuOpen ? "visible opacity-100" : "invisible opacity-0"}`}>
+            <div className={`lg:hidden fixed inset-0 z-40 transition-all duration-500 flex flex-col ${isMenuOpen ? "visible opacity-100" : "invisible opacity-0"}`}>
                 <div className="absolute inset-0 bg-bg-dark/95 backdrop-blur-2xl"></div>
                 <div className="relative z-10 flex-1 flex flex-col pt-32 px-8 gap-8 overflow-y-auto pb-12">
                     <div className="flex flex-col gap-6">

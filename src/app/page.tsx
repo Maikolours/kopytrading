@@ -196,10 +196,10 @@ export default function Home() {
             </div>
 
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6 tracking-tight drop-shadow-sm">
-              Aprende sobre MetaTrader 5
+              Aprende Trading Algorítmico
             </h2>
             <p className="text-text-muted text-lg sm:text-xl max-w-2xl mx-auto mb-12 font-light">
-              Descubre cómo dominar la plataforma institucional líder mundial y la base tecnológica de nuestros algoritmos automatizados.
+              Descubre cómo operan los algoritmos automatizados y domina los conceptos clave para triunfar en los mercados.
             </p>
 
             {/* TV Player Design */}
@@ -229,6 +229,28 @@ export default function Home() {
 
               {/* Glow Behind TV */}
               <div className="absolute -inset-4 bg-brand/20 blur-[60px] rounded-[3rem] -z-10 group-hover:bg-brand/30 transition-colors duration-700" />
+            </div>
+
+            {/* Educational Quick Links */}
+            <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto text-left">
+              <Link href="/articulos/indicadores-volatilidad-atr" className="glass-card p-5 rounded-2xl border border-white/10 hover:border-brand/50 group transition-all hover:bg-white/5 relative overflow-hidden">
+                <div className="absolute -inset-2 bg-gradient-to-br from-brand/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="text-2xl mb-2">📈</div>
+                <h3 className="text-white font-bold mb-1 relative z-10">Volatilidad y ATR</h3>
+                <p className="text-xs text-text-muted relative z-10">Descubre cómo los bots miden la fuerza del mercado para ajustar el Stop Loss dinámicamente.</p>
+              </Link>
+              <Link href="/articulos/trading-algoritmico-vs-manual" className="glass-card p-5 rounded-2xl border border-white/10 hover:border-brand/50 group transition-all hover:bg-white/5 relative overflow-hidden">
+                <div className="absolute -inset-2 bg-gradient-to-br from-brand/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="text-2xl mb-2">🤖</div>
+                <h3 className="text-white font-bold mb-1 relative z-10">Algo vs Manual</h3>
+                <p className="text-xs text-text-muted relative z-10">El futuro de la gestión. Por qué la consistencia matemática supera la psicología humana.</p>
+              </Link>
+              <Link href="/faq" className="glass-card p-5 rounded-2xl border border-white/10 hover:border-brand/50 group transition-all hover:bg-white/5 relative overflow-hidden">
+                <div className="absolute -inset-2 bg-gradient-to-br from-brand/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="text-2xl mb-2">📚</div>
+                <h3 className="text-white font-bold mb-1 relative z-10">Glosario Técnico</h3>
+                <p className="text-xs text-text-muted relative z-10">Break Even, Trailing Stop, Pips, Latencia... Entiende los términos clave que usan los algoritmos.</p>
+              </Link>
             </div>
           </div>
         </section>
