@@ -4,73 +4,141 @@ import { useState, useRef, useEffect } from "react";
 
 const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     {
-        keywords: ["hola", "hello", "buenas", "hey", "qué tal", "que tal"],
-        response: "¡Hola! Soy KopyBot 🤖, el asistente experto de KOPYTRADE. Puedo ayudarte con preguntas sobre nuestros 4 bots, instalación en MetaTrader 5, gestión de riesgo, brokers y mucho más. ¿Qué necesitas saber?"
+        keywords: ["hola", "hello", "buenas", "hey", "qué tal", "que tal", "saludos"],
+        response: "¡Hola! Soy KopyBot 🤖, el asistente experto de KOPYTRADE. Puedo ayudarte con consultas técnicas, MetaTrader 5, nuestros bots, brokers y gestión de riesgo. ¿En qué te puedo ayudar?"
     },
     {
         keywords: ["recomiendas", "recomienda", "empezar", "primer bot", "cuál compro", "cual compro", "para principiante", "soy nuevo", "nunca he", "novato", "recomendación", "mejor para"],
         response: "🏆 **Para principiantes, te recomiendo El Euro Precision Flow (EURUSD)** por estas razones:\n\n✅ Riesgo BAJO (el más seguro de los 4)\n✅ Capital mínimo 500$ (el más accesible)\n✅ Opera en H1 — señales claras, sin mucho ruido\n✅ El Euro es el par más líquido y estabilizado del mundo\n\n⚡ Si quieres más acción y tienes 1.000$, **La Ametralladora (XAUUSD)** es apasionante, pero tiene más riesgo.\n\n❌ **Evita BTC Storm Rider** si eres principiante — el Bitcoin es altamente volátil."
     },
     {
-        keywords: ["cuándo abre", "cuando abre", "no abre", "no opera", "operacion", "operación", "señal", "esperar", "cuánto tiempo", "cuanto tiempo", "eurusd"],
-        response: "⏳ **¿Por qué el Euro Precision Flow no abre operaciones?**\n\nEste bot usa cruce de medias móviles (EMA 21 y EMA 50). Solo entra cuando:\n1. La EMA rápida (21) cruza a la EMA lenta (50)\n2. El RSI no está en zona extrema\n\n🔵 Estos cruces a veces tardan **1-3 días** en producirse en H1 — eso es NORMAL. El bot está diseñado para ser selectivo, no para abrir a cualquier precio.\n\n💡 **En H1 puedes esperar 1-2 señales por semana en condiciones normales.** Si el mercado EURUSD está lateral (como ahora mismo en varios períodos de 2026), el bot espera con paciencia. ¡Eso es correcto!"
+        keywords: ["cuándo abre", "cuando abre", "no abre", "no opera", "operacion", "operación", "señal", "esperar", "cuánto tiempo", "cuanto tiempo", "no hace nada"],
+        response: "⏳ **¿Por qué el bot no abre operaciones?**\n\nEste bot usa algoritmos estrictos. Si la vela no cumple los parámetros milimétricos, NO abre. Esto te protege del sobre-apalancamiento y de operaciones falsas.\n\n🔵 Es NORMAL que esté horas o incluso varios días (en el caso de H1/H4) sin abrir nada. La paciencia es la cualidad #1 de un inversor algorítmico disciplinado."
     },
     {
         keywords: ["ametralladora", "xauusd", "oro", "gold"],
-        response: "🔥 **La Ametralladora (XAUUSD)** — El más popular de KOPYTRADE\n\n• Temporalidad: **M15** (Recomendado)\n• Estrategia: Scalping + Hedge Inteligente\n• Horario: 9h - 21h (sesiones europeas y americanas)\n• Objetivo por operación: $5\n• Break Even: A los $2 ganados\n• Capital mínimo: 1.000$\n• Riesgo: Medio\n• Precio: 249€ (pago único)\n\n⚠️ El Oro es muy volátil. Empieza siempre con lote **0.01** en cuenta Demo."
+        response: "🔥 **La Ametralladora (XAUUSD)** — El más popular\n\n• Temporalidad: **M15**\n• Estrategia: Scalping + Hedge Inteligente\n• Horario: 9h - 21h\n• Objetivo por operación: $5\n• Break Even: a los $2\n• Capital mínimo: 1.000$\n• Riesgo: Medio\n• Precio: 249€ (pago único)\n\n⚠️ El Oro es súper volátil. Usa siempre lotaje 0.01 por cada 1.000$."
     },
     {
         keywords: ["euro", "precision", "eurusd", "eur"],
-        response: "🎯 **Euro Precision Flow (EURUSD)** — El más seguro\n\n• Temporalidad: **H1** (Recomendado)\n• Estrategia: Cruce de EMA 21/50 + Filtro RSI\n• Horario: 8h - 20h (sesión europea + americana)\n• Objetivo por operación: $8\n• Capital mínimo: 500$\n• Riesgo: BAJO ✅\n• Precio: 179€ (pago único)\n\n💡 Puede tardar 1-3 días en abrir operaciones. El cruce de medias H1 es selectivo — eso es una ventaja, no un bug."
+        response: "🎯 **Euro Precision Flow (EURUSD)** — El más seguro\n\n• Temporalidad: **H1**\n• Estrategia: Cruce de EMA 21/50 + Filtro RSI\n• Horario: 8h - 20h\n• Capital mínimo: 500$\n• Riesgo: BAJO ✅\n• Precio: 179€ (pago único)\n\n💡 Puede tardar días en abrir porque espera la alineación perfecta del cruce institucional (H1)."
     },
     {
         keywords: ["yen", "usdjpy", "ninja", "jpy", "asia", "asiática", "asiatica"],
-        response: "🥷 **Yen Ninja Ghost (USDJPY)** — El que opera de noche\n\n• Temporalidad: **M30** (Recomendado)\n• Estrategia: Rebote de Bandas de Bollinger + RSI\n• Horario: 0h - 8h (sesión asiática de Tokio)\n• Objetivo por operación: $6\n• Capital mínimo: 500$\n• Riesgo: Medio\n• Precio: 149€ (pago único)\n\n🌙 Perfecta combinación con La Ametralladora: uno opera de noche, el otro de día."
+        response: "🥷 **Yen Ninja Ghost (USDJPY)** — Operativa nocturna\n\n• Temporalidad: **M30**\n• Estrategia: Rebote Bollingers + RSI\n• Horario: 0h - 8h (noche europea)\n• Capital mínimo: 500$\n• Riesgo: Medio\n• Precio: 149€ (pago único)\n\n🌙 Perfecto para aprovechar los rangos aburridos de la sesión asiática."
     },
     {
         keywords: ["bitcoin", "btc", "crypto", "cripto", "storm"],
-        response: "⚡ **BTC Storm Rider (BTCUSD)** — Solo para expertos\n\n• Temporalidad: **H4** (Recomendado)\n• Estrategia: Breakout de rango de 48 velas H4\n• Horario: 24/7 (Bitcoin no cierra)\n• Objetivo por operación: $50 (BTC mueve mucho)\n• Capital mínimo: 2.000$\n• Riesgo: ALTO ⚠️\n• Precio: 299€ (pago único)\n\n❌ Si eres principiante, espera a tener experiencia con otro bot primero."
+        response: "⚡ **BTC Storm Rider (BTCUSD)** — Solo para verdaderos expertos\n\n• Temporalidad: **H4 o M30 según set**\n• Estrategia: Breakout/Tendencia Fuerte\n• Horario: 24/7\n• Capital mínimo: 2.000$\n• Riesgo: ALTO ⚠️\n• Precio: 299€ (pago único)\n\nDiseñado para capturar la enorme inercia y volatilidad de la criptomoneda madre."
     },
     {
-        keywords: ["precio", "cuánto cuesta", "cuanto cuesta", "costo", "coste", "todos", "comparar", "diferencia entre", "qué bots", "que bots"],
-        response: "💰 **Todos los Bots de KOPYTRADE:**\n\n| Bot | Par | Riesgo | Precio |\n|---|---|---|---|\n| 🔥 La Ametralladora | XAUUSD | Medio | 249€ |\n| 🎯 Euro Precision Flow | EURUSD | Bajo | 179€ |\n| 🥷 Yen Ninja Ghost | USDJPY | Medio | 149€ |\n| ⚡ BTC Storm Rider | BTCUSD | Alto | 299€ |\n\nTodos son de **pago único** — sin suscripciones mensuales. Incluye el archivo .mq5 + PDF manual."
+        keywords: ["precio", "cuánto cuesta", "cuanto cuesta", "costo", "coste", "todos", "comparar"],
+        response: "💰 **Precios de las Licencias Universales (Pago Único):**\n\n• La Ametralladora (XAUUSD) — 249€\n• Euro Precision Flow (EURUSD) — 179€\n• Yen Ninja Ghost (USDJPY) — 149€\n• BTC Storm Rider (BTCUSD) — 299€\n\nIncluye licencia ilimitada en el tiempo para la cuenta, actualizaciones futuras gratis y soporte técnico."
     },
     {
-        keywords: ["vps", "servidor", "cloud", "siempre encendido", "apago el ordenador", "se apaga"],
-        response: "🖥️ **El VPS es FUNDAMENTAL para trading 24/5.**\n\nSi tu ordenador se apaga con operaciones abiertas, el bot queda ciego y no puede aplicar el Break Even ni el Trailing Stop.\n\n💡 Opciones recomendadas:\n• **Contabo**: desde ~5€/mes (bueno para empezar)\n• **ForexVPS**: ~15$/mes (muy bajo latency)\n• **Pepperstone VPS**: GRATIS para clientes activos\n• **IC Markets VPS**: GRATIS para clientes activos\n\nPara La Ametralladora (opera 9h-21h) puedes gestionar con tu propio PC si estás en casa. Para el Yen Ninja Ghost (opera 0h-8h de noche) el VPS es OBLIGATORIO."
+        keywords: ["vps", "servidor", "cloud", "siempre encendido", "apago el ordenador", "se apaga", "nube"],
+        response: "🖥️ **¿Es obligatorio el VPS?**\n\nSÍ, en el 99% de los casos. Si tu ordenador de casa se apaga, la línea de internet se cae o Windows se actualiza, MT5 se cierra. Si MT5 se cierra, el bot se desconecta de la bolsa.\n\nPara no quedar con operaciones expuestas sin el escudo del 'Break Even', sugerimos un VPS barato como *Contabo* (aprox 5€/mes) encendido 24h sin molestarte."
     },
     {
-        keywords: ["broker", "vantage", "vtmarkets", "pepperstone", "ic markets", "dónde", "donde", "qué broker", "que broker"],
-        response: "🏦 **Brokers compatibles con KOPYTRADE:**\n\n• **Vantage Markets** — Tu broker actual. Buena ejecución en Oro\n• **VT Markets** — Spreads competitivos, compatible MT5\n• **Pepperstone** — Lìder mundial. Spreads raw 0 pips. VPS gratis\n• **IC Markets** — Favorito de algorítmicos. Latencia ultra baja\n\n✅ Todos ofrecen MetaTrader 5 y cuentas Demo gratuitas.\n⚠️ Asegúrate de que el par que necesita tu bot esté disponible en tu broker."
+        keywords: ["broker", "vantage", "vtmarkets", "pepperstone", "ic markets", "dónde", "donde", "qué broker", "que broker", "mt5 broker"],
+        response: "🏦 **Brokers 100% Compatibles con KOPYTRADE:**\n\n• **Vantage Markets**: Gran broker ECN, sin limites en XAU.\n• **Pepperstone**: Extrema liquidez, ideal para bots (Regulado EU/US/AU).\n• **IC Markets**: Favorito mundial por latencia hiperbaja.\n• **VT Markets**: Muy buena ejecución de pares Forex.\n\n(Recomendamos usar tipos de cuenta 'RAW' o 'PRO' para tener spreads desde 0.0 pips)."
     },
     {
-        keywords: ["licencia", "clave", "número de cuenta", "cuenta mt5", "cómo activar", "como activar"],
-        response: "🔐 **Activación del Bot (Super Sencilla):**\n\n1. Abre MetaTrader 5\n2. Tu número de cuenta aparece arriba a la izquierda (ej: 87409072)\n3. Descarga el bot desde tu Dashboard en KOPYTRADE\n4. Instálalo en MT5 y ábrelo en el gráfico\n5. En los parámetros, pon ese número en:\n   • **CuentaDemo** si usas cuenta Demo\n   • **CuentaReal** si usas cuenta Real\n\n🎉 El bot se activará automáticamente al reconocer tu cuenta."
+        keywords: ["licencia", "clave", "número de cuenta", "cuenta mt5", "cómo activar", "autorizada", "identidad"],
+        response: "🔐 **Sistema de Protección Activo:**\n\nEl archivo comercial del bot se vincula a tu código de Cuenta particular de MetaTrader. Solo debes escribir este nº en las propiedades del bot, sección **'CuentaDemo'** o **'CuentaReal'**.\n\n👉 De esta manera, nadie podrá robar tu inversión. Al arrastrarlo al gráfico él se autorizará automáticamente."
     },
     {
-        keywords: ["instalar", "instalación", "mt5", "metatrader", "cómo lo instalo", "como lo instalo", "archivo"],
-        response: "📋 **Guía de instalación paso a paso:**\n\n1. Compra el bot y ve a tu Dashboard en KOPYTRADE\n2. Descarga el archivo `.mq5`\n3. En MT5: **Archivo → Abrir carpeta de datos**\n4. Navega a la carpeta `MQL5 → Experts`\n5. Pega el archivo .mq5 ahí\n6. Abre **MetaEditor** (tecla F4 en MT5)\n7. Pulsa **Compilar** (F7) — verás ✓ sin errores\n8. Arrastra el bot del Panel de Navegación al gráfico\n9. Activa AutoTrading (botón verde en la barra de MT5)\n10. Pon tu número de cuenta en CuentaDemo o CuentaReal\n\n¿En qué paso tienes problemas?"
+        keywords: ["instalar", "instalación", "mt5", "metatrader", "cómo lo instalo", "archivos", "mq5"],
+        response: "📋 **Puesta a punto (MetaTrader 5):**\n\n1. En MT5: Archivo → Abrir carpeta de datos.\n2. Ve a MQL5 → Experts y pega ahí el archivo `.mq5`\n3. Presiona F4 para abrir el Compilador MetaEditor.\n4. Presiona F7 para Compilarlo. (Sin errores).\n5. ¡Listo! Vuelve a MT5, activa el AutoTrading (botón de arriba) y arrastra el experto al gráfico."
     },
     {
-        keywords: ["gratis", "prueba", "demo", "trial", "mes gratis", "free"],
-        response: "🆓 **¿Prueba gratuita?**\n\nActualmente ofrecemos:\n✅ **Cuenta Demo gratuita ilimitada** — Descarga el bot, úsalo en una cuenta Demo de tu broker con dinero virtual. Sin límite de tiempo para probar.\n\n🔜 **Próximamente:** Trial de 30 días en cuenta real. Estamos implementando este sistema en la plataforma. Apúntate a nuestra newsletter para ser de los primeros en saberlo.\n\n💡 **Mi consejo:** Prueba siempre al menos 2-3 semanas en Demo antes de pasar a cuenta real. Así entiendes exactamente cómo se comporta tu bot sin arriesgar dinero."
+        keywords: ["gratis", "demo", "trial", "mes gratis", "free", "prueba"],
+        response: "🆓 **Licencias Demo (Ilimitadas)**\n\nPor el momento regalamos la evaluación en Tiempo Real (Prueba Gratuita).\nPuedes ir a descargar cualquier robot y conectarlo tranquilamente a tu cuenta Demo de MetaTrader5 y observar su comportamiento sin límite de días y sin pagar nada.\n\n¡Queremos clientes convencidos antes de usar euros reales!"
     },
     {
-        keywords: ["pago", "comprar", "stripe", "paypal", "bizum", "cómo pago", "como pago", "tarjeta"],
-        response: "💳 **¿Cómo comprar un bot de KOPYTRADE?**\n\n1. Ve al Marketplace y elige tu bot\n2. Haz clic en **'Comprar y Descargar'**\n3. Actualmente el sistema está en modo de prueba (checkout simulado)\n4. Próximamente activaremos Stripe (tarjeta) y PayPal\n\n📧 Si quieres comprar ahora, escríbenos a **soporte@kopytrade.com** y te enviamos instrucciones de pago manual."
+        keywords: ["pago", "comprar", "stripe", "paypal", "bizum", "cómo pago", "tarjeta", "pagar"],
+        response: "💳 **Métodos de Compra:**\n\nPronto implementaremos Stripe directo, PayPal Express y otras pasarelas.\nSi no puedes esperar a llevarte un bot para tu cuenta Real, contáctanos en **soporte@kopytrade.com** y te habilitamos el pago manual mediante tarjeta, transferencia o wallet cripto."
     },
     {
-        keywords: ["no funciona", "error", "problema", "ayuda", "bug", "fallo"],
-        response: "🔧 **¿Tienes un problema técnico?**\n\nLos más comunes y sus soluciones:\n\n⚠️ **'Cuenta no autorizada'**: Verifica que el número de cuenta en los parámetros sea exactamente el mismo que aparece en MetaTrader.\n\n⚠️ **Bot no abre operaciones**: Comprueba que el AutoTrading esté ACTIVO (botón verde en MT5) y que estés en las horas de operación del bot.\n\n⚠️ **Error de compilación**: Asegúrate de copiar el archivo .mq5 en la carpeta correcta (MQL5/Experts) y recompilar.\n\nSi el problema persiste: **soporte@kopytrade.com**"
+        keywords: ["no funciona", "error", "problema", "ayuda", "bug", "fallo", "cuenta no autorizada"],
+        response: "🔧 **Diagnóstico de Problemas Técnicos:**\n\n1. **'Invalid License / Cuenta no autorizada'**: Verifica que no haya espacios al poner tu Nº de cuenta en los Ajustes del bot.\n2. **'AutoTrading deshabilitado'**: Dale al icono de AutoTrading en MT5 (arriba al centro, debe tener play verde).\n3. **'No abre nada'**: Asegúrate que el mercado esté abierto y estás en la gráfica correcta (Oro, Euro..).\nParecen tonterías, pero suele ser la solución al 90%."
     },
     {
-        keywords: ["qué es kopytrade", "que es kopytrade", "quiénes sois", "quienes sois", "sobre vosotros", "la empresa"],
-        response: "🏢 **¿Qué es KOPYTRADE?**\n\nKOPYTRADE es un marketplace especializado en bots de trading algorítmico para MetaTrader 5. Vendemos algoritmos diseñados y probados para automatizar operaciones en los mercados financieros más populares.\n\n🎯 **Nuestra filosofía:**\n• Pago único, sin suscripciones mensuales\n• Código protegido por licencia personal (número de cuenta MT5)\n• Manuales detallados para principiantes\n• Transparencia total sobre estrategias y riesgos\n\n📌 Visita nuestra sección **FAQ** o el **Blog** para más información."
+        keywords: ["qué es kopytrade", "quiénes sois", "sobre vosotros", "la empresa", "kopytrade"],
+        response: "🏢 **Sobre nosotros KOPYTRADE:**\n\nEvitamos los sistemas piramidales, las mensualidades, las Martingalas destructivas y el marketing vende-húmos.\n\nSolo proporcionamos algoritmos matemáticos probados, que nosotros mismos operamos, directamente de las manos del desarrollador a la gráfica del trader. Trading puro, duro y aburrido (consistente)."
     },
     {
-        keywords: ["break even", "breakeven", "perdida", "pérdida", "stop loss"],
-        response: "🛡️ **Break Even (Punto de Equilibrio):**\n\nCuando el bot gana $2 en una operación, mueve automáticamente el Stop Loss al precio de entrada. Así:\n\n✅ Si el mercado se gira, la operación se cierra sin pérdida\n✅ Nunca puede perder más de lo que tenías cuando entró el bot\n\n**Trailing Stop:** Además, el bot persigue el precio a favor con una distancia de 6 pips. Si el precio sigue subiendo, el stop sube con él. Si el precio se gira, el stop protege la ganancia acumulada."
+        keywords: ["break even", "breakeven", "empate", "proteger"],
+        response: "🛡️ **Sistema Break Even (BE):**\n\nNuestra regla de oro. Si la operación va ganando X dólares, el Bot bloquea la posición y mueve el Stop Loss exactamente a tu punto de entrada.\n\n✅ Desde ese instante el saldo de esa operación NUNCA pasará a ser negativo. Estarás matemáticamente blindado ante cualquier retroceso."
     },
+    {
+        keywords: ["trailing stop", "trailing", "perseguir", "asegurar"],
+        response: "📉 **Trailing Stop Dinámico:**\n\nNo dejamos el Stop Loss fijo abajo mientras el precio sube al infinito.\nEl algoritmo lo arrastra dinámicamente varios pips por detrás del precio actual. Si se gira agresivamente el mercado, la operación se cortará de golpe con toda la caja en verde que haya acumulado durante el trayecto."
+    },
+    {
+        keywords: ["apalancamiento", "leverage", "margen", "aplancado"],
+        response: "⚖️ **Guía de Apalancamiento:**\n\nTe recomendamos seleccionar apalancamiento 1:100 o 1:200 en tu Broker.\nOjo: Apalancamiento NO es riesgo extra si usas nuestro Stop Loss y los lotes (0.01) correctamente.\nEl apalancamiento solo sirve para que el broker no retenga el 80% de tus fondos de Free Margin cada vez que el Bot accione."
+    },
+    {
+        keywords: ["lote", "lotaje", "tamaño", "volumen", "0.01"],
+        response: "📏 **Control del Gran Lotaje Matemático:**\n\nNunca subestimes un mal dimensionamiento.\nInicia siempre operando con volumén **0.01 Lotes** por cada 500$-1000$ que tengas fondeados en la gráfica. Ese es el único colchón que evitará la quema bajo Drawdowns extremos."
+    },
+    {
+        keywords: ["mac", "apple", "macbook", "macos", "ipad"],
+        response: "🍎 **MetaTrader en Ecosistema MAC**\n\nMT5 está nativamente programado para Windows. No obstante:\nOpción A: Usa la capa Parallels Desktop/CrossOver.\nOpción B (Nuestra Favorita): Contrátate un VPS Windows y usa Microsoft Remote Desktop. Verás a la perfección tu Windows con el bot desde tu Mac impecablemente fluido."
+    },
+    {
+        keywords: ["fondeo", "prop firm", "ftmo", "evaluación", "funding", "darwinex", "pass"],
+        response: "🏆 **Apto para Firmas de Fondeo (Prop Firms):**\n\nAbsolutamente. Todos los Bots usan Stop Loss estrictos sin promedios Martingala. Cumplirás perfectamente los mandatos del 'Daily Maximum Loss Drawdown' requeridos para superar los Exámenes y Challenges de FTMO o MyForexFunds."
+    },
+    {
+        keywords: ["martingala", "martingale", "grid", "cuadricula", "promediar", "martingalas"],
+        response: "⚠️ **Cero exposición infinita (No Martingalas suicidas):**\n\nTodos nuestros bots rechazan la clásica Martingala exponencial.\nAlgunos usan Hedge escalonado minúsculo, pero todos (sin excepción) cortan con un Stop Loss Duro general de Equity. Cuando nos equivocamos, nos equivocamos, perdemos el 1-2% del account y a seguir. Sobrevivimos."
+    },
+    {
+        keywords: ["drawdown", "retroceso", "flotante", "negativo", "baja la cuenta"],
+        response: "📉 **El inevitable Drawdown (DD):**\n\nTodo algoritmo tendrá DD. Es el flotante negativo aguantado temporalmente. Nuestros perfiles arrojan Drawdowns calculados entre un 5% y 20% histórico anual (teniendo muy buena protección institucional)."
+    },
+    {
+        keywords: ["noticias", "news", "nfp", "ipc", "cpi", "powell", "noticia"],
+        response: "📰 **Impacto de las Noticias Macro:**\n\nNivel rojo (Powell, NFP). En estas franjas el spread del oro o del euro puede triplicarse y saltarse tus defensas.\nRecomendación de oro: Pulsa off al Bot 60 mins antes y préndelo 60 mins después de la intervención fundamental."
+    },
+    {
+        keywords: ["mt4", "metatrader 4", "mq4"],
+        response: "⚙️ **Obsolescencia Técnica de MetaTrader 4:**\n\nKopyTrade desarrolla nativamente al 100% en `MQL5` para MetaTrader 5 porque es el futuro estándar de las instituciones y su Tester genético multithread está a años luz de las barrabasadas arcaicas de MT4."
+    },
+    {
+        keywords: ["movil", "móvil", "android", "iphone", "celular", "app"],
+        response: "📱 **Acceso vía Smartphones:**\n\nNo puedes inyectar un robot en la App Móvil de MetaTrader (MetaQuotes lo bloquea por arquitectura). Usa tu PC o tu VPS para alojar el `Bot.mq5`.\nEso sí, luego podrás ver desde el móvil a tiempo real en el sofá los rendimientos maravillosos abriendo tú solo a leer la operación."
+    },
+    {
+        keywords: ["rentabilidad", "ganancia", "cuanto gano", "porcentaje", "mensual", "roi"],
+        response: "💵 **Proyecciones de Rentabilidad:**\n\nCálculos empíricos y moderados nos arrojan entre un **2% a 5%** de beneficio neto mensual empleando perfiles de riesgo conservadores. \nCualquiera que te garantice un +30% mensual sistemático es porque expone la cuenta al +100% de quebrar (un fraude estadístico)."
+    },
+    {
+        keywords: ["interés", "interes compuesto", "compound", "crecimiento"],
+        response: "📈 **La Magia del Compound (Interés Compuesto):**\n\nEmpieza con 1.000$ a Lote 0.01. Pasados unos meses, con tu cuenta en $2.000 (entre ingresos y bots), asciende el Lotaje a 0.02 respetando el escalón. Expones lo mismo visualmente, pero la gráfica nominal ascenderá en curva geométrica maravillosa."
+    },
+    {
+        keywords: ["manual", "cerrar", "yo mismo", "intervenir", "manipular"],
+        response: "✋ **Tú Eres el Dueño de las Posiciones:**\n\nSi el robot metió una orden, y vas ganando un buen pico que necesitas o que ves incierto a la luz de las velas macro: TÚ le das a la X. No afectará a la API, simplemente el bot cerrará el monitor actual y reanudará escaneo al tick siguiente."
+    },
+    {
+        keywords: ["internet", "corte", "se va la luz", "wifi", "desconexión"],
+        response: "🔌 **La Vitalidad de la Conexión Ininterrumpida:**\n\nSi el terminal pierde red, el algoritmo de gestión (Break Evens / Trails) desaparece con él. Dejarás la posición a su suerte desprotegida.\nVuelvo al refrán institucional: \"Un VPS vale 5€ y te ahorra años de salud cardiovascular\"."
+    },
+    {
+        keywords: ["devolucion", "reembolso", "garantia", "devolver", "return"],
+        response: "↩️ **Política de Código Abierto (Sin DRM Intrusivos):**\n\nEntregamos código MQ5 encriptado y limpio, listo para rodar.\nDado su formato de producto enteramente digital sin desvinculación comprobable... NO ejecutamos reembolsos de compras. Úsalos gratis durante milenios en tu DEMO y paga si se adaptan a tí."
+    },
+    {
+        keywords: ["actualización", "update", "versión nueva", "version", "upgrade"],
+        response: "🔄 **Mantenimiento Cero Costes Ocultos:**\n\nNuestro panel de control está alimentado por DB moderna, en cuanto despachemos una variante v3 del Ametralladora para mejorar eficiencia... los compradores anteriores se lo bajan de su Dashboard GRATIS por siempre."
+    },
+    {
+        keywords: ["soporte", "contacto", "email", "ticket", "hablar con"],
+        response: "📩 **Contacto y Asistencia Personal de Traders para Traders:**\n\nMándanos tu duda, captura de logs técnicos, capturas del terminal.. no te cortes, estamos para ti 24h a soporte@kopytrade.com y tu caso será mirado bajo lupa (Sin IA intermedio, soporte humano 100%)."
+    }
 ];
 
 const DEFAULT_RESPONSE = "Hmm, no tengo una respuesta específica para eso. Para consultas detalladas puedes contactar con nuestro soporte en **soporte@kopytrade.com** o revisar nuestra sección de **FAQ** con las preguntas más frecuentes. ¿Puedo ayudarte con algo diferente?";
