@@ -185,7 +185,7 @@ export default function Home() {
         </section>
 
         {/* === SECCIÓN VÍDEO DESTACADO === */}
-        <section className="px-4 sm:px-6 lg:px-8 py-24 relative overflow-hidden">
+        <section className="px-4 sm:px-6 lg:px-8 py-10 md:py-24 relative overflow-hidden">
           <div className="absolute inset-0 bg-brand/5 backdrop-blur-3xl -z-10" />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-px bg-gradient-to-r from-transparent via-brand-light to-transparent opacity-30" />
 
@@ -258,7 +258,7 @@ export default function Home() {
         </section>
 
         {/* === SECCIÓN BROKERS RECOMENDADOS === */}
-        <section className="px-4 sm:px-6 lg:px-8 py-20 border-t border-white/5">
+        <section className="px-4 sm:px-6 lg:px-8 py-10 md:py-16 border-t border-white/5">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
               <span className="text-xs font-semibold text-brand-light tracking-widest uppercase mb-3 block">Compatibilidad Verificada</span>
@@ -285,14 +285,14 @@ export default function Home() {
                 </a>
               ))}
             </div>
-            <p className="text-center text-xs text-text-muted mt-8 opacity-60">
+            <p className="text-center text-xs text-text-muted mt-5 md:mt-8 opacity-60 max-w-2xl mx-auto">
               KopyTrading no tiene afiliación comercial con estos brokers. La selección se basa únicamente en criterios técnicos de compatibilidad con MT5.
             </p>
           </div>
         </section>
 
         {/* === SECCIÓN TESTIMONIOS (PRUEBA SOCIAL) === */}
-        <section className="px-4 sm:px-6 lg:px-8 py-20 border-t border-white/5 bg-gradient-to-b from-transparent to-brand/5">
+        <section className="px-4 sm:px-6 lg:px-8 py-10 md:py-16 border-t border-white/5 bg-gradient-to-b from-transparent to-brand/5">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <span className="text-xs font-semibold text-brand-light tracking-widest uppercase mb-3 block">Lo que dicen nuestros traders</span>
@@ -346,7 +346,7 @@ export default function Home() {
         </section>
 
         {/* === SECCIÓN COMPARATIVA (TRIAL VS COMPRA) === */}
-        <section className="px-4 sm:px-6 lg:px-8 py-24 border-t border-white/5 relative">
+        <section className="px-4 sm:px-6 lg:px-8 py-12 md:py-20 border-t border-white/5 relative">
           <div className="absolute inset-0 bg-brand/5 blur-[100px] pointer-events-none" />
           <div className="max-w-5xl mx-auto relative z-10">
             <div className="text-center mb-16">
