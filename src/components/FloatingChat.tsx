@@ -91,9 +91,28 @@ interface Message {
     time: string;
 }
 
+function speakText(text: string) {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+
+    window.speechSynthesis.cancel();
+
+    const cleanText = text
+        .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F1E6}-\u{1F1FF}\u{1F004}\u{1F0CF}\u{1F170}-\u{1F251}]/gu, '')
+        .replace(/\*\*/g, '')
+        .replace(/\|/g, '')
+        .replace(/—/g, '')
+        .replace(/\n+/g, '. ');
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'es-ES';
+    utterance.rate = 1.0;
+    window.speechSynthesis.speak(utterance);
+}
+
 export default function FloatingChat() {
     const [open, setOpen] = useState(false);
     const [input, setInput] = useState("");
+    const [voiceEnabled, setVoiceEnabled] = useState(true);
     const [messages, setMessages] = useState<Message[]>([
         {
             from: "bot",
@@ -108,6 +127,13 @@ export default function FloatingChat() {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages, typing]);
 
+    // Handle initial greeting voice if opened and voice was enabled
+    useEffect(() => {
+        if (open && voiceEnabled && messages.length === 1) {
+            speakText(messages[0].text);
+        }
+    }, [open]);
+
     function sendMessage() {
         if (!input.trim()) return;
         const userMsg: Message = { from: "user", text: input, time: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) };
@@ -117,6 +143,9 @@ export default function FloatingChat() {
         setTimeout(() => {
             const response = getBotResponse(input);
             setMessages(prev => [...prev, { from: "bot", text: response, time: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) }]);
+            if (voiceEnabled) {
+                speakText(response);
+            }
             setTyping(false);
         }, 900 + Math.random() * 600);
     }
@@ -136,14 +165,28 @@ export default function FloatingChat() {
             {open && (
                 <div className="fixed bottom-24 right-6 z-[998] w-80 sm:w-96 glass-card border border-brand/30 rounded-2xl shadow-[0_0_50px_rgba(139,92,246,0.3)] flex flex-col overflow-hidden" style={{ height: '520px' }}>
                     {/* Header */}
-                    <div className="bg-gradient-to-r from-brand-dark to-brand p-4 flex items-center gap-3 flex-shrink-0">
-                        <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-xl">🤖</div>
-                        <div>
-                            <div className="font-semibold text-white text-sm">KopyBot — Asistente KOPYTRADE</div>
-                            <div className="text-xs text-white/60 flex items-center gap-1">
-                                <span className="w-1.5 h-1.5 rounded-full bg-success inline-block"></span> Disponible ahora
+                    <div className="bg-gradient-to-r from-brand-dark to-brand p-4 flex items-center justify-between gap-3 flex-shrink-0">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-xl">🤖</div>
+                            <div>
+                                <div className="font-semibold text-white text-sm">KopyBot — Asistente KOPYTRADE</div>
+                                <div className="text-xs text-white/60 flex items-center gap-1">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-success inline-block"></span> Disponible ahora
+                                </div>
                             </div>
                         </div>
+                        <button
+                            onClick={() => {
+                                setVoiceEnabled(!voiceEnabled);
+                                if (voiceEnabled && window.speechSynthesis) {
+                                    window.speechSynthesis.cancel();
+                                }
+                            }}
+                            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors text-sm"
+                            title={voiceEnabled ? "Desactivar voz" : "Activar voz"}
+                        >
+                            {voiceEnabled ? "🔊" : "🔇"}
+                        </button>
                     </div>
 
                     {/* Mensajes */}
