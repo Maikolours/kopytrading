@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AutomatedTradingSim } from "@/components/AutomatedTradingSim";
 
 const FAQS = [
     {
@@ -129,13 +130,9 @@ export default function FAQPage() {
                                 <h3 className="text-xl font-bold text-white">Guía Interactiva en Vídeo</h3>
                             </div>
                             <div className="relative aspect-video rounded-xl overflow-hidden bg-black ring-1 ring-white/10 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
-                                <iframe
-                                    src="https://www.youtube.com/embed/QOcmq345K5Q?rel=0&modestbranding=1"
-                                    title="¿Cómo funciona KopyTrading?"
-                                    className="w-full h-full relative z-10"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                ></iframe>
+                                <div className="w-full h-full relative z-10">
+                                    <AutomatedTradingSim />
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { AutomatedTradingSim } from "@/components/AutomatedTradingSim";
 
 const TICKER_ITEMS = [
   { symbol: "XAU/USD", price: "2,934.50", change: "+0.82%", up: true },
@@ -208,14 +209,10 @@ export default function Home() {
                 {/* Screen glass effect container */}
                 <div className="relative rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden bg-black aspect-video ring-1 ring-white/10 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
 
-                  {/* The actual iframe */}
-                  <iframe
-                    src="https://www.youtube.com/embed/QOcmq345K5Q?rel=0&modestbranding=1"
-                    title="MetaTrader 5 Tutorial Oficial"
-                    className="w-full h-full relative z-10 scale-[1.01]"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
+                  {/* The Interactive Trading Simulation */}
+                  <div className="w-full h-full relative z-10 scale-[1.01]">
+                    <AutomatedTradingSim />
+                  </div>
 
                   {/* TV Reflections & Glare */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none z-20" />
