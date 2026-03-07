@@ -28,7 +28,7 @@ input group "=== 🛡️ RIESGO POR OPERACIÓN (en dólares) ==="
 input double   LoteInicial           = 0.01;  // Tamaño del lote (0.01 = mínimo)
 input double   MaxPerdidaPorTrade    = 50.0;  // Máximo que puedes perder por operación ($)
 input double   SL_Multiplicador      = 1.5;   // Stop Loss = X veces la volatilidad media
-input double   TP_Multiplicador      = 3.0;   // Take Profit = X veces la volatilidad media
+input double   TP_Multiplicador      = 3.5;   // Take Profit = X veces la volatilidad media
 
 //=== PROTECCIÓN DE CUENTA ===
 input group "=== 🚨 PROTECCIÓN DIARIA (en dólares) ==="
@@ -37,8 +37,8 @@ input int      MaxOperacionesDia     = 8;     // Máximo de operaciones por día
 
 //=== ESTRATEGIA ===
 input group "=== 📊 ESTRATEGIA (para usuarios avanzados) ==="
-input int      EMA_Tendencia      = 200;      // Media larga (tendencia general)
-input int      EMA_Rapida         = 21;       // Media rápida (impulso)
+input int      EMA_Tendencia      = 250;      // Media larga (tendencia general)
+input int      EMA_Rapida         = 10;       // Media rápida (impulso)
 input int      EMA_Lenta          = 55;       // Media lenta (confirmación)
 input int      RSI_Periodo        = 14;       // Período del indicador RSI
 input int      RSI_Compra_Min     = 40;       // RSI mínimo para comprar
@@ -51,13 +51,13 @@ input double   VolatilidadMinima  = 100.0;    // Volatilidad mínima en $ para o
 //=== BREAK EVEN ===
 input group "=== 🔒 BREAK EVEN (protección de ganancias en $) ==="
 input bool     ActivarBE              = true;  // ¿Activar protección Break Even?
-input double   BE_Activar_USD         = 3.0;   // Cuando ganes X$, proteger la operación
+input double   BE_Activar_USD         = 2.0;   // Cuando ganes X$, proteger la operación
 input double   BE_Garantia_USD        = 1.0;   // Ganancia mínima asegurada ($)
 
 //=== TRAILING STOP ===
 input group "=== 📈 TRAILING STOP (persigue el beneficio en $) ==="
 input bool     ActivarTrailing             = true;  // ¿Activar Trailing Stop?
-input double   Trailing_Activar_USD        = 3.0;   // Activar cuando ganes X$
+input double   Trailing_Activar_USD        = 5.0;   // Activar cuando ganes X$
 input double   Trailing_Distancia_USD      = 2.0;   // Distancia de seguimiento ($)
 
 //=== CONFIGURACIÓN AVANZADA ===
@@ -330,12 +330,17 @@ void GestionarPosiciones() {
       double garantiaPrecio = USDaPrecio(BE_Garantia_USD);
       double trailDistPrecio = USDaPrecio(Trailing_Distancia_USD);
       
+      // Respetar el Stops Level del broker para evitar [invalid stops]
+      double stLevel = SymbolInfoInteger(_Symbol, SYMBOL_TRADE_STOPS_LEVEL) * SymbolInfoDouble(_Symbol, SYMBOL_POINT);
+      if(garantiaPrecio < stLevel) garantiaPrecio = stLevel;
+      if(trailDistPrecio < stLevel) trailDistPrecio = stLevel;
+      
       // ===== BREAK EVEN (basado en profit real en $) =====
       if(ActivarBE) {
          if(tipo == POSITION_TYPE_BUY) {
             if(profit >= BE_Activar_USD) {
                double newSL = NormalizeDouble(pOpen + garantiaPrecio, _Digits);
-               if(sl < newSL) {
+               if(sl < newSL && (bid - newSL) >= stLevel) {
                   if(trade.PositionModify(ticket, newSL, tp))
                      Print("🔒 BE [BUY] | Profit: $", DoubleToString(profit, 2),
                            " | SL → ", newSL, " (garantía $", BE_Garantia_USD, ")");
@@ -345,7 +350,7 @@ void GestionarPosiciones() {
          else if(tipo == POSITION_TYPE_SELL) {
             if(profit >= BE_Activar_USD) {
                double newSL = NormalizeDouble(pOpen - garantiaPrecio, _Digits);
-               if(sl == 0 || sl > newSL) {
+               if((sl == 0 || sl > newSL) && (newSL - ask) >= stLevel) {
                   if(trade.PositionModify(ticket, newSL, tp))
                      Print("🔒 BE [SELL] | Profit: $", DoubleToString(profit, 2),
                            " | SL → ", newSL, " (garantía $", BE_Garantia_USD, ")");
@@ -359,7 +364,8 @@ void GestionarPosiciones() {
          if(tipo == POSITION_TYPE_BUY) {
             if(profit >= Trailing_Activar_USD) {
                double newSL = NormalizeDouble(bid - trailDistPrecio, _Digits);
-               if(newSL > sl && newSL > pOpen) {
+               // Solo modificar si SL avanza significativamente y respeta Stop Level
+               if(newSL > sl && newSL > pOpen && (newSL - sl) >= (10 * _Point) && (bid - newSL) >= stLevel) {
                   if(trade.PositionModify(ticket, newSL, tp))
                      Print("📈 TRAILING [BUY] | Profit: $", DoubleToString(profit, 2),
                            " | SL → ", newSL);
@@ -369,7 +375,8 @@ void GestionarPosiciones() {
          else if(tipo == POSITION_TYPE_SELL) {
             if(profit >= Trailing_Activar_USD) {
                double newSL = NormalizeDouble(ask + trailDistPrecio, _Digits);
-               if(sl == 0 || (newSL < sl && newSL < pOpen)) {
+               // Solo modificar si SL avanza significativamente y respeta Stop Level
+               if((sl == 0 || (newSL < sl && newSL < pOpen)) && (sl == 0 || (sl - newSL) >= (10 * _Point)) && (newSL - ask) >= stLevel) {
                   if(trade.PositionModify(ticket, newSL, tp))
                      Print("📈 TRAILING [SELL] | Profit: $", DoubleToString(profit, 2),
                            " | SL → ", newSL);

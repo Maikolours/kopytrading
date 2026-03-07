@@ -50,11 +50,27 @@ const ARTICLES = [
         date: "01 Feb, 2026",
         readTime: "9 min"
     },
+    {
+        slug: "indicadores-volatilidad-atr",
+        title: "📈 ATR: Cómo Medir la Volatilidad para Colocar tu Stop Loss",
+        category: "Educación | Indicadores",
+        excerpt: "Uno de los errores más comunes es colocar un Stop Loss fijo. Descubre cómo usar el Average True Range (ATR) para medir la volatilidad real del mercado y colocar tu Stop Loss de forma matemática, como hacen los bots institucionales.",
+        date: "28 Feb, 2026",
+        readTime: "7 min"
+    },
+    {
+        slug: "trading-algoritmico-vs-manual",
+        title: "🤖 Trading Algorítmico vs Manual: ¿Hacia Dónde va el Futuro?",
+        category: "Educación | Tendencias",
+        excerpt: "El debate sobre si los bots de trading acabarán por reemplazar totalmente a los traders manuales sigue vigente. Comparamos el trading manual tradicional frente a los algoritmos automáticos y por qué la cooperación es la respuesta.",
+        date: "25 Feb, 2026",
+        readTime: "6 min"
+    }
 ];
 
 export default function ArticulosPage() {
     return (
-        <div className="min-h-screen pt-12 pb-24 px-4 sm:px-6 lg:px-8 relative">
+        <div className="min-h-screen pt-28 sm:pt-32 pb-24 px-4 sm:px-6 lg:px-8 relative">
             <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-brand/5 blur-[120px] rounded-full mix-blend-screen pointer-events-none" />
 
             <div className="max-w-7xl mx-auto z-10 relative">

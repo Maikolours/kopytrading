@@ -183,6 +183,59 @@ export default function Home() {
           </div>
         </section>
 
+        {/* === SECCIÓN VÍDEO DESTACADO === */}
+        <section className="px-4 sm:px-6 lg:px-8 py-24 relative overflow-hidden">
+          <div className="absolute inset-0 bg-brand/5 backdrop-blur-3xl -z-10" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-px bg-gradient-to-r from-transparent via-brand-light to-transparent opacity-30" />
+
+          <div className="max-w-5xl mx-auto text-center relative z-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/10 border border-brand/20 text-brand-light text-xs font-semibold tracking-widest uppercase mb-6">
+              <span className="w-2 h-2 rounded-full bg-brand animate-pulse" />
+              Educación de Trading
+            </div>
+
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6 tracking-tight drop-shadow-sm">
+              Aprende sobre MetaTrader 5
+            </h2>
+            <p className="text-text-muted text-lg sm:text-xl max-w-2xl mx-auto mb-12 font-light">
+              Descubre cómo dominar la plataforma institucional líder mundial y la base tecnológica de nuestros algoritmos automatizados.
+            </p>
+
+            {/* TV Player Design */}
+            <div className="relative mx-auto max-w-4xl">
+              {/* Outer TV Bezel */}
+              <div className="relative rounded-[2rem] sm:rounded-[2.5rem] bg-gradient-to-b from-gray-800 to-gray-900 p-2 sm:p-3 pb-4 sm:pb-6 shadow-2xl border border-gray-700/50 group">
+                {/* Screen glass effect container */}
+                <div className="relative rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden bg-black aspect-video ring-1 ring-white/10 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+
+                  {/* The actual iframe */}
+                  <iframe
+                    src="https://www.youtube.com/embed/QOcmq345K5Q?rel=0&modestbranding=1"
+                    title="MetaTrader 5 Tutorial Oficial"
+                    className="w-full h-full relative z-10 scale-[1.01]"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+
+                  {/* TV Reflections & Glare */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none z-20" />
+                  <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-white/10 to-transparent pointer-events-none z-20 opacity-50" />
+                </div>
+
+                {/* TV Stand/Bottom Details */}
+                <div className="absolute bottom-1.5 sm:bottom-2.5 left-1/2 -translate-x-1/2 flex items-center gap-3 opacity-60">
+                  <div className="w-1.5 h-1.5 rounded-full bg-red-500/80 shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+                  <div className="w-1 h-1 rounded-full bg-gray-600" />
+                  <div className="w-1 h-1 rounded-full bg-gray-600" />
+                </div>
+              </div>
+
+              {/* Glow Behind TV */}
+              <div className="absolute -inset-4 bg-brand/20 blur-[60px] rounded-[3rem] -z-10 group-hover:bg-brand/30 transition-colors duration-700" />
+            </div>
+          </div>
+        </section>
+
         {/* === SECCIÓN BROKERS RECOMENDADOS === */}
         <section className="px-4 sm:px-6 lg:px-8 py-20 border-t border-white/5">
           <div className="max-w-7xl mx-auto">
@@ -230,9 +283,9 @@ export default function Home() {
 
             <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
               {[
-                { name: "Carlos M.", type: "Cuenta Fondeada", text: "Llevaba meses intentando pasar mis pruebas de fondeo. Empecé a usar el BTC Storm Rider con riesgo muy conservador y logré el objetivo en 3 semanas sin tocar las emociones.", bot: "BTC Storm Rider", stars: 5 },
-                { name: "Elena R.", type: "Trader Retail", text: "No tenía tiempo para mirar las gráficas por mi trabajo. El Gold Sentinel Pro lo hace por mí. Solo reviso los resultados por la noche. Me ha cambiado la vida.", bot: "Gold Sentinel Pro", stars: 5 },
-                { name: "Javier T.", type: "Trader Institucional", text: "La gestión de riesgo (Stop Loss dinámico en dólares) de estos bots es nivel institucional. Mucho mejor programados de lo que encuentras normalmente por ahí.", bot: "Ametralladora v2", stars: 5 }
+                { name: "Carlos M.", type: "Trader Retail", text: "Lo que más destaco del BTC Storm Rider es el control del Drawdown. Tras realizar la optimización en MetaTrader 5 tal como explican, el bot tiene rachas muy consistentes.", bot: "BTC Storm Rider", stars: 5 },
+                { name: "Elena R.", type: "Trader Part Time", text: "El Gold Sentinel Pro no acierta todas sus entradas, pero cuando pilla tendencia institucional y mueve el Break Even rápido me da mucha tranquilidad al dormir.", bot: "Gold Sentinel Pro", stars: 5 },
+                { name: "Javier T.", type: "Trader Algorítmico", text: "Me ha sorprendido positivamente el nivel del código fuente. Todo está integrado en dólares y su protección anti-racha diaria evita problemas graves a largo plazo.", bot: "Ametralladora v2", stars: 5 }
               ].map((testimonio, i) => (
                 <div key={i} className="glass-card border border-white/10 rounded-2xl p-6 sm:p-8 hover:-translate-y-2 transition-transform duration-300">
                   <div className="flex gap-1 mb-4">
