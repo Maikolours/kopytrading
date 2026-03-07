@@ -172,7 +172,11 @@ function speakText(text: string) {
         .replace(/\n+/g, '. ');
 
     // Forzar pronunciación correcta para que no lo deletree "K O P Y T R A D I N G"
-    cleanText = cleanText.replace(/KopyTrading/gi, 'Copy Trading');
+    cleanText = cleanText
+        .replace(/KOPYTRADE/g, 'Copy Trade')
+        .replace(/KopyTrade/gi, 'Copy Trade')
+        .replace(/KopyTrading/gi, 'Copy Trading')
+        .replace(/KopyBot/gi, 'Copy Bot');
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = 'es-ES';
@@ -258,7 +262,7 @@ export default function FloatingChat() {
 
             {/* Panel del chat */}
             {open && (
-                <div className="fixed bottom-24 left-4 right-4 sm:left-auto sm:right-6 z-[998] sm:w-96 glass-card border border-brand/30 rounded-2xl shadow-[0_0_50px_rgba(139,92,246,0.3)] flex flex-col overflow-hidden" style={{ height: '520px' }}>
+                <div className="fixed bottom-24 left-4 right-4 sm:left-auto sm:right-6 z-[998] sm:w-96 glass-card border border-brand/30 rounded-2xl shadow-[0_0_50px_rgba(139,92,246,0.3)] flex flex-col overflow-hidden" style={{ height: '520px', maxHeight: 'calc(100vh - 120px)' }}>
                     {/* Header */}
                     <div className="bg-gradient-to-r from-brand-dark to-brand p-4 flex items-center justify-between gap-3 flex-shrink-0">
                         <div className="flex items-center gap-3 min-w-0">
@@ -278,7 +282,7 @@ export default function FloatingChat() {
                                     window.speechSynthesis.cancel();
                                 }
                             }}
-                            className="w-10 h-10 flex-shrink-0 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors text-lg"
+                            className="w-11 h-11 flex-shrink-0 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors text-xl ml-2 shadow-lg"
                             title={voiceEnabled ? "Desactivar voz" : "Activar voz"}
                         >
                             {voiceEnabled ? "🔊" : "🔇"}
