@@ -107,7 +107,7 @@ function AccordionItem({ question, answer }: { question: string; answer: string 
 
 export default function FAQPage() {
     return (
-        <div className="min-h-screen pt-24 pb-24 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen pt-36 sm:pt-40 pb-24 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-16">
@@ -116,9 +116,29 @@ export default function FAQPage() {
                     <p className="text-text-muted max-w-xl mx-auto">
                         Todo lo que necesitas saber antes de empezar con el trading algorítmico y los bots de KOPYTRADE.
                     </p>
-                    <p className="mt-4 text-xs text-warning/80 border border-warning/20 inline-block px-4 py-2 rounded-full">
+                    <p className="mt-4 text-xs text-warning/80 border border-warning/20 inline-block px-4 py-2 rounded-full mb-10">
                         ⚠️ El trading conlleva un alto riesgo de pérdida de capital. Rendimientos pasados no garantizan resultados futuros.
                     </p>
+
+                    {/* Interactive Video Section */}
+                    <div className="relative mt-8 mb-16 max-w-3xl mx-auto text-left group">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-brand-light to-brand rounded-[2rem] blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+                        <div className="relative glass-card border border-white/10 rounded-[2rem] overflow-hidden p-3 sm:p-5 bg-bg-dark/80">
+                            <div className="flex items-center gap-3 mb-4 px-2">
+                                <span className="bg-brand text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">🕹️</span>
+                                <h3 className="text-xl font-bold text-white">Guía Interactiva en Vídeo</h3>
+                            </div>
+                            <div className="relative aspect-video rounded-xl overflow-hidden bg-black ring-1 ring-white/10 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+                                <iframe
+                                    src="https://www.youtube.com/embed/QOcmq345K5Q?rel=0&modestbranding=1"
+                                    title="¿Cómo funciona KopyTrading?"
+                                    className="w-full h-full relative z-10"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* FAQ Sections */}

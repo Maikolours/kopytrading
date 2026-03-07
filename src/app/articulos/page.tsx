@@ -70,7 +70,7 @@ const ARTICLES = [
 
 export default function ArticulosPage() {
     return (
-        <div className="min-h-screen pt-28 sm:pt-32 pb-24 px-4 sm:px-6 lg:px-8 relative">
+        <div className="min-h-screen pt-40 sm:pt-48 pb-24 px-4 sm:px-6 lg:px-8 relative">
             <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-brand/5 blur-[120px] rounded-full mix-blend-screen pointer-events-none" />
 
             <div className="max-w-7xl mx-auto z-10 relative">
