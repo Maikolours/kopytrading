@@ -59,20 +59,23 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                 </Link>
             </div>
 
-            <div id="bot-catalog" className="max-w-7xl mx-auto mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
-                <div>
+            <div id="bot-catalog" className="max-w-7xl mx-auto mb-10 border-b border-white/10 pb-8">
+                <div className="mb-6">
                     <h1 className="text-4xl font-bold text-white tracking-tight mb-2">Marketplace de Bots</h1>
                     <p className="text-text-muted">Encuentra los algoritmos más precisos para MetaTrader 5.</p>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 md:gap-3">
                     {categories.map((cat) => (
                         <Link key={cat.id} href={cat.id ? `/bots?asset=${cat.id}` : "/bots"}>
                             <span className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${(asset === cat.id || (!asset && cat.id === ""))
-                                ? "bg-brand text-white shadow-[0_0_15px_rgba(139,92,246,0.4)]"
-                                : "bg-surface-light border border-white/5 text-text-muted hover:text-white hover:border-brand/50"
+                                ? "bg-brand text-white shadow-[0_0_15px_rgba(139,92,246,0.4)] relative"
+                                : "bg-surface-light border border-white/5 text-text-muted hover:text-white hover:border-brand/50 relative"
                                 }`}>
                                 {cat.label}
+                                {(asset === cat.id || (!asset && cat.id === "")) && (
+                                    <div className="absolute inset-0 bg-brand blur opacity-50 rounded-full -z-10 animate-pulse"></div>
+                                )}
                             </span>
                         </Link>
                     ))}
