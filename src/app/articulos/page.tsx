@@ -74,6 +74,10 @@ export default function ArticulosPage() {
             <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-brand/5 blur-[120px] rounded-full mix-blend-screen pointer-events-none" />
 
             <div className="max-w-7xl mx-auto z-10 relative">
+                <Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-white transition-colors mb-8">
+                    <span>←</span> Volver al inicio
+                </Link>
+
                 <div className="mb-12 border-b border-white/10 pb-8 text-center md:text-left">
                     <h1 className="text-4xl font-bold tracking-tight text-white mb-3">Artículos de Trading</h1>
                     <p className="text-text-muted max-w-2xl">Mantente al día con nuestros recursos de aprendizaje. Tips de expertos, guías de configuración de MT5 e introducciones al mundo bot.</p>

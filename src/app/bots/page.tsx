@@ -27,11 +27,17 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
     ];
 
     return (
-        <div className="min-h-screen pt-12 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="min-h-screen pt-36 md:pt-40 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
             <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-brand-light/5 blur-[120px] rounded-full pointer-events-none" />
 
+            <div className="max-w-7xl mx-auto relative z-10 mb-8">
+                <Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-white transition-colors">
+                    <span>←</span> Volver al inicio
+                </Link>
+            </div>
+
             {/* === BANNER PRUEBA GRATIS === */}
-            <div className="mb-10">
+            <div className="max-w-7xl mx-auto mb-10">
                 <Link href="#bot-catalog" className="block group">
                     <div className="relative overflow-hidden rounded-2xl border border-brand/40 bg-gradient-to-r from-brand/20 via-brand-dark/30 to-brand/20 p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-brand-light/60 transition-all duration-300 hover:shadow-[0_0_40px_rgba(139,92,246,0.3)]">
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/5 to-transparent animate-gradient-sweep pointer-events-none" />
@@ -53,7 +59,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                 </Link>
             </div>
 
-            <div id="bot-catalog" className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
+            <div id="bot-catalog" className="max-w-7xl mx-auto mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
                 <div>
                     <h1 className="text-4xl font-bold text-white tracking-tight mb-2">Marketplace de Bots</h1>
                     <p className="text-text-muted">Encuentra los algoritmos más precisos para MetaTrader 5.</p>

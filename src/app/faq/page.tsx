@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 const FAQS = [
     {
@@ -110,6 +111,11 @@ export default function FAQPage() {
         <div className="min-h-screen pt-36 sm:pt-40 pb-24 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
+                <div className="mb-8">
+                    <Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-white transition-colors mb-6">
+                        <span>←</span> Volver al inicio
+                    </Link>
+                </div>
                 <div className="text-center mb-16">
                     <span className="text-sm font-semibold text-brand-light tracking-widest uppercase mb-3 block">Soporte & Educación</span>
                     <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Preguntas Frecuentes</h1>
