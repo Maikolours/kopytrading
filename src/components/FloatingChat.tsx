@@ -310,7 +310,7 @@ export default function FloatingChat() {
 
             {/* Panel del chat */}
             {open && (
-                <div className="fixed bottom-20 sm:bottom-24 left-4 right-4 sm:left-auto sm:right-6 z-[998] sm:w-96 glass-card border border-brand/30 rounded-2xl shadow-[0_0_50px_rgba(139,92,246,0.3)] flex flex-col overflow-hidden" style={{ height: '450px', maxHeight: '75vh' }}>
+                <div className="fixed bottom-20 sm:bottom-24 left-4 right-4 sm:left-auto sm:right-6 z-[998] sm:w-[350px] glass-card border border-brand/30 rounded-2xl shadow-[0_0_50px_rgba(139,92,246,0.3)] flex flex-col overflow-hidden" style={{ height: '440px', maxHeight: '70vh' }}>
                     {/* Header */}
                     <div className="bg-gradient-to-r from-brand-dark to-brand p-4 flex items-center justify-between gap-3 flex-shrink-0">
                         <div className="flex items-center gap-3 min-w-0">
@@ -369,24 +369,30 @@ export default function FloatingChat() {
                     </div>
 
                     {/* Input */}
-                    <div className="p-3 border-t border-white/10 flex gap-2 flex-shrink-0 bg-bg-dark/90 items-center">
+                    <div className="p-3 border-t border-white/10 flex gap-2 flex-shrink-0 bg-bg-dark/90 items-end">
                         <button
                             onClick={toggleListen}
-                            className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${isListening ? "bg-red-500 text-white animate-pulse" : "bg-surface-light hover:bg-white/10 text-white/70"}`}
+                            className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-colors mb-1 ${isListening ? "bg-red-500 text-white animate-pulse" : "bg-surface-light hover:bg-white/10 text-white/70"}`}
                             title={isListening ? "Escuchando..." : "Hablar por micrófono"}
                         >
                             🎤
                         </button>
-                        <input
+                        <textarea
                             value={input}
                             onChange={e => setInput(e.target.value)}
-                            onKeyDown={e => e.key === "Enter" && sendMessage()}
+                            onKeyDown={e => {
+                                if (e.key === "Enter" && !e.shiftKey) {
+                                    e.preventDefault();
+                                    sendMessage();
+                                }
+                            }}
                             placeholder={isListening ? "Escuchando..." : "Escribe tu pregunta..."}
-                            className="flex-1 bg-surface-light border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-text-muted outline-none focus:border-brand/60 transition-colors"
+                            className="flex-1 bg-surface-light border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-text-muted outline-none focus:border-brand/60 transition-colors resize-none overflow-y-auto min-h-[36px] max-h-[80px]"
+                            rows={input.length > 35 ? 3 : (input.length > 15 ? 2 : 1)}
                         />
                         <button
                             onClick={sendMessage}
-                            className="w-9 h-9 flex-shrink-0 rounded-xl bg-brand flex items-center justify-center text-white hover:bg-brand-light transition-colors text-sm"
+                            className="w-9 h-9 flex-shrink-0 rounded-xl bg-brand flex items-center justify-center text-white hover:bg-brand-light transition-colors text-sm mb-1"
                         >➤</button>
                     </div>
                 </div>
