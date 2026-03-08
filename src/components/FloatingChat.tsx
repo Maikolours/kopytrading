@@ -212,6 +212,7 @@ export default function FloatingChat() {
     const [open, setOpen] = useState(false);
     const [input, setInput] = useState("");
     const [voiceEnabled, setVoiceEnabled] = useState(true);
+    const [isListening, setIsListening] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
         {
             from: "bot",
@@ -232,6 +233,43 @@ export default function FloatingChat() {
             speakText(messages[0].text);
         }
     }, [open]);
+
+    // Speech-to-Text Microphone toggle
+    const toggleListen = () => {
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert("Tu navegador no soporta dictado por voz. Recomendamos Chrome o Edge.");
+            return;
+        }
+
+        if (isListening) return; // Ya está escuchando
+
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'es-ES';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onstart = () => {
+            setIsListening(true);
+        };
+
+        recognition.onresult = (event: any) => {
+            const transcript = event.results[0][0].transcript;
+            setInput(prev => prev ? `${prev} ${transcript}` : transcript);
+            setIsListening(false);
+        };
+
+        recognition.onerror = (event: any) => {
+            console.error("Error en reconocimiento de voz: ", event.error);
+            setIsListening(false);
+        };
+
+        recognition.onend = () => {
+            setIsListening(false);
+        };
+
+        recognition.start();
+    };
 
     function sendMessage() {
         if (!input.trim()) return;
@@ -262,7 +300,7 @@ export default function FloatingChat() {
 
             {/* Panel del chat */}
             {open && (
-                <div className="fixed bottom-24 left-4 right-4 sm:left-auto sm:right-6 z-[998] sm:w-96 glass-card border border-brand/30 rounded-2xl shadow-[0_0_50px_rgba(139,92,246,0.3)] flex flex-col overflow-hidden" style={{ height: '520px', maxHeight: 'calc(100vh - 120px)' }}>
+                <div className="fixed bottom-20 sm:bottom-24 left-4 right-4 sm:left-auto sm:right-6 z-[998] sm:w-96 glass-card border border-brand/30 rounded-2xl shadow-[0_0_50px_rgba(139,92,246,0.3)] flex flex-col overflow-hidden" style={{ height: '450px', maxHeight: '75vh' }}>
                     {/* Header */}
                     <div className="bg-gradient-to-r from-brand-dark to-brand p-4 flex items-center justify-between gap-3 flex-shrink-0">
                         <div className="flex items-center gap-3 min-w-0">
@@ -321,17 +359,24 @@ export default function FloatingChat() {
                     </div>
 
                     {/* Input */}
-                    <div className="p-3 border-t border-white/10 flex gap-2 flex-shrink-0 bg-bg-dark/90">
+                    <div className="p-3 border-t border-white/10 flex gap-2 flex-shrink-0 bg-bg-dark/90 items-center">
+                        <button
+                            onClick={toggleListen}
+                            className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${isListening ? "bg-red-500 text-white animate-pulse" : "bg-surface-light hover:bg-white/10 text-white/70"}`}
+                            title={isListening ? "Escuchando..." : "Hablar por micrófono"}
+                        >
+                            🎤
+                        </button>
                         <input
                             value={input}
                             onChange={e => setInput(e.target.value)}
                             onKeyDown={e => e.key === "Enter" && sendMessage()}
-                            placeholder="Escribe tu pregunta..."
+                            placeholder={isListening ? "Escuchando..." : "Escribe tu pregunta..."}
                             className="flex-1 bg-surface-light border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-text-muted outline-none focus:border-brand/60 transition-colors"
                         />
                         <button
                             onClick={sendMessage}
-                            className="w-9 h-9 rounded-xl bg-brand flex items-center justify-center text-white hover:bg-brand-light transition-colors text-sm"
+                            className="w-9 h-9 flex-shrink-0 rounded-xl bg-brand flex items-center justify-center text-white hover:bg-brand-light transition-colors text-sm"
                         >➤</button>
                     </div>
                 </div>
