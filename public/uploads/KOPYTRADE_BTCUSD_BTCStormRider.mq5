@@ -1,12 +1,12 @@
 //+------------------------------------------------------------------+
-//|          KOPYTRADE_BTCUSD_BTCStormRider v3.2                    |
-//|   TREND ALIGNMENT + MULTI-FILTER · TODO EN DÓLARES               |
+//|          KOPYTRADE_BTCUSD_BTCStormRider v3.0                    |
+//|   CONFIRMED BREAKOUT + MULTI-FILTER · ATR DYNAMIC RISK           |
 //+------------------------------------------------------------------+
 #property copyright "KOPYTRADE - Bot Oficial"
-#property version   "3.20"
+#property version   "3.00"
 #property strict
-#property description "BTC Storm Rider v3.2 | Todos los parámetros en DÓLARES"
-#property description "Operación Activa 24h · BE y Trailing en USD"
+#property description "BTC Storm Rider v3.0 | Breakout Confirmado + Inteligencia Adaptativa"
+#property description "Estrategia Multi-Filtro con Gestión ATR Dinámica para Bitcoin"
 
 #include <Trade\Trade.mqh>
 
@@ -16,56 +16,57 @@ input long     CuentaDemo         = 0;       // Nº cuenta DEMO de MT5 (Trial y 
 input long     CuentaReal         = 0;       // Nº cuenta REAL de MT5 (Solo Compra)
 
 //=== SESIONES DE MERCADO ===
-input group "=== ⏰ HORARIO DE OPERACIÓN (HORA BROKER) ==="
-input int      SesionEuropa_Inicio  = 0;     // Hora inicio Europa (0=medianoche)
-input int      SesionEuropa_Fin     = 16;    // Hora fin Europa
-input int      SesionUS_Inicio      = 14;    // Hora inicio USA
-input int      SesionUS_Fin         = 24;    // Hora fin USA (24=medianoche)
-input bool     OperarEnAsia         = true;  // ¿Operar también de noche? (Sesión Asia)
+input group "=== ⏰ SESIONES DE MERCADO (HORA BROKER) ==="
+input int      SesionEuropa_Inicio  = 8;     // Inicio Sesión Europa
+input int      SesionEuropa_Fin     = 16;    // Fin Sesión Europa
+input int      SesionUS_Inicio      = 14;    // Inicio Sesión USA
+input int      SesionUS_Fin         = 22;    // Fin Sesión USA
+input bool     OperarEnAsia         = false; // ¿Operar en sesión Asia? (menos volumen)
 
 //=== GESTIÓN DE RIESGO ===
-input group "=== 🛡️ RIESGO POR OPERACIÓN (en dólares) ==="
-input double   LoteInicial           = 0.01;  // Tamaño del lote (0.01 = mínimo)
-input double   MaxPerdidaPorTrade    = 100.0; // Máximo que puedes perder por operación ($)
-input double   SL_Multiplicador      = 1.5;   // Stop Loss = X veces la volatilidad media
-input double   TP_Multiplicador      = 3.5;   // Take Profit = X veces la volatilidad media
+input group "=== 🛡️ GESTIÓN DE RIESGO ==="
+input double   LoteInicial           = 0.01;  // Tamaño de posición
+input double   MaxRiesgoPorTrade_USD = 50.0;  // Máxima pérdida en $ por trade
+input double   ATR_Multiplicador_SL  = 2.0;   // Multiplicador ATR para Stop Loss
+input double   ATR_Multiplicador_TP  = 4.0;   // Multiplicador ATR para Take Profit
 
 //=== PROTECCIÓN DE CUENTA ===
-input group "=== 🚨 PROTECCIÓN DIARIA (en dólares) ==="
-input double   MaxPerdidaDiaria      = 100.0; // Si pierdes esta cantidad, el bot para hoy ($)
-input int      MaxOperacionesDia     = 8;     // Máximo de operaciones por día
+input group "=== 🚨 PROTECCIÓN DE CUENTA (ANTI-RACHA) ==="
+input double   MaxPerdidaDiaria_USD  = 100.0; // Pérdida máxima diaria permitida ($)
+input int      MaxOperacionesDia     = 3;     // Máx operaciones por día
 
-//=== ESTRATEGIA ===
-input group "=== 📊 ESTRATEGIA (para usuarios avanzados) ==="
-input int      EMA_Tendencia      = 250;      // Media larga (tendencia general)
-input int      EMA_Rapida         = 10;       // Media rápida (impulso)
-input int      EMA_Lenta          = 55;       // Media lenta (confirmación)
-input int      RSI_Periodo        = 14;       // Período del indicador RSI
-input int      RSI_Compra_Min     = 30;       // RSI mínimo para comprar (antes 40)
-input int      RSI_Compra_Max     = 70;       // RSI máximo para comprar (antes 65)
-input int      RSI_Venta_Min      = 30;       // RSI mínimo para vender (antes 35)
-input int      RSI_Venta_Max      = 70;       // RSI máximo para vender (antes 60)
-input int      ATR_Periodo        = 14;       // Período volatilidad (ATR)
-input double   VolatilidadMinima  = 2.0;      // Volatilidad mínima en $ para operar (antes 100)
+//=== ESTRATEGIA BREAKOUT ===
+input group "=== 📊 ESTRATEGIA BREAKOUT CONFIRMADO ==="
+input int      VelasRango         = 24;       // Rango de velas para detectar breakout
+input double   FiltroMinRango_USD = 500.0;    // Rango mínimo en puntos para operar
+input int      EMA_Tendencia      = 200;      // EMA de tendencia de fondo
+input int      EMA_Rapida         = 21;       // EMA rápida (momentum)
+input int      EMA_Lenta          = 55;       // EMA lenta (confirmación)
+input int      RSI_Periodo        = 14;       // Período del RSI
+input int      RSI_Compra_Min     = 45;       // RSI mínimo para comprar
+input int      RSI_Compra_Max     = 70;       // RSI máximo para comprar
+input int      RSI_Venta_Min      = 30;       // RSI mínimo para vender
+input int      RSI_Venta_Max      = 55;       // RSI máximo para vender
+input int      ATR_Periodo        = 14;       // Período del ATR
+input double   ATR_Minimo_USD     = 300.0;    // Volatilidad mínima para operar (puntos)
 
 //=== BREAK EVEN ===
-input group "=== 🔒 BREAK EVEN (protección de ganancias en $) ==="
-input bool     ActivarBE              = true;  // ¿Activar protección Break Even?
-input double   BE_Activar_USD         = 2.0;   // Cuando ganes X$, proteger la operación
-input double   BE_Garantia_USD        = 1.0;   // Ganancia mínima asegurada ($)
+input group "=== 🔒 BREAK EVEN ==="
+input bool     ActivarBE              = true;  // ¿Activar Break Even?
+input double   BE_ATR_Multiplicador   = 1.0;   // Activar BE al ganar X veces ATR
+input double   BE_Garantia_USD        = 1.0;   // Ganancia asegurada tras BE ($)
 
 //=== TRAILING STOP ===
-input group "=== 📈 TRAILING STOP (persigue el beneficio en $) ==="
+input group "=== 📈 TRAILING STOP ADAPTATIVO ==="
 input bool     ActivarTrailing             = true;  // ¿Activar Trailing Stop?
-input double   Trailing_Activar_USD        = 5.0;   // Activar cuando ganes X$
-input double   Trailing_Distancia_USD      = 2.0;   // Distancia de seguimiento ($)
+input double   Trailing_ATR_Multiplicador  = 1.5;   // Distancia trailing = X veces ATR
+input int      Trailing_Salto_Puntos       = 500;   // Puntos mínimos para mover trailing
 
 //=== CONFIGURACIÓN AVANZADA ===
 input group "=== ⚙️ CONFIGURACIÓN AVANZADA ==="
-input int      MaxPosiciones     = 3;         // Operaciones abiertas a la vez (máximo)
-input int      CooldownMinutos   = 15;        // Espera entre operaciones (minutos)
-input bool     MostrarPanel      = true;      // Mostrar panel informativo en gráfico
-input long     MagicNumber       = 780044;    // ID único del bot (no cambiar)
+input int      MaxPosiciones     = 1;         // Máx posiciones simultáneas
+input bool     MostrarPanel      = true;      // Mostrar panel visual en el gráfico
+input long     MagicNumber       = 780044;    // ID único del bot
 
 //--- Variables globales internas ---
 CTrade trade;
@@ -80,28 +81,6 @@ ulong  lastBarTime     = 0;
 int    operacionesHoy  = 0;
 double perdidaHoy      = 0;
 int    diaActual       = -1;
-datetime ultimaOperacion = 0;
-
-//+------------------------------------------------------------------+
-//| Convertir dólares a distancia de precio                           |
-//| Ejemplo: $3 con 0.01 lotes = cuántos puntos de precio mover      |
-//+------------------------------------------------------------------+
-double USDaPrecio(double dolares) {
-   double tickValue = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE);
-   double tickSize  = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_SIZE);
-   if(tickValue <= 0 || LoteInicial <= 0) return 0;
-   return (dolares * tickSize) / (tickValue * LoteInicial);
-}
-
-//+------------------------------------------------------------------+
-//| Convertir ATR (distancia de precio) a dólares                     |
-//+------------------------------------------------------------------+
-double PrecioAUSD(double distancia) {
-   double tickValue = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE);
-   double tickSize  = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_SIZE);
-   if(tickSize <= 0) return 0;
-   return (distancia / tickSize) * tickValue * LoteInicial;
-}
 
 //+------------------------------------------------------------------+
 //| SISTEMA DE TRIAL Y LICENCIA                                       |
@@ -118,14 +97,14 @@ bool CheckTrialAndLicense() {
    if(!GlobalVariableCheck(gVarName)) {
       GlobalVariableSet(gVarName, (double)TimeCurrent());
       firstRun = TimeCurrent();
-      Print("🆓 KOPYTRADE BTC STORM RIDER v3.2 — TRIAL INICIADO (30 DÍAS)");
+      Print("🆓 KOPYTRADE BTC STORM RIDER v3.0 — TRIAL INICIADO (30 DÍAS)");
       Print("📧 Compra tu licencia completa en kopytrade.com");
    } else {
       firstRun = (datetime)GlobalVariableGet(gVarName);
    }
    int dias = (int)((TimeCurrent() - firstRun) / 86400);
    if(dias <= 30) {
-      Comment("⚡ BTC STORM RIDER v3.2 TRIAL | Día " + IntegerToString(dias+1) + "/30 | kopytrade.com");
+      Comment("⚡ BTC STORM RIDER v3.0 TRIAL | Día " + IntegerToString(dias+1) + "/30 | kopytrade.com");
       return true;
    }
    Alert("⏰ TRIAL EXPIRADO (" + IntegerToString(dias) + " días). Compra en kopytrade.com");
@@ -155,20 +134,11 @@ int OnInit() {
    trade.SetExpertMagicNumber(MagicNumber);
    trade.SetTypeFillingBySymbol(_Symbol);
    
-   // Mostrar conversión real para que el usuario entienda
-   double test3usd = USDaPrecio(3.0);
-   double testATR = 0;
-   double atrBuf[1];
-   if(CopyBuffer(atrHandle, 0, 0, 1, atrBuf) > 0) testATR = atrBuf[0];
-   
-   Print("✅ BTC Storm Rider v3.2 ACTIVADO en ", _Symbol);
-   Print("   💰 TODO EN DÓLARES:");
-   Print("   BE: activar a $", BE_Activar_USD, " | garantía $", BE_Garantia_USD);
-   Print("   Trailing: activar a $", Trailing_Activar_USD, " | distancia $", Trailing_Distancia_USD);
-   Print("   Máx pérdida/trade: $", MaxPerdidaPorTrade, " | Máx pérdida/día: $", MaxPerdidaDiaria);
-   Print("   $3 = ", DoubleToString(test3usd, 2), " puntos de precio en ", _Symbol);
-   if(testATR > 0) Print("   ATR actual = ", DoubleToString(testATR, 2), " pts = $", DoubleToString(PrecioAUSD(testATR), 2));
-   Print("   Operación 24h | Max Ops: ", MaxOperacionesDia, " | Cooldown: ", CooldownMinutos, "min");
+   Print("✅ BTC Storm Rider v3.0 ACTIVADO en ", _Symbol);
+   Print("   EMA: ", EMA_Tendencia, "/", EMA_Rapida, "/", EMA_Lenta,
+         " | RSI: ", RSI_Periodo, " | ATR: ", ATR_Periodo);
+   Print("   SL: ", ATR_Multiplicador_SL, "x ATR | TP: ", ATR_Multiplicador_TP, "x ATR");
+   Print("   Max Pérdida Diaria: $", MaxPerdidaDiaria_USD, " | Max Ops/Día: ", MaxOperacionesDia);
    
    return(INIT_SUCCEEDED);
 }
@@ -206,11 +176,11 @@ void OnTick() {
    if(CopyBuffer(atrHandle, 0, 0, 1, atr) > 0)
       atrValueCurrent = atr[0];
    
-   // Gestionar posiciones abiertas (BE + Trailing)
+   // Gestionar posiciones abiertas
    GestionarPosiciones();
    
    // Comprobar protección anti-racha
-   if(perdidaHoy >= MaxPerdidaDiaria) {
+   if(perdidaHoy >= MaxPerdidaDiaria_USD) {
       if(MostrarPanel) DibujarPanel();
       return;
    }
@@ -219,18 +189,12 @@ void OnTick() {
       return;
    }
    
-   // Cooldown entre operaciones
-   if(TimeCurrent() - ultimaOperacion < CooldownMinutos * 60) {
-      if(MostrarPanel) DibujarPanel();
-      return;
-   }
-   
-   // Buscar entrada solo al inicio de vela nueva
+   // Buscar breakout solo al inicio de una vela nueva
    if(ContarPosiciones() < MaxPosiciones && EstaEnSesion()) {
       datetime barActual = iTime(_Symbol, _Period, 0);
       if(barActual != (datetime)lastBarTime) {
          lastBarTime = barActual;
-         BuscarEntrada();
+         BuscarBreakoutConfirmado();
       }
    }
    
@@ -238,10 +202,21 @@ void OnTick() {
 }
 
 //+------------------------------------------------------------------+
-//| BUSCAR ENTRADA — Alineación de Tendencia                          |
+//| BUSCAR BREAKOUT CONFIRMADO                                         |
 //+------------------------------------------------------------------+
-void BuscarEntrada() {
-   // Leer indicadores
+void BuscarBreakoutConfirmado() {
+   // 1. Calcular rango de las últimas X velas
+   double highest = -1, lowest = 999999999;
+   for(int i = 1; i <= VelasRango; i++) {
+      double h = iHigh(_Symbol, _Period, i);
+      double l = iLow(_Symbol, _Period, i);
+      if(h > highest) highest = h;
+      if(l < lowest)  lowest  = l;
+   }
+   double rango = highest - lowest;
+   if(rango < FiltroMinRango_USD * _Point) return;
+   
+   // 2. Leer indicadores
    double emaTend[2], emaRap[2], emaLent[2], rsi[2], atr[2];
    ArraySetAsSeries(emaTend, true);
    ArraySetAsSeries(emaRap, true);
@@ -259,57 +234,55 @@ void BuscarEntrada() {
    double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
    double atrVal = atr[0];
    
-   // Filtro volatilidad mínima (convertimos volatilidad a USD)
-   double atrEnUSD = PrecioAUSD(atrVal);
-   if(atrEnUSD < VolatilidadMinima) return;
+   // 3. Filtro volatilidad
+   if(atrVal < ATR_Minimo_USD * _Point) return;
    
-   // SL y TP dinámicos
-   double slDistance = atrVal * SL_Multiplicador;
-   double tpDistance = atrVal * TP_Multiplicador;
+   // 4. SL y TP dinámicos
+   double slDistance = atrVal * ATR_Multiplicador_SL;
+   double tpDistance = atrVal * ATR_Multiplicador_TP;
    
-   // Verificar que SL no supere riesgo máximo (en $)
-   double slUSD = PrecioAUSD(slDistance);
-   if(slUSD > MaxPerdidaPorTrade) return;
+   // 5. Verificar que SL no supere riesgo máximo
+   double tickValue = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE);
+   double tickSize  = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_SIZE);
+   double slUSD = (slDistance / tickSize) * tickValue * LoteInicial;
+   if(slUSD > MaxRiesgoPorTrade_USD) return;
    
-   // Alineación de EMAs
-   bool emaAlcista = (emaRap[0] > emaLent[0]);
-   bool emaBajista = (emaRap[0] < emaLent[0]);
-   
-   // ===== SEÑAL DE COMPRA =====
-   if(bid > emaTend[0] && emaAlcista &&
+   // ===== BREAKOUT ALCISTA CONFIRMADO =====
+   // Breakout + Precio > EMA200 + EMA21 > EMA55 + RSI en zona
+   if(ask > highest &&
+      bid > emaTend[0] &&
+      emaRap[0] > emaLent[0] &&
       rsi[0] >= RSI_Compra_Min && rsi[0] <= RSI_Compra_Max) {
       
       double sl = NormalizeDouble(ask - slDistance, _Digits);
       double tp = NormalizeDouble(ask + tpDistance, _Digits);
       
-      if(trade.Buy(LoteInicial, _Symbol, ask, sl, tp, "BSR32_BUY")) {
+      if(trade.Buy(LoteInicial, _Symbol, ask, sl, tp, "BSR3_BREAKOUT_BUY")) {
          operacionesHoy++;
-         ultimaOperacion = TimeCurrent();
-         Print("🟢 COMPRA | Precio: ", ask, 
-               " | SL: ", sl, " ($", DoubleToString(slUSD, 2), ")",
-               " | TP: ", tp, " ($", DoubleToString(PrecioAUSD(tpDistance), 2), ")");
+         Print("🟢 BREAKOUT COMPRA | Precio: ", ask, " | SL: ", sl, " | TP: ", tp,
+               " | ATR: ", DoubleToString(atrVal, 2), " | Rango: ", DoubleToString(rango, 2));
       }
    }
    
-   // ===== SEÑAL DE VENTA =====
-   if(bid < emaTend[0] && emaBajista &&
+   // ===== BREAKOUT BAJISTA CONFIRMADO =====
+   if(bid < lowest &&
+      bid < emaTend[0] &&
+      emaRap[0] < emaLent[0] &&
       rsi[0] >= RSI_Venta_Min && rsi[0] <= RSI_Venta_Max) {
       
       double sl = NormalizeDouble(bid + slDistance, _Digits);
       double tp = NormalizeDouble(bid - tpDistance, _Digits);
       
-      if(trade.Sell(LoteInicial, _Symbol, bid, sl, tp, "BSR32_SELL")) {
+      if(trade.Sell(LoteInicial, _Symbol, bid, sl, tp, "BSR3_BREAKOUT_SELL")) {
          operacionesHoy++;
-         ultimaOperacion = TimeCurrent();
-         Print("🔴 VENTA | Precio: ", bid,
-               " | SL: ", sl, " ($", DoubleToString(slUSD, 2), ")",
-               " | TP: ", tp, " ($", DoubleToString(PrecioAUSD(tpDistance), 2), ")");
+         Print("🔴 BREAKOUT VENTA | Precio: ", bid, " | SL: ", sl, " | TP: ", tp,
+               " | ATR: ", DoubleToString(atrVal, 2), " | Rango: ", DoubleToString(rango, 2));
       }
    }
 }
 
 //+------------------------------------------------------------------+
-//| GESTIONAR POSICIONES — BE + Trailing TODO EN USD                   |
+//| GESTIONAR POSICIONES — BE + Trailing ATR                          |
 //+------------------------------------------------------------------+
 void GestionarPosiciones() {
    for(int i = PositionsTotal() - 1; i >= 0; i--) {
@@ -326,61 +299,51 @@ void GestionarPosiciones() {
       double bid     = SymbolInfoDouble(_Symbol, SYMBOL_BID);
       double ask     = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
       
-      // Convertir $ a distancia de precio CORRECTAMENTE
-      double garantiaPrecio = USDaPrecio(BE_Garantia_USD);
-      double trailDistPrecio = USDaPrecio(Trailing_Distancia_USD);
+      if(atrValueCurrent <= 0) continue;
       
-      // Respetar el Stops Level del broker para evitar [invalid stops]
-      double stLevel = SymbolInfoInteger(_Symbol, SYMBOL_TRADE_STOPS_LEVEL) * SymbolInfoDouble(_Symbol, SYMBOL_POINT);
-      if(garantiaPrecio < stLevel) garantiaPrecio = stLevel;
-      if(trailDistPrecio < stLevel) trailDistPrecio = stLevel;
-      
-      // ===== BREAK EVEN (basado en profit real en $) =====
+      // ===== BREAK EVEN =====
       if(ActivarBE) {
+         double beThreshold = atrValueCurrent * BE_ATR_Multiplicador;
+         double garantia = BE_Garantia_USD * _Point * 10;
+         
          if(tipo == POSITION_TYPE_BUY) {
-            if(profit >= BE_Activar_USD) {
-               double newSL = NormalizeDouble(pOpen + garantiaPrecio, _Digits);
-               if(sl < newSL && (bid - newSL) >= stLevel) {
-                  if(trade.PositionModify(ticket, newSL, tp))
-                     Print("🔒 BE [BUY] | Profit: $", DoubleToString(profit, 2),
-                           " | SL → ", newSL, " (garantía $", BE_Garantia_USD, ")");
+            if((bid - pOpen) >= beThreshold) {
+               double newSL = NormalizeDouble(pOpen + garantia, _Digits);
+               if(sl < newSL) {
+                  trade.PositionModify(ticket, newSL, tp);
+                  Print("🔒 BE [BUY] Ticket: ", ticket, " | SL → ", newSL);
                }
             }
          }
          else if(tipo == POSITION_TYPE_SELL) {
-            if(profit >= BE_Activar_USD) {
-               double newSL = NormalizeDouble(pOpen - garantiaPrecio, _Digits);
-               if((sl == 0 || sl > newSL) && (newSL - ask) >= stLevel) {
-                  if(trade.PositionModify(ticket, newSL, tp))
-                     Print("🔒 BE [SELL] | Profit: $", DoubleToString(profit, 2),
-                           " | SL → ", newSL, " (garantía $", BE_Garantia_USD, ")");
+            if((pOpen - ask) >= beThreshold) {
+               double newSL = NormalizeDouble(pOpen - garantia, _Digits);
+               if(sl == 0 || sl > newSL) {
+                  trade.PositionModify(ticket, newSL, tp);
+                  Print("🔒 BE [SELL] Ticket: ", ticket, " | SL → ", newSL);
                }
             }
          }
       }
       
-      // ===== TRAILING STOP (basado en profit real en $) =====
+      // ===== TRAILING STOP =====
       if(ActivarTrailing) {
-         if(tipo == POSITION_TYPE_BUY) {
-            if(profit >= Trailing_Activar_USD) {
-               double newSL = NormalizeDouble(bid - trailDistPrecio, _Digits);
-               // Solo modificar si SL avanza significativamente y respeta Stop Level
-               if(newSL > sl && newSL > pOpen && (newSL - sl) >= (10 * _Point) && (bid - newSL) >= stLevel) {
-                  if(trade.PositionModify(ticket, newSL, tp))
-                     Print("📈 TRAILING [BUY] | Profit: $", DoubleToString(profit, 2),
-                           " | SL → ", newSL);
-               }
+         double trailDist = atrValueCurrent * Trailing_ATR_Multiplicador;
+         double salto = Trailing_Salto_Puntos * _Point;
+         double beThreshold = atrValueCurrent * BE_ATR_Multiplicador;
+         
+         if(tipo == POSITION_TYPE_BUY && (bid - pOpen) >= beThreshold) {
+            double newSL = NormalizeDouble(bid - trailDist, _Digits);
+            if(newSL > sl + salto && newSL > pOpen) {
+               trade.PositionModify(ticket, newSL, tp);
+               Print("📈 TRAILING [BUY] Ticket: ", ticket, " | SL → ", newSL);
             }
          }
-         else if(tipo == POSITION_TYPE_SELL) {
-            if(profit >= Trailing_Activar_USD) {
-               double newSL = NormalizeDouble(ask + trailDistPrecio, _Digits);
-               // Solo modificar si SL avanza significativamente y respeta Stop Level
-               if((sl == 0 || (newSL < sl && newSL < pOpen)) && (sl == 0 || (sl - newSL) >= (10 * _Point)) && (newSL - ask) >= stLevel) {
-                  if(trade.PositionModify(ticket, newSL, tp))
-                     Print("📈 TRAILING [SELL] | Profit: $", DoubleToString(profit, 2),
-                           " | SL → ", newSL);
-               }
+         else if(tipo == POSITION_TYPE_SELL && (pOpen - ask) >= beThreshold) {
+            double newSL = NormalizeDouble(ask + trailDist, _Digits);
+            if(sl == 0 || (newSL < sl - salto && newSL < pOpen)) {
+               trade.PositionModify(ticket, newSL, tp);
+               Print("📈 TRAILING [SELL] Ticket: ", ticket, " | SL → ", newSL);
             }
          }
       }
@@ -442,7 +405,7 @@ int ContarPosiciones() {
 }
 
 //+------------------------------------------------------------------+
-//| PANEL VISUAL — TODO EN DÓLARES                                     |
+//| PANEL VISUAL                                                       |
 //+------------------------------------------------------------------+
 void DibujarPanel() {
    double emaTend[1], emaRap[1], emaLent[1], rsi[1], atr[1];
@@ -453,7 +416,6 @@ void DibujarPanel() {
    CopyBuffer(atrHandle,     0, 0, 1, atr);
    
    double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
-   double atrUSD = PrecioAUSD(atr[0]);
    
    string tendencia = (bid > emaTend[0]) ? "🟢 ALCISTA" : "🔴 BAJISTA";
    string momentum  = (emaRap[0] > emaLent[0]) ? "🟢 POSITIVO" : "🔴 NEGATIVO";
@@ -463,37 +425,23 @@ void DibujarPanel() {
    else rsiStatus = "✅ " + DoubleToString(rsi[0], 1);
    
    string sesion = EstaEnSesion() ? "🟢 EN SESIÓN" : "🔴 FUERA";
-   bool antiRacha = (perdidaHoy >= MaxPerdidaDiaria || operacionesHoy >= MaxOperacionesDia);
-   string proteccion = antiRacha ? "🚨 BOT PARADO HOY" : "✅ OPERATIVO";
-   
-   // Cooldown restante
-   int coolSeg = (int)(CooldownMinutos * 60 - (TimeCurrent() - ultimaOperacion));
-   string cooldownStr = (coolSeg > 0 && coolSeg < CooldownMinutos * 60) ? 
-      "⏳ " + IntegerToString(coolSeg/60) + "min " + IntegerToString(coolSeg%60) + "s" : "✅ LISTO";
-   
-   // SL y TP en dólares
-   double slUSD = PrecioAUSD(atr[0] * SL_Multiplicador);
-   double tpUSD = PrecioAUSD(atr[0] * TP_Multiplicador);
+   bool antiRacha = (perdidaHoy >= MaxPerdidaDiaria_USD || operacionesHoy >= MaxOperacionesDia);
+   string proteccion = antiRacha ? "🚨 PROTECCIÓN ACTIVA" : "✅ OPERATIVO";
    
    string panel = "";
    panel += "╔══════════════════════════════════╗\n";
-   panel += "║  ⚡ BTC STORM RIDER v3.2          ║\n";
+   panel += "║  ⚡ BTC STORM RIDER v3.0          ║\n";
    panel += "║       KOPYTRADE.COM               ║\n";
-   panel += "╠═══════ MERCADO ════════════════╣\n";
+   panel += "╠══════════════════════════════════╣\n";
    panel += "║ Tendencia: " + tendencia + "\n";
    panel += "║ Momentum: " + momentum + "\n";
    panel += "║ RSI(" + IntegerToString(RSI_Periodo) + "): " + rsiStatus + "\n";
-   panel += "║ Volatilidad: $" + DoubleToString(atrUSD, 2) + "\n";
+   panel += "║ ATR: " + DoubleToString(atr[0], 2) + "\n";
    panel += "║ Sesión: " + sesion + "\n";
-   panel += "╠═══════ RIESGO ($) ═══════════════╣\n";
-   panel += "║ SL: ~$" + DoubleToString(slUSD, 2) + " | TP: ~$" + DoubleToString(tpUSD, 2) + "\n";
-   panel += "║ BE: a $" + DoubleToString(BE_Activar_USD, 1) + " (garantía $" + DoubleToString(BE_Garantia_USD, 1) + ")\n";
-   panel += "║ Trailing: a $" + DoubleToString(Trailing_Activar_USD, 1) + " (dist $" + DoubleToString(Trailing_Distancia_USD, 1) + ")\n";
-   panel += "╠═══════ ESTADO ════════════════════╣\n";
+   panel += "╠══════════════════════════════════╣\n";
    panel += "║ Ops Hoy: " + IntegerToString(operacionesHoy) + "/" + IntegerToString(MaxOperacionesDia) + "\n";
-   panel += "║ Pérdidas Hoy: $" + DoubleToString(perdidaHoy, 2) + " / $" + DoubleToString(MaxPerdidaDiaria, 2) + "\n";
-   panel += "║ " + proteccion + "\n";
-   panel += "║ Cooldown: " + cooldownStr + "\n";
+   panel += "║ Pérdida Hoy: $" + DoubleToString(perdidaHoy, 2) + "/$" + DoubleToString(MaxPerdidaDiaria_USD, 2) + "\n";
+   panel += "║ Estado: " + proteccion + "\n";
    panel += "║ Posiciones: " + IntegerToString(ContarPosiciones()) + "/" + IntegerToString(MaxPosiciones) + "\n";
    panel += "╚══════════════════════════════════╝\n";
    
