@@ -26,7 +26,7 @@ input bool     OperarEnAsia         = true;  // ¿Operar también de noche? (Ses
 //=== GESTIÓN DE RIESGO ===
 input group "=== 🛡️ RIESGO POR OPERACIÓN (en dólares) ==="
 input double   LoteInicial           = 0.01;  // Tamaño del lote (0.01 = mínimo)
-input double   MaxPerdidaPorTrade    = 50.0;  // Máximo que puedes perder por operación ($)
+input double   MaxPerdidaPorTrade    = 100.0; // Máximo que puedes perder por operación ($)
 input double   SL_Multiplicador      = 1.5;   // Stop Loss = X veces la volatilidad media
 input double   TP_Multiplicador      = 3.5;   // Take Profit = X veces la volatilidad media
 
@@ -46,7 +46,7 @@ input int      RSI_Compra_Max     = 70;       // RSI máximo para comprar (antes
 input int      RSI_Venta_Min      = 30;       // RSI mínimo para vender (antes 35)
 input int      RSI_Venta_Max      = 70;       // RSI máximo para vender (antes 60)
 input int      ATR_Periodo        = 14;       // Período volatilidad (ATR)
-input double   VolatilidadMinima  = 100.0;    // Volatilidad mínima en $ para operar
+input double   VolatilidadMinima  = 2.0;      // Volatilidad mínima en $ para operar (antes 100)
 
 //=== BREAK EVEN ===
 input group "=== 🔒 BREAK EVEN (protección de ganancias en $) ==="
