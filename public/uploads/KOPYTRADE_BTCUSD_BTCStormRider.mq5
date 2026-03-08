@@ -41,10 +41,10 @@ input int      EMA_Tendencia      = 250;      // Media larga (tendencia general)
 input int      EMA_Rapida         = 10;       // Media rápida (impulso)
 input int      EMA_Lenta          = 55;       // Media lenta (confirmación)
 input int      RSI_Periodo        = 14;       // Período del indicador RSI
-input int      RSI_Compra_Min     = 40;       // RSI mínimo para comprar
-input int      RSI_Compra_Max     = 65;       // RSI máximo para comprar
-input int      RSI_Venta_Min      = 35;       // RSI mínimo para vender
-input int      RSI_Venta_Max      = 60;       // RSI máximo para vender
+input int      RSI_Compra_Min     = 30;       // RSI mínimo para comprar (antes 40)
+input int      RSI_Compra_Max     = 70;       // RSI máximo para comprar (antes 65)
+input int      RSI_Venta_Min      = 30;       // RSI mínimo para vender (antes 35)
+input int      RSI_Venta_Max      = 70;       // RSI máximo para vender (antes 60)
 input int      ATR_Periodo        = 14;       // Período volatilidad (ATR)
 input double   VolatilidadMinima  = 100.0;    // Volatilidad mínima en $ para operar
 
@@ -62,8 +62,8 @@ input double   Trailing_Distancia_USD      = 2.0;   // Distancia de seguimiento 
 
 //=== CONFIGURACIÓN AVANZADA ===
 input group "=== ⚙️ CONFIGURACIÓN AVANZADA ==="
-input int      MaxPosiciones     = 2;         // Operaciones abiertas a la vez (máximo)
-input int      CooldownMinutos   = 60;        // Espera entre operaciones (minutos)
+input int      MaxPosiciones     = 3;         // Operaciones abiertas a la vez (máximo)
+input int      CooldownMinutos   = 15;        // Espera entre operaciones (minutos)
 input bool     MostrarPanel      = true;      // Mostrar panel informativo en gráfico
 input long     MagicNumber       = 780044;    // ID único del bot (no cambiar)
 
