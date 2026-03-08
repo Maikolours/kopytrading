@@ -169,6 +169,16 @@ function speakText(text: string) {
         .replace(/\*\*/g, '')
         .replace(/\|/g, '')
         .replace(/—/g, '')
+        .replace(/→/g, ' y luego en ')
+        .replace(/['"`]/g, '')
+        .replace(/\.mq5/gi, ' eme cu cinco ')
+        .replace(/MQL5/gi, ' eme cu ele cinco ')
+        .replace(/MT5/gi, ' Meta Trader 5 ')
+        .replace(/MT4/gi, ' Meta Trader 4 ')
+        .replace(/\bH1\b/gi, ' Hache 1 ')
+        .replace(/\bH4\b/gi, ' Hache 4 ')
+        .replace(/\bM15\b/gi, ' Eme 15 ')
+        .replace(/\bM30\b/gi, ' Eme 30 ')
         .replace(/\n+/g, '. ');
 
     // Forzar pronunciación correcta para que no lo deletree "K O P Y T R A D I N G"
