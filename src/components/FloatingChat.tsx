@@ -138,10 +138,22 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     {
         keywords: ["soporte", "contacto", "email", "ticket", "hablar con"],
         response: "📩 **Contacto y Asistencia Personal de Traders para Traders:**\n\nMándanos tu duda, captura de logs técnicos, capturas del terminal.. no te cortes, estamos para ti 24h a soporte@kopytrade.com y tu caso será mirado bajo lupa (Sin IA intermedio, soporte humano 100%)."
+    },
+    {
+        keywords: ["cuál opera más", "quien opera más", "cual opera mas", "mas veces", "más operaciones", "mayor frecuencia", "opera mucho"],
+        response: "⚡ **¿Cuál es el bot que opera más veces?**\n\nEl bot más activo es, sin duda, **La Ametralladora (XAUUSD)**. Su nombre no es casualidad; al operar en gráficos de M15 y especializarse en Scalping en un par tan volátil como el Oro, tenderá a buscar muchísimas micro-entradas durante su ventana horaria de 9h a 21h.\n\n*(Recuerda que mayor frecuencia también implica mayor estrés operativo, usa siempre lotes mínimos de 0.01 si empiezas con este).* "
+    },
+    {
+        keywords: ["menos riesgo", "más seguro", "mas seguro", "menor riesgo", "conservador", "cual arriesga menos", "qué bot es más seguro"],
+        response: "🛡️ **¿Cuál es el bot con menor riesgo?**\n\nEl más seguro y conservador es el **Euro Precision Flow (EURUSD)**. \n\n¿El motivo? Opera en temporalidad institucional de H1 (1 hora) y sobre el Euro-Dólar, que es el mercado más maduro y estable. Tarda en ver una oportunidad matemática, por lo que hace menos operaciones al mes, pero sus entradas son extremadamente filtradas y seguras."
+    },
+    {
+        keywords: ["cuántas operaciones hace", "cuantas operaciones hace", "frecuencia de cada", "qué frecuencia", "cuánto tarda cada"],
+        response: "⏱️ **Frecuencia de Operaciones de nuestros Bots:**\n\n• **La Ametralladora (XAUUSD):** Puede hacer de 2 a 5 operaciones en un mismo día activo.\n• **Yen Ninja Ghost (USDJPY):** Hace entre 3 y 8 operaciones por *semana* (solo actúa de noche).\n• **Euro Precision Flow (EURUSD):** Hace entre 1 y 3 operaciones por *semana* (alta precisión analítica).\n• **BTC Storm Rider (BTCUSD):** Puede estar 2 semanas sin hacer nada, y de repente abrir 4 operaciones seguidas si hay un breakout fuerte de precio Crypto."
     }
 ];
 
-const DEFAULT_RESPONSE = "Hmm, no tengo una respuesta específica para eso. Para consultas detalladas puedes contactar con nuestro soporte en **soporte@kopytrade.com** o revisar nuestra sección de **FAQ** con las preguntas más frecuentes. ¿Puedo ayudarte con algo diferente?";
+const DEFAULT_RESPONSE = "Hmm, pues no tengo nada específico para eso en mi base de datos de momento, pero puedes revisar con calma nuestra sección de **FAQ** (Preguntas Frecuentes) donde casi seguro que encuentras la información que necesitas. ¿Puedo ayudarte con otra cosa sobre bots de trading?";
 
 function getBotResponse(input: string): string {
     const lower = input.toLowerCase();
