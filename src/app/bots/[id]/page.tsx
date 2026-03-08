@@ -80,12 +80,12 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
 
                                 <div className="mb-8">
                                     <h5 className="text-sm font-semibold text-white mb-4">Curva de Equidad (Simulada)</h5>
-                                    <div className="w-full h-48 bg-surface-light/30 rounded-xl border border-white/5 flex items-end justify-between p-4 gap-1 relative overflow-hidden group">
+                                    <div className="w-full h-48 bg-surface-light/30 rounded-xl border border-white/5 flex items-end justify-between p-2 sm:p-4 gap-0.5 sm:gap-1 relative overflow-hidden group">
                                         <div className="absolute inset-0 bg-gradient-to-t from-brand/5 to-transparent pointer-events-none" />
                                         {[20, 25, 22, 35, 30, 45, 42, 55, 60, 58, 70, 68, 85, 80, 95, 100].map((h, i) => (
                                             <div
                                                 key={i}
-                                                className="w-full bg-gradient-to-t from-brand-light/40 to-brand-light rounded-t-sm transition-all duration-500 group-hover:from-brand-light/60"
+                                                className={`w-full bg-gradient-to-t from-brand-light/40 to-brand-light rounded-t-sm transition-all duration-500 group-hover:from-brand-light/60 ${i < 4 ? 'hidden sm:block' : ''}`}
                                                 style={{ height: `${h}%`, opacity: 0.5 + (i * 0.03) }}
                                             />
                                         ))}

@@ -157,10 +157,11 @@ export function AutomatedTradingSim() {
                     </div>
 
                     {/* Terminal / Logs Area */}
-                    <div className="h-28 bg-black/50 border border-white/10 rounded-lg p-2 overflow-hidden flex flex-col justify-end">
+                    <div className="h-28 sm:h-32 bg-black/50 border border-white/10 rounded-lg p-2 overflow-y-auto overflow-x-hidden flex flex-col justify-end min-w-0">
                         {logs.map((log, i) => (
-                            <div key={i} className={`whitespace-nowrap ${log.includes('[EXEC]') ? 'text-brand-light' : log.includes('[SCAN]') ? 'text-amber-400' : 'text-slate-400'} animate-fade-in-up`}>
-                                <span className="opacity-50 mr-2">{new Date().toLocaleTimeString()}</span>
+                            <div key={i} className={`text-[9px] sm:text-xs md:text-sm break-words leading-tight mb-1 sm:mb-0 ${log.includes('[EXEC]') ? 'text-brand-light' : log.includes('[SCAN]') ? 'text-amber-400' : 'text-slate-400'} animate-fade-in-up`}>
+                                <span className="opacity-50 mr-1.5 hidden sm:inline">{new Date().toLocaleTimeString()}</span>
+                                <span className="opacity-50 mr-1.5 sm:hidden">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                 {log}
                             </div>
                         ))}

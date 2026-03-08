@@ -149,12 +149,12 @@ export default function Home() {
                     </div>
                   </div>
                   {/* Velas */}
-                  <div className="flex-1 flex items-end gap-1 sm:gap-1.5 justify-between py-3">
+                  <div className="flex-1 flex items-end gap-0.5 sm:gap-1.5 justify-between py-2 sm:py-3 px-1">
                     {[40, 60, 45, 80, 50, 90, 70, 100, 85, 110, 95].map((h, i) => (
-                      <div key={i} className="relative w-full flex justify-center h-full items-end">
-                        <div className={`relative w-full max-w-[10px] sm:max-w-[12px] rounded-sm ${i % 2 === 0 ? "bg-gradient-to-t from-success/80 to-success" : "bg-gradient-to-t from-danger/80 to-danger"}`} style={{ height: `${h}%` }}>
-                          <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-0.5 h-3 bg-white/30"></div>
-                          <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0.5 h-3 bg-white/30"></div>
+                      <div key={i} className={`relative w-full flex justify-center h-full items-end ${i < 3 ? 'hidden sm:flex' : ''}`}>
+                        <div className={`relative w-full min-w-[4px] max-w-[8px] sm:max-w-[12px] rounded-sm ${i % 2 === 0 ? "bg-gradient-to-t from-success/80 to-success" : "bg-gradient-to-t from-danger/80 to-danger"}`} style={{ height: `${h}%` }}>
+                          <div className="absolute -top-2 sm:-top-3 left-1/2 -translate-x-1/2 w-0.5 h-2 sm:h-3 bg-white/30"></div>
+                          <div className="absolute -bottom-2 sm:-bottom-3 left-1/2 -translate-x-1/2 w-0.5 h-2 sm:h-3 bg-white/30"></div>
                         </div>
                       </div>
                     ))}
