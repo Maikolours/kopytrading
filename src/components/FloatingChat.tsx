@@ -140,8 +140,8 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
         response: "📩 **Contacto y Asistencia Personal de Traders para Traders:**\n\nMándanos tu duda, captura de logs técnicos, capturas del terminal.. no te cortes, estamos para ti 24h a soporte@kopytrading.com y tu caso será mirado bajo lupa (Sin IA intermedio, soporte humano 100%)."
     },
     {
-        keywords: ["cuál opera más", "quien opera más", "cual opera mas", "mas veces", "más operaciones", "mayor frecuencia", "opera mucho"],
-        response: "⚡ **¿Cuál es el bot que opera más veces?**\n\nEl bot más activo es, sin duda, **La Ametralladora (XAUUSD)**. Su nombre no es casualidad; al operar en gráficos de M15 y especializarse en Scalping en un par tan volátil como el Oro, tenderá a buscar muchísimas micro-entradas durante su ventana horaria de 9h a 21h.\n\n*(Recuerda que mayor frecuencia también implica mayor estrés operativo, usa siempre lotes mínimos de 0.01 si empiezas con este).* "
+        keywords: ["cuál opera más", "quien opera más", "cual opera mas", "mas veces", "más operaciones", "mayor frecuencia", "opera mucho", "más rápido", "mas rapido", "el bot mas rapido", "el más rápido"],
+        response: "⚡ **¿Cuál es el bot más rápido en operar?**\n\nEl bot más rápido y activo es **La Ametralladora (XAUUSD)**. Su nombre no es casualidad; al operar en gráficos de M15 y especializarse en Scalping en un par tan volátil como el Oro, tenderá a buscar muchísimas micro-entradas durante su ventana horaria.\n\n*(Recuerda que mayor rapidez también implica mayor estrés operativo, usa siempre lotes mínimos de 0.01 si empiezas con este).* "
     },
     {
         keywords: ["menos riesgo", "más seguro", "mas seguro", "menor riesgo", "conservador", "cual arriesga menos", "qué bot es más seguro"],
@@ -150,6 +150,14 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     {
         keywords: ["cuántas operaciones hace", "cuantas operaciones hace", "frecuencia de cada", "qué frecuencia", "cuánto tarda cada"],
         response: "⏱️ **Frecuencia de Operaciones de nuestros Bots:**\n\n• **La Ametralladora (XAUUSD):** Puede hacer de 2 a 5 operaciones en un mismo día activo.\n• **Yen Ninja Ghost (USDJPY):** Hace entre 3 y 8 operaciones por *semana* (solo actúa de noche).\n• **Euro Precision Flow (EURUSD):** Hace entre 1 y 3 operaciones por *semana* (alta precisión analítica).\n• **BTC Storm Rider (BTCUSD):** Puede estar 2 semanas sin hacer nada, y de repente abrir 4 operaciones seguidas si hay un breakout fuerte de precio Crypto."
+    },
+    {
+        keywords: ["ganar más dinero", "que más dinero", "que mas dinero", "gana más", "gana mas", "más beneficios", "mas beneficios", "más rentable", "mas rentable", "el que más gana", "mayor beneficio", "mejor rendimiento"],
+        response: "💸 **¿Con cuál bot se puede llegar a ganar más dinero?**\n\nEn términos de potencial bruto (pura velocidad y agresividad del precio), tanto **La Ametralladora (Oro)** como el **BTC Storm Rider (Bitcoin)** son los que mayores sacudidas de beneficios diarios pueden dar si enganchan bien una racha tendencial. \n\n⚠️ PERO OJO: Los bots que más dinero pueden generar también son siempre los que mayor Drawdown (riesgo de caída temporal) asumen. La recompensa siempre es proporcional al riesgo. Para ganar más, debes estar dispuesto psicológicamente a ver los números rojos bailar más fuerte."
+    },
+    {
+        keywords: ["capital asegurado", "asegurado el capital", "seguro de perdida", "pierdo mi dinero", "perderlo todo", "garantizado", "riesgo cero", "riesgo 0", "capital protegido", "mi dinero está seguro", "esta asegurado"],
+        response: "🛑 **Aviso sobre el Capital y el Riesgo:**\n\n**NO. EL CAPITAL NO ESTÁ ASEGURADO BAJO NINGÚN CONCEPTO.** \nEl Trading algorítmico o manual es una actividad de muy alto riesgo financiero. Quien te diga que tu capital está 100% asegurado en los mercados financieros, te está mintiendo o intentando estafar.\n\nNuestros bots usan *Stop Loss* estrictos y escudos de *Break Even* muy avanzados para PROTEGERTE e intentar evitar la quiebra total de tu cuenta ante un día nefasto, pero en cada operación arriesgas un % real de tu cuenta. Solo opera con aquel dinero del que no dependa tu vida ni tus facturas."
     }
 ];
 

@@ -29,7 +29,7 @@ input double   RiskPercent          = 1.0;    // % de riesgo por operación (del
 input double   MaxRiesgoPorTrade_USD = 50.0;  // Máxima pérdida en $ por trade (límite seguro)
 input double   ATR_SL_Mult           = 1.5;   // Multiplicador ATR para Stop Loss
 input double   ATR_TP_Mult           = 3.5;   // Multiplicador ATR para Take Profit (Campeón)
-input int      MaxSpreadPoints       = 30;    // Máximo spread permitido (en puntos)
+input int      MaxSpreadPoints       = 5000;  // Máximo spread permitido (Cripto necesita miles)
 
 //=== PROTECCIÓN DE CUENTA ===
 input group "=== 🚨 PROTECCIÓN DE CUENTA ==="
@@ -39,7 +39,7 @@ input int      MinSecondsBetweenTrades = 180; // Segundos mínimos entre operaci
 
 //=== ESTRATEGIA ===
 input group "=== 📊 ESTRATEGIA ==="
-input int      EMA_Tendencia      = 250;      // EMA de tendencia (FILTRO ESTRICTO)
+input int      EMA_Tendencia      = 100;      // EMA de tendencia (Reducida a 100 para no bloquear)
 input int      EMA_Rapida         = 10;       // EMA rápida (momentum ágil)
 input int      EMA_Lenta          = 55;       // EMA lenta (confirmación)
 input int      RSI_Periodo        = 14;       // Período del RSI
