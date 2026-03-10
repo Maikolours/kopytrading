@@ -1,6 +1,6 @@
 # ⚡ BTC STORM RIDER v3.0
 
-## Manual Oficial KOPYTRADE
+## Manual Oficial KOPYTRADING
 
 ---
 
@@ -19,7 +19,7 @@
 
 ## 🧠 1. ¿Qué es BTC Storm Rider?
 
-**BTC Storm Rider v3.0** es la evolución definitiva del bot de Bitcoin de KOPYTRADE. Combina la potencia del **Breakout de Rango** con un sistema de **4 filtros de confirmación** y **gestión de riesgo adaptativa** basada en ATR.
+**BTC Storm Rider v3.0** es la evolución definitiva del bot de Bitcoin de KOPYTRADING. Combina la potencia del **Breakout de Rango** con un sistema de **4 filtros de confirmación** y **gestión de riesgo adaptativa** basada en ATR.
 
 ### ¿Qué lo hace diferente?
 
@@ -107,9 +107,9 @@ Añade estos indicadores para "ver" lo que hace el bot:
 ## ⚙️ 3. Guía Completa de Parámetros
 
 > Pulsa **F7** en MT5 para acceder a todos los parámetros.
-> Los valores por defecto son los optimizados por KOPYTRADE.
+> Los valores por defecto son los optimizados por KOPYTRADING.
 
-### 🔑 LICENCIA KOPYTRADE
+### 🔑 LICENCIA KOPYTRADING
 
 | Parámetro | Default | Descripción |
 |---|---|---|
@@ -187,7 +187,7 @@ Añade estos indicadores para "ver" lo que hace el bot:
 
 ## 🔧 4. Instalación
 
-1. Descarga el archivo `.ex5` desde tu Dashboard en **kopytrade.com**
+1. Descarga el archivo `.ex5` desde tu Dashboard en **kopytrading.com**
 2. En MT5: **Archivo → Abrir Carpeta de Datos → MQL5 → Experts**
 3. Copia el archivo en esa carpeta
 4. Abre un gráfico **BTCUSD** en temporalidad **H1**
@@ -208,7 +208,7 @@ Añade estos indicadores para "ver" lo que hace el bot:
 ### Reset a Valores de Fábrica
 1. Pulsa **F7** en el gráfico
 2. Haz clic en **Restablecer (Reset)** abajo a la derecha
-3. Los valores volverán a la configuración KOPYTRADE
+3. Los valores volverán a la configuración KOPYTRADING
 
 ---
 
@@ -241,5 +241,5 @@ Sí. Sin martingala, sin grid, SL/TP definidos, y protección de drawdown diario
 
 ---
 
-*Manual revisado: Marzo 2026 | KOPYTRADE BTC Storm Rider v3.0 para MetaTrader 5*
-*© 2026 KOPYTRADE. Todos los derechos reservados.*
+*Manual revisado: Marzo 2026 | KOPYTRADING BTC Storm Rider v3.0 para MetaTrader 5*
+*© 2026 KOPYTRADING. Todos los derechos reservados.*

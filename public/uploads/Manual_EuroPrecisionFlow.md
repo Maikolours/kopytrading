@@ -1,4 +1,4 @@
-# 🎯 EURO PRECISION FLOW v2.0 (TURBO) — Manual Oficial KOPYTRADE
+# 🎯 EURO PRECISION FLOW v2.0 (TURBO) — Manual Oficial KOPYTRADING
 **Versión 2.0 | ACTIVIDAD EXTREMA | Par: EURUSD | Temporalidad: M15/M30**
 
 ---
@@ -49,7 +49,7 @@ Pulsa **F7** en tu teclado dentro de MetaTrader 5 para ajustar estos valores:
 ---
 
 ### 7. Cómo Actualizar tu Bot a una Nueva Versión
-Cuando KOPYTRADE publique una mejora (ej. de v2.0 a v2.1), recibirás un aviso en tu panel de usuario. Para actualizar:
+Cuando KOPYTRADING publique una mejora (ej. de v2.0 a v2.1), recibirás un aviso en tu panel de usuario. Para actualizar:
 
 1.  **Descarga** el nuevo archivo `.ex5` desde tu panel.
 2.  **⚠️ ADVERTENCIA DE SEGURIDAD (MUY IMPORTANTE):** Antes de sustituir el archivo, **copia tu bot antiguo** a una carpeta segura de tu ordenador. Si la nueva versión no te gusta o te da problemas en tu cuenta específica, siempre podrás volver a la versión anterior que ya tenías configurada.
@@ -63,7 +63,7 @@ Cuando KOPYTRADE publique una mejora (ej. de v2.0 a v2.1), recibirás un aviso e
 
 ## 5. Cómo Volver a los Valores de Fábrica (RESET)
 
-Si has modificado los parámetros y quieres volver a la configuración óptima de KOPYTRADE:
+Si has modificado los parámetros y quieres volver a la configuración óptima de KOPYTRADING:
 1. Abre la ventana de parámetros (**F7**).
 2. Haz clic en el botón **"Restablecer" (Reset)** abajo a la derecha.
 3. El bot cargará automáticamente nuestros valores "Turbo" optimizados.
@@ -81,5 +81,5 @@ Si has modificado los parámetros y quieres volver a la configuración óptima d
 
 ---
 
-*Manual revisado: Febrero 2026 | KOPYTRADE v2.0*
-*© 2026 KOPYTRADE. Todos los derechos reservados.*
+*Manual revisado: Febrero 2026 | KOPYTRADING v2.0*
+*© 2026 KOPYTRADING. Todos los derechos reservados.*

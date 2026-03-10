@@ -1,5 +1,5 @@
 # Manual de Usuario Oficial (BETA)
-## Bot KOPYTRADE: Ninja Yen Master (USDJPY)
+## Bot KOPYTRADING: Ninja Yen Master (USDJPY)
 
 ¡Felicidades por tu compra! Acabas de adquirir un algoritmo especializado en uno de los activos más técnicos del mundo: El Yen Japonés contra el Dólar.
 
@@ -21,7 +21,7 @@ A diferencia de otros bots, este es un robot de **reversión a la media**. Le en
 
 ---
 
-### 3. Las Reglas de Oro (Para todos los Bots Kopytrade)
+### 3. Las Reglas de Oro (Para todos los Bots Kopytrading)
 
 Para que cualquier bot funcione correctamente, la infraestructura debe ser perfecta:
 
@@ -31,7 +31,7 @@ El botón de *Encender / Apagar el AutoTrading del Bot* **no existe en la aplica
 
 🖥️ **El Requisito Fundamental: El servidor VPS:**
 Tu ordenador debe estar encendido y con internet el 100% del tiempo que el bot esté operando. Si se va la luz de tu casa con operaciones abiertas en caída libre, el bot se apagará y no podrá poner sus escudos de defensa.
-**Solución obligatoria:** Si vas a operar en cuenta real 24/5, necesitas contratar un **VPS (Servidor Privado Virtual)**. Es como alquilar un ordenador en la nube por 10$ al mes que nunca se apaga ni pierde internet, y ahí instalas tu MetaTrader y el Bot de Kopytrade.
+**Solución obligatoria:** Si vas a operar en cuenta real 24/5, necesitas contratar un **VPS (Servidor Privado Virtual)**. Es como alquilar un ordenador en la nube por 10$ al mes que nunca se apaga ni pierde internet, y ahí instalas tu MetaTrader y el Bot de Kopytrading.
 
 ---
 
@@ -44,4 +44,4 @@ Tu ordenador debe estar encendido y con internet el 100% del tiempo que el bot e
 
 ### ⚠️ ADVERTENCIA LEGAL DE RIESGO
 
-El trading de algoritmos en CFDs conlleva un alto riesgo de pérdida de capital. Ni KOPYTRADE ni los creadores de este software tienen acceso a tus fondos. **NUNCA** operes con dinero que necesites para vivir. Te exigimos expresamente que pruebes este archivo `.ex5` en una **Cuenta DEMO** durante al menos 14 días.
+El trading de algoritmos en CFDs conlleva un alto riesgo de pérdida de capital. Ni KOPYTRADING ni los creadores de este software tienen acceso a tus fondos. **NUNCA** operes con dinero que necesites para vivir. Te exigimos expresamente que pruebes este archivo `.ex5` en una **Cuenta DEMO** durante al menos 14 días.

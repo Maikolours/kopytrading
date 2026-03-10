@@ -46,7 +46,7 @@ const ARTICLES = [
         slug: "gestion-riesgo",
         title: "⚠️ Gestión de Riesgo en Tiempos de Volatilidad Extrema",
         category: "Educación | Esencial",
-        excerpt: "El mayor error de los traders novatos no es elegir mal la estrategia, sino sobredimensionar el tamaño de sus posiciones (oversizing). Aprende las 5 reglas de oro de KOPYTRADE para sobrevivir en los mercados.",
+        excerpt: "El mayor error de los traders novatos no es elegir mal la estrategia, sino sobredimensionar el tamaño de sus posiciones (oversizing). Aprende las 5 reglas de oro de KOPYTRADING para sobrevivir en los mercados.",
         date: "01 Feb, 2026",
         readTime: "9 min"
     },

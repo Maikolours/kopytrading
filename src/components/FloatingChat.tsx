@@ -57,7 +57,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["pago", "comprar", "stripe", "paypal", "bizum", "cómo pago", "tarjeta", "pagar"],
-        response: "💳 **Métodos de Compra:**\n\nPronto implementaremos Stripe directo, PayPal Express y otras pasarelas.\nSi no puedes esperar a llevarte un bot para tu cuenta Real, contáctanos en **soporte@kopytrade.com** y te habilitamos el pago manual mediante tarjeta, transferencia o wallet cripto."
+        response: "💳 **Métodos de Compra:**\n\nPronto implementaremos Stripe directo, PayPal Express y otras pasarelas.\nSi no puedes esperar a llevarte un bot para tu cuenta Real, contáctanos en **soporte@kopytrading.com** y te habilitamos el pago manual mediante tarjeta, transferencia o wallet cripto."
     },
     {
         keywords: ["no funciona", "error", "problema", "ayuda", "bug", "fallo", "cuenta no autorizada"],
@@ -105,7 +105,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["mt4", "metatrader 4", "mq4"],
-        response: "⚙️ **Obsolescencia Técnica de MetaTrader 4:**\n\nKopyTrade desarrolla nativamente al 100% en `MQL5` para MetaTrader 5 porque es el futuro estándar de las instituciones y su Tester genético multithread está a años luz de las barrabasadas arcaicas de MT4."
+        response: "⚙️ **Obsolescencia Técnica de MetaTrader 4:**\n\nKopyTrading desarrolla nativamente al 100% en `MQL5` para MetaTrader 5 porque es el futuro estándar de las instituciones y su Tester genético multithread está a años luz de las barrabasadas arcaicas de MT4."
     },
     {
         keywords: ["movil", "móvil", "android", "iphone", "celular", "app"],
@@ -137,7 +137,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["soporte", "contacto", "email", "ticket", "hablar con"],
-        response: "📩 **Contacto y Asistencia Personal de Traders para Traders:**\n\nMándanos tu duda, captura de logs técnicos, capturas del terminal.. no te cortes, estamos para ti 24h a soporte@kopytrade.com y tu caso será mirado bajo lupa (Sin IA intermedio, soporte humano 100%)."
+        response: "📩 **Contacto y Asistencia Personal de Traders para Traders:**\n\nMándanos tu duda, captura de logs técnicos, capturas del terminal.. no te cortes, estamos para ti 24h a soporte@kopytrading.com y tu caso será mirado bajo lupa (Sin IA intermedio, soporte humano 100%)."
     },
     {
         keywords: ["cuál opera más", "quien opera más", "cual opera mas", "mas veces", "más operaciones", "mayor frecuencia", "opera mucho"],
@@ -195,8 +195,8 @@ function speakText(text: string) {
 
     // Forzar pronunciación correcta para que no lo deletree "K O P Y T R A D I N G"
     cleanText = cleanText
-        .replace(/KOPYTRADE/g, 'Copy Trade')
-        .replace(/KopyTrade/gi, 'Copy Trade')
+        .replace(/KOPYTRADING/g, 'Copy Trade')
+        .replace(/KopyTrading/gi, 'Copy Trade')
         .replace(/KopyTrading/gi, 'Copy Trading')
         .replace(/KopyBot/gi, 'Copy Bot');
 

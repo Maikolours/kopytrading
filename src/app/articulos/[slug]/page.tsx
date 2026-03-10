@@ -41,7 +41,7 @@ El Oro históricamente actúa como "refugio seguro" en tiempos de crisis. Los co
 
 Cuando la Reserva Federal baja los tipos de interés, el dólar se debilita y el Oro (que cotiza en dólares) sube. Las expectativas de recortes adicionales en 2026 actúan como gasolina para el rally.
 
-### ¿Qué significa esto para tu Bot de KOPYTRADE?
+### ¿Qué significa esto para tu Bot de KOPYTRADING?
 
 Si usas [La Ametralladora (XAUUSD)](/bots), este entorno de alta volatilidad es perfecto para el bot. Más movimiento = más oportunidades de scalping. Sin embargo, ten en cuenta que **la volatilidad también amplifica las pérdidas** si no gestionas bien el riesgo.
 
@@ -228,10 +228,10 @@ Con un VPS:
 1. Contrata un VPS Windows (mínimo 2GB RAM)
 2. Conéctate por **Escritorio Remoto** (RDP) desde tu PC o móvil
 3. Instala **MetaTrader 5** en el VPS
-4. Arrastra tu archivo **.ex5** de KOPYTRADE al gráfico
+4. Arrastra tu archivo **.ex5** de KOPYTRADING al gráfico
 5. Activa el **AutoTrading** y cierra el RDP — el bot seguirá operando
 
-### Consejo KOPYTRADE
+### Consejo KOPYTRADING
 
 Si ya tienes cuenta en Pepperstone o IC Markets, pregunta a soporte por el VPS gratuito. Requieren un volumen de trading mínimo mensual, pero muchos usuarios de bots lo alcanzan fácilmente.
 
@@ -245,7 +245,7 @@ Si ya tienes cuenta en Pepperstone o IC Markets, pregunta a soporte por el VPS g
         date: "01 Feb, 2026",
         readTime: "9 min",
         keywords: ["gestión de riesgo", "trading seguro", "lot size trading", "drawdown", "money management", "proteger capital"],
-        metaDescription: "Las 5 reglas de oro de KOPYTRADE para sobrevivir en los mercados. Aprende a gestionar el riesgo y proteger tu capital con bots de trading.",
+        metaDescription: "Las 5 reglas de oro de KOPYTRADING para sobrevivir en los mercados. Aprende a gestionar el riesgo y proteger tu capital con bots de trading.",
         content: `## La Regla de Oro del Trading Algorítmico: No te Arruines
 
 El mayor error que vemos repetirse una y otra vez en traders principiantes no es elegir un bot malo. Es **sobredimensionar el tamaño de sus posiciones**.
@@ -265,7 +265,7 @@ Imagina que tienes una cuenta de **1.000$** y usas un bot de scalping en Oro:
 
 La diferencia entre un trader que sobrevive y uno que no es el tamaño del lote, no la calidad del bot.
 
-### Las 5 Reglas de Oro de KOPYTRADE
+### Las 5 Reglas de Oro de KOPYTRADING
 
 1. **Nunca arriesgues más del 2% de tu cuenta en una sola operación**
 2. **Prueba el bot en demo mínimo 2 semanas** antes de pasar a real
@@ -309,7 +309,7 @@ Nunca superes esta regla hasta tener al menos 3 meses de historial positivo con 
         readTime: "6 min",
         keywords: ["trading algorítmico", "trading manual", "bots de trading", "expert advisors", "ventajas trading automático", "trading forex 2026", "emociones trading"],
         metaDescription: "Comparamos el trading manual tradicional frente a los algoritmos automáticos (Bots/EAs). Descubre si estás listo para la transición tecnológica del 2026.",
-        content: `## La Batalla Eterna: Humano vs Máquina\n\nEl debate sobre si los bots de trading acabarán por reemplazar totalmente a los traders manuales sigue vigente. Especialmente cuando estadísticas institucionales señalan que **más del 70% del trading institucional mundial ya se realiza mediante algoritmos y redes de alta frecuencia (HFT).**\n\nPero, ¿qué significa esto para el inversor retail?\n\n### Ventajas del Trading Manual\n\n1. **Intuición Humana:** Un algoritmo puro (no IA avanzada) no sabe que acaba de estallar una guerra imprevista. El trader humano puede leer noticias de última hora y cancelar todas sus posiciones al instante basándose en contexto macroeconómico.\n2. **Flexibilidad:** El trader manual adapta su estilo al cambiar el régimen de mercado de forma orgánica, mientras que las máquinas siguen la línea matemática para la que fueron programadas.\n\n### Ventajas del Trading Algorítmico (Expert Advisors)\n\nTodo nuestro desarrollo en **KOPYTRADE** se centra en maximizar estos beneficios técnicos:\n\n1. **Velocidad de ejecución (Cero deslizamiento cognitivo):** Un bot procesa la señal, valida el riesgo y envía la orden al servidor en menos de 50 milisegundos. Un humano tarda, de media, 2 segundos solo en procesar la acción de apretar un botón.\n2. **Escalabilidad Multiactivo:** Puedes operar Oro, Bitcoin y EuroDólar a la vez, con 3 estrategias distintas, las 24 horas del día. Un ser humano pierde concentración tras un par de horas frente al gráfico.\n3. **Ausencia TOTAL de Emociones:** Este es el "game changer". El bot no se venga cuando pierde. No dobla el lotaje empujado por el ego. Simplemente ejecuta su Stop Loss matemático y espera su próxima ventaja estadística.\n\n### La Conclusión Institucional\n\nEl futuro (y el presente desde hace años) no va de que la máquina elimine al humano, sino de **cooperación**. Los traders más exitosos del mundo actúan como "gestores de granjas": supervisan los algoritmos, controlan el riesgo base y apagan/encienden los sistemas en función de la meteorología macroeconómica de la semana.\n\nEn lugar de pelear tú mismo contra el mercado vela a vela, **conviértete en el director general de tus propios bots institucionales.**\n\n---\n\n⚠️ *KopyTrading.com desarrolla software matemático, no provee consejos de inversión. Toda ejecución requiere pruebas de rendimiento previo.*`,
+        content: `## La Batalla Eterna: Humano vs Máquina\n\nEl debate sobre si los bots de trading acabarán por reemplazar totalmente a los traders manuales sigue vigente. Especialmente cuando estadísticas institucionales señalan que **más del 70% del trading institucional mundial ya se realiza mediante algoritmos y redes de alta frecuencia (HFT).**\n\nPero, ¿qué significa esto para el inversor retail?\n\n### Ventajas del Trading Manual\n\n1. **Intuición Humana:** Un algoritmo puro (no IA avanzada) no sabe que acaba de estallar una guerra imprevista. El trader humano puede leer noticias de última hora y cancelar todas sus posiciones al instante basándose en contexto macroeconómico.\n2. **Flexibilidad:** El trader manual adapta su estilo al cambiar el régimen de mercado de forma orgánica, mientras que las máquinas siguen la línea matemática para la que fueron programadas.\n\n### Ventajas del Trading Algorítmico (Expert Advisors)\n\nTodo nuestro desarrollo en **KOPYTRADING** se centra en maximizar estos beneficios técnicos:\n\n1. **Velocidad de ejecución (Cero deslizamiento cognitivo):** Un bot procesa la señal, valida el riesgo y envía la orden al servidor en menos de 50 milisegundos. Un humano tarda, de media, 2 segundos solo en procesar la acción de apretar un botón.\n2. **Escalabilidad Multiactivo:** Puedes operar Oro, Bitcoin y EuroDólar a la vez, con 3 estrategias distintas, las 24 horas del día. Un ser humano pierde concentración tras un par de horas frente al gráfico.\n3. **Ausencia TOTAL de Emociones:** Este es el "game changer". El bot no se venga cuando pierde. No dobla el lotaje empujado por el ego. Simplemente ejecuta su Stop Loss matemático y espera su próxima ventaja estadística.\n\n### La Conclusión Institucional\n\nEl futuro (y el presente desde hace años) no va de que la máquina elimine al humano, sino de **cooperación**. Los traders más exitosos del mundo actúan como "gestores de granjas": supervisan los algoritmos, controlan el riesgo base y apagan/encienden los sistemas en función de la meteorología macroeconómica de la semana.\n\nEn lugar de pelear tú mismo contra el mercado vela a vela, **conviértete en el director general de tus propios bots institucionales.**\n\n---\n\n⚠️ *KopyTrading.com desarrolla software matemático, no provee consejos de inversión. Toda ejecución requiere pruebas de rendimiento previo.*`,
     },
 };
 
@@ -317,10 +317,10 @@ Nunca superes esta regla hasta tener al menos 3 meses de historial positivo con 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
     const article = ARTICLES_DATA[slug];
-    if (!article) return { title: "Artículo no encontrado | KOPYTRADE" };
+    if (!article) return { title: "Artículo no encontrado | KOPYTRADING" };
 
     return {
-        title: `${article.title} | KOPYTRADE Blog`,
+        title: `${article.title} | KOPYTRADING Blog`,
         description: article.metaDescription,
         keywords: article.keywords.join(", "),
         openGraph: {

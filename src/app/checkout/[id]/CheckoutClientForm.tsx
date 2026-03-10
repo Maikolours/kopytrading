@@ -77,7 +77,7 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
                     value: priceString,
                     currency_code: "EUR"
                 },
-                description: `KOPYTRADE Bot: ${bot.name}`,
+                description: `KOPYTRADING Bot: ${bot.name}`,
             }]
         });
     }
@@ -107,7 +107,7 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
                     throw new Error("Error registrando la compra");
                 }
             } catch (err) {
-                setError("Pago recibido con éxito, pero hubo un error al crear tu cuenta. Contacta a soporte@kopytrade.com");
+                setError("Pago recibido con éxito, pero hubo un error al crear tu cuenta. Contacta a soporte@kopytrading.com");
             }
         });
     }

@@ -1,4 +1,4 @@
-# 🔥 LA AMETRALLADORA v2.1 — Manual Oficial KOPYTRADE
+# 🔥 LA AMETRALLADORA v2.1 — Manual Oficial KOPYTRADING
 **Versión 2.1 | EL REY DEL ORO | Par: XAUUSD | Temporalidad: M15 | MetaTrader 5 (MT5)**
 
 ---
@@ -10,7 +10,7 @@
 
 ## 1. ¿Qué es La Ametralladora?
 
-Es el bot más activo de KOPYTRADE. Utiliza un sistema de **Hedging Inteligente** (coberturas) para capturar beneficios constantes en el Oro.
+Es el bot más activo de KOPYTRADING. Utiliza un sistema de **Hedging Inteligente** (coberturas) para capturar beneficios constantes en el Oro.
 
 **Expectativas de Operación:**
 - Escenario Normal: **5-10 operaciones/día**.
@@ -51,7 +51,7 @@ Pulsa **F7** en MetaTrader 5 para ajustar:
 
 ## 4. Cómo Actualizar tu Bot a una Nueva Versión
 
-Si KOPYTRADE publica una nueva versión:
+Si KOPYTRADING publica una nueva versión:
 1.  **Descarga** el archivo `.ex5` desde el Dashboard.
 2.  **⚠️ ADVERTENCIA DE SEGURIDAD (MUY IMPORTANTE):** Antes de sustituir el archivo, **copia tu bot antiguo** a una carpeta segura de tu ordenador. Si la nueva versión no te gusta o te da problemas en tu cuenta específica, siempre podrás volver a la versión anterior que ya tenías configurada.
 3.  En MetaTrader 5 (MT5) ve a **Archivo > Abrir Carpeta de Datos > MQL5 > Experts**.
@@ -65,7 +65,7 @@ Si KOPYTRADE publica una nueva versión:
 Si los parámetros han sido modificados y quieres volver al punto de partida óptimo:
 1. Abre la ventana de parámetros (**F7**).
 2. Haz clic en el botón **"Restablecer" (Reset)** abajo a la derecha.
-3. El bot cargará los valores de fábrica calibrados por KOPYTRADE.
+3. El bot cargará los valores de fábrica calibrados por KOPYTRADING.
 4. Pulsa OK.
 
 ---
@@ -80,5 +80,5 @@ Si los parámetros han sido modificados y quieres volver al punto de partida óp
 
 ---
 
-*Manual revisado: Febrero 2026 | KOPYTRADE v2.1 para MetaTrader 5 (MT5)*
-*© 2026 KOPYTRADE. Todos los derechos reservados.*
+*Manual revisado: Febrero 2026 | KOPYTRADING v2.1 para MetaTrader 5 (MT5)*
+*© 2026 KOPYTRADING. Todos los derechos reservados.*

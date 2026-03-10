@@ -1,5 +1,5 @@
 # Manual de Usuario Oficial (BETA)
-## Bot KOPYTRADE: Crypto Whale Rider (BTCUSD)
+## Bot KOPYTRADING: Crypto Whale Rider (BTCUSD)
 
 ¡Felicidades por tu compra! Este no es un bot cualquiera. Estás armando un algoritmo especializado en cazar los movimientos volátiles institucionales de Bitcoin.
 
@@ -22,7 +22,7 @@ Este es un robot de **Swing Trading Cripto**. Está diseñado para paciencia ext
 
 ---
 
-### 3. Las Reglas de Oro (Para todos los Bots Kopytrade)
+### 3. Las Reglas de Oro (Para todos los Bots Kopytrading)
 
 Para que cualquier bot funcione correctamente, la infraestructura debe ser perfecta:
 
@@ -45,4 +45,4 @@ Tu ordenador debe estar encendido y con internet el 100% del tiempo que el bot e
 
 ### ⚠️ ADVERTENCIA LEGAL DE RIESGO
 
-El mercado de Criptomonedas es uno de los más despiadados y volátiles del planeta. El trading algorítmico conlleva un alto riesgo de pérdida de capital absoluto. Ni KOPYTRADE ni los creadores garantizamos rendimientos pasados. **NUNCA** operes con dinero que no te puedas permitir perder. Pruebalo **OBLIGATORIAMENTE** en una **Cuenta DEMO** durante al menos 1 mes.
+El mercado de Criptomonedas es uno de los más despiadados y volátiles del planeta. El trading algorítmico conlleva un alto riesgo de pérdida de capital absoluto. Ni KOPYTRADING ni los creadores garantizamos rendimientos pasados. **NUNCA** operes con dinero que no te puedas permitir perder. Pruebalo **OBLIGATORIAMENTE** en una **Cuenta DEMO** durante al menos 1 mes.

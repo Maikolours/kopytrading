@@ -1,4 +1,4 @@
-# 🥷 YEN NINJA GHOST v2.0 — Manual Oficial KOPYTRADE
+# 🥷 YEN NINJA GHOST v2.0 — Manual Oficial KOPYTRADING
 **Versión 2.0 | REBOTE ASIÁTICO | Par: USDJPY | Temporalidad: M30/H1 | MetaTrader 5 (MT5)**
 
 ---
@@ -49,7 +49,7 @@ Pulsa **F7** en MetaTrader 5 para ajustar:
 
 ## 4. Cómo Actualizar tu Bot a una Nueva Versión
 
-Si KOPYTRADE publica una nueva versión:
+Si KOPYTRADING publica una nueva versión:
 1.  **Descarga** el archivo `.ex5` desde el Dashboard.
 2.  **⚠️ ADVERTENCIA DE SEGURIDAD (MUY IMPORTANTE):** Antes de sustituir el archivo, **copia tu bot antiguo** a una carpeta segura de tu ordenador. Si la nueva versión no te gusta o te da problemas en tu cuenta específica, siempre podrás volver a la versión anterior que ya tenías configurada.
 3.  En MetaTrader 5 (MT5) ve a **Archivo > Abrir Carpeta de Datos > MQL5 > Experts**.
@@ -74,5 +74,5 @@ Si has tocado los ajustes y quieres volver a la configuración Ninja original:
 
 ---
 
-*Manual revisado: Febrero 2026 | KOPYTRADE v2.0 para MetaTrader 5 (MT5)*
-*© 2026 KOPYTRADE. Todos los derechos reservados.*
+*Manual revisado: Febrero 2026 | KOPYTRADING v2.0 para MetaTrader 5 (MT5)*
+*© 2026 KOPYTRADING. Todos los derechos reservados.*

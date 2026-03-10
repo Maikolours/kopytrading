@@ -1,16 +1,16 @@
-# 🎯 EURO PRECISION FLOW — Manual Oficial KOPYTRADE
+# 🎯 EURO PRECISION FLOW — Manual Oficial KOPYTRADING
 **Versión 1.0 | Par: EURUSD | Temporalidad: M30 (Recomendado) / H1 (Conservador)**
 
 ---
 
 > **⚠️ AVISO DE RIESGO LEGAL OBLIGATORIO**
-> El uso de este software conlleva un alto riesgo de pérdida de capital. Los resultados mostrados son orientativos y NO garantizan rendimientos futuros. KOPYTRADE NO se hace responsable de pérdidas derivadas del uso de este bot en ninguna circunstancia. Opere únicamente con capital que pueda permitirse perder. Pruebe SIEMPRE en cuenta Demo antes de operar en real.
+> El uso de este software conlleva un alto riesgo de pérdida de capital. Los resultados mostrados son orientativos y NO garantizan rendimientos futuros. KOPYTRADING NO se hace responsable de pérdidas derivadas del uso de este bot en ninguna circunstancia. Opere únicamente con capital que pueda permitirse perder. Pruebe SIEMPRE en cuenta Demo antes de operar en real.
 
 ---
 
 ## 1. ¿Qué es el Euro Precision Flow?
 
-El **Euro Precision Flow** es un bot de trading tendencial para **EURUSD**. Su filosofía: no entra en cualquier movimiento, solo en los que tienen alta probabilidad de continuar. Es el bot más **seguro y conservador** de KOPYTRADE, ideal para principiantes.
+El **Euro Precision Flow** es un bot de trading tendencial para **EURUSD**. Su filosofía: no entra en cualquier movimiento, solo en los que tienen alta probabilidad de continuar. Es el bot más **seguro y conservador** de KOPYTRADING, ideal para principiantes.
 
 ---
 
@@ -167,11 +167,11 @@ Con horario 8:00-20:00 (laboral europeo), puedes gestionar sin VPS si tu ordenad
 
 ## 10. Descargo de Responsabilidad
 
-**KOPYTRADE no es un asesor financiero regulado.** Este bot es software. No garantiza rentabilidad. Bajo ninguna circunstancia KOPYTRADE asume responsabilidad por pérdidas derivadas de su uso. Los resultados históricos no garantizan rendimientos futuros. El trading de Forex implica alto riesgo. Solo opere con capital que pueda permitirse perder completamente.
+**KOPYTRADING no es un asesor financiero regulado.** Este bot es software. No garantiza rentabilidad. Bajo ninguna circunstancia KOPYTRADING asume responsabilidad por pérdidas derivadas de su uso. Los resultados históricos no garantizan rendimientos futuros. El trading de Forex implica alto riesgo. Solo opere con capital que pueda permitirse perder completamente.
 
-Al utilizar este bot confirmas haber leído y aceptado este manual, el Aviso de Riesgo y los Términos de Uso de KOPYTRADE.
+Al utilizar este bot confirmas haber leído y aceptado este manual, el Aviso de Riesgo y los Términos de Uso de KOPYTRADING.
 
 ---
 
-*Manual revisado: Febrero 2026 | KOPYTRADE v1.0*
-*© 2026 KOPYTRADE. Todos los derechos reservados.*
+*Manual revisado: Febrero 2026 | KOPYTRADING v1.0*
+*© 2026 KOPYTRADING. Todos los derechos reservados.*

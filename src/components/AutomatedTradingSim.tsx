@@ -14,7 +14,7 @@ export function AutomatedTradingSim() {
 
         // Initial logs
         setLogs([
-            "[SYSTEM] KOPYTRADE AI Core v3.2 initialized.",
+            "[SYSTEM] KOPYTRADING AI Core v3.2 initialized.",
             "[NETWORK] Connected to MT5 Server. Latency: 12ms",
             "[SCAN] Analyzing XAUUSD on M15 timeframe...",
         ]);
@@ -71,7 +71,7 @@ export function AutomatedTradingSim() {
                     </div>
                     <span className="font-bold text-slate-100 flex items-center gap-2">
                         <Cpu className="w-4 h-4 text-brand-light" />
-                        KOPYTRADE Algorithmic Engine
+                        KOPYTRADING Algorithmic Engine
                     </span>
                 </div>
                 <div className="flex gap-4 items-center">

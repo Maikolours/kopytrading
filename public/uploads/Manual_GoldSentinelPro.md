@@ -1,4 +1,4 @@
-# 🛡️ GOLDSENTINEL PRO v1.0 — Manual Oficial KOPYTRADE
+# 🛡️ GOLDSENTINEL PRO v1.0 — Manual Oficial KOPYTRADING
 **Versión 1.0 | Inteligencia Adaptativa para el Oro | Par: XAUUSD | Temporalidad: M30 | MetaTrader 5 (MT5)**
 
 ---
@@ -10,7 +10,7 @@
 
 ## 1. ¿Qué es GoldSentinel Pro?
 
-Es el bot **más inteligente** de KOPYTRADE para operar en Oro. A diferencia de otros bots que disparan a todo lo que se mueve, GoldSentinel Pro espera al **"tiro perfecto"**: solo entra cuando **4 indicadores están de acuerdo** al mismo tiempo.
+Es el bot **más inteligente** de KOPYTRADING para operar en Oro. A diferencia de otros bots que disparan a todo lo que se mueve, GoldSentinel Pro espera al **"tiro perfecto"**: solo entra cuando **4 indicadores están de acuerdo** al mismo tiempo.
 
 **Filosofía:** Calidad sobre cantidad. Menos operaciones, más precisas.
 
@@ -62,7 +62,7 @@ Cuando el verde cruza por encima del rojo y el precio está encima de la blanca,
 
 ## 3. Guía Completa de Parámetros (F7 en MT5)
 
-### 🔑 LICENCIA KOPYTRADE
+### 🔑 LICENCIA KOPYTRADING
 | Parámetro | Default | Descripción |
 |---|---|---|
 | `CuentaDemo` | 0 | Tu número de cuenta DEMO de MT5 |
@@ -123,7 +123,7 @@ Cuando el verde cruza por encima del rojo y el precio está encima de la blanca,
 
 ## 4. Instalación Paso a Paso
 
-1. **Descarga** el archivo `.mq5` desde tu Dashboard en kopytrade.com
+1. **Descarga** el archivo `.mq5` desde tu Dashboard en kopytrading.com
 2. Abre MetaTrader 5 y ve a **Archivo → Abrir Carpeta de Datos → MQL5 → Experts**
 3. **Copia** el archivo descargado en esa carpeta
 4. Abre **MetaEditor** (F4) y compila el archivo (F7)
@@ -149,7 +149,7 @@ Cuando el verde cruza por encima del rojo y el precio está encima de la blanca,
 
 1. Abre parámetros con **F7**
 2. Pulsa **Restablecer (Reset)** abajo a la derecha
-3. Los valores volverán a la configuración calibrada por KOPYTRADE
+3. Los valores volverán a la configuración calibrada por KOPYTRADING
 4. Pulsa OK
 
 ---
@@ -184,5 +184,5 @@ Sí, al no usar grid ni martingala y tener SL/TP definidos, es compatible con la
 
 ---
 
-*Manual revisado: Marzo 2026 | KOPYTRADE GoldSentinel Pro v1.0 para MetaTrader 5*
-*© 2026 KOPYTRADE. Todos los derechos reservados.*
+*Manual revisado: Marzo 2026 | KOPYTRADING GoldSentinel Pro v1.0 para MetaTrader 5*
+*© 2026 KOPYTRADING. Todos los derechos reservados.*

@@ -14,7 +14,7 @@ export default function InstalarAppPage() {
                         📲
                     </div>
                     <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-                        Cómo tener KopyTrade en tu móvil
+                        Cómo tener KopyTrading en tu móvil
                     </h1>
                     <p className="text-text-muted text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
                         Nuestra plataforma utiliza tecnología web moderna (PWA). <strong className="text-white">No existe una app en la App Store ni en Google Play</strong>. En su lugar, instalas la web directamente desde tu navegador en 10 segundos. No ocupa apenas memoria.

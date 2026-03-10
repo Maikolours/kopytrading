@@ -77,7 +77,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto p-4 sm:p-0 bg-white/5 sm:bg-transparent rounded-2xl border border-white/5 sm:border-transparent">
               <div>
                 <h3 className="text-brand-light font-bold text-sm sm:text-base mb-1">
-                  Lleva KopyTrade en tu móvil
+                  Lleva KopyTrading en tu móvil
                 </h3>
                 <p className="text-white/60 text-xs max-w-[200px] sm:max-w-[150px] mx-auto sm:mx-0">
                   Instala nuestra plataforma en 10s.

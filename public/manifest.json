@@ -1,7 +1,7 @@
 {
     "name": "KopyTrading",
     "short_name": "KopyTrading",
-    "description": "Plataforma de Trading Bots y Kopytrade",
+    "description": "Plataforma de Trading Bots y Kopytrading",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#000000",
