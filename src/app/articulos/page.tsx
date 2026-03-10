@@ -8,7 +8,7 @@ const ARTICLES = [
         category: "XAUUSD | Análisis",
         excerpt: "El precio del Oro (XAUUSD) ha vuelto a marcar máximos históricos en las primeras semanas de 2026, superando los 2.900$ la onza. El principal catalizador sigue siendo la compra masiva de bancos centrales asiáticos (China, India, Turquía) que buscan diversificar sus reservas lejos del dólar.",
         date: "20 Feb, 2026",
-        readTime: "6 min"
+        readTime: "8 min"
     },
     {
         slug: "eurusd-analisis",
@@ -16,7 +16,7 @@ const ARTICLES = [
         category: "EURUSD | Análisis",
         excerpt: "El par EURUSD ha mostrado una rebaja significativa en los meses recientes, presionado por la divergencia de políticas monetarias entre la Reserva Federal (FED) y el Banco Central Europeo (BCE). Esta divergencia crea oportunidades claras para los bots tendenciales.",
         date: "17 Feb, 2026",
-        readTime: "5 min"
+        readTime: "7 min"
     },
     {
         slug: "usdjpy-boj",
@@ -40,7 +40,7 @@ const ARTICLES = [
         category: "Tecnología | Educación",
         excerpt: "Una de las diferencias más grandes entre un trader algorítmico amateur y uno avanzado no está en el bot que usa, sino en la infraestructura con la que lo ejecuta. Un VPS garantiza latencia baja, conexión ininterrumpida 24/5 y ejecución consistente.",
         date: "05 Feb, 2026",
-        readTime: "4 min"
+        readTime: "7 min"
     },
     {
         slug: "gestion-riesgo",
@@ -64,7 +64,7 @@ const ARTICLES = [
         category: "Educación | Tendencias",
         excerpt: "El debate sobre si los bots de trading acabarán por reemplazar totalmente a los traders manuales sigue vigente. Comparamos el trading manual tradicional frente a los algoritmos automáticos y por qué la cooperación es la respuesta.",
         date: "25 Feb, 2026",
-        readTime: "6 min"
+        readTime: "8 min"
     },
     {
         slug: "por-que-fallan-bots-trading",
@@ -80,7 +80,7 @@ const ARTICLES = [
         category: "Tecnología | Tutoriales",
         excerpt: "MetaTrader 5 sigue siendo nativo para Windows, pero los usuarios de Mac no tienen por qué quedarse fuera. Te enseñamos las 3 mejores formas (Parallels, Crossover y VPS) para correr tus bots perfectamente en macOS.",
         date: "08 Mar, 2026",
-        readTime: "5 min"
+        readTime: "7 min"
     },
     {
         slug: "mejores-vps-trading-2026",
