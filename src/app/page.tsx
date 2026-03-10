@@ -49,6 +49,19 @@ export default function Home() {
 
       <main className="flex-1 flex flex-col relative pt-28 sm:pt-32 z-10">
 
+        {/* === BANNER MANTENIMIENTO ANIMADO (TOP) === */}
+        <div className="w-full overflow-hidden bg-gradient-to-r from-amber-500/10 via-brand/20 to-amber-500/10 border-y border-amber-500/30 py-3 mb-6 relative z-20">
+          {/* Usamos un div con animación simple de translación en X usando CSS in-line o clases de tailwind para el movimiento */}
+          <div className="whitespace-nowrap flex animate-marquee-fast">
+            <span className="text-amber-300 font-bold text-sm sm:text-base mx-4 flex items-center gap-3">
+              🚧 EN BREVE TENDREMOS NUESTROS BOTS A PUNTO 🚧 <span className="text-white">|</span> 📱 ¡DESCÁRGATE NUESTRA APLICACIÓN (Añadir a Pantalla de Inicio)! 📱 <span className="text-white">|</span>
+              🚧 EN BREVE TENDREMOS NUESTROS BOTS A PUNTO 🚧 <span className="text-white">|</span> 📱 ¡DESCÁRGATE NUESTRA APLICACIÓN (Añadir a Pantalla de Inicio)! 📱 <span className="text-white">|</span>
+              🚧 EN BREVE TENDREMOS NUESTROS BOTS A PUNTO 🚧 <span className="text-white">|</span> 📱 ¡DESCÁRGATE NUESTRA APLICACIÓN (Añadir a Pantalla de Inicio)! 📱 <span className="text-white">|</span>
+              🚧 EN BREVE TENDREMOS NUESTROS BOTS A PUNTO 🚧 <span className="text-white">|</span> 📱 ¡DESCÁRGATE NUESTRA APLICACIÓN (Añadir a Pantalla de Inicio)! 📱 <span className="text-white">|</span>
+            </span>
+          </div>
+        </div>
+
         {/* === BANNER PRUEBA GRATIS === */}
         <section className="px-4 sm:px-6 lg:px-8 pt-4 pb-2">
           <div className="max-w-5xl mx-auto">
@@ -426,8 +439,22 @@ export default function Home() {
           </div>
         </section>
 
+        {/* === BANNER MANTENIMIENTO BOTTOM === */}
+        <section className="px-4 sm:px-6 lg:px-8 py-8 border-t border-white/5 bg-gradient-to-b from-transparent to-danger/5">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="bg-danger/10 border border-danger/30 rounded-2xl p-8 glass-card relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-danger/10 to-transparent animate-gradient-sweep" />
+              <div className="text-5xl mb-4 animate-pulse">⚙️</div>
+              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 relative z-10">Nuestros bots están en mantenimiento</h3>
+              <p className="text-danger-light/80 font-medium relative z-10 text-sm sm:text-base">
+                Vuelve dentro de unos minutos para descubrir las nuevas actualizaciones.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* === AVISO DE RIESGO GLOBAL === */}
-        <section className="px-4 sm:px-6 lg:px-8 py-8">
+        <section className="px-4 sm:px-6 lg:px-8 pb-8">
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-xs text-text-muted border border-white/5 rounded-xl px-6 py-4 glass-card">
               ⚠️ <strong className="text-white">Advertencia de riesgo:</strong> El trading de CFDs, Forex y Criptomonedas conlleva un alto riesgo de pérdida de capital. Los rendimientos pasados no garantizan resultados futuros. Opera únicamente con capital que puedas permitirte perder. Prueba siempre en cuenta demo antes de operar en real.

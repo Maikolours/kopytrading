@@ -287,3 +287,18 @@ body {
 .animate-gradient-sweep {
   animation: gradient-sweep 3s ease-in-out infinite;
 }
+
+/* Marquee fast animation for top banner */
+@keyframes marquee-fast {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-fast {
+  animation: marquee-fast 12s linear infinite;
+}
