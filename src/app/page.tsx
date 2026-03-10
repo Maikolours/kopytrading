@@ -49,21 +49,45 @@ export default function Home() {
 
       <main className="flex-1 flex flex-col relative pt-28 sm:pt-32 z-10">
 
-        {/* === BANNER MANTENIMIENTO ANIMADO (TOP) === */}
-        <div className="w-full overflow-hidden bg-gradient-to-r from-red-900/60 via-red-800/80 to-red-900/60 border-y border-red-500/50 py-3.5 mb-6 relative z-20 shadow-[0_0_20px_rgba(220,38,38,0.2)]">
-          <div className="inline-flex animate-marquee-reverse w-max">
-            {[...Array(12)].map((_, i) => (
-              <div key={i} className="flex items-center gap-6 mx-4">
-                <span className="text-red-100 font-extrabold text-xs sm:text-sm tracking-widest uppercase drop-shadow-md flex items-center gap-2">
-                  <span className="text-lg">🚧</span> EN BREVE BOTS A PUNTO
-                </span>
-                <span className="text-red-400/50">|</span>
-                <span className="text-yellow-300 font-bold text-xs sm:text-sm bg-black/60 px-5 py-1.5 rounded-full border border-yellow-500/40 shadow-inner flex items-center gap-2">
-                  <span className="text-lg">📲</span> ¡DESCÁRGATE LA APP!
-                </span>
-                <span className="text-red-400/50">|</span>
+        {/* === BANNER NOTICIAS / MANTENIMIENTO ESTÁTICO === */}
+        <div className="w-full bg-gradient-to-r from-surface-light via-[#2a1313] to-surface-light border-y border-white/10 py-5 sm:py-6 mb-8 relative z-20 shadow-xl overflow-hidden">
+          {/* Luz de fondo sutil */}
+          <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-red-500/50 to-transparent"></div>
+
+          <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-center md:justify-between gap-6 md:gap-8 text-center md:text-left">
+
+            {/* Parte 1: Aviso de Mantenimiento */}
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <div className="bg-red-500/10 w-12 h-12 rounded-full border border-red-500/30 flex items-center justify-center shrink-0">
+                <span className="text-2xl animate-pulse">🚧</span>
               </div>
-            ))}
+              <div className="max-w-md">
+                <h3 className="text-red-300 font-extrabold text-sm sm:text-base tracking-wide uppercase mb-1">
+                  En breve tendremos nuestros BOTS a punto
+                </h3>
+                <p className="text-white/70 text-xs sm:text-sm font-medium">
+                  Estamos trabajando con mimo en nuestros algoritmos para que muy pronto puedas descargártelos y usarlos en tu cuenta.
+                </p>
+              </div>
+            </div>
+
+            <div className="hidden md:block w-px h-16 bg-white/10 shrink-0"></div>
+
+            {/* Parte 2: Botón Clicable de la App */}
+            <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto p-4 sm:p-0 bg-white/5 sm:bg-transparent rounded-2xl border border-white/5 sm:border-transparent">
+              <div>
+                <h3 className="text-brand-light font-bold text-sm sm:text-base mb-1">
+                  Lleva KopyTrade en tu móvil
+                </h3>
+                <p className="text-white/60 text-xs max-w-[200px] sm:max-w-[150px] mx-auto sm:mx-0">
+                  Instala nuestra plataforma en 10s.
+                </p>
+              </div>
+              <Link href="/instalar" className="shrink-0 w-full sm:w-auto bg-gradient-to-br from-brand to-brand-dark hover:from-brand-light hover:to-brand rounded-xl px-6 py-3 font-bold text-sm text-white shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all flex items-center justify-center gap-2 group border border-white/10">
+                <span className="text-lg">📲</span> Instalar APP
+              </Link>
+            </div>
+
           </div>
         </div>
 
