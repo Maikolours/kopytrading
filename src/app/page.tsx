@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { AutomatedTradingSim } from "@/components/AutomatedTradingSim";
+import { ProfitCalculator } from "@/components/ProfitCalculator";
+import { LiveSalesPopup } from "@/components/LiveSalesPopup";
 
 const TICKER_ITEMS = [
   { symbol: "XAU/USD", price: "2,934.50", change: "+0.82%", up: true },
@@ -299,6 +301,21 @@ export default function Home() {
           </div>
         </section>
 
+        {/* === SECCIÓN CALCULADORA DE INTERÉS COMPUESTO === */}
+        <section className="px-4 sm:px-6 lg:px-8 py-12 md:py-24 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand/5 to-transparent pointer-events-none" />
+          <div className="max-w-7xl mx-auto relative z-10">
+            <div className="text-center mb-12">
+              <span className="text-xs font-semibold text-brand-light tracking-widest uppercase mb-3 block animate-pulse">La Magia Matemática</span>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">Proyecta tu Futuro</h2>
+              <p className="text-text-muted max-w-2xl mx-auto text-sm sm:text-base md:text-lg">
+                Juega con nuestra calculadora y descubre cómo el interés compuesto puede multiplicar tus beneficios operando a largo plazo.
+              </p>
+            </div>
+            <ProfitCalculator />
+          </div>
+        </section>
+
         {/* === SECCIÓN BROKERS RECOMENDADOS === */}
         <section className="px-4 sm:px-6 lg:px-8 py-10 md:py-16 border-t border-white/5">
           <div className="max-w-7xl mx-auto">
@@ -490,6 +507,9 @@ export default function Home() {
             </p>
           </div>
         </section>
+
+        {/* NOTIFICACIONES EN VIVO (SOCIAL POPUP) */}
+        <LiveSalesPopup />
 
       </main>
     </div>
