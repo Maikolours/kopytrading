@@ -67,7 +67,12 @@ export default function InstalarAppPage() {
                                 <div className="w-8 h-8 rounded-full bg-success/20 border border-success/50 flex items-center justify-center text-success font-bold shrink-0 shadow-lg shadow-success/20">1</div>
                                 <div>
                                     <p className="text-white text-base font-semibold">Abre Google Chrome</p>
-                                    <p className="text-text-muted text-sm mt-1">Normalmente, al entrar a la web, Chrome te mostrará solo un aviso pidiendo <strong className="text-white">"Añadir a la pantalla de inicio"</strong>. Si es así, acéptalo. Si no sale, ve al paso 2.</p>
+                                    <div className="text-text-muted text-sm mt-1">
+                                        <p>Normalmente, al entrar a la web, Chrome te mostrará solo un aviso pidiendo <strong className="text-white">"Añadir a la pantalla de inicio"</strong>. Si es así, acéptalo.</p>
+                                        <div className="mt-2 p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg text-amber-200/90 text-xs">
+                                            ⚠️ <strong>Aviso Importante:</strong> Debes usar el navegador <strong className="text-white">Google Chrome</strong>. Si has buscado la web desde la <strong className="text-white">"App de Google"</strong> (la del widget de la G de colores), esa app no permite instalar aplicaciones. Dale a los 3 puntitos y elige <strong className="text-white">"Abrir en el navegador"</strong> para que te mande a Chrome.
+                                        </div>
+                                    </div>
                                 </div>
                             </li>
                             <li className="flex gap-4">
