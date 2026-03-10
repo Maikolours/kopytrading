@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { AutomatedTradingSim } from "@/components/AutomatedTradingSim";
 import { ProfitCalculator } from "@/components/ProfitCalculator";
 import { LiveSalesPopup } from "@/components/LiveSalesPopup";
+import { BotComparisonTable } from "@/components/BotComparisonTable";
 
 const TICKER_ITEMS = [
   { symbol: "XAU/USD", price: "2,934.50", change: "+0.82%", up: true },
@@ -298,6 +299,26 @@ export default function Home() {
                 </Link>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* === SECCIÓN COMPARATIVA FRENTE A FRENTE === */}
+        <section className="px-4 sm:px-6 lg:px-8 py-12 md:py-24 border-t border-white/5 relative bg-gradient-to-b from-transparent to-bg-dark">
+          <div className="max-w-[1200px] mx-auto relative z-10">
+            <div className="text-center mb-12">
+              <span className="text-xs font-semibold text-brand-light tracking-widest uppercase mb-3 block">Análisis Técnico</span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight">Frente a Frente</h2>
+              <p className="text-text-muted max-w-2xl mx-auto text-sm sm:text-base">
+                ¿Dudas sobre con cuál empezar? Compara sus perfiles de riesgo y estrategias operativas de un vistazo.
+              </p>
+            </div>
+
+            {/* Oculto en móviles pequeños para evitar que se rompa, se exige scroll horizontal pero mejor avisar */}
+            <div className="block lg:hidden text-center mb-4 text-xs text-brand-light animate-pulse">
+              👈 Desliza hacia los lados para ver la tabla completa 👉
+            </div>
+
+            <BotComparisonTable />
           </div>
         </section>
 
