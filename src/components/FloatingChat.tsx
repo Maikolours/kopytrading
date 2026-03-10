@@ -21,11 +21,11 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["euro", "precision", "eurusd", "eur"],
-        response: "🎯 **Euro Precision Flow (EURUSD)** — El más seguro\n\n• Temporalidad: **H1**\n• Estrategia: Cruce de EMA 21/50 + Filtro RSI\n• Horario: 8h - 20h\n• Capital mínimo: 500$\n• Riesgo: BAJO ✅\n• Precio: 179€ (pago único)\n\n💡 Puede tardar días en abrir porque espera la alineación perfecta del cruce institucional (H1)."
+        response: "🎯 **Euro Precision Flow (EURUSD)** — El más seguro\n\n• Temporalidad: **H1**\n• Estrategia: Cruce de EMA 21/50 + Filtro RSI\n• Horario: 8h - 20h\n• Capital mínimo: 500$\n• Riesgo: BAJO ✅\n• Precio: 149€ (pago único)\n\n💡 Puede tardar días en abrir porque espera la alineación perfecta del cruce institucional (H1)."
     },
     {
         keywords: ["yen", "usdjpy", "ninja", "jpy", "asia", "asiática", "asiatica"],
-        response: "🥷 **Yen Ninja Ghost (USDJPY)** — Operativa nocturna\n\n• Temporalidad: **M30**\n• Estrategia: Rebote Bollingers + RSI\n• Horario: 0h - 8h (noche europea)\n• Capital mínimo: 500$\n• Riesgo: Medio\n• Precio: 149€ (pago único)\n\n🌙 Perfecto para aprovechar los rangos aburridos de la sesión asiática."
+        response: "🥷 **Yen Ninja Ghost (USDJPY)** — Operativa nocturna\n\n• Temporalidad: **M30**\n• Estrategia: Rebote Bollingers + RSI\n• Horario: 0h - 8h (noche europea)\n• Capital mínimo: 500$\n• Riesgo: Medio\n• Precio: 99€ (pago único)\n\n🌙 Perfecto para aprovechar los rangos aburridos de la sesión asiática."
     },
     {
         keywords: ["bitcoin", "btc", "crypto", "cripto", "storm"],
@@ -33,7 +33,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["precio", "cuánto cuesta", "cuanto cuesta", "costo", "coste", "todos", "comparar"],
-        response: "💰 **Precios de las Licencias Universales (Pago Único):**\n\n• La Ametralladora (XAUUSD) — 249€\n• Euro Precision Flow (EURUSD) — 179€\n• Yen Ninja Ghost (USDJPY) — 149€\n• BTC Storm Rider (BTCUSD) — 299€\n\nIncluye licencia ilimitada en el tiempo para la cuenta, actualizaciones futuras gratis y soporte técnico."
+        response: "💰 **Precios de las Licencias Universales (Pago Único):**\n\n• La Ametralladora (XAUUSD) — 249€\n• Euro Precision Flow (EURUSD) — 149€\n• Yen Ninja Ghost (USDJPY) — 99€\n• BTC Storm Rider (BTCUSD) — 299€\n\nIncluye licencia ilimitada en el tiempo para la cuenta, actualizaciones futuras gratis y soporte técnico."
     },
     {
         keywords: ["vps", "servidor", "cloud", "siempre encendido", "apago el ordenador", "se apaga", "nube"],

@@ -12,10 +12,11 @@ const BOTS_DATA = [
         risk: "Bajo",
         minCapital: "$500",
         frequency: "Baja (1-3 / sem)",
+        amortization: "~ 6 semanas",
         features: [true, false, true, true],
         icon: "🎯",
         color: "from-blue-500 to-cyan-500",
-        price: "179€"
+        price: "149€"
     },
     {
         id: "ninja-yen",
@@ -25,10 +26,11 @@ const BOTS_DATA = [
         risk: "Medio",
         minCapital: "$500",
         frequency: "Media (Noche)",
+        amortization: "~ 4 semanas",
         features: [true, false, true, true],
         icon: "🥷",
         color: "from-purple-500 to-indigo-500",
-        price: "149€"
+        price: "99€"
     },
     {
         id: "ametralladora",
@@ -38,6 +40,7 @@ const BOTS_DATA = [
         risk: "Medio-Alto",
         minCapital: "$1,000",
         frequency: "Muy Alta (Diaria)",
+        amortization: "~ 3 semanas",
         features: [true, true, true, true],
         icon: "🔥",
         color: "from-orange-500 to-red-600",
@@ -52,6 +55,7 @@ const BOTS_DATA = [
         risk: "Alto",
         minCapital: "$2,000",
         frequency: "Ráfagas (Breakout)",
+        amortization: "~ 4 semanas",
         features: [true, true, false, true],
         icon: "⚡",
         color: "from-yellow-400 to-orange-500",
@@ -134,6 +138,16 @@ export function BotComparisonTable() {
                         {BOTS_DATA.map((bot, i) => (
                             <div key={i} className={`p-4 text-xs font-medium text-text-muted text-center border-l border-white/5 flex items-center justify-center ${bot.popular ? 'bg-brand/5' : ''}`}>
                                 {bot.frequency}
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Amortización */}
+                    <div className="grid grid-cols-5 hover:bg-white/[0.02] transition-colors">
+                        <div className="p-4 text-sm font-semibold text-text-muted flex items-center">Amortización Estimada (con 1.000$)</div>
+                        {BOTS_DATA.map((bot, i) => (
+                            <div key={i} className={`p-4 text-xs font-bold text-success text-center border-l border-white/5 flex items-center justify-center ${bot.popular ? 'bg-brand/5' : ''}`}>
+                                {bot.amortization}
                             </div>
                         ))}
                     </div>

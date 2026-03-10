@@ -65,6 +65,30 @@ const ARTICLES = [
         excerpt: "El debate sobre si los bots de trading acabarán por reemplazar totalmente a los traders manuales sigue vigente. Comparamos el trading manual tradicional frente a los algoritmos automáticos y por qué la cooperación es la respuesta.",
         date: "25 Feb, 2026",
         readTime: "6 min"
+    },
+    {
+        slug: "por-que-fallan-bots-trading",
+        title: "💥 Por qué fallan los bots de Trading y cómo evitarlo",
+        category: "Educación | Errores",
+        excerpt: "El 90% de los bots comerciales fracasan a largo plazo. Descubre por qué el overfitting, las martingalas y la falta de Stop Loss físicos destruyen cuentas, y cómo los algoritmos profesionales evitan estos problemas.",
+        date: "05 Mar, 2026",
+        readTime: "7 min"
+    },
+    {
+        slug: "configurar-metatrader-5-mac",
+        title: "🍎 Cómo configurar MetaTrader 5 en Mac (Guía 2026)",
+        category: "Tecnología | Tutoriales",
+        excerpt: "MetaTrader 5 sigue siendo nativo para Windows, pero los usuarios de Mac no tienen por qué quedarse fuera. Te enseñamos las 3 mejores formas (Parallels, Crossover y VPS) para correr tus bots perfectamente en macOS.",
+        date: "08 Mar, 2026",
+        readTime: "5 min"
+    },
+    {
+        slug: "mejores-vps-trading-2026",
+        title: "🌐 Mejores VPS para Trading 2026: Comparativa y Precios",
+        category: "Tecnología | Review",
+        excerpt: "Un análisis a fondo de los mejores proveedores de VPS (Servidores Privados Virtuales) para MetaTrader 5 en 2026. Latencia, precio y estabilidad comparados para que tu bot no se desconecte nunca.",
+        date: "10 Mar, 2026",
+        readTime: "8 min"
     }
 ];
 
