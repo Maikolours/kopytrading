@@ -50,15 +50,20 @@ export default function Home() {
       <main className="flex-1 flex flex-col relative pt-28 sm:pt-32 z-10">
 
         {/* === BANNER MANTENIMIENTO ANIMADO (TOP) === */}
-        <div className="w-full overflow-hidden bg-gradient-to-r from-amber-500/10 via-brand/20 to-amber-500/10 border-y border-amber-500/30 py-3 mb-6 relative z-20">
-          {/* Usamos un div con animación simple de translación en X usando CSS in-line o clases de tailwind para el movimiento */}
-          <div className="whitespace-nowrap flex animate-marquee-fast">
-            <span className="text-amber-300 font-bold text-sm sm:text-base mx-4 flex items-center gap-3">
-              🚧 EN BREVE TENDREMOS NUESTROS BOTS A PUNTO 🚧 <span className="text-white">|</span> 📱 ¡DESCÁRGATE NUESTRA APLICACIÓN (Añadir a Pantalla de Inicio)! 📱 <span className="text-white">|</span>
-              🚧 EN BREVE TENDREMOS NUESTROS BOTS A PUNTO 🚧 <span className="text-white">|</span> 📱 ¡DESCÁRGATE NUESTRA APLICACIÓN (Añadir a Pantalla de Inicio)! 📱 <span className="text-white">|</span>
-              🚧 EN BREVE TENDREMOS NUESTROS BOTS A PUNTO 🚧 <span className="text-white">|</span> 📱 ¡DESCÁRGATE NUESTRA APLICACIÓN (Añadir a Pantalla de Inicio)! 📱 <span className="text-white">|</span>
-              🚧 EN BREVE TENDREMOS NUESTROS BOTS A PUNTO 🚧 <span className="text-white">|</span> 📱 ¡DESCÁRGATE NUESTRA APLICACIÓN (Añadir a Pantalla de Inicio)! 📱 <span className="text-white">|</span>
-            </span>
+        <div className="w-full overflow-hidden bg-gradient-to-r from-red-900/60 via-red-800/80 to-red-900/60 border-y border-red-500/50 py-3.5 mb-6 relative z-20 shadow-[0_0_20px_rgba(220,38,38,0.2)]">
+          <div className="inline-flex animate-marquee-reverse w-max">
+            {[...Array(12)].map((_, i) => (
+              <div key={i} className="flex items-center gap-6 mx-4">
+                <span className="text-red-100 font-extrabold text-xs sm:text-sm tracking-widest uppercase drop-shadow-md flex items-center gap-2">
+                  <span className="text-lg">🚧</span> EN BREVE BOTS A PUNTO
+                </span>
+                <span className="text-red-400/50">|</span>
+                <span className="text-yellow-300 font-bold text-xs sm:text-sm bg-black/60 px-5 py-1.5 rounded-full border border-yellow-500/40 shadow-inner flex items-center gap-2">
+                  <span className="text-lg">📲</span> ¡DESCÁRGATE LA APP!
+                </span>
+                <span className="text-red-400/50">|</span>
+              </div>
+            ))}
           </div>
         </div>
 
