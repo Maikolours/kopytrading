@@ -42,16 +42,16 @@ input int    CooldownSeconds     = 60;       // Segundos de espera entre operaci
 
 // ================= CORTAFUEGOS EN DÓLARES =================
 input bool   ActivarCortafuegos  = true;     // 🛡️ Activar Cortafuegos en Dólares
-input double MaxPerdida_USD      = 6.0;      // 🔴 Cerrar OP si pierde X dólares
-input double MaxGanancia_USD     = 6.0;      // 🟢 Cerrar OP si gana X dólares
-input int    MaxVelasContra      = 2;        // ⏱️ Cerrar OP estancada si sigue en rojo
+input double MaxPerdida_USD      = 40.0;     // 🔴 Cerrar OP si pierde X dólares (ORO requiere más margen)
+input double MaxGanancia_USD     = 60.0;     // 🟢 Cerrar OP si gana X dólares
+input int    MaxVelasContra      = 4;        // ⏱️ Cerrar OP estancada si sigue en rojo
 
 // ================= CIERRE POR TIEMPO + BENEFICIO =================
 input bool   EnableTimeExit      = true;     // Activar cierre rápido por impaciencia
 input int    ExitBars_1          = 3;        // Velas espera 1º cierre
-input double ExitProfit_1_EUR    = 1.0;      // Ganancia para 1º cierre ($)
-input int    ExitBars_2          = 4;        // Velas espera 2º cierre
-input double ExitProfit_2_EUR    = 2.0;      // Ganancia para 2º cierre ($)
+input double ExitProfit_1_EUR    = 4.0;      // Ganancia para 1º cierre ($)
+input int    ExitBars_2          = 5;        // Velas espera 2º cierre
+input double ExitProfit_2_EUR    = 8.0;      // Ganancia para 2º cierre ($)
 
 // ================= BREAK EVEN =================
 input bool   EnableBE            = true;     // Activar Break Even

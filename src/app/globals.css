@@ -317,3 +317,26 @@ body {
 .animate-marquee-reverse {
   animation: marquee-reverse 20s linear infinite;
 }
+/* Clases para el Simulador Interactivo */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.rotate-x-1 {
+  transform: rotateX(1deg);
+}
+
+.animate-pulse-glow-heavy {
+  animation: pulse-glow-heavy 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow-heavy {
+  0%, 100% {
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.4), 0 0 60px rgba(168, 85, 247, 0.2);
+    border-color: rgba(168, 85, 247, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 60px rgba(168, 85, 247, 0.8), 0 0 120px rgba(168, 85, 247, 0.4);
+    border-color: rgba(168, 85, 247, 0.8);
+  }
+}

@@ -4,6 +4,7 @@ import { AutomatedTradingSim } from "@/components/AutomatedTradingSim";
 import { ProfitCalculator } from "@/components/ProfitCalculator";
 import { LiveSalesPopup } from "@/components/LiveSalesPopup";
 import { BotComparisonTable } from "@/components/BotComparisonTable";
+import { InteractiveVideoExperience } from "@/components/InteractiveVideoExperience";
 
 const TICKER_ITEMS = [
   { symbol: "XAU/USD", price: "2,934.50", change: "+0.82%", up: true },
@@ -228,6 +229,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* === EXPERIENCIA INTERACTIVA === */}
+        <InteractiveVideoExperience />
 
         {/* === SECCIÓN VÍDEO DESTACADO === */}
         <section className="px-4 sm:px-6 lg:px-8 py-10 md:py-24 relative overflow-hidden">

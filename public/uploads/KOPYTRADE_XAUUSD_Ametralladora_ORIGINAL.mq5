@@ -1,4 +1,4 @@
-//+------------------------------------------------------------------+
+﻿//+------------------------------------------------------------------+
 //|             KOPYTRADE_XAUUSD_Ametralladora v2.1                  |
 //|        MOTOR DE HEDGING INTELIGENTE - CYCLE CLEANER              |
 //+------------------------------------------------------------------+
@@ -11,41 +11,38 @@
 
 //--- LICENCIA ---
 input group "=== LICENCIA KOPYTRADE ==="
-input long     CuentaDemo         = 0;      // Número de cuenta DEMO de MT5
-input long     CuentaReal         = 0;      // Número de cuenta REAL de MT5
+input long     CuentaDemo         = 0;      // N├║mero de cuenta DEMO de MT5
+input long     CuentaReal         = 0;      // N├║mero de cuenta REAL de MT5
 
 //--- RELOJ ---
-input group "=== RELOJ PERÍODO OPERATIVO (HORA BROKER) ==="
+input group "=== RELOJ PER├ìODO OPERATIVO (HORA BROKER) ==="
 input int      HoraInicio         = 9;
 input int      HoraFin            = 21;
-input int      PausaUSA_Inicio    = 14;     // Pausa americana inicio (ej 14:00)
-input int      PausaUSA_Fin       = 17;     // Pausa americana fin (ej 17:00)
 
-//--- GESTIÓN DE RIESGO ---
-input group "=== GESTIÓN DE RIESGO (ESTRATEGIA SCALPING) ==="
+//--- GESTI├ôN DE RIESGO ---
+input group "=== GESTI├ôN DE RIESGO (ESTRATEGIA SCALPING) ==="
 input double   LoteInicial        = 0.01;
-input int      Velas_Para_SL      = 15;     // Velas para calcular SL físico (Mínimos/Máximos)
-input double   Ratio_TP           = 1.5;    // Ratio Beneficio/Riesgo para el TP físico
-input double   ProfitObjetivo     = 5.0;    // Objetivo en USD del primer disparo
+input double   StopLossUSD        = 50.0;   // Protecci├│n m├íxima en $ por lote 0.01
+input double   ProfitObjetivo     = 5.0;    // Objetivo del primer disparo
 
 //--- ESTRATEGIA (ORACLE MODE) ---
 input group "=== ESTRATEGIA AMETRALLADORA (HEDGING) ==="
 input int      EMA_Referencia     = 14;     // EMA para detectar tendencia
-input int      DistanciaPipsHedge = 150;    // Distancia del escudo (15 pips)
-input double   LoteHedge          = 0.02;   // Tamaño de la posición de cobertura
+input int      DistanciaPipsHedge = 80;     // Distancia del escudo (8 pips)
+input double   LoteHedge          = 0.02;   // Tama├▒o de la posici├│n de cobertura
 input double   ProfitHedge        = 3.0;    // Objetivo para cerrar relevo
 
-//--- GESTIÓN DE BENEFICIO ---
-input group "=== GESTIÓN DE BENEFICIO (BE & TRAILING) ==="
+//--- GESTI├ôN DE BENEFICIO ---
+input group "=== GESTI├ôN DE BENEFICIO (BE & TRAILING) ==="
 input double   BE_Activacion      = 2.0;    
 input double   GarantiaBE         = 0.5;    
 input bool     ActivarTrailing    = true;   
-input int      DistanciaTrailing  = 100;    // 10 pips (Oro es rápido)
-input int      SaltoDelTrailing   = 50;     // 5 pips
+input int      DistanciaTrailing  = 60;     // 6 pips (Oro es r├ípido)
+input int      SaltoDelTrailing   = 20;     // 2 pips
 
 //--- AVANZADO ---
-input group "=== CONFIGURACIÓN AVANZADA ==="
-input int      MaxPosiciones      = 2;      // Incluyendo el hedge
+input group "=== CONFIGURACI├ôN AVANZADA ==="
+input int      MaxPosiciones      = 4;      // Incluyendo el hedge
 input int      StopLevelManual    = 50;
 input long     MagicPrincipal     = 777112;
 
@@ -58,7 +55,7 @@ bool CheckTrialAndLicense() {
    long cuenta = AccountInfoInteger(ACCOUNT_LOGIN);
    if(cuenta == CuentaDemo || cuenta == CuentaReal) return true;
    if(AccountInfoInteger(ACCOUNT_TRADE_MODE) != ACCOUNT_TRADE_MODE_DEMO) {
-      Alert("❌ LICENCIA REQUERIDA PARA REAL. kopytrade.com");
+      Alert("ÔØî LICENCIA REQUERIDA PARA REAL. kopytrade.com");
       return false;
    }
    string gVarName = "KOPYTRADE_AMTR_TRIAL_START";
@@ -70,7 +67,7 @@ bool CheckTrialAndLicense() {
    
    int dias = (int)((TimeCurrent() - firstRun) / 86400);
    if(dias <= 30) return true;
-   Alert("⏰ TRIAL EXPIRADO. kopytrade.com");
+   Alert("ÔÅ░ TRIAL EXPIRADO. kopytrade.com");
    return false;
 }
 
@@ -95,32 +92,13 @@ void OnTick() {
    if(nTotal == 0 && nPendientes == 0 && EstaEnHorario()) AbrirEntradaInicial();
 }
 
-double CalcularSL(int tipo) {
-   // Para una estrategia de Hedging como "Ametralladora", el SL duro no debe matar operaciones.
-   // Dejamos un SL lejísimo por si el servidor físico "explota", pero la operativa real la corta la CESTA.
-   double minMargen = 10000 * _Point; // 1000 pips de emergencia
-   double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
-   double ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
-   
-   if(tipo == POSITION_TYPE_BUY) return NormalizeDouble(ask - minMargen, _Digits);
-   else return NormalizeDouble(bid + minMargen, _Digits);
-}
-
 void AbrirEntradaInicial() {
    double ma[2]; ArraySetAsSeries(ma, true);
    if(CopyBuffer(emaHandle, 0, 0, 2, ma) > 1) {
-      double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
-      double ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
-      if(bid > ma[0]) {
-         double sl = CalcularSL(POSITION_TYPE_BUY);
-         double tp = 0; // Take profit lo maneja el BreakEven / Cesta
-         trade.Buy(LoteInicial, _Symbol, ask, sl, tp, "AMTR_PRINCIPAL");
-      }
-      else {
-         double sl = CalcularSL(POSITION_TYPE_SELL);
-         double tp = 0;
-         trade.Sell(LoteInicial, _Symbol, bid, sl, tp, "AMTR_PRINCIPAL");
-      }
+      if(SymbolInfoDouble(_Symbol, SYMBOL_BID) > ma[0])
+         trade.Buy(LoteInicial, _Symbol, 0, 0, 0, "AMTR_PRINCIPAL");
+      else
+         trade.Sell(LoteInicial, _Symbol, 0, 0, 0, "AMTR_PRINCIPAL");
    }
 }
 
@@ -135,46 +113,15 @@ void ColocarEscudoInteligente() {
    double dist=DistanciaPipsHedge*_Point, minDist=StopLevelManual*_Point;
    if(nBuys > nSells) {
       double p=priceBuy-dist; if(p>bid-minDist) p=bid-minDist;
-      double sl = p + (10000 * _Point);
-      double tp = 0;
-      trade.SellStop(LoteHedge, p, _Symbol, sl, tp, ORDER_TIME_GTC, 0, "AMTR_RELEVO");
+      trade.SellStop(LoteHedge, p, _Symbol, 0, 0, ORDER_TIME_GTC, 0, "AMTR_RELEVO");
    }
    else if(nSells > nBuys) {
       double p=priceSell+dist; if(p<ask+minDist) p=ask+minDist;
-      double sl = p - (10000 * _Point);
-      double tp = 0;
-      trade.BuyStop(LoteHedge, p, _Symbol, sl, tp, ORDER_TIME_GTC, 0, "AMTR_RELEVO");
-   }
-}
-
-double BeneficioDeCestaTotal() {
-   double total = 0;
-   for(int i=0; i<PositionsTotal(); i++) {
-      ulong t = PositionGetTicket(i);
-      if(PositionSelectByTicket(t) && PositionGetInteger(POSITION_MAGIC) == MagicPrincipal) {
-         total += PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_COMMISSION) + PositionGetDouble(POSITION_SWAP);
-      }
-   }
-   return total;
-}
-
-void CerrarTodasLasPosicionesAMTR() {
-   for(int i = PositionsTotal() - 1; i >= 0; i--) {
-      ulong t = PositionGetTicket(i);
-      if(PositionSelectByTicket(t) && PositionGetInteger(POSITION_MAGIC) == MagicPrincipal) trade.PositionClose(t);
+      trade.BuyStop(LoteHedge, p, _Symbol, 0, 0, ORDER_TIME_GTC, 0, "AMTR_RELEVO");
    }
 }
 
 void GestionarIndividual() {
-   // 1. CIERRE DE LA CESTA GLOBAL "CYCLE CLEANER"
-   // Si TODAS las operaciones sumadas (las que ganan + las que pierden) ya dan un beneficio igual o mayor a ProfitObjetivo -> CIERRA TODO.
-   if(ContarPosiciones() > 0 && BeneficioDeCestaTotal() >= ProfitObjetivo) {
-      CerrarTodasLasPosicionesAMTR();
-      Print("✅ CESTA AMETRALLADORA CERRADA: Hemos recuperado las pérdidas. Vuelta a empezar.");
-      return;
-   }
-
-   // 2. GESTION INDIVIDUAL DE BE / TRAILING
    for(int i = PositionsTotal() - 1; i >= 0; i--) {
       ulong t = PositionGetTicket(i);
       if(!PositionSelectByTicket(t) || PositionGetInteger(POSITION_MAGIC) != MagicPrincipal) continue;
@@ -183,8 +130,8 @@ void GestionarIndividual() {
       double sl     = PositionGetDouble(POSITION_SL);
       string comment = PositionGetString(POSITION_COMMENT);
       long tipo = PositionGetInteger(POSITION_TYPE);
-      
-      // Si UNA sola operacion individual llega muy arriba, el trailing se encarga.
+      double obj = (StringFind(comment, "PRINCIPAL") >= 0) ? ProfitObjetivo : ProfitHedge;
+      if(profit >= obj) { trade.PositionClose(t); continue; }
       if(profit >= BE_Activacion) {
          double g = GarantiaBE * 10 * _Point;
          double nBE = (tipo == POSITION_TYPE_BUY) ? pOpen + g : pOpen - g;
@@ -205,6 +152,6 @@ void LimpiarPendientesHuerfanos() {
       if(OrderSelect(OrderGetTicket(i)) && OrderGetInteger(ORDER_MAGIC) == MagicPrincipal) trade.OrderDelete(OrderGetTicket(i));
    }
 }
-bool EstaEnHorario() { MqlDateTime dt; TimeToStruct(TimeCurrent(),dt); if(dt.hour >= PausaUSA_Inicio && dt.hour < PausaUSA_Fin) return false; return(dt.hour >= HoraInicio && dt.hour < HoraFin); }
+bool EstaEnHorario() { MqlDateTime dt; TimeToStruct(TimeCurrent(),dt); return(dt.hour >= HoraInicio && dt.hour < HoraFin); }
 int ContarPosiciones() { int c=0; for(int i=0;i<PositionsTotal();i++) if(PositionSelectByTicket(PositionGetTicket(i))&&PositionGetInteger(POSITION_MAGIC)==MagicPrincipal) c++; return c; }
 int ContarPendientes() { int c=0; for(int i=0;i<OrdersTotal();i++) if(OrderSelect(OrderGetTicket(i))&&OrderGetInteger(ORDER_MAGIC)==MagicPrincipal) c++; return c; }
