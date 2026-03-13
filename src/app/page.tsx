@@ -1,10 +1,9 @@
+
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { AutomatedTradingSim } from "@/components/AutomatedTradingSim";
 import { ProfitCalculator } from "@/components/ProfitCalculator";
 import { LiveSalesPopup } from "@/components/LiveSalesPopup";
 import { BotComparisonTable } from "@/components/BotComparisonTable";
-import { InteractiveVideoExperience } from "@/components/InteractiveVideoExperience";
 
 const TICKER_ITEMS = [
   { symbol: "XAU/USD", price: "2,934.50", change: "+0.82%", up: true },
@@ -15,13 +14,6 @@ const TICKER_ITEMS = [
   { symbol: "EUR/USD", price: "1.0842", change: "-0.15%", up: false },
   { symbol: "USD/JPY", price: "149.73", change: "+0.31%", up: true },
   { symbol: "BTC/USD", price: "97,421", change: "+2.14%", up: true },
-];
-
-const BROKERS = [
-  { name: "Vantage Markets", logo: "V", color: "from-red-500 to-red-700", desc: "Tu broker actual. Buena ejecución en Oro. MT5 nativo.", reg: "ASIC / CIMA" },
-  { name: "VT Markets", logo: "VT", color: "from-blue-500 to-blue-700", desc: "Tu broker alternativo. Spreads competitivos. MT5.", reg: "ASIC / FSC" },
-  { name: "Pepperstone", logo: "P", color: "from-green-500 to-green-700", desc: "Líder mundial. Spreads raw desde 0 pips. VPS gratis.", reg: "FCA / ASIC" },
-  { name: "IC Markets", logo: "IC", color: "from-purple-500 to-purple-700", desc: "Favorito de los traders algorítmicos. Latencia ultra baja.", reg: "ASIC / CySEC" },
 ];
 
 export default function Home() {
@@ -45,55 +37,12 @@ export default function Home() {
 
       {/* Fondo */}
       <div className="absolute top-0 inset-x-0 h-full w-full pointer-events-none z-0">
-        <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-brand/20 blur-[150px] rounded-full mix-blend-screen animate-float-slow" />
+        <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-brand/20 blur-[150px] rounded-full mix-blend-screen" />
         <div className="absolute top-1/3 right-0 translate-x-1/3 w-[500px] h-[500px] bg-accent/10 blur-[120px] rounded-full mix-blend-screen" />
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[400px] bg-gradient-to-t from-black to-transparent" />
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTU5LjUgMGguNXY2MEg1OXYtNjB6TTAgNTkuNXYuNWg2MHYtLjVIMHoiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-20" />
       </div>
 
       <main className="flex-1 flex flex-col relative pt-28 sm:pt-32 z-10">
-
-        {/* === BANNER NOTICIAS / MANTENIMIENTO ESTÁTICO === */}
-        <div className="w-full bg-gradient-to-r from-surface-light via-[#2a1313] to-surface-light border-y border-white/10 py-5 sm:py-6 mb-8 relative z-20 shadow-xl overflow-hidden">
-          {/* Luz de fondo sutil */}
-          <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-red-500/50 to-transparent"></div>
-
-          <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-center md:justify-between gap-6 md:gap-8 text-center md:text-left">
-
-            {/* Parte 1: Aviso de Mantenimiento */}
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <div className="bg-red-500/10 w-12 h-12 rounded-full border border-red-500/30 flex items-center justify-center shrink-0">
-                <span className="text-2xl animate-pulse">🚧</span>
-              </div>
-              <div className="max-w-md">
-                <h3 className="text-red-300 font-extrabold text-sm sm:text-base tracking-wide uppercase mb-1">
-                  En breve tendremos nuestros BOTS a punto
-                </h3>
-                <p className="text-white/70 text-xs sm:text-sm font-medium">
-                  Estamos trabajando con mimo en nuestros algoritmos para que muy pronto puedas descargártelos y usarlos en tu cuenta.
-                </p>
-              </div>
-            </div>
-
-            <div className="hidden md:block w-px h-16 bg-white/10 shrink-0"></div>
-
-            {/* Parte 2: Botón Clicable de la App */}
-            <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto p-4 sm:p-0 bg-white/5 sm:bg-transparent rounded-2xl border border-white/5 sm:border-transparent">
-              <div>
-                <h3 className="text-brand-light font-bold text-sm sm:text-base mb-1">
-                  Lleva KopyTrading en tu móvil
-                </h3>
-                <p className="text-white/60 text-xs max-w-[200px] sm:max-w-[150px] mx-auto sm:mx-0">
-                  Instala nuestra plataforma en 10s.
-                </p>
-              </div>
-              <Link href="/instalar" className="shrink-0 w-full sm:w-auto bg-gradient-to-br from-brand to-brand-dark hover:from-brand-light hover:to-brand rounded-xl px-6 py-3 font-bold text-sm text-white shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all flex items-center justify-center gap-2 group border border-white/10">
-                <span className="text-lg">📲</span> Instalar APP
-              </Link>
-            </div>
-
-          </div>
-        </div>
 
         {/* === BANNER PRUEBA GRATIS === */}
         <section className="px-4 sm:px-6 lg:px-8 pt-4 pb-2">
@@ -121,421 +70,91 @@ export default function Home() {
         </section>
 
         {/* === HERO === */}
-        <section className="flex items-center px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <section className="flex items-center px-4 sm:px-6 lg:px-8 py-10 md:py-20">
+          <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 items-center">
 
             {/* Texto Hero */}
-            <div className="space-y-6 text-center lg:text-left animate-slide-up">
-              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-brand/40 bg-surface/40 backdrop-blur-md shadow-[0_0_20px_rgba(139,92,246,0.2)] text-sm text-brand-light">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-light opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-light"></span>
-                </span>
-                Tu entrada al Trading Algorítmico
-              </div>
-
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.15] text-hero">
-                Trading Inteligente{" "}
-                <span className="text-transparent bg-clip-text gradient-animate filter drop-shadow-[0_0_15px_rgba(167,139,250,0.5)]">
-                  al alcance de Todos
+            <div className="space-y-8 text-center lg:text-left">
+              <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-white leading-[1.05] uppercase italic">
+                Trading <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-accent">
+                   Inteligente
                 </span>
               </h1>
 
-              <p className="text-base sm:text-lg md:text-xl text-text-muted max-w-2xl mx-auto lg:mx-0 font-light">
-                Bots para MetaTrader 5 diseñados por expertos. <strong className="text-success">Pruébalos gratis 30 días.</strong> Pago único, sin suscripciones. Protegidos por licencia personal.
+              <p className="text-lg sm:text-xl text-text-muted max-w-xl mx-auto lg:mx-0 font-light leading-relaxed">
+                Algoritmos de alta precisión para MetaTrader 5. Diseñados por traders para traders. <strong className="text-white font-bold">Pruébalos gratis 30 días.</strong>
               </p>
 
-              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start pt-2">
+              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
                 <Link href="/bots">
-                  <Button variant="accent" size="lg" className="w-full sm:w-auto px-8 text-base sm:text-lg animate-pulse-glow">
-                    🚀 Ver Todos los Bots
+                  <Button variant="accent" size="lg" className="w-full sm:w-auto px-10 h-14 text-lg font-black uppercase tracking-widest shadow-[0_0_30px_rgba(139,92,246,0.3)] hover:scale-105 transition-all">
+                    Descargar Bots
                   </Button>
                 </Link>
-                <Link href="/bots">
-                  <Button variant="glass" size="lg" className="w-full sm:w-auto px-8 text-base sm:text-lg border-success/40 hover:border-success/70 text-success hover:text-white">
-                    🎁 Probar Gratis 30 Días
-                  </Button>
+                <Link href="/como-funciona" className="text-white/60 hover:text-white transition-colors text-sm font-bold uppercase tracking-widest border-b border-white/10 pb-1">
+                  Ver cómo funciona
                 </Link>
               </div>
 
               {/* Stats */}
-              <div className="pt-6 grid grid-cols-3 gap-4 sm:gap-6 border-t border-white/10 text-center lg:text-left">
+              <div className="pt-8 flex flex-wrap justify-center lg:justify-start gap-10 border-t border-white/5">
                 {[
                   { val: "4", label: "Bots Activos" },
                   { val: "30 Días", label: "Prueba Gratis" },
-                  { val: "M15", label: "Temporalidad Estrella" },
+                  { val: "$500", label: "Capital Mínimo" },
                 ].map((s, i) => (
-                  <div key={i} className="group p-3 sm:p-4 rounded-xl hover:bg-white/5 transition-all cursor-default">
-                    <p className="text-2xl sm:text-3xl font-bold text-white group-hover:text-brand-light transition-colors">{s.val}</p>
-                    <p className="text-xs sm:text-sm text-text-muted mt-1">{s.label}</p>
+                  <div key={i}>
+                    <p className="text-3xl font-black text-white">{s.val}</p>
+                    <p className="text-[10px] text-text-muted uppercase tracking-[0.2em] font-bold mt-1">{s.label}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Visual Hero — Chart Card (responsive, visible en móvil) */}
-            <div className="relative mx-auto w-full max-w-[420px] lg:max-w-none animate-slide-right">
-              <div className="absolute inset-0 bg-brand/25 blur-[80px] rounded-full pointer-events-none animate-pulse-glow"></div>
-              <div className="relative glass-card border border-white/15 rounded-[2rem] p-3 w-full aspect-square sm:aspect-[4/4] flex items-center justify-center overflow-hidden card-3d">
-                <div className="absolute inset-0 bg-gradient-to-br from-brand/10 via-transparent to-brand/5"></div>
-                <div className="relative w-full h-full flex flex-col p-4 sm:p-5 z-10">
-                  {/* Header */}
-                  <div className="flex justify-between items-center mb-4">
-                    <div className="flex gap-3 items-center">
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center shadow-lg">
-                        <span className="text-yellow-900 font-bold text-xs sm:text-sm">XAU</span>
-                      </div>
-                      <div>
-                        <div className="text-xs text-text-muted">Oro / USD</div>
-                        <div className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">2,934.50</div>
-                      </div>
+            {/* Visual Hero Simple */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-brand/30 blur-[100px] rounded-full" />
+              <div className="relative glass-card border border-white/10 rounded-[3rem] p-8 aspect-square flex flex-col justify-center">
+                 <div className="space-y-6">
+                    <div className="flex justify-between items-end">
+                       <div className="text-4xl font-black text-white italic">XAUUSD</div>
+                       <div className="text-success font-black text-xl">+42.5%</div>
                     </div>
-                    <div className="text-success font-semibold flex items-center bg-success/15 border border-success/30 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-xs sm:text-sm">
-                      ↑ +0.82%
+                    <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                       <div className="h-full bg-brand w-[75%]" />
                     </div>
-                  </div>
-                  {/* Velas */}
-                  <div className="flex-1 flex items-end gap-0.5 sm:gap-1.5 justify-between py-2 sm:py-3 px-1">
-                    {[40, 60, 45, 80, 50, 90, 70, 100, 85, 110, 95].map((h, i) => (
-                      <div key={i} className={`relative w-full flex justify-center h-full items-end ${i < 3 ? 'hidden sm:flex' : ''}`}>
-                        <div className={`relative w-full min-w-[4px] max-w-[8px] sm:max-w-[12px] rounded-sm ${i % 2 === 0 ? "bg-gradient-to-t from-success/80 to-success" : "bg-gradient-to-t from-danger/80 to-danger"}`} style={{ height: `${h}%` }}>
-                          <div className="absolute -top-2 sm:-top-3 left-1/2 -translate-x-1/2 w-0.5 h-2 sm:h-3 bg-white/30"></div>
-                          <div className="absolute -bottom-2 sm:-bottom-3 left-1/2 -translate-x-1/2 w-0.5 h-2 sm:h-3 bg-white/30"></div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  {/* Footer señal */}
-                  <div className="glass-card !border-white/10 !rounded-xl p-3 sm:p-4 flex justify-between items-center mt-2 bg-white/5">
-                    <div>
-                      <div className="text-[10px] sm:text-xs text-brand-light font-medium uppercase tracking-wider mb-0.5">Señal KopyTrading</div>
-                      <div className="text-base sm:text-xl font-bold flex items-center gap-2">La Ametralladora <span className="text-success text-sm animate-pulse">●</span></div>
+                    <div className="grid grid-cols-2 gap-4">
+                       <div className="bg-white/5 p-4 rounded-2xl">
+                          <div className="text-[10px] text-white/30 uppercase font-black tracking-widest mb-1">Estrategia</div>
+                          <div className="text-sm font-bold text-white">Scalping HFT</div>
+                       </div>
+                       <div className="bg-white/5 p-4 rounded-2xl">
+                          <div className="text-[10px] text-white/30 uppercase font-black tracking-widest mb-1">Riesgo</div>
+                          <div className="text-sm font-bold text-success">Controlado</div>
+                       </div>
                     </div>
-                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-brand to-brand-bright flex items-center justify-center shadow-lg shadow-brand/40">
-                      <span className="text-white text-base sm:text-lg">🔥</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* Badge flotante - solo visible en desktop */}
-              <div className="absolute top-1/4 -left-8 float-3d p-3 rounded-xl border border-white/20 items-center gap-3 animate-float z-20 hidden lg:flex">
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center text-xs font-bold text-yellow-900">XAU</div>
-                <div>
-                  <div className="text-xs text-text-muted">Bot Activo</div>
-                  <div className="text-xs font-bold text-white">Ametralladora v2</div>
-                  <div className="text-xs text-success flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-success"></span> Operando</div>
-                </div>
+                    <Link href="/bots" className="block text-center bg-white/10 hover:bg-white/20 py-4 rounded-2xl transition-all font-bold text-xs uppercase tracking-widest">
+                       Ver Análisis Detallado
+                    </Link>
+                 </div>
               </div>
             </div>
+
           </div>
         </section>
 
-        {/* === EXPERIENCIA INTERACTIVA === */}
-        <InteractiveVideoExperience />
-
-        {/* === SECCIÓN VÍDEO DESTACADO === */}
-        <section className="px-4 sm:px-6 lg:px-8 py-10 md:py-24 relative overflow-hidden">
-          <div className="absolute inset-0 bg-brand/5 backdrop-blur-3xl -z-10" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-px bg-gradient-to-r from-transparent via-brand-light to-transparent opacity-30" />
-
-          <div className="max-w-6xl mx-auto relative z-10">
-            <div className="text-center md:text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/10 border border-brand/20 text-brand-light text-xs font-semibold tracking-widest uppercase mb-6">
-                <span className="w-2 h-2 rounded-full bg-brand animate-pulse" />
-                Educación de Trading
-              </div>
-
-              <h2 className="text-4xl sm:text-5xl font-extrabold text-white mb-6 tracking-tight drop-shadow-sm">
-                Aprende Trading Algorítmico
-              </h2>
-              <p className="text-text-muted text-lg max-w-2xl mb-12 font-light">
-                Descubre cómo operan los algoritmos automatizados y domina los conceptos clave para triunfar en los mercados.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center">
-              {/* Visual Engine - Smaller and to the left */}
-              <div className="relative w-full max-w-lg mx-auto md:mx-0">
-                <div className="relative rounded-[2rem] bg-gradient-to-b from-gray-800 to-gray-900 p-2 sm:p-3 pb-4 shadow-2xl border border-gray-700/50 group">
-                  <div className="relative rounded-[1.5rem] overflow-hidden bg-black aspect-video ring-1 ring-white/10 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
-                    <div className="w-full h-full relative z-10 scale-[1.01]">
-                      <AutomatedTradingSim />
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none z-20" />
-                  </div>
-                  <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 flex items-center gap-3 opacity-60">
-                    <div className="w-1.5 h-1.5 rounded-full bg-red-500/80 shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
-                    <div className="w-1 h-1 rounded-full bg-gray-600" />
-                    <div className="w-1 h-1 rounded-full bg-gray-600" />
-                  </div>
-                </div>
-                <div className="absolute -inset-4 bg-brand/20 blur-[60px] rounded-[3rem] -z-10 group-hover:bg-brand/30 transition-colors duration-700" />
-              </div>
-
-              {/* Educational Quick Links - Vertical List */}
-              <div className="flex flex-col gap-4">
-                <Link href="/articulos/indicadores-volatilidad-atr" className="glass-card p-4 sm:p-5 rounded-2xl border border-white/10 hover:border-brand/50 group transition-all hover:bg-white/5 flex items-center gap-5 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                  <div className="text-3xl sm:text-4xl shrink-0 drop-shadow-[0_0_15px_rgba(167,139,250,0.3)]">📈</div>
-                  <div>
-                    <h3 className="text-white font-bold text-base sm:text-lg mb-1 group-hover:text-brand-light transition-colors">Volatilidad y ATR</h3>
-                    <p className="text-xs sm:text-sm text-text-muted">Descubre cómo los bots miden la fuerza del mercado para ajustar el Stop Loss fluidamente.</p>
-                  </div>
-                </Link>
-                <Link href="/articulos/trading-algoritmico-vs-manual" className="glass-card p-4 sm:p-5 rounded-2xl border border-white/10 hover:border-brand/50 group transition-all hover:bg-white/5 flex items-center gap-5 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                  <div className="text-3xl sm:text-4xl shrink-0 drop-shadow-[0_0_15px_rgba(167,139,250,0.3)]">🤖</div>
-                  <div>
-                    <h3 className="text-white font-bold text-base sm:text-lg mb-1 group-hover:text-brand-light transition-colors">Algo vs Manual</h3>
-                    <p className="text-xs sm:text-sm text-text-muted">Por qué la consistencia matemática supera casi siempre a la psicología humana.</p>
-                  </div>
-                </Link>
-                <Link href="/articulos/gestion-riesgo" className="glass-card p-4 sm:p-5 rounded-2xl border border-white/10 hover:border-brand/50 group transition-all hover:bg-white/5 flex items-center gap-5 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                  <div className="text-3xl sm:text-4xl shrink-0 drop-shadow-[0_0_15px_rgba(167,139,250,0.3)]">🛡️</div>
-                  <div>
-                    <h3 className="text-white font-bold text-base sm:text-lg mb-1 group-hover:text-brand-light transition-colors">Gestión de Riesgo</h3>
-                    <p className="text-xs sm:text-sm text-text-muted">Reglas de oro institucionales y técnicas para evitar quemar tu cuenta.</p>
-                  </div>
-                </Link>
-                <Link href="/articulos" className="mt-2 text-center text-sm font-semibold text-brand-light hover:text-white transition-colors">
-                  Ver todos los artículos de la Academia →
-                </Link>
-              </div>
-            </div>
-          </div>
+        {/* === SECCIÓN CALCULADORA === */}
+        <section className="px-4 py-20 bg-black/40">
+           <ProfitCalculator />
         </section>
 
-        {/* === SECCIÓN COMPARATIVA FRENTE A FRENTE === */}
-        <section className="px-4 sm:px-6 lg:px-8 py-12 md:py-24 border-t border-white/5 relative bg-gradient-to-b from-transparent to-bg-dark">
-          <div className="max-w-[1200px] mx-auto relative z-10">
-            <div className="text-center mb-12">
-              <span className="text-xs font-semibold text-brand-light tracking-widest uppercase mb-3 block">Análisis Técnico</span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight">Frente a Frente</h2>
-              <p className="text-text-muted max-w-2xl mx-auto text-sm sm:text-base">
-                ¿Dudas sobre con cuál empezar? Compara sus perfiles de riesgo y estrategias operativas de un vistazo.
-              </p>
-            </div>
-
-            {/* Oculto en móviles pequeños para evitar que se rompa, se exige scroll horizontal pero mejor avisar */}
-            <div className="block lg:hidden text-center mb-4 text-xs text-brand-light animate-pulse">
-              👈 Desliza hacia los lados para ver la tabla completa 👉
-            </div>
-
-            <BotComparisonTable />
-          </div>
+        {/* === SECCIÓN COMPARATIVA === */}
+        <section className="px-4 py-20 border-t border-white/5">
+           <BotComparisonTable />
         </section>
 
-        {/* === SECCIÓN CALCULADORA DE INTERÉS COMPUESTO === */}
-        <section className="px-4 sm:px-6 lg:px-8 py-12 md:py-24 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand/5 to-transparent pointer-events-none" />
-          <div className="max-w-7xl mx-auto relative z-10">
-            <div className="text-center mb-12">
-              <span className="text-xs font-semibold text-brand-light tracking-widest uppercase mb-3 block animate-pulse">La Magia Matemática</span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">Proyecta tu Futuro</h2>
-              <p className="text-text-muted max-w-2xl mx-auto text-sm sm:text-base md:text-lg">
-                Juega con nuestra calculadora y descubre cómo el interés compuesto puede multiplicar tus beneficios operando a largo plazo.
-              </p>
-            </div>
-            <ProfitCalculator />
-          </div>
-        </section>
-
-        {/* === SECCIÓN BROKERS RECOMENDADOS === */}
-        <section className="px-4 sm:px-6 lg:px-8 py-10 md:py-16 border-t border-white/5">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12">
-              <span className="text-xs font-semibold text-brand-light tracking-widest uppercase mb-3 block">Compatibilidad Verificada</span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">Brokers Recomendados</h2>
-              <p className="text-text-muted max-w-xl mx-auto text-sm sm:text-base">
-                Nuestros bots se han testado y optimizado en estos brokers regulados con spreads bajos. Compatibles 100% con MetaTrader 5.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {BROKERS.map((broker, i) => (
-                <a
-                  key={i}
-                  href={broker.name === "Vantage Markets" ? "https://www.vantagemarkets.com/" : broker.name === "VT Markets" ? "https://www.vtmarkets.com/" : broker.name === "Pepperstone" ? "https://pepperstone.com/" : "https://www.icmarkets.com/"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="glass-card border border-white/10 rounded-2xl p-6 text-center card-3d hover:border-accent/40 group transition-all"
-                >
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${broker.color} flex items-center justify-center mx-auto mb-4 shadow-xl text-white font-extrabold text-xl group-hover:scale-110 transition-transform`}>
-                    {broker.logo}
-                  </div>
-                  <h3 className="text-lg font-bold text-white mb-1 group-hover:text-accent transition-colors">{broker.name}</h3>
-                  <p className="text-xs text-text-muted mb-4 leading-relaxed line-clamp-2">{broker.desc}</p>
-                  <span className="text-[10px] text-accent font-bold border border-accent/20 px-3 py-1 rounded-full group-hover:bg-accent group-hover:text-black transition-all">Abrir Cuenta ↗</span>
-                </a>
-              ))}
-            </div>
-            <p className="text-center text-xs text-text-muted mt-5 md:mt-8 opacity-60 max-w-2xl mx-auto">
-              KopyTrading no tiene afiliación comercial con estos brokers. La selección se basa únicamente en criterios técnicos de compatibilidad con MT5.
-            </p>
-          </div>
-        </section>
-
-        {/* === SECCIÓN TESTIMONIOS (PRUEBA SOCIAL) === */}
-        <section className="px-4 sm:px-6 lg:px-8 py-10 md:py-16 border-t border-white/5 bg-gradient-to-b from-transparent to-brand/5">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <span className="text-xs font-semibold text-brand-light tracking-widest uppercase mb-3 block">Lo que dicen nuestros traders</span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Resultados Reales. Traders Reales.</h2>
-              <p className="text-text-muted max-w-2xl mx-auto text-sm sm:text-base">
-                Ya son decenas de usuarios operando sus cuentas con el apoyo de nuestros algoritmos automáticos.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-              {[
-                { name: "Carlos M.", type: "Trader Retail", text: "Lo que más destaco del BTC Storm Rider es el control del Drawdown. Tras realizar la optimización en MetaTrader 5 tal como explican, el bot tiene rachas muy consistentes.", bot: "BTC Storm Rider", stars: 5 },
-                { name: "Elena R.", type: "Trader Part Time", text: "El Gold Sentinel Pro no acierta todas sus entradas, pero cuando pilla tendencia institucional y mueve el Break Even rápido me da mucha tranquilidad al dormir.", bot: "Gold Sentinel Pro", stars: 5 },
-                { name: "Javier T.", type: "Trader Algorítmico", text: "Me ha sorprendido positivamente el nivel del código fuente. Todo está integrado en dólares y su protección anti-racha diaria evita problemas graves a largo plazo.", bot: "Ametralladora v2", stars: 5 }
-              ].map((testimonio, i) => (
-                <div key={i} className="glass-card border border-white/10 rounded-2xl p-6 sm:p-8 hover:-translate-y-2 transition-transform duration-300">
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(testimonio.stars)].map((_, s) => (
-                      <span key={s} className="text-yellow-500">★</span>
-                    ))}
-                  </div>
-                  <p className="text-white/80 italic mb-6 leading-relaxed">"{testimonio.text}"</p>
-                  <div className="flex items-center gap-4 border-t border-white/10 pt-4">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand to-accent flex items-center justify-center font-bold text-white shadow-lg">
-                      {testimonio.name.charAt(0)}
-                    </div>
-                    <div>
-                      <h4 className="text-white font-bold text-sm">{testimonio.name}</h4>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-text-muted">{testimonio.type}</span>
-                        <span className="text-xs text-brand-light bg-brand/10 px-2 py-0.5 rounded-full">{testimonio.bot}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-12 text-center flex flex-col items-center">
-              <div className="flex -space-x-3 mb-4">
-                {[1, 2, 3, 4, 5].map(i => (
-                  <div key={i} className="w-10 h-10 rounded-full border-2 border-bg-dark bg-surface flex items-center justify-center overflow-hidden">
-                    <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i}&backgroundColor=transparent`} alt="User" />
-                  </div>
-                ))}
-                <div className="w-10 h-10 rounded-full border-2 border-bg-dark bg-accent flex items-center justify-center text-white text-xs font-bold">+50</div>
-              </div>
-              <p className="text-text-muted text-sm font-medium">Únete a nuestra creciente comunidad de traders algorítmicos</p>
-            </div>
-          </div>
-        </section>
-
-        {/* === SECCIÓN COMPARATIVA (TRIAL VS COMPRA) === */}
-        <section className="px-4 sm:px-6 lg:px-8 py-12 md:py-20 border-t border-white/5 relative">
-          <div className="absolute inset-0 bg-brand/5 blur-[100px] pointer-events-none" />
-          <div className="max-w-5xl mx-auto relative z-10">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Planes Claros. Sin Suscripciones.</h2>
-              <p className="text-text-muted max-w-xl mx-auto text-sm sm:text-base">
-                Nuestra filosofía es sencilla: descargas el bot, lo pruebas gratis operando en tu cuenta de MetaTrader, y si te gusta, lo compras para siempre.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {/* PLAN TRIAL */}
-              <div className="glass-card border border-white/10 rounded-3xl p-8 relative overflow-hidden flex flex-col h-full">
-                <div className="absolute top-0 right-0 p-4">
-                  <span className="bg-white/10 text-white text-xs font-bold px-3 py-1 rounded-full">30 Días</span>
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-2">Prueba Gratis</h3>
-                <p className="text-text-muted text-sm mb-6">Prueba el bot completo sin restricciones en cuenta demo.</p>
-                <div className="text-4xl font-extrabold text-white mb-8">$0<span className="text-lg text-text-muted font-normal"> / mes</span></div>
-
-                <ul className="space-y-4 mb-8 flex-1">
-                  {[
-                    { text: "Acceso completo a todos los parámetros", ok: true },
-                    { text: "Licencia válida para Cuenta Demo", ok: true },
-                    { text: "Uso libre durante 30 días", ok: true },
-                    { text: "Licencia para Cuenta Real", ok: false },
-                    { text: "Actualizaciones de por vida", ok: false }
-                  ].map((feature, i) => (
-                    <li key={i} className={`flex items-start gap-3 ${feature.ok ? 'text-white' : 'text-white/30'}`}>
-                      <span className={`mt-0.5 ${feature.ok ? 'text-success' : 'text-danger/50'}`}>{feature.ok ? '✓' : '✕'}</span>
-                      <span className="text-sm">{feature.text}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <Link href="/bots" className="w-full">
-                  <Button variant="outline" className="w-full py-6 rounded-xl border-white/20 hover:bg-white/5">
-                    Ver Catálogo y Probar
-                  </Button>
-                </Link>
-              </div>
-
-              {/* PLAN LICENCIA */}
-              <div className="relative rounded-3xl p-[1px] bg-gradient-to-b from-brand-light via-brand to-accent h-full">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-brand to-accent text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg z-20">
-                  RECOMENDADO
-                </div>
-                <div className="bg-bg-dark rounded-3xl p-8 relative overflow-hidden h-full flex flex-col">
-                  <div className="absolute inset-0 bg-gradient-to-br from-brand/10 to-transparent pointer-events-none" />
-
-                  <h3 className="text-2xl font-bold text-white mb-2 relative z-10">Licencia Vitalicia</h3>
-                  <p className="text-text-muted text-sm mb-6 relative z-10">Tuya para siempre. Opérala en tu cuenta real.</p>
-                  <div className="text-4xl font-extrabold text-white mb-8 relative z-10">Desde €67<span className="text-lg text-text-muted font-normal"> / pago único</span></div>
-
-                  <ul className="space-y-4 mb-8 flex-1 relative z-10">
-                    {[
-                      { text: "Acceso completo a todos los parámetros", ok: true },
-                      { text: "Licencia válida para Cuenta Demo", ok: true },
-                      { text: "Licencia válida para Cuenta Real (1 ID)", ok: true },
-                      { text: "Actualizaciones de estrategia gratuitas", ok: true },
-                      { text: "Soporte prioritario por email", ok: true }
-                    ].map((feature, i) => (
-                      <li key={i} className="flex items-start gap-3 text-white">
-                        <span className="mt-0.5 text-success">✓</span>
-                        <span className="text-sm font-medium">{feature.text}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Link href="/bots" className="w-full relative z-10">
-                    <Button variant="accent" className="w-full py-6 rounded-xl shadow-[0_0_20px_rgba(139,92,246,0.3)] animate-pulse-glow">
-                      Comprar Licencia Ahora
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* === BANNER MANTENIMIENTO BOTTOM === */}
-        <section className="px-4 sm:px-6 lg:px-8 py-8 border-t border-white/5 bg-gradient-to-b from-transparent to-danger/5">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="bg-danger/10 border border-danger/30 rounded-2xl p-8 glass-card relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-danger/10 to-transparent animate-gradient-sweep" />
-              <div className="text-5xl mb-4 animate-pulse">⚙️</div>
-              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 relative z-10">Nuestros bots están en mantenimiento</h3>
-              <p className="text-danger-light/80 font-medium relative z-10 text-sm sm:text-base">
-                Vuelve dentro de unos minutos para descubrir las nuevas actualizaciones.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* === AVISO DE RIESGO GLOBAL === */}
-        <section className="px-4 sm:px-6 lg:px-8 pb-8">
-          <div className="max-w-4xl mx-auto text-center">
-            <p className="text-xs text-text-muted border border-white/5 rounded-xl px-6 py-4 glass-card">
-              ⚠️ <strong className="text-white">Advertencia de riesgo:</strong> El trading de CFDs, Forex y Criptomonedas conlleva un alto riesgo de pérdida de capital. Los rendimientos pasados no garantizan resultados futuros. Opera únicamente con capital que puedas permitirte perder. Prueba siempre en cuenta demo antes de operar en real.
-            </p>
-          </div>
-        </section>
-
-        {/* NOTIFICACIONES EN VIVO (SOCIAL POPUP) */}
         <LiveSalesPopup />
-
       </main>
     </div>
   );

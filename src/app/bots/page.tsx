@@ -89,7 +89,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                     <Link href="/bots"><Button variant="outline">Ver todos los bots</Button></Link>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ${bots.length < 3 ? 'justify-center max-w-4xl mx-auto' : ''}`}>
                     {bots.map((bot: any) => (
                         <Card key={bot.id} interactive className="flex flex-col h-full bg-surface-light/20">
                             <CardHeader>

@@ -6,6 +6,7 @@ import { Navbar } from "@/components/Navbar";
 import FloatingChat from "@/components/FloatingChat";
 import CookieBanner from "@/components/CookieBanner";
 import Link from "next/link";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,6 +40,14 @@ export default function RootLayout({
 
   return (
     <html lang="es" className="dark">
+      <head>
+        <Script 
+          async 
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7217883854605334"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
       <body className={`${inter.className} min-h-screen bg-black text-slate-50 antialiased selection:bg-brand/30 selection:text-white`}>
         {isMaintenance ? (
           <MaintenanceMode />

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -12,64 +13,38 @@ export function Navbar() {
     const isLoggedIn = status === "authenticated";
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    // Si hay ticker, bajamos la navbar. El ticker está en '/' por ahora.
-    const hasTicker = pathname === "/";
-
+    // Navbar siempre fija arriba para simplicidad
     return (
-        <header className={`fixed ${hasTicker ? 'top-[41px]' : 'top-0'} w-full z-[70] transition-all duration-300`}>
-            <div className="absolute inset-0 glass-card !rounded-none !border-x-0 !border-t-0 bg-bg-dark/80 backdrop-blur-xl"></div>
+        <header className="fixed top-0 w-full z-[70] transition-all duration-300">
+            <div className="absolute inset-0 bg-bg-dark/90 backdrop-blur-xl border-b border-white/5"></div>
 
-            <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between relative z-10">
+            <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between relative z-10">
                 <Link href="/" className="flex items-center gap-4 group">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(245,158,11,0.3)] group-hover:shadow-[0_0_35px_rgba(245,158,11,0.5)] transition-all duration-500">
-                        <img src="/logo-kopytrading.png" alt="Logo" className="w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform duration-700" />
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
+                        <img src="/logo-kopytrading.png" alt="Logo" className="w-full h-full object-cover" />
                     </div>
-                    <span className="font-extrabold text-2xl sm:text-3xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-accent/60">KopyTrading</span>
+                    <span className="font-black text-xl sm:text-2xl tracking-tighter uppercase italic text-white">KopyTrading</span>
                 </Link>
 
-                {/* Desktop Nav */}
-                <nav className="hidden md:flex items-center gap-4 lg:gap-6">
-                    <Link
-                        href="/bots"
-                        className={`text-sm font-medium transition-colors ${pathname === "/bots" ? "text-white border-b border-brand-light/50 pb-0.5" : "text-text-muted hover:text-white"}`}
-                    >
-                        Marketplace
-                    </Link>
+                {/* Desktop Nav - SIMPLE Y DIRECTA */}
+                <nav className="hidden md:flex items-center gap-8">
+                    <Link href="/bots" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/bots" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Marketplace</Link>
+                    <Link href="/activos" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/activos" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Activos</Link>
+                    <Link href="/activos#resultados" className="text-xs font-black uppercase tracking-widest text-white/40 hover:text-white transition-colors">Resultados</Link>
+                    <Link href="/como-funciona" className="text-xs font-black uppercase tracking-widest text-white/40 hover:text-white transition-colors">Cómo Funciona</Link>
                     {isLoggedIn && (
-                        <Link
-                            href="/dashboard"
-                            className={`text-sm font-medium transition-colors ${pathname === "/dashboard" ? "text-white border-b border-brand-light/50 pb-0.5" : "text-text-muted hover:text-white"}`}
-                        >
-                            Mi Panel
-                        </Link>
+                        <Link href="/dashboard" className="text-xs font-black uppercase tracking-widest text-brand-light hover:text-white transition-colors">Mi Panel</Link>
                     )}
-                    <div className="relative group">
-                        <span className="text-sm font-medium text-text-muted hover:text-white transition-colors cursor-pointer flex items-center gap-1">
-                            Activos <span className="text-[10px]">▼</span>
-                        </span>
-                        <div className="absolute top-full left-0 mt-2 w-40 glass-card p-2 rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-                            <Link href="/bots?asset=XAUUSD" className="block px-4 py-2 text-sm text-text-muted hover:text-white hover:bg-white/5 rounded-lg">XAUUSD (Oro)</Link>
-                            <Link href="/bots?asset=EURUSD" className="block px-4 py-2 text-sm text-text-muted hover:text-white hover:bg-white/5 rounded-lg">EURUSD</Link>
-                            <Link href="/bots?asset=USDJPY" className="block px-4 py-2 text-sm text-text-muted hover:text-white hover:bg-white/5 rounded-lg">USDJPY</Link>
-                            <Link href="/bots?asset=BTCUSD" className="block px-4 py-2 text-sm text-text-muted hover:text-white hover:bg-white/5 rounded-lg">BTCUSD</Link>
-                        </div>
-                    </div>
-                    <Link href="/como-funciona" className="text-sm font-medium text-text-muted hover:text-white transition-colors">Cómo Funciona</Link>
-                    <Link href="/articulos" className="text-sm font-medium text-text-muted hover:text-white transition-colors">Blog</Link>
-                    <Link href="/faq" className="text-sm font-medium text-text-muted hover:text-white transition-colors">FAQ</Link>
                 </nav>
 
-                <div className="flex items-center gap-2 sm:gap-4">
-                    {isLoggedIn ? (
-                        <div className="flex items-center gap-3">
-                            <span className="text-[10px] text-text-muted hidden md:block opacity-50">{session.user?.email}</span>
-                            <Button variant="outline" size="sm" onClick={() => signOut()} className="hidden sm:flex text-[10px] h-8 border-white/10 text-white hover:bg-danger/10 hover:border-danger/30">Cerrar Sesión</Button>
-                        </div>
+                <div className="flex items-center gap-4">
+                    {!isLoggedIn ? (
+                        <Link href="/login" className="text-xs font-black uppercase tracking-widest text-white/60 hover:text-white transition-colors hidden sm:block">Login</Link>
                     ) : (
-                        <Link href="/login" className="text-xs font-medium text-white hover:text-accent transition-colors hidden sm:block">Mi Cuenta</Link>
+                        <Button variant="outline" size="sm" onClick={() => signOut()} className="hidden sm:flex text-[10px] h-8 border-white/10 text-white">Salir</Button>
                     )}
-                    <Link href="/bots" className="hidden sm:block">
-                        <Button variant="accent" size="sm" className="text-[11px] h-9">Ver Bots</Button>
+                    <Link href="/bots">
+                        <Button variant="accent" size="sm" className="text-[10px] font-black uppercase h-9 px-6 rounded-full shadow-lg shadow-brand/20">Ver Bots</Button>
                     </Link>
 
                     {/* Mobile Menu Toggle */}
@@ -86,29 +61,17 @@ export function Navbar() {
 
             {/* Mobile Menu Overlay */}
             <div className={`md:hidden fixed inset-0 z-40 transition-all duration-500 flex flex-col ${isMenuOpen ? "visible opacity-100" : "invisible opacity-0"}`}>
-                <div className="absolute inset-0 bg-bg-dark/95 backdrop-blur-2xl"></div>
-                <div className="relative z-10 flex-1 flex flex-col pt-32 px-8 gap-8 overflow-y-auto pb-12">
-                    <div className="flex flex-col gap-6">
-                        <Link onClick={() => setIsMenuOpen(false)} href="/bots" className="text-2xl font-bold text-white border-b border-white/5 pb-2">Marketplace</Link>
-                        {isLoggedIn && (
-                            <Link onClick={() => setIsMenuOpen(false)} href="/dashboard" className="text-2xl font-bold text-brand-light border-b border-white/5 pb-2">Mi Panel (Mis Bots)</Link>
-                        )}
-                        <Link onClick={() => setIsMenuOpen(false)} href="/como-funciona" className="text-2xl font-bold text-white border-b border-white/5 pb-2">Cómo Funciona</Link>
-                        <Link onClick={() => setIsMenuOpen(false)} href="/articulos" className="text-2xl font-bold text-white border-b border-white/5 pb-2">Blog</Link>
-                        <Link onClick={() => setIsMenuOpen(false)} href="/faq" className="text-2xl font-bold text-white border-b border-white/5 pb-2">FAQ</Link>
-                    </div>
-
-                    <div className="flex flex-col gap-4 mt-auto">
-                        {!isLoggedIn && (
-                            <Link onClick={() => setIsMenuOpen(false)} href="/login">
-                                <Button fullWidth size="lg" variant="outline" className="border-white/10">Mi Cuenta</Button>
-                            </Link>
-                        )}
-                        <Link onClick={() => setIsMenuOpen(false)} href="/bots">
-                            <Button variant="accent" fullWidth size="lg">Ver Todos los Bots</Button>
-                        </Link>
-                        {isLoggedIn && (
-                            <Button fullWidth size="lg" variant="outline" onClick={() => { signOut(); setIsMenuOpen(false); }} className="border-danger/30 text-danger hover:bg-danger/10">Cerrar Sesión</Button>
+                <div className="absolute inset-0 bg-bg-dark/98 backdrop-blur-2xl"></div>
+                <div className="relative z-10 flex-1 flex flex-col pt-32 px-8 gap-10">
+                    <Link onClick={() => setIsMenuOpen(false)} href="/bots" className="text-3xl font-black text-white uppercase italic">Marketplace</Link>
+                    <Link onClick={() => setIsMenuOpen(false)} href="/activos" className="text-3xl font-black text-white uppercase italic">Activos</Link>
+                    <Link onClick={() => setIsMenuOpen(false)} href="/activos#resultados" className="text-3xl font-black text-white/40 uppercase italic">Resultados</Link>
+                    <Link onClick={() => setIsMenuOpen(false)} href="/como-funciona" className="text-3xl font-black text-white/40 uppercase italic">Cómo Funciona</Link>
+                    <div className="mt-auto pb-12 flex flex-col gap-4">
+                        {!isLoggedIn ? (
+                            <Link href="/login" onClick={() => setIsMenuOpen(false)}><Button fullWidth size="lg">Mi Cuenta</Button></Link>
+                        ) : (
+                            <Button fullWidth size="lg" variant="outline" onClick={() => { signOut(); setIsMenuOpen(false); }}>Cerrar Sesión</Button>
                         )}
                     </div>
                 </div>
