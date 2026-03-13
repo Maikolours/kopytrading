@@ -27,6 +27,9 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
+  other: {
+    "google-adsense-account": "ca-pub-7217883854605334",
+  },
 };
 
 import { MaintenanceMode } from "@/components/MaintenanceMode";
@@ -41,12 +44,12 @@ export default function RootLayout({
   return (
     <html lang="es" className="dark">
       <head>
-        <Script 
+        <meta name="google-adsense-account" content="ca-pub-7217883854605334" />
+        <script 
           async 
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7217883854605334"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        ></script>
       </head>
       <body className={`${inter.className} min-h-screen bg-black text-slate-50 antialiased selection:bg-brand/30 selection:text-white`}>
         {isMaintenance ? (
