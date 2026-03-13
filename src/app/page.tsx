@@ -45,23 +45,23 @@ export default function Home() {
       <main className="flex-1 flex flex-col relative pt-28 sm:pt-32 z-10">
 
         {/* === BANNER PRUEBA GRATIS === */}
-        <section className="px-4 sm:px-6 lg:px-8 pt-4 pb-2">
-          <div className="max-w-5xl mx-auto">
+        <section className="px-4 sm:px-6 lg:px-8 mt-4 mb-2">
+          <div className="max-w-4xl mx-auto">
             <Link href="/bots" className="block group">
-              <div className="relative overflow-hidden rounded-2xl border border-brand/40 bg-gradient-to-r from-brand/20 via-brand-dark/30 to-brand/20 p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-brand-light/60 transition-all duration-300 hover:shadow-[0_0_40px_rgba(139,92,246,0.3)]">
+              <div className="relative overflow-hidden rounded-2xl border border-brand/30 bg-gradient-to-r from-brand/10 via-brand-dark/20 to-brand/10 p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-brand-light/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(139,92,246,0.2)]">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/5 to-transparent animate-gradient-sweep pointer-events-none" />
                 <div className="flex items-center gap-4 z-10">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-success to-emerald-600 flex items-center justify-center shadow-lg shadow-success/30 flex-shrink-0">
-                    <span className="text-2xl sm:text-3xl">🎁</span>
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-success to-emerald-600 flex items-center justify-center shadow-lg shadow-success/30 flex-shrink-0">
+                    <span className="text-2xl">🎁</span>
                   </div>
-                  <div>
-                    <h2 className="text-base sm:text-lg font-bold text-white">Prueba cualquier Bot GRATIS durante 30 días</h2>
-                    <p className="text-xs sm:text-sm text-text-muted">Sin tarjeta de crédito · Sin compromiso · Acceso completo al bot</p>
+                  <div className="text-left">
+                    <h2 className="text-sm sm:text-base font-black text-white uppercase italic">Prueba Gratis 30 Días</h2>
+                    <p className="text-[10px] sm:text-xs text-text-muted">Acceso completo a cualquier bot · Sin tarjeta</p>
                   </div>
                 </div>
                 <div className="flex-shrink-0 z-10">
-                  <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-success text-white font-semibold text-sm shadow-lg shadow-success/30 group-hover:bg-emerald-500 transition-colors">
-                    Empezar Prueba Gratis →
+                  <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-success text-white font-black text-xs shadow-lg shadow-success/30 group-hover:bg-emerald-500 transition-all uppercase tracking-widest">
+                    Empezar →
                   </span>
                 </div>
               </div>
@@ -75,7 +75,7 @@ export default function Home() {
 
             {/* Texto Hero */}
             <div className="space-y-8 text-center lg:text-left">
-              <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-white leading-[1.05] uppercase italic">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-[1.1] uppercase italic">
                 Trading <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-accent">
                    Inteligente
@@ -88,12 +88,12 @@ export default function Home() {
 
               <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
                 <Link href="/bots">
-                  <Button variant="accent" size="lg" className="w-full sm:w-auto px-10 h-14 text-lg font-black uppercase tracking-widest shadow-[0_0_30px_rgba(139,92,246,0.3)] hover:scale-105 transition-all">
-                    Descargar Bots
+                  <Button variant="accent" size="lg" className="w-full sm:w-auto px-10 h-12 text-base font-black uppercase tracking-widest shadow-[0_0_30px_rgba(139,92,246,0.3)] hover:scale-105 transition-all">
+                    Ver Catálogo
                   </Button>
                 </Link>
-                <Link href="/como-funciona" className="text-white/60 hover:text-white transition-colors text-sm font-bold uppercase tracking-widest border-b border-white/10 pb-1">
-                  Ver cómo funciona
+                <Link href="/activos#resultados" className="text-white/60 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest border-b border-white/10 pb-1">
+                  Ver Resultados Reales
                 </Link>
               </div>
 

@@ -90,11 +90,15 @@ export default function ActivosPage() {
       </section>
 
       {/* SECCIÓN DE RESULTADOS DINÁMICA */}
-      <div id="resultados" className="py-24 border-y border-white/5 bg-black/20 backdrop-blur-sm">
+      <div id="resultados" className="py-20 border-y border-white/5 bg-black/40 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4">
-           <div className="text-center mb-16">
-              <h2 className="text-4xl sm:text-6xl font-black text-white uppercase tracking-tighter italic mb-4">Resultados Reales</h2>
-              <p className="text-text-muted text-lg">Mira cómo operan nuestros algoritmos en cuentas auditadas y en tiempo real.</p>
+           <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-success/10 border border-success/20 text-success text-[10px] font-bold tracking-widest uppercase mb-4">
+                <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+                Operativa en Vivo
+              </div>
+              <h2 className="text-4xl sm:text-5xl font-black text-white uppercase tracking-tighter italic mb-4">Resultados Reales</h2>
+              <p className="text-text-muted text-base max-w-xl mx-auto">Mira cómo operan nuestros algoritmos en cuentas auditadas y en tiempo real.</p>
            </div>
            <ResultsGallery />
         </div>
@@ -103,10 +107,10 @@ export default function ActivosPage() {
       <section className="py-32 px-4 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-brand/5 backdrop-blur-3xl -z-10" />
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl sm:text-6xl font-black text-white mb-8 italic uppercase tracking-tighter leading-none">
+          <h1 className="text-4xl sm:text-6xl font-black text-white mb-6 italic uppercase tracking-tighter leading-none">
             La consistencia no es suerte, <br />es <span className="text-brand-light underline decoration-brand/30 underline-offset-8">matemática</span>.
-          </h2>
-          <p className="text-text-muted text-lg mb-12 max-w-xl mx-auto font-light">
+          </h1>
+          <p className="text-text-muted text-base mb-10 max-w-xl mx-auto font-light">
             Únete a cientos de traders que ya operan con el respaldo de nuestros algoritmos profesionales.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

@@ -81,7 +81,7 @@ export default function RootLayout({
                 </div>
 
                 <div className="flex flex-col items-center gap-2 text-[10px] text-text-muted/40 text-center max-w-2xl">
-                  <p>© {new Date().getFullYear()} KopyTrading. Todos los derechos reservados.</p>
+                  <p suppressHydrationWarning>© {new Date().getFullYear()} KopyTrading. Todos los derechos reservados.</p>
                   <p className="mt-2">
                     KopyTrading NO constituye asesoramiento financiero. El trading en CFDs, Forex y Criptomonedas implica un alto nivel de riesgo y puede no ser adecuado para todos los inversores.
                     Solo debes operar con capital que puedas permitirte perder completamente.
