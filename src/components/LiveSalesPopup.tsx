@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-const BOTS = ["La Ametralladora v2", "Euro Precision Flow", "Yen Ninja Ghost", "BTC Storm Rider"];
+const BOTS = ["La Ametralladora v5.0", "Euro Precision Flow", "Yen Ninja Ghost", "BTC Storm Rider v6.0"];
 const OUTCOMES = [
     { text: "operación ganadora", emoji: "✅", color: "text-success", bg: "bg-success/10", border: "border-success/30" },
     { text: "Take Profit alcanzado", emoji: "🎯", color: "text-success", bg: "bg-success/10", border: "border-success/30" },
