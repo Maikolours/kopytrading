@@ -18,7 +18,8 @@ export function Navbar() {
         <header className="fixed top-0 w-full z-[70] transition-all duration-300">
             <div className="absolute inset-0 bg-bg-dark/90 backdrop-blur-xl border-b border-white/5"></div>
 
-            <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between relative z-10">
+            <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between relative z-10">
+
                 <Link href="/" className="flex items-center gap-4 group">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
                         <img src="/logo-kopytrading.png" alt="Logo" className="w-full h-full object-cover" />
@@ -50,12 +51,14 @@ export function Navbar() {
                     {/* Mobile Menu Toggle */}
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none z-50 rounded-xl bg-white/5 border border-white/10"
+                        className="md:hidden w-12 h-12 flex flex-col items-center justify-center gap-1.5 focus:outline-none z-50 rounded-xl bg-white/5 border border-white/10 active:scale-90 transition-transform -mr-2"
+                        aria-label="Menu"
                     >
-                        <span className={`w-5 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? "rotate-45 translate-y-2" : ""}`} />
-                        <span className={`w-5 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? "opacity-0" : ""}`} />
-                        <span className={`w-5 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+                        <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? "rotate-45 translate-y-2" : ""}`} />
+                        <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? "opacity-0" : ""}`} />
+                        <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
                     </button>
+
                 </div>
             </div>
 

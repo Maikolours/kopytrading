@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Outfit } from "next/font/google";
+
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Navbar } from "@/components/Navbar";
@@ -11,7 +12,8 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 
-const inter = Inter({ subsets: ["latin"] });
+const outfit = Outfit({ subsets: ["latin"] });
+
 
 export const viewport = {
   themeColor: "#000000",
@@ -67,7 +69,8 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`${inter.className} min-h-screen bg-black text-slate-50 antialiased selection:bg-brand/30 selection:text-white`}>
+      <body className={`${outfit.className} min-h-screen bg-black text-slate-50 antialiased selection:bg-brand/30 selection:text-white`}>
+
         {isMaintenance ? (
           <MaintenanceMode />
         ) : (

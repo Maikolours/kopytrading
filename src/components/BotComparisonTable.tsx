@@ -74,7 +74,12 @@ export function BotComparisonTable() {
     const [activeTab, setActiveTab] = useState<string>("all");
 
     return (
-        <div className="w-full overflow-x-auto pb-6 custom-scrollbar">
+        <div className="w-full relative">
+            <div className="md:hidden flex items-center justify-center gap-2 mb-4 text-[10px] text-accent font-bold uppercase tracking-widest animate-pulse">
+                <span>←</span> Desliza para comparar <span>→</span>
+            </div>
+            <div className="w-full overflow-x-auto pb-6 custom-scrollbar">
+
             <div className="min-w-[800px] w-full glass-card border border-white/10 rounded-2xl overflow-hidden bg-bg-dark">
                 {/* Encabezado */}
                 <div className="grid grid-cols-5 border-b border-white/10 bg-white/5">
@@ -183,6 +188,8 @@ export function BotComparisonTable() {
 
                 </div>
             </div>
+            </div>
         </div>
+
     );
 }

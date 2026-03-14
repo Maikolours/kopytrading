@@ -50,14 +50,16 @@ export default function ActivosPage() {
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand/5 blur-[150px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 blur-[120px] rounded-full pointer-events-none" />
 
-      <section className="px-4 sm:px-6 lg:px-8 mb-24 relative z-10">
+      <section className="px-6 sm:px-6 lg:px-8 mb-24 relative z-10">
+
         <div className="max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/10 border border-brand/20 text-brand-light text-xs font-semibold tracking-widest uppercase mb-6">
             Ecosistema de Trading
           </div>
-          <h1 className="text-5xl sm:text-7xl font-black text-white mb-6 uppercase tracking-tighter italic leading-none">
+          <h1 className="text-4xl sm:text-7xl font-black text-white mb-6 uppercase tracking-tighter italic leading-none">
             Nuestros <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-accent">Activos</span>
           </h1>
+
           <p className="text-text-muted text-lg max-w-2xl mx-auto mb-16 font-light">
             No operamos todo el mercado, solo donde la ventaja estadística es real. Descubre los instrumentos que hemos masterizado para ti.
           </p>
@@ -67,8 +69,9 @@ export default function ActivosPage() {
               <Link 
                 key={i} 
                 href={`/bots?asset=${asset.id}`}
-                className={`glass-card border-2 ${asset.color} rounded-[2rem] p-8 text-center hover:scale-[1.02] transition-all group relative overflow-hidden flex flex-col items-center justify-between min-h-[350px] shadow-2xl`}
+                className={`glass-card border-2 ${asset.color} rounded-[2rem] p-6 sm:p-8 text-center hover:scale-[1.02] transition-all group relative overflow-hidden flex flex-col items-center justify-between min-h-[350px] shadow-2xl`}
               >
+
                 <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
                 
                 <div className="relative z-10">

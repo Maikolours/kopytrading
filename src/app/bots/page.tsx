@@ -27,7 +27,8 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
     ];
 
     return (
-        <div className="min-h-screen pt-28 md:pt-32 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="min-h-screen pt-28 md:pt-32 pb-12 px-6 sm:px-6 lg:px-8 relative overflow-hidden">
+
             <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-brand-light/5 blur-[120px] rounded-full pointer-events-none" />
 
             <div className="max-w-7xl mx-auto relative z-10 mb-4">
@@ -39,8 +40,9 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
             {/* === BANNER PRUEBA GRATIS === */}
             <div className="max-w-7xl mx-auto mb-10">
                 <Link href="#bot-catalog" className="block group">
-                    <div className="relative overflow-hidden rounded-2xl border border-brand/40 bg-gradient-to-r from-brand/20 via-brand-dark/30 to-brand/20 p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-brand-light/60 transition-all duration-300 hover:shadow-[0_0_40px_rgba(139,92,246,0.3)]">
+                    <div className="relative overflow-hidden rounded-2xl border border-brand/40 bg-gradient-to-r from-brand/20 via-brand-dark/30 to-brand/20 p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-brand-light/60 transition-all duration-300 hover:shadow-[0_0_40px_rgba(139,92,246,0.3)]">
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/5 to-transparent animate-gradient-sweep pointer-events-none" />
+
                         <div className="flex items-center gap-4 z-10">
                             <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-success to-emerald-600 flex items-center justify-center shadow-lg shadow-success/30 flex-shrink-0">
                                 <span className="text-2xl sm:text-3xl">🎁</span>
@@ -61,7 +63,8 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
 
             <div id="bot-catalog" className="max-w-7xl mx-auto mb-10 border-b border-white/10 pb-8">
                 <div className="mb-6">
-                    <h1 className="text-4xl font-bold text-white tracking-tight mb-2">Marketplace de Bots</h1>
+                    <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-2 uppercase italic">Marketplace de Bots</h1>
+
                     <p className="text-text-muted">Encuentra los algoritmos más precisos para MetaTrader 5.</p>
                 </div>
 

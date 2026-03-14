@@ -115,7 +115,8 @@ export default function Home() {
             {/* Visual Hero Simple */}
             <div className="relative">
               <div className="absolute inset-0 bg-brand/30 blur-[100px] rounded-full" />
-              <div className="relative glass-card border border-white/10 rounded-[3rem] p-8 aspect-square flex flex-col justify-center">
+              <div className="relative glass-card border border-white/10 rounded-[3rem] p-6 sm:p-8 flex flex-col justify-center">
+
                  <div className="space-y-6">
                     <div className="flex justify-between items-end">
                        <div className="text-4xl font-black text-white italic">XAUUSD</div>
