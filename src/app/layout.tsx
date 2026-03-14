@@ -51,6 +51,19 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7217883854605334"
           crossOrigin="anonymous"
         ></script>
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-QWJ1GK9417"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-QWJ1GK9417');
+          `}
+        </Script>
       </head>
       <body className={`${inter.className} min-h-screen bg-black text-slate-50 antialiased selection:bg-brand/30 selection:text-white`}>
         {isMaintenance ? (
