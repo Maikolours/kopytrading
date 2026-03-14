@@ -7,6 +7,7 @@ import FloatingChat from "@/components/FloatingChat";
 import CookieBanner from "@/components/CookieBanner";
 import Link from "next/link";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -92,6 +93,7 @@ export default function RootLayout({
             </footer>
             <CookieBanner />
             <FloatingChat />
+            <Analytics />
           </Providers>
         )}
       </body>
