@@ -89,49 +89,56 @@ const FAQS = [
 function AccordionItem({ question, answer }: { question: string; answer: string }) {
     const [open, setOpen] = useState(false);
     return (
-        <div className="border border-white/10 rounded-xl overflow-hidden">
+        <div className={`border rounded-xl overflow-hidden transition-all duration-300 ${open ? "border-brand/40 bg-brand/5 shadow-[0_0_20px_rgba(139,92,246,0.1)]" : "border-white/10 bg-transparent hover:border-white/20"}`}>
             <button
                 onClick={() => setOpen(!open)}
-                className="w-full text-left flex items-center justify-between p-5 hover:bg-white/5 transition-colors"
+                className="w-full text-left flex items-center justify-between p-5 sm:p-6 transition-colors"
             >
-                <span className="font-medium text-white pr-4">{question}</span>
-                <span className={`text-brand-light text-xl transition-transform flex-shrink-0 ${open ? "rotate-45" : ""}`}>+</span>
+                <span className={`font-semibold transition-colors ${open ? "text-brand-light" : "text-white"}`}>{question}</span>
+                <span className={`text-brand-light text-2xl transition-transform duration-300 flex-shrink-0 ${open ? "rotate-45" : ""}`}>+</span>
             </button>
-            {open && (
-                <div className="px-5 pb-5 text-text-muted text-sm leading-relaxed border-t border-white/5 pt-4">
-                    {answer}
+            <div className={`grid transition-all duration-300 ease-in-out ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
+                <div className="overflow-hidden">
+                    <div className="px-5 sm:px-6 pb-6 text-text-muted text-sm sm:text-base leading-relaxed border-t border-white/5 pt-4">
+                        {answer}
+                    </div>
                 </div>
-            )}
+            </div>
         </div>
     );
 }
 
 export default function FAQPage() {
     return (
-        <div className="min-h-screen pt-28 md:pt-32 pb-24 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto">
+        <div className="min-h-screen pt-28 md:pt-36 pb-24 px-4 sm:px-8 max-w-5xl mx-auto">
+            <div className="w-full">
                 {/* Header */}
-                <div className="mb-4">
-                    <Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-white transition-colors">
-                        <span>←</span> Volver al inicio
+                <div className="mb-6">
+                    <Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-white transition-colors group">
+                        <span className="group-hover:-translate-x-1 transition-transform">←</span> Volver al inicio
                     </Link>
                 </div>
-                <div className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Preguntas Frecuentes</h1>
-                    <p className="text-text-muted max-w-xl mx-auto">
+                <div className="text-center mb-16">
+                    <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 uppercase tracking-tight italic">Preguntas Frecuentes</h1>
+                    <p className="text-text-muted max-w-2xl mx-auto text-lg">
                         Todo lo que necesitas saber antes de empezar con el trading algorítmico y los bots de KOPYTRADING.
                     </p>
-                    <p className="mt-4 text-xs text-warning/80 border border-warning/20 inline-block px-4 py-2 rounded-full mb-6">
-                        ⚠️ El trading conlleva un alto riesgo de pérdida de capital. Rendimientos pasados no garantizan resultados futuros.
-                    </p>
+                    <div className="mt-8 inline-block px-6 py-2 rounded-full bg-warning/10 border border-warning/20">
+                        <p className="text-xs text-warning font-semibold">
+                            ⚠️ El trading conlleva un alto riesgo de pérdida de capital. Rendimientos pasados no garantizan resultados futuros.
+                        </p>
+                    </div>
                 </div>
 
                 {/* FAQ Sections */}
-                <div className="space-y-12">
+                <div className="space-y-16">
                     {FAQS.map((section, si) => (
-                        <div key={si}>
-                            <h2 className="text-xl font-semibold text-white mb-4">{section.category}</h2>
-                            <div className="space-y-3">
+                        <div key={si} className="animate-slide-up" style={{ animationDelay: `${si * 100}ms` }}>
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="h-8 w-1 bg-brand rounded-full"></div>
+                                <h2 className="text-2xl font-bold text-white">{section.category}</h2>
+                            </div>
+                            <div className="space-y-4">
                                 {section.items.map((item, ii) => (
                                     <AccordionItem key={ii} question={item.q} answer={item.a} />
                                 ))}

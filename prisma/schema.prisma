@@ -29,6 +29,8 @@ model BotProduct {
   riskLevel       String
   price           Float
   version         String     @default("1.0")
+  status          String     @default("ACTIVE") // ACTIVE, MAINTENANCE, UPCOMING
+  launchDate      DateTime?
   ex5FilePath     String?
   pdfFilePath     String?
   isActive        Boolean    @default(true)
@@ -41,17 +43,31 @@ model BotProduct {
 }
 
 model Purchase {
-  id                    String     @id @default(cuid())
+  id                    String          @id @default(cuid())
   userId                String
   botProductId          String
   amount                Float
-  status                String     @default("COMPLETED")
+  status                String          @default("COMPLETED")
   lastDownloadedVersion String?
-  createdAt             DateTime   @default(now())
+  createdAt             DateTime        @default(now())
   expiresAt             DateTime?
-  botProduct            BotProduct @relation(fields: [botProductId], references: [id])
-  user                  User       @relation(fields: [userId], references: [id])
+  botProduct            BotProduct      @relation(fields: [botProductId], references: [id])
+  user                  User            @relation(fields: [userId], references: [id])
+  commands              RemoteCommand[]
+  mt5AccountNumber      String?
 
   @@index([botProductId], map: "Purchase_botProductId_fkey")
   @@index([userId], map: "Purchase_userId_fkey")
+}
+
+model RemoteCommand {
+  id         String   @id @default(cuid())
+  purchaseId String
+  command    String // PAUSE, RESUME, CLOSE_ALL, CHANGE_MODE, etc.
+  value      String? // E.g., mode name
+  isExecuted Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  purchase   Purchase @relation(fields: [purchaseId], references: [id])
+
+  @@index([purchaseId])
 }

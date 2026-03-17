@@ -7,6 +7,7 @@ import { Card, CardHeader, CardContent, CardTitle, CardFooter } from "@/componen
 import { Button } from "@/components/ui/Button";
 import { Countdown } from "@/components/ui/Countdown";
 import { PasswordChangeForm } from "@/components/PasswordChangeForm";
+import { BotRemoteControl } from "@/components/BotRemoteControl";
 
 // Evitar cacheo
 export const dynamic = "force-dynamic";
@@ -124,6 +125,13 @@ export default async function DashboardPage() {
                                                     <p>Licencia: <span className="font-semibold text-white">Activa de por vida</span></p>
                                                 </div>
                                             )}
+
+                                            {!isExpired && (
+                                                <BotRemoteControl 
+                                                    purchaseId={purchase.id} 
+                                                    botName={purchase.botProduct.name} 
+                                                />
+                                            )}
                                         </CardContent>
                                         <CardFooter className="pt-4 border-t border-white/5 flex flex-wrap gap-3">
                                             <a href={`/api/download/${purchase.id}?type=ex5`} className="flex-1 min-w-[120px]">
@@ -131,11 +139,14 @@ export default async function DashboardPage() {
                                                     Descargar .EX5
                                                 </Button>
                                             </a>
+                                            {/* Oculto temporalmente */}
+                                            {/* 
                                             <a href={`/api/download/${purchase.id}?type=pdf`} className="flex-1 min-w-[120px]">
                                                 <Button variant="outline" size="sm" fullWidth className="text-sm">
                                                     Manual PDF
                                                 </Button>
                                             </a>
+                                            */}
                                             {isTrial && (
                                                 <a href={`/checkout/${purchase.botProductId}`} className="w-full mt-2">
                                                     <Button size="sm" fullWidth className="bg-gradient-to-r from-brand to-brand-bright hover:shadow-brand/20 shadow-lg text-xs py-2">

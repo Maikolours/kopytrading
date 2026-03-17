@@ -186,6 +186,18 @@ void OnTick() {
 
    int nTotal = ContarPosiciones() + ContarPendientes();
    
+   // --- FILTRO DE RECUPERACIÓN (Petición Usuario) ---
+   // Si tenemos posiciones en ambas direcciones y el ciclo va en negativo,
+   // no abrimos nuevas entradas hasta que una dirección sea clara.
+   bool hayBuy = false, haySell = false;
+   double pBuy = 0, pSell = 0;
+   for(int i=0; i<PositionsTotal(); i++) {
+      if(PositionSelectByTicket(PositionGetTicket(i)) && PositionGetInteger(POSITION_MAGIC)==MagicNumber) {
+         if(PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_BUY) { hayBuy=true; pBuy += PositionGetDouble(POSITION_PROFIT); }
+         if(PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_SELL) { haySell=true; pSell += PositionGetDouble(POSITION_PROFIT); }
+      }
+   }
+
    if(nTotal == 0) {
       if(TimeCurrent() >= nextAllowedTrade) {
          analizandoIA = false;
@@ -193,7 +205,10 @@ void OnTick() {
       } else analizandoIA = true;
    }
    
-   if(ContarPosiciones() >= 1 && ContarPendientes() == 0 && nTotal < Bozal_Max_Ops) 
+   // Solo colocamos escudo si no estamos bloqueados por el filtro de recuperación
+   bool bloqueadoRecuperacion = (hayBuy && haySell && (pBuy+pSell < 0) && (pBuy < 3.0 && pSell < 3.0));
+
+   if(ContarPosiciones() >= 1 && ContarPendientes() == 0 && nTotal < Bozal_Max_Ops && !bloqueadoRecuperacion) 
       ColocarEscudoSticky();
 
    if(MostrarPanel) ActualizarHUD();
@@ -220,17 +235,26 @@ void EjecutarAmetralladora() {
 }
 
 void ColocarEscudoSticky() {
-   double dist = Distancia_Sticky_Pts * _Point;
+   double netLot = 0;
+   double lotB = 0, lotS = 0;
+   
    for(int i=0; i<PositionsTotal(); i++) {
       ulong t = PositionGetTicket(i);
       if(PositionSelectByTicket(t) && PositionGetInteger(POSITION_MAGIC)==MagicNumber) {
-         if(PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_BUY)
-            trade.SellStop(LoteShield, SymbolInfoDouble(_Symbol, SYMBOL_BID)-dist, _Symbol, 0, 0, ORDER_TIME_GTC, 0, "AMT5_SHIELD");
-         else
-            trade.BuyStop(LoteShield, SymbolInfoDouble(_Symbol, SYMBOL_ASK)+dist, _Symbol, 0, 0, ORDER_TIME_GTC, 0, "AMT5_SHIELD");
-         break;
+         if(PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_BUY) lotB += PositionGetDouble(POSITION_VOLUME);
+         else lotS += PositionGetDouble(POSITION_VOLUME);
       }
    }
+   
+   netLot = NormalizeDouble(lotB - lotS, 2);
+   if(netLot == 0) return; // Estamos equilibrados, no poner más escudos alternos
+
+   double dist = Distancia_Sticky_Pts * _Point;
+   
+   if(netLot > 0) // Netamente COMPRADOS -> Protección VENTA
+      trade.SellStop(LoteShield, SymbolInfoDouble(_Symbol, SYMBOL_BID)-dist, _Symbol, 0, 0, ORDER_TIME_GTC, 0, "AMT5_SHIELD");
+   else // Netamente VENDIDOS -> Protección COMPRA
+      trade.BuyStop(LoteShield, SymbolInfoDouble(_Symbol, SYMBOL_ASK)+dist, _Symbol, 0, 0, ORDER_TIME_GTC, 0, "AMT5_SHIELD");
 }
 
 void MoverEscudoSticky() {

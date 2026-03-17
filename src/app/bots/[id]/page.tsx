@@ -15,7 +15,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
     }
 
     return (
-        <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden max-w-full">
             <div className="max-w-5xl mx-auto">
                 <div className="mb-8">
                     <Link href="/bots" className="text-brand-light hover:text-white transition-colors text-sm flex items-center gap-2">
@@ -25,8 +25,8 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
 
                 <div className="grid lg:grid-cols-3 gap-12">
                     {/* Main Content */}
-                    <div className="lg:col-span-2 space-y-8">
-                        <div className="glass-card p-6 sm:p-8 border border-white/10">
+                    <div className="lg:col-span-2 space-y-6 sm:space-y-8">
+                        <div className="glass-card p-5 sm:p-8 border border-white/10">
 
                             <h1 className="text-4xl font-bold text-white mb-4">{bot.name}</h1>
                             <div className="flex flex-wrap gap-2 mb-6">
@@ -96,8 +96,8 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
 
                                 <div>
                                     <h5 className="text-sm font-semibold text-white mb-4">Rendimiento Mensual</h5>
-                                    <div className="overflow-x-auto -mx-6 sm:mx-0 px-6 sm:px-0">
-                                        <table className="w-full text-sm text-left text-text-muted min-w-[450px]">
+                                    <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 scrollbar-thin">
+                                        <table className="w-full text-sm text-left text-text-muted min-w-[500px]">
                                             <thead className="text-xs uppercase bg-black/20 text-white/70">
                                                 <tr>
                                                     <th className="px-4 py-3 rounded-tl-lg">Año</th>
@@ -130,11 +130,11 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             </div>
                         </div>
 
-                        <div className="bg-danger/10 border border-danger/20 rounded-xl p-5 sm:p-6">
-                            <h4 className="text-danger font-bold mb-2 flex items-center gap-2 text-sm sm:text-base">
+                        <div className="bg-danger/10 border border-danger/20 rounded-xl p-4 sm:p-6">
+                            <h4 className="text-danger font-bold mb-2 flex items-center gap-2 text-xs sm:text-base">
                                 ⚠️ Aviso Importante de Riesgo
                             </h4>
-                            <p className="text-xs sm:text-sm text-danger/80">
+                            <p className="text-[10px] sm:text-sm text-danger/80">
                                 El trading conlleva un alto nivel de riesgo y puede no ser adecuado para todos los inversores.
                                 Los resultados históricos mostrados en backtests no garantizan rendimientos futuros.
                                 Este bot es una herramienta de asistencia y tú eres el único responsable de la configuración,

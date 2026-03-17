@@ -144,6 +144,31 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* STATUS OVERLAYS */}
+                                {bot.status === "MAINTENANCE" && (
+                                    <div className="absolute inset-0 z-20 bg-bg-dark/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
+                                        <div className="w-16 h-16 rounded-full bg-amber-500/20 flex items-center justify-center mb-4 border border-amber-500/30">
+                                            <span className="text-3xl">🛠️</span>
+                                        </div>
+                                        <h4 className="text-xl font-bold text-white mb-2 uppercase tracking-tighter italic">Mantenimiento</h4>
+                                        <p className="text-sm text-text-muted">Estamos optimizando este bot. Volverá a estar disponible muy pronto.</p>
+                                    </div>
+                                )}
+
+                                {bot.status === "UPCOMING" && (
+                                    <div className="absolute inset-0 z-20 bg-brand-dark/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
+                                        <div className="w-16 h-16 rounded-full bg-brand/20 flex items-center justify-center mb-4 border border-brand/30 animate-pulse">
+                                            <span className="text-3xl">🚀</span>
+                                        </div>
+                                        <h4 className="text-xl font-bold text-white mb-1 uppercase tracking-tighter italic">Próximamente</h4>
+                                        <p className="text-[10px] text-brand-light font-bold mb-4 uppercase tracking-widest">Disponible en:</p>
+                                        <div className="bg-black/40 px-4 py-2 rounded-xl border border-white/10 font-mono text-xl text-white">
+                                            7d 14h 22m
+                                        </div>
+                                        <button className="mt-6 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-colors border-b border-white/10 pb-1">Notificarme al lanzar</button>
+                                    </div>
+                                )}
                             </CardContent>
 
                             <CardFooter className="justify-between items-center mt-auto border-t border-white/10 pt-4">
@@ -153,8 +178,10 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                     </div>
                                     <div className="text-[10px] text-success font-semibold tracking-wider uppercase">1 Mes Gratis</div>
                                 </div>
-                                <Link href={`/bots/${bot.id}`}>
-                                    <Button size="sm" className="shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:shadow-[0_0_20px_rgba(139,92,246,0.6)]">Descargar</Button>
+                                <Link href={`/bots/${bot.id}`} className={bot.status !== 'ACTIVE' ? 'pointer-events-none opacity-20' : ''}>
+                                    <Button size="sm" className="shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:shadow-[0_0_20px_rgba(139,92,246,0.6)]" disabled={bot.status !== 'ACTIVE'}>
+                                        {bot.status === 'ACTIVE' ? 'Descargar' : 'No disponible'}
+                                    </Button>
                                 </Link>
                             </CardFooter>
                         </Card>

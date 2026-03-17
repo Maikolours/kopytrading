@@ -18,7 +18,7 @@ const TICKER_ITEMS = [
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen relative overflow-hidden bg-bg-dark">
+    <div className="flex flex-col min-h-screen relative overflow-x-hidden bg-bg-dark overflow-guard">
 
       {/* === TICKER DE PRECIOS ANIMADO === */}
       <div className="fixed top-0 left-0 right-0 z-[60] bg-bg-dark/95 backdrop-blur border-b border-white/5 py-2">
@@ -36,7 +36,7 @@ export default function Home() {
       </div>
 
       {/* Fondo */}
-      <div className="absolute top-0 inset-x-0 h-full w-full pointer-events-none z-0">
+      <div className="absolute top-0 inset-x-0 h-full w-full pointer-events-none z-0 overflow-hidden bg-blur-container">
         <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-brand/20 blur-[150px] rounded-full mix-blend-screen" />
         <div className="absolute top-1/3 right-0 translate-x-1/3 w-[500px] h-[500px] bg-accent/10 blur-[120px] rounded-full mix-blend-screen" />
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[400px] bg-gradient-to-t from-black to-transparent" />
@@ -70,12 +70,12 @@ export default function Home() {
         </section>
 
         {/* === HERO === */}
-        <section className="flex items-center px-4 sm:px-6 lg:px-8 py-10 md:py-20">
+        <section className="flex items-center px-4 sm:px-6 lg:px-8 py-10 md:py-20 hero-section relative">
           <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 items-center">
 
             {/* Texto Hero */}
             <div className="space-y-8 text-center lg:text-left">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-[1.1] uppercase italic">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-tight uppercase italic break-words">
                 Trading <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-accent">
                    Inteligente

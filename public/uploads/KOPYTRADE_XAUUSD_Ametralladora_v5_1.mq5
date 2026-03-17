@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------+
-//| EA Scalping Inteligente v5.1 – MT5 (CON META DIARIA DE BENEFICIOS)|
+//| Ametralladora Evolution v5.1 – MT5 (CON META DIARIA)           |
 //+------------------------------------------------------------------+
 #property strict
 #property version "5.1"
@@ -354,7 +354,7 @@ void DrawPanel(double dailyProfit)
    }
    
    string text = "╔══════════════════════════════════════════════╗\n";
-   text += "║  EA Scalping v5.1 [Meta Diaria Activada] \n";
+   text += "║  Ametralladora Evolution v5.1 [Meta Diaria] \n";
    text += "╠══════════════════════════════════════════════╣\n";
    text += "║ Balance: " + DoubleToString(AccountInfoDouble(ACCOUNT_BALANCE), 2) + " USD\n";
    text += "║ Beneficio Hoy: $" + DoubleToString(dailyProfit, 2) + dailyStatus + "\n";

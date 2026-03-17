@@ -17,6 +17,10 @@ const outfit = Outfit({ subsets: ["latin"] });
 
 export const viewport = {
   themeColor: "#000000",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export const metadata: Metadata = {
@@ -76,10 +80,10 @@ export default function RootLayout({
         ) : (
           <Providers>
             <Navbar />
-            <main>
+            <main className="main-wrapper">
               {children}
             </main>
-            <footer className="border-t border-white/5 py-12 px-4 sm:px-6 lg:px-8 bg-black">
+            <footer className="border-t border-white/5 py-12 px-4 sm:px-6 lg:px-8 bg-black main-wrapper">
               <div className="max-w-7xl mx-auto flex flex-col items-center gap-8">
                 <div className="flex flex-col items-center gap-6">
                   <div className="w-24 h-24 rounded-[2rem] overflow-hidden shadow-[0_0_40px_rgba(245,158,11,0.3)] border border-white/5 p-1 bg-black">
