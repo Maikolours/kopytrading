@@ -93,9 +93,13 @@ export default async function DashboardPage() {
                                                     )}
                                                 </div>
                                             </div>
-                                            <div className="flex gap-2 mt-2">
+                                            <div className="flex flex-wrap gap-2 mt-2">
                                                 <span className="px-2 py-0.5 rounded text-xs bg-surface-light border border-white/5">{purchase.botProduct.instrument}</span>
                                                 {isTrial && <span className="px-2 py-0.5 rounded text-[10px] border border-orange-500/30 text-orange-400 bg-orange-500/5">Solo Cuenta DEMO</span>}
+                                                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded text-[9px] bg-brand/5 border border-brand/10 text-brand-light">
+                                                    <span className="opacity-60">ID VÍNCULO:</span>
+                                                    <code className="font-mono font-bold select-all tracking-tighter">{purchase.id}</code>
+                                                </div>
                                             </div>
                                         </CardHeader>
                                         <CardContent className="flex-grow pb-4 text-sm text-text-muted">

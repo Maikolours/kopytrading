@@ -52,7 +52,20 @@ model Purchase {
   expiresAt             DateTime?
   botProduct            BotProduct @relation(fields: [botProductId], references: [id])
   user                  User       @relation(fields: [userId], references: [id])
+  remoteCommands        RemoteCommand[]
 
   @@index([botProductId], map: "Purchase_botProductId_fkey")
   @@index([userId], map: "Purchase_userId_fkey")
+}
+
+model RemoteCommand {
+  id         String   @id @default(cuid())
+  purchaseId String
+  command    String   // PAUSE, RESUME, CLOSE_ALL, CHANGE_MODE, DIRECTION
+  value      String?  // ZEN, COSECHA, BUY, SELL, etc.
+  isExecuted Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  purchase   Purchase @relation(fields: [purchaseId], references: [id])
+
+  @@index([purchaseId])
 }

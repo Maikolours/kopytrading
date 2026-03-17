@@ -28,6 +28,7 @@ void CrBtn(string n, int x, int y, int w, int h, string t, color bg, color tc);
 //============================================================
 input group "=== LICENCIA & MOBILE BRIDGE ==="
 input string   LicenseKey        = "TRIAL-2026";
+input string   PurchaseID        = "";         // ID de Vínculo (Ver en kopytrading.com/dashboard)
 input string   TelegramToken     = "";         // Token del Bot (ej: 123456:ABC...)
 input long     TelegramChatID    = 0;          // Tu Chat ID (ej: 987654321)
 input bool     NotificarTelegram = true;       // Enviar alertas al móvil
@@ -190,7 +191,56 @@ void NotifyDeals() {
    }
 }
 
-void OnTimer() { if(TelegramToken != "") ProcessTelegramCommands(); }
+void OnTimer() { 
+   if(TelegramToken != "") ProcessTelegramCommands(); 
+   
+   static datetime lastRemoteSync = 0;
+   if(PurchaseID != "" && TimeCurrent() - lastRemoteSync >= 30) {
+      CheckRemoteCommands();
+      lastRemoteSync = TimeCurrent();
+   }
+}
+
+//--- CONTROL REMOTO DENTRO DE KOPYTRADING ---
+void CheckRemoteCommands() {
+   string account = IntegerToString((long)AccountInfoInteger(ACCOUNT_LOGIN));
+   string url = "https://www.kopytrading.com/api/remote-control?purchaseId=" + PurchaseID + "&account=" + account;
+   
+   char post[], result[]; string headers;
+   int res = WebRequest("GET", url, headers, 2000, post, result, headers);
+   
+   if(res == 200) {
+      string response = CharArrayToString(result);
+      if(StringFind(response, "\"command\":\"PAUSE\"") != -1) {
+         remotePaused = true;
+         SendTelegramMessage("🛑 Comando Remoto: PAUSAR BOT");
+         CrearPanel();
+      }
+      if(StringFind(response, "\"command\":\"RESUME\"") != -1) {
+         remotePaused = false;
+         SendTelegramMessage("🟢 Comando Remoto: REANUDAR BOT");
+         CrearPanel();
+      }
+      if(StringFind(response, "\"command\":\"CLOSE_ALL\"") != -1) {
+         CloseAllBotPositions();
+         SendTelegramMessage("🔥 Comando Remoto: CIERRE EMERGENCIA");
+      }
+      if(StringFind(response, "\"command\":\"CHANGE_MODE\"") != -1) {
+          if(StringFind(response, "\"value\":\"ZEN\"") != -1) {
+              currentMode = MODE_ZEN; UpdateModeParams();
+          } else if(StringFind(response, "\"value\":\"COSECHA\"") != -1) {
+              currentMode = MODE_COSECHA; UpdateModeParams();
+          }
+          CrearPanel();
+      }
+      if(StringFind(response, "\"command\":\"DIRECTION\"") != -1) {
+          if(StringFind(response, "\"value\":\"BUY\"") != -1) currentDir = DIR_COMPRAS;
+          else if(StringFind(response, "\"value\":\"SELL\"") != -1) currentDir = DIR_VENTAS;
+          else currentDir = DIR_AMBAS;
+          CrearPanel();
+      }
+   }
+}
 
 //--- LÓGICA DE TRADING ---
 void MaintainGates() {

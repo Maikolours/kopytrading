@@ -254,27 +254,35 @@ void OnTick() {
 }
 
 void SyncWithWeb() {
-   if(Token_Web == "" || TimeCurrent() < lastWebSync + 30) return;
+   if(purchaseID_Synced == "" || TimeCurrent() < lastWebSync + 30) return;
    lastWebSync = TimeCurrent();
    
-   string url = "https://kopytrading.com/api/remote-control?purchaseId=" + purchaseID_Synced + "&account=" + IntegerToString((int)AccountInfoInteger(ACCOUNT_LOGIN));
+   string account = IntegerToString((int)AccountInfoInteger(ACCOUNT_LOGIN));
+   string url = "https://www.kopytrading.com/api/remote-control?purchaseId=" + purchaseID_Synced + "&account=" + account;
    char post[], result[]; string headers;
    int res = WebRequest("GET", url, headers, 2000, post, result, headers);
    
    if(res == 200) {
       string response = CharArrayToString(result);
-      // Procesar JSON simple (esperamos array de comandos)
-      if(StringFind(response, "\"command\":\"PAUSE\"") != -1) remotePaused = true;
-      if(StringFind(response, "\"command\":\"RESUME\"") != -1) remotePaused = false;
-      if(StringFind(response, "\"command\":\"CLOSE_ALL\"") != -1) CloseAllBotPositions();
+      if(StringFind(response, "\"command\":\"PAUSE\"") != -1) {
+         remotePaused = true;
+         SendTelegramMessage("🛑 BTC: Pausado remotamente desde el Panel Web.");
+      }
+      if(StringFind(response, "\"command\":\"RESUME\"") != -1) {
+         remotePaused = false;
+         SendTelegramMessage("✅ BTC: Reanudado remotamente desde el Panel Web.");
+      }
+      if(StringFind(response, "\"command\":\"CLOSE_ALL\"") != -1) {
+         CloseAllBotPositions();
+         SendTelegramMessage("🔥 BTC: Cierre de Emergencia activado desde la Web.");
+      }
       if(StringFind(response, "\"command\":\"DIRECTION\"") != -1) {
          if(StringFind(response, "\"value\":\"BUY\"") != -1) ModoBot = 1;
-         if(StringFind(response, "\"value\":\"SELL\"") != -1) ModoBot = 2;
-         if(StringFind(response, "\"value\":\"BOTH\"") != -1) ModoBot = 0;
+         else if(StringFind(response, "\"value\":\"SELL\"") != -1) ModoBot = 2;
+         else ModoBot = 0;
+         SendTelegramMessage("↕️ BTC: Dirección de trading cambiada remotamente.");
       }
-      if(StringFind(response, "\"command\":\"CHANGE_MODE\"") != -1) {
-         // Futuro: Modo Zen/Cosecha
-      }
+      if(MostrarPanel) CrearPanel();
    }
 }
 
