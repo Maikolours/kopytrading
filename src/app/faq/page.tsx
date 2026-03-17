@@ -83,6 +83,27 @@ const FAQS = [
                 a: "No. Las licencias de prueba de 30 días están limitadas técnicamente para funcionar SOLO en cuentas de tipo DEMO (dinero ficticio). Esto es para que puedas testear la estrategia sin riesgo. Para operar en una cuenta REAL, necesitarás adquirir la licencia vitalicia (LIFETIME)."
             },
         ]
+    },
+    {
+        category: "⚖️ Conceptos Ávancados",
+        items: [
+            {
+                q: "He arrastrado el bot pero no hace nada, ¿qué es el 'Algo Trading'?",
+                a: "En la parte superior de MetaTrader 5 hay un botón llamado 'Algo Trading' (o AutoTrading). Debe estar en VERDE. Además, al arrastrar el bot, en la pestaña 'Común', debes marcar la casilla 'Permitir trading algorítmico'. Si alguna de estas dos cosas falla, el bot tendrá una cara triste en la esquina superior derecha y no operará."
+            },
+            {
+                q: "¿Por qué los resultados del Probador (Backtest) son distintos a la Real?",
+                a: "El Backtest usa datos históricos, pero no puede replicar al 100% la velocidad de ejecución, el deslizamiento (slippage) o los cambios de spread que ocurren en el mercado real en milisegundos. El backtest sirve para validar la lógica, pero la verdadera prueba es la cuenta DEMO en tiempo real."
+            },
+            {
+                q: "¿Qué es el Spread y cómo afecta a mi bot?",
+                a: "El spread es la diferencia entre el precio de compra y el de venta (la comisión del broker). Si el spread sube mucho (por ejemplo, durante noticias), el bot podría no abrir operaciones o cerrarlas antes de tiempo para protegerte. Por eso recomendamos brokers con spreads bajos (Raw/Razor)."
+            },
+            {
+                q: "¿Qué diferencia hay entre CopyTrading y usar vuestros Bots?",
+                a: "En el CopyTrading tradicional, dependes de que un humano abra una operación y tu cuenta la replique (a veces con retraso). Con nuestros Expert Advisors (Bots), tú tienes el software ejecutándose en tu propio ordenador/VPS. Es más rápido, más privado y tú tienes el control total de los parámetros y el riesgo en todo momento."
+            }
+        ]
     }
 ];
 

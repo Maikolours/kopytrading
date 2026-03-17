@@ -158,10 +158,26 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     {
         keywords: ["capital asegurado", "asegurado el capital", "seguro de perdida", "pierdo mi dinero", "perderlo todo", "garantizado", "riesgo cero", "riesgo 0", "capital protegido", "mi dinero está seguro", "esta asegurado"],
         response: "🛑 **Aviso sobre el Capital y el Riesgo:**\n\n**NO. EL CAPITAL NO ESTÁ ASEGURADO BAJO NINGÚN CONCEPTO.** \nEl Trading algorítmico o manual es una actividad de muy alto riesgo financiero. Quien te diga que tu capital está 100% asegurado en los mercados financieros, te está mintiendo o intentando estafar.\n\nNuestros bots usan *Stop Loss* estrictos y escudos de *Break Even* muy avanzados para PROTEGERTE e intentar evitar la quiebra total de tu cuenta ante un día nefasto, pero en cada operación arriesgas un % real de tu cuenta. Solo opera con aquel dinero del que no dependa tu vida ni tus facturas."
+    },
+    {
+        keywords: ["algoritmo", "cara triste", "no hace nada", "donde activo", "algo trading", "autotrading", "permitir trading", "permitir algorithmic"],
+        response: "🤖 **¿Bot con cara triste o sin operar?**\n\n1. Mira arriba en MT5: El botón **'Algo Trading'** debe estar en VERDE.\n2. Al arrastrar el bot: En la pestaña 'Común', marca **'Permitir trading algorítmico'**.\n\nSi el sombrero o la cara del bot en la esquina derecha es azul/verde, ¡está listo! Si está gris/rojo, es que falta uno de esos dos pasos."
+    },
+    {
+        keywords: ["deslizamiento", "slippage", "recorrer", "spread", "comisión", "comision", "swap", "swaps", "spreads"],
+        response: "💹 **Spread, Slippage y Swaps:**\n\n• **Spread**: Es la comisión del broker por entrar. Si es alto, el bot espera a que baje para protegerte.\n• **Slippage**: Es cuando el precio se mueve tan rápido que entras en un punto distinto. Nuestros bots tienen filtros de 'Max Slippage'.\n• **Swap**: Es el interés por dejar la operación abierta de un día para otro. \n\nPara optimizar esto, usa siempre una cuenta **RAW o ECN** en tu broker."
+    },
+    {
+        keywords: ["backtest", "probador", "historia", "pasado", "por que es distinto", "por qué es distinto", "real vs demo", "demo vs real"],
+        response: "📈 **Backtest vs Realidad:**\n\nEl backtest es genial para ver si la estrategia funciona en el pasado, pero NO tiene en cuenta la latencia de internet ni los spreads variables del directo. \n\nNo te fíes solo del backtest: prueba el bot **30 días gratis en una cuenta DEMO** de tu broker. Esa es la única prueba real de fuego."
+    },
+    {
+        keywords: ["diferencia", "copy trading", "copiar", "ea", "expert advisor", "señales", "señal"],
+        response: "🔄 **¿Nuestros Bots o CopyTrading?**\n\nEn el CopyTrading dependes de otro. Con nuestros **Expert Advisors (EAs)**:\n\n1. El software corre en TU PC o VPS.\n2. Nadie ve tus fondos.\n3. La ejecución es instantánea.\n4. Tú decides cuándo apagarlo o cambiar el riesgo.\n\nEs trading profesional bajo tu control, no una copia a ciegas."
     }
 ];
 
-const DEFAULT_RESPONSE = "Hmm, pues no tengo nada específico para eso en mi base de datos de momento, pero puedes revisar con calma nuestra sección de **FAQ** (Preguntas Frecuentes) donde casi seguro que encuentras la información que necesitas. ¿Puedo ayudarte con otra cosa sobre bots de trading?";
+const DEFAULT_RESPONSE = "Hmm, pues no tengo esa respuesta exacta en mi memoria 🤖, pero no te preocupes. \n\nHe aprendido mucho sobre **instalación, brokers, gestión de riesgo y VPS**. Prueba a preguntarme algo más específico sobre eso o visita nuestra sección de [Preguntas Frecuentes](/faq) donde tengo una base de datos mucho más amplia.";
 
 function getBotResponse(input: string): string {
     const lower = input.toLowerCase();
