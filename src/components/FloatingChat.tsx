@@ -48,8 +48,8 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
         response: "🔐 **Sistema de Protección Activo:**\n\nEl archivo comercial del bot se vincula a tu código de Cuenta particular de MetaTrader. Solo debes escribir este nº en las propiedades del bot, sección **'CuentaDemo'** o **'CuentaReal'**.\n\n👉 De esta manera, nadie podrá robar tu inversión. Al arrastrarlo al gráfico él se autorizará automáticamente."
     },
     {
-        keywords: ["instalar", "instalación", "mt5", "metatrader", "cómo lo instalo", "archivos", "mq5"],
-        response: "📋 **Puesta a punto (MetaTrader 5):**\n\n1. En MT5: Archivo → Abrir carpeta de datos.\n2. Ve a MQL5 → Experts y pega ahí el archivo `.mq5`\n3. Presiona F4 para abrir el Compilador MetaEditor.\n4. Presiona F7 para Compilarlo. (Sin errores).\n5. ¡Listo! Vuelve a MT5, activa el AutoTrading (botón de arriba) y arrastra el experto al gráfico."
+        keywords: ["instalar", "instalación", "instalacion", "instala", "instalo", "mt5", "metatrader", "cómo lo instalo", "archivos", "mq5"],
+        response: "📋 **Puesta a punto (MetaTrader 5):**\n\n1. En MT5: Archivo → Abrir carpeta de datos.\n2. Ve a MQL5 → Experts y pega ahí el archivo `.mq5`\n3. Presiona F4 para abrir el Compilador MetaEditor.\n4. Presiona F7 para Compilarlo. (Sin errores).\n5. ¡Listo! Vuelve a MT5, activa el AutoTrading (botón de arriba) and arrastra el experto al gráfico."
     },
     {
         keywords: ["gratis", "demo", "trial", "mes gratis", "free", "prueba"],
@@ -172,7 +172,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
         response: "🔄 **¿Nuestros Bots o CopyTrading?**\n\nEn el CopyTrading dependes de otro. Con nuestros **Expert Advisors (EAs)**:\n\n1. El software corre en TU PC o VPS.\n2. Nadie ve tus fondos.\n3. La ejecución es instantánea.\n4. Tú decides cuándo apagarlo o cambiar el riesgo.\n\nEs trading profesional bajo tu control, no una copia a ciegas."
     },
     {
-        keywords: ["cómo descargar", "como descargar", "bajar el bot", "donde esta el archivo", "dónde está el archivo", "descarga mi bot"],
+        keywords: ["descargar", "descarga", "descargan", "cómo descargar", "como descargar", "bajar el bot", "donde esta el archivo", "dónde está el archivo", "descarga mi bot"],
         response: "📥 **¿Cómo descargar tus bots?**\n\nEs instantáneo. Una vez activas una prueba o realizas una compra, ve a **[Mi Panel]** (o 'Dashboard'). \n\nAllí verás el botón de **'Descargar .ex5'** para cada uno de tus bots. Recuerda que también incluimos el manual en PDF para que no te pierdas nada."
     },
     {
@@ -205,11 +205,42 @@ const DEFAULT_RESPONSE = "Hmm, pues no tengo esa respuesta exacta en mi memoria 
 
 function getBotResponse(input: string): string {
     const lower = input.toLowerCase();
+    
+    // Prioridad 1: Match exacto de frases o palabras clave largas
     for (const item of BOT_RESPONSES) {
         if (item.keywords.some(k => lower.includes(k))) {
             return item.response;
         }
     }
+
+    // Prioridad 2: Buscar raíces de palabras (fuzzy match simple)
+    const roots = [
+        { root: "descarg", block: "descargar" },
+        { root: "instal", block: "instalar" },
+        { root: "pag", block: "pago" },
+        { root: "vps", block: "vps" },
+        { root: "broker", block: "broker" },
+        { root: "oro", block: "ametralladora" },
+        { root: "xau", block: "ametralladora" },
+        { root: "bitcoin", block: "bitcoin" },
+        { root: "btc", block: "bitcoin" },
+        { root: "eur", block: "euro" },
+        { root: "yen", block: "yen" },
+        { root: "jpy", block: "yen" },
+        { root: "gratis", block: "gratis" },
+        { root: "demo", block: "gratis" },
+        { root: "bot", block: "que bots hay" },
+        { root: "robot", block: "que bots hay" },
+        { root: "compr", block: "pago" }
+    ];
+
+    for (const r of roots) {
+        if (lower.includes(r.root)) {
+            const match = BOT_RESPONSES.find(item => item.keywords.includes(r.block));
+            if (match) return match.response;
+        }
+    }
+
     return DEFAULT_RESPONSE;
 }
 
