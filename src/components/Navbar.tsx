@@ -28,7 +28,7 @@ export function Navbar() {
     // Close menu on resize if screen becomes large
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth >= 1024) {
+            if (window.innerWidth >= 1024) { // lg breakpoint
                 setIsMenuOpen(false);
             }
         };
@@ -36,30 +36,29 @@ export function Navbar() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
     return (
-        <header className="fixed top-0 left-0 right-0 w-full z-[70] transition-all duration-300 overflow-hidden">
+        <header className="fixed top-0 left-0 right-0 w-full z-[70] transition-all duration-300">
             <div className="absolute inset-0 bg-bg-dark/90 backdrop-blur-xl border-b border-white/5"></div>
 
             <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between w-full relative z-10">
 
                 {/* LOGO & BUTTON STACK - Ultra-Mobile Fix */}
                 <div className="flex flex-col items-start gap-1 flex-shrink-0 z-20">
-                    <Link href="/" className="flex items-center gap-1.5 flex-shrink-0 group">
-                        <div className="w-8 h-8 rounded-xl overflow-hidden shadow-lg bg-black border border-white/5">
+                    <Link href="/" className="flex items-center gap-2 flex-shrink-0 group pointer-events-auto">
+                        <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg bg-black border border-white/5 transition-transform group-hover:scale-110">
                             <img src="/logo-kopytrading.png" alt="Logo" className="w-full h-full object-cover" />
                         </div>
-                        {/* Always hide text on mobile/tablet to give space to menu */}
-                        <span className="font-black text-sm tracking-tighter uppercase text-white hidden xl:block">KopyTrading</span>
+                        <span className="font-black text-base tracking-tighter uppercase text-white hidden lg:block">KopyTrading</span>
                     </Link>
                     
-                    <Link href="/bots" className="xl:hidden">
-                        <Button variant="accent" size="sm" className="text-[9px] font-black uppercase h-6 px-3 rounded-full shadow-lg">
+                    <Link href="/bots" className="lg:hidden">
+                        <Button variant="accent" size="sm" className="text-[10px] font-black uppercase h-7 px-4 rounded-full shadow-lg">
                             VER BOTS
                         </Button>
                     </Link>
                 </div>
 
-                {/* Desktop Nav - Only for XL+ (1280px+) */}
-                <nav className="hidden xl:flex items-center gap-8 ml-6">
+                {/* Desktop Nav - Only for LG+ (1024px+) */}
+                <nav className="hidden lg:flex items-center gap-8 ml-6">
                     <Link href="/bots" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/bots" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Marketplace</Link>
                     <Link href="/activos" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/activos" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Activos</Link>
                     {isLoggedIn && (
@@ -68,17 +67,17 @@ export function Navbar() {
                 </nav>
 
                 <div className="flex items-center gap-4">
-                    {/* PC View Button stays here for XL+ */}
-                    <Link href="/bots" className="hidden xl:block">
+                    {/* PC View Button stays here for LG+ */}
+                    <Link href="/bots" className="hidden lg:block">
                         <Button variant="accent" size="sm" className="text-xs font-black uppercase px-6 rounded-full shadow-lg shadow-brand/20">
                             VER BOTS
                         </Button>
                     </Link>
 
-                    {/* Mobile Menu Toggle - Responsive Below XL */}
+                    {/* Mobile Menu Toggle - Responsive Below LG */}
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="xl:hidden w-12 h-12 flex flex-col items-center justify-center gap-1.5 focus:outline-none z-[110] rounded-2xl bg-brand text-white shadow-2xl active:scale-90 transition-all border border-white/10"
+                        className="lg:hidden w-12 h-12 flex flex-col items-center justify-center gap-1.5 focus:outline-none z-[110] rounded-2xl bg-brand text-white shadow-2xl active:scale-90 transition-all border border-white/10"
                         aria-label="Menu"
                     >
                         <div className="relative w-6 h-5">
@@ -90,8 +89,8 @@ export function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile Menu Overlay - Active below XL */}
-            <div className={`xl:hidden fixed inset-0 z-[60] transition-all duration-500 flex flex-col ${isMenuOpen ? "visible opacity-100" : "invisible opacity-0"}`}>
+            {/* Mobile Menu Overlay - Active below LG */}
+            <div className={`lg:hidden fixed inset-0 z-[60] transition-all duration-500 flex flex-col ${isMenuOpen ? "visible opacity-100" : "invisible opacity-0"}`}>
                 <div className="absolute inset-0 bg-bg-dark/98 backdrop-blur-2xl"></div>
                 
                 {/* Explicit Close Button inside menu */}

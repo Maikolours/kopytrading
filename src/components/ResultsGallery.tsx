@@ -37,17 +37,6 @@ export function ResultsGallery() {
       <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-accent/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-success/10 border border-success/20 text-success text-xs font-semibold tracking-widest uppercase mb-4">
-            <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
-            Resultados Transparentes
-          </div>
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-white mb-6">Pruebas en Real</h2>
-          <p className="text-text-muted text-lg max-w-2xl mx-auto font-light">
-            No solo vendemos código, operamos con él. Mira cómo se comportan nuestros bots en condiciones de mercado reales.
-          </p>
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {RESULTS_VIDEOS.map((video) => (
             <div 
@@ -108,17 +97,6 @@ export function ResultsGallery() {
           </div>
         </div>
 
-        {/* Aviso de seguridad sobre Drive */}
-        <div className="mt-20 p-6 rounded-2xl bg-brand/5 border border-brand/10 flex flex-col md:flex-row items-center gap-6">
-          <div className="text-3xl">ℹ️</div>
-          <div>
-            <h4 className="text-white font-bold mb-1">Nota sobre Reproducción</h4>
-            <p className="text-text-muted text-sm font-light">
-              Estamos utilizando Google Drive para estas demostraciones iniciales. Si el video no carga correctamente, asegúrate de tener cookies de terceros habilitadas o 
-              <a href="https://drive.google.com/file/d/13zwGUwrmkxOYEKrOd3TVYSwd8xqa9-be/view?usp=sharing" target="_blank" className="text-brand-light hover:underline ml-1">verlo directamente en Drive</a>.
-            </p>
-          </div>
-        </div>
       </div>
     </section>
   );
