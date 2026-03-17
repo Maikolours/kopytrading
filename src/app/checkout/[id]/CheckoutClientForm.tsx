@@ -107,7 +107,7 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
                     throw new Error("Error registrando la compra");
                 }
             } catch (err) {
-                setError("Pago recibido con éxito, pero hubo un error al crear tu cuenta. Contacta a soporte@kopytrading.com");
+                setError("Pago recibido con éxito, pero hubo un error inesperado al activar tu cuenta. Por favor, revisa tu conexión y vuelve a intentarlo o espera unos minutos.");
             }
         });
     }

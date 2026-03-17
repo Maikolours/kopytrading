@@ -167,18 +167,6 @@ export default function FAQPage() {
                         </div>
                     ))}
                 </div>
-
-                {/* CTA Bottom */}
-                <div className="mt-20 text-center glass-card border border-white/10 rounded-2xl p-10">
-                    <h3 className="text-2xl font-bold text-white mb-3">¿Tienes más dudas?</h3>
-                    <p className="text-text-muted mb-6">Nuestro equipo está disponible para resolver todas tus preguntas antes de que decidas invertir.</p>
-                    <a
-                        href="mailto:soporte@kopytrading.com"
-                        className="inline-block px-8 py-3 rounded-xl bg-brand text-white font-semibold hover:bg-brand-light transition-colors"
-                    >
-                        Contactar Soporte
-                    </a>
-                </div>
             </div>
         </div>
     );

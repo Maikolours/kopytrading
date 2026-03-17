@@ -57,7 +57,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["pago", "comprar", "stripe", "paypal", "bizum", "cómo pago", "tarjeta", "pagar"],
-        response: "💳 **Métodos de Compra:**\n\nPronto implementaremos Stripe directo, PayPal Express y otras pasarelas.\nSi no puedes esperar a llevarte un bot para tu cuenta Real, contáctanos en **soporte@kopytrading.com** y te habilitamos el pago manual mediante tarjeta, transferencia o wallet cripto."
+        response: "💳 **Métodos de Compra:**\n\nPronto implementaremos Stripe directo, PayPal Express y otras pasarelas. Nuestros bots son de pago único sin suscripciones mensuales."
     },
     {
         keywords: ["no funciona", "error", "problema", "ayuda", "bug", "fallo", "cuenta no autorizada"],
@@ -134,10 +134,6 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     {
         keywords: ["actualización", "update", "versión nueva", "version", "upgrade"],
         response: "🔄 **Mantenimiento Cero Costes Ocultos:**\n\nNuestro panel de control está alimentado por DB moderna, en cuanto despachemos una variante v3 del Ametralladora para mejorar eficiencia... los compradores anteriores se lo bajan de su Dashboard GRATIS por siempre."
-    },
-    {
-        keywords: ["soporte", "contacto", "email", "ticket", "hablar con"],
-        response: "📩 **Contacto y Asistencia Personal de Traders para Traders:**\n\nMándanos tu duda, captura de logs técnicos, capturas del terminal.. no te cortes, estamos para ti 24h a soporte@kopytrading.com y tu caso será mirado bajo lupa (Sin IA intermedio, soporte humano 100%)."
     },
     {
         keywords: ["cuál opera más", "quien opera más", "cual opera mas", "mas veces", "más operaciones", "mayor frecuencia", "opera mucho", "más rápido", "mas rapido", "el bot mas rapido", "el más rápido"],
