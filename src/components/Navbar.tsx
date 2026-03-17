@@ -104,10 +104,10 @@ export function Navbar() {
                 </button>
 
                 <div className="relative z-10 flex-1 flex flex-col pt-24 px-10 gap-5 items-center justify-center text-center">
-                    <Link onClick={() => setIsMenuOpen(false)} href="/bots" className="text-xl font-black text-white uppercase tracking-[0.2em] hover:text-brand-light transition-colors">Marketplace</Link>
-                    <Link onClick={() => setIsMenuOpen(false)} href="/activos" className="text-xl font-black text-white uppercase tracking-[0.2em] hover:text-brand-light transition-colors">Activos</Link>
-                    <Link onClick={() => setIsMenuOpen(false)} href="/activos#resultados" className="text-xl font-bold text-white/40 uppercase tracking-widest hover:text-brand-light transition-colors">Resultados</Link>
-                    <Link onClick={() => setIsMenuOpen(false)} href="/como-funciona" className="text-xl font-bold text-white/40 uppercase tracking-widest hover:text-brand-light transition-colors">Cómo Funciona</Link>
+                    <Link onClick={() => setIsMenuOpen(false)} href="/bots" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/bots" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Marketplace</Link>
+                    <Link onClick={() => setIsMenuOpen(false)} href="/activos" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/activos" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Activos</Link>
+                    <Link onClick={() => setIsMenuOpen(false)} href="/activos#resultados" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/activos#resultados" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Resultados</Link>
+                    <Link onClick={() => setIsMenuOpen(false)} href="/como-funciona" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/como-funciona" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Cómo Funciona</Link>
                     {isLoggedIn && (
                         <Link onClick={() => setIsMenuOpen(false)} href="/dashboard" className="text-xl font-bold text-brand-light uppercase tracking-widest hover:text-white transition-colors">Mi Panel</Link>
                     )}

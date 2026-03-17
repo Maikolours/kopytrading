@@ -56,11 +56,11 @@ export default function ActivosPage() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/10 border border-brand/20 text-brand-light text-xs font-semibold tracking-widest uppercase mb-6">
             Ecosistema de Trading
           </div>
-          <h1 className="text-4xl sm:text-7xl font-black text-white mb-6 uppercase tracking-tighter italic leading-none">
+          <h1 className="text-3xl sm:text-7xl font-black text-white mb-4 uppercase tracking-tighter italic leading-none">
             Nuestros <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-accent">Activos</span>
           </h1>
 
-          <p className="text-text-muted text-lg max-w-2xl mx-auto mb-16 font-light">
+          <p className="text-text-muted text-base sm:text-lg max-w-2xl mx-auto mb-10 font-light">
             No operamos todo el mercado, solo donde la ventaja estadística es real. Descubre los instrumentos que hemos masterizado para ti.
           </p>
 
@@ -69,14 +69,14 @@ export default function ActivosPage() {
               <Link 
                 key={i} 
                 href={`/bots?asset=${asset.id}`}
-                className={`glass-card border-2 ${asset.color} rounded-[2rem] p-6 sm:p-8 text-center hover:scale-[1.02] transition-all group relative overflow-hidden flex flex-col items-center justify-between min-h-[350px] shadow-2xl`}
+                className={`glass-card border-2 ${asset.color} rounded-[1.5rem] p-5 sm:p-8 text-center hover:scale-[1.02] transition-all group relative overflow-hidden flex flex-col items-center justify-between min-h-[300px] sm:min-h-[350px] shadow-2xl`}
               >
 
                 <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
                 
                 <div className="relative z-10">
-                  <div className="text-6xl mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">{asset.icon}</div>
-                  <h3 className="text-white font-black text-2xl mb-4 group-hover:text-brand-light transition-colors uppercase tracking-tight">{asset.name}</h3>
+                  <div className="text-5xl sm:text-6xl mb-4 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">{asset.icon}</div>
+                  <h3 className="text-white font-black text-xl sm:text-2xl mb-3 group-hover:text-brand-light transition-colors uppercase tracking-tight">{asset.name}</h3>
                   <p className="text-text-muted text-sm leading-relaxed mb-6 font-light">{asset.desc}</p>
                 </div>
 

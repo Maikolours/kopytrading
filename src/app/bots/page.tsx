@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardTitle, CardHeader, CardFooter } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { Countdown } from "@/components/Countdown";
 
 export const dynamic = "force-dynamic";
 
@@ -134,14 +135,14 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                 )}
 
                                 {bot.status === "UPCOMING" && (
-                                    <div className="absolute inset-0 z-20 bg-brand-dark/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
+                                    <div className="absolute inset-0 z-20 bg-brand-dark/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
                                         <div className="w-16 h-16 rounded-full bg-brand/20 flex items-center justify-center mb-4 border border-brand/30 animate-pulse">
                                             <span className="text-3xl">🚀</span>
                                         </div>
-                                        <h4 className="text-xl font-bold text-white mb-1 uppercase tracking-tighter italic">Próximamente</h4>
-                                        <div className="bg-black/40 px-6 py-4 rounded-xl border border-white/10 font-black text-xs text-brand-light uppercase tracking-widest">
-                                            Lanzamiento en breves
-                                        </div>
+                                        <h4 className="text-xl font-black text-white mb-1 uppercase tracking-tighter italic">Próximo Lanzamiento</h4>
+                                        <p className="text-[10px] text-brand-light font-bold mb-4 uppercase tracking-[0.2em]">{bot.name.includes("Ametralladora") ? "Ametralladora Evolution" : bot.name.includes("BTC") ? "Storm Rider 6.6" : "Nuevo Bot"}</p>
+                                        <Countdown targetDate="2026-03-24T22:00:00" />
+                                        <div className="mt-6 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-colors border-b border-white/10 pb-1">Permanece atento</div>
                                     </div>
                                 )}
                             </CardContent>
