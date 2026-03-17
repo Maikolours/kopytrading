@@ -170,6 +170,34 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     {
         keywords: ["diferencia", "copy trading", "copiar", "ea", "expert advisor", "señales", "señal"],
         response: "🔄 **¿Nuestros Bots o CopyTrading?**\n\nEn el CopyTrading dependes de otro. Con nuestros **Expert Advisors (EAs)**:\n\n1. El software corre en TU PC o VPS.\n2. Nadie ve tus fondos.\n3. La ejecución es instantánea.\n4. Tú decides cuándo apagarlo o cambiar el riesgo.\n\nEs trading profesional bajo tu control, no una copia a ciegas."
+    },
+    {
+        keywords: ["cómo descargar", "como descargar", "bajar el bot", "donde esta el archivo", "dónde está el archivo", "descarga mi bot"],
+        response: "📥 **¿Cómo descargar tus bots?**\n\nEs instantáneo. Una vez activas una prueba o realizas una compra, ve a **[Mi Panel]** (o 'Dashboard'). \n\nAllí verás el botón de **'Descargar .ex5'** para cada uno de tus bots. Recuerda que también incluimos el manual en PDF para que no te pierdas nada."
+    },
+    {
+        keywords: ["que bots hay", "qué bots hay", "cuales teneis", "cuáles tenéis", "cuales son", "cuáles son", "lista de bots", "catálogo", "catalogo"],
+        response: "🤖 **Nuestros 4 Especialistas:**\n\n1. **La Ametralladora (XAUUSD)**: Scalping agresivo en Oro. ($$$)\n2. **Euro Precision Flow (EURUSD)**: El más seguro y estable. (✅)\n3. **Yen Ninja Ghost (USDJPY)**: Estrategia nocturna para Asia. (🥷)\n4. **BTC Storm Rider (BTCUSD)**: Solo para expertos en Bitcoin. (⚡)\n\nPuedes ver los detalles de cada uno en la sección de **Bots** de la web."
+    },
+    {
+        keywords: ["capital minimo", "capital mínimo", "cuanto dinero necesito", "cuánto dinero necesito", "deposito minimo", "depósito mínimo"],
+        response: "💰 **Capital Mínimo Recomendado:**\n\n• **Euro Precision**: 500$\n• **Yen Ninja**: 500$\n• **La Ametralladora**: 1.000$\n• **BTC Storm Rider**: 2.000$\n\n*Nota: Operamos con lotajes mínimos de 0.01. Tener este capital te permite aguantar retrocesos del mercado con seguridad.*"
+    },
+    {
+        keywords: ["mql5 vs mql4", "por que mt5", "por qué mt5", "funciona en mt4", "metatrader 4"],
+        response: "⚙️ **¿Por qué usamos MetaTrader 5 (MT5)?**\n\nMT5 es el estándar moderno. Es más rápido, permite ejecutar más hilos en el procesador y su probador de estrategias (Backtest) es infinitamente más preciso que el de MT4. \n\nNo desarrollamos para MT4 porque es una plataforma obsoleta para el trading algorítmico institucional."
+    },
+    {
+        keywords: ["varios graficos", "varias cuentas", "mas de un bot", "más de un bot", "combinar", "varios bots a la vez"],
+        response: "🔀 **¿Puedo usar varios bots a la vez?**\n\n¡Por supuesto! \n1. Abre un gráfico para cada par (ej. uno de Oro y otro de Euro).\n2. Arrastra a cada uno su respectivo bot.\n3. Asegúrate de tener capital suficiente para ambos.\n\nCada bot operará de forma independiente sin estorbar al otro."
+    },
+    {
+        keywords: ["ajustes", "parametros", "parámetros", "cambiar lotaje", "riesgo", "configuracion", "configuración"],
+        response: "🛠️ **Personalización (Inputs):**\n\nAl arrastrar el bot, verás una pestaña de **'Parámetros de Entrada'**. Aquí puedes:\n• Ajustar el **Lotaje** (recomendamos 0.01).\n• Activar/Desactivar el **Auto-Hedge**.\n• Cambiar el **Daily Stop Loss**.\n\nVienen optimizados por defecto, pero tú tienes el control final."
+    },
+    {
+        keywords: ["donde abro cuenta", "donde me registro", "registro", "crear cuenta"],
+        response: "👤 **Acceso a KopyTrading:**\n\nNo necesitas un botón de registro previo. Al pulsar en **'Probar Gratis'** o comprar un bot, el sistema te pedirá tu email y te creará la cuenta automáticamente. Recibirás tus datos de acceso al instante."
     }
 ];
 

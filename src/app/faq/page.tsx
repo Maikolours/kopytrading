@@ -164,8 +164,6 @@ export default function FAQPage() {
                                     <AccordionItem key={ii} question={item.q} answer={item.a} />
                                 ))}
                             </div>
-                        </div>
-                    ))}
                 </div>
             </div>
         </div>
