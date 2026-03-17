@@ -38,9 +38,25 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                     }`}>Riesgo {bot.riskLevel}</span>
                             </div>
 
-                            <div className="prose prose-invert max-w-none">
+                            <div className="prose prose-invert max-w-none relative">
                                 <h3 className="text-xl font-semibold mb-2">Descripción de la Estrategia</h3>
                                 <p className="text-text-muted leading-relaxed whitespace-pre-wrap">{bot.description}</p>
+                                
+                                {/* STATUS OVERLAYS for Detail Page */}
+                                {bot.status === "MAINTENANCE" && (
+                                    <div className="absolute inset-x-0 -bottom-4 z-20 bg-amber-500/10 backdrop-blur-sm border border-amber-500/30 rounded-xl p-4 text-center">
+                                        <p className="text-amber-400 font-bold flex items-center justify-center gap-2">
+                                            <span>🛠️</span> ESTAMOS EN MANTENIMIENTO TÉCNICO
+                                        </p>
+                                    </div>
+                                )}
+                                {bot.status === "UPCOMING" && (
+                                    <div className="absolute inset-x-0 -bottom-4 z-20 bg-brand/10 backdrop-blur-sm border border-brand/30 rounded-xl p-4 text-center animate-pulse">
+                                        <p className="text-brand-light font-bold flex items-center justify-center gap-2">
+                                            <span>🚀</span> LANZAMIENTO PRÓXIMAMENTE - ¡PREPÁRATE!
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -173,17 +189,33 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             </div>
 
                             <div className="space-y-3">
-                                <Link href={`/checkout/${bot.id}`} className="block">
-                                    <Button size="lg" fullWidth className="text-lg py-6 shadow-[0_0_20px_rgba(139,92,246,0.5)]">
-                                        Comprar y Descargar
-                                    </Button>
-                                </Link>
+                                {bot.status === 'ACTIVE' ? (
+                                    <>
+                                        <Link href={`/checkout/${bot.id}`} className="block">
+                                            <Button size="lg" fullWidth className="text-lg py-6 shadow-[0_0_20px_rgba(139,92,246,0.5)]">
+                                                Comprar y Descargar
+                                            </Button>
+                                        </Link>
 
-                                <Link href={`/checkout/${bot.id}?trial=true`} className="block">
-                                    <Button size="lg" variant="outline" fullWidth className="py-6 border-success/40 text-success hover:bg-success/10 hover:border-success/60">
-                                        🎁 Probar Gratis 30 Días
-                                    </Button>
-                                </Link>
+                                        <Link href={`/checkout/${bot.id}?trial=true`} className="block">
+                                            <Button size="lg" variant="outline" fullWidth className="py-6 border-success/40 text-success hover:bg-success/10 hover:border-success/60">
+                                                🎁 Probar Gratis 30 Días
+                                            </Button>
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <div className="space-y-4">
+                                        <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+                                            <p className="text-sm text-text-muted mb-1">Este bot no admite compras actualmente</p>
+                                            <p className="font-bold text-white uppercase italic">
+                                                {bot.status === 'MAINTENANCE' ? 'En Mantenimiento' : 'Próximamente'}
+                                            </p>
+                                        </div>
+                                        <Button disabled size="lg" fullWidth className="py-6 opacity-30 grayscale cursor-not-allowed">
+                                            {bot.status === 'MAINTENANCE' ? 'No disponible' : 'Próximamente...'}
+                                        </Button>
+                                    </div>
+                                )}
                             </div>
 
                             <p className="text-center text-xs text-text-muted mt-4">
