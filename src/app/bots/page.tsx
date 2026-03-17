@@ -37,38 +37,15 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                 </Link>
             </div>
 
-            {/* === BANNER PRUEBA GRATIS === */}
-            <div className="max-w-7xl mx-auto mb-10">
-                <Link href="#bot-catalog" className="block group">
-                    <div className="relative overflow-hidden rounded-2xl border border-brand/40 bg-gradient-to-r from-brand/20 via-brand-dark/30 to-brand/20 p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-brand-light/60 transition-all duration-300 hover:shadow-[0_0_40px_rgba(139,92,246,0.3)]">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/5 to-transparent animate-gradient-sweep pointer-events-none" />
 
-                        <div className="flex items-center gap-4 z-10">
-                            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-success to-emerald-600 flex items-center justify-center shadow-lg shadow-success/30 flex-shrink-0">
-                                <span className="text-2xl sm:text-3xl">🎁</span>
-                            </div>
-                            <div>
-                                <h2 className="text-base sm:text-lg font-bold text-white">Prueba cualquier Bot GRATIS durante 30 días</h2>
-                                <p className="text-xs sm:text-sm text-text-muted">Sin tarjeta de crédito · Sin compromiso · Acceso completo al bot</p>
-                            </div>
-                        </div>
-                        <div className="flex-shrink-0 z-10">
-                            <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-success text-white font-semibold text-sm shadow-lg shadow-success/30 group-hover:bg-emerald-500 transition-colors">
-                                Empezar Prueba Gratis →
-                            </span>
-                        </div>
-                    </div>
-                </Link>
-            </div>
-
-            <div id="bot-catalog" className="max-w-7xl mx-auto mb-10 border-b border-white/10 pb-8">
+            <div id="bot-catalog" className="max-w-7xl mx-auto mb-10 border-b border-white/10 pb-8 text-center">
                 <div className="mb-6">
-                    <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-2 uppercase italic">Marketplace de Bots</h1>
+                    <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tighter mb-4 uppercase italic">Marketplace de Bots</h1>
 
-                    <p className="text-text-muted">Encuentra los algoritmos más precisos para MetaTrader 5.</p>
+                    <p className="text-text-muted text-lg max-w-2xl mx-auto font-light">Encuentra los algoritmos más precisos para MetaTrader 5.</p>
                 </div>
 
-                <div className="flex flex-wrap gap-2 md:gap-3">
+                <div className="flex flex-wrap gap-2 md:gap-3 justify-center">
                     {categories.map((cat) => (
                         <Link key={cat.id} href={cat.id ? `/bots?asset=${cat.id}` : "/bots"}>
                             <span className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${(asset === cat.id || (!asset && cat.id === ""))
@@ -92,7 +69,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                     <Link href="/bots"><Button variant="outline">Ver todos los bots</Button></Link>
                 </div>
             ) : (
-                <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ${bots.length < 3 ? 'justify-center max-w-4xl mx-auto' : ''}`}>
+                <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6`}>
                     {bots.map((bot: any) => (
                         <Card key={bot.id} interactive className="flex flex-col h-full bg-surface-light/20">
                             <CardHeader>
@@ -162,11 +139,9 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                             <span className="text-3xl">🚀</span>
                                         </div>
                                         <h4 className="text-xl font-bold text-white mb-1 uppercase tracking-tighter italic">Próximamente</h4>
-                                        <p className="text-[10px] text-brand-light font-bold mb-4 uppercase tracking-widest">Disponible en:</p>
-                                        <div className="bg-black/40 px-4 py-2 rounded-xl border border-white/10 font-mono text-xl text-white">
-                                            7d 14h 22m
+                                        <div className="bg-black/40 px-6 py-4 rounded-xl border border-white/10 font-black text-xs text-brand-light uppercase tracking-widest">
+                                            Lanzamiento en breves
                                         </div>
-                                        <button className="mt-6 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-colors border-b border-white/10 pb-1">Notificarme al lanzar</button>
                                     </div>
                                 )}
                             </CardContent>

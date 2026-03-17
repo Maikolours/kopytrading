@@ -44,33 +44,22 @@ export default function Home() {
 
       <main className="flex-1 flex flex-col relative pt-28 sm:pt-32 z-10">
 
-        {/* === BANNER PRUEBA GRATIS === */}
-        <section className="px-4 sm:px-6 lg:px-8 mt-4 mb-2">
+        {/* === AVISO DE MANTENIMIENTO / LANZAMIENTO === */}
+        <section className="px-4 mt-6">
           <div className="max-w-4xl mx-auto">
-            <Link href="/bots" className="block group">
-              <div className="relative overflow-hidden rounded-2xl border border-brand/30 bg-gradient-to-r from-brand/10 via-brand-dark/20 to-brand/10 p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-brand-light/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(139,92,246,0.2)]">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/5 to-transparent animate-gradient-sweep pointer-events-none" />
-                <div className="flex items-center gap-4 z-10">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-success to-emerald-600 flex items-center justify-center shadow-lg shadow-success/30 flex-shrink-0">
-                    <span className="text-2xl">🎁</span>
-                  </div>
-                  <div className="text-left">
-                    <h2 className="text-sm sm:text-base font-black text-white uppercase italic">Prueba Gratis 30 Días</h2>
-                    <p className="text-[10px] sm:text-xs text-text-muted">Acceso completo a cualquier bot · Sin tarjeta</p>
-                  </div>
-                </div>
-                <div className="flex-shrink-0 z-10">
-                  <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-success text-white font-black text-xs shadow-lg shadow-success/30 group-hover:bg-emerald-500 transition-all uppercase tracking-widest">
-                    Empezar →
-                  </span>
-                </div>
+            <div className="bg-brand/5 border border-brand/20 rounded-2xl p-4 flex items-center gap-4 backdrop-blur-md">
+              <div className="w-10 h-10 rounded-full bg-brand/20 flex items-center justify-center flex-shrink-0 animate-pulse">
+                <span className="text-xl">📢</span>
               </div>
-            </Link>
+              <p className="text-sm text-white/80 font-light">
+                <strong className="text-brand-light">AVISO:</strong> Nuestros bots están en mantenimiento técnico. En pocos días lanzaremos <span className="text-brand-light font-bold">La Ametralladora Evolution</span> y <span className="text-brand-light font-bold">BTC Storm Rider</span>. ¡Permanece atento!
+              </p>
+            </div>
           </div>
         </section>
 
         {/* === HERO === */}
-        <section className="flex items-center px-4 sm:px-6 lg:px-8 py-10 md:py-20 hero-section relative">
+        <section className="flex items-center px-4 sm:px-6 lg:px-8 py-10 md:py-16 hero-section relative">
           <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 items-center">
 
             {/* Texto Hero */}
@@ -142,6 +131,31 @@ export default function Home() {
               </div>
             </div>
 
+          </div>
+        </section>
+
+        {/* === BANNER PRUEBA GRATIS (RESERVED FOR BELOW HERO) === */}
+        <section className="px-4 sm:px-6 lg:px-8 mb-12">
+          <div className="max-w-5xl mx-auto">
+            <Link href="/bots" className="block group">
+              <div className="relative overflow-hidden rounded-3xl border border-brand/40 bg-gradient-to-r from-brand/20 via-brand-dark/30 to-brand/20 p-6 sm:p-8 flex flex-col lg:flex-row items-center justify-between gap-6 hover:border-brand-light/60 transition-all duration-300 hover:shadow-[0_0_50px_rgba(139,92,246,0.3)]">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/5 to-transparent animate-gradient-sweep pointer-events-none" />
+                <div className="flex items-center gap-6 z-10">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-success to-emerald-600 flex items-center justify-center shadow-lg shadow-success/40 flex-shrink-0">
+                    <span className="text-3xl sm:text-4xl">🎁</span>
+                  </div>
+                  <div className="text-left">
+                    <h2 className="text-xl sm:text-2xl font-black text-white uppercase italic mb-1 tracking-tight">Prueba cualquier Bot GRATIS</h2>
+                    <p className="text-sm sm:text-base text-text-muted font-light">Acceso completo durante 30 días · Sin tarjeta de crédito · Sin compromiso</p>
+                  </div>
+                </div>
+                <div className="flex-shrink-0 z-10 w-full lg:w-auto">
+                  <span className="block text-center lg:inline-flex items-center gap-3 px-10 py-5 rounded-2xl bg-success text-white font-black text-sm shadow-xl shadow-success/30 group-hover:bg-emerald-500 transition-all uppercase tracking-[0.15em]">
+                    Empezar Ahora →
+                  </span>
+                </div>
+              </div>
+            </Link>
           </div>
         </section>
 

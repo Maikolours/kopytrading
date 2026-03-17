@@ -110,7 +110,7 @@ export default function ActivosPage() {
       <section className="py-32 px-4 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-brand/5 backdrop-blur-3xl -z-10" />
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl sm:text-5xl font-black text-white mb-6 italic uppercase tracking-tighter leading-none">
+          <h1 className="text-2xl sm:text-4xl font-black text-white mb-6 italic uppercase tracking-wider leading-tight">
             La consistencia no es suerte, <br />es <span className="text-brand-light underline decoration-brand/30 underline-offset-8">matemática</span>.
           </h1>
           <p className="text-text-muted text-base mb-10 max-w-xl mx-auto font-light">

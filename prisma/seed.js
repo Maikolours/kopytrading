@@ -67,21 +67,6 @@ async function main() {
             pdfFilePath: '/uploads/Manual_BTCStormRider.pdf',
             isActive: true,
             status: 'UPCOMING',
-        },
-        {
-            name: 'GoldSentinel Pro 🛡️ (XAUUSD)',
-            description: '🛠️ **EN MANTENIMIENTO TÉCNICO**\n\n🧠 El sistema de Multi-Confirmación trend-following está siendo actualizado con nuevos filtros ATR dinámicos para el 2026.',
-            instrument: 'XAUUSD',
-            strategyType: 'Multi-Confirmación Trend',
-            riskLevel: 'Medium',
-            price: 69.00,
-            version: '1.0',
-            timeframes: 'M30 (Recomendado), H1',
-            minCapital: 500,
-            ex5FilePath: '/uploads/KOPYTRADE_XAUUSD_GoldSentinelPro.mq5',
-            pdfFilePath: '/uploads/Manual_GoldSentinelPro.pdf',
-            isActive: true,
-            status: 'MAINTENANCE',
         }
     ];
 
