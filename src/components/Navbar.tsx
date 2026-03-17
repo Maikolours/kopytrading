@@ -43,11 +43,11 @@ export function Navbar() {
 
                 {/* LOGO & BUTTON STACK - Ultra-Mobile Fix */}
                 <div className="flex flex-col items-start gap-1 flex-shrink-0 z-20">
-                    <Link href="/" className="flex items-center gap-2 flex-shrink-0 group pointer-events-auto">
-                        <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg bg-black border border-white/5 transition-transform group-hover:scale-110">
+                    <Link href="/" className="flex items-center gap-3 flex-shrink-0 group pointer-events-auto">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden shadow-xl bg-black border border-white/10 transition-transform group-hover:scale-110">
                             <img src="/logo-kopytrading.png" alt="Logo" className="w-full h-full object-cover" />
                         </div>
-                        <span className="font-black text-base tracking-tighter uppercase text-white hidden lg:block">KopyTrading</span>
+                        <span className="font-black text-lg sm:text-2xl tracking-tighter uppercase text-white">KopyTrading</span>
                     </Link>
                     
                     <Link href="/bots" className="lg:hidden">
@@ -58,9 +58,11 @@ export function Navbar() {
                 </div>
 
                 {/* Desktop Nav - Only for LG+ (1024px+) */}
-                <nav className="hidden lg:flex items-center gap-8 ml-6">
+                <nav className="hidden lg:flex items-center gap-6 ml-6">
                     <Link href="/bots" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/bots" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Marketplace</Link>
                     <Link href="/activos" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/activos" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Activos</Link>
+                    <Link href="/como-funciona" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/como-funciona" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Cómo Funciona</Link>
+                    <Link href="/faq" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/faq" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>FAQ</Link>
                     {isLoggedIn && (
                         <Link href="/dashboard" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/dashboard" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Panel</Link>
                     )}
@@ -108,6 +110,7 @@ export function Navbar() {
                     <Link onClick={() => setIsMenuOpen(false)} href="/activos" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/activos" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Activos</Link>
                     <Link onClick={() => setIsMenuOpen(false)} href="/activos#resultados" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/activos#resultados" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Resultados</Link>
                     <Link onClick={() => setIsMenuOpen(false)} href="/como-funciona" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/como-funciona" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Cómo Funciona</Link>
+                    <Link onClick={() => setIsMenuOpen(false)} href="/faq" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/faq" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Preguntas</Link>
                     {isLoggedIn && (
                         <Link onClick={() => setIsMenuOpen(false)} href="/dashboard" className="text-xl font-bold text-brand-light uppercase tracking-widest hover:text-white transition-colors">Mi Panel</Link>
                     )}

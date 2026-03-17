@@ -49,6 +49,12 @@ export default function ActivosPage() {
       {/* Fondos decorativos */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand/5 blur-[150px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 blur-[120px] rounded-full pointer-events-none" />
+      
+      <div className="max-w-7xl mx-auto relative z-10 px-6 sm:px-6 lg:px-8 mb-4">
+          <Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-white transition-colors">
+              <span>←</span> Volver al inicio
+          </Link>
+      </div>
 
       <section className="px-6 sm:px-6 lg:px-8 mb-24 relative z-10">
 
