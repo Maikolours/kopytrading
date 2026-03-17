@@ -102,6 +102,9 @@ input double BE_Garantia_USD  = 1.5;
 //============================================================
 input group "=== TRAILING STOP ==="
 input int    Puntos_Minimos_Trailing  = 100;
+input bool   ActivarTrailing          = true;
+input double Trailing_Activar_USD     = 2.0;
+input double Trailing_Distancia_USD   = 2.0;
 
 //============================================================
 //  SMART HEDGE (RESCATE)
@@ -373,7 +376,11 @@ void ManageHedge() {
       double lot = LoteInicial * HedgeLoteMult;
       double price = (hedgeType == POSITION_TYPE_BUY) ? SymbolInfoDouble(_Symbol, SYMBOL_ASK) : SymbolInfoDouble(_Symbol, SYMBOL_BID);
       
-      if(trade.PositionOpen(_Symbol, hedgeType, NormalizeLot(lot), price, 0, 0, "BSR66_HEDGE")) {
+      bool res = false;
+      if(hedgeType == POSITION_TYPE_BUY) res = trade.Buy(NormalizeLot(lot), _Symbol, price, 0, 0, "BSR66_HEDGE");
+      else res = trade.Sell(NormalizeLot(lot), _Symbol, price, 0, 0, "BSR66_HEDGE");
+
+      if(res) {
          hedgeTicket = trade.ResultPosition();
          hedgeActive = true;
          SendTelegramMessage("🚑 BTC: SMART HEDGE ACTIVADO ($" + DoubleToString(netProfit, 2) + ")");
