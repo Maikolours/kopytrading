@@ -381,7 +381,7 @@ void ManageHedge() {
       else res = trade.Sell(NormalizeLot(lot), _Symbol, price, 0, 0, "BSR66_HEDGE");
 
       if(res) {
-         hedgeTicket = trade.ResultPosition();
+         hedgeTicket = trade.ResultOrder();
          hedgeActive = true;
          SendTelegramMessage("🚑 BTC: SMART HEDGE ACTIVADO ($" + DoubleToString(netProfit, 2) + ")");
       }
