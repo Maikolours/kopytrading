@@ -125,24 +125,24 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
 
                                 {/* STATUS OVERLAYS */}
                                 {bot.status === "MAINTENANCE" && (
-                                    <div className="absolute inset-0 z-20 bg-bg-dark/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-                                        <div className="w-16 h-16 rounded-full bg-amber-500/20 flex items-center justify-center mb-4 border border-amber-500/30">
+                                    <div className="absolute inset-0 z-20 bg-bg-dark/40 backdrop-blur-[2px] flex flex-col items-center justify-center p-6 text-center">
+                                        <div className="w-16 h-16 rounded-full bg-amber-500/40 flex items-center justify-center mb-4 border border-amber-500/50 shadow-lg shadow-amber-500/20">
                                             <span className="text-3xl">🛠️</span>
                                         </div>
-                                        <h4 className="text-xl font-bold text-white mb-2 uppercase tracking-tighter italic">Mantenimiento</h4>
-                                        <p className="text-sm text-text-muted">Estamos optimizando este bot. Volverá a estar disponible muy pronto.</p>
+                                        <h4 className="text-xl font-black text-white mb-2 uppercase tracking-tighter italic drop-shadow-lg">Mantenimiento</h4>
+                                        <p className="text-sm text-white font-medium drop-shadow-md bg-black/40 px-3 py-1 rounded-lg">Estamos optimizando este bot. Volverá pronto.</p>
                                     </div>
                                 )}
 
                                 {bot.status === "UPCOMING" && (
-                                    <div className="absolute inset-0 z-20 bg-brand-dark/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
-                                        <div className="w-16 h-16 rounded-full bg-brand/20 flex items-center justify-center mb-4 border border-brand/30 animate-pulse">
+                                    <div className="absolute inset-0 z-20 bg-brand-dark/40 backdrop-blur-[2px] flex flex-col items-center justify-center p-6 text-center">
+                                        <div className="w-16 h-16 rounded-full bg-brand/40 flex items-center justify-center mb-4 border border-brand/50 animate-pulse shadow-lg shadow-brand/20">
                                             <span className="text-3xl">🚀</span>
                                         </div>
-                                        <h4 className="text-xl font-black text-white mb-1 uppercase tracking-tighter italic">Próximo Lanzamiento</h4>
-                                        <p className="text-[10px] text-brand-light font-bold mb-4 uppercase tracking-[0.2em]">{bot.name.includes("Ametralladora") ? "Ametralladora Evolution" : bot.name.includes("BTC") ? "Storm Rider 6.6" : "Nuevo Bot"}</p>
+                                        <h4 className="text-xl font-black text-white mb-1 uppercase tracking-tighter italic drop-shadow-lg">Próximo Lanzamiento</h4>
+                                        <p className="text-[10px] text-brand-light font-bold mb-4 uppercase tracking-[0.2em] drop-shadow-md">{bot.name.includes("Ametralladora") ? "Ametralladora Evolution" : bot.name.includes("BTC") ? "Storm Rider 6.6" : "Nuevo Bot"}</p>
                                         <Countdown targetDate="2026-03-24T22:00:00" />
-                                        <div className="mt-6 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-colors border-b border-white/10 pb-1">Permanece atento</div>
+                                        <div className="mt-6 text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-white transition-colors border-b border-white/20 pb-1">Permanece atento</div>
                                     </div>
                                 )}
                             </CardContent>

@@ -1,6 +1,5 @@
-//+------------------------------------------------------------------+
-//|          KOPYTRADING_BTCUSD_BTCStormRider v6.4 ÉLITE             |
-//|   DISEÑO v5 COMPLETO | SL ESTRUCTURAL 5h | ATR REAL | MINIMIZAR  |
+//|          KOPYTRADING_BTCUSD_BTCStormRider v6.6 ÉLITE             |
+//|   DISEÑO v6 COMPLETO | SL ESTRUCTURAL 5h | ATR REAL | MINIMIZAR  |
 //+------------------------------------------------------------------+
 #property copyright "KOPYTRADE - Bot Oficial"
 //--- GENERADOR DE HASH PARA MAGIC NUMBER AUTOMATICO ---
@@ -9,9 +8,9 @@ uint GetHash(string text) {
    for(int i = 0; i < StringLen(text); i++) hash = ((hash << 5) + hash) + text[i];
    return hash & 0x7FFFFFFF;
 }
-#property version   "6.40"
+#property version   "6.60"
 #property strict
-#property description "BTC Storm Rider v6.4 | Edición Élite kopytrading.com"
+#property description "BTC Storm Rider v6.6 | Edición Élite kopytrading.com"
 
 #include <Trade\Trade.mqh>
 
@@ -50,9 +49,8 @@ input double ATR_Multiplicador_SL   = 1.5;
 input double ATR_Multiplicador_TP   = 3.0;
 
 input group "=== LICENCIA & WEB BRIDGE ==="
-input long   CuentaDemo             = 0;
-input long   CuentaReal             = 0;
 input string Token_Web              = "";   // Token de sincronización web
+input string purchaseID_Synced      = "";   // ID de compra para sync
 input bool   SilentTelegram         = true; // Silenciar errores de Telegram
 
 input group "=== STOP ESTRUCTURAL ==="
@@ -133,6 +131,7 @@ bool     StrucSL = true;
 bool     Minimized = false;
 bool     remotePaused = false;
 long     lastUpdateID = 0;
+datetime lastWebSync = 0;
 int      lastPosCount = 0;
 datetime cooldownUntil = 0;
 
@@ -442,7 +441,7 @@ void CrearPanel() {
    
    CrRect("bg", x, y, w, h, CLR_BG, CLR_BRD, 2);
    CrRect("hdr", x+2, y+2, w-4, 40, CLR_HDR, CLR_HDR);
-   CrLabel("ttl", x+15, y+8, "KOPYTRADING BTC RIDER v6.4", clrWhite, 11, "Arial Bold");
+   CrLabel("ttl", x+15, y+8, "KOPYTRADING BTC RIDER v6.6", clrWhite, 11, "Arial Bold");
    CrLabel("sub", x+15, y+25, "kopytrading.com", CLR_MUTED, 7);
    CrBtn("min", x+w-25, y+8, 18, 18, Minimized?"+":"-", CLR_HDR, clrWhite);
    
