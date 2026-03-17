@@ -63,9 +63,10 @@ export function Navbar() {
                     <Link href="/activos" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/activos" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Activos</Link>
                     <Link href="/como-funciona" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/como-funciona" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Cómo Funciona</Link>
                     <Link href="/faq" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/faq" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>FAQ</Link>
-                    {isLoggedIn && (
-                        <Link href="/dashboard" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/dashboard" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Panel</Link>
-                    )}
+                    <Link href={isLoggedIn ? "/dashboard" : "/login"} className={`text-xs font-black uppercase tracking-widest transition-colors flex items-center gap-2 group ${pathname === "/dashboard" || pathname === "/login" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>
+                        <span className="w-1.5 h-1.5 rounded-full bg-brand group-hover:animate-pulse"></span>
+                        {isLoggedIn ? "Mi Panel" : "Mi Cuenta"}
+                    </Link>
                 </nav>
 
                 <div className="flex items-center gap-4">

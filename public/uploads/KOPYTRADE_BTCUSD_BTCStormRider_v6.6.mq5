@@ -101,10 +101,16 @@ input double BE_Garantia_USD  = 1.5;
 //  TRAILING STOP
 //============================================================
 input group "=== TRAILING STOP ==="
-input bool   ActivarTrailing          = true;
-input double Trailing_Activar_USD     = 2.0;
-input double Trailing_Distancia_USD   = 2.0;
 input int    Puntos_Minimos_Trailing  = 100;
+
+//============================================================
+//  SMART HEDGE (RESCATE)
+//============================================================
+input group "=== SMART HEDGE (RESCATE) ==="
+input bool   ActivarHedge           = true;     // 🚑 Activar protección Hedge
+input double HedgeTrigger_USD       = 3.0;      // $ Perdida para activar Hedge
+input double HedgeTP_USD            = 2.0;      // $ TP para la operación Hedge
+input double HedgeLoteMult          = 1.5;      // Multiplicador de lote para el Hedge
 
 //============================================================
 //  CONFIGURACION AVANZADA
@@ -134,6 +140,8 @@ long     lastUpdateID = 0;
 datetime lastWebSync = 0;
 int      lastPosCount = 0;
 datetime cooldownUntil = 0;
+bool     hedgeActive = false;
+ulong    hedgeTicket = 0;
 
 #define PNL "BSR64_E_"
 
@@ -248,6 +256,7 @@ void OnTick() {
 
    if(MostrarPanel) ActualizarPanel();
    ManageBETrailing();
+   if(ActivarHedge) ManageHedge();
    CheckEntradas();
    ProcessTelegramCommands();
    SyncWithWeb();
@@ -333,6 +342,61 @@ void ManageBETrailing() {
          }
       }
    }
+}
+
+void ManageHedge() {
+   double netProfit = GetCurrentNetProfit();
+   int mainPos = ContarPos();
+   
+   // Verificar si el hedge sigue vivo
+   if(hedgeTicket > 0) {
+      if(!PositionSelectByTicket(hedgeTicket)) {
+         hedgeTicket = 0;
+         hedgeActive = false;
+         SendTelegramMessage("🏁 BTC: Operación Hedge cerrada.");
+      } else {
+         // Gestionar TP del Hedge
+         double pPos = PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP);
+         if(pPos >= HedgeTP_USD) trade.PositionClose(hedgeTicket);
+         
+         // Si las posiciones principales se cerraron/recuperaron, cerrar hedge
+         if(mainPos == 0 || netProfit >= -1.0) trade.PositionClose(hedgeTicket);
+         return;
+      }
+   }
+
+   // Activar Hedge si hay perdida suficiente
+   if(!hedgeActive && mainPos > 0 && netProfit <= -HedgeTrigger_USD) {
+      ENUM_POSITION_TYPE mainType = GetDominantSide();
+      ENUM_POSITION_TYPE hedgeType = (mainType == POSITION_TYPE_BUY) ? POSITION_TYPE_SELL : POSITION_TYPE_BUY;
+      
+      double lot = LoteInicial * HedgeLoteMult;
+      double price = (hedgeType == POSITION_TYPE_BUY) ? SymbolInfoDouble(_Symbol, SYMBOL_ASK) : SymbolInfoDouble(_Symbol, SYMBOL_BID);
+      
+      if(trade.PositionOpen(_Symbol, hedgeType, NormalizeLot(lot), price, 0, 0, "BSR66_HEDGE")) {
+         hedgeTicket = trade.ResultPosition();
+         hedgeActive = true;
+         SendTelegramMessage("🚑 BTC: SMART HEDGE ACTIVADO ($" + DoubleToString(netProfit, 2) + ")");
+      }
+   }
+}
+
+ENUM_POSITION_TYPE GetDominantSide() {
+   int buys=0, sells=0;
+   for(int i=0; i<PositionsTotal(); i++) {
+      if(PositionSelectByTicket(PositionGetTicket(i)) && PositionGetInteger(POSITION_MAGIC)==MagicNumber) {
+         if(PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_BUY) buys++;
+         else sells++;
+      }
+   }
+   return (buys >= sells) ? POSITION_TYPE_BUY : POSITION_TYPE_SELL;
+}
+
+double NormalizeLot(double l) {
+   double min = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_MIN);
+   double step = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_STEP);
+   double res = MathFloor(l/step)*step;
+   return (res < min) ? min : res;
 }
 
 void CheckEntradas() {
@@ -480,8 +544,8 @@ void CrearPanel() {
       CrLabel("slL", x+15, y+330, "STOP ESTRUCTURAL:", CLR_MUTED, 8);
       CrBtn("b_sl", x+165, y+325, 60, 25, StrucSL?"ON":"OFF", StrucSL?CLR_ACCENT:C'35,35,65', clrWhite);
       
-      CrBtn("b_test", x+10, y+365, 80, 25, "TEST BOT", C'50,50,80', clrWhite);
       CrLabel("rem", x+100, y+370, "REMOTO: " + (remotePaused?"🔴 PAUSA":"🟢 ONLINE"), (remotePaused?CLR_DANGER:CLR_SUCCESS), 8);
+      CrLabel("hdg", x+15, y+395, "SMART HEDGE: " + (hedgeActive?"🚑 ACTIVO":"💤 ESPERA"), (hedgeActive?CLR_SUCCESS:CLR_MUTED), 8);
 
       CrRect("stBg", x+2, h-40+y, w-4, 30, C'15,15,40', CLR_BRD);
       CrLabel("stL", x+15, h-32+y, "ESTADO:", CLR_MUTED, 8); CrLabel("stV", x+85, h-32+y, "OPERATIVO", CLR_SUCCESS, 10, "Arial Bold");

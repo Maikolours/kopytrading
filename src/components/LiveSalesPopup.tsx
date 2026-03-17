@@ -61,7 +61,7 @@ export function LiveSalesPopup() {
     if (!visible) return null;
 
     return (
-        <div className="fixed bottom-24 sm:bottom-6 left-4 z-[900] animate-slide-right pointer-events-none">
+        <div className="fixed bottom-32 sm:bottom-12 left-4 z-[900] animate-slide-right pointer-events-none">
             <div className={`glass-card border ${data.action.border} ${data.action.bg} rounded-2xl p-4 shadow-2xl flex items-center gap-4 max-w-sm`}>
                 <div className="text-3xl filter drop-shadow-md bg-white/10 rounded-full w-12 h-12 flex items-center justify-center">
                     {data.action.emoji}
