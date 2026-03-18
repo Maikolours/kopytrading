@@ -99,7 +99,6 @@ bool           isMinimized = false;
 bool           remotePaused = false; 
 bool           startNotified = false;
 int            startRetries = 0;
-datetime       lastRemoteSync = 0;
 datetime       lastPositionsSync = 0;
 double         mode_HarvestTP = 3.0;
 double         mode_CycleMeta = 5.0;
