@@ -119,3 +119,12 @@ model TradeHistory {
 
   @@index([purchaseId])
 }
+
+model RequestLog {
+  id        String   @id @default(cuid())
+  path      String
+  method    String
+  body      String?  @db.Text
+  error     String?  @db.Text
+  createdAt DateTime @default(now())
+}

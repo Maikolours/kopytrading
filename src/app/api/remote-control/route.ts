@@ -32,13 +32,17 @@ export async function POST(req: Request) {
     }
 }
 
-// GET para el bot de MetaTrader 5
 export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const purchaseId = searchParams.get("purchaseId");
     const account = searchParams.get("account");
 
-    if (!purchaseId || !account) return new NextResponse("Missing params", { status: 400 });
+    if (!purchaseId || !account) {
+        await prisma.requestLog.create({
+            data: { path: "/api/remote-control", method: "GET", body: req.url, error: "Missing params" }
+        });
+        return new NextResponse("Missing params", { status: 400 });
+    }
 
     try {
         // Obtener comandos no ejecutados por ESTA cuenta específica
@@ -64,11 +68,19 @@ export async function GET(req: Request) {
                     })
                 )
             );
+            
+            // Log de comandos enviados
+            await prisma.requestLog.create({
+                data: { path: "/api/remote-control", method: "GET", body: `CID: ${purchaseId}, ACC: ${account}`, error: `Enviados ${commands.length} comandos` }
+            });
         }
 
         return NextResponse.json(commands);
-    } catch (error) {
-        console.error("Remote Control GET Error:", error);
+    } catch (err: any) {
+        console.error("Remote Control GET Error:", err);
+        await prisma.requestLog.create({
+            data: { path: "/api/remote-control", method: "GET", body: req.url, error: err.message || "Unknown error" }
+        });
         return new NextResponse("Error", { status: 500 });
     }
 }

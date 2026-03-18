@@ -2,11 +2,15 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
+    let body = null;
     try {
-        const body = await req.json();
+        body = await req.json();
         const { purchaseId, account, positions, history } = body;
 
         if (!purchaseId || !account) {
+            await prisma.requestLog.create({
+                data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body), error: "Missing purchaseId or account" }
+            });
             return NextResponse.json({ error: "Missing purchaseId or account" }, { status: 400 });
         }
 
@@ -16,6 +20,9 @@ export async function POST(req: Request) {
         });
 
         if (!purchase) {
+            await prisma.requestLog.create({
+                data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body), error: "Purchase not found: " + purchaseId }
+            });
             return NextResponse.json({ error: "Purchase not found" }, { status: 404 });
         }
 
@@ -74,9 +81,24 @@ export async function POST(req: Request) {
             }
         }
 
+        // Registrar éxito silencioso (opcional, pero ayuda a depurar)
+        /*
+        await prisma.requestLog.create({
+            data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body).substring(0, 500) }
+        });
+        */
+
         return NextResponse.json({ success: true });
-    } catch (err) {
+    } catch (err: any) {
         console.error("Sync Positions Error:", err);
+        await prisma.requestLog.create({
+            data: { 
+                path: "/api/sync-positions", 
+                method: "POST", 
+                body: JSON.stringify(body), 
+                error: err.message || "Unknown error" 
+            }
+        });
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
