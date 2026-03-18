@@ -41,15 +41,13 @@ export default async function DashboardPage() {
             where: { userId: currentUserId },
             include: { 
                 botProduct: true,
-                /* Ocultando relaciones problemáticas para detectar el origen del error
-                livePositions: {
+                activePositions: {
                     orderBy: { updatedAt: 'desc' }
                 },
-                tradeHistory: {
+                pastTrades: {
                     orderBy: { closedAt: 'desc' },
                     take: 5
                 }
-                */
             },
             orderBy: { createdAt: 'desc' }
         });
@@ -63,7 +61,7 @@ export default async function DashboardPage() {
             <div className="max-w-5xl mx-auto">
                 <div className="mb-10 pb-6 border-b border-white/10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold text-white mb-1">Mi Dashboard de Trading (v2)</h1>
+                        <h1 className="text-3xl font-bold text-white mb-1">Mi Panel de Trading</h1>
                         <p className="text-text-muted">Hola, {session.user.name || session.user.email}</p>
                     </div>
                     {(session.user as any).role === "ADMIN" && (
@@ -200,10 +198,10 @@ export default async function DashboardPage() {
                                                 })()}
 
                                                 {/* Sección de Operaciones Abiertas (Real-Time Grouped by Account) */}
-                                                {(purchase.livePositions?.length || 0) > 0 && (() => {
+                                                {(purchase.activePositions?.length || 0) > 0 && (() => {
                                                     // Agrupar por cuenta
                                                     const accounts: Record<string, any[]> = {};
-                                                    purchase.livePositions.forEach((pos: any) => {
+                                                    purchase.activePositions.forEach((pos: any) => {
                                                         const acc = pos.account || "Principal";
                                                         if (!accounts[acc]) accounts[acc] = [];
                                                         accounts[acc].push(pos);
@@ -253,11 +251,11 @@ export default async function DashboardPage() {
                                                 })()}
 
                                                 {/* Mini Historial Reciente */}
-                                                {(purchase.tradeHistory?.length || 0) > 0 && (
+                                                {(purchase.pastTrades?.length || 0) > 0 && (
                                                     <div className="mt-6 pt-4 border-t border-white/5">
                                                         <h4 className="text-[10px] font-bold uppercase tracking-widest text-text-muted/40 mb-3">Historial Reciente (Global)</h4>
                                                         <div className="space-y-1">
-                                                            {purchase.tradeHistory.map((h: any) => (
+                                                            {purchase.pastTrades.map((h: any) => (
                                                                 <div key={h.id || Math.random()} className="flex items-center justify-between text-[11px] py-1 px-2 rounded hover:bg-white/5 transition-colors">
                                                                     <div className="flex items-center gap-2">
                                                                         <span className={(h.profit || 0) >= 0 ? 'text-success/70' : 'text-danger/70'}>

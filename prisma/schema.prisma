@@ -51,12 +51,12 @@ model Purchase {
   lastSync              DateTime?
   createdAt             DateTime        @default(now())
   updatedAt             DateTime        @updatedAt
-  expiresAt             DateTime?
-  livePositions         LivePosition[]
-  botProduct            BotProduct      @relation(fields: [botProductId], references: [id])
-  user                  User            @relation(fields: [userId], references: [id])
-  remoteCommands        RemoteCommand[]
-  tradeHistory          TradeHistory[]
+  expiresAt       DateTime?
+  activePositions LivePosition[]
+  pastTrades      TradeHistory[]
+  botProduct      BotProduct      @relation(fields: [botProductId], references: [id])
+  user            User            @relation(fields: [userId], references: [id])
+  remoteCommands  RemoteCommand[]
 
   @@index([botProductId], map: "Purchase_botProductId_fkey")
   @@index([userId], map: "Purchase_userId_fkey")
