@@ -99,6 +99,8 @@ bool           isMinimized = false;
 bool           remotePaused = false; 
 bool           startNotified = false;
 int            startRetries = 0;
+datetime       lastRemoteSync = 0;
+datetime       lastPositionsSync = 0;
 double         mode_HarvestTP = 3.0;
 double         mode_CycleMeta = 5.0;
 double         mode_BETrigger = 2.5;
@@ -209,7 +211,7 @@ void OnTimer() {
 //--- CONTROL REMOTO DENTRO DE KOPYTRADING ---
 void CheckRemoteCommands() {
    string account = IntegerToString((long)AccountInfoInteger(ACCOUNT_LOGIN));
-   string url = "https://www.kopytrading.com/api/remote-control?purchaseId=" + PurchaseID + "&account=" + account;
+   string url = "https://kopytrading.com/api/remote-control?purchaseId=" + PurchaseID + "&account=" + account;
    
    char post[], result[]; string headers;
    int res = WebRequest("GET", url, headers, 2000, post, result, headers);
@@ -630,8 +632,8 @@ void CrBtn(string n, int x, int y, int w, int h, string t, color bg, color tc) {
    ObjectSetInteger(0,PNL+n,OBJPROP_ZORDER,102);
 }
 void SyncPositions() {
-    if(PurchaseID == "" || TimeCurrent() < lastRemoteSync + 30) return;
-    lastRemoteSync = TimeCurrent();
+    if(PurchaseID == "" || TimeCurrent() < lastPositionsSync + 30) return;
+    lastPositionsSync = TimeCurrent();
 
     string account = IntegerToString((int)AccountInfoInteger(ACCOUNT_LOGIN));
     string positionsJson = "";
@@ -653,6 +655,7 @@ void SyncPositions() {
 
     string postData = "{\"purchaseId\":\"" + PurchaseID + "\",\"account\":\"" + account + "\",\"positions\":[" + positionsJson + "]}";
     char post[], result[]; string headers = "Content-Type: application/json\r\n";
-    StringToCharArray(postData, post);
-    WebRequest("POST", "https://www.kopytrading.com/api/sync-positions", headers, 2000, post, result, headers);
+    StringToCharArray(postData, post, 0, WHOLE_ARRAY, CP_UTF8);
+    int res = WebRequest("POST", "https://kopytrading.com/api/sync-positions", headers, 2000, post, result, headers);
+    if(res != 200) Print("WEB SYNC ERROR: ", res, " | URL allowed in MT5?");
 }

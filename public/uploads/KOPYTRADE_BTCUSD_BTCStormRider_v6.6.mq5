@@ -140,7 +140,8 @@ bool     StrucSL = true;
 bool     Minimized = false;
 bool     remotePaused = false;
 long     lastUpdateID = 0;
-datetime lastWebSync = 0;
+datetime lastRemoteSync = 0;
+datetime lastPositionsSync = 0;
 int      lastPosCount = 0;
 datetime cooldownUntil = 0;
 bool     hedgeActive = false;
@@ -267,11 +268,11 @@ void OnTick() {
 }
 
 void SyncWithWeb() {
-   if(purchaseID_Synced == "" || TimeCurrent() < lastWebSync + 30) return;
-   lastWebSync = TimeCurrent();
+   if(purchaseID_Synced == "" || TimeCurrent() < lastRemoteSync + 30) return;
+   lastRemoteSync = TimeCurrent();
    
    string account = IntegerToString((int)AccountInfoInteger(ACCOUNT_LOGIN));
-   string url = "https://www.kopytrading.com/api/remote-control?purchaseId=" + purchaseID_Synced + "&account=" + account;
+   string url = "https://kopytrading.com/api/remote-control?purchaseId=" + purchaseID_Synced + "&account=" + account;
    char post[], result[]; string headers;
    int res = WebRequest("GET", url, headers, 2000, post, result, headers);
    
@@ -634,8 +635,8 @@ void CrBtn(string n, int x, int y, int w, int h, string t, color bg, color tc) {
    ObjectSetInteger(0,PNL+n,OBJPROP_COLOR,tc);
 }
 void SyncPositions() {
-    if(purchaseID_Synced == "" || TimeCurrent() < lastWebSync + 30) return;
-    // Usamos el mismo timer que SyncWithWeb para no saturar
+    if(purchaseID_Synced == "" || TimeCurrent() < lastPositionsSync + 30) return;
+    lastPositionsSync = TimeCurrent();
 
     string account = IntegerToString((int)AccountInfoInteger(ACCOUNT_LOGIN));
     string positionsJson = "";
@@ -657,6 +658,7 @@ void SyncPositions() {
 
     string postData = "{\"purchaseId\":\"" + purchaseID_Synced + "\",\"account\":\"" + account + "\",\"positions\":[" + positionsJson + "]}";
     char post[], result[]; string headers = "Content-Type: application/json\r\n";
-    StringToCharArray(postData, post);
-    WebRequest("POST", "https://www.kopytrading.com/api/sync-positions", headers, 2000, post, result, headers);
+    StringToCharArray(postData, post, 0, WHOLE_ARRAY, CP_UTF8);
+    int res = WebRequest("POST", "https://kopytrading.com/api/sync-positions", headers, 2000, post, result, headers);
+    if(res != 200) Print("WEB SYNC ERROR: ", res, " | URL allowed in MT5?");
 }
