@@ -41,6 +41,7 @@ export default async function DashboardPage() {
             where: { userId: currentUserId },
             include: { 
                 botProduct: true,
+                /* Ocultando relaciones problemáticas para detectar el origen del error
                 livePositions: {
                     orderBy: { updatedAt: 'desc' }
                 },
@@ -48,6 +49,7 @@ export default async function DashboardPage() {
                     orderBy: { closedAt: 'desc' },
                     take: 5
                 }
+                */
             },
             orderBy: { createdAt: 'desc' }
         });
