@@ -22,7 +22,16 @@ export default async function DashboardPage() {
     // Obtener compras del usuario
     const purchases = await prisma.purchase.findMany({
         where: { userId: (session.user as any).id },
-        include: { botProduct: true },
+        include: { 
+            botProduct: true,
+            livePositions: {
+                orderBy: { updatedAt: 'desc' }
+            },
+            tradeHistory: {
+                orderBy: { closedAt: 'desc' },
+                take: 5
+            }
+        },
         orderBy: { createdAt: 'desc' }
     });
 
@@ -66,7 +75,7 @@ export default async function DashboardPage() {
                                 const hasUpdate = purchase.botProduct.version !== purchase.lastDownloadedVersion;
 
                                 return (
-                                    <Card key={purchase.id} className={`flex flex-col border transition-colors ${isExpired ? 'border-danger/30 opacity-75' : 'border-white/10 hover:border-brand-light/30'}`}>
+                                    <Card key={purchase.id} className={`flex flex-col h-full border transition-colors ${isExpired ? 'border-danger/30 opacity-75' : 'border-white/10 hover:border-brand-light/30'}`}>
                                         <CardHeader>
                                             <div className="flex justify-between items-start mb-2">
                                                 <CardTitle>{purchase.botProduct.name}</CardTitle>
@@ -130,11 +139,111 @@ export default async function DashboardPage() {
                                                 </div>
                                             )}
 
-                                            {!isExpired && (
-                                                <BotRemoteControl 
-                                                    purchaseId={purchase.id} 
-                                                    botName={purchase.botProduct.name} 
-                                                />
+                                            {(() => {
+                                                const syncTime = purchase.lastSync ? new Date(purchase.lastSync) : null;
+                                                const isOnline = syncTime ? (new Date().getTime() - syncTime.getTime()) < 120000 : false;
+                                                
+                                                return (
+                                                    <>
+                                                        {!isExpired && (
+                                                            <BotRemoteControl 
+                                                                purchaseId={purchase.id} 
+                                                                botName={purchase.botProduct.name} 
+                                                                isOnline={isOnline}
+                                                            />
+                                                        )}
+
+                                                        <div className="mt-4 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-light/30 border border-white/5 w-fit">
+                                                            <div className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-success animate-pulse' : 'bg-text-muted/30'}`} />
+                                                            <span className={`text-[10px] font-bold uppercase tracking-wider ${isOnline ? 'text-success' : 'text-text-muted/60'}`}>
+                                                                {isOnline ? '📡 LINK MT5: OK' : '📡 LINK MT5: OFFLINE'}
+                                                            </span>
+                                                            <span className="text-[9px] text-text-muted/40 italic ml-2">
+                                                                Sinc: {syncTime ? syncTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '---'}
+                                                            </span>
+                                                        </div>
+                                                    </>
+                                                );
+                                            })()}
+
+                                            {/* Sección de Operaciones Abiertas (Real-Time Grouped by Account) */}
+                                            {purchase.livePositions.length > 0 && (() => {
+                                                // Agrupar por cuenta
+                                                const accounts: Record<string, any[]> = {};
+                                                purchase.livePositions.forEach((pos: any) => {
+                                                    if (!accounts[pos.account]) accounts[pos.account] = [];
+                                                    accounts[pos.account].push(pos);
+                                                });
+
+                                                return (
+                                                    <div className="mt-6 pt-4 border-t border-white/5">
+                                                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-brand-light mb-4 flex items-center gap-2">
+                                                            Operaciones Abiertas
+                                                        </h4>
+                                                        
+                                                        <div className="space-y-6">
+                                                            {Object.entries(accounts).map(([accountNo, positions]) => (
+                                                                <div key={accountNo} className="space-y-2">
+                                                                    <div className="flex items-center gap-2 px-2 py-0.5 rounded bg-white/5 w-fit border border-white/5">
+                                                                        <span className="text-[9px] text-text-muted/60">CUENTA:</span>
+                                                                        <span className="text-[9px] font-mono font-bold text-white">{accountNo}</span>
+                                                                    </div>
+                                                                    <div className="space-y-2 pl-2 border-l border-white/5">
+                                                                        {positions.map((pos: any) => (
+                                                                            <div key={pos.id} className="bg-surface-light/30 rounded-lg p-3 border border-white/5 flex items-center justify-between transition-all hover:bg-surface-light/50">
+                                                                                <div className="flex items-center gap-3">
+                                                                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold ${pos.type === 'BUY' ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'}`}>
+                                                                                        {pos.type === 'BUY' ? 'B' : 'S'}
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <div className="flex items-center gap-2">
+                                                                                            <span className="text-white font-medium text-xs font-mono">{pos.lots} {pos.symbol}</span>
+                                                                                            <span className="text-[9px] text-text-muted/60 opacity-50">#{pos.ticket}</span>
+                                                                                        </div>
+                                                                                        <div className="text-[10px] text-text-muted/60">
+                                                                                            @ {pos.openPrice.toFixed(2)}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div className={`text-sm font-bold font-mono ${pos.profit >= 0 ? 'text-success' : 'text-danger'}`}>
+                                                                                    {pos.profit >= 0 ? '+' : ''}{pos.profit.toFixed(2)} $
+                                                                                </div>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })()}
+
+                                            {/* Mini Historial Reciente */}
+                                            {purchase.tradeHistory.length > 0 && (
+                                                <div className="mt-6 pt-4 border-t border-white/5">
+                                                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-text-muted/40 mb-3">Historial Reciente (Global)</h4>
+                                                    <div className="space-y-1">
+                                                        {purchase.tradeHistory.map((h: any) => (
+                                                            <div key={h.id} className="flex items-center justify-between text-[11px] py-1 px-2 rounded hover:bg-white/5 transition-colors">
+                                                                <div className="flex items-center gap-2">
+                                                                    <span className={h.profit >= 0 ? 'text-success/70' : 'text-danger/70'}>
+                                                                        {h.type === 'BUY' ? 'BUY' : 'SELL'}
+                                                                    </span>
+                                                                    <span className="text-text-muted/60">{h.lots} lotes</span>
+                                                                    <span className="text-[8px] opacity-30 font-mono ml-1">{h.account}</span>
+                                                                </div>
+                                                                <div className="flex items-center gap-3">
+                                                                    <span className="text-text-muted/40 italic text-[9px]">
+                                                                        {new Date(h.closedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                    </span>
+                                                                    <span className={`font-mono font-bold ${h.profit >= 0 ? 'text-success/80' : 'text-danger/80'}`}>
+                                                                        {h.profit >= 0 ? '+' : ''}{h.profit.toFixed(2)}$
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
                                             )}
                                         </CardContent>
                                         <CardFooter className="pt-4 border-t border-white/5 flex flex-wrap gap-3">

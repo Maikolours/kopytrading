@@ -32,39 +32,89 @@ model BotProduct {
   ex5FilePath     String?
   pdfFilePath     String?
   isActive        Boolean    @default(true)
-  status          String     @default("ACTIVE")
   timeframes      String?
   minCapital      Float?
   backtestResults String?
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
+  status          String     @default("ACTIVE")
   purchases       Purchase[]
 }
 
 model Purchase {
-  id                    String     @id @default(cuid())
+  id                    String          @id @default(cuid())
   userId                String
   botProductId          String
   amount                Float
-  status                String     @default("COMPLETED")
+  status                String          @default("COMPLETED")
   lastDownloadedVersion String?
-  createdAt             DateTime   @default(now())
+  lastSync              DateTime?
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
   expiresAt             DateTime?
-  botProduct            BotProduct @relation(fields: [botProductId], references: [id])
-  user                  User       @relation(fields: [userId], references: [id])
+  livePositions         LivePosition[]
+  botProduct            BotProduct      @relation(fields: [botProductId], references: [id])
+  user                  User            @relation(fields: [userId], references: [id])
   remoteCommands        RemoteCommand[]
+  tradeHistory          TradeHistory[]
 
   @@index([botProductId], map: "Purchase_botProductId_fkey")
   @@index([userId], map: "Purchase_userId_fkey")
 }
 
 model RemoteCommand {
+  id         String             @id @default(cuid())
+  purchaseId String
+  command    String
+  value      String?
+  createdAt  DateTime           @default(now())
+  purchase   Purchase           @relation(fields: [purchaseId], references: [id])
+  executions CommandExecution[]
+
+  @@index([purchaseId])
+}
+
+model CommandExecution {
+  id        String        @id @default(cuid())
+  commandId String
+  account   String
+  createdAt DateTime      @default(now())
+  command   RemoteCommand @relation(fields: [commandId], references: [id])
+
+  @@unique([commandId, account])
+  @@index([commandId])
+}
+
+model LivePosition {
   id         String   @id @default(cuid())
   purchaseId String
-  command    String   // PAUSE, RESUME, CLOSE_ALL, CHANGE_MODE, DIRECTION
-  value      String?  // ZEN, COSECHA, BUY, SELL, etc.
-  isExecuted Boolean  @default(false)
-  createdAt  DateTime @default(now())
+  ticket     String
+  type       String
+  symbol     String
+  lots       Float
+  openPrice  Float
+  tp         Float
+  sl         Float
+  profit     Float
+  account    String   @default("unknown")
+  updatedAt  DateTime @updatedAt
+  purchase   Purchase @relation(fields: [purchaseId], references: [id])
+
+  @@index([purchaseId])
+}
+
+model TradeHistory {
+  id         String   @id @default(cuid())
+  purchaseId String
+  ticket     String
+  type       String
+  symbol     String
+  lots       Float
+  openPrice  Float
+  closePrice Float
+  profit     Float
+  account    String   @default("unknown")
+  closedAt   DateTime
   purchase   Purchase @relation(fields: [purchaseId], references: [id])
 
   @@index([purchaseId])

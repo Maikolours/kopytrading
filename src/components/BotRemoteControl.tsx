@@ -6,9 +6,10 @@ import { Button } from "./ui/Button";
 interface BotRemoteControlProps {
     purchaseId: string;
     botName: string;
+    isOnline?: boolean;
 }
 
-export function BotRemoteControl({ purchaseId, botName }: BotRemoteControlProps) {
+export function BotRemoteControl({ purchaseId, botName, isOnline }: BotRemoteControlProps) {
     const [loading, setLoading] = useState<string | null>(null);
     const [statusMsg, setStatusMsg] = useState<string | null>(null);
 
@@ -42,8 +43,10 @@ export function BotRemoteControl({ purchaseId, botName }: BotRemoteControlProps)
             <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-3">
                 <h4 className="text-xs font-black uppercase tracking-[0.2em] text-brand-light">Control Remoto Live</h4>
                 <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-success animate-pulse"></span>
-                    <span className="text-[10px] font-bold text-success uppercase">Bot Vinculado</span>
+                    <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-success animate-pulse' : 'bg-text-muted/30'}`}></span>
+                    <span className={`text-[10px] font-bold uppercase ${isOnline ? 'text-success' : 'text-text-muted/60'}`}>
+                        {isOnline ? 'Bot Vinculado' : 'Sin Conexión'}
+                    </span>
                 </div>
             </div>
 

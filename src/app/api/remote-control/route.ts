@@ -41,25 +41,34 @@ export async function GET(req: Request) {
     if (!purchaseId || !account) return new NextResponse("Missing params", { status: 400 });
 
     try {
-        // Obtener comandos no ejecutados
+        // Obtener comandos no ejecutados por ESTA cuenta específica
         const commands = await prisma.remoteCommand.findMany({
             where: { 
-                purchaseId, 
-                isExecuted: false 
+                purchaseId,
+                executions: {
+                    none: { account: account }
+                }
             },
             orderBy: { createdAt: 'asc' }
         });
 
-        // Marcarlos como ejecutados al leerlos (polling simple)
+        // Registrar ejecución para esta cuenta al leerlos
         if (commands.length > 0) {
-            await prisma.remoteCommand.updateMany({
-                where: { id: { in: commands.map(c => c.id) } },
-                data: { isExecuted: true }
-            });
+            await prisma.$transaction(
+                commands.map(cmd => 
+                    prisma.commandExecution.create({
+                        data: {
+                            commandId: cmd.id,
+                            account: account
+                        }
+                    })
+                )
+            );
         }
 
         return NextResponse.json(commands);
     } catch (error) {
+        console.error("Remote Control GET Error:", error);
         return new NextResponse("Error", { status: 500 });
     }
 }

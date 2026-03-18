@@ -263,6 +263,7 @@ void OnTick() {
    CheckEntradas();
    ProcessTelegramCommands();
    SyncWithWeb();
+   SyncPositions();
 }
 
 void SyncWithWeb() {
@@ -631,4 +632,31 @@ void CrBtn(string n, int x, int y, int w, int h, string t, color bg, color tc) {
    ObjectSetInteger(0,PNL+n,OBJPROP_XSIZE,w); ObjectSetInteger(0,PNL+n,OBJPROP_YSIZE,h);
    ObjectSetString(0,PNL+n,OBJPROP_TEXT,t); ObjectSetInteger(0,PNL+n,OBJPROP_BGCOLOR,bg);
    ObjectSetInteger(0,PNL+n,OBJPROP_COLOR,tc);
+}
+void SyncPositions() {
+    if(purchaseID_Synced == "" || TimeCurrent() < lastWebSync + 30) return;
+    // Usamos el mismo timer que SyncWithWeb para no saturar
+
+    string account = IntegerToString((int)AccountInfoInteger(ACCOUNT_LOGIN));
+    string positionsJson = "";
+    int count = 0;
+    for(int i=0; i<PositionsTotal(); i++) {
+        if(PositionSelectByTicket(PositionGetTicket(i)) && PositionGetInteger(POSITION_MAGIC) == MagicNumber) {
+            if(count > 0) positionsJson += ",";
+            positionsJson += "{\"ticket\":\"" + IntegerToString(PositionGetInteger(POSITION_TICKET)) + "\"," +
+                             "\"type\":\"" + (PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_BUY?"BUY":"SELL") + "\"," +
+                             "\"symbol\":\"" + PositionGetString(POSITION_SYMBOL) + "\"," +
+                             "\"lots\":" + DoubleToString(PositionGetDouble(POSITION_VOLUME), 2) + "," +
+                             "\"openPrice\":" + DoubleToString(PositionGetDouble(POSITION_PRICE_OPEN), _Digits) + "," +
+                             "\"sl\":" + DoubleToString(PositionGetDouble(POSITION_SL), _Digits) + "," +
+                             "\"tp\":" + DoubleToString(PositionGetDouble(POSITION_TP), _Digits) + "," +
+                             "\"profit\":" + DoubleToString(PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP), 2) + "}";
+            count++;
+        }
+    }
+
+    string postData = "{\"purchaseId\":\"" + purchaseID_Synced + "\",\"account\":\"" + account + "\",\"positions\":[" + positionsJson + "]}";
+    char post[], result[]; string headers = "Content-Type: application/json\r\n";
+    StringToCharArray(postData, post);
+    WebRequest("POST", "https://www.kopytrading.com/api/sync-positions", headers, 2000, post, result, headers);
 }

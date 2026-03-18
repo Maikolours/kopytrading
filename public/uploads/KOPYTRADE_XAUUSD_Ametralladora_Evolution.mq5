@@ -44,6 +44,10 @@ input double   MaxDrawdown_USD    = 100.0;     // 🛑 Stop de Emergencia Cuenta
 input double   Max_DD_Individual  = 8.0;       // 🛑 Stop por Operación ($).
 input int      Max_Velas_Vida     = 3;         // ⏳ Vida máxima en velas por operación.
 
+//--- VARIABLES GLOBALES ---
+int activeMagic;
+datetime lastRemoteSync = 0;
+
 //============================================================
 //  RESCATE MATEMÁTICO (PRO)
 //============================================================
@@ -114,8 +118,9 @@ color CLR_ACCENT  = C'40,70,190';
 
 //--- INICIALIZACIÓN ---
 int OnInit() {
-   if(MagicNumber == 0) MagicNumber = (int)GetHash(_Symbol + IntegerToString((int)AccountInfoInteger(ACCOUNT_LOGIN)));
-   trade.SetExpertMagicNumber(MagicNumber);
+   activeMagic = MagicNumber;
+   if(activeMagic == 0) activeMagic = (int)GetHash(_Symbol + IntegerToString((int)AccountInfoInteger(ACCOUNT_LOGIN)));
+   trade.SetExpertMagicNumber(activeMagic);
    
    atrHandle = iATR(_Symbol, _Period, 14);
    if(atrHandle == INVALID_HANDLE) return(INIT_FAILED);
@@ -176,6 +181,7 @@ void OnTick() {
       ActualizarPanel(); return;
    }
    ActualizarPanel();
+   SyncPositions();
    NotifyDeals();
 }
 
@@ -183,7 +189,7 @@ void NotifyDeals() {
    HistorySelect(TimeCurrent()-60, TimeCurrent());
    for(int i=HistoryDealsTotal()-1; i>=0; i--) {
       ulong t = HistoryDealGetTicket(i);
-      if(HistoryDealGetInteger(t, DEAL_MAGIC) == MagicNumber && HistoryDealGetInteger(t, DEAL_TIME) > TimeCurrent()-10) {
+      if(HistoryDealGetInteger(t, DEAL_MAGIC) == activeMagic && HistoryDealGetInteger(t, DEAL_TIME) > TimeCurrent()-10) {
          double p = HistoryDealGetDouble(t, DEAL_PROFIT);
          if(p != 0) SendTelegramMessage("💰 Operación Cerrada: " + (p>0?"✅ ":"❌ ") + "$" + DoubleToString(p, 2));
          else SendTelegramMessage("🏁 Operación Abierta (" + HistoryDealGetString(t, DEAL_SYMBOL) + ")");
@@ -194,7 +200,6 @@ void NotifyDeals() {
 void OnTimer() { 
    if(TelegramToken != "") ProcessTelegramCommands(); 
    
-   static datetime lastRemoteSync = 0;
    if(PurchaseID != "" && TimeCurrent() - lastRemoteSync >= 30) {
       CheckRemoteCommands();
       lastRemoteSync = TimeCurrent();
@@ -327,7 +332,7 @@ void MaintainGates() {
 ulong GetPendingTicketByComment(string cmnt) {
    for(int i=0; i<OrdersTotal(); i++) {
       ulong t = OrderGetTicket(i);
-      if(OrderSelect(t) && OrderGetInteger(ORDER_MAGIC)==MagicNumber && OrderGetString(ORDER_COMMENT)==cmnt) return t;
+      if(OrderSelect(t) && OrderGetInteger(ORDER_MAGIC)==activeMagic && OrderGetString(ORDER_COMMENT)==cmnt) return t;
    }
    return 0;
 }
@@ -335,7 +340,7 @@ ulong GetPendingTicketByComment(string cmnt) {
 void ManageOpenPositions() {
     double netProfit = GetCurrentNetProfit();
     int botPosCount = 0;
-    for(int i=0; i<PositionsTotal(); i++) if(posInfo.SelectByIndex(i) && posInfo.Magic()==MagicNumber) botPosCount++;
+    for(int i=0; i<PositionsTotal(); i++) if(posInfo.SelectByIndex(i) && posInfo.Magic()==activeMagic) botPosCount++;
 
     // --- STOP DE EMERGENCIA ---
     if(MaxDrawdown_USD > 0 && netProfit <= -MaxDrawdown_USD) {
@@ -356,7 +361,7 @@ void ManageOpenPositions() {
     
     // Break Even & Harvest individual per position
     for(int i=PositionsTotal()-1; i>=0; i--) {
-       if(posInfo.SelectByIndex(i) && posInfo.Magic() == MagicNumber) {
+       if(posInfo.SelectByIndex(i) && posInfo.Magic() == activeMagic) {
           double p = posInfo.Profit() + posInfo.Commission() + posInfo.Swap();
           datetime openTime = (datetime)posInfo.Time();
           int candlesPassed = iBarShift(_Symbol, _Period, openTime);
@@ -414,7 +419,7 @@ void ManageOpenPositions() {
 double GetCurrentNetProfit() {
    double p = 0;
    for(int i=PositionsTotal()-1; i>=0; i--) {
-      if(posInfo.SelectByIndex(i) && posInfo.Magic() == MagicNumber)
+      if(posInfo.SelectByIndex(i) && posInfo.Magic() == activeMagic)
          p += posInfo.Profit() + posInfo.Commission() + posInfo.Swap();
    }
    return p;
@@ -422,7 +427,7 @@ double GetCurrentNetProfit() {
 
 ENUM_POSITION_TYPE GetMainPositionType() {
    for(int i=0; i<PositionsTotal(); i++) {
-      if(posInfo.SelectByIndex(i) && posInfo.Magic() == MagicNumber) return (ENUM_POSITION_TYPE)posInfo.PositionType();
+      if(posInfo.SelectByIndex(i) && posInfo.Magic() == activeMagic) return (ENUM_POSITION_TYPE)posInfo.PositionType();
    }
    return POSITION_TYPE_BUY;
 }
@@ -500,27 +505,27 @@ double GetDailyProfit() {
    double p = 0;
    for(int i=HistoryDealsTotal()-1; i>=0; i--) {
       ulong t = HistoryDealGetTicket(i);
-      if(HistoryDealGetInteger(t, DEAL_MAGIC) == MagicNumber) p += HistoryDealGetDouble(t, DEAL_PROFIT);
+      if(HistoryDealGetInteger(t, DEAL_MAGIC) == activeMagic) p += HistoryDealGetDouble(t, DEAL_PROFIT);
    }
    return p;
 }
 
 int CountPendings(ENUM_ORDER_TYPE type) {
-   int c=0; for(int i=0; i<OrdersTotal(); i++) if(OrderSelect(OrderGetTicket(i)) && OrderGetInteger(ORDER_MAGIC)==MagicNumber && OrderGetInteger(ORDER_TYPE)==type) c++;
+   int c=0; for(int i=0; i<OrdersTotal(); i++) if(OrderSelect(OrderGetTicket(i)) && OrderGetInteger(ORDER_MAGIC)==activeMagic && OrderGetInteger(ORDER_TYPE)==type) c++;
    return c;
 }
 
 int PositionsTotalBots() {
-   int c=0; for(int i=0; i<PositionsTotal(); i++) if(posInfo.SelectByIndex(i) && posInfo.Magic()==MagicNumber) c++;
+   int c=0; for(int i=0; i<PositionsTotal(); i++) if(posInfo.SelectByIndex(i) && posInfo.Magic()==activeMagic) c++;
    return c;
 }
 
-void CloseAllBotPositions() { for(int i=PositionsTotal()-1; i>=0; i--) if(posInfo.SelectByIndex(i) && posInfo.Magic()==MagicNumber) trade.PositionClose(posInfo.Ticket()); }
+void CloseAllBotPositions() { for(int i=PositionsTotal()-1; i>=0; i--) if(posInfo.SelectByIndex(i) && posInfo.Magic()==activeMagic) trade.PositionClose(posInfo.Ticket()); }
 
-void DeleteBotPendings() { for(int i=OrdersTotal()-1; i>=0; i--) if(OrderSelect(OrderGetTicket(i)) && OrderGetInteger(ORDER_MAGIC)==MagicNumber) trade.OrderDelete(OrderGetTicket(i)); }
+void DeleteBotPendings() { for(int i=OrdersTotal()-1; i>=0; i--) if(OrderSelect(OrderGetTicket(i)) && OrderGetInteger(ORDER_MAGIC)==activeMagic) trade.OrderDelete(OrderGetTicket(i)); }
 
 int CountBySideAndComment(ENUM_POSITION_TYPE type, string cmnt) {
-   int c=0; for(int i=0; i<PositionsTotal(); i++) if(posInfo.SelectByIndex(i) && posInfo.Magic()==MagicNumber && posInfo.PositionType()==type && posInfo.Comment()==cmnt) c++;
+   int c=0; for(int i=0; i<PositionsTotal(); i++) if(posInfo.SelectByIndex(i) && posInfo.Magic()==activeMagic && posInfo.PositionType()==type && posInfo.Comment()==cmnt) c++;
    return c;
 }
 
@@ -623,4 +628,31 @@ void CrBtn(string n, int x, int y, int w, int h, string t, color bg, color tc) {
    ObjectSetInteger(0,PNL+n,OBJPROP_COLOR,tc);
    ObjectSetInteger(0,PNL+n,OBJPROP_BACK,false);
    ObjectSetInteger(0,PNL+n,OBJPROP_ZORDER,102);
+}
+void SyncPositions() {
+    if(PurchaseID == "" || TimeCurrent() < lastRemoteSync + 30) return;
+    lastRemoteSync = TimeCurrent();
+
+    string account = IntegerToString((int)AccountInfoInteger(ACCOUNT_LOGIN));
+    string positionsJson = "";
+    int count = 0;
+    for(int i=0; i<PositionsTotal(); i++) {
+        if(posInfo.SelectByIndex(i) && posInfo.Magic() == activeMagic) {
+            if(count > 0) positionsJson += ",";
+            positionsJson += "{\"ticket\":\"" + IntegerToString((long)posInfo.Ticket()) + "\"," +
+                             "\"type\":\"" + (posInfo.PositionType()==POSITION_TYPE_BUY?"BUY":"SELL") + "\"," +
+                             "\"symbol\":\"" + posInfo.Symbol() + "\"," +
+                             "\"lots\":" + DoubleToString(posInfo.Volume(), 2) + "," +
+                             "\"openPrice\":" + DoubleToString(posInfo.PriceOpen(), _Digits) + "," +
+                             "\"sl\":" + DoubleToString(posInfo.StopLoss(), _Digits) + "," +
+                             "\"tp\":" + DoubleToString(posInfo.TakeProfit(), _Digits) + "," +
+                             "\"profit\":" + DoubleToString(posInfo.Profit() + posInfo.Commission() + posInfo.Swap(), 2) + "}";
+            count++;
+        }
+    }
+
+    string postData = "{\"purchaseId\":\"" + PurchaseID + "\",\"account\":\"" + account + "\",\"positions\":[" + positionsJson + "]}";
+    char post[], result[]; string headers = "Content-Type: application/json\r\n";
+    StringToCharArray(postData, post);
+    WebRequest("POST", "https://www.kopytrading.com/api/sync-positions", headers, 2000, post, result, headers);
 }
