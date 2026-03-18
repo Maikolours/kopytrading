@@ -19,9 +19,23 @@ export default async function DashboardPage() {
         redirect("/login");
     }
 
+    // Obtener ID real del usuario de forma robusta
+    let currentUserId = (session.user as any).id;
+    if (!currentUserId && session.user.email) {
+        const dbUser = await prisma.user.findUnique({
+            where: { email: session.user.email },
+            select: { id: true }
+        });
+        currentUserId = dbUser?.id;
+    }
+
+    if (!currentUserId) {
+        redirect("/login");
+    }
+
     // Obtener compras del usuario
     const purchases = await prisma.purchase.findMany({
-        where: { userId: (session.user as any).id },
+        where: { userId: currentUserId },
         include: { 
             botProduct: true,
             livePositions: {
