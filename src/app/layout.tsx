@@ -1,47 +1,34 @@
-import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
-
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Navbar } from "@/components/Navbar";
-import FloatingChat from "@/components/FloatingChat";
 import CookieBanner from "@/components/CookieBanner";
-import Link from "next/link";
-import Script from "next/script";
+import FloatingChat from "@/components/FloatingChat";
+import { MaintenanceMode } from "@/components/MaintenanceMode";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-
+import Script from "next/script";
+import Link from "next/link";
+import type { Metadata } from "next";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
-
-export const viewport = {
-  themeColor: "#000000",
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-};
-
 export const metadata: Metadata = {
   title: "KopyTrading | Bots de Trading Avanzados",
-  description: "Marketplace de bots de trading descargables para MetaTrader 5",
+  description: "Automatiza tu trading en MT5 con nuestros bots especializados en Oro, Bitcoin y Forex. Tecnología institucional para el trader retail.",
   manifest: "/manifest.json",
+  themeColor: "#0F0F1A",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
-    title: "KopyTrading",
+    statusBarStyle: "black-translucent",
+    title: "KopyTrading"
   },
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
-  },
-  other: {
-    "google-adsense-account": "ca-pub-7217883854605334",
-  },
+  }
 };
-
-import { MaintenanceMode } from "@/components/MaintenanceMode";
 
 export default function RootLayout({
   children,
@@ -117,7 +104,6 @@ export default function RootLayout({
             <FloatingChat />
             <Analytics />
             <SpeedInsights />
-
           </Providers>
         )}
       </body>
