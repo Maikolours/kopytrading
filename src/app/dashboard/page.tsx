@@ -247,27 +247,30 @@ export default async function DashboardPage() {
                                                                             <span className="text-[9px] font-mono font-bold text-white">{accountNo}</span>
                                                                         </div>
                                                                         <div className="space-y-2 pl-2 border-l border-white/5">
-                                                                            {positions.map((pos: any) => (
-                                                                                <div key={pos.id || Math.random()} className="bg-surface-light/30 rounded-lg p-3 border border-white/5 flex items-center justify-between transition-all hover:bg-surface-light/50">
-                                                                                    <div className="flex items-center gap-3">
-                                                                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold ${pos.type === 'BUY' ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'}`}>
-                                                                                            {pos.type === 'BUY' ? 'B' : 'S'}
+                                                                            {positions.map((pos: any) => {
+                                                                                if (!pos) return null;
+                                                                                return (
+                                                                                    <div key={pos.id || Math.random()} className="bg-surface-light/30 rounded-lg p-3 border border-white/5 flex items-center justify-between transition-all hover:bg-surface-light/50">
+                                                                                        <div className="flex items-center gap-3">
+                                                                                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold ${pos.type === 'BUY' ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'}`}>
+                                                                                                {pos.type === 'BUY' ? 'B' : 'S'}
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <div className="flex items-center gap-2">
+                                                                                                    <span className="text-white font-medium text-xs font-mono">{(pos.lots || 0).toFixed(2)} {pos.symbol || '---'}</span>
+                                                                                                    <span className="text-[9px] text-text-muted/60 opacity-50">#{pos.ticket || '---'}</span>
+                                                                                                </div>
+                                                                                                <div className="text-[10px] text-text-muted/60">
+                                                                                                    @ {(pos.openPrice || 0).toFixed(2)}
+                                                                                                </div>
+                                                                                            </div>
                                                                                         </div>
-                                                                                        <div>
-                                                                                            <div className="flex items-center gap-2">
-                                                                                                <span className="text-white font-medium text-xs font-mono">{(pos.lots || 0).toFixed(2)} {pos.symbol || '---'}</span>
-                                                                                                <span className="text-[9px] text-text-muted/60 opacity-50">#{pos.ticket || '---'}</span>
-                                                                                            </div>
-                                                                                            <div className="text-[10px] text-text-muted/60">
-                                                                                                @ {(pos.openPrice || 0).toFixed(2)}
-                                                                                            </div>
+                                                                                        <div className={`text-sm font-bold font-mono ${(pos.profit || 0) >= 0 ? 'text-success' : 'text-danger'}`}>
+                                                                                            {(pos.profit || 0) >= 0 ? '+' : ''}{(pos.profit || 0).toFixed(2)} $
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div className={`text-sm font-bold font-mono ${(pos.profit || 0) >= 0 ? 'text-success' : 'text-danger'}`}>
-                                                                                        {(pos.profit || 0) >= 0 ? '+' : ''}{(pos.profit || 0).toFixed(2)} $
-                                                                                    </div>
-                                                                                </div>
-                                                                            ))}
+                                                                                );
+                                                                            })}
                                                                         </div>
                                                                     </div>
                                                                 ))}
