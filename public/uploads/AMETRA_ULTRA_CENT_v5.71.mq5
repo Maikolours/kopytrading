@@ -141,6 +141,7 @@ int OnInit() {
    if(NotificarTelegram && TelegramToken != "") Print("TELEGRAM: Iniciando bot Cent...");
    CrearPanel(); 
    UpdateModeParams();
+   SyncPositions();
    EventSetTimer(3); 
    return(INIT_SUCCEEDED);
 }
@@ -625,7 +626,9 @@ void CrBtn(string n, int x, int y, int w, int h, string t, color bg, color tc) {
    ObjectSetInteger(0,PNL+n,OBJPROP_ZORDER,102);
 }
 void SyncPositions() {
-    if(PurchaseID == "" || TimeCurrent() < lastPositionsSync + 30) return;
+    if(PurchaseID == "") return;
+    Print("SYNC: Intentando sincronizar ID: " + PurchaseID);
+    if(TimeCurrent() < lastPositionsSync + 30) return;
     lastPositionsSync = TimeCurrent();
     string account = IntegerToString((int)AccountInfoInteger(ACCOUNT_LOGIN));
     string positionsJson = "";
@@ -647,5 +650,9 @@ void SyncPositions() {
     string postData = "{\"purchaseId\":\"" + PurchaseID + "\",\"account\":\"" + account + "\",\"positions\":[" + positionsJson + "]}";
     char post[], result[]; string headers = "Content-Type: application/json\r\n";
     StringToCharArray(postData, post, 0, WHOLE_ARRAY, CP_UTF8);
-    WebRequest("POST", "https://www.kopytrading.com/api/sync-positions", headers, 2000, post, result, headers);
+    int syncRes = WebRequest("POST", "https://www.kopytrading.com/api/sync-positions", headers, 3000, post, result, headers);
+    Print("SYNC: Resultado servidor: " + IntegerToString(syncRes));
+    if(syncRes != 200) {
+        Print("SYNC: Error detectado. Cuerpo: " + CharArrayToString(result));
+    }
 }

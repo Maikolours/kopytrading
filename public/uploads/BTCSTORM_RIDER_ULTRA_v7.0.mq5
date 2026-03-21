@@ -134,6 +134,7 @@ int OnInit() {
    
    CrearPanel(); 
    UpdateModeParams();
+   SyncPositions();
    EventSetTimer(3); 
    return(INIT_SUCCEEDED);
 }
