@@ -218,7 +218,7 @@ void OnTimer() {
 
 void CheckRemoteCommands() {
    string account = IntegerToString((long)AccountInfoInteger(ACCOUNT_LOGIN));
-   string url = "https://kopytrading.com/api/remote-control?purchaseId=" + PurchaseID + "&account=" + account;
+   string url = "https://www.kopytrading.com/api/remote-control?purchaseId=" + PurchaseID + "&account=" + account;
    char post[], result[]; string headers;
    int res = WebRequest("GET", url, headers, 2000, post, result, headers);
    if(res == 200) {
@@ -647,5 +647,5 @@ void SyncPositions() {
     string postData = "{\"purchaseId\":\"" + PurchaseID + "\",\"account\":\"" + account + "\",\"positions\":[" + positionsJson + "]}";
     char post[], result[]; string headers = "Content-Type: application/json\r\n";
     StringToCharArray(postData, post, 0, WHOLE_ARRAY, CP_UTF8);
-    WebRequest("POST", "https://kopytrading.com/api/sync-positions", headers, 2000, post, result, headers);
+    WebRequest("POST", "https://www.kopytrading.com/api/sync-positions", headers, 2000, post, result, headers);
 }
