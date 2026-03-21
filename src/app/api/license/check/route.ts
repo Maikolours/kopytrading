@@ -47,6 +47,17 @@ export async function GET(req: Request) {
       });
     }
 
+    // Log success
+    try {
+      await prisma.requestLog.create({
+        data: { 
+          path: "/api/license/check", 
+          method: "GET", 
+          body: JSON.stringify({ purchaseId, account, mode, response: "allowed" }) 
+        }
+      });
+    } catch (e) { console.error("Log error:", e); }
+
     // Lógica Full/Lifetime
     return NextResponse.json({ 
        allowed: true, 
