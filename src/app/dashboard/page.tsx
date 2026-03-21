@@ -75,33 +75,34 @@ export default async function DashboardPage() {
         const n = name.toUpperCase();
         if (n.includes("ORO") || n.includes("XAUUSD") || n.includes("AMETRA"))
             return {
-                border: 'border-t-amber-500/80 border-l-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.15)]',
+                border: 'border-amber-500 border-l-[12px] shadow-[0_0_60px_-15px_rgba(245,158,11,0.4)]',
                 accent: 'text-amber-400',
-                glow: 'bg-amber-500/5',
-                bg: 'from-amber-500/5 via-transparent to-transparent'
+                glow: 'bg-amber-500/30',
+                gradient: 'from-amber-600/50 via-amber-900/10 to-black',
+                badge: 'bg-amber-500/20 text-amber-300 border-amber-500/30'
             };
         if (n.includes("BTC") || n.includes("BITCOIN"))
             return {
-                border: 'border-t-purple-500 border-l-4 border-l-purple-500 shadow-[0_0_20px_rgba(168,85,247,0.2)]',
+                border: 'border-purple-500 border-l-[12px] shadow-[0_0_60px_-15px_rgba(168,85,247,0.4)]',
                 accent: 'text-purple-400',
-                glow: 'bg-purple-500/10',
-                bg: 'from-purple-500/5 via-transparent to-transparent',
-                gradient: 'from-purple-500/20 via-black to-black'
+                glow: 'bg-purple-500/30',
+                gradient: 'from-purple-600/50 via-purple-900/10 to-black',
+                badge: 'bg-purple-500/20 text-purple-300 border-purple-500/30'
             };
         if (n.includes("YEN") || n.includes("JPY"))
             return {
-                border: 'border-t-cyan-500 border-l-4 border-l-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.2)]',
+                border: 'border-cyan-500 border-l-[12px] shadow-[0_0_60px_-15px_rgba(6,182,212,0.4)]',
                 accent: 'text-cyan-400',
-                glow: 'bg-cyan-500/10',
-                bg: 'from-cyan-500/5 via-transparent to-transparent',
-                gradient: 'from-cyan-500/10 via-black to-black'
+                glow: 'bg-cyan-500/30',
+                gradient: 'from-cyan-600/50 via-cyan-900/10 to-black',
+                badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30'
             };
         return {
-            border: 'border-t-brand/80 border-l-brand/20 shadow-[0_0_15px_rgba(0,186,215,0.15)]',
+            border: 'border-brand border-l-[12px] shadow-[0_0_60px_-15px_rgba(168,85,247,0.4)]',
             accent: 'text-brand-light',
-            glow: 'bg-brand/5',
-            bg: 'from-brand/5 via-transparent to-transparent',
-            gradient: 'from-brand/10 via-black to-black'
+            glow: 'bg-brand/30',
+            gradient: 'from-brand/40 via-brand-dark/10 to-black',
+            badge: 'bg-brand/20 text-brand-light border-brand/30'
         };
     };
 
@@ -154,32 +155,35 @@ export default async function DashboardPage() {
                                     const isExpired = isTrial && purchase.expiresAt && new Date() > new Date(purchase.expiresAt) && !isEternalUser;
                                     const hasUpdate = purchase.botProduct.version !== purchase.lastDownloadedVersion;
                                     const theme = getBotTheme(purchase.botProduct.name);
-
                                     return (
-                                        <Card key={purchase.id} className={`relative overflow-hidden glass-card border border-white/5 ${theme.border} group h-full flex flex-col transition-all duration-300 hover:scale-[1.01] bg-black/60`}>
-                                            <div className={`absolute inset-0 bg-gradient-to-tr ${theme.gradient} pointer-events-none opacity-40`} />
-                                            <div className={`absolute -top-24 -right-24 w-48 h-48 ${theme.glow} blur-[120px] rounded-full group-hover:opacity-100 transition-opacity opacity-30`} />
+                                        <Card key={purchase.id} className={`relative overflow-hidden glass-card border-white/20 ${theme.border} group h-full flex flex-col transition-all duration-500 hover:scale-[1.03] bg-black/80 shadow-2xl`}>
+                                            {/* Background Gradient Layer - Much more visible */}
+                                            <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} pointer-events-none opacity-90`} />
                                             
-                                            <CardHeader className="relative z-10 pb-2">
+                                            {/* Spotlight effect - Large and colorful */}
+                                            <div className={`absolute -top-40 -right-40 w-80 h-80 ${theme.glow} blur-[150px] rounded-full group-hover:opacity-100 transition-opacity opacity-60`} />
+                                            
+                                            <CardHeader className="relative z-10 pb-2 bg-white/5 border-b border-white/5">
                                                 <div className="flex justify-between items-start mb-2">
-                                                    <CardTitle>{purchase.botProduct.name || "Sin nombre"}</CardTitle>
+                                                    <CardTitle className="text-2xl font-black text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-tight">
+                                                        {purchase.botProduct.name || "Sin nombre"}
+                                                    </CardTitle>
                                                     <div className="flex flex-col items-end gap-1">
                                                         <span className="text-[10px] uppercase tracking-wider text-text-muted">
                                                             {isTrial ? "Trial activado el" : "Comprado"}: {purchase.createdAt ? new Date(purchase.createdAt).toLocaleDateString() : '---'}
                                                         </span>
-                                                        {isTrial && (
-                                                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${isExpired ? 'bg-danger/20 text-danger' : 'bg-brand/20 text-brand-light animate-pulse'}`}>
-                                                                {isExpired ? "PRUEBA EXPIRADA" : "PRUEBA ACTIVA"}
+                                                        {isTrial ? (
+                                                            <span className={`text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest ${theme.badge}`}>
+                                                                PRUEBA ACTIVA
+                                                            </span>
+                                                        ) : (
+                                                            <span className="text-[10px] font-black px-3 py-1 rounded-full bg-success/20 text-success border border-success/30 uppercase tracking-widest">
+                                                                LIFETIME
                                                             </span>
                                                         )}
-                                                        {!isTrial || isEternalUser ? (
-                                                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-success/20 text-success">
-                                                                {isEternalUser ? "LICENCIA DEV (ETERNA)" : "LIFETIME"}
-                                                            </span>
-                                                        ) : null}
                                                         {hasUpdate && !isExpired && (
                                                             <a href={`/api/download/${purchase.id}?type=ex5`} className="mt-1">
-                                                                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-bright/20 text-brand-light border border-brand-light/20 animate-pulse cursor-pointer hover:bg-brand-bright/30 transition-colors block text-center">
+                                                                <span className={`text-[10px] font-black px-3 py-1.5 rounded-full ${theme.badge} animate-pulse cursor-pointer hover:opacity-80 transition-all block text-center shadow-lg border-2`}>
                                                                     🚀 ¡NUEVA VERSIÓN {purchase.botProduct.version} DISPONIBLE! (Clic para descargar)
                                                                 </span>
                                                             </a>
@@ -189,9 +193,9 @@ export default async function DashboardPage() {
                                                 <div className="flex flex-wrap gap-2 mt-2">
                                                     <span className="px-2 py-0.5 rounded text-xs bg-surface-light border border-white/5">{purchase.botProduct.instrument || '---'}</span>
                                                     {isTrial && <span className="px-2 py-0.5 rounded text-[10px] border border-orange-500/30 text-orange-400 bg-orange-500/5">Solo Cuenta DEMO</span>}
-                                                    <div className="flex items-center gap-1.5 px-2 py-0.5 rounded text-[9px] bg-brand/5 border border-brand/10 text-brand-light">
+                                                     <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded text-[9px] bg-black/40 border ${theme.border} text-white`}>
                                                         <span className="opacity-60">ID VÍNCULO:</span>
-                                                        <code className="font-mono font-bold select-all tracking-tighter">{purchase.id}</code>
+                                                        <code className={`font-mono font-bold select-all tracking-tighter ${theme.accent}`}>{purchase.id}</code>
                                                     </div>
                                                 </div>
                                             </CardHeader>
@@ -234,15 +238,16 @@ export default async function DashboardPage() {
                                                                     purchaseId={purchase.id} 
                                                                     botName={purchase.botProduct?.name || "Bot"} 
                                                                     isOnline={isOnline}
+                                                                    theme={theme}
                                                                 />
                                                             )}
                                                             
-                                                            <div className="mt-6 p-4 rounded-xl bg-surface-light/40 border-t-2 border-brand/20 shadow-inner">
-                                                                <p className="text-[10px] text-text-muted/60 uppercase tracking-tighter mb-2 font-bold">
-                                                                    ID para Parámetro <span className="text-secondary font-black">PurchaseID</span>
+                                                                                                         <div className={`mt-6 p-4 rounded-xl bg-black/40 border-t-2 ${theme.border} shadow-2xl backdrop-blur-md`}>
+                                                                <p className="text-[10px] text-text-muted/80 uppercase tracking-tighter mb-2 font-black">
+                                                                    ID para Parámetro <span className={`${theme.accent} font-black`}>PurchaseID</span>
                                                                 </p>
                                                                 <div className="flex items-center gap-2">
-                                                                    <code className="bg-black/40 px-3 py-2.5 rounded-lg text-secondary text-xs font-mono border border-white/5 flex-1 break-all uppercase font-bold tracking-widest text-glow">
+                                                                    <code className={`bg-black/60 px-3 py-3 rounded-lg ${theme.accent} text-xs font-mono border border-white/10 flex-1 break-all uppercase font-black tracking-widest text-glow`}>
                                                                         {purchase.id}
                                                                     </code>
                                                                     <CopyIdButton id={purchase.id} />

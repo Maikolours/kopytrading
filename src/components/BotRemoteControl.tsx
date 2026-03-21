@@ -7,9 +7,10 @@ interface BotRemoteControlProps {
     purchaseId: string;
     botName: string;
     isOnline?: boolean;
+    theme?: any;
 }
 
-export function BotRemoteControl({ purchaseId, botName, isOnline }: BotRemoteControlProps) {
+export function BotRemoteControl({ purchaseId, botName, isOnline, theme }: BotRemoteControlProps) {
     const [loading, setLoading] = useState<string | null>(null);
     const [statusMsg, setStatusMsg] = useState<string | null>(null);
 
@@ -39,13 +40,13 @@ export function BotRemoteControl({ purchaseId, botName, isOnline }: BotRemoteCon
     const isGoldBot = botName.toLowerCase().includes("oro") || botName.toLowerCase().includes("ametralladora");
 
     return (
-        <div className="mt-6 p-5 rounded-2xl bg-white/[0.03] border border-white/10 shadow-inner flex flex-col min-h-[340px]">
-            <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-3">
-                <h4 className="text-xs font-black uppercase tracking-[0.2em] text-brand-light">Control Remoto Live</h4>
+        <div className={`mt-6 p-5 rounded-2xl bg-black/40 border ${theme?.border || 'border-white/10'} shadow-2xl flex flex-col min-h-[340px] backdrop-blur-sm`}>
+            <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-3">
+                <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${theme?.accent || 'text-brand-light'}`}>Control Remoto Live</h4>
                 <div className="flex items-center gap-2">
-                    <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-success animate-pulse' : 'bg-text-muted/30'}`}></span>
-                    <span className={`text-[10px] font-bold uppercase ${isOnline ? 'text-success' : 'text-text-muted/60'}`}>
-                        {isOnline ? 'Bot Vinculado' : 'Sin Conexión'}
+                    <span className={`w-2.5 h-2.5 rounded-full ${isOnline ? 'bg-success animate-pulse' : 'bg-white/20'}`}></span>
+                    <span className={`text-[10px] font-black uppercase tracking-tighter ${isOnline ? 'text-success' : 'text-white/40'}`}>
+                        {isOnline ? 'CONECTADO' : 'DESCONECTADO'}
                     </span>
                 </div>
             </div>
@@ -103,7 +104,7 @@ export function BotRemoteControl({ purchaseId, botName, isOnline }: BotRemoteCon
                  <Button 
                     variant="outline" 
                     size="sm" 
-                    className="border-white/10 hover:bg-white/5 text-[9px] font-black uppercase tracking-widest py-3"
+                    className={`bg-white/5 border-white/10 hover:border-brand text-[9px] font-black uppercase tracking-widest py-3 ${theme?.accent}`}
                     onClick={() => sendCommand("DIRECTION", "BUY")}
                 >
                     SOLO BUY
@@ -111,7 +112,7 @@ export function BotRemoteControl({ purchaseId, botName, isOnline }: BotRemoteCon
                 <Button 
                     variant="outline" 
                     size="sm" 
-                    className="border-white/10 hover:bg-white/5 text-[9px] font-black uppercase tracking-widest py-3"
+                    className={`bg-white/5 border-white/10 hover:border-brand text-[9px] font-black uppercase tracking-widest py-3 ${theme?.accent}`}
                     onClick={() => sendCommand("DIRECTION", "SELL")}
                 >
                     SOLO SELL
