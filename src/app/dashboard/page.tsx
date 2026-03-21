@@ -10,6 +10,7 @@ import { PasswordChangeForm } from "@/components/PasswordChangeForm";
 import { BotRemoteControl } from "@/components/BotRemoteControl";
 import { CopyIdButton } from "@/components/CopyIdButton";
 import { SyncStatus } from "@/components/SyncStatus";
+import { CleanupButton } from "@/components/CleanupButton";
 
 // Evitar cacheo
 export const dynamic = "force-dynamic";
@@ -254,7 +255,10 @@ export default async function DashboardPage() {
                                                                 </div>
                                                             </div>
 
-                                                            <SyncStatus initialLastSync={purchase.lastSync ? purchase.lastSync.toISOString() : null} />
+                                                             <div className="flex items-center justify-between mt-4">
+                                                                <SyncStatus initialLastSync={purchase.lastSync ? purchase.lastSync.toISOString() : null} />
+                                                                <CleanupButton purchaseId={purchase.id} />
+                                                            </div>
                                                         </>
                                                     );
                                                 })()}
