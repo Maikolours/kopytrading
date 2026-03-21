@@ -36,7 +36,12 @@ input bool     NotificarTelegram = true;       // Enviar alertas al móvil
 //============================================================
 //  GESTIÓN DE RIESGO
 //============================================================
-input group "=== GESTION DE RIESGO ==="
+input group "=== FILTRO DE NOTICIAS USD ==="
+input bool     FiltroNoticias       = true; // Activar pausa por noticias?
+input int      MinutosAntes         = 30;   // Minutos antes de noticia
+input int      MinutosDespues       = 30;   // Minutos despues de noticia
+
+input group "=== CONFIGURACIÓN INTERNA ==="
 input double   RiskPercent        = 0.0;       // % de Riesgo (0 = Lote Manual)
 input int      MagicNumber        = 202509;    // Magic Number
 input double   LoteManual         = 0.01;      // Lote Inicial
@@ -106,7 +111,8 @@ ENUM_DIR       currentDir = DIR_AMBAS;
 ENUM_MODE      currentMode = MODE_COSECHA;
 string         botStatus = "LISTO";
 bool           isMinimized = false;
-bool           remotePaused = false; 
+bool           remotePaused = false;
+bool           noticiaActiva = false;
 bool           startNotified = false;
 int            startRetries = 0;
 datetime       lastPositionsSync = 0;
@@ -183,11 +189,16 @@ void OnTick() {
       }
    }
 
-   if(!IsTradingTime() || TimeCurrent() < coolingEndTime) {
-      botStatus = (TimeCurrent() < coolingEndTime) ? "ENFRIANDO" : "FUERA DE HORARIO";
+   noticiaActiva = HayNoticia();
+   if(noticiaActiva || !IsTradingTime() || TimeCurrent() < coolingEndTime) {
+      if(noticiaActiva) botStatus = "ALERTA NOTICIA";
+      else botStatus = (TimeCurrent() < coolingEndTime) ? "ENFRIANDO" : "FUERA DE HORARIO";
+      
       ManageOpenPositions(); // Keep managing existing ones
       DeleteBotPendings();  // No new pending orders
-      ActualizarPanel(); return;
+      ActualizarPanel(); 
+      SyncPositions();
+      return;
    }
 
    ManageOpenPositions();
