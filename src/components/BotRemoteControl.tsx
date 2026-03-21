@@ -39,7 +39,7 @@ export function BotRemoteControl({ purchaseId, botName, isOnline }: BotRemoteCon
     const isGoldBot = botName.toLowerCase().includes("oro") || botName.toLowerCase().includes("ametralladora");
 
     return (
-        <div className="mt-6 p-5 rounded-2xl bg-black/40 border border-white/10 shadow-inner">
+        <div className="mt-6 p-5 rounded-2xl bg-white/[0.03] border border-white/10 shadow-inner flex flex-col min-h-[340px]">
             <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-3">
                 <h4 className="text-xs font-black uppercase tracking-[0.2em] text-brand-light">Control Remoto Live</h4>
                 <div className="flex items-center gap-2">
@@ -48,6 +48,34 @@ export function BotRemoteControl({ purchaseId, botName, isOnline }: BotRemoteCon
                         {isOnline ? 'Bot Vinculado' : 'Sin Conexión'}
                     </span>
                 </div>
+            </div>
+
+            {/* Fila de Modos (Zen/Cosecha) - Siempre ocupa espacio pero solo se ve en Gold */}
+            <div className={`grid grid-cols-2 gap-3 mb-4 transition-all duration-300 ${isGoldBot ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                {isGoldBot ? (
+                    <>
+                        <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="bg-amber-500/10 border-amber-500/30 hover:bg-amber-500/20 text-[10px] font-bold py-3 text-amber-400"
+                            onClick={() => sendCommand("CHANGE_MODE", "ZEN")}
+                            loading={loading === "CHANGE_MODE" && statusMsg?.includes("ZEN")}
+                        >
+                            🧘 MODO ZEN
+                        </Button>
+                        <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="bg-emerald-500/10 border-emerald-500/30 hover:bg-emerald-500/20 text-[10px] font-bold py-3 text-emerald-400"
+                            onClick={() => sendCommand("CHANGE_MODE", "COSECHA")}
+                            loading={loading === "CHANGE_MODE" && statusMsg?.includes("COSECHA")}
+                        >
+                            🚜 COSECHA
+                        </Button>
+                    </>
+                ) : (
+                    <div className="h-[42px]" /> // Placeholder para mantener altura
+                )}
             </div>
 
             <div className="grid grid-cols-2 gap-3 mb-4">
@@ -71,54 +99,31 @@ export function BotRemoteControl({ purchaseId, botName, isOnline }: BotRemoteCon
                 </Button>
             </div>
 
-            {isGoldBot && (
-                <div className="grid grid-cols-2 gap-3 mb-4">
-                    <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="bg-brand/5 border-brand/20 hover:bg-brand/10 text-[10px] font-bold py-3"
-                        onClick={() => sendCommand("CHANGE_MODE", "ZEN")}
-                        loading={loading === "CHANGE_MODE" && statusMsg?.includes("ZEN")}
-                    >
-                        🧘 MODO ZEN
-                    </Button>
-                    <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="bg-orange-500/5 border-orange-500/20 hover:bg-orange-500/10 text-[10px] font-bold py-3 text-orange-400"
-                        onClick={() => sendCommand("CHANGE_MODE", "COSECHA")}
-                        loading={loading === "CHANGE_MODE" && statusMsg?.includes("COSECHA")}
-                    >
-                        🚜 COSECHA
-                    </Button>
-                </div>
-            )}
-
-            <div className="space-y-3">
-                <div className="flex gap-2">
-                     <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="flex-1 border-white/10 hover:bg-white/5 text-[9px] font-black uppercase tracking-widest"
-                        onClick={() => sendCommand("DIRECTION", "BUY")}
-                    >
-                        SOLO BUY
-                    </Button>
-                    <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="flex-1 border-white/10 hover:bg-white/5 text-[9px] font-black uppercase tracking-widest"
-                        onClick={() => sendCommand("DIRECTION", "SELL")}
-                    >
-                        SOLO SELL
-                    </Button>
-                </div>
-                
+            <div className="grid grid-cols-2 gap-3 mb-6">
+                 <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="border-white/10 hover:bg-white/5 text-[9px] font-black uppercase tracking-widest py-3"
+                    onClick={() => sendCommand("DIRECTION", "BUY")}
+                >
+                    SOLO BUY
+                </Button>
+                <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="border-white/10 hover:bg-white/5 text-[9px] font-black uppercase tracking-widest py-3"
+                    onClick={() => sendCommand("DIRECTION", "SELL")}
+                >
+                    SOLO SELL
+                </Button>
+            </div>
+            
+            <div className="mt-auto">
                 <Button 
                     variant="danger" 
                     size="sm" 
                     fullWidth
-                    className="text-[10px] font-black uppercase tracking-widest shadow-lg shadow-danger/20"
+                    className="text-[10px] font-black uppercase tracking-widest shadow-lg shadow-danger/20 py-4"
                     onClick={() => {
                         if(confirm("¿Estás seguro? Esto cerrará todas las posiciones abiertas del bot inmediatamente.")) {
                             sendCommand("CLOSE_ALL");

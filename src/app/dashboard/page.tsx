@@ -73,13 +73,36 @@ export default async function DashboardPage() {
     // Helper para colores de bot
     const getBotTheme = (name: string = "") => {
         const n = name.toUpperCase();
-        if (n.includes("ORO") || n.includes("XAUUSD") || n.includes("AMETRA")) 
-            return { border: "border-amber-500/40", glow: "shadow-[0_0_20px_rgba(245,158,11,0.15)]", accent: "text-amber-400", bg: "bg-amber-500/5" };
+        if (n.includes("ORO") || n.includes("XAUUSD") || n.includes("AMETRA"))
+            return {
+                border: 'border-t-amber-500/80 border-l-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.15)]',
+                accent: 'text-amber-400',
+                glow: 'bg-amber-500/5',
+                bg: 'from-amber-500/5 via-transparent to-transparent'
+            };
         if (n.includes("BTC") || n.includes("BITCOIN"))
-            return { border: "border-purple-500/40", glow: "shadow-[0_0_20px_rgba(168,85,247,0.15)]", accent: "text-purple-400", bg: "bg-purple-500/5" };
+            return {
+                border: 'border-t-purple-500 border-l-4 border-l-purple-500 shadow-[0_0_20px_rgba(168,85,247,0.2)]',
+                accent: 'text-purple-400',
+                glow: 'bg-purple-500/10',
+                bg: 'from-purple-500/5 via-transparent to-transparent',
+                gradient: 'from-purple-500/20 via-black to-black'
+            };
         if (n.includes("YEN") || n.includes("JPY"))
-            return { border: "border-cyan-500/40", glow: "shadow-[0_0_20px_rgba(6,182,212,0.15)]", accent: "text-cyan-400", bg: "bg-cyan-500/5" };
-        return { border: "border-white/20", glow: "shadow-[0_0_20px_rgba(255,255,255,0.05)]", accent: "text-brand-light", bg: "bg-white/5" };
+            return {
+                border: 'border-t-cyan-500 border-l-4 border-l-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.2)]',
+                accent: 'text-cyan-400',
+                glow: 'bg-cyan-500/10',
+                bg: 'from-cyan-500/5 via-transparent to-transparent',
+                gradient: 'from-cyan-500/10 via-black to-black'
+            };
+        return {
+            border: 'border-t-brand/80 border-l-brand/20 shadow-[0_0_15px_rgba(0,186,215,0.15)]',
+            accent: 'text-brand-light',
+            glow: 'bg-brand/5',
+            bg: 'from-brand/5 via-transparent to-transparent',
+            gradient: 'from-brand/10 via-black to-black'
+        };
     };
 
     return (
@@ -133,8 +156,11 @@ export default async function DashboardPage() {
                                     const theme = getBotTheme(purchase.botProduct.name);
 
                                     return (
-                                        <Card key={purchase.id} className={`flex flex-col h-full border transition-all duration-300 ${theme.border} ${theme.glow} ${theme.bg} ${isExpired ? 'opacity-70 grayscale-[0.5]' : 'hover:scale-[1.01] hover:border-brand-bright/50'}`}>
-                                            <CardHeader>
+                                        <Card key={purchase.id} className={`relative overflow-hidden glass-card border border-white/5 ${theme.border} group h-full flex flex-col transition-all duration-300 hover:scale-[1.01] bg-black/60`}>
+                                            <div className={`absolute inset-0 bg-gradient-to-tr ${theme.gradient} pointer-events-none opacity-40`} />
+                                            <div className={`absolute -top-24 -right-24 w-48 h-48 ${theme.glow} blur-[120px] rounded-full group-hover:opacity-100 transition-opacity opacity-30`} />
+                                            
+                                            <CardHeader className="relative z-10 pb-2">
                                                 <div className="flex justify-between items-start mb-2">
                                                     <CardTitle>{purchase.botProduct.name || "Sin nombre"}</CardTitle>
                                                     <div className="flex flex-col items-end gap-1">
@@ -169,7 +195,7 @@ export default async function DashboardPage() {
                                                     </div>
                                                 </div>
                                             </CardHeader>
-                                            <CardContent className="flex-grow pb-4 text-sm text-text-muted">
+                                             <CardContent className="relative z-10 flex-grow flex flex-col pb-4 text-sm text-text-muted">
                                                 {isTrial ? (
                                                     <div className="space-y-3">
                                                         <div className="flex flex-col gap-1">
@@ -309,9 +335,14 @@ export default async function DashboardPage() {
                                                                 </div>
                                                             ))}
                                                         </div>
-                                                    </div>
-                                                )}
-                                            </CardContent>
+                                                     </div>
+                                                 )}
+
+                                                {/* Botón de Emergencia SIEMPRE AL FINAL */}
+                                                <div className="mt-auto pt-4 border-t border-white/5 italic text-[10px] text-text-muted/40 text-center">
+                                                    Control centralizado de cuenta MT5.
+                                                </div>
+                                             </CardContent>
                                         <CardFooter className="pt-4 border-t border-white/5 flex flex-wrap gap-3">
                                             <a href={`/api/download/${purchase.id}?type=ex5`} className="flex-1 min-w-[120px]">
                                                 <Button size="sm" fullWidth className="text-sm bg-surface-light hover:bg-surface-light/80 text-white shadow-none">

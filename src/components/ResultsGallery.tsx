@@ -35,13 +35,7 @@ const RESULTS_VIDEOS: VideoResult[] = [
   },
 ];
 
-const RESULTS_PHOTOS = [
-  { id: "p1", url: "/img/results/resultado-01.png", title: "Operativa Oro" },
-  { id: "p2", url: "/img/results/resultado-02.png", title: "Panel Profit" },
-  { id: "p3", url: "/img/results/resultado-03.png", title: "Evolución Cuenta" },
-  { id: "p4", url: "/img/results/result-xauusd-cent.png", title: "Resultado Oro Cent" },
-  { id: "p5", url: "/img/results/result-btc-profit.jpg", title: "Profit BTC Storm" },
-];
+const RESULTS_PHOTOS: any[] = [];
 
 export function ResultsGallery() {
   const [activeVideo, setActiveVideo] = useState<VideoResult | null>(null);
