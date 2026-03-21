@@ -48,8 +48,12 @@ export default async function DashboardPage() {
                     orderBy: { updatedAt: 'desc' }
                 },
                 pastTrades: {
-                    orderBy: { closedAt: 'desc' },
-                    take: 5
+                    where: {
+                        closedAt: {
+                            gte: new Date(new Date().setHours(0, 0, 0, 0))
+                        }
+                    },
+                    orderBy: { closedAt: 'desc' }
                 }
             },
             orderBy: { createdAt: 'desc' }
@@ -156,6 +160,10 @@ export default async function DashboardPage() {
                                     const isExpired = isTrial && purchase.expiresAt && new Date() > new Date(purchase.expiresAt) && !isEternalUser;
                                     const hasUpdate = purchase.botProduct.version !== purchase.lastDownloadedVersion;
                                     const theme = getBotTheme(purchase.botProduct.name);
+                                 
+                                 // Calcular beneficio diario de hoy
+                                 const dailyProfit = (purchase.pastTrades || []).reduce((acc: number, t: any) => acc + (Number(t.profit) || 0), 0);
+                                 
                                     return (
                                         <Card key={purchase.id} className={`relative overflow-hidden glass-card border-white/20 ${theme.border} group h-full flex flex-col transition-all duration-500 hover:scale-[1.03] bg-black/80 shadow-2xl`}>
                                             {/* Background Gradient Layer - Much more visible */}
@@ -182,6 +190,14 @@ export default async function DashboardPage() {
                                                                 LIFETIME
                                                             </span>
                                                         )}
+                                                        
+                                                        {/* Resultado Diario (PnL Hoy) - ¡MUY VISIBLE! */}
+                                                        <div className={`mt-2 px-3 py-2 rounded-xl flex items-center justify-between gap-3 shadow-inner bg-black/60 border ${theme.border}`}>
+                                                            <span className="text-[9px] font-black uppercase tracking-widest opacity-60">RESULTADO HOY:</span>
+                                                            <span className={`text-sm font-black font-mono ${dailyProfit >= 0 ? 'text-success drop-shadow-[0_0_8px_rgba(34,197,94,0.4)]' : 'text-danger drop-shadow-[0_0_8px_rgba(239,68,68,0.4)]'}`}>
+                                                                {dailyProfit >= 0 ? '+' : ''}{dailyProfit.toFixed(2)} $
+                                                            </span>
+                                                        </div>
                                                         {hasUpdate && !isExpired && (
                                                             <a href={`/api/download/${purchase.id}?type=ex5`} className="mt-1">
                                                                 <span className={`text-[10px] font-black px-3 py-1.5 rounded-full ${theme.badge} animate-pulse cursor-pointer hover:opacity-80 transition-all block text-center shadow-lg border-2`}>
