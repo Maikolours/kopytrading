@@ -1,72 +1,61 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-/**
- * API para que los bots (.ex5) verifiquen si tienen permiso para operar.
- * El bot enviará su ID y el AccountNumber() de MetaTrader.
- */
 export async function GET(req: Request) {
-    try {
-        const { searchParams } = new URL(req.url);
-        const botId = searchParams.get("botId");
-        const accountNumber = searchParams.get("accountNumber");
-        const email = searchParams.get("email");
-        const isDemo = searchParams.get("isDemo"); // Nuevo: el bot debe decir si es demo
+  const { searchParams } = new URL(req.url);
+  const purchaseId = searchParams.get("purchaseId");
+  const account = searchParams.get("account");
+  const mode = searchParams.get("mode"); // 0=Demo, 1=Real (custom)
 
-        if (!botId || !accountNumber || !email) {
-            return NextResponse.json({ authorized: false, message: "Missing params" }, { status: 400 });
-        }
+  if (!purchaseId) {
+    return NextResponse.json({ allowed: false, error: "Missing PurchaseID" }, { status: 400 });
+  }
 
-        // 1. Buscar el usuario por email
-        const user = await prisma.user.findUnique({
-            where: { email },
-            include: {
-                purchases: {
-                    where: {
-                        botProductId: botId,
-                        status: { in: ["COMPLETED", "TRIAL"] }
-                    }
-                }
-            }
-        });
+  try {
+    const purchase = await prisma.purchase.findUnique({
+      where: { id: purchaseId },
+      include: { botProduct: true }
+    });
 
-        if (!user) {
-            return NextResponse.json({ authorized: false, message: "Usuario no registrado" });
-        }
-
-        // 2. Verificar si tiene una compra/trial activa
-        const purchase = user.purchases[0];
-        if (!purchase) {
-            return NextResponse.json({ authorized: false, message: "No tienes una licencia activa para este bot" });
-        }
-
-        // 3. Verificar si el trial ha expirado
-        if (purchase.status === "TRIAL" && purchase.expiresAt) {
-            if (new Date() > purchase.expiresAt) {
-                return NextResponse.json({ authorized: false, message: "Tu prueba gratuita de 30 días ha expirado" });
-            }
-
-            // 4. NUEVO: Restringir TRIAL solo a cuentas DEMO
-            if (isDemo !== "true") {
-                return NextResponse.json({
-                    authorized: false,
-                    message: "Las licencias de PRUEBA solo funcionan en cuentas DEMO. Adquiere una licencia FULL para operar en REAL."
-                });
-            }
-        }
-
-        // 5. Lógica de "Piratería": Vincular el AccountNumber
-        // Podríamos guardar purchase.accountNumber en la DB si quisiéramos fijarlo.
-
-        return NextResponse.json({
-            authorized: true,
-            status: purchase.status,
-            expiresAt: purchase.expiresAt,
-            message: purchase.status === "TRIAL" ? "Licencia de PRUEBA activa (Solo DEMO)" : "Licencia VITALICIA activa"
-        });
-
-    } catch (error) {
-        console.error("Error in license check:", error);
-        return NextResponse.json({ authorized: false, error: "Server error" }, { status: 500 });
+    if (!purchase) {
+      return NextResponse.json({ allowed: false, error: "Invalid License" }, { status: 404 });
     }
+
+    // Lógica de Trial: Solo Demo
+    if (purchase.status === "TRIAL") {
+      if (mode === "1") { // Intento en Cuenta Real
+         return NextResponse.json({ 
+            allowed: false, 
+            error: "TRIAL_REAL_FORBIDDEN",
+            message: "La versión TRIAL solo funciona en cuentas DEMO." 
+         });
+      }
+
+      // Check Expiración
+      if (purchase.expiresAt && new Date() > new Date(purchase.expiresAt)) {
+         return NextResponse.json({ 
+            allowed: false, 
+            error: "TRIAL_EXPIRED",
+            message: "Tu periodo de prueba de 30 días ha terminado." 
+         });
+      }
+
+      return NextResponse.json({ 
+         allowed: true, 
+         type: "TRIAL",
+         message: "Prueba Activa (Solo Demo)" 
+      });
+    }
+
+    // Lógica Full/Lifetime
+    return NextResponse.json({ 
+       allowed: true, 
+       type: "FULL",
+       message: "Licencia Vitalicia Activa" 
+    });
+
+  } catch (error) {
+    console.error("License Check Error:", error);
+    return NextResponse.json({ allowed: false, error: "Internal Error" }, { status: 500 });
+  }
 }

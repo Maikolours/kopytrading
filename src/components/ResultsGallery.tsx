@@ -17,14 +17,28 @@ interface VideoResult {
 const RESULTS_VIDEOS: VideoResult[] = [
   {
     id: "1",
-    title: "Operativa Real XAUUSD - La Ametralladora",
-    description: "Sesión de trading en vivo mostrando el funcionamiento del algoritmo en el Oro con el sistema de blindaje activado.",
-    videoUrl: "https://drive.google.com/file/d/13zwGUwrmkxOYEKrOd3TVYSwd8xqa9-be/preview",
-    date: "12 Mar 2026",
-    botName: "Ametralladora v3.60",
-    profit: "+125.40 USD"
+    title: "Operativa Real XAUUSD - Rescate Cent",
+    description: "Funcionamiento del sistema de rescate (Martingala Controlada) en cuenta real Cent. Verificación de lotajes y anclaje de seguridad.",
+    videoUrl: "https://drive.google.com/file/d/1jbQWw8cuLm6gjqoH1TADWPqTNZ2199_u/preview",
+    date: "20 Mar 2026",
+    botName: "Ametralladora Evolution",
+    profit: "+55.80 USC"
   },
-  // Aquí se pueden añadir más vídeos en el futuro
+  {
+    id: "2",
+    title: "BTCUSD Storm Rider - Optimización",
+    description: "Análisis de entradas en Bitcoin tras la optimización del Momentum y filtros de volatilidad.",
+    videoUrl: "https://drive.google.com/file/d/1aIu398AEt4_HBW_ULl0UvGmK70eCV3b8/preview",
+    date: "19 Mar 2026",
+    botName: "BTC Storm Rider",
+    profit: "+12.20 USD"
+  },
+];
+
+const RESULTS_PHOTOS = [
+  { id: "p1", url: "/img/results/resultado-01.png", title: "Operativa Oro" },
+  { id: "p2", url: "/img/results/resultado-02.png", title: "Panel Profit" },
+  { id: "p3", url: "/img/results/resultado-03.png", title: "Evolución Cuenta" },
 ];
 
 export function ResultsGallery() {
@@ -37,22 +51,19 @@ export function ResultsGallery() {
       <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-accent/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {RESULTS_VIDEOS.map((video) => (
             <div 
               key={video.id} 
               className="glass-card border border-white/10 rounded-2xl overflow-hidden group hover:border-brand/40 transition-all flex flex-col"
             >
               <div className="aspect-video relative bg-surface overflow-hidden">
-                {/* Iframe de Google Drive */}
                 <iframe
                   src={video.videoUrl}
                   className="w-full h-full"
                   allow="autoplay"
                   title={video.title}
                 ></iframe>
-                
-                {/* Overlay sutil para indicar que es un video */}
                 <div className="absolute inset-0 bg-black/20 pointer-events-none group-hover:bg-transparent transition-colors" />
               </div>
 
@@ -94,6 +105,32 @@ export function ResultsGallery() {
             </div>
             <h4 className="text-white/40 font-bold mb-2">Próximos Resultados</h4>
             <p className="text-text-muted/40 text-xs">Añadiremos más grabaciones semanales de nuestras pruebas.</p>
+          </div>
+        </div>
+
+        {/* Sección de Fotos/Capturas */}
+        <div className="mt-20">
+          <div className="flex flex-col items-center mb-12">
+            <h2 className="text-3xl font-bold text-white mb-4">Capturas de Resultados</h2>
+            <div className="h-1 w-20 bg-brand rounded-full" />
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {RESULTS_PHOTOS.map((photo) => (
+              <div 
+                key={photo.id}
+                className="aspect-square relative rounded-xl overflow-hidden border border-white/10 group cursor-zoom-in"
+              >
+                <img 
+                  src={photo.url} 
+                  alt={photo.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                  <p className="text-white text-xs font-bold">{photo.title}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
