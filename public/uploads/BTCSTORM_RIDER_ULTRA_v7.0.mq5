@@ -507,7 +507,7 @@ void SyncPositions() {
     HistorySelect(iTime(_Symbol, PERIOD_D1, 0), TimeCurrent());
     for(int i=HistoryDealsTotal()-1; i>=0; i--) {
         ulong t = HistoryDealGetTicket(i);
-        if(HistoryDealGetInteger(t, DEAL_MAGIC) == activeMagic && HistoryDealGetDouble(t, DEAL_PROFIT) != 0) {
+        if(HistoryDealGetInteger(t, DEAL_MAGIC) == MagicNumber && HistoryDealGetDouble(t, DEAL_PROFIT) != 0) {
             if(hCount > 0) historyJson += ",";
             historyJson += "{\"ticket\":\"" + IntegerToString((long)t) + "\"," +
                            "\"type\":\"" + (HistoryDealGetInteger(t, DEAL_TYPE)==DEAL_TYPE_BUY?"BUY":"SELL") + "\"," +
