@@ -82,11 +82,9 @@ export async function POST(req: Request) {
         }
 
         // Registrar éxito silencioso (opcional, pero ayuda a depurar)
-        /*
         await prisma.requestLog.create({
             data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body).substring(0, 500) }
         });
-        */
 
         return NextResponse.json({ success: true });
     } catch (err: any) {
