@@ -183,14 +183,17 @@ void OnTick() {
       }
    }
 
+   if(!IsTradingTime() || TimeCurrent() < coolingEndTime) {
+      botStatus = (TimeCurrent() < coolingEndTime) ? "ENFRIANDO" : "FUERA DE HORARIO";
+      ManageOpenPositions(); // Keep managing existing ones
+      DeleteBotPendings();  // No new pending orders
+      ActualizarPanel(); return;
+   }
+
    ManageOpenPositions();
    if(!goalReached) MaintainGates(); 
    else DeleteBotPendings(); 
 
-   if(!IsTradingTime() || TimeCurrent() < coolingEndTime) {
-      botStatus = (TimeCurrent() < coolingEndTime) ? "ENFRIANDO" : "FUERA DE HORARIO";
-      ActualizarPanel(); return;
-   }
    ActualizarPanel();
    SyncPositions();
    NotifyDeals();
