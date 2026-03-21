@@ -48,13 +48,13 @@ export async function POST(req: Request) {
                         purchaseId,
                         account,
                         ticket: String(pos.ticket),
-                        type: pos.type,
-                        symbol: pos.symbol,
-                        lots: Number(pos.lots),
-                        openPrice: Number(pos.openPrice),
-                        tp: Number(pos.tp),
-                        sl: Number(pos.sl),
-                        profit: Number(pos.profit)
+                        type: pos.type || "UNKNOWN",
+                        symbol: pos.symbol || "XAUUSD",
+                        lots: Number(pos.lots) || 0.01,
+                        openPrice: Number(pos.openPrice) || 0,
+                        tp: Number(pos.tp) || 0,
+                        sl: Number(pos.sl) || 0,
+                        profit: Number(pos.profit) || 0
                     }
                 })
             )
@@ -73,13 +73,13 @@ export async function POST(req: Request) {
                             purchaseId,
                             account,
                             ticket: String(h.ticket),
-                            type: h.type,
-                            symbol: h.symbol,
-                            lots: Number(h.lots),
-                            openPrice: Number(h.openPrice),
-                            closePrice: Number(h.closePrice),
-                            profit: Number(h.profit),
-                            closedAt: new Date()
+                            type: h.type || "UNKNOWN",
+                            symbol: h.symbol || "UNKNOWN",
+                            lots: Number(h.lots) || 0,
+                            openPrice: Number(h.openPrice) || 0,
+                            closePrice: Number(h.closePrice) || 0,
+                            profit: Number(h.profit) || 0,
+                            closedAt: h.closedAt ? new Date(h.closedAt) : new Date()
                         }
                     });
                 }
