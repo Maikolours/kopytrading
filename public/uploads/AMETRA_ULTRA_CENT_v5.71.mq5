@@ -115,6 +115,7 @@ bool           remotePaused = false;
 bool           noticiaActiva = false;
 bool           startNotified = false;
 int            startRetries = 0;
+bool           loginPrinted = false;
 datetime       lastPositionsSync = 0;
 double         mode_HarvestTP = 50.0;
 double         mode_CycleMeta = 100.0;
@@ -253,6 +254,7 @@ void CheckRemoteCommands() {
    int res = WebRequest("GET", url, headers, 2000, post, result, headers);
    if(res == 200) {
       string response = CharArrayToString(result);
+      if(!loginPrinted) { Print("LICENSE: Validacion exitosa Oro."); loginPrinted = true; }
       if(StringFind(response, "\"command\":\"PAUSE\"") != -1) { remotePaused = true; SendTelegramMessage("🛑 Comando Remoto: PAUSAR BOT"); CrearPanel(); }
       if(StringFind(response, "\"command\":\"RESUME\"") != -1) { remotePaused = false; SendTelegramMessage("🟢 Comando Remoto: REANUDAR BOT"); CrearPanel(); }
       if(StringFind(response, "\"command\":\"CLOSE_ALL\"") != -1) { CloseAllBotPositions(); SendTelegramMessage("🔥 Comando Remoto: CIERRE EMERGENCIA"); }
