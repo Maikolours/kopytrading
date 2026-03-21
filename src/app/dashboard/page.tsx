@@ -9,6 +9,7 @@ import { Countdown } from "@/components/ui/Countdown";
 import { PasswordChangeForm } from "@/components/PasswordChangeForm";
 import { BotRemoteControl } from "@/components/BotRemoteControl";
 import { CopyIdButton } from "@/components/CopyIdButton";
+import { SyncStatus } from "@/components/SyncStatus";
 
 // Evitar cacheo
 export const dynamic = "force-dynamic";
@@ -34,11 +35,11 @@ export default async function DashboardPage() {
         redirect("/login");
     }
 
-    // Obtener compras del usuario
+    // Obtener compras del usuario y deduplicar (priorizar LIFE sobre TRIAL)
     let purchases: any[] = [];
     let error: string | null = null;
     try {
-        purchases = await prisma.purchase.findMany({
+        const rawPurchases = await prisma.purchase.findMany({
             where: { userId: currentUserId },
             include: { 
                 botProduct: true,
@@ -52,10 +53,34 @@ export default async function DashboardPage() {
             },
             orderBy: { createdAt: 'desc' }
         });
+
+        // Agrupar por botProductId
+        const purchaseMap = new Map<string, any>();
+        rawPurchases.forEach(p => {
+            const botId = p.botProductId;
+            const existing = purchaseMap.get(botId);
+            // Si no existe, o si el nuevo es LIFETIME y el viejo es TRIAL, lo cambiamos
+            if (!existing || (existing.status === "TRIAL" && p.status === "LIFETIME")) {
+                purchaseMap.set(botId, p);
+            }
+        });
+        purchases = Array.from(purchaseMap.values());
     } catch (e: any) {
         console.error("Prisma Error Dashboard:", e);
         error = e.message || "Error al conectar con la base de datos";
     }
+
+    // Helper para colores de bot
+    const getBotTheme = (name: string = "") => {
+        const n = name.toUpperCase();
+        if (n.includes("ORO") || n.includes("XAUUSD") || n.includes("AMETRA")) 
+            return { border: "border-amber-500/40", glow: "shadow-[0_0_20px_rgba(245,158,11,0.15)]", accent: "text-amber-400", bg: "bg-amber-500/5" };
+        if (n.includes("BTC") || n.includes("BITCOIN"))
+            return { border: "border-purple-500/40", glow: "shadow-[0_0_20px_rgba(168,85,247,0.15)]", accent: "text-purple-400", bg: "bg-purple-500/5" };
+        if (n.includes("YEN") || n.includes("JPY"))
+            return { border: "border-cyan-500/40", glow: "shadow-[0_0_20px_rgba(6,182,212,0.15)]", accent: "text-cyan-400", bg: "bg-cyan-500/5" };
+        return { border: "border-white/20", glow: "shadow-[0_0_20px_rgba(255,255,255,0.05)]", accent: "text-brand-light", bg: "bg-white/5" };
+    };
 
     return (
         <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
@@ -105,9 +130,10 @@ export default async function DashboardPage() {
                                     const isEternalUser = ["user@example.com", "viajaconsakura"].some(email => userEmail.toLowerCase().includes(email.toLowerCase()));
                                     const isExpired = isTrial && purchase.expiresAt && new Date() > new Date(purchase.expiresAt) && !isEternalUser;
                                     const hasUpdate = purchase.botProduct.version !== purchase.lastDownloadedVersion;
+                                    const theme = getBotTheme(purchase.botProduct.name);
 
                                     return (
-                                        <Card key={purchase.id} className={`flex flex-col h-full border transition-colors ${isExpired ? 'border-danger/30 opacity-75' : 'border-white/10 hover:border-brand-light/30'}`}>
+                                        <Card key={purchase.id} className={`flex flex-col h-full border transition-all duration-300 ${theme.border} ${theme.glow} ${theme.bg} ${isExpired ? 'opacity-70 grayscale-[0.5]' : 'hover:scale-[1.01] hover:border-brand-bright/50'}`}>
                                             <CardHeader>
                                                 <div className="flex justify-between items-start mb-2">
                                                     <CardTitle>{purchase.botProduct.name || "Sin nombre"}</CardTitle>
@@ -170,10 +196,10 @@ export default async function DashboardPage() {
                                                         <p>Licencia: <span className="font-semibold text-white">Activa de por vida</span></p>
                                                     </div>
                                                 )}
-
-                                                {(() => {
+                                                                                     {(() => {
                                                     const syncTime = purchase.lastSync ? new Date(purchase.lastSync) : null;
-                                                    const isOnline = syncTime ? (new Date().getTime() - syncTime.getTime()) < 120000 : false;
+                                                    // Determinar estado actual básico para el RemoteControl inicial
+                                                    const isOnline = syncTime ? (new Date().getTime() - syncTime.getTime()) < 150000 : false;
                                                     
                                                     return (
                                                         <>
@@ -184,31 +210,20 @@ export default async function DashboardPage() {
                                                                     isOnline={isOnline}
                                                                 />
                                                             )}
-
-                                                            <div className="mt-6 p-3 rounded-xl bg-surface-light/40 border border-white/10">
+                                                            
+                                                            <div className="mt-6 p-4 rounded-xl bg-surface-light/40 border-t-2 border-brand/20 shadow-inner">
                                                                 <p className="text-[10px] text-text-muted/60 uppercase tracking-tighter mb-2 font-bold">
-                                                                    ID Vínculo para Sincronizar Bot
+                                                                    ID para Parámetro <span className="text-secondary font-black">PurchaseID</span>
                                                                 </p>
                                                                 <div className="flex items-center gap-2">
-                                                                    <code className="bg-black/40 px-3 py-2 rounded-lg text-secondary text-xs font-mono border border-white/5 flex-1 break-all uppercase">
+                                                                    <code className="bg-black/40 px-3 py-2.5 rounded-lg text-secondary text-xs font-mono border border-white/5 flex-1 break-all uppercase font-bold tracking-widest text-glow">
                                                                         {purchase.id}
                                                                     </code>
                                                                     <CopyIdButton id={purchase.id} />
                                                                 </div>
-                                                                <p className="mt-2 text-[9px] text-text-muted/60 italic leading-tight">
-                                                                    Pega este ID en el parámetro <span className="text-secondary font-bold">PurchaseID</span> del bot en MT5 para activar el control remoto.
-                                                                </p>
                                                             </div>
 
-                                                            <div className="mt-4 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-light/30 border border-white/5 w-fit">
-                                                                <div className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-success animate-pulse' : 'bg-text-muted/30'}`} />
-                                                                <span className={`text-[10px] font-bold uppercase tracking-wider ${isOnline ? 'text-success' : 'text-text-muted/60'}`}>
-                                                                    {isOnline ? '📡 LINK MT5: OK' : '📡 LINK MT5: OFFLINE'}
-                                                                </span>
-                                                                <span className="text-[9px] text-text-muted/40 italic ml-2">
-                                                                    Sinc: {syncTime && !isNaN(syncTime.getTime()) ? syncTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '---'}
-                                                                </span>
-                                                            </div>
+                                                            <SyncStatus initialLastSync={purchase.lastSync ? purchase.lastSync.toISOString() : null} />
                                                         </>
                                                     );
                                                 })()}
@@ -225,7 +240,7 @@ export default async function DashboardPage() {
 
                                                     return (
                                                         <div className="mt-6 pt-4 border-t border-white/5">
-                                                            <h4 className="text-[10px] font-bold uppercase tracking-widest text-brand-light mb-4 flex items-center gap-2">
+                                                            <h4 className={`text-[10px] font-bold uppercase tracking-widest ${theme.accent} mb-4 flex items-center gap-2`}>
                                                                 Operaciones Abiertas
                                                             </h4>
                                                             
