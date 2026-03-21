@@ -1,5 +1,11 @@
 
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "KopyTrading | Bots de Trading Algorítmico para MT5",
+  description: "Líderes en automatización de trading. Bots especializados en Oro (XAUUSD), Bitcoin y Forex con gestión de riesgo avanzada. Resultados reales y verificados.",
+};
 import { Button } from "@/components/ui/Button";
 import { ProfitCalculator } from "@/components/ProfitCalculator";
 import { LiveSalesPopup } from "@/components/LiveSalesPopup";

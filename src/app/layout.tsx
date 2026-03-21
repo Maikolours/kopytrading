@@ -15,16 +15,44 @@ import type { Metadata } from "next";
 const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "KopyTrading | Bots de Trading Avanzados",
-  description: "Automatiza tu trading en MT5 con nuestros bots especializados en Oro, Bitcoin y Forex. Tecnología institucional para el trader retail.",
-  manifest: "/manifest.json",
-  themeColor: "#0F0F1A",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "black-translucent",
-    title: "KopyTrading"
+  title: {
+    default: "KopyTrading | Bots de Trading Avanzados para MT5",
+    template: "%s | KopyTrading"
   },
+  description: "Automatiza tu trading en MetaTrader 5 con nuestros bots de alta precisión en Oro (XAUUSD), Bitcoin y Forex. Tecnología institucional accesible para todos.",
+  keywords: ["Trading Bots", "MT5", "MetaTrader 5", "Expert Advisors", "Oro", "XAUUSD", "Bitcoin Trading", "Trading Automático", "KopyTrading", "MQL5"],
+  authors: [{ name: "KopyTrading Team" }],
+  creator: "KopyTrading",
+  publisher: "KopyTrading",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    locale: "es_ES",
+    url: "https://kopytrading.com",
+    siteName: "KopyTrading",
+    title: "KopyTrading | Bots de Trading de Alta Precisión",
+    description: "Consigue rentabilidad algorítmica con nuestros bots especializados para MT5. Oro, BTC y más.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "KopyTrading Platform",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "KopyTrading | Bots de Trading MT5",
+    description: "Algoritmos avanzados para traders que quieren resultados reales en MT5.",
+    images: ["/og-image.png"],
+    creator: "@kopytrading",
+  },
+  manifest: "/manifest.json",
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",

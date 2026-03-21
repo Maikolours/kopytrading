@@ -1,4 +1,10 @@
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Marketplace de Bots | MT5 Trading Algorítmico",
+  description: "Explora nuestro catálogo de Expert Advisors para MetaTrader 5. Consigue acceso a La Ametralladora Evolution, BTC Storm Rider y más.",
+};
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardTitle, CardHeader, CardFooter } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
