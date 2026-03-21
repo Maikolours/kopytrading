@@ -154,6 +154,20 @@ int OnInit() {
 
 void OnDeinit(const int r) { ObjectsDeleteAll(0, PNL); }
 
+bool HayNoticia() {
+   if(!FiltroNoticias) return false;
+   MqlCalendarValue vals[];
+   datetime start = TimeCurrent() - MinutosDespues*60;
+   datetime end   = TimeCurrent() + MinutosAntes*60;
+   if(CalendarValueHistory(vals, start, end, "USD") > 0) {
+      for(int i=0; i<ArraySize(vals); i++) {
+         MqlCalendarEvent ev;
+         if(CalendarEventById(vals[i].event_id, ev) && ev.importance == CALENDAR_IMPORTANCE_HIGH) return true;
+      }
+   }
+   return false;
+}
+
 void OnTick() {
    if(NotificarTelegram && TelegramToken != "" && !startNotified && startRetries < 3) {
       if(SendTelegramMessage("🚀 KOPYTRADING EVOLUTION CENT Iniciada.\n\n/status - Ver PnL\n/pause - Apagar\n/resume - Reanudar"))
