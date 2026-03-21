@@ -3,13 +3,18 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
     let body = null;
+    let text = "";
     try {
-        body = await req.json();
+        text = await req.text();
+        // Limpiar posibles caracteres nulos al final (común en MQL5) y espacios
+        const cleanText = text.replace(/\0/g, '').trim();
+        body = JSON.parse(cleanText);
+        
         const { purchaseId, account, positions, history } = body;
 
         if (!purchaseId || !account) {
             await prisma.requestLog.create({
-                data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body), error: "Missing purchaseId or account" }
+                data: { path: "/api/sync-positions", method: "POST", body: text.substring(0, 1000), error: "Missing purchaseId or account" }
             });
             return NextResponse.json({ error: "Missing purchaseId or account" }, { status: 400 });
         }
@@ -93,8 +98,8 @@ export async function POST(req: Request) {
             data: { 
                 path: "/api/sync-positions", 
                 method: "POST", 
-                body: JSON.stringify(body), 
-                error: err.message || "Unknown error" 
+                body: text.substring(0, 1000), 
+                error: (err.message || "Unknown error") + " (Raw: " + text.substring(0, 100) + ")"
             }
         });
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

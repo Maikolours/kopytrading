@@ -504,7 +504,7 @@ void SyncPositions() {
     }
     string postData = "{\"purchaseId\":\"" + PurchaseID + "\",\"account\":\"" + account + "\",\"positions\":[" + positionsJson + "]}";
     char post[], result[]; string headers = "Content-Type: application/json\r\n";
-    StringToCharArray(postData, post, 0, WHOLE_ARRAY, CP_UTF8);
+    StringToCharArray(postData, post, 0, StringLen(postData), CP_UTF8);
     int syncRes = WebRequest("POST", "https://www.kopytrading.com/api/sync-positions", headers, 3000, post, result, headers);
     Print("SYNC: Resultado servidor: " + IntegerToString(syncRes));
     if(syncRes != 200) {
