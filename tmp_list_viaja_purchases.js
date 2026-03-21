@@ -2,19 +2,18 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-  const userId = "cmmrxrks00000vhmc7izw11z9"; // ID del usuario basado en logs previos
+  const userId = "cmmb2z6ml000dvhhoj1s9zmnf"; // viajaconsakura
   const purchases = await prisma.purchase.findMany({
     where: { userId: userId },
     include: { botProduct: true }
   });
 
-  console.log("=== COMPRAS DEL USUARIO ===");
+  console.log(`=== PURCHASES FOR viajaconsakura (${userId}) ===`);
   purchases.forEach(p => {
-    console.log(`Bot: ${p.botProduct.name} (${p.botProduct.instrument})`);
     console.log(`ID: ${p.id}`);
+    console.log(`Bot: ${p.botProduct.name}`);
     console.log(`Status: ${p.status}`);
-    console.log(`Last Sync: ${p.lastSync}`);
-    console.log(`Bot Version: ${p.botProduct.version}`);
+    console.log(`Sync: ${p.lastSync}`);
     console.log("---");
   });
 }

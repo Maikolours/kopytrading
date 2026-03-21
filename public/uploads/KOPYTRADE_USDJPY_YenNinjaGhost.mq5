@@ -13,6 +13,7 @@
 input group "=== LICENCIA KOPYTRADE ==="
 input long     CuentaDemo         = 0;      // Número de cuenta DEMO de MT5
 input long     CuentaReal         = 0;      // Número de cuenta REAL de MT5
+input string   PurchaseID         = "";     // ID de Vínculo (Copiar del Dashboard)
 
 //--- RELOJ ---
 input group "=== RELOJ DE OPERACIÓN (SESIÓN ASIÁTICA) ==="
@@ -44,6 +45,11 @@ input int      SaltoDelTrailing   = 40;     // 4 pips
 input group "=== CONFIGURACIÓN AVANZADA ==="
 input int      MaxPosiciones      = 2;      
 input long     MagicPrincipal     = 779933;
+
+//--- GLOBALES SYNC ---
+datetime lastPositionsSync = 0;
+bool     remotePaused      = false;
+CPositionInfo posInfo;
 
 CTrade trade;
 bool   licenseValid = false;
@@ -79,11 +85,20 @@ int OnInit() {
    licenseValid = true;
    trade.SetExpertMagicNumber(MagicPrincipal);
    trade.SetTypeFillingBySymbol(_Symbol);
+   
+   // Sincronización inicial
+   SyncPositions();
    return(INIT_SUCCEEDED);
 }
 
 void OnTick() {
    if(!licenseValid) return;
+   
+   CheckRemoteCommands();
+   SyncPositions();
+   
+   if(remotePaused) return;
+   
    GestionarIndividual();
    if(ContarPosiciones() < MaxPosiciones && EstaEnHorario()) BuscarEntrada();
 }
@@ -134,3 +149,60 @@ void GestionarIndividual() {
 
 bool EstaEnHorario() { MqlDateTime dt; TimeToStruct(TimeCurrent(),dt); return(dt.hour >= HoraInicio && dt.hour < HoraFin); }
 int ContarPosiciones() { int c=0; for(int i=0;i<PositionsTotal();i++) if(PositionSelectByTicket(PositionGetTicket(i))&&PositionGetInteger(POSITION_MAGIC)==MagicPrincipal) c++; return c; }
+
+//--- FUNCIONES DE SINCRONIZACIÓN ---
+void SyncPositions() {
+    if(PurchaseID == "") return;
+    if(TimeCurrent() < lastPositionsSync + 30) return;
+    lastPositionsSync = TimeCurrent();
+    
+    string account = IntegerToString((int)AccountInfoInteger(ACCOUNT_LOGIN));
+    string positionsJson = "";
+    int count = 0;
+    
+    for(int i=0; i<PositionsTotal(); i++) {
+        if(posInfo.SelectByIndex(i) && posInfo.Magic() == MagicPrincipal) {
+            if(count > 0) positionsJson += ",";
+            positionsJson += "{\"ticket\":\"" + IntegerToString((long)posInfo.Ticket()) + "\"," +
+                             "\"type\":\"" + (posInfo.PositionType()==POSITION_TYPE_BUY?"BUY":"SELL") + "\"," +
+                             "\"symbol\":\"" + posInfo.Symbol() + "\"," +
+                             "\"lots\":" + DoubleToString(posInfo.Volume(), 2) + "," +
+                             "\"openPrice\":" + DoubleToString(posInfo.PriceOpen(), _Digits) + "," +
+                             "\"sl\":" + DoubleToString(posInfo.StopLoss(), _Digits) + "," +
+                             "\"tp\":" + DoubleToString(posInfo.TakeProfit(), _Digits) + "," +
+                             "\"profit\":" + DoubleToString(posInfo.Profit() + posInfo.Commission() + posInfo.Swap(), 2) + "}";
+            count++;
+        }
+    }
+    
+    string postData = "{\"purchaseId\":\"" + PurchaseID + "\",\"account\":\"" + account + "\",\"positions\":[" + positionsJson + "]}";
+    char post[], result[];
+    string headers = "Content-Type: application/json\r\n";
+    StringToCharArray(postData, post, 0, WHOLE_ARRAY, CP_UTF8);
+    
+    ResetLastError();
+    int res = WebRequest("POST", "https://kopytrading.com/api/sync-positions", headers, 3000, post, result, headers);
+    if(res == -1) {
+        // Reintento sin www si falla
+        res = WebRequest("POST", "http://kopytrading.com/api/sync-positions", headers, 3000, post, result, headers);
+    }
+}
+
+void CheckRemoteCommands() {
+    if(PurchaseID == "") return;
+    char post[], result[];
+    string headers = "Content-Type: application/json\r\n";
+    string url = "https://kopytrading.com/api/bot-command?purchaseId=" + PurchaseID;
+    
+    ResetLastError();
+    int res = WebRequest("GET", url, headers, 2000, post, result, headers);
+    if(res == 200) {
+        string response = CharArrayToString(result, 0, WHOLE_ARRAY, CP_UTF8);
+        if(StringFind(response, "\"command\":\"PAUSE\"") >= 0) remotePaused = true;
+        if(StringFind(response, "\"command\":\"RESUME\"") >= 0) remotePaused = false;
+        if(StringFind(response, "\"command\":\"CLOSE_ALL\"") >= 0) {
+            for(int i=PositionsTotal()-1; i>=0; i--) 
+                if(posInfo.SelectByIndex(i) && posInfo.Magic()==MagicPrincipal) trade.PositionClose(posInfo.Ticket());
+        }
+    }
+}
