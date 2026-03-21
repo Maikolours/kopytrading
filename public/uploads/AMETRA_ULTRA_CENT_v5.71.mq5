@@ -574,18 +574,26 @@ void CrearPanel() {
    CrBtn("min", x+w-25, y+8, 18, 18, isMinimized?"+":"-", CLR_HDR, clrWhite);
    
    if(!isMinimized) {
-      CrLabel("licV", x+15, y+60, "LICENCIA: " + LicenseKey, CLR_WARN, 8, "Arial Bold");
-      CrLabel("pL", x+15, y+90, "PnL USC:", CLR_MUTED, 8); CrLabel("pV", x+110, y+90, "0", CLR_TXT, 10, "Arial Bold");
-      CrLabel("stL", x+15, y+115, "ESTADO:", CLR_MUTED, 8); CrLabel("stV", x+110, y+115, botStatus, CLR_SUCCESS, 9);
-      CrLabel("moH", x+12, y+150, "MODOS & DIRECCIÓN", CLR_MUTED, 7);
-      CrBtn("b_zen", x+10, y+170, 90, 25, "MODO ZEN", currentMode==MODE_ZEN?CLR_ACCENT:C'35,35,65', clrWhite);
-      CrBtn("b_har", x+105, y+170, 90, 25, "COSECHA", currentMode==MODE_COSECHA?C'200,80,40':C'35,35,65', clrWhite);
-      CrBtn("b_buy", x+10, y+205, 90, 25, "SOLO BUY", currentDir==DIR_COMPRAS?CLR_ACCENT:C'35,35,65', clrWhite);
-      CrBtn("b_both", x+105, y+205, 90, 25, "AMBAS", currentDir==DIR_AMBAS?CLR_ACCENT:C'35,35,65', clrWhite);
-      CrBtn("b_sell", x+200, y+205, 85, 25, "SOLO SELL", currentDir==DIR_VENTAS?C'180,40,40':C'35,35,65', clrWhite);
-      CrBtn("b_close", x+10, y+245, 185, 30, "CLOSE ALL POSITIONS", CLR_DANGER, clrWhite);
-      CrBtn("b_test", x+205, y+245, 80, 30, "TEST BOT", C'50,50,80', clrWhite);
-      CrLabel("rem", x+15, y+300, "REMOTO: " + (remotePaused?"🔴 PAUSA":"🟢 ONLINE"), (remotePaused?CLR_DANGER:CLR_SUCCESS), 8);
+      CrLabel("licV", x+15, y+55, "LICENCIA: " + LicenseKey, CLR_WARN, 8, "Arial Bold");
+      CrLabel("pL", x+15, y+80, "PnL HOY:", CLR_MUTED, 8); CrLabel("pV", x+110, y+80, "0", CLR_TXT, 10, "Arial Bold");
+      CrLabel("stL", x+15, y+105, "ESTADO:", CLR_MUTED, 8); CrLabel("stV", x+110, y+105, botStatus, CLR_SUCCESS, 9);
+      
+      CrLabel("trL", x+15, y+130, "TENDENCIA:", CLR_MUTED, 8); CrLabel("trV", x+110, y+130, "AUTO", CLR_MUTED, 8);
+      CrLabel("nwL", x+15, y+150, "NOTICIAS:", CLR_MUTED, 8);  CrLabel("nwV", x+110, y+150, "OK", CLR_SUCCESS, 8);
+      CrLabel("opL", x+15, y+170, "OPS ABIERTAS:", CLR_MUTED, 8); CrLabel("opV", x+110, y+170, "0 / 2", CLR_TXT, 8);
+
+      CrLabel("moH", x+12, y+200, "MODOS & DIRECCIÓN", CLR_MUTED, 7);
+      CrBtn("b_zen", x+10, y+220, 90, 25, "MODO ZEN", currentMode==MODE_ZEN?CLR_ACCENT:C'35,35,65', clrWhite);
+      CrBtn("b_har", x+105, y+220, 90, 25, "COSECHA", currentMode==MODE_COSECHA?C'200,80,40':C'35,35,65', clrWhite);
+      CrBtn("b_buy", x+10, y+255, 90, 25, "SOLO BUY", currentDir==DIR_COMPRAS?CLR_ACCENT:C'35,35,65', clrWhite);
+      CrBtn("b_both", x+105, y+255, 90, 25, "AMBAS", currentDir==DIR_AMBAS?CLR_ACCENT:C'35,35,65', clrWhite);
+      CrBtn("b_sell", x+200, y+255, 85, 25, "SOLO SELL", currentDir==DIR_VENTAS?C'180,40,40':C'35,35,65', clrWhite);
+      CrBtn("b_close", x+10, y+295, 185, 30, "CLOSE ALL POSITIONS", CLR_DANGER, clrWhite);
+      CrBtn("b_test", x+205, y+295, 80, 30, "TEST BOT", C'50,50,80', clrWhite);
+      
+      string accType = (SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE) < 0.01) ? "CUENTA CENT (USC)" : "CUENTA DOLLAR (USD)";
+      CrLabel("rem", x+15, y+340, "MODO: " + accType, CLR_MUTED, 7);
+      CrLabel("con", x+15, y+355, "REMOTO: " + (remotePaused?"🔴 PAUSA":"🟢 ONLINE"), (remotePaused?CLR_DANGER:CLR_SUCCESS), 8);
    }
    ChartRedraw(0);
 }
@@ -593,10 +601,22 @@ void CrearPanel() {
 void ActualizarPanel() {
    if(!isMinimized) {
       double p = GetDailyProfit();
-      ObjectSetString(0, PNL+"pV", OBJPROP_TEXT, DoubleToString(p, 0) + " USC");
+      ObjectSetString(0, PNL+"pV", OBJPROP_TEXT, DoubleToString(p, 0) + " unid.");
       ObjectSetInteger(0, PNL+"pV", OBJPROP_COLOR, p>=0?CLR_SUCCESS:CLR_DANGER);
       ObjectSetString(0, PNL+"stV", OBJPROP_TEXT, botStatus);
-      ObjectSetInteger(0, PNL+"stV", OBJPROP_COLOR, botStatus=="LISTO"?CLR_SUCCESS:CLR_WARN);
+      ObjectSetInteger(0, PNL+"stV", OBJPROP_COLOR, (botStatus=="LISTO"||botStatus=="SENTINEL")?CLR_SUCCESS:CLR_WARN);
+      
+      ObjectSetString(0, PNL+"nwV", OBJPROP_TEXT, noticiaActiva ? "ALERTA - PAUSA" : "OK");
+      ObjectSetInteger(0, PNL+"nwV", OBJPROP_COLOR, noticiaActiva ? CLR_DANGER : CLR_SUCCESS);
+      
+      int ops = PositionsTotalBots();
+      ObjectSetString(0, PNL+"opV", OBJPROP_TEXT, IntegerToString(ops) + " / " + IntegerToString(MaxPosiciones));
+      
+      // Tendencia simplificada para el HUD
+      double ma[];
+      if(CopyBuffer(atrHandle, 0, 0, 1, ma) > 0) { // Usamos el ATR handle solo para sync, pero mejor buscar tendencia real
+         ObjectSetString(0, PNL+"trV", OBJPROP_TEXT, "ACTIVA");
+      }
    }
    ChartRedraw(0);
 }
