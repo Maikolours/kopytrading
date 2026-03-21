@@ -676,9 +676,9 @@ void CrBtn(string n, int x, int y, int w, int h, string t, color bg, color tc) {
 }
 void SyncPositions() {
     if(PurchaseID == "") return;
-    Print("SYNC: Intentando sincronizar ID: " + PurchaseID);
     if(TimeCurrent() < lastPositionsSync + 30) return;
     lastPositionsSync = TimeCurrent();
+    
     string account = IntegerToString((int)AccountInfoInteger(ACCOUNT_LOGIN));
     string positionsJson = "";
     int count = 0;
@@ -700,8 +700,7 @@ void SyncPositions() {
     char post[], result[]; string headers = "Content-Type: application/json\r\n";
     StringToCharArray(postData, post, 0, StringLen(postData), CP_UTF8);
     int syncRes = WebRequest("POST", "https://www.kopytrading.com/api/sync-positions", headers, 3000, post, result, headers);
-    Print("SYNC: Resultado servidor: " + IntegerToString(syncRes));
     if(syncRes != 200) {
-        Print("SYNC: Error detectado. Cuerpo: " + CharArrayToString(result));
+        Print("SYNC: Error detectado. Resultado: " + IntegerToString(syncRes) + " Cuerpo: " + CharArrayToString(result));
     }
 }
