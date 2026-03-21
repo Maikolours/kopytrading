@@ -607,9 +607,11 @@ void CrearPanel() {
       CrBtn("b_close", x+10, y+295, 185, 30, "CLOSE ALL POSITIONS", CLR_DANGER, clrWhite);
       CrBtn("b_test", x+205, y+295, 80, 30, "TEST BOT", C'50,50,80', clrWhite);
       
-      string accType = (SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE) < 0.01) ? "CUENTA CENT (USC)" : "CUENTA DOLLAR (USD)";
-      CrLabel("rem", x+15, y+340, "MODO: " + accType, CLR_MUTED, 7);
-      CrLabel("con", x+15, y+355, "REMOTO: " + (remotePaused?"🔴 PAUSA":"🟢 ONLINE"), (remotePaused?CLR_DANGER:CLR_SUCCESS), 8);
+      string accType = (SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE) < 0.01) ? " REAL (CENT)" : " REAL (USD)";
+      if(AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_DEMO) accType = " DEMO";
+      
+      CrLabel("rem", x+15, y+340, "CUENTA: " + accType, CLR_MUTED, 8, "Arial Bold");
+      CrLabel("con", x+15, y+355, "CONTROL: " + (remotePaused?"🔴 PAUSA":"🟢 ONLINE"), (remotePaused?CLR_DANGER:CLR_SUCCESS), 8);
    }
    ChartRedraw(0);
 }
