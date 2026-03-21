@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Countdown } from "@/components/ui/Countdown";
 import { PasswordChangeForm } from "@/components/PasswordChangeForm";
 import { BotRemoteControl } from "@/components/BotRemoteControl";
+import { CopyIdButton } from "@/components/CopyIdButton";
 
 // Evitar cacheo
 export const dynamic = "force-dynamic";
@@ -192,18 +193,7 @@ export default async function DashboardPage() {
                                                                     <code className="bg-black/40 px-3 py-2 rounded-lg text-secondary text-xs font-mono border border-white/5 flex-1 break-all uppercase">
                                                                         {purchase.id}
                                                                     </code>
-                                                                    <button 
-                                                                        onClick={() => {
-                                                                            navigator.clipboard.writeText(purchase.id);
-                                                                            alert("ID Copiado al portapapeles");
-                                                                        }}
-                                                                        className="p-2 rounded-lg bg-secondary/10 hover:bg-secondary/20 border border-secondary/20 transition-all text-secondary"
-                                                                        title="Copiar ID"
-                                                                    >
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 002-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 00-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-                                                                        </svg>
-                                                                    </button>
+                                                                    <CopyIdButton id={purchase.id} />
                                                                 </div>
                                                                 <p className="mt-2 text-[9px] text-text-muted/60 italic leading-tight">
                                                                     Pega este ID en el parámetro <span className="text-secondary font-bold">PurchaseID</span> del bot en MT5 para activar el control remoto.
