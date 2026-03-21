@@ -698,7 +698,25 @@ void SyncPositions() {
             count++;
         }
     }
-    string postData = "{\"purchaseId\":\"" + PurchaseID + "\",\"account\":\"" + account + "\",\"positions\":[" + positionsJson + "]}";
+    // --- Sincronizar Historial de Hoy ---
+    string historyJson = "";
+    int hCount = 0;
+    HistorySelect(iTime(_Symbol, PERIOD_D1, 0), TimeCurrent());
+    for(int i=HistoryDealsTotal()-1; i>=0; i--) {
+        ulong t = HistoryDealGetTicket(i);
+        if(HistoryDealGetInteger(t, DEAL_MAGIC) == activeMagic && HistoryDealGetDouble(t, DEAL_PROFIT) != 0) {
+            if(hCount > 0) historyJson += ",";
+            historyJson += "{\"ticket\":\"" + IntegerToString((long)t) + "\"," +
+                           "\"type\":\"" + (HistoryDealGetInteger(t, DEAL_TYPE)==DEAL_TYPE_BUY?"BUY":"SELL") + "\"," +
+                           "\"symbol\":\"" + HistoryDealGetString(t, DEAL_SYMBOL) + "\"," +
+                           "\"lots\":" + DoubleToString(HistoryDealGetDouble(t, DEAL_VOLUME), 2) + "," +
+                           "\"profit\":" + DoubleToString(HistoryDealGetDouble(t, DEAL_PROFIT), 2) + "}";
+            hCount++;
+            if(hCount >= 10) break; // Limitar para no saturar el JSON
+        }
+    }
+
+    string postData = "{\"purchaseId\":\"" + PurchaseID + "\",\"account\":\"" + account + "\",\"positions\":[" + positionsJson + "],\"history\":[" + historyJson + "]}";
     char post[], result[]; string headers = "Content-Type: application/json\r\n";
     StringToCharArray(postData, post, 0, StringLen(postData), CP_UTF8);
     int syncRes = WebRequest("POST", "https://www.kopytrading.com/api/sync-positions", headers, 3000, post, result, headers);

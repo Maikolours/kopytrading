@@ -80,33 +80,33 @@ export default async function DashboardPage() {
         const n = name.toUpperCase();
         if (n.includes("ORO") || n.includes("XAUUSD") || n.includes("AMETRA"))
             return {
-                border: 'border-amber-500 border-l-[12px] shadow-[0_0_60px_-15px_rgba(245,158,11,0.4)]',
+                border: 'border-amber-500/50 border-[2px] border-l-[16px] shadow-[0_0_80px_-20px_rgba(245,158,11,0.3)]',
                 accent: 'text-amber-400',
-                glow: 'bg-amber-500/30',
-                gradient: 'from-amber-600/50 via-amber-900/10 to-black',
+                glow: 'bg-amber-500/20',
+                gradient: 'from-amber-600/40 via-amber-900/20 to-[#0a0a0f]',
                 badge: 'bg-amber-500/20 text-amber-300 border-amber-500/30'
             };
         if (n.includes("BTC") || n.includes("BITCOIN"))
             return {
-                border: 'border-purple-500 border-l-[12px] shadow-[0_0_60px_-15px_rgba(168,85,247,0.4)]',
+                border: 'border-purple-500/50 border-[2px] border-l-[16px] shadow-[0_0_80px_-20px_rgba(168,85,247,0.3)]',
                 accent: 'text-purple-400',
-                glow: 'bg-purple-500/30',
-                gradient: 'from-purple-600/50 via-purple-900/10 to-black',
+                glow: 'bg-purple-500/20',
+                gradient: 'from-purple-600/40 via-purple-900/20 to-[#0a0a0f]',
                 badge: 'bg-purple-500/20 text-purple-300 border-purple-500/30'
             };
         if (n.includes("YEN") || n.includes("JPY"))
             return {
-                border: 'border-cyan-500 border-l-[12px] shadow-[0_0_60px_-15px_rgba(6,182,212,0.4)]',
+                border: 'border-cyan-500/50 border-[2px] border-l-[16px] shadow-[0_0_80px_-20px_rgba(6,182,212,0.3)]',
                 accent: 'text-cyan-400',
-                glow: 'bg-cyan-500/30',
-                gradient: 'from-cyan-600/50 via-cyan-900/10 to-black',
+                glow: 'bg-cyan-500/20',
+                gradient: 'from-cyan-600/40 via-cyan-900/20 to-[#0a0a0f]',
                 badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30'
             };
         return {
-            border: 'border-brand border-l-[12px] shadow-[0_0_60px_-15px_rgba(168,85,247,0.4)]',
+            border: 'border-brand/50 border-[2px] border-l-[16px] shadow-[0_0_80px_-20px_rgba(168,85,247,0.3)]',
             accent: 'text-brand-light',
-            glow: 'bg-brand/30',
-            gradient: 'from-brand/40 via-brand-dark/10 to-black',
+            glow: 'bg-brand/20',
+            gradient: 'from-brand/30 via-brand-dark/20 to-[#0a0a0f]',
             badge: 'bg-brand/20 text-brand-light border-brand/30'
         };
     };
@@ -158,16 +158,21 @@ export default async function DashboardPage() {
                                     const userEmail = session?.user?.email || "";
                                     const isEternalUser = ["user@example.com", "viajaconsakura"].some(email => userEmail.toLowerCase().includes(email.toLowerCase()));
                                     const isExpired = isTrial && purchase.expiresAt && new Date() > new Date(purchase.expiresAt) && !isEternalUser;
-                                    const hasUpdate = purchase.botProduct.version !== purchase.lastDownloadedVersion;
-                                    const theme = getBotTheme(purchase.botProduct.name);
+                                     
+                                     // Comparación de versiones más inteligente (solo muestra si la del producto es mayor que la descargada)
+                                     const normalizeVer = (v: string) => parseFloat(v.replace(/[^0-9.]/g, '')) || 0;
+                                     const hasUpdate = normalizeVer(purchase.botProduct.version) > normalizeVer(purchase.lastDownloadedVersion || "0.0");
+                                     
+                                     const theme = getBotTheme(purchase.botProduct.name);
                                  
                                  // Calcular beneficio diario de hoy
                                  const dailyProfit = (purchase.pastTrades || []).reduce((acc: number, t: any) => acc + (Number(t.profit) || 0), 0);
                                  
                                     return (
-                                        <Card key={purchase.id} className={`relative overflow-hidden glass-card border-white/20 ${theme.border} group h-full flex flex-col transition-all duration-500 hover:scale-[1.03] bg-black/80 shadow-2xl`}>
-                                            {/* Background Gradient Layer - Much more visible */}
-                                            <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} pointer-events-none opacity-90`} />
+                                         <Card key={purchase.id} className={`relative overflow-hidden glass-card ${theme.border} group h-full flex flex-col transition-all duration-500 hover:scale-[1.03] bg-black/90 shadow-2xl rounded-2xl`}>
+                                             {/* Full Background Gradient specifically for each bot */}
+                                             <div className={`absolute inset-0 bg-gradient-to-b ${theme.gradient} pointer-events-none opacity-80`} />
+                                             <div className={`absolute inset-0 border border-white/10 rounded-2xl pointer-events-none`} />
                                             
                                             {/* Spotlight effect - Large and colorful */}
                                             <div className={`absolute -top-40 -right-40 w-80 h-80 ${theme.glow} blur-[150px] rounded-full group-hover:opacity-100 transition-opacity opacity-60`} />
