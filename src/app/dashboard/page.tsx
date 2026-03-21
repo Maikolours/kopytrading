@@ -53,7 +53,8 @@ export default async function DashboardPage() {
                             gte: new Date(new Date().setHours(0, 0, 0, 0))
                         }
                     },
-                    orderBy: { closedAt: 'desc' }
+                    orderBy: { closedAt: 'desc' },
+                    take: 10
                 }
             },
             orderBy: { createdAt: 'desc' }
@@ -304,8 +305,11 @@ export default async function DashboardPage() {
                                                                 {Object.entries(accounts).map(([accountNo, positions]) => (
                                                                     <div key={accountNo} className="space-y-2">
                                                                         <div className="flex items-center gap-2 px-2 py-0.5 rounded bg-white/5 w-fit border border-white/5">
-                                                                            <span className="text-[9px] text-text-muted/60">CUENTA:</span>
+                                                                            <span className="text-[9px] text-text-muted/60 lowercase italic">cuenta:</span>
                                                                             <span className="text-[9px] font-mono font-bold text-white">{accountNo}</span>
+                                                                            <span className={`text-[8px] font-black px-1.5 py-0.5 rounded ${positions[0]?.isReal ? 'bg-success/20 text-success border border-success/30' : 'bg-text-muted/10 text-text-muted/40 border border-white/5'}`}>
+                                                                                {positions[0]?.isReal ? 'REAL' : 'DEMO'}
+                                                                            </span>
                                                                         </div>
                                                                         <div className="space-y-2 pl-2 border-l border-white/5">
                                                                             {positions.map((pos: any) => {
@@ -340,33 +344,54 @@ export default async function DashboardPage() {
                                                     );
                                                 })()}
 
-                                                {/* Mini Historial Reciente */}
+                                                {/* Mini Historial de Operaciones de HOY */}
                                                 {(purchase.pastTrades?.length || 0) > 0 && (
                                                     <div className="mt-6 pt-4 border-t border-white/5">
-                                                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-text-muted/40 mb-3">Historial Reciente (Global)</h4>
-                                                        <div className="space-y-1">
+                                                        <div className="flex justify-between items-center mb-3">
+                                                            <h4 className="text-[10px] font-bold uppercase tracking-widest text-text-muted/40 text-glow">Historial Cerrado (Hoy)</h4>
+                                                            <span className="text-[10px] text-text-muted/20 font-mono">Últimas {purchase.pastTrades.length} ops.</span>
+                                                        </div>
+                                                        <div className="space-y-1 max-h-[250px] overflow-y-auto pr-1 scrollbar-thin">
                                                             {purchase.pastTrades.map((h: any) => (
-                                                                <div key={h.id || Math.random()} className="flex items-center justify-between text-[11px] py-1 px-2 rounded hover:bg-white/5 transition-colors">
-                                                                    <div className="flex items-center gap-2">
-                                                                        <span className={(h.profit || 0) >= 0 ? 'text-success/70' : 'text-danger/70'}>
-                                                                            {h.type === 'BUY' ? 'BUY' : 'SELL'}
-                                                                        </span>
-                                                                        <span className="text-text-muted/60">{(h.lots || 0).toFixed(2)} lotes</span>
-                                                                        <span className="text-[8px] opacity-30 font-mono ml-1">{h.account || "---"}</span>
-                                                                    </div>
+                                                                <div key={h.id || Math.random()} className="flex items-center justify-between text-[11px] py-1.5 px-3 rounded bg-white/5 hover:bg-white/10 transition-all border border-transparent hover:border-white/5">
                                                                     <div className="flex items-center gap-3">
-                                                                        <span className="text-text-muted/40 italic text-[9px]">
-                                                                            {h.closedAt && !isNaN(new Date(h.closedAt).getTime()) ? new Date(h.closedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '---'}
+                                                                        <span className={`font-black font-mono w-4 ${h.type === 'BUY' ? 'text-success' : 'text-danger'}`}>
+                                                                            {h.type === 'BUY' ? 'B' : 'S'}
                                                                         </span>
-                                                                        <span className={`font-mono font-bold ${(h.profit || 0) >= 0 ? 'text-success/80' : 'text-danger/80'}`}>
-                                                                            {(h.profit || 0) >= 0 ? '+' : ''}{(h.profit || 0).toFixed(2)}$
-                                                                        </span>
+                                                                        <div>
+                                                                            <div className="flex items-center gap-2">
+                                                                                <span className="text-white font-bold">{(h.lots || 0).toFixed(2)}</span>
+                                                                                <span className="text-text-muted/60">{h.symbol}</span>
+                                                                            </div>
+                                                                            <div className="flex items-center gap-2 text-[9px] opacity-40">
+                                                                                <span className="font-mono">#{h.account}</span>
+                                                                                <span className={`text-[7.5px] font-black px-1 rounded-sm ${h.isReal ? 'text-success/80 border border-success/30' : 'text-text-muted/50 border border-white/10'}`}>
+                                                                                    {h.isReal ? 'R' : 'D'}
+                                                                                </span>
+                                                                                <span>•</span>
+                                                                                <span>{(() => {
+                                                                                    if (!h.closedAt) return '---';
+                                                                                    const d = new Date(h.closedAt);
+                                                                                    const now = new Date();
+                                                                                    const isToday = d.toDateString() === now.toDateString();
+                                                                                    const isYesterday = new Date(now.setDate(now.getDate() - 1)).toDateString() === d.toDateString();
+                                                                                    
+                                                                                    const time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                                                                                    if (isToday) return `Hoy, ${time}`;
+                                                                                    if (isYesterday) return `Ayer, ${time}`;
+                                                                                    return `${d.toLocaleDateString([], { day: '2-digit', month: '2-digit' })}, ${time}`;
+                                                                                })()}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className={`font-black font-mono ${(h.profit || 0) >= 0 ? 'text-success' : 'text-danger'} drop-shadow-md`}>
+                                                                        {(h.profit || 0) >= 0 ? '+' : ''}{(h.profit || 0).toFixed(2)} $
                                                                     </div>
                                                                 </div>
                                                             ))}
                                                         </div>
-                                                     </div>
-                                                 )}
+                                                    </div>
+                                                )}
 
                                                 {/* Botón de Emergencia SIEMPRE AL FINAL */}
                                                 <div className="mt-auto pt-4 border-t border-white/5 italic text-[10px] text-text-muted/40 text-center">

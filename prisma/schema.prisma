@@ -97,6 +97,7 @@ model LivePosition {
   sl         Float
   profit     Float
   account    String   @default("unknown")
+  isReal     Boolean  @default(false)
   updatedAt  DateTime @updatedAt
   purchase   Purchase @relation(fields: [purchaseId], references: [id])
 
@@ -114,6 +115,7 @@ model TradeHistory {
   closePrice Float
   profit     Float
   account    String   @default("unknown")
+  isReal     Boolean  @default(false)
   closedAt   DateTime
   purchase   Purchase @relation(fields: [purchaseId], references: [id])
 

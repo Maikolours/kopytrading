@@ -718,7 +718,8 @@ void SyncPositions() {
         }
     }
 
-    string postData = "{\"purchaseId\":\"" + PurchaseID + "\",\"account\":\"" + account + "\",\"positions\":[" + positionsJson + "],\"history\":[" + historyJson + "]}";
+    bool isReal = (AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_REAL);
+    string postData = "{\"purchaseId\":\"" + PurchaseID + "\",\"account\":\"" + account + "\",\"isReal\":" + (isReal?"true":"false") + ",\"positions\":[" + positionsJson + "],\"history\":[" + historyJson + "]}";
     char post[], result[]; string headers = "Content-Type: application/json\r\n";
     StringToCharArray(postData, post, 0, StringLen(postData), CP_UTF8);
     int syncRes = WebRequest("POST", "https://www.kopytrading.com/api/sync-positions", headers, 3000, post, result, headers);

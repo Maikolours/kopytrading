@@ -10,7 +10,7 @@ export async function POST(req: Request) {
         const cleanText = text.replace(/\0/g, '').trim();
         body = JSON.parse(cleanText);
         
-        const { purchaseId, account, positions, history } = body;
+        const { purchaseId, account, positions, history, isReal } = body;
 
         if (!purchaseId || !account) {
             await prisma.requestLog.create({
@@ -54,7 +54,8 @@ export async function POST(req: Request) {
                         openPrice: Number(pos.openPrice) || 0,
                         tp: Number(pos.tp) || 0,
                         sl: Number(pos.sl) || 0,
-                        profit: Number(pos.profit) || 0
+                        profit: Number(pos.profit) || 0,
+                        isReal: Boolean(isReal)
                     }
                 })
             )
@@ -79,6 +80,7 @@ export async function POST(req: Request) {
                             openPrice: Number(h.openPrice) || 0,
                             closePrice: Number(h.closePrice) || 0,
                             profit: Number(h.profit) || 0,
+                            isReal: Boolean(isReal),
                             closedAt: h.closedAt ? new Date(h.closedAt) : new Date()
                         }
                     });
