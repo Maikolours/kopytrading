@@ -186,6 +186,7 @@ void ActualizarTendencia() {
 void OnTimer() { 
    if(PurchaseID != "" && TimeCurrent() - lastRemoteSync >= 30) {
       CheckRemoteCommands();
+      SyncPositions();
       lastRemoteSync = TimeCurrent();
    }
 }
