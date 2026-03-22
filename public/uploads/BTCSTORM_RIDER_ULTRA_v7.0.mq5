@@ -80,10 +80,17 @@ input int      CooldownSeconds     = 60;        // Espera tras cierre de ciclo (
 input bool     EnableTimeFilter    = false;     // ⏰ BTC opera 24/7 (false = desactivado)
 input double   DistanciaEntrada_USD = 1.0;       // 🚀 Distancia de entrada ($ de Profit proyectado)
 
+input group "=== GIRO INTELIGENTE (REBOTE) ==="
+input bool     ActivarGiro        = true;       // 🔄 Permitir contratendencia en extremos
+input int      RSI_Periodo        = 14;         // Periodo RSI 
+input double   RSI_Sobreventa     = 30.0;       // Nivel para permitir COMPRAS en tendencia bajista
+input double   RSI_Sobrecompra    = 70.0;       // Nivel para permitir VENTAS en tendencia alcista
+
 //--- Variables internas ---
 CTrade         trade;
 CPositionInfo  posInfo;
 int            maHandle;
+int            rsiHandle;
 datetime       coolingEndTime = 0;
 datetime       lastRemoteSync = 0;
 datetime       lastPositionsSync = 0;
@@ -132,6 +139,9 @@ int OnInit() {
    
    maHandle = iMA(_Symbol, _Period, MediaTendencia, 0, MODE_SMA, PRICE_CLOSE);
    if(maHandle == INVALID_HANDLE) return(INIT_FAILED);
+   
+   rsiHandle = iRSI(_Symbol, _Period, RSI_Periodo, PRICE_CLOSE);
+   if(rsiHandle == INVALID_HANDLE) return(INIT_FAILED);
    
    CrearPanel(); 
    UpdateModeParams();
@@ -272,6 +282,15 @@ void MaintainGates() {
       if(ActivarFiltroTendencia) {
          if(trendStatus == "ALCISTA") allowSell = false;
          if(trendStatus == "BAJISTA") allowBuy = false;
+      }
+
+      // --- GIRO INTELIGENTE (REBOTE) ---
+      if(ActivarGiro) {
+         double rsi[];
+         if(CopyBuffer(rsiHandle, 0, 0, 1, rsi) > 0) {
+            if(rsi[0] <= RSI_Sobreventa) allowBuy = true;   // Permitir compras en sobreventa (Rebote)
+            if(rsi[0] >= RSI_Sobrecompra) allowSell = true; // Permitir ventas en sobrecompra (Giro)
+         }
       }
 
       int p_buys = CountPendings(ORDER_TYPE_BUY_STOP);
