@@ -78,6 +78,7 @@ input int      MomentumCandles     = 3;         // Velas para medir fuerza (M15/
 input int      MomentumRequired    = 2;         // Cuantas velas coinciden (ej: 2 de 3)
 input int      CooldownSeconds     = 60;        // Espera tras cierre de ciclo (seg)
 input bool     EnableTimeFilter    = false;     // ⏰ BTC opera 24/7 (false = desactivado)
+input double   DistanciaEntrada_USD = 1.0;       // 🚀 Distancia de entrada ($ de Profit proyectado)
 
 //--- Variables internas ---
 CTrade         trade;
@@ -275,7 +276,7 @@ void MaintainGates() {
 
       int p_buys = CountPendings(ORDER_TYPE_BUY_STOP);
       int p_sells = CountPendings(ORDER_TYPE_SELL_STOP);
-      double dist = USDtoPrice(1.0, LoteManual); 
+      double dist = USDtoPrice(DistanciaEntrada_USD, LoteManual); 
       
       if((currentDir == DIR_COMPRAS || currentDir == DIR_AMBAS) && p_buys == 0 && allowBuy)
          trade.BuyStop(LoteManual, SymbolInfoDouble(_Symbol, SYMBOL_ASK) + dist, _Symbol, 0, 0, 0, 0, "G_BUY_BTC");
