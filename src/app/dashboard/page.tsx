@@ -364,7 +364,8 @@ export default async function DashboardPage() {
                                                                                 <span className="text-text-muted/60">{h.symbol}</span>
                                                                             </div>
                                                                             <div className="flex items-center gap-2 text-[9px] opacity-40">
-                                                                                <span className="font-mono">#{h.account}</span>
+                                                                                <span className="font-mono text-white/50">#{h.account}</span>
+                                                                                <span className="font-mono bg-white/5 px-1 rounded">t:{h.ticket}</span>
                                                                                 <span className={`text-[7.5px] font-black px-1 rounded-sm ${h.isReal ? 'text-success/80 border border-success/30' : 'text-text-muted/50 border border-white/10'}`}>
                                                                                     {h.isReal ? 'R' : 'D'}
                                                                                 </span>
