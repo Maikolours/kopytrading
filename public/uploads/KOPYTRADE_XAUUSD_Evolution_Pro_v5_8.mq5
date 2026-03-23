@@ -10,9 +10,9 @@ uint GetHash(string text) {
    for(int i = 0; i < StringLen(text); i++) hash = ((hash << 5) + hash) + text[i];
    return hash & 0x7FFFFFFF; // Asegurar que sea positivo
 }
-#property version   "5.71"
+#property version   "5.81"
 #property strict
-#property description "Ametralladora Cent | Pre-configurado para Cuentas Cent kopytrade.com"
+#property description "Evolution Pro | Pre-configurado para Cuentas USD/Cent kopytrading.com"
 
 #include <Trade/Trade.mqh>
 #include <Trade/PositionInfo.mqh>
@@ -22,6 +22,13 @@ uint GetHash(string text) {
 void CrRect(string n, int x, int y, int w, int h, color bg, color bd, int bw=1);
 void CrLabel(string n, int x, int y, string t, color c, int s=9, string f="Segoe UI");
 void CrBtn(string n, int x, int y, int w, int h, string t, color bg, color tc);
+
+enum ENUM_DIR  { DIR_COMPRAS, DIR_VENTAS, DIR_AMBAS };
+enum ENUM_MODE { MODE_ZEN, MODE_COSECHA };
+
+ENUM_DIR       currentDir = DIR_AMBAS;
+ENUM_MODE      currentMode = MODE_COSECHA;
+bool           isCentAccount = true; 
 
 //============================================================
 //  LICENCIA & TELEGRAM
@@ -106,11 +113,9 @@ datetime       lastTradeTime = 0;
 datetime       coolingEndTime = 0;
 long           lastUpdateID = 0;
 
-enum ENUM_DIR  { DIR_COMPRAS, DIR_VENTAS, DIR_AMBAS };
-enum ENUM_MODE { MODE_ZEN, MODE_COSECHA };
-
-ENUM_DIR       currentDir = DIR_AMBAS;
-ENUM_MODE      currentMode = MODE_COSECHA;
+// --- VARIABLES GLOBALES ---
+int activeMagic;
+datetime lastRemoteSync = 0;
 
 // --- VARIABLES EFECTIVAS (SHADOW) ---
 double         eff_Lots = 0.01;
@@ -158,6 +163,9 @@ int OnInit() {
    if(activeMagic == 0) activeMagic = (int)GetHash(_Symbol + IntegerToString((int)AccountInfoInteger(ACCOUNT_LOGIN)));
    trade.SetExpertMagicNumber(activeMagic);
    
+   string currency = AccountInfoString(ACCOUNT_CURRENCY);
+   isCentAccount = (StringFind(currency, "USC") != -1 || SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE) < 0.001);
+
    atrHandle = iATR(_Symbol, _Period, 14);
    if(atrHandle == INVALID_HANDLE) return(INIT_FAILED);
    
@@ -213,7 +221,8 @@ void OnTick() {
       if(currentNet >= 0) {
          CloseAllBotPositions();
          DeleteBotPendings();
-         SendTelegramMessage("🎯 META CENT FINALIZADA ($" + DoubleToString((dailyProfit + currentNet)/100.0, 2) + " reales). Todo cerrado.");
+         string profitStr = isCentAccount ? ("$" + DoubleToString((dailyProfit + currentNet)/100.0, 2) + " reales") : ("$" + DoubleToString(dailyProfit + currentNet, 2));
+         SendTelegramMessage("🎯 META PRO FINALIZADA (" + profitStr + "). Todo cerrado.");
          botStatus = "META ALCANZADA";
          ActualizarPanel();
          return;
@@ -249,8 +258,12 @@ void NotifyDeals() {
       ulong t = HistoryDealGetTicket(i);
       if(HistoryDealGetInteger(t, DEAL_MAGIC) == activeMagic && HistoryDealGetInteger(t, DEAL_TIME) > TimeCurrent()-10) {
          double p = HistoryDealGetDouble(t, DEAL_PROFIT);
-         if(p != 0) SendTelegramMessage("💰 Operación Cent Cerrada: " + (p>0?"✅ ":"❌ ") + DoubleToString(p, 0) + " USC");
-         else SendTelegramMessage("🏁 Operación Cent Abierta (" + HistoryDealGetString(t, DEAL_SYMBOL) + ")");
+         if(p != 0) {
+            string unit = isCentAccount ? " USC" : " $";
+            int digs = isCentAccount ? 0 : 2;
+            SendTelegramMessage("💰 Operación Cerrada: " + (p>0?"✅ ":"❌ ") + DoubleToString(p, digs) + unit);
+         }
+         else SendTelegramMessage("🏁 Operación Abierta (" + HistoryDealGetString(t, DEAL_SYMBOL) + ")");
       }
    }
 }
@@ -559,8 +572,10 @@ bool SendTelegramMessage(string msg) {
 }
 
 void SendTelegramStatus() {
-   string msg = "🔫 EVOLUTION CENT\n";
-   msg += "PnL Hoy: " + DoubleToString(GetDailyProfit(), 0) + " USC\n";
+   string msg = "🔫 EVOLUTION PRO\n";
+   string unit = isCentAccount ? " USC" : " $";
+   int digs = isCentAccount ? 0 : 2;
+   msg += "PnL Hoy: " + DoubleToString(GetDailyProfit(), digs) + unit + "\n";
    msg += "Status: " + botStatus;
    SendTelegramMessage(msg);
 }
@@ -685,7 +700,7 @@ void CrearPanel() {
       CrBtn("b_close", x+10, y+295, 185, 30, "CLOSE ALL POSITIONS", CLR_DANGER, clrWhite);
       CrBtn("b_test", x+205, y+295, 80, 30, "TEST BOT", C'50,50,80', clrWhite);
       
-      string accType = (SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE) < 0.01) ? " REAL (CENT)" : " REAL (USD)";
+      string accType = isCentAccount ? " REAL (CENT)" : " REAL (USD)";
       if(AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_DEMO) accType = " DEMO Account";
       
       CrLabel("rem", x+15, y+340, "CUENTA: " + accType + " | TF: " + EnumToString(_Period), CLR_MUTED, 8, "Arial Bold");
@@ -697,7 +712,9 @@ void CrearPanel() {
 void ActualizarPanel() {
    if(!isMinimized) {
       double p = GetDailyProfit();
-      ObjectSetString(0, PNL+"pV", OBJPROP_TEXT, DoubleToString(p, 0) + " unid.");
+      string unit = isCentAccount ? " unid." : " $";
+      int digs = isCentAccount ? 0 : 2;
+      ObjectSetString(0, PNL+"pV", OBJPROP_TEXT, DoubleToString(p, digs) + unit);
       ObjectSetInteger(0, PNL+"pV", OBJPROP_COLOR, p>=0?CLR_SUCCESS:CLR_DANGER);
       ObjectSetString(0, PNL+"stV", OBJPROP_TEXT, botStatus);
       ObjectSetInteger(0, PNL+"stV", OBJPROP_COLOR, (botStatus=="LISTO"||botStatus=="SENTINEL")?CLR_SUCCESS:CLR_WARN);
