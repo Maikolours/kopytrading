@@ -33,14 +33,14 @@ bool           isCentAccount = true;
 //============================================================
 //  LICENCIA & TELEGRAM
 //============================================================
-input group "=== LICENCIA & SEGURIDAD ==="
+sinput string separator0 = "=========================="; // === LICENCIA & SEGURIDAD ===
 input string   LicenseKey        = "TRIAL-2026";
 input string   PurchaseID        = "";         // ID de Vínculo (Ver en kopytrading.com/dashboard)
 
 //============================================================
 //  GESTIÓN DE RIESGO
 //============================================================
-input group "=== FILTRO DE NOTICIAS USD ==="
+sinput string separator1 = "=========================="; // === FILTRO DE NOTICIAS USD ===
 input bool     FiltroNoticias       = true; // Activar pausa por noticias?
 input int      MinutosAntes         = 30;   // Minutos antes de noticia
 input int      MinutosDespues       = 30;   // Minutos despues de noticia
@@ -63,7 +63,7 @@ datetime lastRemoteSync = 0;
 //============================================================
 //  RESCATE MATEMÁTICO (ULTRA)
 //============================================================
-input group "=== RESCATE MATEMÁTICO (ULTRA) ==="
+sinput string separator3 = "=========================="; // === RESCATE MATEMÁTICO (ULTRA) ===
 input bool     ActivarRescate     = true;      // 🚑 Activar Operación de Rescate
 input double   MultiplicadorLote  = 2.0;       // Multiplicador base Martingala
 input double   DistanciaRescate   = 50.0;      // $ Perdida para activar gatillo (50 unid.)
@@ -74,7 +74,7 @@ input double   MinLoteRescate     = 0.02;      // 🚑 Lote mínimo para rescata
 //============================================================
 //  METAS & CORTAFUEGOS
 //============================================================
-input group "=== METAS & CORTAFUEGOS ==="
+sinput string separator4 = "=========================="; // === METAS & CORTAFUEGOS ===
 input double   MetaDiaria_USD      = 500.0;     // 🎯 Ganancia Diaria (500 unid.).
 input double   Meta_Ciclo_USD      = 100.0;     // Neto para cerrar ciclo (100 unid.)
 input double   Harvest_TP_USD      = 50.0;      // TP individual (50 unid.)
@@ -82,7 +82,7 @@ input double   Harvest_TP_USD      = 50.0;      // TP individual (50 unid.)
 //============================================================
 //  BREAK EVEN & TRAILING
 //============================================================
-input group "=== BREAK EVEN & TRAILING ==="
+sinput string separator5 = "=========================="; // === BREAK EVEN & TRAILING ===
 input bool     ActivarBE           = true;      // 🛡️ Activar Break Even
 input double   BE_Trigger_USD      = 30.0;      // Activar BE tras (30 unidades)
 input bool     ActivarTrailing     = true;      // 🚀 Activar Trailing Stop
@@ -92,7 +92,7 @@ input int      TrailingStep        = 50;        // Paso de Trailing (5 pips)
 //============================================================
 //  ESTRATEGIA & FILTROS
 //============================================================
-input group "=== ESTRATEGIA (MOMENTUM) ==="
+sinput string separator6 = "=========================="; // === ESTRATEGIA (MOMENTUM) ===
 input int      MomentumCandles     = 3;        
 input int      MomentumRequired    = 2;        
 input int      CooldownSeconds     = 60;       
@@ -109,10 +109,6 @@ int            atrHandle;
 datetime       lastTradeTime = 0;
 datetime       coolingEndTime = 0;
 long           lastUpdateID = 0;
-
-// --- VARIABLES GLOBALES ---
-int activeMagic;
-datetime lastRemoteSync = 0;
 
 // --- VARIABLES EFECTIVAS (SHADOW) ---
 double         eff_Lots = 0.01;

@@ -56,16 +56,7 @@ export default async function DashboardPage() {
         });
 
         // Agrupar por botProductId
-        const purchaseMap = new Map<string, any>();
-        rawPurchases.forEach(p => {
-            const botId = p.botProductId;
-            const existing = purchaseMap.get(botId);
-            // Si no existe, o si el nuevo es LIFETIME y el viejo es TRIAL, lo cambiamos
-            if (!existing || (existing.status === "TRIAL" && p.status === "LIFETIME")) {
-                purchaseMap.set(botId, p);
-            }
-        });
-        purchases = Array.from(purchaseMap.values());
+        purchases = rawPurchases;
     } catch (e: any) {
         console.error("Prisma Error Dashboard:", e);
         error = e.message || "Error al conectar con la base de datos";

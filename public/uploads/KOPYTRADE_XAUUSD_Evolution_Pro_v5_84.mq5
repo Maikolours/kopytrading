@@ -34,7 +34,7 @@ bool           isForcedCent = false;
 //============================================================
 //  LICENCIA & SEGURIDAD
 //============================================================
-input group "=== LICENCIA & SEGURIDAD ==="
+sinput string separator0 = "=========================="; // === LICENCIA & SEGURIDAD ===
 input string   LicenseKey        = "TRIAL-2026";
 input string   PurchaseID        = "";         // ID de Vínculo (Ver en kopytrading.com/dashboard)
 input bool     ModoCentManual    = false;      // 💰 Forzar MODO CENT (Si el auto-fallara)
@@ -42,12 +42,12 @@ input bool     ModoCentManual    = false;      // 💰 Forzar MODO CENT (Si el a
 //============================================================
 //  GESTIÓN DE RIESGO
 //============================================================
-input group "=== FILTRO DE NOTICIAS USD ==="
+sinput string separator1 = "=========================="; // === FILTRO DE NOTICIAS USD ===
 input bool     FiltroNoticias       = true; // Activar pausa por noticias?
 input int      MinutosAntes         = 30;   // Minutos antes de noticia
 input int      MinutosDespues       = 30;   // Minutos despues de noticia
 
-input group "=== CONFIGURACIÓN INTERNA ==="
+sinput string separator2 = "=========================="; // === CONFIGURACIÓN INTERNA ===
 input ENUM_MODE ModePreset        = MODE_COSECHA; // 🎨 Modo del Bot (Zen/Cosecha)
 input bool     UseManualSettings  = false;        // 🛠️ Ignorar Preset y usar ajustes manuales
 input double   RiskPercent        = 0.0;          // % de Riesgo (0 = Lote Manual)
@@ -65,7 +65,7 @@ datetime lastRemoteSync = 0;
 //============================================================
 //  RESCATE MATEMÁTICO (ULTRA)
 //============================================================
-input group "=== RESCATE MATEMÁTICO (ULTRA) ==="
+sinput string separator3 = "=========================="; // === RESCATE MATEMÁTICO (ULTRA) ===
 input bool     ActivarRescate     = true;      // 🚑 Activar Operación de Rescate
 input double   MultiplicadorLote  = 2.0;       // Multiplicador base Martingala
 input double   DistanciaRescate   = 50.0;      // $ Perdida para activar gatillo (50 unid.)
@@ -76,7 +76,7 @@ input double   MinLoteRescate     = 0.02;      // 🚑 Lote mínimo para rescata
 //============================================================
 //  METAS & CORTAFUEGOS
 //============================================================
-input group "=== METAS & CORTAFUEGOS ==="
+sinput string separator4 = "=========================="; // === METAS & CORTAFUEGOS ===
 input double   MetaDiaria_USD      = 500.0;     // 🎯 Ganancia Diaria (500 unid.).
 input double   Meta_Ciclo_USD      = 100.0;     // Neto para cerrar ciclo (100 unid.)
 input double   Harvest_TP_USD      = 50.0;      // TP individual (50 unid.)
@@ -84,7 +84,7 @@ input double   Harvest_TP_USD      = 50.0;      // TP individual (50 unid.)
 //============================================================
 //  BREAK EVEN & TRAILING
 //============================================================
-input group "=== BREAK EVEN & TRAILING ==="
+sinput string separator5 = "=========================="; // === BREAK EVEN & TRAILING ===
 input bool     ActivarBE           = true;      // 🛡️ Activar Break Even
 input double   BE_Trigger_USD      = 30.0;      // Activar BE tras (30 unidades)
 input bool     ActivarTrailing     = true;      // 🚀 Activar Trailing Stop
@@ -94,7 +94,7 @@ input int      TrailingStep        = 50;        // Paso de Trailing (5 pips)
 //============================================================
 //  ESTRATEGIA & FILTROS
 //============================================================
-input group "=== ESTRATEGIA (MOMENTUM) ==="
+sinput string separator6 = "=========================="; // === ESTRATEGIA (MOMENTUM) ===
 input int      MomentumCandles     = 3;        
 input int      MomentumRequired    = 2;        
 input int      CooldownSeconds     = 60;       
