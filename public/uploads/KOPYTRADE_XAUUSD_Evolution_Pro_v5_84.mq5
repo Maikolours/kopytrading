@@ -110,10 +110,6 @@ datetime       lastTradeTime = 0;
 datetime       coolingEndTime = 0;
 long           lastUpdateID = 0;
 
-// --- VARIABLES GLOBALES ---
-int activeMagic;
-datetime lastRemoteSync = 0;
-
 // --- VARIABLES EFECTIVAS (SHADOW) ---
 double         eff_Lots = 0.01;
 double         eff_HarvestTP = 50.0;
