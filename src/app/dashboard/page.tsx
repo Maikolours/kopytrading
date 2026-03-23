@@ -81,7 +81,7 @@ export default async function DashboardPage() {
         const n = name.toUpperCase();
         if (n.includes("ORO") || n.includes("XAUUSD") || n.includes("AMETRA"))
             return {
-                border: 'border-amber-500/50 border-[2px] border-l-[16px] shadow-[0_0_80px_-20px_rgba(245,158,11,0.3)]',
+                border: 'border-amber-500/50 border-[2px] sm:border-l-[16px] border-l-[8px] shadow-[0_0_80px_-20px_rgba(245,158,11,0.3)]',
                 accent: 'text-amber-400',
                 glow: 'bg-amber-500/20',
                 gradient: 'from-amber-600/40 via-amber-900/20 to-[#0a0a0f]',
@@ -89,7 +89,7 @@ export default async function DashboardPage() {
             };
         if (n.includes("BTC") || n.includes("BITCOIN"))
             return {
-                border: 'border-purple-500/50 border-[2px] border-l-[16px] shadow-[0_0_80px_-20px_rgba(168,85,247,0.3)]',
+                border: 'border-purple-500/50 border-[2px] sm:border-l-[16px] border-l-[8px] shadow-[0_0_80px_-20px_rgba(168,85,247,0.3)]',
                 accent: 'text-purple-400',
                 glow: 'bg-purple-500/20',
                 gradient: 'from-purple-600/40 via-purple-900/20 to-[#0a0a0f]',
@@ -97,14 +97,14 @@ export default async function DashboardPage() {
             };
         if (n.includes("YEN") || n.includes("JPY"))
             return {
-                border: 'border-cyan-500/50 border-[2px] border-l-[16px] shadow-[0_0_80px_-20px_rgba(6,182,212,0.3)]',
+                border: 'border-cyan-500/50 border-[2px] sm:border-l-[16px] border-l-[8px] shadow-[0_0_80px_-20px_rgba(6,182,212,0.3)]',
                 accent: 'text-cyan-400',
                 glow: 'bg-cyan-500/20',
                 gradient: 'from-cyan-600/40 via-cyan-900/20 to-[#0a0a0f]',
                 badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30'
             };
         return {
-            border: 'border-brand/50 border-[2px] border-l-[16px] shadow-[0_0_80px_-20px_rgba(168,85,247,0.3)]',
+            border: 'border-brand/50 border-[2px] sm:border-l-[16px] border-l-[8px] shadow-[0_0_80px_-20px_rgba(168,85,247,0.3)]',
             accent: 'text-brand-light',
             glow: 'bg-brand/20',
             gradient: 'from-brand/30 via-brand-dark/20 to-[#0a0a0f]',
@@ -197,10 +197,10 @@ export default async function DashboardPage() {
                                                             </span>
                                                         )}
                                                         
-                                                        {/* Resultado Diario (PnL Hoy) - ¡MUY VISIBLE! */}
-                                                        <div className={`mt-2 px-3 py-2 rounded-xl flex items-center justify-between gap-3 shadow-inner bg-black/60 border ${theme.border}`}>
-                                                            <span className="text-[9px] font-black uppercase tracking-widest opacity-60">RESULTADO HOY:</span>
-                                                            <span className={`text-sm font-black font-mono ${dailyProfit >= 0 ? 'text-success drop-shadow-[0_0_8px_rgba(34,197,94,0.4)]' : 'text-danger drop-shadow-[0_0_8px_rgba(239,68,68,0.4)]'}`}>
+                                                        {/* Resultado Diario (PnL Hoy) - Flex wrap for mobile */}
+                                                        <div className={`mt-2 px-2 sm:px-3 py-2 rounded-xl flex flex-wrap items-center justify-between gap-2 shadow-inner bg-black/60 border ${theme.border}`}>
+                                                            <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest opacity-60">RESULTADO HOY:</span>
+                                                            <span className={`text-xs sm:text-sm font-black font-mono ${dailyProfit >= 0 ? 'text-success drop-shadow-[0_0_8px_rgba(34,197,94,0.4)]' : 'text-danger drop-shadow-[0_0_8px_rgba(239,68,68,0.4)]'}`}>
                                                                 {dailyProfit >= 0 ? '+' : ''}{dailyProfit.toFixed(2)} $
                                                             </span>
                                                         </div>
