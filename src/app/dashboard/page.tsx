@@ -11,6 +11,7 @@ import { BotRemoteControl } from "@/components/BotRemoteControl";
 import { CopyIdButton } from "@/components/CopyIdButton";
 import { SyncStatus } from "@/components/SyncStatus";
 import { CleanupButton } from "@/components/CleanupButton";
+import { DashboardRefresher } from "@/components/DashboardRefresher";
 
 // Evitar cacheo
 export const dynamic = "force-dynamic";
@@ -114,6 +115,7 @@ export default async function DashboardPage() {
 
     return (
         <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+            <DashboardRefresher />
             <div className="max-w-5xl mx-auto">
                 <div className="mb-10 pb-6 border-b border-white/10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                     <div>
