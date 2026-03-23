@@ -10,7 +10,7 @@ uint GetHash(string text) {
    for(int i = 0; i < StringLen(text); i++) hash = ((hash << 5) + hash) + text[i];
    return hash & 0x7FFFFFFF; // Asegurar que sea positivo
 }
-#property version   "5.81"
+#property version   "5.82"
 #property strict
 #property description "Evolution Pro | Pre-configurado para Cuentas USD/Cent kopytrading.com"
 
@@ -33,12 +33,9 @@ bool           isCentAccount = true;
 //============================================================
 //  LICENCIA & TELEGRAM
 //============================================================
-input group "=== LICENCIA & MOBILE BRIDGE ==="
+input group "=== LICENCIA & SEGURIDAD ==="
 input string   LicenseKey        = "TRIAL-2026";
 input string   PurchaseID        = "";         // ID de Vínculo (Ver en kopytrading.com/dashboard)
-input string   TelegramToken     = "";         // Token del Bot (ej: 123456:ABC...)
-input long     TelegramChatID    = 0;          // Tu Chat ID (ej: 987654321)
-input bool     NotificarTelegram = true;       // Enviar alertas al móvil
 
 //============================================================
 //  GESTIÓN DE RIESGO
@@ -159,7 +156,6 @@ color CLR_ACCENT  = C'40,70,190';
 
 //--- INICIALIZACIÓN ---
 int OnInit() {
-   activeMagic = MagicNumber;
    if(activeMagic == 0) activeMagic = (int)GetHash(_Symbol + IntegerToString((int)AccountInfoInteger(ACCOUNT_LOGIN)));
    trade.SetExpertMagicNumber(activeMagic);
    
@@ -169,9 +165,8 @@ int OnInit() {
    atrHandle = iATR(_Symbol, _Period, 14);
    if(atrHandle == INVALID_HANDLE) return(INIT_FAILED);
    
-   startNotified = false;
+   startNotified = true; // No Telegram, avoid checking
    startRetries = 0;
-   if(NotificarTelegram && TelegramToken != "") Print("TELEGRAM: Iniciando bot Cent...");
    CrearPanel(); 
    UpdateModeParams();
    SyncPositions();
@@ -196,12 +191,6 @@ bool HayNoticia() {
 }
 
 void OnTick() {
-   if(NotificarTelegram && TelegramToken != "" && !startNotified && startRetries < 3) {
-      if(SendTelegramMessage("🚀 KOPYTRADING EVOLUTION CENT Iniciada.\n\n/status - Ver PnL\n/pause - Apagar\n/resume - Reanudar"))
-         startNotified = true;
-      else
-         startRetries++;
-   }
     double dailyProfit = GetDailyProfit();
     double currentNet = GetCurrentNetProfit();
     
@@ -221,8 +210,6 @@ void OnTick() {
       if(currentNet >= 0) {
          CloseAllBotPositions();
          DeleteBotPendings();
-         string profitStr = isCentAccount ? ("$" + DoubleToString((dailyProfit + currentNet)/100.0, 2) + " reales") : ("$" + DoubleToString(dailyProfit + currentNet, 2));
-         SendTelegramMessage("🎯 META PRO FINALIZADA (" + profitStr + "). Todo cerrado.");
          botStatus = "META ALCANZADA";
          ActualizarPanel();
          return;
@@ -249,28 +236,9 @@ void OnTick() {
 
    ActualizarPanel();
    SyncPositions();
-   NotifyDeals();
-}
-
-void NotifyDeals() {
-   HistorySelect(TimeCurrent()-60, TimeCurrent());
-   for(int i=HistoryDealsTotal()-1; i>=0; i--) {
-      ulong t = HistoryDealGetTicket(i);
-      if(HistoryDealGetInteger(t, DEAL_MAGIC) == activeMagic && HistoryDealGetInteger(t, DEAL_TIME) > TimeCurrent()-10) {
-         double p = HistoryDealGetDouble(t, DEAL_PROFIT);
-         if(p != 0) {
-            string unit = isCentAccount ? " USC" : " $";
-            int digs = isCentAccount ? 0 : 2;
-            SendTelegramMessage("💰 Operación Cerrada: " + (p>0?"✅ ":"❌ ") + DoubleToString(p, digs) + unit);
-         }
-         else SendTelegramMessage("🏁 Operación Abierta (" + HistoryDealGetString(t, DEAL_SYMBOL) + ")");
-      }
-   }
 }
 
 void OnTimer() { 
-   if(TelegramToken != "") ProcessTelegramCommands(); 
-   
    if(PurchaseID != "" && TimeCurrent() - lastRemoteSync >= 30) {
       CheckRemoteCommands();
       SyncPositions();
@@ -287,9 +255,9 @@ void CheckRemoteCommands() {
       string response = CharArrayToString(result);
       if(!loginPrinted) { Print("LICENSE: Validacion exitosa Oro Pro."); loginPrinted = true; }
       
-      if(StringFind(response, "\"command\":\"PAUSE\"") != -1) { remotePaused = true; SendTelegramMessage("🛑 Comando Remoto: PAUSAR BOT"); CrearPanel(); }
-      if(StringFind(response, "\"command\":\"RESUME\"") != -1) { remotePaused = false; SendTelegramMessage("🟢 Comando Remoto: REANUDAR BOT"); CrearPanel(); }
-      if(StringFind(response, "\"command\":\"CLOSE_ALL\"") != -1) { CloseAllBotPositions(); SendTelegramMessage("🔥 Comando Remoto: CIERRE EMERGENCIA"); }
+      if(StringFind(response, "\"command\":\"PAUSE\"") != -1) { remotePaused = true; CrearPanel(); }
+      if(StringFind(response, "\"command\":\"RESUME\"") != -1) { remotePaused = false; CrearPanel(); }
+      if(StringFind(response, "\"command\":\"CLOSE_ALL\"") != -1) { CloseAllBotPositions(); }
       
       // --- COMANDOS PRO ---
       if(StringFind(response, "\"command\":\"SET_LOTS\"") != -1) { rem_Lots = ExtractValue(response); UpdateModeParams(); }
@@ -335,7 +303,6 @@ void SetRemoteTimeframe(string tf) {
    if(tf == "H1")  period = PERIOD_H1;
    
    if(period != _Period) {
-      SendTelegramMessage("🕒 Cambio Remoto Temporalidad: " + tf);
       ChartSetSymbolPeriod(0, _Symbol, period);
    }
 }
@@ -455,7 +422,6 @@ void ManageOpenPositions() {
     if(botPosCount >= 2 && netProfit >= eff_CycleMeta) {
        CloseAllBotPositions();
        coolingEndTime = TimeCurrent() + CooldownSeconds;
-       SendTelegramMessage("✅ Ciclo Cent Cerrado: " + DoubleToString(netProfit, 0) + " USC");
        return;
     }
     
@@ -538,47 +504,6 @@ ENUM_POSITION_TYPE GetMainPositionType() {
    return POSITION_TYPE_BUY;
 }
 
-void ProcessTelegramCommands() {
-   string url = "https://api.telegram.org/bot" + TelegramToken + "/getUpdates?offset=" + IntegerToString(lastUpdateID + 1);
-   char post[], result[]; string headers;
-   int res = WebRequest("GET", url, headers, 1000, post, result, headers);
-   if(res == 200) {
-      string response = CharArrayToString(result);
-      if(StringFind(response, "\"/start\"") != -1) { SendTelegramMessage("👋 ¡Hola! Soy tu bot de Kopytrading Cent."); lastUpdateID = ParseUpdateID(response); }
-      if(StringFind(response, "\"/status\"") != -1) { SendTelegramStatus(); lastUpdateID = ParseUpdateID(response); }
-      if(StringFind(response, "\"/closeall\"") != -1) { CloseAllBotPositions(); SendTelegramMessage("🏁 POSICIONES CENT CERRADAS"); lastUpdateID = ParseUpdateID(response); }
-      if(StringFind(response, "\"/pause\"") != -1) { remotePaused = true; SendTelegramMessage("🔴 PAUSA REMOTA ACTIVADA"); lastUpdateID = ParseUpdateID(response); }
-      if(StringFind(response, "\"/resume\"") != -1) { remotePaused = false; SendTelegramMessage("🟢 BOT REANUDADO"); lastUpdateID = ParseUpdateID(response); }
-   }
-}
-
-long ParseUpdateID(string json) {
-   int pos = StringFind(json, "\"update_id\":"); if(pos == -1) return lastUpdateID;
-   string sub = StringSubstr(json, pos + 12); int end = StringFind(sub, ",");
-   return (long)StringToInteger(StringSubstr(sub, 0, end));
-}
-
-bool SendTelegramMessage(string msg) {
-   string token = TelegramToken;
-   StringTrimLeft(token); StringTrimRight(token);
-   if(token == "" || TelegramChatID <= 0) return false;
-   string url = "https://api.telegram.org/bot" + token + "/sendMessage";
-   string payload = "chat_id=" + IntegerToString(TelegramChatID) + "&text=" + msg + "\n\n🌐 kopytrading.com";
-   char post[], result[]; string headers = "Content-Type: application/x-www-form-urlencoded\r\n";
-   StringToCharArray(payload, post, 0, WHOLE_ARRAY, CP_UTF8);
-   int res = WebRequest("POST", url, headers, 2000, post, result, headers);
-   if(res != 200) return false;
-   return true;
-}
-
-void SendTelegramStatus() {
-   string msg = "🔫 EVOLUTION PRO\n";
-   string unit = isCentAccount ? " USC" : " $";
-   int digs = isCentAccount ? 0 : 2;
-   msg += "PnL Hoy: " + DoubleToString(GetDailyProfit(), digs) + unit + "\n";
-   msg += "Status: " + botStatus;
-   SendTelegramMessage(msg);
-}
 
 double CalculateInitialLot() { return LoteManual; }
 double CalculateRecoveryLot(double loss) { 
@@ -697,8 +622,7 @@ void CrearPanel() {
       CrBtn("b_buy", x+10, y+255, 90, 25, "SOLO BUY", currentDir==DIR_COMPRAS?CLR_ACCENT:C'35,35,65', clrWhite);
       CrBtn("b_both", x+105, y+255, 90, 25, "AMBAS", currentDir==DIR_AMBAS?CLR_ACCENT:C'35,35,65', clrWhite);
       CrBtn("b_sell", x+200, y+255, 85, 25, "SOLO SELL", currentDir==DIR_VENTAS?C'180,40,40':C'35,35,65', clrWhite);
-      CrBtn("b_close", x+10, y+295, 185, 30, "CLOSE ALL POSITIONS", CLR_DANGER, clrWhite);
-      CrBtn("b_test", x+205, y+295, 80, 30, "TEST BOT", C'50,50,80', clrWhite);
+      CrBtn("b_close", x+10, y+295, 275, 30, "CLOSE ALL POSITIONS", CLR_DANGER, clrWhite);
       
       string accType = isCentAccount ? " REAL (CENT)" : " REAL (USD)";
       if(AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_DEMO) accType = " DEMO Account";
@@ -737,13 +661,12 @@ void ActualizarPanel() {
 void OnChartEvent(const int id, const long &lp, const double &dp, const string &sp) {
    if(id!=CHARTEVENT_OBJECT_CLICK) return;
    if(sp==PNL+"min") { isMinimized=!isMinimized; CrearPanel(); }
-   if(sp==PNL+"b_zen") { currentMode=MODE_ZEN; rem_Lots=0; UpdateModeParams(); SendTelegramMessage("🧘 MODO ZEN Activado (Manual/Gráfico)"); CrearPanel(); }
-   if(sp==PNL+"b_har") { currentMode=MODE_COSECHA; rem_Lots=0; UpdateModeParams(); SendTelegramMessage("🚜 MODO COSECHA Activado (Manual/Gráfico)"); CrearPanel(); }
+   if(sp==PNL+"b_zen") { currentMode=MODE_ZEN; rem_Lots=0; UpdateModeParams(); CrearPanel(); }
+   if(sp==PNL+"b_har") { currentMode=MODE_COSECHA; rem_Lots=0; UpdateModeParams(); CrearPanel(); }
    if(sp==PNL+"b_buy") { currentDir=DIR_COMPRAS; CrearPanel(); }
    if(sp==PNL+"b_sell") { currentDir=DIR_VENTAS; CrearPanel(); }
    if(sp==PNL+"b_both") { currentDir=DIR_AMBAS; CrearPanel(); }
    if(sp==PNL+"b_close") { CloseAllBotPositions(); }
-   if(sp==PNL+"b_test") { if(SendTelegramMessage("🔔 Prueba conexión HUD Pro OK.")) Alert("¡Mensaje enviado!"); }
    ObjectSetInteger(0, sp, OBJPROP_STATE, false);
 }
 
