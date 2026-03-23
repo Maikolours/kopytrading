@@ -349,34 +349,31 @@ void MaintainGates() {
       double distRes = 200 * _Point;
       double targetRes = (mainType == POSITION_TYPE_BUY) ? bid - distRes : ask + distRes;
 
-      if(t_res == 0) {
-         double resLot = CalculateRecoveryLot(MathAbs(netProfit > 0 ? 0 : netProfit));
-         if(mainType == POSITION_TYPE_BUY) trade.SellStop(resLot, targetRes, _Symbol, 0, 0, 0, 0, "RESCATE_P");
-         else trade.BuyStop(resLot, targetRes, _Symbol, 0, 0, 0, 0, "RESCATE_P");
-      } else {
-         if(OrderSelect(t_res)) {
-            double op = OrderGetDouble(ORDER_PRICE_OPEN);
-            double netP = GetCurrentNetProfit();
-            
-            // --- DIFERENCIA CLAVE: Solo "corremos" si estamos en zona segura ---
-            if(netP > -DistanciaRescate) {
-               double freezeLevel = SymbolInfoInteger(_Symbol, SYMBOL_TRADE_FREEZE_LEVEL) * _Point;
-               double stopLevel = SymbolInfoInteger(_Symbol, SYMBOL_TRADE_STOPS_LEVEL) * _Point;
-               double distLimit = MathMax(freezeLevel, stopLevel) + (20 * _Point);
+      if(netProfit < -10.0) { // Solo rescatar si estamos en pérdida significativa
+         if(t_res == 0) {
+            double resLot = CalculateRecoveryLot(MathAbs(netProfit > 0 ? 0 : netProfit));
+            if(mainType == POSITION_TYPE_BUY) trade.SellStop(resLot, targetRes, _Symbol, 0, 0, 0, 0, "RESCATE_P");
+            else trade.BuyStop(resLot, targetRes, _Symbol, 0, 0, 0, 0, "RESCATE_P");
+         } else {
+            if(OrderSelect(t_res)) {
+               double op = OrderGetDouble(ORDER_PRICE_OPEN);
+               double netP = GetCurrentNetProfit();
                
-               // Solo intentar modificar si el precio está fuera de la zona "fría" (Frozen)
-               bool canModify = (mainType == POSITION_TYPE_BUY) ? (bid - targetRes > distLimit) : (targetRes - ask > distLimit);
+               if(netP > -DistanciaRescate) {
+                  double freezeLevel = SymbolInfoInteger(_Symbol, SYMBOL_TRADE_FREEZE_LEVEL) * _Point;
+                  double stopLevel = SymbolInfoInteger(_Symbol, SYMBOL_TRADE_STOPS_LEVEL) * _Point;
+                  double distLimit = MathMax(freezeLevel, stopLevel) + (20 * _Point);
+                  
+                  bool canModify = (mainType == POSITION_TYPE_BUY) ? (bid - targetRes > distLimit) : (targetRes - ask > distLimit);
 
-               if(canModify && MathAbs(targetRes - op) > 100 * _Point) {
-                  if(!trade.OrderModify(t_res, NormalizeDouble(targetRes, _Digits), 0, 0, ORDER_TIME_GTC, 0, 0)) {
-                     // Loguear solo si falla para evitar spam
-                     Print("RESCATE ERROR: No se pudo modificar. Error=", GetLastError());
+                  if(canModify && MathAbs(targetRes - op) > 100 * _Point) {
+                     trade.OrderModify(t_res, NormalizeDouble(targetRes, _Digits), 0, 0, ORDER_TIME_GTC, 0, 0);
                   }
                }
-            } else {
-               Print("RESCATE: Precio en zona activa. Manteniendo orden anclada.");
             }
          }
+      } else {
+         if(t_res != 0) trade.OrderDelete(t_res); // El mercado se dio la vuelta, dejamos de meter rescate
       }
    }
 
@@ -412,12 +409,11 @@ void ManageOpenPositions() {
     int botPosCount = 0;
     for(int i=0; i<PositionsTotal(); i++) if(posInfo.SelectByIndex(i) && posInfo.Magic()==activeMagic) botPosCount++;
 
-    if(MaxDrawdown_USD > 0 && netProfit <= -MaxDrawdown_USD) {
-       CloseAllBotPositions();
-       botStatus = "🛑 STOP EMERGENCIA";
-       SendTelegramMessage("⚠️ STOP EMERGENCIA CENT ACTIVADO. Perdida: $" + DoubleToString(netProfit/100.0, 2) + " reales.\nEl bot se ha detenido.");
-       remotePaused = true; return;
-    }
+     if(MaxDrawdown_USD > 0 && netProfit <= -MaxDrawdown_USD) {
+        CloseAllBotPositions();
+        botStatus = "🛑 STOP EMERGENCIA";
+        remotePaused = true; return;
+     }
 
     if(botPosCount >= 2 && netProfit >= eff_CycleMeta) {
        CloseAllBotPositions();
@@ -433,12 +429,10 @@ void ManageOpenPositions() {
 
           if(p <= -Max_DD_Individual) {
              trade.PositionClose(posInfo.Ticket());
-             SendTelegramMessage("⚠️ Cierre Seguridad: Operación alcanzó -" + DoubleToString(Max_DD_Individual, 0) + " USC");
              coolingEndTime = TimeCurrent() + 300; continue;
           }
           if(Max_Velas_Vida > 0 && candlesPassed >= Max_Velas_Vida) {
              trade.PositionClose(posInfo.Ticket());
-             SendTelegramMessage("⏳ Cierre Tiempo: " + IntegerToString(candlesPassed) + " velas.");
              continue;
           }
           // --- LOGICA DE HARVEST (TP INDIVIDUAL) ---
