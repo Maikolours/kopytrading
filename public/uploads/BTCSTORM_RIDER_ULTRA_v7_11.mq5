@@ -107,6 +107,8 @@ bool           remotePaused = false;
 double         mode_HarvestTP = 2.0;
 double         mode_CycleMeta = 5.0;
 double         mode_BETrigger = 2.0;
+int            mode_MaxPos    = 4;
+double         mode_DistUSD   = 1.5;
 
 #define PNL "BSR_v7_"
 
@@ -244,7 +246,7 @@ void MaintainGates() {
    double netProfit = GetCurrentNetProfit();
 
    if(botPosCount > 0) {
-      if(botPosCount >= MaxPosiciones) { DeleteBotPendings(); return; }
+      if(botPosCount >= mode_MaxPos) { DeleteBotPendings(); return; }
       double ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
       double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
       
@@ -299,7 +301,7 @@ void MaintainGates() {
 
       int p_buys = CountPendings(ORDER_TYPE_BUY_STOP);
       int p_sells = CountPendings(ORDER_TYPE_SELL_STOP);
-      double dist = USDtoPrice(DistanciaEntrada_USD, LoteManual); 
+      double dist = USDtoPrice(mode_DistUSD, LoteManual); 
       
       if((currentDir == DIR_COMPRAS || currentDir == DIR_AMBAS) && p_buys == 0 && allowBuy)
          trade.BuyStop(LoteManual, SymbolInfoDouble(_Symbol, SYMBOL_ASK) + dist, _Symbol, 0, 0, 0, 0, "G_BUY_BTC");
@@ -416,8 +418,16 @@ void CloseAllBotPositions() { for(int i=PositionsTotal()-1; i>=0; i--) if(posInf
 void DeleteBotPendings() { for(int i=OrdersTotal()-1; i>=0; i--) if(OrderSelect(OrderGetTicket(i)) && OrderGetInteger(ORDER_MAGIC)==MagicNumber) trade.OrderDelete(OrderGetTicket(i)); }
 
 void UpdateModeParams() {
-   if(currentMode == MODE_ZEN) { mode_HarvestTP = 1.0; mode_CycleMeta = 3.0; mode_BETrigger = 1.0; }
-   else { mode_HarvestTP = Harvest_TP_USD; mode_CycleMeta = Meta_Ciclo_USD; mode_BETrigger = BE_Trigger_USD; }
+   if(currentMode == MODE_ZEN) { 
+      mode_HarvestTP = 1.0; mode_CycleMeta = 3.0; mode_BETrigger = 1.0; 
+      mode_MaxPos = 1;
+      mode_DistUSD = 5.0; // ZEN: Entrada a $5 de distancia en BTC
+   }
+   else { 
+      mode_HarvestTP = Harvest_TP_USD; mode_CycleMeta = Meta_Ciclo_USD; mode_BETrigger = BE_Trigger_USD; 
+      mode_MaxPos = MaxPosiciones;
+      mode_DistUSD = DistanciaEntrada_USD; // COSECHA: Entrada según input (1.0 por defecto)
+   }
 }
 
 void CrearPanel() {
@@ -440,8 +450,10 @@ void CrearPanel() {
       
       string mUnit = EsCuentaCent ? " unid." : " $";
       CrLabel("opL", x+15, y+155, "META DIARIA:", CLR_MUTED, 8); CrLabel("opV", x+115, y+155, DoubleToString(MetaDiaria_USD, EsCuentaCent?0:2) + mUnit, CLR_TXT, 8, "Arial Bold");
+      
+      CrLabel("opX", x+15, y+175, "LIMITE POS.:", CLR_MUTED, 8); CrLabel("opY", x+115, y+175, IntegerToString(PositionsTotalBots()) + " / " + IntegerToString(mode_MaxPos), CLR_WARN, 8);
 
-      CrLabel("moH", x+12, y+185, "MODOS & DIRECCIÓN BTC", CLR_MUTED, 7);
+      CrLabel("moH", x+12, y+190, "MODOS & DIRECCIÓN BTC", CLR_MUTED, 7);
       CrBtn("b_zen", x+10, y+205, 90, 25, "MODO ZEN", currentMode==MODE_ZEN?CLR_ACCENT:C'35,35,65', clrWhite);
       CrBtn("b_har", x+105, y+205, 90, 25, "COSECHA", currentMode==MODE_COSECHA?C'200,80,40':C'35,35,65', clrWhite);
       CrBtn("b_set", x+200, y+205, 85, 25, "⚙️ SET", CLR_HDR, clrWhite);

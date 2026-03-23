@@ -139,6 +139,8 @@ datetime       lastPositionsSync = 0;
 double         mode_HarvestTP = 50.0;
 double         mode_CycleMeta = 100.0;
 double         mode_BETrigger = 50.0;
+int            mode_MaxPos    = 2;
+int            mode_Entrada   = 500;
 
 #define PNL "AEVO_C_"
 
@@ -316,7 +318,7 @@ void MaintainGates() {
    double netProfit = GetCurrentNetProfit();
 
    if(botPosCount > 0) {
-      if(botPosCount >= MaxPosiciones) { DeleteBotPendings(); return; }
+      if(botPosCount >= mode_MaxPos) { DeleteBotPendings(); return; }
       double ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
       double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
       if(ask <= 0 || bid <= 0) return; 
@@ -389,7 +391,7 @@ void MaintainGates() {
       if(c_up < MomentumRequired && c_dn < MomentumRequired) { DeleteBotPendings(); return; }
       int p_buys = CountPendings(ORDER_TYPE_BUY_STOP);
       int p_sells = CountPendings(ORDER_TYPE_SELL_STOP);
-      double dist = EntradaPoints * _Point;
+      double dist = mode_Entrada * _Point;
       double lot = eff_Lots;
       if((currentDir == DIR_COMPRAS || currentDir == DIR_AMBAS) && p_buys == 0)
          trade.BuyStop(lot, SymbolInfoDouble(_Symbol, SYMBOL_ASK) + dist, _Symbol, 0, 0, 0, 0, "G_BUY");
@@ -566,14 +568,18 @@ bool IsTradingTime() {
 }
 
 void UpdateModeParams() {
-   // 1. Base del Modo (Preset)
+   // 1. Base del Modo (Preset) - DIFERENCIACIÓN REAL ZEN vs COSECHA
    if(currentMode == MODE_ZEN) { 
       eff_HarvestTP = 20.0; eff_CycleMeta = 50.0; eff_BETrigger = 20.0; 
-      eff_ModeType = "AUTO (ZEN)";
+      mode_MaxPos = 1; 
+      mode_Entrada = 1000; // ZEN: Entrada a $10 de distancia
+      eff_ModeType = "AUTO (ZEN - CALM)";
    }
    else { 
       eff_HarvestTP = Harvest_TP_USD; eff_CycleMeta = Meta_Ciclo_USD; eff_BETrigger = BE_Trigger_USD; 
-      eff_ModeType = "AUTO (COSECHA)";
+      mode_MaxPos = MaxPosiciones;
+      mode_Entrada = EntradaPoints; // COSECHA: Entrada según input (500 por defecto)
+      eff_ModeType = "AUTO (COSECHA - ACT)";
    }
    
    // 2. Overrides Manuales (Inputs)
@@ -648,7 +654,7 @@ void ActualizarPanel() {
       ObjectSetInteger(0, PNL+"nwV", OBJPROP_COLOR, noticiaActiva ? CLR_DANGER : CLR_SUCCESS);
       
       int ops = PositionsTotalBots();
-      ObjectSetString(0, PNL+"opV", OBJPROP_TEXT, IntegerToString(ops) + " / " + IntegerToString(MaxPosiciones));
+      ObjectSetString(0, PNL+"opV", OBJPROP_TEXT, IntegerToString(ops) + " / " + IntegerToString(mode_MaxPos));
       
       // Tendencia simplificada para el HUD
       double ma[];
