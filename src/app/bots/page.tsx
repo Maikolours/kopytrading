@@ -155,10 +155,26 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
 
                             <CardFooter className="justify-between items-center mt-auto border-t border-white/10 pt-4">
                                 <div className="flex flex-col">
-                                    <div className="text-2xl font-bold text-white tracking-tight">
-                                        ${bot.price.toFixed(2)}
+                                    <div className="flex items-center gap-2">
+                                        <div className="text-2xl font-bold text-white tracking-tight">
+                                            ${bot.price.toFixed(2)}
+                                        </div>
+                                        {bot.originalPrice && bot.originalPrice > bot.price && (
+                                            <div className="text-sm text-text-muted line-through opacity-50">
+                                                ${bot.originalPrice.toFixed(2)}
+                                            </div>
+                                        )}
                                     </div>
-                                    <div className="text-[10px] text-success font-semibold tracking-wider uppercase">1 Mes Gratis</div>
+                                    <div className="text-[10px] text-success font-black tracking-wider uppercase flex items-center gap-1">
+                                        {bot.originalPrice ? (
+                                            <>
+                                                <span className="bg-success/20 px-1 rounded">OFERTA LANZAMIENTO</span>
+                                                <span>-25%</span>
+                                            </>
+                                        ) : (
+                                            "1 Mes Gratis"
+                                        )}
+                                    </div>
                                 </div>
                                 <Link href={`/bots/${bot.id}`} className={bot.status !== 'ACTIVE' ? 'pointer-events-none opacity-20' : ''}>
                                     <Button size="sm" className="shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:shadow-[0_0_20px_rgba(139,92,246,0.6)]" disabled={bot.status !== 'ACTIVE'}>

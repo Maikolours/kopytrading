@@ -8,6 +8,7 @@ import { SyncStatus } from "./SyncStatus";
 import { CleanupButton } from "./CleanupButton";
 import { Countdown } from "./ui/Countdown";
 import { PasswordChangeForm } from "./PasswordChangeForm";
+import { Copy, CheckCircle2 } from "lucide-react";
 
 interface DashboardContainerProps {
     purchases: any[];
@@ -67,14 +68,21 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
 
     const categories = [...Object.keys(groupedBots), "⚙️ AJUSTES"];
     const [activeCategory, setActiveCategory] = useState(categories[0] || "");
+    const [copiedId, setCopiedId] = useState<string | null>(null);
+
+    const handleCopy = (id: string) => {
+        navigator.clipboard.writeText(id);
+        setCopiedId(id);
+        setTimeout(() => setCopiedId(null), 2000);
+    };
 
     const selectedPurchases = groupedBots[activeCategory] || [];
 
     return (
-        <div className="flex flex-col md:flex-row gap-8">
-            {/* Sidebar / Tabs para Escritorio & Móvil */}
-            <div className="w-full md:w-64 flex-shrink-0">
-                <div className="flex md:flex-col overflow-x-auto md:overflow-visible gap-2 pb-4 md:pb-0 scrollbar-hide">
+        <div className="flex flex-col gap-8">
+            {/* Top Navigation Tabs - Better for Centering */}
+            <div className="w-full">
+                <div className="flex flex-wrap justify-center gap-2 pb-6 border-b border-white/5">
                     {categories.map(cat => (
                         <button
                             key={cat}
@@ -91,8 +99,8 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                 </div>
             </div>
 
-            {/* Contenido Principal: Un solo bot a la vez */}
-            <div className="flex-1 min-w-0">
+            {/* Contenido Principal: Centrado y Optimizado */}
+            <div className="flex-1 min-w-0 max-w-4xl mx-auto w-full">
                 {selectedPurchases.map((purchase: any) => {
                     const theme = getBotTheme(purchase.botProduct.name);
                     const isTrial = purchase.status === "TRIAL";
@@ -153,17 +161,17 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                                                     {purchase.botProduct.instrument}
                                                 </span>
                                             </div>
-                                            <CardTitle className="text-4xl sm:text-5xl font-black text-white tracking-tighter leading-none mb-2">
+                                            <CardTitle className="text-3xl sm:text-4xl font-black text-white tracking-tighter leading-tight mb-2 uppercase">
                                                 {purchase.botProduct.name}
                                             </CardTitle>
-                                            <p className="text-text-muted text-sm opacity-60">
-                                                {purchase.botProduct.description || "Sin descripción"}
+                                            <p className="text-text-muted text-xs opacity-60">
+                                                {purchase.botProduct.description || "Optimizado para trading automático de alta precisión."}
                                             </p>
                                         </div>
 
-                                        <div className="w-full sm:w-auto p-4 rounded-2xl bg-black/60 border border-white/10 flex flex-col items-center justify-center">
-                                            <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 mb-1">Resultado Hoy</span>
-                                            <span className={`text-3xl font-black font-mono ${dailyProfit >= 0 ? 'text-success' : 'text-danger'} drop-shadow-[0_0_15px_rgba(34,197,94,0.3)]`}>
+                                        <div className="w-full sm:w-auto p-4 px-6 rounded-2xl bg-black/60 border border-white/10 flex flex-col items-center justify-center min-w-32">
+                                            <span className="text-[9px] font-black uppercase tracking-[0.2em] opacity-40 mb-1">Hoy</span>
+                                            <span className={`text-2xl font-black font-mono ${dailyProfit >= 0 ? 'text-success' : 'text-danger'} drop-shadow-[0_0_15px_rgba(34,197,94,0.3)]`}>
                                                 {dailyProfit >= 0 ? '+' : ''}{dailyProfit.toFixed(2)} $
                                             </span>
                                         </div>
@@ -195,10 +203,10 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                                                     <a href={`/api/download/${purchase.id}?type=ex5`} className="group">
                                                         <Button fullWidth size="lg" className="bg-white text-black hover:bg-white/90 font-black tracking-tight flex items-center justify-between px-6 py-6 h-auto">
                                                             <div className="text-left">
-                                                                <div className="text-sm">DESCARGAR BOT (.EX5)</div>
+                                                                 <div className="text-xs uppercase font-black">Descargar Bot (.EX5)</div>
                                                                 <div className="text-[10px] opacity-60 font-bold uppercase tracking-tighter">Versión actual: {purchase.botProduct.version}</div>
                                                             </div>
-                                                            <span className="text-2xl group-hover:translate-y-1 transition-transform">📥</span>
+                                                            <span className="text-xl group-hover:translate-x-1 transition-transform">📥</span>
                                                         </Button>
                                                     </a>
                                                     {hasUpdate && (
@@ -209,16 +217,23 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                                                 </div>
                                             </div>
 
-                                            {/* ID DE VÍNCULO (Más legible) */}
+                                            {/* ID DE VÍNCULO (Copiable) */}
                                             <div className="p-5 rounded-2xl bg-black/40 border-l-4 border-brand-light shadow-2xl">
-                                                <p className="text-[10px] text-text-muted/60 uppercase tracking-widest mb-2 font-black">Tu ID de Vínculo (LICENSE KEY)</p>
-                                                <div className="flex items-center gap-3">
-                                                    <code className="text-lg sm:text-xl font-black font-mono text-brand-light select-all break-all tracking-tighter uppercase">
+                                                <p className="text-[9px] text-text-muted/60 uppercase tracking-widest mb-2 font-black">ID Vínculo (LICENSE KEY)</p>
+                                                <div className="flex items-center gap-2">
+                                                    <code className="text-sm sm:text-base font-black font-mono text-brand-light select-all break-all tracking-tighter uppercase p-2 bg-white/5 rounded-lg flex-1">
                                                         {purchase.id}
                                                     </code>
+                                                    <Button 
+                                                        size="sm" 
+                                                        className={`transition-all h-9 w-9 p-0 flex items-center justify-center shrink-0 ${copiedId === purchase.id ? 'bg-success text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                                                        onClick={() => handleCopy(purchase.id)}
+                                                    >
+                                                        {copiedId === purchase.id ? <CheckCircle2 size={16} /> : <Copy size={16} />}
+                                                    </Button>
                                                 </div>
-                                                <p className="mt-2 text-[10px] text-text-muted/40 italic">
-                                                    Introduce este ID en los parámetros de tu bot dentro de MetaTrader 5.
+                                                <p className="mt-2 text-[9px] text-text-muted/40 italic">
+                                                    Copia este ID y pégalo en el parámetro "ID Vínculo" de tu bot en MT5.
                                                 </p>
                                             </div>
                                         </div>

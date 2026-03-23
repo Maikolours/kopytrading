@@ -16,7 +16,7 @@ const BOTS_DATA = [
         features: [true, true, true, true],
         icon: "🎯",
         color: "from-blue-500 to-cyan-500",
-        price: "179€"
+        price: "$149"
     },
     {
         id: "ninja-yen",
@@ -30,36 +30,36 @@ const BOTS_DATA = [
         features: [true, true, true, true],
         icon: "🥷",
         color: "from-purple-500 to-indigo-500",
-        price: "77€"
+        price: "$149"
     },
     {
         id: "ametralladora",
-        name: "La Ametralladora v5.0",
+        name: "Evolution PRO v5.84",
         pair: "XAU/USD",
-        timeframe: "M15",
-        risk: "Medio-Alto",
+        timeframe: "M15 (PRO)",
+        risk: "Dinámico",
         minCapital: "$1,000",
-        frequency: "Muy Alta (Diaria)",
-        amortization: "~ 3 semanas",
+        frequency: "Muy Alta (HFT)",
+        amortization: "~ 2 semanas",
         features: [true, true, true, true],
-        icon: "🔥",
-        color: "from-orange-500 to-red-600",
-        price: "97€",
+        icon: "💎",
+        color: "from-amber-400 to-amber-600",
+        price: "$224",
         popular: true
     },
     {
         id: "btc-storm",
-        name: "BTC Storm Rider v6.3",
+        name: "BTC Storm Rider v7.11",
         pair: "BTC/USD",
-        timeframe: "M30-H4",
-        risk: "Alto",
+        timeframe: "M30-H1",
+        risk: "Medio-Alto",
         minCapital: "$2,000",
-        frequency: "Ráfagas (Breakout)",
+        frequency: "Breakout (IA)",
         amortization: "~ 4 semanas",
         features: [true, true, true, true],
         icon: "⚡",
         color: "from-yellow-400 to-orange-500",
-        price: "87€"
+        price: "$224"
     }
 ];
 

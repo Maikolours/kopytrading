@@ -50,35 +50,35 @@ export default function Home() {
 
       <main className="flex-1 flex flex-col relative pt-28 sm:pt-32 z-10">
 
-        {/* === PRÓXIMO LANZAMIENTO / TEASER === */}
+        {/* === LANZAMIENTO OFICIAL / OFERTA === */}
         <section className="px-4 mt-8">
           <div className="max-w-5xl mx-auto">
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-brand to-accent rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative bg-black/80 border border-white/10 rounded-2xl p-6 sm:p-8 backdrop-blur-xl flex flex-col md:flex-row items-center gap-6 overflow-hidden">
+              <div className="relative bg-black/80 border border-brand/30 rounded-2xl p-6 sm:p-8 backdrop-blur-xl flex flex-col md:flex-row items-center gap-6 overflow-hidden">
                 <div className="absolute top-0 right-0 p-4 opacity-10">
-                  <span className="text-8xl select-none">🚀</span>
+                  <span className="text-8xl select-none">🔥</span>
                 </div>
                 
-                <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-brand/20 flex items-center justify-center text-3xl animate-bounce">
-                  ⚡
+                <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-brand/20 flex items-center justify-center text-3xl animate-pulse">
+                  🚀
                 </div>
                 
                 <div className="flex-1 text-center md:text-left z-10">
                   <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-2">
-                    ¡No te pierdas el lanzamiento oficial!
+                    ¡PRÓXIMO LANZAMIENTO: EVOLUTION PRO!
                   </h3>
                   <p className="text-text-muted leading-relaxed max-w-2xl">
-                    Estamos ultimando los detalles de <span className="text-brand-light font-bold">La Ametralladora Evolution</span> y <span className="text-brand-light font-bold">BTC Storm Rider</span>. 
-                    <strong className="text-white"> Muy pronto podrás descargar versiones de prueba GRATUITAS </strong> 
-                    directamente desde tu panel para utilizarlas en tus cuentas <span className="text-success font-bold">DEMO</span>.
+                    Estamos preparando el lanzamiento de <span className="text-brand-light font-bold">La Ametralladora Evolution PRO</span>. 
+                    <strong className="text-white"> Muy pronto podrás conseguirlo con un 25% de DESCUENTO </strong> 
+                    y disfrutar del nuevo sistema de control desde el <span className="text-success font-bold">MÓVIL</span>.
                   </p>
                 </div>
                 
                 <div className="flex-shrink-0">
-                  <Link href="/dashboard">
-                    <Button variant="outline" className="border-brand-light text-brand-light hover:bg-brand/10 px-8 py-6 h-auto font-black uppercase tracking-widest text-xs">
-                      Ir al Panel →
+                  <Link href="/bots">
+                    <Button variant="outline" className="border-brand-light text-brand-light hover:bg-brand/10 px-8 py-6 h-auto font-black uppercase tracking-widest text-xs shadow-lg">
+                      Ver Catálogo →
                     </Button>
                   </Link>
                 </div>
