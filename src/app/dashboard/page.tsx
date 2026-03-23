@@ -171,8 +171,12 @@ export default async function DashboardPage() {
                                  // Calcular beneficio diario de hoy
                                  const dailyProfit = (purchase.pastTrades || []).reduce((acc: number, t: any) => acc + (Number(t.profit) || 0), 0);
                                  
-                                    return (
-                                         <Card key={purchase.id} className={`relative overflow-hidden glass-card ${theme.border} group h-full flex flex-col transition-all duration-500 hover:scale-[1.03] bg-black/90 shadow-2xl rounded-2xl`}>
+                                                    const hasRealSync = (purchase.activePositions || []).some((pos: any) => pos.isReal);
+                                                    const accountTypeLabel = hasRealSync ? "Cuenta REAL ✨" : "Cuenta DEMO 🧪";
+                                                    const accountTypeColor = hasRealSync ? "border-success/30 text-success bg-success/5" : "border-orange-500/30 text-orange-400 bg-orange-500/5";
+
+                                                    return (
+                                                        <Card key={purchase.id} className={`relative overflow-hidden glass-card ${theme.border} group h-full flex flex-col transition-all duration-500 hover:scale-[1.03] bg-black/90 shadow-2xl rounded-2xl`}>
                                              {/* Full Background Gradient specifically for each bot */}
                                              <div className={`absolute inset-0 bg-gradient-to-b ${theme.gradient} pointer-events-none opacity-80`} />
                                              <div className={`absolute inset-0 border border-white/10 rounded-2xl pointer-events-none`} />
@@ -217,7 +221,7 @@ export default async function DashboardPage() {
                                                 </div>
                                                 <div className="flex flex-wrap gap-2 mt-2">
                                                     <span className="px-2 py-0.5 rounded text-xs bg-surface-light border border-white/5">{purchase.botProduct.instrument || '---'}</span>
-                                                    {isTrial && <span className="px-2 py-0.5 rounded text-[10px] border border-orange-500/30 text-orange-400 bg-orange-500/5">Solo Cuenta DEMO</span>}
+                                                    <span className={`px-2 py-0.5 rounded text-[10px] border ${accountTypeColor}`}>{accountTypeLabel}</span>
                                                      <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded text-[9px] bg-black/40 border ${theme.border} text-white`}>
                                                         <span className="opacity-60">ID VÍNCULO:</span>
                                                         <code className={`font-mono font-bold select-all tracking-tighter ${theme.accent}`}>{purchase.id}</code>
