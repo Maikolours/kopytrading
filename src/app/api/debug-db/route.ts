@@ -17,13 +17,15 @@ export async function GET() {
       where: { email: 'viajaconsakura@gmail.com' }
     });
 
+    // 4. Get all BotProducts
+    const botProducts = await prisma.botProduct.findMany();
+
     return NextResponse.json({
       connected: true,
       hasTestUser: !!testUser,
       hasMainUser: !!mainUser,
+      botProducts,
       nextAuthUrl: process.env.NEXTAUTH_URL,
-      nodeEnv: process.env.NODE_ENV,
-      databaseUrlPrefix: process.env.DATABASE_URL?.split('@')[1] || 'NOT_SET'
     });
   } catch (error: any) {
     return NextResponse.json({

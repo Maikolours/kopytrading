@@ -29,6 +29,7 @@ enum ENUM_MODE { MODE_ZEN, MODE_COSECHA };
 ENUM_DIR       currentDir = DIR_AMBAS;
 ENUM_MODE      currentMode = MODE_COSECHA;
 bool           isCentAccount = true; 
+bool           isForcedCent = false;
 
 //============================================================
 //  LICENCIA & SEGURIDAD
@@ -36,6 +37,7 @@ bool           isCentAccount = true;
 input group "=== LICENCIA & SEGURIDAD ==="
 input string   LicenseKey        = "TRIAL-2026";
 input string   PurchaseID        = "";         // ID de Vínculo (Ver en kopytrading.com/dashboard)
+input bool     ModoCentManual    = false;      // 💰 Forzar MODO CENT (Si el auto-fallara)
 
 //============================================================
 //  GESTIÓN DE RIESGO
@@ -161,7 +163,8 @@ int OnInit() {
    trade.SetExpertMagicNumber(activeMagic);
    
    string currency = AccountInfoString(ACCOUNT_CURRENCY);
-   isCentAccount = (StringFind(currency, "USC") != -1 || SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE) < 0.001);
+   bool autoCent = (StringFind(currency, "USC") != -1 || StringFind(currency, "CENT") != -1 || SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE) < 0.001);
+   isCentAccount = ModoCentManual ? true : autoCent;
 
    atrHandle = iATR(_Symbol, _Period, 14);
    if(atrHandle == INVALID_HANDLE) return(INIT_FAILED);
@@ -618,7 +621,7 @@ void CrearPanel() {
       CrLabel("nwL", x+15, y+150, "LOTE BASE:", CLR_MUTED, 8);  CrLabel("nwV", x+110, y+150, DoubleToString(eff_Lots, 2), CLR_SUCCESS, 8);
       CrLabel("tfL", x+15, y+170, "TEMP. (TF):", CLR_MUTED, 8); CrLabel("tfV", x+110, y+170, EnumToString(_Period), CLR_SUCCESS, 8);
       
-      string mUnit = isCentAccount ? " unid." : " $";
+      string mUnit = isCentAccount ? " USC" : " $";
       CrLabel("opL", x+15, y+190, "META DIARIA:", CLR_MUTED, 8); CrLabel("opV", x+110, y+190, DoubleToString(eff_DailyTarget, isCentAccount?0:2) + mUnit, CLR_TXT, 8, "Arial Bold");
 
       CrLabel("moH", x+12, y+215, "MODOS & DIRECCIÓN", CLR_MUTED, 7);
@@ -643,7 +646,7 @@ void CrearPanel() {
 void ActualizarPanel() {
    if(!isMinimized) {
       double p = GetDailyProfit();
-      string unit = isCentAccount ? " unid." : " $";
+      string unit = isCentAccount ? " USC" : " $";
       int digs = isCentAccount ? 0 : 2;
       ObjectSetString(0, PNL+"pV", OBJPROP_TEXT, DoubleToString(p, digs) + unit);
       ObjectSetInteger(0, PNL+"pV", OBJPROP_COLOR, p>=0?CLR_SUCCESS:CLR_DANGER);

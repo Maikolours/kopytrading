@@ -50,16 +50,39 @@ export default function Home() {
 
       <main className="flex-1 flex flex-col relative pt-28 sm:pt-32 z-10">
 
-        {/* === AVISO DE MANTENIMIENTO / LANZAMIENTO === */}
-        <section className="px-4 mt-6">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-brand/5 border border-brand/20 rounded-2xl p-4 flex items-center gap-4 backdrop-blur-md">
-              <div className="w-10 h-10 rounded-full bg-brand/20 flex items-center justify-center flex-shrink-0 animate-pulse">
-                <span className="text-xl">📢</span>
+        {/* === PRÓXIMO LANZAMIENTO / TEASER === */}
+        <section className="px-4 mt-8">
+          <div className="max-w-5xl mx-auto">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-brand to-accent rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative bg-black/80 border border-white/10 rounded-2xl p-6 sm:p-8 backdrop-blur-xl flex flex-col md:flex-row items-center gap-6 overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-10">
+                  <span className="text-8xl select-none">🚀</span>
+                </div>
+                
+                <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-brand/20 flex items-center justify-center text-3xl animate-bounce">
+                  ⚡
+                </div>
+                
+                <div className="flex-1 text-center md:text-left z-10">
+                  <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-2">
+                    ¡No te pierdas el lanzamiento oficial!
+                  </h3>
+                  <p className="text-text-muted leading-relaxed max-w-2xl">
+                    Estamos ultimando los detalles de <span className="text-brand-light font-bold">La Ametralladora Evolution</span> y <span className="text-brand-light font-bold">BTC Storm Rider</span>. 
+                    <strong className="text-white"> Muy pronto podrás descargar versiones de prueba GRATUITAS </strong> 
+                    directamente desde tu panel para utilizarlas en tus cuentas <span className="text-success font-bold">DEMO</span>.
+                  </p>
+                </div>
+                
+                <div className="flex-shrink-0">
+                  <Link href="/dashboard">
+                    <Button variant="outline" className="border-brand-light text-brand-light hover:bg-brand/10 px-8 py-6 h-auto font-black uppercase tracking-widest text-xs">
+                      Ir al Panel →
+                    </Button>
+                  </Link>
+                </div>
               </div>
-              <p className="text-sm text-white/80 font-light">
-                <strong className="text-brand-light">AVISO:</strong> Nuestros bots están en mantenimiento técnico. En pocos días lanzaremos <span className="text-brand-light font-bold">La Ametralladora Evolution</span> y <span className="text-brand-light font-bold">BTC Storm Rider</span>. ¡Permanece atento!
-              </p>
             </div>
           </div>
         </section>

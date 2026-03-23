@@ -19,9 +19,10 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Missing purchaseId or account" }, { status: 400 });
         }
 
-        // Verificar que la compra existe
+        // Verificar que la compra existe y cargar su producto
         const purchase = await prisma.purchase.findUnique({
-            where: { id: purchaseId }
+            where: { id: purchaseId },
+            include: { botProduct: true }
         });
 
         if (!purchase) {
@@ -29,6 +30,22 @@ export async function POST(req: Request) {
                 data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body), error: "Purchase not found: " + purchaseId }
             });
             return NextResponse.json({ error: "Purchase not found" }, { status: 404 });
+        }
+
+        // VALIDACIÓN DE CRUCE: Verificar que el instrumento coincide (ej: XAUUSD no puede entrar en un bot de BTC)
+        // El bot envía el símbolo en las posiciones. Si no hay posiciones, enviamos el símbolo principal esperado.
+        const botSymbol = positions && positions.length > 0 ? positions[0].symbol : body.symbol;
+        const expectedInstrument = purchase.botProduct.instrument;
+
+        if (botSymbol && expectedInstrument && !botSymbol.toUpperCase().includes(expectedInstrument.toUpperCase()) && !expectedInstrument.toUpperCase().includes(botSymbol.toUpperCase())) {
+            // Permitir casos especiales (XAUUSD vs GOLD)
+            const isXAU = (botSymbol.includes("XAU") || botSymbol.includes("GOLD")) && (expectedInstrument.includes("XAU") || expectedInstrument.includes("GOLD"));
+            if (!isXAU) {
+                await prisma.requestLog.create({
+                    data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body), error: `Crossover detected: Bot ${botSymbol} syncing to ${expectedInstrument} license.` }
+                });
+                return NextResponse.json({ error: "License type mismatch (Crossover detected)" }, { status: 403 });
+            }
         }
 
         // Actualizar latido de conexión
