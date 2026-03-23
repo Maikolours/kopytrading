@@ -96,6 +96,9 @@ input group "=== ESTRATEGIA (MOMENTUM) ==="
 input int      MomentumCandles     = 3;        
 input int      MomentumRequired    = 2;        
 input int      CooldownSeconds     = 60;       
+input int      EntradaPoints       = 500;      // 📥 Distancia de entrada (GATES) en puntos (500 = $5).
+input int      DistanciaRefuerzo   = 350;      // 📥 Distancia para orden de REFUERZO (3.5 pips).
+input int      DistanciaRescatePoints = 250;   // 📥 Distancia para orden de RESCATE (2.5 pips).
 input bool     EnableTimeFilter    = true;     // ⏰ Activar filtro de horario
 input int      StartHour1          = 9;        
 input int      EndHour1            = 14;       
@@ -319,7 +322,7 @@ void MaintainGates() {
       if(ask <= 0 || bid <= 0) return; 
 
       ulong t_ref = GetPendingTicketByComment("REFUERZO");
-      double distRef = 250 * _Point;
+      double distRef = DistanciaRefuerzo * _Point;
       double targetRef = (mainType == POSITION_TYPE_BUY) ? ask + distRef : bid - distRef;
       
       if(GetCurrentNetProfit() > 50.0) { // Profit > 50 cents
@@ -345,7 +348,7 @@ void MaintainGates() {
       } else { if(t_ref != 0) trade.OrderDelete(t_ref); }
 
       ulong t_res = GetPendingTicketByComment("RESCATE_P");
-      double distRes = 200 * _Point;
+      double distRes = DistanciaRescatePoints * _Point;
       double targetRes = (mainType == POSITION_TYPE_BUY) ? bid - distRes : ask + distRes;
 
       if(netProfit < -10.0) { // Solo rescatar si estamos en pérdida significativa
@@ -386,7 +389,7 @@ void MaintainGates() {
       if(c_up < MomentumRequired && c_dn < MomentumRequired) { DeleteBotPendings(); return; }
       int p_buys = CountPendings(ORDER_TYPE_BUY_STOP);
       int p_sells = CountPendings(ORDER_TYPE_SELL_STOP);
-      double dist = 250 * _Point;
+      double dist = EntradaPoints * _Point;
       double lot = eff_Lots;
       if((currentDir == DIR_COMPRAS || currentDir == DIR_AMBAS) && p_buys == 0)
          trade.BuyStop(lot, SymbolInfoDouble(_Symbol, SYMBOL_ASK) + dist, _Symbol, 0, 0, 0, 0, "G_BUY");
