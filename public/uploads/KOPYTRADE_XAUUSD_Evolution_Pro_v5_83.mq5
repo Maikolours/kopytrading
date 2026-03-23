@@ -10,7 +10,7 @@ uint GetHash(string text) {
    for(int i = 0; i < StringLen(text); i++) hash = ((hash << 5) + hash) + text[i];
    return hash & 0x7FFFFFFF; // Asegurar que sea positivo
 }
-#property version   "5.83"
+#property version   "5.84"
 #property strict
 #property description "Evolution Pro | Pre-configurado para Cuentas USD/Cent kopytrading.com"
 
@@ -610,22 +610,27 @@ void CrearPanel() {
       CrLabel("stL", x+15, y+105, "ESTADO:", CLR_MUTED, 8); CrLabel("stV", x+110, y+105, botStatus, CLR_SUCCESS, 9);
       
       CrLabel("trL", x+15, y+130, "MODO EFECT.:", CLR_MUTED, 8); CrLabel("trV", x+110, y+130, eff_ModeType, CLR_WARN, 8, "Arial Bold");
-      CrLabel("nwL", x+15, y+150, "LOTES/TP:", CLR_MUTED, 8);  CrLabel("nwV", x+110, y+150, DoubleToString(eff_Lots, 2) + " / " + DoubleToString(eff_HarvestTP, 0), CLR_SUCCESS, 8);
-      CrLabel("opL", x+15, y+170, "META DIARIA:", CLR_MUTED, 8); CrLabel("opV", x+110, y+170, DoubleToString(eff_DailyTarget, 0), CLR_TXT, 8);
+      CrLabel("nwL", x+15, y+150, "LOTE BASE:", CLR_MUTED, 8);  CrLabel("nwV", x+110, y+150, DoubleToString(eff_Lots, 2), CLR_SUCCESS, 8);
+      CrLabel("tfL", x+15, y+170, "TEMP. (TF):", CLR_MUTED, 8); CrLabel("tfV", x+110, y+170, EnumToString(_Period), CLR_SUCCESS, 8);
+      
+      string mUnit = isCentAccount ? " unid." : " $";
+      CrLabel("opL", x+15, y+190, "META DIARIA:", CLR_MUTED, 8); CrLabel("opV", x+110, y+190, DoubleToString(eff_DailyTarget, isCentAccount?0:2) + mUnit, CLR_TXT, 8, "Arial Bold");
 
-      CrLabel("moH", x+12, y+200, "MODOS & DIRECCIÓN", CLR_MUTED, 7);
-      CrBtn("b_zen", x+10, y+220, 90, 25, "MODO ZEN", currentMode==MODE_ZEN?CLR_ACCENT:C'35,35,65', clrWhite);
-      CrBtn("b_har", x+105, y+220, 90, 25, "COSECHA", currentMode==MODE_COSECHA?C'200,80,40':C'35,35,65', clrWhite);
-      CrBtn("b_buy", x+10, y+255, 90, 25, "SOLO BUY", currentDir==DIR_COMPRAS?CLR_ACCENT:C'35,35,65', clrWhite);
-      CrBtn("b_both", x+105, y+255, 90, 25, "AMBAS", currentDir==DIR_AMBAS?CLR_ACCENT:C'35,35,65', clrWhite);
-      CrBtn("b_sell", x+200, y+255, 85, 25, "SOLO SELL", currentDir==DIR_VENTAS?C'180,40,40':C'35,35,65', clrWhite);
-      CrBtn("b_close", x+10, y+295, 275, 30, "CLOSE ALL POSITIONS", CLR_DANGER, clrWhite);
+      CrLabel("moH", x+12, y+215, "MODOS & DIRECCIÓN", CLR_MUTED, 7);
+      CrBtn("b_zen", x+10, y+230, 90, 25, "MODO ZEN", currentMode==MODE_ZEN?CLR_ACCENT:C'35,35,65', clrWhite);
+      CrBtn("b_har", x+105, y+230, 90, 25, "COSECHA", currentMode==MODE_COSECHA?C'200,80,40':C'35,35,65', clrWhite);
+      CrBtn("b_set", x+200, y+230, 85, 25, "⚙️ SET", CLR_HDR, clrWhite); // BOTON SET PARA SYNC FORZADO
+      
+      CrBtn("b_buy", x+10, y+265, 90, 25, "SOLO BUY", currentDir==DIR_COMPRAS?CLR_ACCENT:C'35,35,65', clrWhite);
+      CrBtn("b_both", x+105, y+265, 90, 25, "AMBAS", currentDir==DIR_AMBAS?CLR_ACCENT:C'35,35,65', clrWhite);
+      CrBtn("b_sell", x+200, y+265, 85, 25, "SOLO SELL", currentDir==DIR_VENTAS?C'180,40,40':C'35,35,65', clrWhite);
+      CrBtn("b_close", x+10, y+305, 275, 30, "CLOSE ALL POSITIONS", CLR_DANGER, clrWhite);
       
       string accType = isCentAccount ? " REAL (CENT)" : " REAL (USD)";
       if(AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_DEMO) accType = " DEMO Account";
       
-      CrLabel("rem", x+15, y+340, "CUENTA: " + accType + " | TF: " + EnumToString(_Period), CLR_MUTED, 8, "Arial Bold");
-      CrLabel("con", x+15, y+355, "CONTROL: " + (remotePaused?"🔴 PAUSA":"🟢 ONLINE"), (remotePaused?CLR_DANGER:CLR_SUCCESS), 8);
+      CrLabel("rem", x+15, y+350, "CUENTA: " + accType, CLR_MUTED, 8, "Arial Bold");
+      CrLabel("con", x+15, y+365, "CONTROL: " + (remotePaused?"🔴 PAUSA":"🟢 ONLINE"), (remotePaused?CLR_DANGER:CLR_SUCCESS), 8);
    }
    ChartRedraw(0);
 }
@@ -660,6 +665,7 @@ void OnChartEvent(const int id, const long &lp, const double &dp, const string &
    if(sp==PNL+"min") { isMinimized=!isMinimized; CrearPanel(); }
    if(sp==PNL+"b_zen") { currentMode=MODE_ZEN; rem_Lots=0; UpdateModeParams(); CrearPanel(); }
    if(sp==PNL+"b_har") { currentMode=MODE_COSECHA; rem_Lots=0; UpdateModeParams(); CrearPanel(); }
+   if(sp==PNL+"b_set") { CheckRemoteCommands(); UpdateModeParams(); SyncPositions(); CrearPanel(); }
    if(sp==PNL+"b_buy") { currentDir=DIR_COMPRAS; CrearPanel(); }
    if(sp==PNL+"b_sell") { currentDir=DIR_VENTAS; CrearPanel(); }
    if(sp==PNL+"b_both") { currentDir=DIR_AMBAS; CrearPanel(); }

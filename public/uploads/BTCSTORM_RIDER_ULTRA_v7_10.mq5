@@ -3,7 +3,7 @@
 //+------------------------------------------------------------------+
 #property copyright "Copyright 2026, Kopytrade Corp."
 #property link      "https://www.kopytrade.com"
-#property version   "7.10"
+#property version   "7.11"
 #property strict
 #property description "BTC Storm Rider v7.10 | Auto-Visual MA200 & RSI | kopytrading.com"
 
@@ -435,17 +435,21 @@ void CrearPanel() {
       CrLabel("trL", x+15, y+90, "TENDENCIA BTC:", CLR_MUTED, 8); 
       CrLabel("trV", x+115, y+90, trendStatus, (trendStatus=="ALCISTA"?CLR_SUCCESS:(trendStatus=="BAJISTA"?CLR_DANGER:CLR_WARN)), 9, "Arial Bold");
       
-      string pPrefix = EsCuentaCent ? "PnL HOY (USD):" : "PnL HOY USD:";
-      CrLabel("pL", x+15, y+115, pPrefix, CLR_MUTED, 8); CrLabel("pV", x+115, y+115, "0", CLR_TXT, 10, "Arial Bold");
-      CrLabel("stL", x+15, y+140, "ESTADO:", CLR_MUTED, 8); CrLabel("stV", x+115, y+140, botStatus, CLR_SUCCESS, 9);
+      CrLabel("nwL", x+15, y+115, "LOTE BASE:", CLR_MUTED, 8);  CrLabel("nwV", x+115, y+115, DoubleToString(LoteManual, 2), CLR_SUCCESS, 8);
+      CrLabel("tfL", x+15, y+135, "TEMP. (TF):", CLR_MUTED, 8); CrLabel("tfV", x+115, y+135, EnumToString(_Period), CLR_SUCCESS, 8);
       
-      CrLabel("moH", x+12, y+175, "MODOS & DIRECCIÓN BTC", CLR_MUTED, 7);
-      CrBtn("b_zen", x+10, y+195, 90, 25, "MODO ZEN", currentMode==MODE_ZEN?CLR_ACCENT:C'35,35,65', clrWhite);
-      CrBtn("b_har", x+105, y+195, 90, 25, "COSECHA", currentMode==MODE_COSECHA?C'200,80,40':C'35,35,65', clrWhite);
-      CrBtn("b_buy", x+10, y+230, 90, 25, "SOLO BUY", currentDir==DIR_COMPRAS?CLR_ACCENT:C'35,35,65', clrWhite);
-      CrBtn("b_both", x+105, y+230, 90, 25, "AMBAS", currentDir==DIR_AMBAS?CLR_ACCENT:C'35,35,65', clrWhite);
-      CrBtn("b_sell", x+200, y+230, 85, 25, "SOLO SELL", currentDir==DIR_VENTAS?C'180,40,40':C'35,35,65', clrWhite);
-      CrBtn("b_close", x+10, y+270, 275, 30, "CERRAR TODAS LAS POSICIONES", CLR_DANGER, clrWhite);
+      string mUnit = EsCuentaCent ? " unid." : " $";
+      CrLabel("opL", x+15, y+155, "META DIARIA:", CLR_MUTED, 8); CrLabel("opV", x+115, y+155, DoubleToString(MetaDiaria_USD, EsCuentaCent?0:2) + mUnit, CLR_TXT, 8, "Arial Bold");
+
+      CrLabel("moH", x+12, y+185, "MODOS & DIRECCIÓN BTC", CLR_MUTED, 7);
+      CrBtn("b_zen", x+10, y+205, 90, 25, "MODO ZEN", currentMode==MODE_ZEN?CLR_ACCENT:C'35,35,65', clrWhite);
+      CrBtn("b_har", x+105, y+205, 90, 25, "COSECHA", currentMode==MODE_COSECHA?C'200,80,40':C'35,35,65', clrWhite);
+      CrBtn("b_set", x+200, y+205, 85, 25, "⚙️ SET", CLR_HDR, clrWhite);
+      
+      CrBtn("b_buy", x+10, y+240, 90, 25, "SOLO BUY", currentDir==DIR_COMPRAS?CLR_ACCENT:C'35,35,65', clrWhite);
+      CrBtn("b_both", x+105, y+240, 90, 25, "AMBAS", currentDir==DIR_AMBAS?CLR_ACCENT:C'35,35,65', clrWhite);
+      CrBtn("b_sell", x+200, y+240, 85, 25, "SOLO SELL", currentDir==DIR_VENTAS?C'180,40,40':C'35,35,65', clrWhite);
+      CrBtn("b_close", x+10, y+280, 275, 30, "CERRAR TODAS LAS POSICIONES", CLR_DANGER, clrWhite);
       
       CrLabel("inf", x+15, y+315, "MODO: PROTECCIÓN ACTIVA", CLR_SUCCESS, 7);
       CrLabel("inf2", x+15, y+330, "RESCATE & BE CONFIGURADOS", CLR_MUTED, 7);
@@ -474,6 +478,7 @@ void OnChartEvent(const int id, const long &lp, const double &dp, const string &
    if(sp==PNL+"min") { isMinimized=!isMinimized; CrearPanel(); }
    if(sp==PNL+"b_zen") { currentMode=MODE_ZEN; UpdateModeParams(); CrearPanel(); }
    if(sp==PNL+"b_har") { currentMode=MODE_COSECHA; UpdateModeParams(); CrearPanel(); }
+   if(sp==PNL+"b_set") { CheckRemoteCommands(); UpdateModeParams(); SyncPositions(); CrearPanel(); }
    if(sp==PNL+"b_buy") { currentDir=DIR_COMPRAS; CrearPanel(); }
    if(sp==PNL+"b_sell") { currentDir=DIR_VENTAS; CrearPanel(); }
    if(sp==PNL+"b_both") { currentDir=DIR_AMBAS; CrearPanel(); }
