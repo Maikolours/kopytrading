@@ -278,6 +278,7 @@ void ManageOpenPositions() {
                  double tickVal = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE);
                  double tpPoints = (1.50 / resLot) / tickVal;
                  
+                 double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID), ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
                  trade.SetExpertMagicNumber(activeMagic);
                  if(posInfo.PositionType() == POSITION_TYPE_BUY) {
                     // Si el principal es BUY, el rescate es SELL
