@@ -29,6 +29,9 @@ export const BotCard = memo(function BotCard({
 }: BotCardProps) {
     const purchase = variants[selectedIndex] || variants[0];
     const isTrial = purchase.status === "TRIAL";
+    const isCent = baseName.toUpperCase().includes("CENT") || purchase.botProduct.name.toUpperCase().includes("CENT");
+    const currency = isCent ? "USC" : "$";
+
     const dailyProfit = (purchase.pastTrades || []).reduce((acc: number, t: any) => acc + (Number(t.profit) || 0), 0);
     const hasRealSync = (purchase.activePositions || []).some((pos: any) => pos.isReal);
     const accountTypeLabel = hasRealSync ? "CUENTA REAL" : "CUENTA DEMO";
@@ -104,9 +107,9 @@ export const BotCard = memo(function BotCard({
                         </div>
 
                         <div className="w-full sm:w-auto p-3 px-5 rounded-xl bg-black/40 border border-white/5 flex flex-col items-center justify-center min-w-28 text-center">
-                            <span className="text-[8px] font-black uppercase tracking-[0.2em] opacity-40 mb-0.5">Hoy</span>
+                            <span className="text-[8px] font-black uppercase tracking-[0.2em] opacity-40 mb-0.5">Total Hoy</span>
                             <span className={`text-xl font-black font-mono ${dailyProfit >= 0 ? 'text-success' : 'text-danger'}`}>
-                                {dailyProfit >= 0 ? '+' : ''}{dailyProfit.toFixed(2)} $
+                                {dailyProfit >= 0 ? '+' : ''}{dailyProfit.toFixed(2)} {currency}
                             </span>
                         </div>
                     </div>
@@ -175,7 +178,7 @@ export const BotCard = memo(function BotCard({
                                 const detectedVersion = posList[0]?.id?.toString().includes("5.90") ? "v5.90" : (posList[0]?.id?.toString().includes("5.84") ? "v5.84" : null);
 
                                 return (
-                                    <div key={account} className="p-4 rounded-2xl bg-black/40 border border-white/5 shadow-2xl overflow-hidden relative">
+                                    <div key={account} className="p-4 rounded-2xl bg-black/40 border border-white/5 shadow-2xl overflow-hidden relative group/acc">
                                         <div className="absolute top-0 right-0 p-3">
                                             <div className="flex flex-col items-end">
                                                 <span className="text-[8px] font-black text-brand-light/40 uppercase tracking-widest">Estado</span>
@@ -186,17 +189,34 @@ export const BotCard = memo(function BotCard({
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center gap-3 mb-5 border-b border-white/5 pb-3">
-                                            <div className="w-10 h-10 rounded-xl bg-brand-light/10 border border-brand-light/20 flex items-center justify-center">
-                                                <ShieldCheck className="text-brand-light" size={20} />
+                                        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-5 border-b border-white/5 pb-3">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-xl bg-brand-light/10 border border-brand-light/20 flex items-center justify-center">
+                                                    <ShieldCheck className="text-brand-light" size={20} />
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-xs font-black text-white uppercase tracking-tight flex items-center gap-2">
+                                                        Cuenta: <span className="bg-brand-light/20 px-2 py-0.5 rounded text-[10px] font-mono">{account}</span>
+                                                    </h4>
+                                                    <p className="text-[9px] text-text-muted/60 font-black uppercase tracking-widest mt-1">
+                                                        {posList.length} Operaciones Activas
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <h4 className="text-xs font-black text-white uppercase tracking-tight flex items-center gap-2">
-                                                    Cuenta: <span className="bg-brand-light/20 px-2 py-0.5 rounded text-[10px] font-mono">{account}</span>
-                                                </h4>
-                                                <p className="text-[9px] text-text-muted/60 font-black uppercase tracking-widest mt-1">
-                                                    {posList.length} Operaciones Activas • {detectedVersion || "Bot Evolution"}
-                                                </p>
+
+                                            <div className="flex gap-4">
+                                                <div className="text-right">
+                                                    <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Flotante</p>
+                                                    <p className={`text-xs font-black font-mono ${posList.reduce((a:any,p:any)=>a+p.profit,0) >= 0 ? 'text-success' : 'text-danger'}`}>
+                                                        {posList.reduce((a:any,p:any)=>a+p.profit,0) >= 0 ? '+' : ''}{posList.reduce((a:any,p:any)=>a+p.profit,0).toFixed(2)} {currency}
+                                                    </p>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Balance Hoy</p>
+                                                    <p className={`text-xs font-black font-mono ${(purchase.pastTrades || []).filter((h:any)=>h.account===account).reduce((a:any,p:any)=>a+p.profit,0) >= 0 ? 'text-success' : 'text-danger'}`}>
+                                                        {(purchase.pastTrades || []).filter((h:any)=>h.account===account).reduce((a:any,p:any)=>a+p.profit,0) >= 0 ? '+' : ''}{(purchase.pastTrades || []).filter((h:any)=>h.account===account).reduce((a:any,p:any)=>a+p.profit,0).toFixed(2)} {currency}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -218,7 +238,7 @@ export const BotCard = memo(function BotCard({
                                                         </div>
                                                     </div>
                                                     <div className={`text-xl font-black font-mono ${(pos.profit || 0) >= 0 ? 'text-success' : 'text-danger'}`}>
-                                                        {(pos.profit || 0) >= 0 ? '+' : ''}{(pos.profit || 0).toFixed(2)} $
+                                                        {(pos.profit || 0) >= 0 ? '+' : ''}{(pos.profit || 0).toFixed(2)} {currency}
                                                     </div>
                                                 </div>
                                             ))}
@@ -255,7 +275,7 @@ export const BotCard = memo(function BotCard({
                                                     </div>
                                                 </div>
                                                 <div className={`font-black text-sm ${(h.profit || 0) >= 0 ? 'text-success' : 'text-danger'}`}>
-                                                    {(h.profit || 0) >= 0 ? '+' : ''}{(h.profit || 0).toFixed(2)} $
+                                                    {(h.profit || 0) >= 0 ? '+' : ''}{(h.profit || 0).toFixed(2)} {currency}
                                                 </div>
                                             </div>
                                         ))}
