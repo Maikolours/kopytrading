@@ -36,17 +36,35 @@ body {
   color: var(--foreground);
 }
 
-/* Glassmorphism 3D de Alto Contraste Mejorado */
+/* --- GLASSMISM OPTIMIZATION --- */
 .glass-card {
-  background: linear-gradient(135deg, rgba(20, 20, 25, 0.7) 0%, rgba(0, 0, 0, 0.9) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow:
-    inset 1px 1px 0px rgba(255, 255, 255, 0.05),
-    inset -1px -1px 0px rgba(0, 0, 0, 0.5),
-    0 15px 35px -15px rgba(0, 0, 0, 0.8);
-  border-radius: 1.5rem;
+  background: rgba(15, 15, 25, 0.4);
+  backdrop-filter: blur(8px); /* Reduced from 12px for better INP */
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+.glass-card:hover {
+  border-color: rgba(168, 85, 247, 0.2);
+  background: rgba(20, 20, 35, 0.5);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+/* --- OPTIMIZED UTILITIES --- */
+.blur-glow {
+  filter: blur(40px); /* Reduced from 60+px */
+  opacity: 0.4;
+  will-change: transform, opacity;
+}
+
+.animate-pulse-slow {
+  animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.05); }
 }
 
 .card-accent-border {

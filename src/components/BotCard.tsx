@@ -6,7 +6,7 @@ import { Button } from "./ui/Button";
 import { BotRemoteControl } from "./BotRemoteControl";
 import { SyncStatus } from "./SyncStatus";
 import { CleanupButton } from "./CleanupButton";
-import { Copy, CheckCircle2 } from "lucide-react";
+import { Copy, CheckCircle2, ShieldCheck } from "lucide-react";
 
 interface BotCardProps {
     baseName: string;
@@ -159,58 +159,107 @@ export const BotCard = memo(function BotCard({
                         </div>
                     </div>
 
-                    {/* OPERACIONES ABIERTAS */}
+                    {/* OPERACIONES ABIERTAS - AGRUPADAS POR CUENTA */}
                     {(purchase.activePositions?.length || 0) > 0 && (
-                        <div className="p-4 rounded-2xl bg-black/40 border border-white/5">
-                            <h4 className={`text-[10px] font-black uppercase tracking-widest ${theme.accent} mb-4`}>Operaciones en Vivo</h4>
-                            <div className="space-y-3">
-                                {purchase.activePositions.map((pos: any) => (
-                                    <div key={pos.id} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all group">
-                                        <div className="flex items-center gap-3">
-                                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-black ${pos.type === 'BUY' ? 'bg-success/20 text-success' : 'bg-danger/20 text-danger'}`}>
-                                                {pos.type === 'BUY' ? 'BUY' : 'SELL'}
+                        <div className="space-y-6">
+                            {Object.entries(
+                                purchase.activePositions.reduce((acc: any, pos: any) => {
+                                    if (!acc[pos.account]) acc[pos.account] = [];
+                                    acc[pos.account].push(pos);
+                                    return acc;
+                                }, {})
+                            ).map(([account, posList]: [string, any]) => {
+                                const detectedVersion = posList[0]?.id?.toString().includes("5.90") ? "v5.90" : (posList[0]?.id?.toString().includes("5.84") ? "v5.84" : null);
+
+                                return (
+                                    <div key={account} className="p-4 rounded-2xl bg-black/40 border border-white/5 shadow-2xl overflow-hidden relative">
+                                        <div className="absolute top-0 right-0 p-3">
+                                            <div className="flex flex-col items-end">
+                                                <span className="text-[8px] font-black text-brand-light/40 uppercase tracking-widest">Estado</span>
+                                                <span className="text-[10px] font-black text-success flex items-center gap-1.5">
+                                                    <div className="w-1.5 h-1.5 bg-success rounded-full animate-pulse" />
+                                                    SYNC OK
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-3 mb-5 border-b border-white/5 pb-3">
+                                            <div className="w-10 h-10 rounded-xl bg-brand-light/10 border border-brand-light/20 flex items-center justify-center">
+                                                <ShieldCheck className="text-brand-light" size={20} />
                                             </div>
                                             <div>
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-white font-black text-sm leading-none">{(pos.lots || 0).toFixed(2)} {pos.symbol}</span>
-                                                    <span className="text-[9px] opacity-20 font-mono italic">#{pos.ticket}</span>
-                                                </div>
-                                                <div className="text-[10px] text-text-muted/60 mt-0.5 uppercase font-medium tracking-widest">
-                                                    Lote: <span className="text-white/80">{pos.account}</span> • @{(pos.openPrice || 0).toFixed(2)}
-                                                </div>
+                                                <h4 className="text-xs font-black text-white uppercase tracking-tight flex items-center gap-2">
+                                                    Cuenta: <span className="bg-brand-light/20 px-2 py-0.5 rounded text-[10px] font-mono">{account}</span>
+                                                </h4>
+                                                <p className="text-[9px] text-text-muted/60 font-black uppercase tracking-widest mt-1">
+                                                    {posList.length} Operaciones Activas • {detectedVersion || "Bot Evolution"}
+                                                </p>
                                             </div>
                                         </div>
-                                        <div className={`text-xl font-black font-mono ${(pos.profit || 0) >= 0 ? 'text-success' : 'text-danger'}`}>
-                                            {(pos.profit || 0) >= 0 ? '+' : ''}{(pos.profit || 0).toFixed(2)} $
+
+                                        <div className="space-y-3">
+                                            {posList.map((pos: any) => (
+                                                <div key={pos.id} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all group">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-black ${pos.type === 'BUY' ? 'bg-success/20 text-success' : 'bg-danger/20 text-danger'}`}>
+                                                            {pos.type === 'BUY' ? 'BUY' : 'SELL'}
+                                                        </div>
+                                                        <div>
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="text-white font-black text-sm leading-none">{(pos.lots || 0).toFixed(2)} {pos.symbol}</span>
+                                                                <span className="text-[9px] opacity-20 font-mono italic">#{pos.ticket || "SYNC"}</span>
+                                                            </div>
+                                                            <div className="text-[10px] text-text-muted/60 mt-0.5 uppercase font-black tracking-widest">
+                                                                Precio: <span className="text-white/60 font-mono">@{(pos.openPrice || 0).toFixed(2)}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className={`text-xl font-black font-mono ${(pos.profit || 0) >= 0 ? 'text-success' : 'text-danger'}`}>
+                                                        {(pos.profit || 0) >= 0 ? '+' : ''}{(pos.profit || 0).toFixed(2)} $
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
-                                ))}
-                            </div>
+                                );
+                            })}
                         </div>
                     )}
 
-                    {/* HISTORIAL */}
+                    {/* HISTORIAL - AGRUPADO POR CUENTA */}
                     {(purchase.pastTrades?.length || 0) > 0 && (
-                         <div className="p-4 rounded-2xl bg-black/20 border border-white/5">
-                            <h4 className="text-[9px] font-black uppercase tracking-[0.3em] text-text-muted/40 mb-3">Cierres de Hoy</h4>
-                            <div className="space-y-1.5 font-mono">
-                                {purchase.pastTrades.map((h: any) => (
-                                    <div key={h.id} className="flex items-center justify-between py-2 px-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.05] transition-all">
-                                        <div className="flex items-center gap-3">
-                                            <span className={`font-black w-6 text-xs ${h.type === 'BUY' ? 'text-success' : 'text-danger'}`}>{h.type === 'B' ? 'B' : 'S'}</span>
-                                            <div className="flex items-center gap-3 text-white">
-                                                <span className="text-xs font-black">{(h.lots || 0).toFixed(2)}</span>
-                                                <span className="text-[10px] opacity-40">{h.symbol}</span>
-                                                <span className="text-[9px] opacity-20 hidden sm:inline italic">#{h.ticket}</span>
+                        <div className="space-y-4">
+                            {Object.entries(
+                                purchase.pastTrades.reduce((acc: any, h: any) => {
+                                    if (!acc[h.account]) acc[h.account] = [];
+                                    acc[h.account].push(h);
+                                    return acc;
+                                }, {})
+                            ).map(([account, historyList]: [string, any]) => (
+                                <div key={account} className="p-4 rounded-2xl bg-black/20 border border-white/5">
+                                    <h4 className="text-[8px] font-black uppercase tracking-[0.2em] text-text-muted/40 mb-3">
+                                        Cierres Cuenta: {account}
+                                    </h4>
+                                    <div className="space-y-1.5 font-mono">
+                                        {historyList.map((h: any) => (
+                                            <div key={h.id} className="flex items-center justify-between py-2 px-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.05] transition-all">
+                                                <div className="flex items-center gap-3">
+                                                    <span className={`font-black w-6 text-xs ${h.type === 'BUY' ? 'text-success' : 'text-danger'}`}>{h.type === 'BUY' ? 'B' : 'S'}</span>
+                                                    <div className="flex items-center gap-3 text-white">
+                                                        <span className="text-xs font-black">{(h.lots || 0).toFixed(2)}</span>
+                                                        <span className="text-[10px] opacity-40">{h.symbol}</span>
+                                                        <span className="text-[9px] opacity-20 hidden sm:inline italic">#{h.ticket}</span>
+                                                    </div>
+                                                </div>
+                                                <div className={`font-black text-sm ${(h.profit || 0) >= 0 ? 'text-success' : 'text-danger'}`}>
+                                                    {(h.profit || 0) >= 0 ? '+' : ''}{(h.profit || 0).toFixed(2)} $
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className={`font-black text-sm ${(h.profit || 0) >= 0 ? 'text-success' : 'text-danger'}`}>
-                                            {(h.profit || 0) >= 0 ? '+' : ''}{(h.profit || 0).toFixed(2)} $
-                                        </div>
+                                        ))}
                                     </div>
-                                ))}
-                            </div>
-                         </div>
+                                </div>
+                            ))}
+                        </div>
                     )}
                 </CardContent>
             </Card>

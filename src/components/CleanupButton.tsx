@@ -51,7 +51,7 @@ export function CleanupButton({ purchaseId }: CleanupButtonProps) {
             size="sm" 
             onClick={handleCleanup}
             loading={loading || isPending}
-            className={`text-[10px] font-black uppercase tracking-tighter h-7 px-3 transition-all shadow-lg ${
+            className={`text-[10px] font-black uppercase tracking-tighter h-7 px-3 transition-[background-color,border-color,color,box-shadow,transform] shadow-lg ${
                 showConfirm 
                 ? 'bg-amber-500/20 border-amber-500/50 text-amber-400 animate-pulse' 
                 : 'bg-red-500/10 border-red-500/30 text-red-500 hover:bg-red-500/20 shadow-red-500/10'

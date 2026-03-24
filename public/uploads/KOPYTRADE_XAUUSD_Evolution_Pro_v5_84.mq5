@@ -55,7 +55,7 @@ input int      MagicNumber        = 202509;       // Magic Number
 input double   LoteManual         = 0.01;         // Lote Inicial Manual
 input double   MaxDrawdown_USD    = 500.0;        // 🛑 Stop de Emergencia Cuenta (500 unid.).
 input double   Max_DD_Individual  = 100.0;        // 🛑 Stop por Operación (100 unid.).
-input int      Max_Velas_Vida     = 3;            // ⏳ Vida máxima en velas por operación.
+input int      Max_Velas_Vida     = 0;            // ⏳ Vida máxima en velas por operación (0 = Desact.).
 input int      MaxPosiciones      = 2;            // 📈 Máximo de posiciones abiertas (Bot)
 
 //--- VARIABLES GLOBALES ---
@@ -443,9 +443,9 @@ void ManageOpenPositions() {
              continue;
           }
           // --- LOGICA DE HARVEST (TP INDIVIDUAL) ---
-          if(p >= eff_HarvestTP) { 
+          // EXCEPCIÓN: Los rescates no se cierran solos para no quedar huérfanos
+          if(p >= eff_HarvestTP && posInfo.Comment() != "RESCATE_P") { 
              trade.PositionClose(posInfo.Ticket()); 
-             if(posInfo.Comment() == "RESCATE_P") coolingEndTime = 0; // CHAINING: Bypas cooldown if rescue TP
              continue; 
           }
 

@@ -40,12 +40,12 @@ export default function LoginPage() {
     return (
         <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
             <div className="max-w-md w-full space-y-8 glass-card p-8 sm:p-10 border border-white/10 relative overflow-hidden group">
-                {/* Background glow effect */}
-                <div className="absolute -top-24 -right-24 w-48 h-48 bg-brand/20 blur-[80px] rounded-full group-hover:bg-brand/30 transition-colors duration-700" />
-                <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-accent/10 blur-[80px] rounded-full group-hover:bg-accent/20 transition-colors duration-700" />
+                {/* Background glow effect - Optimized blur and opacity */}
+                <div className="absolute -top-24 -right-24 w-48 h-48 bg-brand/10 blur-[60px] rounded-full group-hover:bg-brand/20 transition-colors duration-1000" />
+                <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-accent/5 blur-[60px] rounded-full group-hover:bg-accent/10 transition-colors duration-1000" />
 
                 <div className="relative z-10 text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-brand/20 to-brand-bright/10 border border-brand/20 mb-6 group-hover:scale-110 transition-transform duration-500">
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-brand/10 to-brand-bright/5 border border-white/5 mb-6 group-hover:scale-105 transition-transform duration-500">
                         <span className="text-3xl">🔐</span>
                     </div>
                     <h2 className="text-3xl font-extrabold text-white tracking-tight">Bienvenido de nuevo</h2>
@@ -72,7 +72,7 @@ export default function LoginPage() {
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="appearance-none block w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder-text-muted/30 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all duration-300 sm:text-sm"
+                                className="appearance-none block w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder-text-muted/30 focus:outline-none focus:ring-2 focus:ring-brand/40 focus:border-brand transition-[border-color,box-shadow,background-color] duration-200 sm:text-sm"
                                 placeholder="ejemplo@email.com"
                             />
                         </div>
@@ -85,7 +85,7 @@ export default function LoginPage() {
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="appearance-none block w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder-text-muted/30 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all duration-300 sm:text-sm"
+                                className="appearance-none block w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder-text-muted/30 focus:outline-none focus:ring-2 focus:ring-brand/40 focus:border-brand transition-[border-color,box-shadow,background-color] duration-200 sm:text-sm"
                                 placeholder="••••••••"
                             />
                         </div>
@@ -104,7 +104,7 @@ export default function LoginPage() {
                         fullWidth 
                         size="lg" 
                         loading={loading}
-                        className="mt-8 shadow-[0_4px_15px_rgba(139,92,246,0.3)] hover:shadow-[0_6px_25px_rgba(139,92,246,0.5)]"
+                        className="mt-8 shadow-[0_4px_15px_rgba(139,92,246,0.2)] hover:shadow-[0_6px_20px_rgba(139,92,246,0.3)]"
                     >
                         Iniciar Sesión →
                     </Button>
