@@ -129,7 +129,7 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                 ))}
 
                 {activeCategory === "📈 RENDIMIENTO" && (
-                    <PerformanceSection />
+                    <PerformanceSection purchases={purchases} />
                 )}
 
                 {activeCategory === "⚙️ AJUSTES" && (
