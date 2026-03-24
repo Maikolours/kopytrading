@@ -317,8 +317,11 @@ void MaintainGates() {
          if(t_ref == 0) (mainType==POSITION_TYPE_BUY) ? trade.BuyStop(eff_Lots, ask+dRef, _Symbol, 0, 0, 0, 0, "REFUERZO") : trade.SellStop(eff_Lots, bid-dRef, _Symbol, 0, 0, 0, 0, "REFUERZO");
          // Ajustar orden si el precio se aleja demasiado (Chase)
          else {
-            if(mainType==POSITION_TYPE_BUY && ask+dRef < OrderGetDouble(OBJPROP_PRICE) - 50*_Point) trade.OrderModify(t_ref, ask+dRef, 0, 0, 0);
-            if(mainType==POSITION_TYPE_SELL && bid-dRef > OrderGetDouble(OBJPROP_PRICE) + 50*_Point) trade.OrderModify(t_ref, bid-dRef, 0, 0, 0);
+            if(OrderSelect(t_ref)) {
+               double p_ref = OrderGetDouble(ORDER_PRICE_OPEN);
+               if(mainType==POSITION_TYPE_BUY && ask+dRef < p_ref - 50*_Point) trade.OrderModify(t_ref, ask+dRef, 0, 0, ORDER_TIME_GTC, 0, 0);
+               if(mainType==POSITION_TYPE_SELL && bid-dRef > p_ref + 50*_Point) trade.OrderModify(t_ref, bid-dRef, 0, 0, ORDER_TIME_GTC, 0, 0);
+            }
          }
       } else if(t_ref != 0) trade.OrderDelete(t_ref);
 

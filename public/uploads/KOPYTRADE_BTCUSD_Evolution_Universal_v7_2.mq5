@@ -245,8 +245,11 @@ void MaintainGates() {
       if(net > (eff_HarvestTP * 0.4)) {
          if(t_ref == 0) (type==POSITION_TYPE_BUY) ? trade.BuyStop(LoteManual, ask+dRef, _Symbol, 0, 0, 0, 0, "REF_U") : trade.SellStop(LoteManual, bid-dRef, _Symbol, 0, 0, 0, 0, "REF_U");
          else { // Chase
-            if(type==POSITION_TYPE_BUY && ask+dRef < OrderGetDouble(ORDER_PRICE_OPEN) - USDtoPrice(1.0, LoteManual)) trade.OrderModify(t_ref, ask+dRef, 0, 0, ORDER_TIME_GTC, 0, 0);
-            if(type==POSITION_TYPE_SELL && bid-dRef > OrderGetDouble(ORDER_PRICE_OPEN) + USDtoPrice(1.0, LoteManual)) trade.OrderModify(t_ref, bid-dRef, 0, 0, ORDER_TIME_GTC, 0, 0);
+            if(OrderSelect(t_ref)) {
+               double p_ref = OrderGetDouble(ORDER_PRICE_OPEN);
+               if(type==POSITION_TYPE_BUY && ask+dRef < p_ref - USDtoPrice(1.0, LoteManual)) trade.OrderModify(t_ref, ask+dRef, 0, 0, ORDER_TIME_GTC, 0, 0);
+               if(type==POSITION_TYPE_SELL && bid-dRef > p_ref + USDtoPrice(1.0, LoteManual)) trade.OrderModify(t_ref, bid-dRef, 0, 0, ORDER_TIME_GTC, 0, 0);
+            }
          }
       } else if(t_ref != 0) trade.OrderDelete(t_ref);
 
