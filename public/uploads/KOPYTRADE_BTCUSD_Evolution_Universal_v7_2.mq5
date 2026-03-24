@@ -86,6 +86,7 @@ int    eff_MaxPos;
 color CLR_BG      = C'10,10,25';
 color CLR_HDR     = C'20,40,80';
 color CLR_BRD     = C'60,100,200';
+color CLR_TXT     = clrWhite;
 color CLR_SUCCESS = C'40,200,90';
 color CLR_DANGER  = C'210,50,50';
 color CLR_WARN    = C'210,170,40';
@@ -216,8 +217,8 @@ void MaintainGates() {
       if(net > (eff_HarvestTP * 0.4)) {
          if(t_ref == 0) (type==POSITION_TYPE_BUY) ? trade.BuyStop(LoteManual, ask+dRef, _Symbol, 0, 0, 0, 0, "REF_U") : trade.SellStop(LoteManual, bid-dRef, _Symbol, 0, 0, 0, 0, "REF_U");
          else { // Chase
-            if(type==POSITION_TYPE_BUY && ask+dRef < OrderGetDouble(ORDER_PRICE_OPEN) - USDtoPrice(1.0, LoteManual)) trade.OrderModify(t_ref, ask+dRef, 0, 0, 0);
-            if(type==POSITION_TYPE_SELL && bid-dRef > OrderGetDouble(ORDER_PRICE_OPEN) + USDtoPrice(1.0, LoteManual)) trade.OrderModify(t_ref, bid-dRef, 0, 0, 0);
+            if(type==POSITION_TYPE_BUY && ask+dRef < OrderGetDouble(ORDER_PRICE_OPEN) - USDtoPrice(1.0, LoteManual)) trade.OrderModify(t_ref, ask+dRef, 0, 0, ORDER_TIME_GTC, 0, 0);
+            if(type==POSITION_TYPE_SELL && bid-dRef > OrderGetDouble(ORDER_PRICE_OPEN) + USDtoPrice(1.0, LoteManual)) trade.OrderModify(t_ref, bid-dRef, 0, 0, ORDER_TIME_GTC, 0, 0);
          }
       } else if(t_ref != 0) trade.OrderDelete(t_ref);
 
