@@ -29,13 +29,24 @@ export const BotCard = memo(function BotCard({
 }: BotCardProps) {
     const purchase = variants[selectedIndex] || variants[0];
     const isTrial = purchase.status === "TRIAL";
-    const isCent = baseName.toUpperCase().includes("CENT") || purchase.botProduct.name.toUpperCase().includes("CENT");
+    
+    // Detectar tipo de cuenta real sincronizada
+    const activeAcc = purchase.activePositions?.[0];
+    const isCent = activeAcc?.isCent || purchase.botProduct.name.toUpperCase().includes("CENT") || baseName.toUpperCase().includes("CENT");
     const currency = isCent ? "USC" : "$";
 
-    const dailyProfit = (purchase.pastTrades || []).reduce((acc: number, t: any) => acc + (Number(t.profit) || 0), 0);
     const hasRealSync = (purchase.activePositions || []).some((pos: any) => pos.isReal);
-    const accountTypeLabel = hasRealSync ? "CUENTA REAL" : "CUENTA DEMO";
-    const accountTypeColor = hasRealSync ? "bg-success/20 text-success border-success/40" : "bg-orange-500/20 text-orange-400 border-orange-500/40";
+    
+    // Etiqueta superior dinámica: DEMO | REAL USD | REAL CENT
+    let accountTypeLabel = "CUENTA DEMO";
+    let accountTypeColor = "bg-orange-500/20 text-orange-400 border-orange-500/40";
+    
+    if (hasRealSync) {
+        accountTypeLabel = isCent ? "CUENTA REAL (CENT)" : "CUENTA REAL (USD)";
+        accountTypeColor = "bg-success/20 text-success border-success/40";
+    }
+    
+    const dailyProfit = (purchase.pastTrades || []).reduce((acc: number, t: any) => acc + (Number(t.profit) || 0), 0);
     
     const normalizeVer = (v: string) => parseFloat(v.replace(/[^0-9.]/g, '')) || 0;
     // const hasUpdate = normalizeVer(purchase.botProduct.version) > normalizeVer(purchase.lastDownloadedVersion || "0.0");
