@@ -267,15 +267,31 @@ void ManageOpenPositions() {
 void MaintainGates() {
    if(remotePaused) { DeleteBotPendings(); return; }
    int botPosCount = PositionsTotalBots();
+   
+   // FIX: Lógica de entrada continua si acabamos de cerrar en positivo y la tendencia sigue (RSI simple)
+   if(botPosCount == 0 && TimeCurrent() < coolingEndTime && currentMode == MODE_COSECHA) {
+       double rsi = GetRSI();
+       if((currentDir != DIR_VENTAS && rsi > 60) || (currentDir != DIR_COMPRAS && rsi < 40)) {
+           coolingEndTime = 0; // Rompemos el enfriamiento si la tendencia es brutal
+       }
+   }
+
    if(botPosCount > 0) {
       if(botPosCount >= eff_MaxPos) { DeleteBotPendings(); return; }
       ENUM_POSITION_TYPE mainType = GetMainPositionType();
       double netProfit = GetCurrentNetProfit(), ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK), bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
       
       ulong t_ref = GetPendingTicketByComment("REFUERZO");
-      double dRef = DistanciaRefuerzo * _Point;
-      if(netProfit > (eff_HarvestTP * 0.5)) {
+      // REDUCIMOS LA DISTANCIA DEL REFUERZO PARA QUE NO "HUYA": 200 puntos en lugar de los 350 originales
+      double dRef = (DistanciaRefuerzo * 0.6) * _Point; 
+      
+      if(netProfit > (eff_HarvestTP * 0.4)) { // Bajamos el umbral para que entre antes
          if(t_ref == 0) (mainType==POSITION_TYPE_BUY) ? trade.BuyStop(eff_Lots, ask+dRef, _Symbol, 0, 0, 0, 0, "REFUERZO") : trade.SellStop(eff_Lots, bid-dRef, _Symbol, 0, 0, 0, 0, "REFUERZO");
+         // Ajustar orden si el precio se aleja demasiado (Chase)
+         else {
+            if(mainType==POSITION_TYPE_BUY && ask+dRef < OrderGetDouble(OBJPROP_PRICE) - 50*_Point) trade.OrderModify(t_ref, ask+dRef, 0, 0, 0);
+            if(mainType==POSITION_TYPE_SELL && bid-dRef > OrderGetDouble(OBJPROP_PRICE) + 50*_Point) trade.OrderModify(t_ref, bid-dRef, 0, 0, 0);
+         }
       } else if(t_ref != 0) trade.OrderDelete(t_ref);
 
       ulong t_res = GetPendingTicketByComment("RESCATE_P");
@@ -290,6 +306,13 @@ void MaintainGates() {
          if(currentDir != DIR_COMPRAS) trade.SellStop(eff_Lots, SymbolInfoDouble(_Symbol, SYMBOL_BID)-d, _Symbol, 0, 0, 0, 0, "G_SELL");
       }
    }
+}
+
+double GetRSI() {
+   int handle = iRSI(_Symbol, _Period, 14, PRICE_CLOSE);
+   double val[1];
+   if(CopyBuffer(handle, 0, 0, 1, val) > 0) return val[0];
+   return 50;
 }
 
 void OnTimer() { 
@@ -379,7 +402,7 @@ void CrearPanel() {
    CrRect("bg", x, y, w, h, CLR_BG, CLR_BRD, 2);
    CrRect("hdr", x+2, y+2, w-4, 40, CLR_HDR, CLR_HDR);
    CrLabel("ttl", x+15, y+8, "EVOLUTION UNIVERSAL", clrWhite, 10, "Arial Bold");
-   CrLabel("sub", x+15, y+25, "v5.90 - kopytrading.com", CLR_MUTED, 7);
+   CrLabel("sub", x+15, y+25, "v5.91 - kopytrading.com", CLR_MUTED, 7);
    CrBtn("min", x+w-25, y+10, 18, 18, isMinimized?"+":"-", CLR_HDR, clrWhite);
    if(!isMinimized) {
       CrLabel("li", x+15, y+55, "LIC: " + LicenseKey, CLR_WARN, 8, "Arial Bold");
@@ -466,7 +489,7 @@ void SyncPositions() {
        }
     }
     bool isR = (AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_REAL);
-    string postD = "{\"purchaseId\":\""+PurchaseID+"\",\"account\":\""+account+"\",\"isReal\":"+(isR?"true":"false")+",\"version\":\"5.90\",\"positions\":["+posJ+"],\"history\":["+histJ+"]}";
+    string postD = "{\"purchaseId\":\""+PurchaseID+"\",\"account\":\""+account+"\",\"isReal\":"+(isR?"true":"false")+",\"version\":\"5.91\",\"positions\":["+posJ+"],\"history\":["+histJ+"]}";
     char post[], res[]; string head = "Content-Type: application/json\r\n";
     StringToCharArray(postD, post, 0, StringLen(postD), CP_UTF8);
     WebRequest("POST", "https://www.kopytrading.com/api/sync-positions", head, 3000, post, res, head);

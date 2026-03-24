@@ -9,6 +9,7 @@ import { CleanupButton } from "./CleanupButton";
 import { Countdown } from "./ui/Countdown";
 import { PasswordChangeForm } from "./PasswordChangeForm";
 import { BotCard } from "./BotCard";
+import { PerformanceSection } from "./PerformanceSection";
 
 interface DashboardContainerProps {
     purchases: any[];
@@ -68,7 +69,7 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
         return groups;
     }, [purchases]);
 
-    const categories = useMemo(() => [...Object.keys(categoryGroups), "⚙️ AJUSTES"], [categoryGroups]);
+    const categories = useMemo(() => [...Object.keys(categoryGroups), "📈 RENDIMIENTO", "⚙️ AJUSTES"], [categoryGroups]);
     const [activeCategory, setActiveCategory] = useState(categories[0] || "");
     const [copiedId, setCopiedId] = useState<string | null>(null);
     const [selectedBotIndices, setSelectedBotIndices] = useState<Record<string, number>>({});
@@ -126,6 +127,10 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                         copiedId={copiedId}
                     />
                 ))}
+
+                {activeCategory === "📈 RENDIMIENTO" && (
+                    <PerformanceSection />
+                )}
 
                 {activeCategory === "⚙️ AJUSTES" && (
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
