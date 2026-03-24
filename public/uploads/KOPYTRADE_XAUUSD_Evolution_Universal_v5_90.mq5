@@ -276,14 +276,14 @@ void ManageOpenPositions() {
                  if(resLot < 0.01) resLot = 0.01;
                  
                  double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID), ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
-                 ENUM_POSITION_TYPE resType = (posInfo.PositionType() == POSITION_TYPE_BUY) ? POSITION_TYPE_SELL : POSITION_TYPE_BUY;
+                 ENUM_ORDER_TYPE resType = (posInfo.PositionType() == POSITION_TYPE_BUY) ? ORDER_TYPE_SELL : ORDER_TYPE_BUY;
                  
                  double tickVal = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE);
                  double tpPoints = (1.50 / resLot) / tickVal;
-                 double resTP = (resType == POSITION_TYPE_BUY) ? ask + (tpPoints * _Point) : bid - (tpPoints * _Point);
+                 double resTP = (resType == ORDER_TYPE_BUY) ? ask + (tpPoints * _Point) : bid - (tpPoints * _Point);
                  
                  trade.SetExpertMagicNumber(activeMagic);
-                 if(trade.PositionOpen(_Symbol, resType, resLot, (resType == POSITION_TYPE_BUY ? ask : bid), 0, NormalizeDouble(resTP, _Digits), "RESCATE_P")) {
+                 if(trade.PositionOpen(_Symbol, resType, resLot, (resType == ORDER_TYPE_BUY ? ask : bid), 0, NormalizeDouble(resTP, _Digits), "RESCATE_P")) {
                     Print("PHASE 3: Rescate lanzado...");
                  }
               }
