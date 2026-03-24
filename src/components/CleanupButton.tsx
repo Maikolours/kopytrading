@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "./ui/Button";
 import { useRouter } from "next/navigation";
 
@@ -10,10 +10,14 @@ interface CleanupButtonProps {
 
 export function CleanupButton({ purchaseId }: CleanupButtonProps) {
     const [loading, setLoading] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [isPending, startTransition] = useTransition();
     const router = useRouter();
 
     const handleCleanup = async () => {
-        if (!confirm("¿Estás seguro de que quieres limpiar la lista de operaciones de este bot en el panel web? Esto no afectará a tu MetaTrader 5, solo refrescará la vista de la web.")) {
+        if (!showConfirm) {
+            setShowConfirm(true);
+            setTimeout(() => setShowConfirm(false), 3000); // Reset after 3s
             return;
         }
 
@@ -26,8 +30,11 @@ export function CleanupButton({ purchaseId }: CleanupButtonProps) {
             });
 
             if (res.ok) {
-                // Refrescar la página para ver los cambios
-                router.refresh();
+                // Refrescar la página sin bloquear la UI
+                startTransition(() => {
+                    router.refresh();
+                });
+                setShowConfirm(false);
             } else {
                 alert("Error al limpiar el historial.");
             }
@@ -43,10 +50,14 @@ export function CleanupButton({ purchaseId }: CleanupButtonProps) {
             variant="outline" 
             size="sm" 
             onClick={handleCleanup}
-            loading={loading}
-            className="text-[10px] font-black uppercase tracking-tighter h-7 px-3 bg-red-500/10 border-red-500/30 text-red-500 hover:bg-red-500/20 transition-all shadow-lg shadow-red-500/10"
+            loading={loading || isPending}
+            className={`text-[10px] font-black uppercase tracking-tighter h-7 px-3 transition-all shadow-lg ${
+                showConfirm 
+                ? 'bg-amber-500/20 border-amber-500/50 text-amber-400 animate-pulse' 
+                : 'bg-red-500/10 border-red-500/30 text-red-500 hover:bg-red-500/20 shadow-red-500/10'
+            }`}
         >
-            🧹 LIMPIAR DASHBOARD
+            {showConfirm ? "⚠️ ¿CONFIRMAR LIMPIEZA?" : "🧹 LIMPIAR DASHBOARD"}
         </Button>
     );
 }

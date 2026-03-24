@@ -149,22 +149,36 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                                             
                                             {/* SWITCHER DE VARIANTES (Si hay más de una) */}
                                             {variants.length > 1 && (
-                                                <div className="flex gap-1.5 mt-3 mb-1">
+                                                <div className="flex flex-wrap gap-1.5 mt-3 mb-1">
                                                     {variants.map((v, idx) => {
                                                         const isSel = selectedIndex === idx;
-                                                        const vName = v.botProduct.name.toUpperCase();
+                                                        const vName = (v.botProduct.name || "").toUpperCase();
                                                         let label = vName.includes("CENT") ? "CENT" : (vName.includes("ULTRA") ? "ULTRA" : `LIC ${idx+1}`);
+                                                        
+                                                        const posCount = (v.activePositions || []).length;
+                                                        const hasActiveOps = posCount > 0;
+
                                                         return (
                                                             <button
                                                                 key={v.id}
                                                                 onClick={() => setSelectedBotIndices(prev => ({ ...prev, [baseName]: idx }))}
-                                                                className={`px-3 py-1 rounded-md text-[9px] font-black uppercase transition-all border ${
+                                                                className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all border-2 relative ${
                                                                     isSel 
-                                                                    ? 'bg-white/20 border-white/40 text-white' 
+                                                                    ? 'bg-white/20 border-white/40 text-white shadow-xl' 
                                                                     : 'bg-white/5 border-white/5 text-white/30 hover:bg-white/10'
-                                                                }`}
+                                                                } ${hasActiveOps && !isSel ? 'border-amber-500/30' : ''}`}
                                                             >
-                                                                {label}
+                                                                <span className="flex items-center gap-1.5">
+                                                                    {label}
+                                                                    {hasActiveOps && (
+                                                                        <span className={`inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-[8px] ${isSel ? 'bg-amber-500 text-black' : 'bg-amber-500/20 text-amber-500'} font-bold`}>
+                                                                            {posCount}
+                                                                        </span>
+                                                                    )}
+                                                                </span>
+                                                                {hasActiveOps && !isSel && (
+                                                                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-amber-500 rounded-full animate-ping" />
+                                                                )}
                                                             </button>
                                                         );
                                                     })}
