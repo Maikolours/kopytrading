@@ -85,7 +85,9 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
         const groups: Record<string, any[]> = {};
         const currentCategoryPurchases = categoryGroups[activeCategory] || [];
         currentCategoryPurchases.forEach(p => {
-            const baseName = (p.botProduct?.name || "").split('(')[0].trim().toUpperCase();
+            let baseName = (p.botProduct?.name || "").toUpperCase();
+            // Limpieza agresiva de variantes para agrupar
+            baseName = baseName.replace(/ULTRA|CÉNTIMOS|CENT|BTCUSD|XAUUSD|XAU|JPY|YEN|EUR|USD|GHOST|NINJA|\(|\)/gi, "").trim();
             if (!groups[baseName]) groups[baseName] = [];
             groups[baseName].push(p);
         });
