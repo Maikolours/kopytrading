@@ -208,16 +208,18 @@ void ManageOpenPositions() {
                 double resLot = NormalizeDouble(posInfo.Volume() * 0.5, 2);
                 if(resLot < 0.01) resLot = 0.01;
                 
-                double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID), ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
-                ENUM_ORDER_TYPE resType = (posInfo.PositionType() == POSITION_TYPE_BUY) ? ORDER_TYPE_SELL : ORDER_TYPE_BUY;
-                
                 double tickVal = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE);
                 double tpPoints = (1.50 / resLot) / tickVal;
-                double resTP = (resType == ORDER_TYPE_BUY) ? ask + (tpPoints * _Point) : bid - (tpPoints * _Point);
                 
                 trade.SetExpertMagicNumber(MagicNumber);
-                if(trade.PositionOpen(_Symbol, resType, resLot, (resType == POSITION_TYPE_BUY ? ask : bid), 0, NormalizeDouble(resTP, _Digits), "RESCATE_P")) {
-                   Print("PHASE 3: Rescate lanzado...");
+                if(posInfo.PositionType() == POSITION_TYPE_BUY) {
+                   double resTP = SymbolInfoDouble(_Symbol, SYMBOL_BID) - (tpPoints * _Point);
+                   if(trade.Sell(resLot, _Symbol, SymbolInfoDouble(_Symbol, SYMBOL_BID), 0, NormalizeDouble(resTP, _Digits), "RESCATE_P"))
+                      Print("PHASE 3: Rescate SELL lanzado...");
+                } else {
+                   double resTP = SymbolInfoDouble(_Symbol, SYMBOL_ASK) + (tpPoints * _Point);
+                   if(trade.Buy(resLot, _Symbol, SymbolInfoDouble(_Symbol, SYMBOL_ASK), 0, NormalizeDouble(resTP, _Digits), "RESCATE_P"))
+                      Print("PHASE 3: Rescate BUY lanzado...");
                 }
              }
           }
