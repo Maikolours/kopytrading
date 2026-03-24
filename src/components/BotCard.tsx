@@ -73,7 +73,14 @@ export const BotCard = memo(function BotCard({
                                         
                                         // Detectar cuenta para el label de la pestaña
                                         const accountNum = v.activePositions?.[0]?.account;
-                                        const vShortName = vName.includes("ULTRA") ? "ULTRA" : (vName.includes("CENT") ? "CENT" : "");
+                                        const isUltra = vName.includes("ULTRA");
+                                        const isCentV = vName.includes("CENT") || vName.includes("CÉNTIMOS");
+                                        
+                                        let vShortName = "";
+                                        if (isUltra && isCentV) vShortName = "ULTRA CENT";
+                                        else if (isUltra) vShortName = "ULTRA USD";
+                                        else if (isCentV) vShortName = "CENT";
+                                        
                                         let label = accountNum ? `Cuenta ${accountNum}${vShortName ? ` (${vShortName})` : ''}` : (vShortName || `LIC ${idx+1}`);
                                         
                                         const posCount = (v.activePositions || []).length;
