@@ -80,16 +80,22 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
         setTimeout(() => setCopiedId(null), 2000);
     };
 
-    // Memoizar la agrupación por Nombre Base dentro de la categoría activa
+    // Memoizar la agrupación por Nombre Base + Real/Demo dentro de la categoría activa
     const botsByBaseName = useMemo(() => {
         const groups: Record<string, any[]> = {};
         const currentCategoryPurchases = categoryGroups[activeCategory] || [];
         currentCategoryPurchases.forEach(p => {
             let baseName = (p.botProduct?.name || "").toUpperCase();
+            // Detectar si alguna posición activa o el bot en sí es Real para separar la tarjeta
+            const hasRealSync = (p.activePositions || []).some((pos: any) => pos.isReal);
+            const realityKey = hasRealSync ? "REAL" : "DEMO";
+            
             // Limpieza agresiva de variantes para agrupar
             baseName = baseName.replace(/ULTRA|CÉNTIMOS|CENT|BTCUSD|XAUUSD|XAU|JPY|YEN|EUR|USD|GHOST|NINJA|\(|\)/gi, "").trim();
-            if (!groups[baseName]) groups[baseName] = [];
-            groups[baseName].push(p);
+            const groupKey = `${baseName}_${realityKey}`;
+            
+            if (!groups[groupKey]) groups[groupKey] = [];
+            groups[groupKey].push(p);
         });
         return groups;
     }, [categoryGroups, activeCategory]);
