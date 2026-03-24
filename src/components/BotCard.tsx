@@ -75,11 +75,13 @@ export const BotCard = memo(function BotCard({
                                         const accountNum = v.activePositions?.[0]?.account;
                                         const isUltra = vName.includes("ULTRA");
                                         const isCentV = vName.includes("CENT") || vName.includes("CÉNTIMOS");
+                                        const isUniv = vName.includes("UNIVERSAL");
                                         
                                         let vShortName = "";
                                         if (isUltra && isCentV) vShortName = "ULTRA CENT";
                                         else if (isUltra) vShortName = "ULTRA USD";
                                         else if (isCentV) vShortName = "CENT";
+                                        else if (isUniv) vShortName = "UNIVERSAL";
                                         
                                         let label = accountNum ? `Cuenta ${accountNum}${vShortName ? ` (${vShortName})` : ''}` : (vShortName || `LIC ${idx+1}`);
                                         
