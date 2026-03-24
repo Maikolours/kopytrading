@@ -1,13 +1,13 @@
 //+------------------------------------------------------------------+
-//|          KOPYTRADE_BTCUSD_Evolution_Universal_v7_2.mq5          |
-//|   EDICIÓN UNIVERSAL: ESCALADO AUTO + TENDENCIA AGRESIVA         |
-//|   kopytrading.com - v7.2 "Tranquilo pero Decidido"              |
+//|          KOPYTRADE_BTCUSD_Evolution_Universal_v7_30         |
+//|   EDICIÓN UNIVERSAL: STABILITY FIX (BE & LOGS)                  |
+//|   kopytrading.com - v7.30 "Tranquilo pero Decidido"             |
 //+------------------------------------------------------------------+
 #property copyright "Copyright 2026, Kopytrade Corp."
 #property link      "https://www.kopytrade.com"
-#property version   "7.20"
+#property version   "7.30"
 #property strict
-#property description "Universal BTC Evolution | Auto-Scaling | Trend Persistence | Visual HUD"
+#property description "Universal BTC Evolution | Stability Fix | Anti-Suffocation"
 
 #include <Trade/Trade.mqh>
 #include <Trade/PositionInfo.mqh>
@@ -132,6 +132,9 @@ void UpdateEffectiveParams() {
        eff_MaxPos    = MaxPosiciones;
        eff_Entrada   = DistanciaEntrada_Uni * scale;
     }
+    
+    // SEGURIDAD: Evitar que el BE asfixie la operación (Mínimo $1.50 de beneficio para mover stop)
+    if(eff_BETrigger < 1.50) eff_BETrigger = 1.50;
     eff_DailyGoal  = MetaDiaria_Uni * scale;
     eff_StopEmerg  = MaxDrawdown_Uni * scale;
     eff_StopIndiv  = Max_DD_Individual * scale;
@@ -179,17 +182,17 @@ void ManageOpenPositions() {
              double open = posInfo.PriceOpen(), bid = SymbolInfoDouble(_Symbol, SYMBOL_BID), ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK), sl = posInfo.StopLoss();
              if(posInfo.PositionType()==POSITION_TYPE_BUY) {
                 double nBE = open + (SymbolInfoDouble(_Symbol, SYMBOL_ASK)-open)*0.1;
-                if(sl < nBE || sl == 0) trade.PositionModify(posInfo.Ticket(), NormalizeDouble(nBE, _Digits), posInfo.TakeProfit());
+                if(MathAbs(sl - nBE) > _Point) if(sl < nBE || sl == 0) trade.PositionModify(posInfo.Ticket(), NormalizeDouble(nBE, _Digits), posInfo.TakeProfit());
                 if(ActivarTrailing && bid-nBE > TrailingPoints*_Point) {
                    double ts = bid - TrailingPoints*_Point;
-                   if(ts > sl + TrailingStep*_Point || sl == 0) trade.PositionModify(posInfo.Ticket(), NormalizeDouble(ts, _Digits), posInfo.TakeProfit());
+                   if((ts > sl + TrailingStep*_Point || sl == 0) && MathAbs(sl - ts) > _Point) trade.PositionModify(posInfo.Ticket(), NormalizeDouble(ts, _Digits), posInfo.TakeProfit());
                 }
              } else {
                 double nBE = open - (open-SymbolInfoDouble(_Symbol, SYMBOL_BID))*0.1;
-                if(sl > nBE || sl == 0) trade.PositionModify(posInfo.Ticket(), NormalizeDouble(nBE, _Digits), posInfo.TakeProfit());
+                if(MathAbs(sl - nBE) > _Point) if(sl > nBE || sl == 0) trade.PositionModify(posInfo.Ticket(), NormalizeDouble(nBE, _Digits), posInfo.TakeProfit());
                 if(ActivarTrailing && nBE-ask > TrailingPoints*_Point) {
                    double ts = ask + TrailingPoints*_Point;
-                   if(ts < sl - TrailingStep*_Point || sl == 0) trade.PositionModify(posInfo.Ticket(), NormalizeDouble(ts, _Digits), posInfo.TakeProfit());
+                   if((ts < sl - TrailingStep*_Point || sl == 0) && MathAbs(sl - ts) > _Point) trade.PositionModify(posInfo.Ticket(), NormalizeDouble(ts, _Digits), posInfo.TakeProfit());
                 }
              }
           }
