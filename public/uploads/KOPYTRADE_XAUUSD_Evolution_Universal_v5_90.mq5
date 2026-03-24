@@ -1,12 +1,12 @@
 //+------------------------------------------------------------------+
-//|          KOPYTRADE_XAUUSD_Evolution_Universal_v5_92               |
-//|   EDICIÓN UNIVERSAL - STABILITY FIX (BE & LOGS)                   |
+//|          KOPYTRADE_XAUUSD_Evolution_Universal_v5_95               |
+//|   EDICIÓN UNIVERSAL - PHASE 3: SMART CLUSTER RESCUE               |
 //+------------------------------------------------------------------+
 #property copyright "Copyright 2026, Kopytrade Corp."
 #property link      "https://www.kopytrade.com"
-#property version   "5.92"
+#property version   "5.95"
 #property strict
-#property description "Universal Bot | Stability Fix | Anti-Suffocation"
+#property description "Universal Bot | Phase 3 | Smart Rescue Offsetting"
 
 #include <Trade\Trade.mqh>
 #include <Trade\PositionInfo.mqh>
@@ -263,6 +263,31 @@ void ManageOpenPositions() {
                 }
              }
           }
+          
+           // --- PHASE 3: SMART CLUSTER RESCUE (Offsetting) ---
+           if(p < 0 && MathAbs(p) >= (eff_StopIndiv * 0.4) && posInfo.Comment() != "RESCATE_P") {
+              int activeRescues = 0;
+              for(int j=0; j<PositionsTotal(); j++) {
+                 if(posInfo.SelectByIndex(j) && posInfo.Magic() == activeMagic && posInfo.Comment() == "RESCATE_P") { activeRescues++; }
+              }
+              
+              if(activeRescues == 0) {
+                 double resLot = NormalizeDouble(posInfo.Volume() * 0.5, 2);
+                 if(resLot < 0.01) resLot = 0.01;
+                 
+                 double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID), ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
+                 ENUM_POSITION_TYPE resType = (posInfo.PositionType() == POSITION_TYPE_BUY) ? POSITION_TYPE_SELL : POSITION_TYPE_BUY;
+                 
+                 double tickVal = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE);
+                 double tpPoints = (1.50 / resLot) / tickVal;
+                 double resTP = (resType == POSITION_TYPE_BUY) ? ask + (tpPoints * _Point) : bid - (tpPoints * _Point);
+                 
+                 trade.SetExpertMagicNumber(activeMagic);
+                 if(trade.PositionOpen(_Symbol, resType, resLot, (resType == POSITION_TYPE_BUY ? ask : bid), 0, NormalizeDouble(resTP, _Digits), "RESCATE_P")) {
+                    Print("PHASE 3: Rescate lanzado...");
+                 }
+              }
+           }
        }
     }
 }

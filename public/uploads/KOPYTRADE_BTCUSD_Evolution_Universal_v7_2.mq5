@@ -1,13 +1,13 @@
 //+------------------------------------------------------------------+
-//|          KOPYTRADE_BTCUSD_Evolution_Universal_v7_30         |
-//|   EDICIÓN UNIVERSAL: STABILITY FIX (BE & LOGS)                  |
-//|   kopytrading.com - v7.30 "Tranquilo pero Decidido"             |
+//|          KOPYTRADE_BTCUSD_Evolution_Universal_v7_50         |
+//|   EDICIÓN UNIVERSAL: PHASE 3 - SMART CLUSTER RESCUE             |
+//|   kopytrading.com - v7.50 "Tranquilo pero Decidido"             |
 //+------------------------------------------------------------------+
 #property copyright "Copyright 2026, Kopytrade Corp."
 #property link      "https://www.kopytrade.com"
-#property version   "7.30"
+#property version   "7.50"
 #property strict
-#property description "Universal BTC Evolution | Stability Fix | Anti-Suffocation"
+#property description "Universal BTC Evolution | Phase 3 | Smart Rescue Offsetting"
 
 #include <Trade/Trade.mqh>
 #include <Trade/PositionInfo.mqh>
@@ -175,7 +175,7 @@ void ManageOpenPositions() {
        if(posInfo.SelectByIndex(i) && posInfo.Magic() == MagicNumber) {
           double p = posInfo.Profit() + posInfo.Swap();
           if(p <= -eff_StopIndiv) { trade.PositionClose(posInfo.Ticket()); continue; }
-          if(p >= eff_HarvestTP && posInfo.Comment() != "RES_U") { trade.PositionClose(posInfo.Ticket()); continue; }
+          if(p >= eff_HarvestTP && posInfo.Comment() != "RES_U" && posInfo.Comment() != "RESCATE_P") { trade.PositionClose(posInfo.Ticket()); continue; }
 
           // BE & Trailing
           if(ActivarBE && p >= eff_BETrigger) {
@@ -193,6 +193,31 @@ void ManageOpenPositions() {
                 if(ActivarTrailing && nBE-ask > TrailingPoints*_Point) {
                    double ts = ask + TrailingPoints*_Point;
                    if((ts < sl - TrailingStep*_Point || sl == 0) && MathAbs(sl - ts) > _Point) trade.PositionModify(posInfo.Ticket(), NormalizeDouble(ts, _Digits), posInfo.TakeProfit());
+                }
+             }
+          }
+          
+          // --- PHASE 3: SMART CLUSTER RESCUE (Offsetting) ---
+          if(p < 0 && MathAbs(p) >= (eff_StopIndiv * 0.4) && posInfo.Comment() != "RESCATE_P") {
+             int activeRescues = 0;
+             for(int j=0; j<PositionsTotal(); j++) {
+                if(posInfo.SelectByIndex(j) && posInfo.Magic() == MagicNumber && posInfo.Comment() == "RESCATE_P") { activeRescues++; }
+             }
+             
+             if(activeRescues == 0) {
+                double resLot = NormalizeDouble(posInfo.Volume() * 0.5, 2);
+                if(resLot < 0.01) resLot = 0.01;
+                
+                double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID), ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
+                ENUM_POSITION_TYPE resType = (posInfo.PositionType() == POSITION_TYPE_BUY) ? POSITION_TYPE_SELL : POSITION_TYPE_BUY;
+                
+                double tickVal = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE);
+                double tpPoints = (1.50 / resLot) / tickVal;
+                double resTP = (resType == POSITION_TYPE_BUY) ? ask + (tpPoints * _Point) : bid - (tpPoints * _Point);
+                
+                trade.SetExpertMagicNumber(MagicNumber);
+                if(trade.PositionOpen(_Symbol, resType, resLot, (resType == POSITION_TYPE_BUY ? ask : bid), 0, NormalizeDouble(resTP, _Digits), "RESCATE_P")) {
+                   Print("PHASE 3: Rescate lanzado...");
                 }
              }
           }
