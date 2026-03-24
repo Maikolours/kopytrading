@@ -1,7 +1,8 @@
-import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     try {
         const { purchaseId } = await req.json();
 
@@ -20,6 +21,9 @@ export async function POST(req: Request) {
             where: { id: purchaseId },
             data: { lastSync: null }
         });
+
+        // Asegurar que la cache de Next.js se invalide
+        revalidatePath("/dashboard");
 
         return NextResponse.json({ success: true });
     } catch (err: any) {
