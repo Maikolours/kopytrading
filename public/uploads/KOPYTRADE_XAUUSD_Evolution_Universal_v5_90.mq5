@@ -4,7 +4,7 @@
 //+------------------------------------------------------------------+
 #property copyright "Copyright 2026, Kopytrade Corp."
 #property link      "https://www.kopytrade.com"
-#property version   "5.90"
+#property version   "5.90.1"
 #property strict
 #property description "Universal Bot | Un solo bot para todas tus cuentas Gold"
 
@@ -48,7 +48,7 @@ input ENUM_MODE ModePreset        = MODE_COSECHA; // 🎨 Modo del Bot (Zen/Cose
 input bool     UseManualSettings  = false;        // 🛠️ Ignorar Preset y usar ajustes manuales
 input double   RiskPercent        = 0.0;          // % de Riesgo (0 = Lote Manual)
 input int      MagicNumber        = 202509;       // Magic Number
-input double   LoteManual         = 0.01;         // Lote Inicial Manual
+input double   LoteManual         = 0.02;         // Lote Inicial Manual
 input double   MaxDrawdown_Uni    = 500.0;        // 🛑 Stop de Emergencia Cuenta (500 unid.).
 input double   Max_DD_Individual  = 100.0;        // 🛑 Stop por Operación (100 unid.).
 input int      Max_Velas_Vida     = 0;            // ⏳ Vida máxima en velas por operación (0 = Desact.).
@@ -63,7 +63,7 @@ input double   MultiplicadorLote  = 2.0;       // Multiplicador base Martingala
 input double   DistanciaRescate   = 50.0;      // $ Perdida para activar gatillo (50 unid.)
 input int      DelayRescateSegs   = 120;       // Segundos de espera para rescatar (2 min)
 input double   MaxLoteRescate     = 0.10;      // 🛡️ Lote máximo permitido en rescate
-input double   MinLoteRescate     = 0.02;      // 🚑 Lote mínimo para rescatar
+input double   MinLoteRescate     = 0.03;      // 🚑 Lote mínimo para rescatar
 
 //============================================================
 //  METAS & CORTAFUEGOS
@@ -71,7 +71,7 @@ input double   MinLoteRescate     = 0.02;      // 🚑 Lote mínimo para rescata
 sinput string separator4 = "=========================="; // === METAS & CORTAFUEGOS ===
 input double   MetaDiaria_Uni      = 500.0;     // 🎯 Ganancia Diaria (500 unid.).
 input double   Meta_Ciclo_Uni      = 100.0;     // Neto para cerrar ciclo (100 unid.)
-input double   Harvest_TP_Uni      = 50.0;      // TP individual (50 unid.)
+input double   Harvest_TP_Uni      = 15.0;      // TP individual (15 unid. = 15 céntimos)
 
 //============================================================
 //  BREAK EVEN & TRAILING
@@ -95,13 +95,15 @@ input int      DistanciaRefuerzo   = 350;      // Distancia orden REFUERZO (3.5 
 input int      DistanciaRescateP   = 250;      // Distancia orden RESCATE (2.5 pips)
 input bool     EnableTimeFilter    = true;     // ⏰ Activar filtro de horario
 input int      StartHour1          = 9;        
-input int      EndHour1            = 23;       
+input int      EndHour1            = 17;       
+input int      StartHour2          = 17;       
+input int      EndHour2            = 22;       
 
 //--- Variables internas ---
 CTrade         trade;
 CPositionInfo  posInfo;
 int            activeMagic;
-int            atrHandle;
+int            atrHandle, maSmallHandle, maBigHandle, rsiHandle;
 datetime       lastRemoteSync = 0;
 datetime       coolingEndTime = 0;
 long           lastUpdateID = 0;
@@ -148,7 +150,16 @@ int OnInit() {
    trade.SetExpertMagicNumber(activeMagic);
    
    atrHandle = iATR(_Symbol, _Period, 14);
-   if(atrHandle == INVALID_HANDLE) return(INIT_FAILED);
+   maSmallHandle = iMA(_Symbol, _Period, 20, 0, MODE_EMA, PRICE_CLOSE);
+   maBigHandle   = iMA(_Symbol, _Period, 50, 0, MODE_EMA, PRICE_CLOSE);
+   rsiHandle     = iRSI(_Symbol, _Period, 14, PRICE_CLOSE);
+   
+   if(atrHandle == INVALID_HANDLE || maSmallHandle == INVALID_HANDLE || maBigHandle == INVALID_HANDLE || rsiHandle == INVALID_HANDLE) return(INIT_FAILED);
+   
+   // Auto-agregado visual al gráfico
+   ChartIndicatorAdd(0, 0, maSmallHandle);
+   ChartIndicatorAdd(0, 0, maBigHandle);
+   ChartIndicatorAdd(0, 1, rsiHandle);
    
    UpdateEffectiveParams();
    CrearPanel(); 
@@ -345,7 +356,9 @@ double NormalizeLot(double l) {
 }
 bool IsTradingTime() {
    MqlDateTime dt; TimeToStruct(TimeCurrent(), dt);
-   return (!EnableTimeFilter || (dt.hour >= StartHour1 && dt.hour < EndHour1));
+   bool session1 = (dt.hour >= StartHour1 && dt.hour < EndHour1);
+   bool session2 = (dt.hour >= StartHour2 && dt.hour < EndHour2);
+   return (!EnableTimeFilter || session1 || session2);
 }
 bool HayNoticia() { 
    if(!FiltroNoticias) return false;

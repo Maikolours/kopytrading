@@ -58,7 +58,7 @@ export const BotCard = memo(function BotCard({
                             </div>
 
                             <CardTitle className="text-xl sm:text-2xl font-black text-white tracking-tighter leading-tight mb-1 uppercase">
-                                {purchase.botProduct.name}
+                                {purchase.botProduct.name.replace(/\(V5\.54\)|\(V1\.2\)/gi, "(UNIVERSAL)")}
                             </CardTitle>
                             
                             {/* SWITCHER DE VARIANTES */}
@@ -67,7 +67,10 @@ export const BotCard = memo(function BotCard({
                                     {variants.map((v, idx) => {
                                         const isSel = selectedIndex === idx;
                                         const vName = (v.botProduct.name || "").toUpperCase();
-                                        let label = vName.includes("CENT") ? "CENT" : (vName.includes("ULTRA") ? "ULTRA" : `LIC ${idx+1}`);
+                                        
+                                        // Detectar cuenta para el label de la pestaña
+                                        const accountNum = v.activePositions?.[0]?.account;
+                                        let label = accountNum ? `Cuenta ${accountNum}` : (vName.includes("CENT") ? "CENT" : (vName.includes("ULTRA") ? "ULTRA" : `LIC ${idx+1}`));
                                         
                                         const posCount = (v.activePositions || []).length;
                                         const hasActiveOps = posCount > 0;
