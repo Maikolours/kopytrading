@@ -177,11 +177,11 @@ export function BotRemoteControl({ purchaseId, botName, isOnline, theme }: BotRe
                 </Button>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 mb-6">
+            <div className="grid grid-cols-3 gap-2 mb-6">
                  <Button 
                     variant="outline" 
                     size="sm" 
-                    className={`bg-white/5 border-white/10 hover:border-brand text-[9px] font-black uppercase tracking-widest py-3 ${theme?.accent}`}
+                    className={`bg-white/5 border-white/10 hover:border-brand text-[8px] font-black uppercase tracking-tighter py-3 ${theme?.accent}`}
                     onClick={() => sendCommand("DIRECTION", "BUY")}
                 >
                     SOLO BUY
@@ -189,10 +189,18 @@ export function BotRemoteControl({ purchaseId, botName, isOnline, theme }: BotRe
                 <Button 
                     variant="outline" 
                     size="sm" 
-                    className={`bg-white/5 border-white/10 hover:border-brand text-[9px] font-black uppercase tracking-widest py-3 ${theme?.accent}`}
+                    className={`bg-white/5 border-white/10 hover:border-brand text-[8px] font-black uppercase tracking-tighter py-3 ${theme?.accent}`}
                     onClick={() => sendCommand("DIRECTION", "SELL")}
                 >
                     SOLO SELL
+                </Button>
+                <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className={`bg-white/5 border-white/10 hover:border-brand text-[8px] font-black uppercase tracking-tighter py-3 ${theme?.accent}`}
+                    onClick={() => sendCommand("DIRECTION", "BOTH")}
+                >
+                    AMBOS
                 </Button>
             </div>
             

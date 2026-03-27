@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Marketplace de Bots | MT5 Trading Algorítmico",
@@ -13,6 +15,8 @@ import { Countdown } from "@/components/Countdown";
 export const dynamic = "force-dynamic";
 
 export default async function BotsPage({ searchParams }: { searchParams: Promise<{ asset?: string }> }) {
+    const session = await getServerSession(authOptions);
+    const isOwner = session?.user?.email === "viajaconsakura@gmail.com" || session?.user?.email === "viajaconsakura";
     const { asset } = await searchParams;
 
     const whereClause: any = { isActive: true };
@@ -129,14 +133,14 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                     </div>
                                 </div>
 
-                                {/* STATUS OVERLAYS */}
-                                {bot.status === "MAINTENANCE" && (
-                                    <div className="absolute inset-0 z-20 bg-bg-dark/40 backdrop-blur-[2px] flex flex-col items-center justify-center p-6 text-center">
+                                 {/* STATUS OVERLAYS */}
+                                {bot.status === "MAINTENANCE" && !isOwner && (
+                                    <div className="absolute inset-0 z-20 bg-bg-dark/60 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
                                         <div className="w-16 h-16 rounded-full bg-amber-500/40 flex items-center justify-center mb-4 border border-amber-500/50 shadow-lg shadow-amber-500/20">
                                             <span className="text-3xl">🛠️</span>
                                         </div>
                                         <h4 className="text-xl font-black text-white mb-2 uppercase tracking-tighter italic drop-shadow-lg">Mantenimiento</h4>
-                                        <p className="text-sm text-white font-medium drop-shadow-md bg-black/40 px-3 py-1 rounded-lg">Estamos optimizando este bot. Volverá pronto.</p>
+                                        <p className="text-sm text-white font-medium drop-shadow-md bg-black/60 px-3 py-1 rounded-lg">Estamos calibrando este bot.<br/>Vuelve pronto.</p>
                                     </div>
                                 )}
 
@@ -176,9 +180,9 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                         )}
                                     </div>
                                 </div>
-                                <Link href={`/bots/${bot.id}`} className={bot.status !== 'ACTIVE' ? 'pointer-events-none opacity-20' : ''}>
-                                    <Button size="sm" className="shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:shadow-[0_0_20px_rgba(139,92,246,0.6)]" disabled={bot.status !== 'ACTIVE'}>
-                                        {bot.status === 'ACTIVE' ? 'Descargar' : 'No disponible'}
+                                <Link href={`/bots/${bot.id}`} className={(bot.status !== 'ACTIVE' && !isOwner) ? 'pointer-events-none opacity-20' : ''}>
+                                    <Button size="sm" className="shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:shadow-[0_0_20px_rgba(139,92,246,0.6)]" disabled={bot.status !== 'ACTIVE' && !isOwner}>
+                                        {(bot.status === 'ACTIVE' || isOwner) ? 'Descargar' : 'En Mantenimiento'}
                                     </Button>
                                 </Link>
                             </CardFooter>

@@ -1,12 +1,12 @@
-import { MetadataRoute } from 'next';
+import { MetadataRoute } from "next";
 
-export default function robots(): MetadataRoute.Robots {
-  return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: ['/dashboard/', '/admin/', '/api/'],
-    },
-    sitemap: 'https://kopytrading.com/sitemap.xml',
-  };
+export default function robots(): MetadataRoute.Sitemap {
+    return {
+        rules: {
+            userAgent: "*",
+            allow: "/",
+            disallow: ["/api/", "/_next/", "/admin/"],
+        },
+        sitemap: "https://www.kopytrading.com/sitemap.xml",
+    };
 }

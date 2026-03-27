@@ -249,8 +249,8 @@ void MaintainGates() {
          else { // Chase
             if(OrderSelect(t_ref)) {
                double p_ref = OrderGetDouble(ORDER_PRICE_OPEN);
-               if(type==POSITION_TYPE_BUY && ask+dRef < p_ref - USDtoPrice(1.0, LoteManual)) trade.OrderModify(t_ref, ask+dRef, 0, 0, ORDER_TIME_GTC, 0, 0);
-               if(type==POSITION_TYPE_SELL && bid-dRef > p_ref + USDtoPrice(1.0, LoteManual)) trade.OrderModify(t_ref, bid-dRef, 0, 0, ORDER_TIME_GTC, 0, 0);
+               if(type==POSITION_TYPE_BUY && ask+dRef < p_ref - USDtoPrice(1.0, LoteManual)) trade.OrderModify(t_ref, NormalizeDouble(ask+dRef, _Digits), 0, 0, ORDER_TIME_GTC, 0, 0);
+               if(type==POSITION_TYPE_SELL && bid-dRef > p_ref + USDtoPrice(1.0, LoteManual)) trade.OrderModify(t_ref, NormalizeDouble(bid-dRef, _Digits), 0, 0, ORDER_TIME_GTC, 0, 0);
             }
          }
       } else if(t_ref != 0) trade.OrderDelete(t_ref);

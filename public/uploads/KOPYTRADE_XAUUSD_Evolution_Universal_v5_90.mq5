@@ -1,10 +1,10 @@
 //+------------------------------------------------------------------+
-//|          KOPYTRADE_XAUUSD_Evolution_Universal_v5_95               |
-//|   EDICIÓN UNIVERSAL - PHASE 3: SMART CLUSTER RESCUE               |
+//|          KOPYTRADE_XAUUSD_Evolution_Universal_v5_90               |
+//|   EDICIÓN UNIVERSAL - PHASE 3: SMART CLUSTER RESCUE (FIXED)      |
 //+------------------------------------------------------------------+
 #property copyright "Copyright 2026, Kopytrade Corp."
 #property link      "https://www.kopytrade.com"
-#property version   "5.95"
+#property version   "5.90"
 #property strict
 #property description "Universal Bot | Phase 3 | Smart Rescue Offsetting"
 
@@ -438,7 +438,7 @@ void CrearPanel() {
    CrRect("bg", x, y, w, h, CLR_BG, CLR_BRD, 2);
    CrRect("hdr", x+2, y+2, w-4, 40, CLR_HDR, CLR_HDR);
    CrLabel("ttl", x+15, y+8, "EVOLUTION UNIVERSAL", clrWhite, 10, "Arial Bold");
-   CrLabel("sub", x+15, y+25, "v5.91 - kopytrading.com", CLR_MUTED, 7);
+   CrLabel("sub", x+15, y+25, "v5.90 - kopytrading.com", CLR_MUTED, 7);
    CrBtn("min", x+w-25, y+10, 18, 18, isMinimized?"+":"-", CLR_HDR, clrWhite);
    if(!isMinimized) {
       CrLabel("li", x+15, y+55, "LIC: " + LicenseKey, CLR_WARN, 8, "Arial Bold");
@@ -510,22 +510,22 @@ void SyncPositions() {
     string account = IntegerToString((int)AccountInfoInteger(ACCOUNT_LOGIN)), posJ = "", histJ = "";
     int c = 0;
     for(int i=0; i<PositionsTotal(); i++) if(posInfo.SelectByIndex(i) && posInfo.Magic()==activeMagic) {
-       if(c>0) posJ += ",";
-       posJ += "{\"ticket\":\""+IntegerToString((long)posInfo.Ticket())+"\",\"type\":\""+(posInfo.PositionType()==POSITION_TYPE_BUY?"BUY":"SELL")+"\",\"symbol\":\""+posInfo.Symbol()+"\",\"lots\":"+DoubleToString(posInfo.Volume(),2)+",\"openPrice\":"+DoubleToString(posInfo.PriceOpen(),_Digits)+",\"sl\":"+DoubleToString(posInfo.StopLoss(),_Digits)+",\"tp\":"+DoubleToString(posInfo.TakeProfit(),_Digits)+",\"profit\":"+DoubleToString(posInfo.Profit()+posInfo.Commission()+posInfo.Swap(),2)+"}";
-       c++;
+        if(c>0) posJ += ",";
+        posJ += "{\"ticket\":\""+IntegerToString((long)posInfo.Ticket())+"\",\"type\":\""+(posInfo.PositionType()==POSITION_TYPE_BUY?"BUY":"SELL")+"\",\"symbol\":\""+posInfo.Symbol()+"\",\"lots\":"+DoubleToString(posInfo.Volume(),2)+",\"openPrice\":"+DoubleToString(posInfo.PriceOpen(),_Digits)+",\"sl\":"+DoubleToString(posInfo.StopLoss(),_Digits)+",\"tp\":"+DoubleToString(posInfo.TakeProfit(),_Digits)+",\"profit\":"+DoubleToString(posInfo.Profit()+posInfo.Commission()+posInfo.Swap(),2)+"}";
+        c++;
     }
     HistorySelect(iTime(_Symbol, PERIOD_D1, 0), TimeCurrent());
     int hc = 0;
     for(int i=HistoryDealsTotal()-1; i>=0; i--) {
-       ulong t = HistoryDealGetTicket(i);
-       if(HistoryDealGetInteger(t, DEAL_MAGIC) == activeMagic && HistoryDealGetDouble(t, DEAL_PROFIT) != 0) {
-          if(hc>0) histJ += ",";
-          histJ += "{\"ticket\":\""+IntegerToString((long)t)+"\",\"type\":\""+(HistoryDealGetInteger(t, DEAL_TYPE)==DEAL_TYPE_BUY?"BUY":"SELL")+"\",\"symbol\":\""+HistoryDealGetString(t, DEAL_SYMBOL)+"\",\"lots\":"+DoubleToString(HistoryDealGetDouble(t, DEAL_VOLUME),2)+",\"profit\":"+DoubleToString(HistoryDealGetDouble(t, DEAL_PROFIT), 2)+"}";
-          hc++; if(hc>=10) break;
-       }
+        ulong t = HistoryDealGetTicket(i);
+        if(HistoryDealGetInteger(t, DEAL_MAGIC) == activeMagic && HistoryDealGetDouble(t, DEAL_PROFIT) != 0) {
+            if(hc>0) histJ += ",";
+            histJ += "{\"ticket\":\""+IntegerToString((long)t)+"\",\"type\":\""+(HistoryDealGetInteger(t, DEAL_TYPE)==DEAL_TYPE_BUY?"BUY":"SELL")+"\",\"symbol\":\""+HistoryDealGetString(t, DEAL_SYMBOL)+"\",\"lots\":"+DoubleToString(HistoryDealGetDouble(t, DEAL_VOLUME),2)+",\"profit\":"+DoubleToString(HistoryDealGetDouble(t, DEAL_PROFIT), 2)+"}";
+            hc++; if(hc>=10) break;
+        }
     }
     bool isR = (AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_REAL);
-    string postD = "{\"purchaseId\":\""+PurchaseID+"\",\"account\":\""+account+"\",\"isReal\":"+(isR?"true":"false")+",\"version\":\"5.91\",\"positions\":["+posJ+"],\"history\":["+histJ+"]}";
+    string postD = "{\"purchaseId\":\""+PurchaseID+"\",\"account\":\""+account+"\",\"isReal\":"+(isR?"true":"false")+",\"version\":\"5.90\",\"positions\":["+posJ+"],\"history\":["+histJ+"]}";
     char post[], res[]; string head = "Content-Type: application/json\r\n";
     StringToCharArray(postD, post, 0, StringLen(postD), CP_UTF8);
     WebRequest("POST", "https://www.kopytrading.com/api/sync-positions", head, 3000, post, res, head);

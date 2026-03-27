@@ -1,11 +1,11 @@
 //+------------------------------------------------------------------+
-//|             KOPYTRADE_USDJPY_YenNinjaGhost v2.0                 |
-//|        BOLLINGER REBOTE + RSI - SESIÓN ASIÁTICA                 |
+//|             KOPYTRADE_USDJPY_YenNinjaGhost v3.0 TITAN           |
+//|        REBOTE + RSI + FILTRO TENDENCIAL EMA 50 H1               |
 //+------------------------------------------------------------------+
 #property copyright "KOPYTRADE - Bot Oficial"
-#property version   "2.00"
+#property version   "3.00"
 #property strict
-#property description "Yen Ninja Ghost | REBOTE EN TOKIO"
+#property description "Yen Ninja Ghost v3.0 | TITAN YEN (USDJPY)"
 
 #include <Trade\Trade.mqh>
 
@@ -20,26 +20,28 @@ input group "=== RELOJ DE OPERACIÓN (SESIÓN ASIÁTICA) ==="
 input int      HoraInicio         = 0;      // Apertura de Tokio (hora broker)
 input int      HoraFin            = 8;      // Cierre sesión asiática
 
-//--- GESTIÓN DE RIESGO ---
-input group "=== GESTIÓN DE RIESGO ==="
-input double   LoteInicial        = 0.01;   
+//--- GESTIÓN DE RIESGO TITAN ---
+input group "=== GESTIÓN DE RIESGO TITAN ==="
+input double   RiskPercent        = 1.0;    // Riesgo por operación (%)
+input double   LoteFijo           = 0.00;   // Ingrese valor > 0 para desactivar Risk%
 input double   StopLossUSD        = 30.0;   // Protección máxima en $ (Yen es volátil)
 input double   ProfitObjetivo     = 6.0;    
 
 //--- ESTRATEGIA (NINJA MODE) ---
-input group "=== ESTRATEGIA NINJA (BOLLINGER + RSI) ==="
+input group "=== ESTRATEGIA TITAN (BOLLINGER + RSI + EMA H1) ==="
+input int      EMA_Filtro_Periodo = 50;     // Filtro Tendencial H1
 input int      BB_Periodo         = 20;     
-input double   BB_Desviacion      = 1.5;    // Nivel de rebote (1.5 para más actividad)
+input double   BB_Desviacion      = 1.5;    
 input int      RSI_Sobrevendido   = 40;     
 input int      RSI_Sobrecomprado  = 60;     
 
 //--- GESTIÓN DE BENEFICIO ---
 input group "=== GESTIÓN DE BENEFICIO (BE & TRAILING) ==="
-input double   BE_Activacion      = 2.0;    
+input double   BE_Activacion      = 1.5;    
 input double   GarantiaBE         = 0.3;    
 input bool     ActivarTrailing    = true;   
-input int      DistanciaTrailing  = 120;    // 12 pips
-input int      SaltoDelTrailing   = 40;     // 4 pips
+input int      DistanciaTrailing  = 100;    
+input int      SaltoDelTrailing   = 30;     
 
 //--- AVANZADO ---
 input group "=== CONFIGURACIÓN AVANZADA ==="
@@ -55,6 +57,7 @@ CTrade trade;
 bool   licenseValid = false;
 int    bbHandle     = INVALID_HANDLE;
 int    rsiHandle    = INVALID_HANDLE;
+int    emaHandle    = INVALID_HANDLE;
 
 //+------------------------------------------------------------------+
 bool CheckTrialAndLicense() {
@@ -69,7 +72,7 @@ bool CheckTrialAndLicense() {
    if(!GlobalVariableCheck(gVarName)) {
       GlobalVariableSet(gVarName, (double)TimeCurrent());
       firstRun = TimeCurrent();
-      Print("🆓 TRIAL INICIADO");
+      Print("🆓 TRIAL INICIADO v3.0");
    } else firstRun = (datetime)GlobalVariableGet(gVarName);
    
    int dias = (int)((TimeCurrent() - firstRun) / 86400);
@@ -82,11 +85,15 @@ int OnInit() {
    if(!CheckTrialAndLicense()) return(INIT_FAILED);
    bbHandle  = iBands(_Symbol, _Period, BB_Periodo, 0, BB_Desviacion, PRICE_CLOSE);
    rsiHandle = iRSI(_Symbol, _Period, 14, PRICE_CLOSE);
+   emaHandle = iMA(_Symbol, PERIOD_H1, EMA_Filtro_Periodo, 0, MODE_EMA, PRICE_CLOSE);
+   
    licenseValid = true;
    trade.SetExpertMagicNumber(MagicPrincipal);
    trade.SetTypeFillingBySymbol(_Symbol);
    
-   // Sincronización inicial
+   // HUD Consola
+   Print("🚀 Yen Ninja Ghost v3.0 TITAN Initialized");
+   
    SyncPositions();
    return(INIT_SUCCEEDED);
 }
@@ -103,24 +110,48 @@ void OnTick() {
    if(ContarPosiciones() < MaxPosiciones && EstaEnHorario()) BuscarEntrada();
 }
 
+double GetDynamicLot() {
+    if(LoteFijo > 0) return LoteFijo;
+    double balance = AccountInfoDouble(ACCOUNT_BALANCE);
+    double tickVal = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE);
+    if(tickVal <= 0) return 0.01;
+    // Calculamos lote para que el StopLossUSD represente el Risk% si es posible
+    // Pero en este bot el StopLossUSD es fijo. Calculamos basado en balance.
+    double lot = NormalizeDouble((balance * RiskPercent / 100.0) / (StopLossUSD * 10), 2);
+    if(lot < SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_MIN)) lot = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_MIN);
+    if(lot > SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_MAX)) lot = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_MAX);
+    return lot;
+}
+
 void BuscarEntrada() {
-   double bbUpper[2], bbLower[2], rsi[2];
-   ArraySetAsSeries(bbUpper,true); ArraySetAsSeries(bbLower,true); ArraySetAsSeries(rsi,true);
+   double bbUpper[2], bbLower[2], rsi[2], ema[2];
+   ArraySetAsSeries(bbUpper,true); ArraySetAsSeries(bbLower,true); ArraySetAsSeries(rsi,true); ArraySetAsSeries(ema,true);
+   
    if(CopyBuffer(bbHandle, 1, 0, 2, bbUpper) < 2) return;
    if(CopyBuffer(bbHandle, 2, 0, 2, bbLower) < 2) return;
    if(CopyBuffer(rsiHandle, 0, 0, 2, rsi) < 2) return;
+   if(CopyBuffer(emaHandle, 0, 0, 2, ema) < 2) return;
 
    double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
    double ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
-   double sl_puntos = StopLossUSD / (LoteInicial * SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE) / _Point);
+   double pNow = iClose(_Symbol, PERIOD_H1, 0);
+   
+   // Filtro Tendencial EMA 50 en H1
+   bool tendenciaAlcista = pNow > ema[0];
+   bool tendenciaBajista = pNow < ema[0];
 
-   if(bid <= bbLower[0] && rsi[0] < RSI_Sobrevendido) {
+   double lote = GetDynamicLot();
+   double sl_puntos = StopLossUSD / (lote * SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE) / _Point);
+
+   // COMPRA: Rebote en Banda Inferior + RSI Bajo + Tendencia Alcista o Neutral
+   if(bid <= bbLower[0] && rsi[0] < RSI_Sobrevendido && tendenciaAlcista) {
       double sl = ask - sl_puntos * _Point;
-      trade.Buy(LoteInicial, _Symbol, 0, sl, 0, "YNG_BUY");
+      trade.Buy(lote, _Symbol, 0, sl, 0, "YNG_TITAN_BUY");
    }
-   if(ask >= bbUpper[0] && rsi[0] > RSI_Sobrecomprado) {
+   // VENTA: Rebote en Banda Superior + RSI Alto + Tendencia Bajista o Neutral
+   if(ask >= bbUpper[0] && rsi[0] > RSI_Sobrecomprado && tendenciaBajista) {
       double sl = bid + sl_puntos * _Point;
-      trade.Sell(LoteInicial, _Symbol, 0, sl, 0, "YNG_SELL");
+      trade.Sell(lote, _Symbol, 0, sl, 0, "YNG_TITAN_SELL");
    }
 }
 
@@ -132,7 +163,9 @@ void GestionarIndividual() {
       double pOpen  = PositionGetDouble(POSITION_PRICE_OPEN);
       double sl     = PositionGetDouble(POSITION_SL);
       long   tipo   = PositionGetInteger(POSITION_TYPE);
+      
       if(profit >= ProfitObjetivo) { trade.PositionClose(t); continue; }
+      
       if(profit >= BE_Activacion) {
          double g = GarantiaBE * 10 * _Point;
          double nBE = (tipo == POSITION_TYPE_BUY) ? pOpen + g : pOpen - g;

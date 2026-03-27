@@ -8,10 +8,32 @@ export async function POST(req: Request) {
         text = await req.text();
         // Limpiar posibles caracteres nulos al final (común en MQL5) y espacios
         const cleanText = text.replace(/\0/g, '').trim();
-        body = JSON.parse(cleanText);
         
-        // NORMALIZACIÓN: Asegurar que el purchaseId sea siempre mayúsculas y esté limpio
-        const purchaseId = body.purchaseId ? body.purchaseId.trim().toUpperCase() : null;
+        try {
+            body = JSON.parse(cleanText);
+        } catch (e) {
+            // ROBUSTEZ: Si falla el parseo, intentamos extraer solo el primer objeto JSON {...}
+            // Útil para buffers de MT5 que vienen con basura extra al final
+            const firstBrace = cleanText.indexOf('{');
+            const lastBrace = cleanText.lastIndexOf('}');
+            if (firstBrace !== -1 && lastBrace !== -1) {
+                try {
+                    body = JSON.parse(cleanText.substring(firstBrace, lastBrace + 1));
+                } catch (innerE) {
+                    throw new Error("Invalid JSON structure even after extraction");
+                }
+            } else {
+                throw e;
+            }
+        }
+        
+        // NORMALIZACIÓN: Asegurar que el purchaseId sea siempre minúsculas y limpiar sufijos
+        // Algunos bots envían cmmv3...-btccent o cmmv3...-oro
+        let purchaseId = body.purchaseId ? body.purchaseId.trim().toLowerCase() : null;
+        if (purchaseId && purchaseId.includes("-")) {
+            purchaseId = purchaseId.split("-")[0]; // Nos quedamos solo con el CUID
+        }
+        
         const account = body.account ? String(body.account).trim() : null;
         const { positions, history, isReal } = body;
 

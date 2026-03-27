@@ -10,12 +10,15 @@ import { Countdown } from "./ui/Countdown";
 import { PasswordChangeForm } from "./PasswordChangeForm";
 import { BotCard } from "./BotCard";
 import { PerformanceSection } from "./PerformanceSection";
+import { useSession } from "next-auth/react";
 
 interface DashboardContainerProps {
     purchases: any[];
 }
 
 export function DashboardContainer({ purchases }: DashboardContainerProps) {
+    const { data: session } = useSession();
+    const isOwner = session?.user?.email === "viajaconsakura@gmail.com" || session?.user?.email === "viajaconsakura";
     // Helper para colores de bot (Interiorizado para evitar errores de Client Component)
     const getBotTheme = (name: string = "") => {
         const n = name.toUpperCase();
@@ -57,11 +60,14 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
         const groups: Record<string, any[]> = {};
         purchases.forEach(p => {
             const name = (p.botProduct?.name || "").toUpperCase();
+            const instrument = (p.botProduct?.instrument || "").toUpperCase();
             let key = "Otros";
-            if (name.includes("BTC") || name.includes("BITCOIN")) key = "BTC (Bitcoin)";
-            else if (name.includes("ORO") || name.includes("XAU") || name.includes("AMETRA") || name.includes("EVOLUTION") || name.includes("GOLD")) key = "GOLD (Oro)";
-            else if (name.includes("EUR") || name.includes("EURO")) key = "EUR (Euro)";
-            else if (name.includes("YEN") || name.includes("JPY")) key = "JPY (Yen)";
+            
+            if (instrument.includes("BTC") || instrument.includes("BITCOIN") || name.includes("BITCOIN")) key = "BTC (Bitcoin)";
+            else if (instrument.includes("XAU") || instrument.includes("GOLD") || instrument.includes("ORO")) key = "GOLD (Oro)";
+            else if (instrument.includes("EUR") || name.includes("EURO")) key = "EUR (Euro)";
+            else if (instrument.includes("JPY") || name.includes("YEN")) key = "JPY (Yen)";
+            else if (name.includes("EVOLUTION")) key = "GOLD (Oro)"; // Fallback para los que solo tengan Evolution en el nombre
             
             if (!groups[key]) groups[key] = [];
             groups[key].push(p);
@@ -133,6 +139,7 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                         theme={getBotTheme(variants[0].botProduct.name)}
                         onCopy={handleCopy}
                         copiedId={copiedId}
+                        isOwner={isOwner}
                     />
                 ))}
 

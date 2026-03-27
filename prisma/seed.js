@@ -4,13 +4,18 @@ const prisma = new PrismaClient();
 
 async function main() {
     // Limpiar base de datos para evitar duplicados
+    await prisma.livePosition.deleteMany({});
+    await prisma.tradeHistory.deleteMany({});
+    await prisma.botSettings.deleteMany({});
+    await prisma.commandExecution.deleteMany({});
+    await prisma.remoteCommand.deleteMany({});
     await prisma.purchase.deleteMany({});
     await prisma.botProduct.deleteMany({});
 
     const bots = [
         {
             name: 'La Ametralladora Evolution 🔥 (v5.54)',
-            description: '🚀 **¡EL PRÓXIMO LANZAMIENTO MÁS ESPERADO!**\n\n🛡️ **El bot más agresivo del mercado del Oro.** Rediseñado con meta inteligente y stop de seguridad. No te pierdas el lanzamiento oficial. Permanece atento a esta página para el cronómetro final.\n\n⚡ **Ficha Técnica:** Gestión de Hedge avanzada y meta de profit inteligente.',
+            description: '🛠️ **EN MANTENIMIENTO TÉCNICO**\n\n🛡️ **Calibrando la versión Evolution para el mercado actual.** Estamos optimizando la gestión de riesgo y los filtros institucionales. Vuelve pronto para el lanzamiento definitivo.',
             instrument: 'XAUUSD',
             strategyType: 'Scalping Inteligente',
             riskLevel: 'Medium',
@@ -21,7 +26,7 @@ async function main() {
             ex5FilePath: '/uploads/KOPYTRADE_XAUUSD_Ametralladora_Evolution.mq5',
             pdfFilePath: '/uploads/Manual_Ametralladora.pdf',
             isActive: true,
-            status: 'UPCOMING',
+            status: 'MAINTENANCE',
         },
         {
             name: 'Euro Precision Flow 🎯 (EURUSD)',
@@ -55,7 +60,7 @@ async function main() {
         },
         {
             name: 'BTC Storm Rider ⚡ (BTCUSD)',
-            description: '🔥 **¡YA QUEDA MENOS! EL REY DEL BITCOIN VUELVE.**\n\n₿ Detecta rupturas de rango tras acumulaciones de energía. La versión 6.6 está a punto de ver la luz con una gestión monetaria aún más sagrada.\n\n⚡ **No te pierdas el lanzamiento.** Unidades de licencia limitadas para el primer lote.',
+            description: '🛠️ **EN MANTENIMIENTO TÉCNICO**\n\n₿ **Optimizando la serie v8.3 para el Bitcoin.** El Storm Rider está siendo recalibrado con el nuevo motor TITAN para una estabilidad institucional sin precedentes.',
             instrument: 'BTCUSD',
             strategyType: 'Breakout Confirmado',
             riskLevel: 'Medium',
@@ -66,7 +71,7 @@ async function main() {
             ex5FilePath: '/uploads/KOPYTRADE_BTCUSD_BTCStormRider_v6.6.mq5',
             pdfFilePath: '/uploads/Manual_BTCStormRider.pdf',
             isActive: true,
-            status: 'UPCOMING',
+            status: 'MAINTENANCE',
         }
     ];
 

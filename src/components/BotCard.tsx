@@ -6,7 +6,9 @@ import { Button } from "./ui/Button";
 import { BotRemoteControl } from "./BotRemoteControl";
 import { SyncStatus } from "./SyncStatus";
 import { CleanupButton } from "./CleanupButton";
-import { Copy, CheckCircle2, ShieldCheck } from "lucide-react";
+import { BotSettings } from "./BotSettings";
+import { Copy, CheckCircle2, ShieldCheck, Settings2 } from "lucide-react";
+import { useState } from "react";
 
 interface BotCardProps {
     baseName: string;
@@ -16,6 +18,7 @@ interface BotCardProps {
     theme: any;
     onCopy: (id: string) => void;
     copiedId: string | null;
+    isOwner?: boolean;
 }
 
 export const BotCard = memo(function BotCard({ 
@@ -25,10 +28,13 @@ export const BotCard = memo(function BotCard({
     onSelectVariant, 
     theme, 
     onCopy, 
-    copiedId 
+    copiedId,
+    isOwner = false
 }: BotCardProps) {
+    const [showSettings, setShowSettings] = useState(false);
     const purchase = variants[selectedIndex] || variants[0];
     const isTrial = purchase.status === "TRIAL";
+    const isMaintenance = purchase.botProduct.status === "MAINTENANCE" && !isOwner;
     
     // Detectar tipo de cuenta real sincronizada
     const activeAcc = purchase.activePositions?.[0];
@@ -138,33 +144,64 @@ export const BotCard = memo(function BotCard({
 
                 <CardContent className="relative z-10 p-4 sm:p-5 space-y-6">
                     <div className="grid lg:grid-cols-2 gap-6">
-                        <div className="space-y-4">
-                            <BotRemoteControl 
-                                purchaseId={purchase.id} 
-                                botName={purchase.botProduct.name} 
-                                isOnline={purchase.lastSync && (new Date().getTime() - new Date(purchase.lastSync).getTime()) < 150000}
-                                theme={theme}
-                            />
+                        <div className={`space-y-4 ${isMaintenance ? 'blur-md grayscale pointer-events-none opacity-40' : ''}`}>
+                            <div className="flex items-center gap-2">
+                                <div className="flex-1">
+                                    <BotRemoteControl 
+                                        purchaseId={purchase.id} 
+                                        botName={purchase.botProduct.name} 
+                                        isOnline={purchase.lastSync && (new Date().getTime() - new Date(purchase.lastSync).getTime()) < 150000}
+                                        theme={theme}
+                                    />
+                                </div>
+                                <button 
+                                    onClick={() => setShowSettings(!showSettings)}
+                                    className={`p-3 rounded-xl border-2 transition-all group ${
+                                        showSettings 
+                                        ? 'bg-brand/20 border-brand-light text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]' 
+                                        : 'bg-white/5 border-white/5 text-white/40 hover:bg-white/10'
+                                    }`}
+                                    title="Configuración Remota"
+                                >
+                                    <Settings2 size={24} className={showSettings ? 'animate-spin-slow' : 'group-hover:rotate-45 transition-transform'} />
+                                </button>
+                            </div>
                             
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 rounded-xl bg-white/5 border border-white/5">
                                 <SyncStatus initialLastSync={purchase.lastSync ? purchase.lastSync.toISOString() : null} />
                                 <CleanupButton purchaseId={purchase.id} />
                             </div>
+
+                            {showSettings && (
+                                <BotSettings 
+                                    purchaseId={purchase.id} 
+                                    account={purchase.activePositions?.[0]?.account || "unknown"} 
+                                    theme={theme}
+                                    onClose={() => setShowSettings(false)}
+                                />
+                            )}
                         </div>
 
                         <div className="space-y-4">
-                            <div className="p-4 rounded-xl bg-gradient-to-br from-white/5 to-transparent border border-white/5">
+                            <div className="p-4 rounded-xl bg-gradient-to-br from-white/5 to-transparent border border-white/5 relative">
                                 <h4 className="text-[9px] font-black uppercase tracking-widest text-white/40 mb-3 text-center sm:text-left">Instalación</h4>
                                 <div className="flex flex-col gap-2">
-                                    <a href={`/api/download/${purchase.id}?type=ex5`} className="group">
-                                        <Button fullWidth className="bg-white text-black hover:bg-white/90 font-black tracking-tight flex items-center justify-between px-5 py-3 h-auto rounded-lg">
-                                            <div className="text-left leading-tight">
-                                                 <div className="text-[10px] uppercase font-black">Descargar (.EX5)</div>
-                                                 <div className="text-[8px] opacity-60 font-bold tracking-tighter">VERSIÓN {purchase.botProduct.version}</div>
-                                            </div>
-                                            <span className="text-base group-hover:translate-x-0.5 transition-transform font-none">📥</span>
-                                        </Button>
-                                    </a>
+                                    {isMaintenance ? (
+                                        <div className="bg-brand/10 border border-brand/30 p-3 rounded-lg text-center">
+                                            <p className="text-[10px] font-black text-brand-light uppercase tracking-widest mb-1">En Mantenimiento</p>
+                                            <p className="text-[8px] text-gray-400">Calibrando algoritmos TITAN...</p>
+                                        </div>
+                                    ) : (
+                                        <a href={`/api/download/${purchase.id}?type=ex5`} className="group">
+                                            <Button fullWidth className="bg-white text-black hover:bg-white/90 font-black tracking-tight flex items-center justify-between px-5 py-3 h-auto rounded-lg">
+                                                <div className="text-left leading-tight">
+                                                     <div className="text-[10px] uppercase font-black">Descargar (.EX5)</div>
+                                                     <div className="text-[8px] opacity-60 font-bold tracking-tighter">VERSIÓN {purchase.botProduct.version}</div>
+                                                </div>
+                                                <span className="text-base group-hover:translate-x-0.5 transition-transform font-none">📥</span>
+                                            </Button>
+                                        </a>
+                                    )}
                                 </div>
                             </div>
 
