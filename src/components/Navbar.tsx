@@ -62,6 +62,7 @@ export function Navbar() {
                     <Link href="/bots" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/bots" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Marketplace</Link>
                     <Link href="/activos" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/activos" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Activos</Link>
                     <Link href="/como-funciona" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/como-funciona" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Cómo Funciona</Link>
+                    <Link href="/articulos" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/articulos" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Blog</Link>
                     <Link href="/faq" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/faq" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>FAQ</Link>
                     <Link href={isLoggedIn ? "/dashboard" : "/login"} className={`text-xs font-black uppercase tracking-widest transition-colors flex items-center gap-2 group ${pathname === "/dashboard" || pathname === "/login" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>
                         <span className="w-1.5 h-1.5 rounded-full bg-brand group-hover:animate-pulse"></span>
@@ -111,6 +112,7 @@ export function Navbar() {
                     <Link onClick={() => setIsMenuOpen(false)} href="/activos" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/activos" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Activos</Link>
                     <Link onClick={() => setIsMenuOpen(false)} href="/activos#resultados" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/activos#resultados" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Resultados</Link>
                     <Link onClick={() => setIsMenuOpen(false)} href="/como-funciona" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/como-funciona" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Cómo Funciona</Link>
+                    <Link onClick={() => setIsMenuOpen(false)} href="/articulos" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/articulos" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Blog</Link>
                     <Link onClick={() => setIsMenuOpen(false)} href="/faq" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/faq" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Preguntas</Link>
                     {isLoggedIn && (
                         <Link onClick={() => setIsMenuOpen(false)} href="/dashboard" className="text-xl font-bold text-brand-light uppercase tracking-widest hover:text-white transition-colors">Mi Panel</Link>
