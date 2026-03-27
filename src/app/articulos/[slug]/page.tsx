@@ -337,6 +337,96 @@ Nunca superes esta regla hasta tener al menos 3 meses de historial positivo con 
         keywords: ["Mejores VPS Trading 2026", "vps trading barato", "forexvps", "contabo trading", "latencia vps metatrader", "expert advisor vps", "alojamiento vps mt5"],
         metaDescription: "Analizamos los mejores proveedores de VPS para MetaTrader 5. Compara precios, latencia y estabilidad para asegurar que tu bot nunca se caiga.",
         content: `## Si vas en serio con los bots, necesitas un Servidor\n\nCuando compras un algoritmo potente como el **BTC Storm Rider** (que puede requerir estar conectado todo un fin de semana esperando un breakout del Bitcoin), no puedes depender de la energía de tu salón ni de la wifi de tu operadora.\n\nAquí tienes nuestra selección definitiva y sin filtros comerciales de los **mejores VPS para Trading Algorítmico en el año 2026**.\n\n### 1. El Barato de Batalla: CONTABO\n\nLos VPS alemanes llevan muchos años liderando el mercado por una sencilla razón: lo dan **todo a precio de risa**.\n\n- **Precio Mensual:** Unos 5-7 €\n- **Hardware:** Suelen darte 4 núcleos y 6 Gigabytes de RAM en su nivel más bajo. Una monstruosidad para este trabajo.\n- **Punto Fuerte:** Inigualable rentabilidad-precio.\n- **Punto Débil:** El servidor suele estar en Europa (Múnich). Si operas con un broker con servidores localizados físicamente en Nueva York o Sídney, tu pin-ping (latencia) rondará los 90-150 milisegundos. Para Scalping super-agresivo (La Ametralladora oro) es pasable, pero no es excelente.\n\n### 2. El Premium Latencia-Ultra-Baja: FOREX VPS\n\nServidores creados, configurados y enfocados estrictamente a comerciantes e inversores.\n\n- **Precio Mensual:** Alrededor de los 30-40 $\n- **Punto Fuerte:** Sus sedes están posicionadas equino-lateralmente exactamente al lado de los centros de datos de los grandes brokers de Nueva York o Londres. **Latencia < 1 milisegundo**.\n- **Punto Débil:** Cuesta casi 5 veces más que Contabo para obtener apenas 2GB de Memoria.\n\n### 3. "El VPS de tu Broker": GRATIS\n\nLo tenemos infra-valorado. Si operamos con **IC Markets, Vantage, FX Pro**... estos titanes de la liquidez tienen su propia red de ordenadores virtuales.\n\n- Si eres cliente y generas unas 10 o 15 operaciones al mes (algo ridículo usando la Ametralladora o el Yen Ghost), **TE REGALAN EL VPS MES A MES GRATIS**.\n- Este VPS está en la misma red de datos interna que los servidores donde vas a lanzar las operaciones.\n- **Punto Débil:** Si un mes por vacaciones no usas tus bots, no generas volumen y por lo tanto ese mes no te lo convalidan.\n\n### El Veredicto de KopyTrading\n\nAbre un ticket en la pestaña de soporte técnico de tu broker actual y pregúntales: *"Tengo interés en usar un Asesor Experto, ¿Cumplo con los requisitos mínimos de Lotes comerciados para que se asocien con un proveedor VPS por mí?"*. Te sorprenderá un rotundo SÍ el 70% de las veces.\n\nSi te dicen que no, entonces no te rompas la cabeza y contrátate un **Contabo Cloud de 6€/mes** instalándole "Windows Server 2022". Tendrás tranquilidad asoluta 24 horas al día 365 días al año.\n\n---\n\n⚠️ *Este contenido es técnico educativo. No albergamos acuerdos ocultos de afiliación VPS masivos.*`,
+    },
+    "psicologia-trading-emociones": {
+        title: "Psicología del Trading: El Enemigo en el Espejo",
+        category: "Psicología | Mentalidad",
+        date: "12 Mar, 2026",
+        readTime: "10 min",
+        keywords: ["psicología trading", "emociones trading", "miedo perder trading", "disciplina trader", "bots vs humanos", "sesgos cognitivos"],
+        metaDescription: "Aprende por qué el 90% de los traders fallan debido a sus propias emociones y cómo los algoritmos eliminan este sesgo destructivo de tu operativa.",
+        content: `## El Factor Humano: Por qué fallamos\n\n¿Alguna vez has cerrado una operación en pérdidas justo antes de que el mercado se diera la vuelta a tu favor? ¿O has aguantado una pérdida mucho más de lo que tu stop loss permitía esperando un milagro?\n\nEso es la **Psicología del Trading** en acción, y es la razón número uno por la cual los traders retail pierden su capital.\n\n### Los Tres Jinetes del Apocalipsis del Trader\n\n1. **El Miedo:** Miedo a perder dinero, miedo a dejar pasar una oportunidad (FOMO). El miedo nos hace dudar de nuestra estrategia justo cuando más necesitamos seguirla.\n2. **La Avaricia:** Querer ganar demasiado rápido. Esto lleva al sobreapalancamiento, que es la vía más rápida hacia la ruina.\n3. **La Venganza:** Intentar "recuperar" lo perdido abriendo operaciones impulsivas. El mercado no sabe quién eres ni le importa tu "venganza".\n\n### La Solución Algorítmica\n\nUn bot de trading como **La Ametralladora** no tiene sistema límbico. No suda cuando el precio se acerca a su stop loss, ni siente euforia cuando toca el take profit. Simplemente ejecuta matemática pura.\n\nAl usar algoritmos, delegas la ejecución a un sistema disciplinado, permitiéndote a ti actuar como un **gestor de riesgos** y no como un apostador emocional.\n\n--- ⚠️ *El trading emocional mata cuentas. La disciplina tecnológica las salva.*`
+    },
+    "guia-backtesting-mt5": {
+        title: "Backtesting en MT5: Guía para Optimizar tu Bot",
+        category: "Tecnología | Guía",
+        date: "15 Mar, 2026",
+        readTime: "12 min",
+        keywords: ["backtesting mt5", "probar bots mt5", "estrategia metatrader 5", "overfitting trading", "optimizar ea mt5"],
+        metaDescription: "Guía paso a paso para realizar backtests profesionales en MetaTrader 5. Aprende a validar tu estrategia antes de arriesgar capital real.",
+        content: `## No adivines, prueba\n\nEl Backtesting es el proceso de ejecutar una estrategia sobre datos históricos para ver cómo se habría comportado en el pasado. En **KOPYTRADING**, no lanzamos nada al mercado sin al menos 5 años de datos probados.\n\n### Cómo hacer un Backtest real en MT5\n\n1. **Calidad de los Datos:** Usa siempre "Cada tick basado en ticks reales". Los datos de velas (OHLC) suelen ocultar picos de volatilidad que pueden activar tu stop loss.\n2. **Modelado de Spread:** No uses spread actual. Usa un spread "Custom" que sea un 20% superior al de tu broker para ser conservador.\n3. **Cuidado con el Overfitting:** Si optimizas tu bot para que gane siempre en los últimos 3 meses, probablemente fallará mañana. Busca parámetros que funcionen en diferentes regímenes de mercado.\n\n### Qué mirar en el Informe de Estrategia\n\n- **Factor de Beneficio:** Debería estar por encima de 1.3.\n- **Drawdown Máximo:** ¿Puedes soportar ver tu cuenta bajar un 15% temporalmente? Si no, baja el riesgo.\n- **Factor de Recuperación:** Cuánto tarda el bot en salir de una racha de pérdidas.\n\n--- ⚠️ *Los resultados pasados no garantizan rendimientos futuros, pero aumentan drásticamente tus probabilidades.*`
+    },
+    "cuentas-hedging-vs-netting": {
+        title: "Cuentas Hedging vs Netting: Qué Necesitas Saber",
+        category: "Brokers | Tutorial",
+        date: "18 Mar, 2026",
+        readTime: "7 min",
+        keywords: ["hedging vs netting", "cuenta metatrader 5", "cobertura trading", "fifo forex", "tipos cuenta mt5"],
+        metaDescription: "Explicamos las diferencias críticas entre Hedging y Netting en MT5. Por qué elegir la cuenta correcta es vital para el funcionamiento de tus EAs.",
+        content: `## ¿Por qué mi bot no abre varias órdenes?\n\nSi has instalado un bot de scalping y notas que solo abre una operación a la vez, aunque la estrategia diga lo contrario, probablemente tengas una cuenta de tipo **Netting**.\n\n### ¿Qué es Netting?\n\nEs un sistema donde solo puedes tener **una posición abierta por activo**. Si compras 1 lote de Oro y luego compras otro lote, el sistema los suma en una sola posición de 2 lotes. Si luego vendes 1 lote, tu posición se reduce a 1.\n\n### ¿Qué es Hedging?\n\nEs el sistema que **recomendamos en KOPYTRADING**. Permite tener múltiples posiciones abiertas sobre el mismo activo en la misma o diferente dirección. Puedes estar comprado y vendido en Oro al mismo tiempo.\n\n### Por qué importa para los Bots\n\nNuestros algoritmos están diseñados para gestionar órdenes individuales. Si usas una cuenta Netting, el bot se confundirá al intentar gestionar posiciones que el broker ha "fusionado". Asegúrate de que tu cuenta de trading sea **HEDGING** al crearla en tu broker.\n\n--- ⚠️ *Consulta con tu broker antes de operar si no estás seguro de tu tipo de cuenta.*`
+    },
+    "spread-slippage-costes-ocultos": {
+        title: "Spread y Slippage: Los Costes Ocultos del Trading",
+        category: "Educación | Avanzado",
+        date: "20 Mar, 2026",
+        readTime: "9 min",
+        keywords: ["spread", "slippage", "deslizamiento trading", "ecn vs market maker", "costes trading", "comisiones broker"],
+        metaDescription: "No todo es ganar pips. Aprende cómo el spread y el slippage afectan a tus beneficios y cómo evitarlos con brokers de ejecución directa.",
+        content: `## El precio que no ves\n\nMuchos traders calculan su beneficio diciendo: "Compré a 1.0500 y vendí a 1.0510, gané 10 pips". La realidad es que el **Spread** y el **Slippage** pueden hacer que esos 10 pips se conviertan en 6.\n\n### El Spread: El peaje del mercado\n\nEs la diferencia entre el precio de compra (Ask) y el de venta (Bid). En brokers Market Maker, este spread suele ser fijo y alto. En brokers **ECN (Electronic Communication Network)**, el spread es variable y suele ser casi cero, pero pagas una pequeña comisión por lote.\n\n**Para nuestros bots, siempre recomendamos cuentas ECN con spreads bajos.**\n\n### El Slippage: El deslizamiento\n\nOcurre cuando el precio que pides no está disponible y el broker te ejecuta a uno peor. Esto sucede frecuentemente durante noticias de alto impacto (NFP, tipos de la FED).\n\n### Cómo combatirlos\n\n1. Usa un **VPS** cerca del servidor del broker para reducir el tiempo de ejecución.\n2. Opera con brokers que tengan liquidez institucional profunda.\n3. Evita operar en los cierres y aperturas de mercado, cuando los spreads se ensanchan exponencialmente.\n--- ⚠️ *Un spread alto puede convertir una estrategia ganadora en perdedora.*`
+    },
+    "trading-noticias-nfp": {
+        title: "Trading de Noticias: Por Qué Apagamos el Bot en el NFP",
+        category: "Macro | Estrategia",
+        date: "22 Mar, 2026",
+        readTime: "8 min",
+        keywords: ["nfp trading", "trading de noticias", "calendario económico", "volatilidad noticias", "apagado bot noticia"],
+        metaDescription: "Analizamos el impacto de las Nóminas No Agrícolas (NFP) y por qué los bots de bajo riesgo deben permanecer apagados durante estos eventos.",
+        content: `## El caos de los viernes de NFP\n\nLas **Nóminas No Agrícolas (Non-Farm Payrolls)** de EE.UU. son el indicador económico que más mueve el mercado cada primer viernes de mes. En cuestión de segundos, activos como el Oro pueden moverse 200 pips en ambas direcciones.\n\n### Por qué los algoritmos sufren en noticias\n\nLos algoritmos se basan en ineficiencias matemáticas y patrones repetitivos. Durante una noticia macro de alto impacto, la **acción del precio pierde toda lógica técnica** y se rinde al sentimiento y al pánico.\n\n1. **Spreads locos:** El spread puede pasar de 1 a 50 pips en milisegundos.\n2. **Gaps de ejecución:** Tu Stop Loss puede no ejecutarse donde quieres si el precio "salta" ese nivel.\n\n### Nuestra recomendación\n\nEn KOPYTRADING sugerimos **apagar el AutoTrading 30 minutos antes** de noticias de color "Rojo" en el calendario económico y esperar al menos 1 hora a que la liquidez se normalice antes de reactivarlo.\n\n--- ⚠️ *No te conviertas en una estadística de liquidación por una noticia que podías prever.*`
+    },
+    "correlacion-divisas-riesgo": {
+        title: "Correlación de Divisas: No Dobles tu Riesgo sin Saberlo",
+        category: "Gestión Riesgo | Avanzado",
+        date: "23 Mar, 2026",
+        readTime: "8 min",
+        keywords: ["correlación divisas", "coeficiente correlación", "riesgo forex", "diversificación trading", "matriz correlación"],
+        metaDescription: "Aprende cómo la correlación entre pares como EURUSD y GBPUSD puede afectar a tu riesgo total y cómo diversificar correctamente tus bots.",
+        content: `## El peligro de los pares similares\n\nSi tienes un bot operando en **EURUSD** y otro en **GBPUSD**, podrías pensar que estás diversificando. La realidad es que estos pares tienen una correlación positiva cercana al **+0.90**. Cuando el Euro sube, la Libra suele subir también.\n\n### ¿Qué significa esto para tu cuenta?\n\nSignifica que si el Dólar se fortalece de golpe, **ambas estrategias entrarán en pérdidas al mismo tiempo**. No estás diversificando el riesgo, lo estás doblando en la misma dirección.\n\n### Cómo diversificar de verdad\n\n- **Busca correlaciones negativas:** Por ejemplo, el USDCHF suele moverse de forma opuesta al EURUSD.\n- **Diversifica por activos:** Combina un bot de Forex (EURUSD) con uno de materias primas (Oro) o uno de Cripto (Bitcoin).\n- **Usa una Matriz de Correlación:** Muchos sitios web ofrecen tablas gratuitas para ver qué pares se mueven en sintonía.\n\n--- ⚠️ *La verdadera diversificación reduce el drawdown máximo de tu cuenta.*`
+    },
+    "entender-drawdown-trading": {
+        title: "Drawdown: Cómo Entender las Rachas de Pérdidas",
+        category: "Educación | Mentalidad",
+        date: "24 Mar, 2026",
+        readTime: "7 min",
+        keywords: ["drawdown", "pérdida máxima", "gestión capital", "recuperación drawdown", "riesgo trading"],
+        metaDescription: "El drawdown es parte del juego. Aprende a diferenciar entre una racha de pérdidas normal y una estrategia fallida para proteger tu inversión.",
+        content: `## Bajando para subir\n\nEl **Drawdown** es la caída porcentual desde el punto más alto de tu cuenta hasta el punto más bajo antes de recuperarse. Todo trader profesional sabe que es imposible ganar siempre; el drawdown es simplemente el "coste de hacer negocios".\n\n### Tipos de Drawdown\n\n1. **Drawdown Flotante:** Son las pérdidas de las operaciones que aún están abiertas. Nuestros bots de KOPYTRADING suelen tener un drawdown flotante controlado.\n2. **Drawdown Cerrado (Realizado):** Son las pérdidas que ya se han consolidado al cerrar las operaciones.\n\n### ¿Cuándo preocuparse?\n\nSi el drawdown histórico de un bot en backtest es del 10%, y en real ves un 15%, es normal. Pero si ves un **30% o 40%**, algo ha cambiado en el mercado o el bot ha fallado. En ese momento, la regla de oro es detener la operativa y revisar los parámetros.\n\n--- ⚠️ *Aprender a tolerar el drawdown es lo que separa a los profesionales de los novatos.*`
+    },
+    "accion-precio-vs-indicadores": {
+        title: "Indicadores vs Precio: La Acción del Precio Explicada",
+        category: "Análisis | Educación",
+        date: "25 Mar, 2026",
+        readTime: "9 min",
+        keywords: ["acción del precio", "price action", "velas japonesas", "indicadores técnicos", "soporte y resistencia"],
+        metaDescription: "Descubre por qué la acción del precio es considerada la fuente de verdad en los mercados y cómo combinarla con indicadores para mayor precisión.",
+        content: `## Leyendo el gráfico desnudo\n\nLa **Acción del Precio (Price Action)** es el estudio del movimiento del precio puro sin indicadores retrasados. Muchos traders creen que los indicadores "predicen" el futuro, pero la realidad es que solo calculan el pasado.\n\n### Elementos clave de la Acción del Precio\n\n1. **Velas Japonesas:** Patrones como el 'Pin Bar' o 'Engulfing' nos dicen quién tiene el control (compradores o vendedores).\n2. **Niveles de Soporte y Resistencia:** Los puntos donde el mercado ha rebotado históricamente.\n3. **Tendencias:** Estructuras de máximos y mínimos cada vez más altos o bajos.\n\n### El Enfoque de KOPYTRADING\n\nNuestros bots no usan indicadores de forma aislada. Combinan la lógica de **Soportes/Resistencias** dinámicos con indicadores de impulso para filtrar las señales falsas. El precio es el rey, los indicadores son sus consejeros.\n\n--- ⚠️ *No compliques tus gráficos con 50 indicadores. El precio es la señal más clara.*`
+    },
+    "smart-money-concepts-realidad": {
+        title: "Smart Money Concepts (SMC): ¿Realidad o Marketing?",
+        category: "Tendencias | Análisis",
+        date: "26 Mar, 2026",
+        readTime: "11 min",
+        keywords: ["smc trading", "smart money concepts", "order blocks", "liquidez institucional", "trading bancos"],
+        metaDescription: "Analizamos el auge del SMC. ¿Es realmente una forma de operar como los bancos o simplemente trading de oferta y demanda con nombres nuevos?",
+        content: `## ¿Qué es el Dinero Inteligente?\n\nLos **Smart Money Concepts (SMC)** se han vuelto virales en 2026. La premisa es simple: los bancos e instituciones "manipulan" el precio para sacar a los traders retail antes de mover el mercado. El SMC busca seguir la huella de estas instituciones.\n\n### Conceptos Estrella del SMC\n\n- **Order Blocks:** Zonas donde las instituciones supuestamente dejan órdenes pendientes.\n- **Fair Value Gap (FVG):** Desequilibrios en el precio que suelen ser rellenados.\n- **Liquidez:** Zonas donde hay muchos Stop Loss (como por encima de máximos) que el mercado busca "limpiar".\n\n### Nuestra Opinión Institucional\n\nMientras que el marketing del SMC puede ser exagerado, los conceptos de **Liquidez y Desequilibrio** son muy reales. Nuestros algoritmos incorporan filtros de liquidez para evitar entrar en zonas donde es probable que ocurra un "stop run" (cacería de stops).\n\n--- ⚠️ *Entender la liquidez es vital, pero ninguna estrategia es el Santo Grial.*`
+    },
+    "elegir-broker-algoritmico": {
+        title: "Cómo Elegir el Broker Adecuado para Trading Algorítmico",
+        category: "Brokers | Guía",
+        date: "26 Mar, 2026",
+        readTime: "9 min",
+        keywords: ["elegir broker", "mejor broker trading bots", "broker mt5", "regulación trading", "latencia broker"],
+        metaDescription: "No todos los brokers son iguales para bots. Aprende a evaluar regulación, latencia y ejecución para asegurar que tu bot rinda al máximo.",
+        content: `## Tu socio más importante\n\nDe nada sirve tener el mejor bot del mundo si tu **Broker** tiene spreads gigantes o una ejecución lenta. Para el trading algorítmico, el broker es tu socio tecnológico.\n\n### 3 Factores No Negociables\n\n1. **Regulación de Alto Nivel:** Busca brokers regulados por la ASIC (Australia), FCA (Reino Unido) o CYSEC (Europa). Tu capital debe estar seguro en cuentas segregadas.\n2. **Latencia Baja:** Si tu bot hace scalping, necesitas una ejecución de milisegundos. Elige brokers con servidores en Equinix (NY4 o LD5).\n3. **Compatibilidad MT5:** Asegúrate de que el broker ofrezca MetaTrader 5 nativo y no solo una versión web limitada.\n\n### Brokers Recomendados\n\nEn nuestra experiencia, brokers como **IC Markets, Pepperstone o Tickmill** ofrecen las mejores condiciones de spread y latencia para traders algorítmicos profesionales.\n\n--- ⚠️ *Un mal broker puede ser la diferencia entre una cuenta ganadora y una perdedora.*`
     }
 };
 
@@ -422,7 +512,7 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                                             {rows.map((row, ri) => (
                                                 <tr key={ri} className={ri === 0 ? 'bg-brand/10 border-b border-brand/30' : 'border-b border-white/5 hover:bg-white/5 transition-colors'}>
                                                     {row.split('|').filter(c => c.trim()).map((cell, ci) => (
-                                                        <td key={ci} className={`py - 2.5 px - 4 ${ri === 0 ? 'font-semibold text-white text-xs uppercase tracking-wider' : 'text-text-muted'} `}>
+                                                        <td key={ci} className={`py-2.5 px-4 ${ri === 0 ? 'font-semibold text-white text-xs uppercase tracking-wider' : 'text-text-muted'}`}>
                                                             <span dangerouslySetInnerHTML={{ __html: cell.trim().replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>') }} />
                                                         </td>
                                                     ))}

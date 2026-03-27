@@ -102,33 +102,68 @@ export default function RootLayout({
             <main className="main-wrapper">
               {children}
             </main>
-            <footer className="border-t border-white/5 py-12 px-4 sm:px-6 lg:px-8 bg-black main-wrapper">
-              <div className="max-w-7xl mx-auto flex flex-col items-center gap-8">
-                <div className="flex flex-col items-center gap-6">
-                  <div className="w-24 h-24 rounded-[2rem] overflow-hidden shadow-[0_0_40px_rgba(245,158,11,0.3)] border border-white/5 p-1 bg-black">
-                    <img src="/logo-kopytrading.png" alt="Logo" className="w-full h-full object-cover rounded-[1.8rem]" />
+            <footer className="border-t border-white/5 pt-16 pb-12 px-4 sm:px-6 lg:px-8 bg-black main-wrapper">
+              <div className="max-w-7xl mx-auto">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
+                  {/* Columna 1: Marca y Logo */}
+                  <div className="col-span-2 md:col-span-1 space-y-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10 p-0.5 bg-black">
+                        <img src="/logo-kopytrading.png" alt="Logo" className="w-full h-full object-cover rounded-[0.5rem]" />
+                      </div>
+                      <span className="font-bold text-xl tracking-tighter text-white">KopyTrading</span>
+                    </div>
+                    <p className="text-xs text-text-muted leading-relaxed max-w-xs">
+                      Tecnología algorítmica de alta precisión diseñada para traders que buscan consistencia en MetaTrader 5.
+                    </p>
                   </div>
-                  <div className="text-center">
-                    <span className="font-extrabold text-4xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-accent via-white to-accent block">KopyTrading</span>
-                    <span className="text-[10px] text-accent/60 font-bold uppercase tracking-[0.3em] mt-1">Advanced Trading Bots</span>
+
+                  {/* Columna 2: Productos */}
+                  <div className="space-y-4">
+                    <h4 className="text-white font-bold text-sm uppercase tracking-widest">Sistemas</h4>
+                    <ul className="space-y-2 text-xs text-text-muted">
+                      <li><Link href="/bots/cmmv3xu5f0006vhmcqmuq1b4a" className="hover:text-accent transition-colors">La Ametralladora (Oro)</Link></li>
+                      <li><Link href="/bots/cmmv3xugt000cvhmc7nqjwwji-btcusd" className="hover:text-accent transition-colors">BTC Storm Rider</Link></li>
+                      <li><Link href="/bots" className="hover:text-accent transition-colors font-semibold text-accent/80">Todos los Bots →</Link></li>
+                    </ul>
+                  </div>
+
+                  {/* Columna 3: Información */}
+                  <div className="space-y-4">
+                    <h4 className="text-white font-bold text-sm uppercase tracking-widest">Recursos</h4>
+                    <ul className="space-y-2 text-xs text-text-muted">
+                      <li><Link href="/articulos" className="hover:text-accent transition-colors">Blog & Análisis</Link></li>
+                      <li><Link href="/activos" className="hover:text-accent transition-colors">Activos Disponibles</Link></li>
+                      <li><Link href="/faq" className="hover:text-accent transition-colors">Preguntas Frecuentes</Link></li>
+                      <li><Link href="/instalar" className="hover:text-accent transition-colors">Guía de Instalación</Link></li>
+                    </ul>
+                  </div>
+
+                  {/* Columna 4: Soporte y Legal */}
+                  <div className="space-y-4">
+                    <h4 className="text-white font-bold text-sm uppercase tracking-widest">Compañía</h4>
+                    <ul className="space-y-2 text-xs text-text-muted">
+                      <li><Link href="/sobre-nosotros" className="hover:text-accent transition-colors">Sobre Nosotros</Link></li>
+                      <li><Link href="/contacto" className="hover:text-accent transition-colors">Contacto</Link></li>
+                      <li><Link href="/legal/privacidad" className="hover:text-accent transition-colors">Privacidad</Link></li>
+                      <li><Link href="/legal/riesgo" className="hover:text-accent transition-colors font-bold text-danger/80">Aviso de Riesgo</Link></li>
+                    </ul>
                   </div>
                 </div>
 
-                <div className="flex gap-6 flex-wrap justify-center text-xs text-text-muted">
-                  <Link href="/legal/privacidad" className="hover:text-accent transition-colors">Privacidad</Link>
-                  <Link href="/legal/terminos" className="hover:text-accent transition-colors">Términos de Uso</Link>
-                  <Link href="/legal/cookies" className="hover:text-accent transition-colors">Cookies</Link>
-                  <Link href="/legal/riesgo" className="hover:text-accent transition-colors">Aviso de Riesgo</Link>
-                  <Link href="/faq" className="hover:text-accent transition-colors">FAQ</Link>
-                </div>
-
-                <div className="flex flex-col items-center gap-2 text-[10px] text-text-muted/40 text-center max-w-2xl">
-                  <p suppressHydrationWarning>© {new Date().getFullYear()} KopyTrading. Todos los derechos reservados.</p>
-                  <p className="mt-2">
-                    KopyTrading NO constituye asesoramiento financiero. El trading en CFDs, Forex y Criptomonedas implica un alto nivel de riesgo y puede no ser adecuado para todos los inversores.
-                    Solo debes operar con capital que puedas permitirte perder completamente.
-                  </p>
-                  <span className="text-accent/60 mt-2 font-bold uppercase tracking-widest">⚠️ Trading de Alto Riesgo</span>
+                <div className="border-t border-white/5 pt-8 flex flex-col items-center gap-6">
+                  <div className="flex flex-col items-center gap-2 text-[10px] text-text-muted/40 text-center max-w-3xl">
+                    <p suppressHydrationWarning>© {new Date().getFullYear()} KopyTrading. Todos los derechos reservados.</p>
+                    <p className="mt-4 leading-relaxed">
+                      KopyTrading es un proveedor de software tecnológico. NO constituye asesoramiento financiero ni recomendaciones de inversión. 
+                      El trading en CFDs, Forex y Criptomonedas implica un riesgo significativo. Solo debes operar con capital que puedas permitirte perder completamente. 
+                    </p>
+                    <div className="flex items-center gap-4 mt-2">
+                        <span className="text-accent/40 font-bold uppercase tracking-[0.2em]">E-E-A-T Certified</span>
+                        <span className="w-1 h-1 rounded-full bg-white/10"></span>
+                        <span className="text-accent/40 font-bold uppercase tracking-[0.2em]">SSL Secure Encryption</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </footer>

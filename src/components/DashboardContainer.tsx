@@ -58,8 +58,8 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
         purchases.forEach(p => {
             const name = (p.botProduct?.name || "").toUpperCase();
             let key = "Otros";
-            if (name.includes("ORO") || name.includes("XAU") || name.includes("AMETRA") || name.includes("EVOLUTION") || name.includes("GOLD")) key = "GOLD (Oro)";
-            else if (name.includes("BTC") || name.includes("BITCOIN")) key = "BTC (Bitcoin)";
+            if (name.includes("BTC") || name.includes("BITCOIN")) key = "BTC (Bitcoin)";
+            else if (name.includes("ORO") || name.includes("XAU") || name.includes("AMETRA") || name.includes("EVOLUTION") || name.includes("GOLD")) key = "GOLD (Oro)";
             else if (name.includes("EUR") || name.includes("EURO")) key = "EUR (Euro)";
             else if (name.includes("YEN") || name.includes("JPY")) key = "JPY (Yen)";
             

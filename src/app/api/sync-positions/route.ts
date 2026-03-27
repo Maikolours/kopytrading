@@ -10,7 +10,10 @@ export async function POST(req: Request) {
         const cleanText = text.replace(/\0/g, '').trim();
         body = JSON.parse(cleanText);
         
-        const { purchaseId, account, positions, history, isReal } = body;
+        // NORMALIZACIÓN: Asegurar que el purchaseId sea siempre mayúsculas y esté limpio
+        const purchaseId = body.purchaseId ? body.purchaseId.trim().toUpperCase() : null;
+        const account = body.account ? String(body.account).trim() : null;
+        const { positions, history, isReal } = body;
 
         if (!purchaseId || !account) {
             await prisma.requestLog.create({
@@ -33,11 +36,10 @@ export async function POST(req: Request) {
         }
 
         // VALIDACIÓN DE CRUCE: Verificar que el instrumento coincide (ej: XAUUSD no puede entrar en un bot de BTC)
-        // El bot envía el símbolo en las posiciones. Si no hay posiciones, enviamos el símbolo principal esperado.
-        const botSymbol = positions && positions.length > 0 ? positions[0].symbol : body.symbol;
-        const expectedInstrument = purchase.botProduct.instrument;
+        const botSymbol = (positions && positions.length > 0 ? positions[0].symbol : (body.symbol || "XAUUSD")).toUpperCase();
+        const expectedInstrument = (purchase.botProduct.instrument || "").toUpperCase();
 
-        if (botSymbol && expectedInstrument && !botSymbol.toUpperCase().includes(expectedInstrument.toUpperCase()) && !expectedInstrument.toUpperCase().includes(botSymbol.toUpperCase())) {
+        if (expectedInstrument && !botSymbol.includes(expectedInstrument) && !expectedInstrument.includes(botSymbol)) {
             // Permitir casos especiales (XAUUSD vs GOLD)
             const isXAU = (botSymbol.includes("XAU") || botSymbol.includes("GOLD")) && (expectedInstrument.includes("XAU") || expectedInstrument.includes("GOLD"));
             if (!isXAU) {
@@ -105,12 +107,52 @@ export async function POST(req: Request) {
             }
         }
 
-        // Registrar éxito silencioso (opcional, pero ayuda a depurar)
-        await prisma.requestLog.create({
-            data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body).substring(0, 500) }
-        });
+        // 4. SINCRO DE CONFIGURACIÓN (v7.5)
+        // Si el bot propone settings (cambios en el HUD), los guardamos.
+        // Siempre devolvemos los settings actuales para que el bot esté sincronizado.
+        const DEFAULT_SETTINGS = {
+            net_cycle: 5.0,
+            hedge_trigger: 3.0,
+            lote_manual: 0.01,
+            lote_rescate: 0.02,
+            max_dd: 50.0,
+            trailling_stop: 0.0,
+            limit_dist: 500,
+            timeframe: "M5"
+        };
 
-        return NextResponse.json({ success: true });
+        let currentSettings = null;
+        try {
+            if (body.proposedSettings) {
+                currentSettings = await prisma.botSettings.upsert({
+                    where: { purchaseId_account: { purchaseId, account: String(account) } },
+                    update: { settings: body.proposedSettings },
+                    create: { purchaseId, account: String(account), settings: body.proposedSettings }
+                });
+            } else {
+                currentSettings = await prisma.botSettings.findUnique({
+                    where: { purchaseId_account: { purchaseId, account: String(account) } }
+                });
+                
+                // Si no hay settings aún, los creamos con los valores por defecto
+                if (!currentSettings) {
+                    currentSettings = await prisma.botSettings.create({
+                        data: {
+                            purchaseId,
+                            account: String(account),
+                            settings: DEFAULT_SETTINGS
+                        }
+                    });
+                }
+            }
+        } catch (sErr) {
+            console.error("Error syncing settings:", sErr);
+        }
+
+        return NextResponse.json({ 
+            success: true, 
+            settings: currentSettings?.settings || DEFAULT_SETTINGS 
+        });
     } catch (err: any) {
         console.error("Sync Positions Error:", err);
         await prisma.requestLog.create({
