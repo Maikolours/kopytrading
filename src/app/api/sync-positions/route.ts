@@ -44,7 +44,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Missing purchaseId or account" }, { status: 400 });
         }
 
-        // Verificar que la compra existe y cargar su producto
+        // 3. Verificar que la compra existe y cargar su producto
         const purchase = await prisma.purchase.findUnique({
             where: { id: purchaseId },
             include: { botProduct: true }
@@ -55,6 +55,14 @@ export async function POST(req: Request) {
                 data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body), error: "Purchase not found: " + purchaseId }
             });
             return NextResponse.json({ error: "Purchase not found" }, { status: 404 });
+        }
+
+        // 3b. VERIFICACIÓN DE PRODUCTO (Opcional): Si el bot envía licenseKey (XAU-MG, etc)
+        if (body.licenseKey && purchase.botProduct.productKey && purchase.botProduct.productKey !== body.licenseKey) {
+            await prisma.requestLog.create({
+                data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body), error: `ProductKey mismatch: Bot ${body.licenseKey} vs License ${purchase.botProduct.productKey}` }
+            });
+            return NextResponse.json({ error: "License product mismatch" }, { status: 403 });
         }
 
         // VALIDACIÓN DE CRUCE: Verificar que el instrumento coincide (ej: XAUUSD no puede entrar en un bot de BTC)
