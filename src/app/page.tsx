@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { ProfitCalculator } from "@/components/ProfitCalculator";
 import { LiveSalesPopup } from "@/components/LiveSalesPopup";
 import { BotComparisonTable } from "@/components/BotComparisonTable";
+import { ARTICLES } from "@/lib/constants/articles";
 
 const TICKER_ITEMS = [
   { symbol: "XAU/USD", price: "2,934.50", change: "+0.82%", up: true },
@@ -110,7 +111,7 @@ export default function Home() {
                     Ver Catálogo
                   </Button>
                 </Link>
-                <Link href="/activos#resultados" className="text-white/60 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest border-b border-white/10 pb-1">
+                <Link href="/articulos" className="text-white/60 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest border-b border-white/10 pb-1">
                   Ver Resultados Reales
                 </Link>
               </div>
@@ -130,40 +131,49 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Visual Hero Simple */}
-            <div className="relative">
-              <div className="absolute inset-0 bg-brand/30 blur-[100px] rounded-full" />
-              <div className="relative glass-card border border-white/10 rounded-[3rem] p-6 sm:p-8 flex flex-col justify-center">
-
+            {/* Visual Hero */}
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-brand/20 blur-[60px] rounded-full opacity-50 group-hover:opacity-100 transition-opacity duration-1000" />
+              <div className="relative glass-card border border-white/10 rounded-[3rem] p-8 sm:p-10 flex flex-col justify-center overflow-hidden shadow-2xl">
+                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand to-transparent" />
+                 
                  <div className="space-y-6">
                     <div className="flex justify-between items-end">
-                       <div className="text-4xl font-black text-white italic">XAUUSD</div>
-                       <div className="text-success font-black text-xl">+42.5%</div>
+                       <div className="space-y-1">
+                          <div className="text-[10px] text-brand-light font-black uppercase tracking-[0.3em]">Live Performance</div>
+                          <div className="text-4xl font-black text-white italic tracking-tighter uppercase">XAUUSD</div>
+                       </div>
+                       <div className="text-right">
+                          <div className="text-success font-black text-2xl tracking-tighter">+42.5%</div>
+                          <div className="text-[10px] text-text-muted uppercase font-bold tracking-widest">Este Mes</div>
+                       </div>
                     </div>
-                    <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                       <div className="h-full bg-brand w-[75%]" />
+                    
+                    <div className="relative h-2 bg-white/5 rounded-full overflow-hidden">
+                       <div className="absolute top-0 left-0 h-full bg-brand w-[75%] shadow-[0_0_15px_rgba(139,92,246,0.8)]" />
                     </div>
+                    
                     <div className="grid grid-cols-2 gap-4">
-                       <div className="bg-white/5 p-4 rounded-2xl">
-                          <div className="text-[10px] text-white/30 uppercase font-black tracking-widest mb-1">Estrategia</div>
-                          <div className="text-sm font-bold text-white">Scalping HFT</div>
+                       <div className="bg-white/[0.03] border border-white/5 p-4 rounded-3xl hover:bg-white/10 transition-colors group/item">
+                          <div className="text-[10px] text-white/30 uppercase font-black tracking-widest mb-1 group-hover/item:text-brand-light transition-colors">Estrategia</div>
+                          <div className="text-sm font-bold text-white uppercase italic">Scalping HFT</div>
                        </div>
-                       <div className="bg-white/5 p-4 rounded-2xl">
-                          <div className="text-[10px] text-white/30 uppercase font-black tracking-widest mb-1">Riesgo</div>
-                          <div className="text-sm font-bold text-success">Controlado</div>
+                       <div className="bg-white/[0.03] border border-white/5 p-4 rounded-3xl hover:bg-white/10 transition-colors group/item">
+                          <div className="text-[10px] text-white/30 uppercase font-black tracking-widest mb-1 group-hover/item:text-success transition-colors">Riesgo</div>
+                          <div className="text-sm font-bold text-success uppercase italic">Controlado</div>
                        </div>
                     </div>
-                    <Link href="/bots" className="block text-center bg-white/10 hover:bg-white/20 py-4 rounded-2xl transition-all font-bold text-xs uppercase tracking-widest">
-                       Ver Análisis Detallado
+                    
+                    <Link href="/bots" className="relative group/btn block text-center bg-white/5 hover:bg-brand py-5 rounded-3xl transition-all duration-500 font-black text-[10px] uppercase tracking-[0.2em] border border-white/10 hover:border-brand shadow-xl">
+                       <span className="relative z-10 text-white">Ver Análisis Detallado →</span>
                     </Link>
                  </div>
               </div>
             </div>
-
           </div>
         </section>
 
-        {/* === BANNER PRUEBA GRATIS (RESERVED FOR BELOW HERO) === */}
+        {/* === BANNER PRUEBA GRATIS === */}
         <section className="px-4 sm:px-6 lg:px-8 mb-12">
           <div className="max-w-5xl mx-auto">
             <Link href="/bots" className="block group">
@@ -196,6 +206,50 @@ export default function Home() {
         {/* === SECCIÓN COMPARATIVA === */}
         <section className="px-4 py-20 border-t border-white/5">
            <BotComparisonTable />
+        </section>
+
+        {/* === SECCIÓN ÚLTIMOS ANÁLISIS === */}
+        <section className="px-4 py-24 relative overflow-hidden">
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-brand/5 blur-[120px] rounded-full pointer-events-none" />
+           
+           <div className="max-w-7xl mx-auto relative z-10">
+              <div className="text-center mb-16 space-y-4">
+                 <h2 className="text-3xl sm:text-5xl font-black text-white italic tracking-tighter uppercase leading-none">
+                    Últimos <span className="text-brand-light">Análisis</span>
+                 </h2>
+                 <p className="text-text-muted max-w-2xl mx-auto font-light lg:text-lg">
+                    Mantente al día con las últimas estrategias y estados del mercado. Análisis técnico institucional a tu alcance.
+                 </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                 {ARTICLES.slice(0, 3).map((article, j) => (
+                    <Link href={`/articulos/${article.slug}`} key={j} className="group">
+                       <div className="glass-card border border-white/5 rounded-[2.5rem] p-8 h-full flex flex-col space-y-6 hover:border-brand/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand/20 bg-white/[0.02]">
+                          <div className="space-y-2">
+                             <span className="text-[10px] font-black text-brand-light uppercase tracking-[0.2em]">{article.category}</span>
+                             <h3 className="text-xl font-black text-white group-hover:text-brand-light transition-colors leading-tight italic uppercase tracking-tight">{article.title}</h3>
+                          </div>
+                          <p className="text-text-muted text-sm line-clamp-3 font-light leading-relaxed flex-grow">
+                             {article.excerpt}
+                          </p>
+                          <div className="flex items-center justify-between pt-6 border-t border-white/5">
+                             <span className="text-[10px] text-text-muted font-bold uppercase tracking-widest">⏱ {article.readTime}</span>
+                             <span className="text-[10px] text-brand-light font-black uppercase tracking-widest group-hover:translate-x-2 transition-transform">Leer Más →</span>
+                          </div>
+                       </div>
+                    </Link>
+                 ))}
+              </div>
+
+              <div className="mt-16 text-center">
+                 <Link href="/articulos">
+                    <Button variant="outline" className="border-white/10 text-white/60 hover:text-white px-10 rounded-full text-xs font-black uppercase tracking-widest">
+                       Ver Todos los Artículos
+                    </Button>
+                 </Link>
+              </div>
+           </div>
         </section>
 
         <LiveSalesPopup />

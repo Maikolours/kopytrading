@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Allow: /bots
+Allow: /articulos
+
+Sitemap: https://www.kopytrading.com/sitemap.xml

@@ -23,6 +23,7 @@ model User {
 model BotProduct {
   id              String     @id @default(cuid())
   name            String
+  productKey      String?    @unique // Identifier for bots (e.g. XAU-MG)
   description     String
   instrument      String
   strategyType    String
@@ -46,22 +47,36 @@ model Purchase {
   id                    String          @id @default(cuid())
   userId                String
   botProductId          String
+  productKey            String?         // Snapshotted productKey for safety
   amount                Float
   status                String          @default("COMPLETED")
   lastDownloadedVersion String?
   lastSync              DateTime?
   createdAt             DateTime        @default(now())
   updatedAt             DateTime        @updatedAt
-  expiresAt       DateTime?
-  activePositions LivePosition[]
-  pastTrades      TradeHistory[]
-  botSettings     BotSettings[]
-  botProduct      BotProduct      @relation(fields: [botProductId], references: [id])
-  user            User            @relation(fields: [userId], references: [id])
-  remoteCommands  RemoteCommand[]
+  expiresAt             DateTime?
+  activePositions       LivePosition[]
+  pastTrades            TradeHistory[]
+  botSettings           BotSettings[]
+  licenseSessions       LicenseSession[]
+  botProduct            BotProduct      @relation(fields: [botProductId], references: [id])
+  user                  User            @relation(fields: [userId], references: [id])
+  remoteCommands        RemoteCommand[]
 
   @@index([botProductId], map: "Purchase_botProductId_fkey")
   @@index([userId], map: "Purchase_userId_fkey")
+}
+
+model LicenseSession {
+  id           String   @id @default(cuid())
+  purchaseId   String
+  account      String
+  lastActivity DateTime @default(now())
+  isActive     Boolean  @default(true)
+  purchase     Purchase @relation(fields: [purchaseId], references: [id])
+
+  @@unique([purchaseId]) // One active session per purchase
+  @@index([purchaseId])
 }
 
 model RemoteCommand {
