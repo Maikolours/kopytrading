@@ -3,6 +3,18 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
     try {
+        // 1. Sincronización Manual del Esquema (si falla el push automático)
+        // Intentamos añadir la columna productKey si no existe
+        try {
+            await prisma.$executeRawUnsafe(`
+                ALTER TABLE BotProduct 
+                ADD COLUMN IF NOT EXISTS productKey VARCHAR(191) UNIQUE AFTER name
+            `);
+            console.log("Columna productKey verificada/añadida.");
+        } catch (dbErr) {
+            console.log("Aviso: No se pudo ejecutar ALTER TABLE (posiblemente ya existe o falta permisos)");
+        }
+
         const newBots = [
             {
                 productKey: 'XAU-MG',
@@ -68,12 +80,12 @@ export async function GET() {
 
         let results = [];
         for (const bot of newBots) {
-            const existing = await prisma.botProduct.findFirst({
+            const existing = await (prisma.botProduct as any).findFirst({
                 where: { OR: [{ productKey: bot.productKey }, { name: bot.name }] }
             });
 
             if (!existing) {
-                const created = await prisma.botProduct.create({ data: bot });
+                const created = await (prisma.botProduct as any).create({ data: bot });
                 results.push(`✅ Created: ${bot.productKey}`);
             } else {
                 results.push(`⏭️ Skipped (Exists): ${bot.productKey}`);
