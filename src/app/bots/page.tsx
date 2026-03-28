@@ -19,7 +19,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
     const isOwner = session?.user?.email === "viajaconsakura@gmail.com" || session?.user?.email === "viajaconsakura";
     const { asset } = await searchParams;
 
-    const whereClause: any = { isActive: true };
+    const whereClause: any = isOwner ? {} : { isActive: true };
     if (asset) {
         whereClause.instrument = { contains: asset };
     }
