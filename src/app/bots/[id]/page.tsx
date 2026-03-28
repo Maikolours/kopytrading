@@ -2,15 +2,20 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/Button";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
 
 export default async function BotDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
+
+    const session = await getServerSession(authOptions);
+    const isOwner = session?.user?.email === "viajaconsakura@gmail.com" || session?.user?.email === "viajaconsakura";
 
     const bot = await prisma.botProduct.findUnique({
         where: { id: id }
     });
 
-    if (!bot || !bot.isActive) {
+    if (!bot || (!bot.isActive && !isOwner)) {
         notFound();
     }
 
@@ -142,6 +147,41 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                         </table>
                                     </div>
 
+                                </div>
+                                
+                                <div className="mt-12 pt-8 border-t border-white/10">
+                                    <h5 className="text-xl font-bold text-white mb-6 uppercase italic flex items-center gap-3">
+                                        <span className="w-8 h-8 rounded-lg bg-brand/20 flex items-center justify-center text-sm">📂</span>
+                                        Documentación y Descargables
+                                    </h5>
+                                    
+                                    <div className="grid sm:grid-cols-2 gap-4">
+                                        <div className="glass-card bg-white/[0.03] p-5 border border-white/5 hover:border-brand/30 transition-all group/dl cursor-pointer">
+                                            <div className="flex items-center justify-between mb-3">
+                                                <div className="text-[10px] font-black text-brand-light uppercase tracking-widest">Guía Rápida</div>
+                                                <span className="text-xs text-text-muted">PDF - 2.4MB</span>
+                                            </div>
+                                            <h6 className="font-bold text-white mb-1">Manual de Instalación</h6>
+                                            <p className="text-xs text-text-muted mb-4 font-light">Configuración paso a paso en MT5 y conexión con el Dashboard.</p>
+                                            <div className="text-[10px] font-black text-white hover:text-brand-light transition-colors uppercase tracking-widest flex items-center gap-2">
+                                                <span>Pendiente de Subida</span>
+                                                <div className="w-1.5 h-1.5 rounded-full bg-white/20"></div>
+                                            </div>
+                                        </div>
+
+                                        <div className="glass-card bg-white/[0.03] p-5 border border-white/5 hover:border-success/30 transition-all group/dl cursor-pointer">
+                                            <div className="flex items-center justify-between mb-3">
+                                                <div className="text-[10px] font-black text-success uppercase tracking-widest">Optimización</div>
+                                                <span className="text-xs text-text-muted">SET - 12KB</span>
+                                            </div>
+                                            <h6 className="font-bold text-white mb-1">Set de Parámetros Ultra</h6>
+                                            <p className="text-xs text-text-muted mb-4 font-light">Configuración optimizada para cuentas institucionales de bajo riesgo.</p>
+                                            <div className="text-[10px] font-black text-white hover:text-success transition-colors uppercase tracking-widest flex items-center gap-2">
+                                                <span>Pendiente de Subida</span>
+                                                <div className="w-1.5 h-1.5 rounded-full bg-white/20"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

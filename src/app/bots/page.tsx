@@ -19,7 +19,9 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
     const isOwner = session?.user?.email === "viajaconsakura@gmail.com" || session?.user?.email === "viajaconsakura";
     const { asset } = await searchParams;
 
-    const whereClause: any = isOwner ? {} : { isActive: true };
+    const whereClause: any = isOwner 
+        ? { productKey: { not: null } }  // Solo mostrar los bots "llave en mano" con ProductKey
+        : { isActive: true };
     if (asset) {
         whereClause.instrument = { contains: asset };
     }
@@ -80,9 +82,9 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                     <Link href="/bots"><Button variant="outline">Ver todos los bots</Button></Link>
                 </div>
             ) : (
-                <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6`}>
+                <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8`}>
                     {bots.map((bot: any) => (
-                        <Card key={bot.id} interactive className="flex flex-col h-full bg-surface-light/20">
+                        <Card key={bot.id} interactive className="flex flex-col h-full bg-white/[0.03] border-white/10 hover:border-brand/50 transition-all duration-500 shadow-xl overflow-hidden group">
                             <CardHeader>
                                 <div className="flex justify-between items-start mb-2">
                                     <CardTitle className="text-xl">{bot.name}</CardTitle>
@@ -134,13 +136,13 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                 </div>
 
                                  {/* STATUS OVERLAYS */}
-                                {bot.status === "MAINTENANCE" && !isOwner && (
-                                    <div className="absolute inset-0 z-20 bg-bg-dark/60 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
-                                        <div className="w-16 h-16 rounded-full bg-amber-500/40 flex items-center justify-center mb-4 border border-amber-500/50 shadow-lg shadow-amber-500/20">
+                                {bot.status === "MAINTENANCE" && (
+                                    <div className="absolute inset-0 z-20 bg-bg-dark/80 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center border border-amber-500/20 rounded-2xl">
+                                        <div className="w-16 h-16 rounded-full bg-amber-500/20 flex items-center justify-center mb-4 border border-amber-500/40 shadow-lg shadow-amber-500/20">
                                             <span className="text-3xl">🛠️</span>
                                         </div>
-                                        <h4 className="text-xl font-black text-white mb-2 uppercase tracking-tighter italic drop-shadow-lg">Mantenimiento</h4>
-                                        <p className="text-sm text-white font-medium drop-shadow-md bg-black/60 px-3 py-1 rounded-lg">Estamos calibrando este bot.<br/>Vuelve pronto.</p>
+                                        <h4 className="text-xl font-black text-white mb-2 uppercase tracking-tighter italic">En Mantenimiento</h4>
+                                        <p className="text-sm text-text-muted">Estamos calibrando este bot.<br/>Vuelve pronto.</p>
                                     </div>
                                 )}
 
