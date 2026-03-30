@@ -65,9 +65,9 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                     {contentBlocks.map((block, i) => {
                         const trimmed = block.trim();
                         if (!trimmed) return null;
-                        if (trimmed.startsWith('## ')) return <h2 key={i} className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 mt-16 mb-8 tracking-tighter uppercase italic border-l-8 border-brand pl-8">{trimmed.replace('## ', '')}</h2>;
-                        if (trimmed.startsWith('### ')) return <h3 key={i} className="text-xl font-black text-brand-light mt-12 mb-6 tracking-tight uppercase flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-brand" /> {trimmed.replace('### ', '')}</h3>;
-                        if (trimmed.startsWith('---')) return <hr key={i} className="border-white/10 my-14" />;
+                        if (trimmed.startsWith('## ')) return <h2 key={i} className="text-2xl sm:text-4xl font-black text-white mt-16 mb-8 tracking-tighter uppercase italic border-l-4 border-brand pl-6">{trimmed.replace('## ', '')}</h2>;
+                        if (trimmed.startsWith('### ')) return <h3 key={i} className="text-lg sm:text-xl font-black text-brand-light mt-12 mb-6 tracking-tight uppercase flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full bg-brand" /> {trimmed.replace('### ', '')}</h3>;
+                        if (trimmed.startsWith('---')) return <hr key={i} className="border-white/5 my-14" />;
                         if (trimmed.startsWith('⚠️')) return (
                             <div key={i} className="relative group my-12">
                                 <div className="absolute -inset-1 bg-gradient-to-r from-danger/30 to-orange-500/20 rounded-3xl blur opacity-30 group-hover:opacity-50 transition-all duration-500" />
@@ -124,10 +124,10 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                         // Paragraphs with bold and link handling
                         // Apply drop cap to the very first paragraph
                         const isFirstParagraph = i === 1 || (i === 0 && !trimmed.startsWith('#'));
-                        return <p key={i} className={`text-slate-300 text-lg sm:text-xl leading-relaxed font-normal mb-8 opacity-90 hover:opacity-100 transition-opacity ${isFirstParagraph ? 'first-letter:text-6xl first-letter:font-black first-letter:text-brand first-letter:mr-3 first-letter:float-left first-letter:leading-[0.85]' : ''}`} dangerouslySetInnerHTML={{
+                        return <p key={i} className={`text-slate-300 text-[17px] sm:text-[19px] leading-[1.8] font-normal mb-10 opacity-90 hover:opacity-100 transition-opacity ${isFirstParagraph ? 'first-letter:text-6xl first-letter:font-black first-letter:text-brand first-letter:mr-3 first-letter:float-left first-letter:leading-[0.85]' : ''}`} dangerouslySetInnerHTML={{
                             __html: trimmed
-                                .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-black tracking-tight">$1</strong>')
-                                .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-brand-light hover:text-white font-bold underline decoration-brand/50 underline-offset-8 transition-all hover:decoration-white">$1</a>')
+                                .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>')
+                                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-brand-light hover:text-white font-bold underline decoration-brand/40 underline-offset-4 transition-all hover:decoration-white">$1</a>')
                         }} />;
                     })}
                 </article>
