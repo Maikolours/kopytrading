@@ -12,7 +12,7 @@ export default function PrivacidadPage() {
 
                     <section>
                         <h2 className="text-white font-semibold text-base mb-2">1. Responsable del Tratamiento</h2>
-                        <p>KOPYTRADING gestiona este sitio web. Para cualquier consulta relacionada con el tratamiento de tus datos personales, puedes contactarnos a través de los canales oficiales habilitados en la plataforma.</p>
+                        <p>KopyTrading gestiona este sitio web. Para cualquier consulta relacionada con el tratamiento de tus datos personales, puedes contactarnos a través de los canales oficiales habilitados en la plataforma.</p>
                     </section>
 
                     <section>

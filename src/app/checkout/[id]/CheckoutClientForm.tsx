@@ -77,7 +77,7 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
                     value: priceString,
                     currency_code: "EUR"
                 },
-                description: `KOPYTRADING Bot: ${bot.name}`,
+                description: `KopyTrading Bot: ${bot.name}`,
             }]
         });
     }

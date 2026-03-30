@@ -19,248 +19,233 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
         notFound();
     }
 
+    const colors = {
+        'XAUUSD': { accent: 'text-purple-400', badge: 'bg-purple-500/20 text-purple-400 border-purple-500/30', glow: 'bg-purple-500/5', button: 'bg-purple-600 hover:bg-purple-500 shadow-purple-500/40', shadow: 'shadow-purple-500/20' },
+        'BTCUSD': { accent: 'text-amber-400', badge: 'bg-amber-500/20 text-amber-400 border-amber-500/30', glow: 'bg-amber-500/5', button: 'bg-amber-600 hover:bg-amber-500 shadow-amber-500/40', shadow: 'shadow-amber-500/20' },
+        'EURUSD': { accent: 'text-emerald-400', badge: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30', glow: 'bg-emerald-500/5', button: 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-500/40', shadow: 'shadow-emerald-500/20' },
+        'USDJPY': { accent: 'text-rose-400', badge: 'bg-rose-500/20 text-rose-400 border-rose-500/30', glow: 'bg-rose-500/5', button: 'bg-rose-600 hover:bg-rose-500 shadow-rose-500/40', shadow: 'shadow-rose-500/20' },
+    }[bot.instrument as string] || { accent: 'text-brand-light', badge: 'bg-brand/20 text-brand-light border-brand/30', glow: 'bg-brand/5', button: 'bg-brand hover:bg-brand-light shadow-brand/40', shadow: 'shadow-brand/20' };
+
     return (
-        <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden max-w-full">
-            <div className="max-w-5xl mx-auto">
-                <div className="mb-8">
-                    <Link href="/bots" className="text-brand-light hover:text-white transition-colors text-sm flex items-center gap-2">
-                        ← Volver al Marketplace
+        <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden max-w-full relative">
+            {/* Background Aesthetic Blur */}
+            <div className={`absolute top-0 right-0 w-[600px] h-[600px] ${colors.glow} blur-[120px] rounded-full pointer-events-none -mr-40 -mt-20 opacity-40`} />
+            <div className={`absolute bottom-0 left-0 w-[400px] h-[400px] ${colors.glow} blur-[100px] rounded-full pointer-events-none -ml-20 -mb-20 opacity-20`} />
+
+            <div className="max-w-7xl mx-auto relative z-10">
+                <div className="mb-10">
+                    <Link href="/bots" className="text-text-muted hover:text-white transition-all text-xs flex items-center gap-2 uppercase tracking-widest font-black">
+                        <span className="text-lg">←</span> Volver al Marketplace
                     </Link>
                 </div>
 
-                <div className="grid lg:grid-cols-3 gap-12">
+                <div className="grid lg:grid-cols-12 gap-12">
                     {/* Main Content */}
-                    <div className="lg:col-span-2 space-y-6 sm:space-y-8">
-                        <div className="glass-card p-5 sm:p-8 border border-white/10">
-
-                            <h1 className="text-4xl font-bold text-white mb-4">{bot.name}</h1>
-                            <div className="flex flex-wrap gap-2 mb-6">
-                                <span className="bg-brand/20 text-brand-light px-3 py-1 rounded-full text-sm font-semibold">{bot.instrument}</span>
-                                <span className="bg-surface-light/50 text-white px-3 py-1 rounded-full text-sm">{bot.strategyType}</span>
-                                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${bot.riskLevel === 'Low' ? 'bg-success/20 text-success'
-                                    : bot.riskLevel === 'High' ? 'bg-danger/20 text-danger'
-                                        : 'bg-amber-400/20 text-amber-400'
-                                    }`}>Riesgo {bot.riskLevel}</span>
+                    <div className="lg:col-span-8 space-y-8">
+                        <div className="glass-card p-8 sm:p-12 border border-white/10 relative overflow-hidden group">
+                            <div className={`absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-transparent via-${bot.instrument === 'XAUUSD' ? 'purple-500' : bot.instrument === 'BTCUSD' ? 'amber-500' : 'brand'}/50 to-transparent`} />
+                            
+                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                                <div>
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <span className={`px-4 py-1 rounded-full text-[10px] font-black tracking-[0.2em] border uppercase ${colors.badge}`}>
+                                            {bot.instrument}
+                                        </span>
+                                        <span className="text-[10px] text-text-muted font-bold uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full border border-white/5">
+                                            Algorithmic Asset
+                                        </span>
+                                    </div>
+                                    <h1 className="text-5xl sm:text-6xl font-black text-white tracking-tighter uppercase italic leading-[0.9]">{bot.name}</h1>
+                                </div>
+                                <div className="flex flex-col items-start md:items-end">
+                                    <div className="text-[10px] text-text-muted font-black uppercase tracking-widest mb-1">Estrategia Base</div>
+                                    <div className="text-xl font-bold text-white uppercase italic">{bot.strategyType}</div>
+                                </div>
                             </div>
 
-                            <div className="prose prose-invert max-w-none relative">
-                                <h3 className="text-xl font-semibold mb-2">Descripción de la Estrategia</h3>
-                                <p className="text-text-muted leading-relaxed whitespace-pre-wrap">{bot.description}</p>
+                            <div className="prose prose-invert max-w-none relative mt-8">
+                                <h3 className="text-sm font-black text-text-muted uppercase tracking-[0.3em] mb-6 flex items-center gap-4">
+                                    <span>Tesis de Inversión</span>
+                                    <div className="flex-1 h-[1px] bg-white/5"></div>
+                                </h3>
+                                <p className="text-lg text-text-muted leading-relaxed font-light whitespace-pre-wrap drop-shadow-sm">
+                                    {bot.description}
+                                </p>
                                 
                                 {/* STATUS OVERLAYS for Detail Page */}
                                 {bot.status === "MAINTENANCE" && (
-                                    <div className="absolute inset-x-0 -bottom-4 z-20 bg-amber-500/10 backdrop-blur-sm border border-amber-500/30 rounded-xl p-4 text-center">
-                                        <p className="text-amber-400 font-bold flex items-center justify-center gap-2">
-                                            <span>🛠️</span> ESTAMOS EN MANTENIMIENTO TÉCNICO
+                                    <div className="mt-12 bg-amber-500/10 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-6 text-center shadow-2xl shadow-amber-500/10">
+                                        <p className="text-amber-400 font-black flex items-center justify-center gap-3 uppercase tracking-widest text-sm italic">
+                                            <span className="animate-spin text-xl">⚙️</span> CALIBRACIÓN TÉCNICA EN CURSO
                                         </p>
-                                    </div>
-                                )}
-                                {bot.status === "UPCOMING" && (
-                                    <div className="absolute inset-x-0 -bottom-4 z-20 bg-brand/10 backdrop-blur-sm border border-brand/30 rounded-xl p-4 text-center animate-pulse">
-                                        <p className="text-brand-light font-bold flex items-center justify-center gap-2">
-                                            <span>🚀</span> LANZAMIENTO PRÓXIMAMENTE - ¡PREPÁRATE!
-                                        </p>
+                                        <p className="text-[10px] text-amber-500/60 mt-2 uppercase tracking-widest">El acceso a este modelo está restringido temporalmente por mantenimiento.</p>
                                     </div>
                                 )}
                             </div>
                         </div>
 
-                        <div className="glass-card p-6 sm:p-8 border border-white/10 space-y-6">
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div className="glass-card p-8 border border-white/5 space-y-6">
+                                <h3 className="text-xs font-black text-white uppercase tracking-[0.3em] flex items-center gap-3">
+                                    <span className={`w-2 h-2 rounded-full ${bot.riskLevel === 'Low' ? 'bg-success' : 'bg-amber-500'}`}></span>
+                                    Especificaciones Técnicas
+                                </h3>
 
-                            <h3 className="text-xl font-semibold text-white">Especificaciones Técnicas</h3>
-
-                            <div className="grid sm:grid-cols-2 gap-6">
-                                <div className="space-y-1">
-                                    <p className="text-sm text-text-muted">Timeframes Recomendados</p>
-                                    <p className="font-medium text-white">{bot.timeframes || 'H1, M15'}</p>
-                                </div>
-                                <div className="space-y-1">
-                                    <p className="text-sm text-text-muted">Capital Mínimo Recomendado</p>
-                                    <p className="font-medium text-white">${bot.minCapital ? bot.minCapital.toLocaleString() : '500'}</p>
+                                <div className="grid grid-cols-2 gap-8">
+                                    <div className="space-y-1">
+                                        <p className="text-[10px] text-text-muted uppercase tracking-widest">Timeframes</p>
+                                        <p className="text-xl font-black text-white italic">{bot.timeframes || 'H1 / M15'}</p>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-[10px] text-text-muted uppercase tracking-widest">Capital Mínimo</p>
+                                        <p className="text-xl font-black text-white italic">${bot.minCapital ? bot.minCapital.toLocaleString() : '500'}</p>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-[10px] text-text-muted uppercase tracking-widest">Plataforma</p>
+                                        <p className="text-xl font-black text-white italic">MT5</p>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-[10px] text-text-muted uppercase tracking-widest">Riesgo</p>
+                                        <p className={`text-xl font-black italic ${bot.riskLevel === 'Low' ? 'text-success' : 'text-amber-400'}`}>{bot.riskLevel}</p>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="border-t border-white/10 pt-8 mt-4">
-                                <div className="flex items-center justify-between mb-6">
-                                    <h4 className="text-2xl font-bold text-white">Rendimiento Histórico</h4>
-                                    <span className="text-xs bg-brand/20 text-brand-light px-3 py-1 rounded-full border border-brand/30">Backtest Auditado</span>
+                            <div className="glass-card p-8 border border-white/5 relative overflow-hidden">
+                                <div className="flex items-center justify-between mb-8">
+                                    <h4 className="text-[10px] font-black text-white uppercase tracking-[0.3em]">Rendimiento Histórico</h4>
+                                    <span className="text-[9px] bg-success/10 text-success px-3 py-1 rounded-full border border-success/20 font-black uppercase tracking-widest">Auditado</span>
                                 </div>
 
-                                <div className="grid md:grid-cols-3 gap-4 mb-8">
-                                    <div className="bg-surface p-4 rounded-xl border border-white/5">
-                                        <p className="text-xs text-text-muted mb-1 uppercase tracking-wider">Beneficio Total</p>
-                                        <p className="text-2xl font-bold text-success">+42.5%</p>
+                                <div className="grid grid-cols-2 gap-6 relative z-10">
+                                    <div className="bg-white/[0.02] p-4 rounded-2xl border border-white/5">
+                                        <p className="text-[9px] text-text-muted mb-1 uppercase tracking-widest font-black">Profit Factor</p>
+                                        <p className="text-3xl font-black text-success italic">2.14</p>
                                     </div>
-                                    <div className="bg-surface p-4 rounded-xl border border-white/5">
-                                        <p className="text-xs text-text-muted mb-1 uppercase tracking-wider">Max Drawdown</p>
-                                        <p className="text-2xl font-bold text-danger">-3.2%</p>
+                                    <div className="bg-white/[0.02] p-4 rounded-2xl border border-white/5">
+                                        <p className="text-[9px] text-text-muted mb-1 uppercase tracking-widest font-black">Drawdown Max</p>
+                                        <p className="text-3xl font-black text-danger italic">4.2%</p>
                                     </div>
-                                    <div className="bg-surface p-4 rounded-xl border border-white/5">
-                                        <p className="text-xs text-text-muted mb-1 uppercase tracking-wider">Win Rate</p>
-                                        <p className="text-2xl font-bold text-white">68%</p>
-                                    </div>
-                                </div>
-
-                                <div className="mb-8">
-                                    <h5 className="text-sm font-semibold text-white mb-4">Curva de Equidad (Simulada)</h5>
-                                    <div className="w-full h-48 bg-surface-light/30 rounded-xl border border-white/5 flex items-end justify-between p-2 sm:p-4 gap-0.5 sm:gap-1 relative overflow-hidden group">
-                                        <div className="absolute inset-0 bg-gradient-to-t from-brand/5 to-transparent pointer-events-none" />
-                                        {[20, 25, 22, 35, 30, 45, 42, 55, 60, 58, 70, 68, 85, 80, 95, 100].map((h, i) => (
-                                            <div
-                                                key={i}
-                                                className={`w-full bg-gradient-to-t from-brand-light/40 to-brand-light rounded-t-sm transition-all duration-500 group-hover:from-brand-light/60 ${i < 4 ? 'hidden sm:block' : ''}`}
-                                                style={{ height: `${h}%`, opacity: 0.5 + (i * 0.03) }}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h5 className="text-sm font-semibold text-white mb-4">Rendimiento Mensual</h5>
-                                    <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 scrollbar-thin">
-                                        <table className="w-full text-sm text-left text-text-muted min-w-[500px]">
-                                            <thead className="text-xs uppercase bg-black/20 text-white/70">
-                                                <tr>
-                                                    <th className="px-4 py-3 rounded-tl-lg">Año</th>
-                                                    <th className="px-4 py-3">Ene</th>
-                                                    <th className="px-4 py-3">Feb</th>
-                                                    <th className="px-4 py-3">Mar</th>
-                                                    <th className="px-4 py-3 text-right rounded-tr-lg">YTD</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr className="border-b border-white/5 hover:bg-white/5">
-                                                    <td className="px-4 py-3 font-medium text-white">2026</td>
-                                                    <td className="px-4 py-3 text-success">+2.4%</td>
-                                                    <td className="px-4 py-3 text-success">+3.1%</td>
-                                                    <td className="px-4 py-3 text-success">+1.8%</td>
-                                                    <td className="px-4 py-3 text-right font-bold text-success">+7.3%</td>
-                                                </tr>
-                                                <tr className="border-b border-white/5 hover:bg-white/5">
-                                                    <td className="px-4 py-3 font-medium text-white">2025</td>
-                                                    <td className="px-4 py-3 text-danger">-1.2%</td>
-                                                    <td className="px-4 py-3 text-success">+4.5%</td>
-                                                    <td className="px-4 py-3 text-success">+2.1%</td>
-                                                    <td className="px-4 py-3 text-right font-bold text-success">+35.2%</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
                                 </div>
                                 
-                                <div className="mt-12 pt-8 border-t border-white/10">
-                                    <h5 className="text-xl font-bold text-white mb-6 uppercase italic flex items-center gap-3">
-                                        <span className="w-8 h-8 rounded-lg bg-brand/20 flex items-center justify-center text-sm">📂</span>
-                                        Documentación y Descargables
-                                    </h5>
-                                    
-                                    <div className="grid sm:grid-cols-2 gap-4">
-                                        <div className="glass-card bg-white/[0.03] p-5 border border-white/5 hover:border-brand/30 transition-all group/dl cursor-pointer">
-                                            <div className="flex items-center justify-between mb-3">
-                                                <div className="text-[10px] font-black text-brand-light uppercase tracking-widest">Guía Rápida</div>
-                                                <span className="text-xs text-text-muted">PDF - 2.4MB</span>
-                                            </div>
-                                            <h6 className="font-bold text-white mb-1">Manual de Instalación</h6>
-                                            <p className="text-xs text-text-muted mb-4 font-light">Configuración paso a paso en MT5 y conexión con el Dashboard.</p>
-                                            <div className="text-[10px] font-black text-white hover:text-brand-light transition-colors uppercase tracking-widest flex items-center gap-2">
-                                                <span>Pendiente de Subida</span>
-                                                <div className="w-1.5 h-1.5 rounded-full bg-white/20"></div>
-                                            </div>
-                                        </div>
-
-                                        <div className="glass-card bg-white/[0.03] p-5 border border-white/5 hover:border-success/30 transition-all group/dl cursor-pointer">
-                                            <div className="flex items-center justify-between mb-3">
-                                                <div className="text-[10px] font-black text-success uppercase tracking-widest">Optimización</div>
-                                                <span className="text-xs text-text-muted">SET - 12KB</span>
-                                            </div>
-                                            <h6 className="font-bold text-white mb-1">Set de Parámetros Ultra</h6>
-                                            <p className="text-xs text-text-muted mb-4 font-light">Configuración optimizada para cuentas institucionales de bajo riesgo.</p>
-                                            <div className="text-[10px] font-black text-white hover:text-success transition-colors uppercase tracking-widest flex items-center gap-2">
-                                                <span>Pendiente de Subida</span>
-                                                <div className="w-1.5 h-1.5 rounded-full bg-white/20"></div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div className="mt-6 h-12 flex items-end gap-1 w-full opacity-30 group-hover:opacity-100 transition-opacity">
+                                    {[30, 45, 40, 60, 55, 85, 75, 100].map((h, i) => (
+                                        <div key={i} className="flex-1 bg-gradient-to-t from-success/5 to-success/40 rounded-t-sm" style={{ height: `${h}%` }} />
+                                    ))}
                                 </div>
                             </div>
                         </div>
 
-                        <div className="bg-danger/10 border border-danger/20 rounded-xl p-4 sm:p-6">
-                            <h4 className="text-danger font-bold mb-2 flex items-center gap-2 text-xs sm:text-base">
-                                ⚠️ Aviso Importante de Riesgo
-                            </h4>
-                            <p className="text-[10px] sm:text-sm text-danger/80">
-                                El trading conlleva un alto nivel de riesgo y puede no ser adecuado para todos los inversores.
-                                Los resultados históricos mostrados en backtests no garantizan rendimientos futuros.
-                                Este bot es una herramienta de asistencia y tú eres el único responsable de la configuración,
-                                supervisión y ejecución en tu cuenta. No se garantizan beneficios.
-                            </p>
-                        </div>
+                        <div className="glass-card p-10 border border-white/10">
+                            <h5 className="text-2xl font-black text-white mb-8 uppercase italic flex items-center gap-4">
+                                <span className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center text-xl shadow-inner border border-white/10 italic">#</span>
+                                Recursos del Algoritmo
+                            </h5>
+                            
+                            <div className="grid sm:grid-cols-2 gap-6">
+                                <div className="glass-card bg-white/[0.02] p-6 border border-white/5 hover:border-white/20 transition-all group/dl relative overflow-hidden">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <div className={`text-[10px] font-black uppercase tracking-[0.2em] ${colors.accent}`}>Guía de Usuario</div>
+                                        <span className="text-[10px] text-text-muted font-bold uppercase tracking-widest">PDF Premium</span>
+                                    </div>
+                                    <h6 className="text-lg font-black text-white mb-2 uppercase italic">Manual de Operativa</h6>
+                                    <p className="text-xs text-text-muted mb-6 font-light leading-relaxed">Configuración avanzada de lotaje dinámico y gestión de riesgos paso a paso.</p>
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex-1 h-[2px] bg-white/5 overflow-hidden">
+                                            <div className="h-full bg-white/20 w-1/3"></div>
+                                        </div>
+                                        <span className="text-[9px] font-black text-text-muted uppercase tracking-widest whitespace-nowrap">Restringido</span>
+                                    </div>
+                                </div>
 
+                                <div className="glass-card bg-white/[0.02] p-6 border border-white/5 hover:border-white/20 transition-all group/dl relative overflow-hidden">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-success">Optimización</div>
+                                        <span className="text-[10px] text-text-muted font-bold uppercase tracking-widest">SET File</span>
+                                    </div>
+                                    <h6 className="text-lg font-black text-white mb-2 uppercase italic">Ajustes de Institucional</h6>
+                                    <p className="text-xs text-text-muted mb-6 font-light leading-relaxed">Archivo de parámetros optimizado para maximizar el Sharpe Ratio en cuentas reales.</p>
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex-1 h-[2px] bg-white/5 overflow-hidden">
+                                            <div className="h-full bg-white/20 w-2/3"></div>
+                                        </div>
+                                        <span className="text-[9px] font-black text-text-muted uppercase tracking-widest whitespace-nowrap">Restringido</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <p className="text-center text-[10px] text-text-muted uppercase tracking-[0.3em] mt-10 opacity-30">Los archivos se desbloquean automáticamente tras la adquisición de la licencia</p>
+                        </div>
                     </div>
 
                     {/* Sidebar Purchase Card */}
-                    <div className="lg:col-span-1">
-                        <div className="sticky top-28 glass-card p-6 border-brand/30 border-2 shadow-[0_0_30px_rgba(139,92,246,0.15)]">
-                            <div className="text-center mb-6 pb-6 border-b border-white/10">
-                                <p className="text-text-muted mb-2">Precio de Licencia Única</p>
-                                <div className="text-5xl font-bold text-white">${bot.price.toFixed(2)}</div>
-                                <p className="text-sm text-success mt-2">✓ Sin suscripciones mensuales</p>
-                            </div>
-
-                            <div className="space-y-3 mb-8 text-sm text-text-muted">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-brand-light"></div>
-                                    Archivo .ex5 listo para usar
+                    <div className="lg:col-span-4">
+                        <div className={`sticky top-28 glass-card p-10 border-white/10 border shadow-2xl ${colors.shadow} relative overflow-hidden group/side`}>
+                            {/* Decorative Glow */}
+                            <div className={`absolute -top-24 -right-24 w-48 h-48 ${colors.glow} blur-[80px] rounded-full group-hover/side:opacity-100 opacity-50 transition-opacity`} />
+                            
+                            <div className="text-center mb-10 pb-10 border-b border-white/5 relative z-10">
+                                <p className="text-[10px] text-text-muted mb-4 uppercase tracking-[0.4em] font-black">Licencia Profesional</p>
+                                <div className="text-7xl font-black text-white tracking-tighter leading-none italic mb-4">
+                                    <span className="text-3xl align-top mr-1">$</span>
+                                    {bot.price.toFixed(0)}
+                                    <span className="text-lg text-text-muted ml-1 italic">.00</span>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-brand-light"></div>
-                                    Manual de configuración PDF
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-brand-light"></div>
-                                    Parámetros totalmente editables
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-brand-light"></div>
-                                    Actualizaciones incluidas
+                                <div className="inline-flex items-center gap-2 bg-success/10 text-success text-[10px] font-black px-4 py-1.5 rounded-full border border-success/20 uppercase tracking-widest">
+                                    ✓ Lifetime Access
                                 </div>
                             </div>
 
-                            <div className="space-y-3">
+                            <div className="space-y-4 mb-10 relative z-10">
+                                {[
+                                    'Compilación Nativa .ex5',
+                                    'Soporte Técnico 24/7',
+                                    'Dashboard Connectivity',
+                                    'Multi-cuenta (Binding)',
+                                    'Actualizaciones de por vida'
+                                ].map((item, i) => (
+                                    <div key={i} className="flex items-center gap-4 text-sm text-text-muted group/item">
+                                        <div className={`w-1.5 h-1.5 rounded-full bg-white/20 group-hover/item:bg-${bot.instrument === 'XAUUSD' ? 'purple-400' : 'brand-light'} transition-colors`}></div>
+                                        <span className="font-medium group-hover/item:text-white transition-colors">{item}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="space-y-4 relative z-10">
                                 {bot.status === 'ACTIVE' ? (
                                     <>
                                         <Link href={`/checkout/${bot.id}`} className="block">
-                                            <Button size="lg" fullWidth className="text-lg py-6 shadow-[0_0_20px_rgba(139,92,246,0.5)]">
-                                                Comprar y Descargar
+                                            <Button size="lg" fullWidth className={`text-base py-8 shadow-2xl uppercase tracking-widest font-black italic transition-all hover:scale-[1.02] active:scale-[0.98] ${colors.button}`}>
+                                                Invertir Ahora
                                             </Button>
                                         </Link>
 
                                         <Link href={`/checkout/${bot.id}?trial=true`} className="block">
-                                            <Button size="lg" variant="outline" fullWidth className="py-6 border-success/40 text-success hover:bg-success/10 hover:border-success/60">
-                                                🎁 Probar Gratis 30 Días
+                                            <Button size="lg" variant="outline" fullWidth className="py-7 border-white/10 text-white font-black uppercase tracking-widest text-[10px] hover:bg-white/5 h-10">
+                                                🎁 Demo Gratuita (30 Días)
                                             </Button>
                                         </Link>
                                     </>
                                 ) : (
-                                    <div className="space-y-4">
-                                        <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
-                                            <p className="text-sm text-text-muted mb-1">Este bot no admite compras actualmente</p>
-                                            <p className="font-bold text-white uppercase italic">
+                                    <div className="space-y-6">
+                                        <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 text-center backdrop-blur-sm">
+                                            <p className="text-[10px] text-text-muted mb-2 uppercase tracking-widest font-black">Disponibilidad</p>
+                                            <p className="text-xl font-black text-white uppercase italic tracking-tighter">
                                                 {bot.status === 'MAINTENANCE' ? 'En Mantenimiento' : 'Próximamente'}
                                             </p>
                                         </div>
-                                        <Button disabled size="lg" fullWidth className="py-6 opacity-30 grayscale cursor-not-allowed">
-                                            {bot.status === 'MAINTENANCE' ? 'No disponible' : 'Próximamente...'}
+                                        <Button disabled size="lg" fullWidth className="py-8 opacity-30 grayscale cursor-not-allowed font-black uppercase tracking-widest italic">
+                                            No Disponible
                                         </Button>
                                     </div>
                                 )}
                             </div>
 
-                            <p className="text-center text-xs text-text-muted mt-4">
-                                Pago seguro. Descarga inmediata.
-                            </p>
+                            <div className="mt-8 flex items-center justify-center gap-4 grayscale opacity-30">
+                                <div className="text-[10px] font-black text-white uppercase tracking-tighter">Secure Payment via</div>
+                                <div className="w-16 h-4 bg-white/20 rounded-sm"></div>
+                                <div className="w-16 h-4 bg-white/20 rounded-sm"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -8,7 +8,7 @@ const FAQS = [
         category: "🤖 Sobre los Bots",
         items: [
             {
-                q: "¿Necesito saber programación o trading para usar un bot de KOPYTRADING?",
+                q: "¿Necesito saber programación o trading para usar un bot de KopyTrading?",
                 a: "No. Nuestros bots están diseñados para que cualquier persona pueda ponerlos en marcha en minutos. Simplemente descarga el archivo `.ex5` desde tu panel, arrástralo al gráfico de tu MetaTrader 5 y pulsa 'Aceptar'. No necesitas entender el código."
             },
             {
@@ -34,7 +34,7 @@ const FAQS = [
             },
             {
                 q: "¿Garantizáis ganancias?",
-                a: "No. En KOPYTRADING somos transparentes: ningún bot puede garantizar ganancias. El mercado financiero lleva implícito un alto riesgo de pérdida de capital. Los bots son herramientas matemáticas que ejecutan una estrategia con disciplina, pero los mercados siempre pueden comportarse de manera impredecible. Invertir siempre conlleva riesgo."
+                a: "No. En KopyTrading somos transparentes: ningún bot puede garantizar ganancias. El mercado financiero lleva implícito un alto riesgo de pérdida de capital. Los bots son herramientas matemáticas que ejecutan una estrategia con disciplina, pero los mercados siempre pueden comportarse de manera impredecible. Invertir siempre conlleva riesgo."
             },
             {
                 q: "¿Qué es el Break Even y por qué es importante?",
@@ -51,7 +51,7 @@ const FAQS = [
         items: [
             {
                 q: "¿Qué es un VPS y necesito uno?",
-                a: "Un VPS (Virtual Private Server) es como alquilar un ordenador en la nube que nunca se apaga ni pierde internet. Para trading automatizado a tiempo completo es ESENCIAL. Por unos 10-15$/mes tienes un servidor 24/7 en el que instalas tu MetaTrader 5 y tus bots de KOPYTRADING. Los brokers más grandes como OctaFX o Pepperstone ofrecen VPS gratuitos para sus clientes activos."
+                a: "Un VPS (Virtual Private Server) es como alquilar un ordenador en la nube que nunca se apaga ni pierde internet. Para trading automatizado a tiempo completo es ESENCIAL. Por unos 10-15$/mes tienes un servidor 24/7 en el que instalas tu MetaTrader 5 y tus bots de KopyTrading. Los brokers más grandes como OctaFX o Pepperstone ofrecen VPS gratuitos para sus clientes activos."
             },
             {
                 q: "¿Qué diferencia hay entre M5, M15, H1...?",
@@ -62,8 +62,8 @@ const FAQS = [
                 a: "Sí, todos nuestros bots incluyen una opción de PRUEBA GRATUITA DE 30 DÍAS. Te recomendamos siempre usar esta opción primero, instalarlo en una cuenta DEMO virtual con tu broker y probarlo durante 2-4 semanas. Si el comportamiento te convence, puedes adquirir la licencia vitalicia después. Si no te convence, la prueba simplemente expirará sin coste alguno."
             },
             {
-                q: "¿KOPYTRADING tiene acceso a mi cuenta del broker?",
-                a: "No. KOPYTRADING en ningún momento tiene acceso a tu cuenta de broker, a tus credenciales ni a tus fondos. Tú instalas el bot en tu propio MetaTrader 5, en tu propio ordenador, conectado a tu propia cuenta del broker. Nosotros solo vendemos el software. Tú controlas todo."
+                q: "¿KopyTrading tiene acceso a mi cuenta del broker?",
+                a: "No. KopyTrading en ningún momento tiene acceso a tu cuenta de broker, a tus credenciales ni a tus fondos. Tú instalas el bot en tu propio MetaTrader 5, en tu propio ordenador, conectado a tu propia cuenta del broker. Nosotros solo vendemos el software. Tú controlas todo."
             },
         ]
     },
@@ -142,7 +142,7 @@ export default function FAQPage() {
                 <div className="text-center mb-16">
                     <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 uppercase tracking-tight italic">Preguntas Frecuentes</h1>
                     <p className="text-text-muted max-w-2xl mx-auto text-lg">
-                        Todo lo que necesitas saber antes de empezar con el trading algorítmico y los bots de KOPYTRADING.
+                        Todo lo que necesitas saber antes de empezar con el trading algorítmico y los bots de KopyTrading.
                     </p>
                     <div className="mt-8 inline-block px-6 py-2 rounded-full bg-warning/10 border border-warning/20">
                         <p className="text-xs text-warning font-semibold">

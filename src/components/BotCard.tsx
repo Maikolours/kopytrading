@@ -36,6 +36,18 @@ export const BotCard = memo(function BotCard({
     const isTrial = purchase.status === "TRIAL";
     const isMaintenance = purchase.botProduct.status === "MAINTENANCE" && !isOwner;
     
+    // Asignar tema visual según el instrumento
+    const getBotTheme = (symbol: string) => {
+        const s = (symbol || "").toUpperCase();
+        if (s.includes("BTC")) return { class: "theme-btc", glow: "shadow-purple-500/30", border: "border-purple-500/40", text: "text-purple-400" };
+        if (s.includes("XAU") || s.includes("GOLD")) return { class: "theme-gold", glow: "shadow-amber-500/30", border: "border-amber-500/40", text: "text-amber-400" };
+        if (s.includes("EUR")) return { class: "theme-eur", glow: "shadow-emerald-500/30", border: "border-emerald-500/40", text: "text-emerald-400" };
+        if (s.includes("JPY")) return { class: "theme-jpy", glow: "shadow-red-500/30", border: "border-red-500/40", text: "text-red-400" }; // Red Crimson
+        return { class: "theme-btc", glow: "shadow-purple-500/30", border: "border-purple-500/40", text: "text-purple-400" };
+    };
+
+    const assetTheme = getBotTheme(purchase.botProduct.instrument);
+    
     // Detectar tipo de cuenta real sincronizada
     const activeAcc = purchase.activePositions?.[0];
     const isCent = activeAcc?.isCent || purchase.botProduct.name.toUpperCase().includes("CENT") || baseName.toUpperCase().includes("CENT");
@@ -58,9 +70,9 @@ export const BotCard = memo(function BotCard({
     // const hasUpdate = normalizeVer(purchase.botProduct.version) > normalizeVer(purchase.lastDownloadedVersion || "0.0");
 
     return (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 mb-6">
-            <Card className={`relative overflow-hidden glass-card ${theme.border} bg-black/95 shadow-2xl rounded-2xl border`}>
-                <div className={`absolute inset-0 bg-gradient-to-b ${theme.gradient} pointer-events-none opacity-30`} />
+        <div className={`animate-in fade-in slide-in-from-bottom-6 duration-700 mb-8 ${assetTheme.class}`}>
+            <Card className={`relative overflow-hidden glass-card ${assetTheme.border} bg-surface/60 backdrop-blur-3xl shadow-2xl rounded-[2.5rem] border premium-card-glow`}>
+                <div className={`absolute inset-0 bg-gradient-to-b from-[var(--theme-color)]/10 to-[var(--theme-color)]/5 pointer-events-none opacity-40`} />
                 
                 <CardHeader className="relative z-10 border-b border-white/5 py-4 px-5 sm:px-6">
                     <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
@@ -133,11 +145,27 @@ export const BotCard = memo(function BotCard({
                             )}
                         </div>
 
-                        <div className="w-full sm:w-auto p-3 px-5 rounded-xl bg-black/40 border border-white/5 flex flex-col items-center justify-center min-w-28 text-center">
-                            <span className="text-[8px] font-black uppercase tracking-[0.2em] opacity-40 mb-0.5">Total Hoy</span>
-                            <span className={`text-xl font-black font-mono ${dailyProfit >= 0 ? 'text-success' : 'text-danger'}`}>
-                                {dailyProfit >= 0 ? '+' : ''}{dailyProfit.toFixed(2)} {currency}
-                            </span>
+                        <div className="flex flex-col items-end gap-2">
+                            <div className="p-3 px-5 rounded-xl bg-black/40 border border-white/5 flex flex-col items-center justify-center min-w-28 text-center premium-glass shadow-purple-500/10">
+                                <span className="text-[8px] font-black uppercase tracking-[0.2em] opacity-40 mb-0.5">Total Hoy</span>
+                                <span className={`text-xl font-black font-mono ${dailyProfit >= 0 ? 'text-success' : 'text-danger'}`}>
+                                    {dailyProfit >= 0 ? '+' : ''}{dailyProfit.toFixed(2)} {currency}
+                                </span>
+                            </div>
+                            
+                            <div className={`flex items-center gap-2 p-1.5 px-3 rounded-lg bg-white/5 border ${assetTheme.border} animate-pulse-glow-heavy`}>
+                                <span className={`text-[8px] font-black uppercase tracking-widest ${assetTheme.text}`}>ID:</span>
+                                <code className="text-[10px] font-black font-mono text-white select-all">
+                                    {purchase.id.slice(0, 8)}...
+                                </code>
+                                <Button 
+                                    size="sm" 
+                                    className={`h-5 w-5 p-0 flex items-center justify-center shrink-0 rounded ${copiedId === purchase.id ? 'bg-success text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                                    onClick={() => onCopy(purchase.id)}
+                                >
+                                    {copiedId === purchase.id ? <CheckCircle2 size={10} /> : <Copy size={10} />}
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </CardHeader>
@@ -158,7 +186,7 @@ export const BotCard = memo(function BotCard({
                                     onClick={() => setShowSettings(!showSettings)}
                                     className={`p-3 rounded-xl border-2 transition-all group ${
                                         showSettings 
-                                        ? 'bg-brand/20 border-brand-light text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]' 
+                                        ? `bg-white/10 ${assetTheme.border} text-white ${assetTheme.glow}` 
                                         : 'bg-white/5 border-white/5 text-white/40 hover:bg-white/10'
                                     }`}
                                     title="Configuración Remota"
@@ -187,38 +215,46 @@ export const BotCard = memo(function BotCard({
                                 <h4 className="text-[9px] font-black uppercase tracking-widest text-white/40 mb-3 text-center sm:text-left">Instalación</h4>
                                 <div className="flex flex-col gap-2">
                                     {isMaintenance ? (
-                                        <div className="bg-brand/10 border border-brand/30 p-3 rounded-lg text-center">
-                                            <p className="text-[10px] font-black text-brand-light uppercase tracking-widest mb-1">En Mantenimiento</p>
+                                        <div className={`bg-white/5 border ${assetTheme.border} p-3 rounded-lg text-center backdrop-blur-xl animate-pulse`}>
+                                            <p className={`text-[10px] font-black ${assetTheme.text} uppercase tracking-widest mb-1`}>En Mantenimiento</p>
                                             <p className="text-[8px] text-gray-400">Calibrando algoritmos TITAN...</p>
                                         </div>
                                     ) : (
                                         <a href={`/api/download/${purchase.id}?type=ex5`} className="group">
-                                            <Button fullWidth className="bg-white text-black hover:bg-white/90 font-black tracking-tight flex items-center justify-between px-5 py-3 h-auto rounded-lg">
+                                            <Button fullWidth className="bg-white text-black hover:bg-white/90 font-black tracking-tight flex items-center justify-between px-5 py-3 h-auto rounded-xl">
                                                 <div className="text-left leading-tight">
-                                                     <div className="text-[10px] uppercase font-black">Descargar (.EX5)</div>
-                                                     <div className="text-[8px] opacity-60 font-bold tracking-tighter">VERSIÓN {purchase.botProduct.version}</div>
+                                                     <div className="text-[11px] uppercase font-black">Descargar última versión</div>
+                                                     <div className="text-[8px] opacity-40 font-bold tracking-tighter uppercase italic">Archivo .EX5 para MetaTrader 5</div>
                                                 </div>
-                                                <span className="text-base group-hover:translate-x-0.5 transition-transform font-none">📥</span>
+                                                <span className="text-xl group-hover:translate-x-1 transition-transform font-none">📥</span>
                                             </Button>
                                         </a>
                                     )}
                                 </div>
                             </div>
 
-                            <div className="p-4 rounded-xl bg-black/40 border-l-2 border-brand-light shadow-xl">
-                                <p className="text-[8px] text-text-muted/60 uppercase tracking-widest mb-1.5 font-black">Licencia ID</p>
+                            <div className="p-4 rounded-xl bg-black/60 border border-brand/20 shadow-2xl premium-glass">
+                                <div className="flex items-center justify-between mb-3">
+                                    <p className="text-[9px] text-brand-light uppercase tracking-widest font-black flex items-center gap-2">
+                                        <ShieldCheck size={12} /> LICENCIA MT5 COMPLETA
+                                    </p>
+                                    <span className="text-[8px] text-white/40 font-bold uppercase">Copiar para MT5</span>
+                                </div>
                                 <div className="flex items-center gap-2">
-                                    <code className="text-[11px] font-black font-mono text-brand-light select-all break-all tracking-tighter uppercase p-1.5 bg-white/5 rounded flex-1">
+                                    <code className="text-[12px] font-black font-mono text-white select-all break-all tracking-tight uppercase p-3 bg-white/5 rounded-lg border border-white/10 flex-1 shadow-inner">
                                         {purchase.id}
                                     </code>
                                     <Button 
-                                        size="sm" 
-                                        className={`transition-all h-8 w-8 p-0 flex items-center justify-center shrink-0 rounded-md ${copiedId === purchase.id ? 'bg-success text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                                        size="lg" 
+                                        className={`transition-all h-12 w-12 p-0 flex items-center justify-center shrink-0 rounded-xl border-2 ${copiedId === purchase.id ? 'bg-success border-success text-white' : `bg-white/5 ${assetTheme.border} text-white hover:bg-white/20`}`}
                                         onClick={() => onCopy(purchase.id)}
                                     >
-                                        {copiedId === purchase.id ? <CheckCircle2 size={12} /> : <Copy size={12} />}
+                                        {copiedId === purchase.id ? <CheckCircle2 size={20} /> : <Copy size={20} />}
                                     </Button>
                                 </div>
+                                <p className="text-[8px] text-white/30 mt-3 italic text-center uppercase tracking-tighter">
+                                    Introduce este ID en el parámetro "PurchaseID" del bot en MT5 para sincronizar.
+                                </p>
                             </div>
                         </div>
                     </div>

@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     if (!article) return { title: "Artículo no encontrado" };
 
     return {
-        title: `${article.title} | KOPYTRADING Blog`,
+        title: `${article.title} | KopyTrading Blog`,
         description: article.metaDescription,
         keywords: article.keywords.join(", "),
         openGraph: {
@@ -49,7 +49,9 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                     <div className="inline-block px-3 py-1 rounded-full bg-brand/10 border border-brand/20 mb-4">
                         <span className="text-[10px] font-black text-brand-light uppercase tracking-[0.2em]">{article.category}</span>
                     </div>
-                    <h1 className="text-3xl sm:text-5xl font-black text-white mt-1 mb-6 leading-[1.1] tracking-tighter uppercase italic">{article.title}</h1>
+                    <h1 className="text-3xl sm:text-5xl font-black text-white mt-1 mb-6 leading-[1.1] tracking-tighter uppercase italic drop-shadow-2xl">
+                        {article.title}
+                    </h1>
                     <div className="flex flex-wrap items-center justify-center sm:justify-start gap-6 text-[11px] text-text-muted font-bold uppercase tracking-widest">
                         <span className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/5">📅 {article.date}</span>
                         <span className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/5">⏱ {article.readTime}</span>
@@ -57,7 +59,7 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                 </header>
 
                 {/* Article content */}
-                <article className="glass-card border border-white/10 rounded-[2.5rem] p-8 sm:p-14 space-y-10 shadow-2xl relative overflow-hidden bg-white/[0.01]">
+                <article className="glass-card border border-white/10 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-14 space-y-8 sm:space-y-12 shadow-2xl relative overflow-hidden bg-white/[0.01]">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand to-transparent opacity-80" />
                     
                     {contentBlocks.map((block, i) => {

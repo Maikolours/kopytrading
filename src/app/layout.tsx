@@ -111,7 +111,7 @@ export default function RootLayout({
                       <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10 p-0.5 bg-black">
                         <img src="/logo-kopytrading.png" alt="Logo" className="w-full h-full object-cover rounded-[0.5rem]" />
                       </div>
-                      <span className="font-bold text-xl tracking-tighter text-white">KopyTrading</span>
+                      <span className="font-black text-lg sm:text-2xl tracking-tighter uppercase text-white">KopyTrading</span>
                     </div>
                     <p className="text-xs text-text-muted leading-relaxed max-w-xs">
                       Tecnología algorítmica de alta precisión diseñada para traders que buscan consistencia en MetaTrader 5.

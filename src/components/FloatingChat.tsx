@@ -168,7 +168,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
         response: "📈 **Backtest vs Realidad:**\n\nEl backtest es genial para ver si la estrategia funciona en el pasado, pero NO tiene en cuenta la latencia de internet ni los spreads variables del directo. \n\nNo te fíes solo del backtest: prueba el bot **30 días gratis en una cuenta DEMO** de tu broker. Esa es la única prueba real de fuego."
     },
     {
-        keywords: ["diferencia", "copy trading", "copiar", "ea", "expert advisor", "señales", "señal"],
+        keywords: ["diferencia", "KopyTrading", "copiar", "ea", "expert advisor", "señales", "señal"],
         response: "🔄 **¿Nuestros Bots o CopyTrading?**\n\nEn el CopyTrading dependes de otro. Con nuestros **Expert Advisors (EAs)**:\n\n1. El software corre en TU PC o VPS.\n2. Nadie ve tus fondos.\n3. La ejecución es instantánea.\n4. Tú decides cuándo apagarlo o cambiar el riesgo.\n\nEs trading profesional bajo tu control, no una copia a ciegas."
     },
     {
@@ -274,10 +274,9 @@ function speakText(text: string) {
 
     // Forzar pronunciación correcta para que no lo deletree "K O P Y T R A D I N G"
     cleanText = cleanText
-        .replace(/KOPYTRADING/g, 'Copy Trade')
-        .replace(/KopyTrading/gi, 'Copy Trade')
-        .replace(/KopyTrading/gi, 'Copy Trading')
-        .replace(/KopyBot/gi, 'Copy Bot');
+        .replace(/KOPYTRADING/g, 'Kopy Trading')
+        .replace(/KopyTrading/gi, 'Kopy Trading')
+        .replace(/KopyBot/gi, 'Kopy Bot');
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = 'es-ES';

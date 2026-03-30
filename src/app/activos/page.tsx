@@ -1,5 +1,6 @@
 
 import { ResultsGallery } from "@/components/ResultsGallery";
+import { Countdown } from "@/components/Countdown";
 import Link from "next/link";
 import { Metadata } from "next";
 
@@ -15,7 +16,10 @@ const ASSETS = [
     desc: "Nuestro activo estrella. Alta volatilidad y precisión quirúrgica para traders ambiciosos.", 
     icon: "🟡",
     stats: "M15 | +42.5% Histórico",
-    color: "border-yellow-500/30 shadow-yellow-500/5"
+    color: "border-yellow-500/40 shadow-yellow-500/10",
+    theme: "theme-gold",
+    isUpcoming: true,
+    launchDate: "2026-04-15T00:00:00Z"
   },
   { 
     id: "BTCUSD", 
@@ -23,7 +27,10 @@ const ASSETS = [
     desc: "Captura las tendencias institucionales de la criptomoneda líder con nuestro Storm Rider.", 
     icon: "₿",
     stats: "H4/M30 | Explosividad",
-    color: "border-orange-500/30 shadow-orange-500/5"
+    color: "border-purple-500/40 shadow-purple-500/10",
+    theme: "theme-btc",
+    isUpcoming: true,
+    launchDate: "2026-04-20T00:00:00Z"
   },
   { 
     id: "EURUSD", 
@@ -31,7 +38,8 @@ const ASSETS = [
     desc: "El par más líquido del mundo bajo control del algoritmo Precision Flow.", 
     icon: "🇪🇺",
     stats: "H1 | Riesgo Bajo",
-    color: "border-blue-500/30 shadow-blue-500/5"
+    color: "border-emerald-500/40 shadow-emerald-500/10",
+    theme: "theme-eur"
   },
   { 
     id: "USDJPY", 
@@ -39,7 +47,8 @@ const ASSETS = [
     desc: "Especializado en la sesión asiática para capturar rebotes y rangos dinámicos.", 
     icon: "🇯🇵",
     stats: "M30 | Versatilidad",
-    color: "border-red-500/30 shadow-red-500/5"
+    color: "border-red-500/40 shadow-red-500/10",
+    theme: "theme-jpy"
   },
 ];
 
@@ -70,26 +79,38 @@ export default function ActivosPage() {
             No operamos todo el mercado, solo donde la ventaja estadística es real. Descubre los instrumentos que hemos masterizado para ti.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {ASSETS.map((asset, i) => (
               <Link 
                 key={i} 
                 href={`/bots?asset=${asset.id}`}
-                className={`glass-card border-2 ${asset.color} rounded-[1.5rem] p-5 sm:p-8 text-center hover:scale-[1.02] transition-all group relative overflow-hidden flex flex-col items-center justify-between min-h-[300px] sm:min-h-[350px] shadow-2xl`}
+                className={`glass-card border-2 ${asset.color} rounded-[2.5rem] p-6 sm:p-10 text-center hover:scale-[1.05] transition-all group relative overflow-hidden flex flex-col items-center justify-between min-h-[400px] sm:min-h-[450px] shadow-2xl ${asset.theme}`}
               >
+                {asset.isUpcoming && (
+                  <div className="absolute top-8 -right-12 rotate-45 bg-gradient-to-r from-brand to-accent text-white px-14 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] shadow-xl z-20">
+                    Próximo Lanzamiento
+                  </div>
+                )}
 
-                <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[var(--theme-color)]/10 to-transparent pointer-events-none" />
                 
-                <div className="relative z-10">
-                  <div className="text-5xl sm:text-6xl mb-4 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">{asset.icon}</div>
-                  <h3 className="text-white font-black text-xl sm:text-2xl mb-3 group-hover:text-brand-light transition-colors uppercase tracking-tight">{asset.name}</h3>
-                  <p className="text-text-muted text-sm leading-relaxed mb-6 font-light">{asset.desc}</p>
+                <div className="relative z-10 w-full">
+                  <div className="text-6xl sm:text-7xl mb-8 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-700 drop-shadow-[0_0_20px_rgba(var(--glow-color),0.3)]">{asset.icon}</div>
+                  <h3 className="text-white font-black text-2xl sm:text-3xl mb-4 group-hover:text-brand-light transition-colors uppercase tracking-tighter italic">{asset.name}</h3>
+                  <p className="text-text-muted text-sm sm:text-base leading-relaxed mb-8 font-medium opacity-80">{asset.desc}</p>
+                  
+                  {asset.isUpcoming && asset.launchDate && (
+                    <div className="mt-4 flex flex-col items-center gap-3">
+                       <span className="text-[10px] font-black text-brand-light uppercase tracking-widest">Disponible en:</span>
+                       <Countdown targetDate={asset.launchDate} />
+                    </div>
+                  )}
                 </div>
 
-                <div className="relative z-10 w-full pt-6 border-t border-white/5 space-y-4">
-                  <div className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">{asset.stats}</div>
-                  <div className="inline-flex items-center gap-2 text-brand-light font-bold text-xs group-hover:translate-x-1 transition-transform">
-                    Explorar Bots <span className="text-lg">→</span>
+                <div className="relative z-10 w-full pt-8 border-t border-white/10 space-y-5">
+                  <div className="text-[11px] font-black text-white/50 uppercase tracking-[0.3em]">{asset.stats}</div>
+                  <div className="inline-flex items-center gap-3 text-brand-light font-black text-xs uppercase tracking-widest group-hover:translate-x-3 transition-transform">
+                    Explorar Bots <span className="text-xl animate-pulse">→</span>
                   </div>
                 </div>
               </Link>
