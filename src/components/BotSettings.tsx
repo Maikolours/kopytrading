@@ -17,17 +17,24 @@ export function BotSettings({ purchaseId, account, theme, onClose }: BotSettings
     const [settings, setSettings] = useState<any>({
         net_cycle: 5.0,
         hedge_trigger: 3.0,
-        lote_manual: 0.01,
+        lote_manual: 0.08,
         lote_rescate: 0.02,
-        max_dd: 10.0,
-        trailling_stop: 0.0,
+        max_dd: 50.0,
+        trailling_stop: 3.0,
         limit_dist: 500,
         timeframe: "M5",
-        be_trigger: 120,      // NEW v8
-        trailing_start: 180,  // NEW v8
-        max_reentries: 2,     // NEW v8
-        start_hour: 8,        // NEW v8
-        end_hour: 22          // NEW v8
+        be_trigger: 120,      
+        trailing_start: 180,  
+        max_reentries: 2,     
+        start_hour: 8,        
+        end_hour: 22,
+        // Sniper Specific 11.2
+        lkb: 12,
+        b1_be: 7.0, b1_gar: 4.0,
+        b2_be: 8.0, b2_gar: 5.0,
+        gr_be: 8.0, gr_gar: 5.0,
+        casOn: true,
+        autoRA: true
     });
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -199,79 +206,98 @@ export function BotSettings({ purchaseId, account, theme, onClose }: BotSettings
                         />
                     </div>
 
-                    {/* Timeframe */}
+                    {/* --- SNIPER PRECISION SECTION --- */}
+                    <div className="col-span-full pt-6 border-t-2 border-brand-light/30 text-[10px] font-black uppercase tracking-[0.2em] text-brand-light flex items-center gap-3">
+                        <div className="w-2 h-2 bg-brand-light rounded-full animate-pulse" />
+                        Ajustes Sniper v11.2.6
+                    </div>
+
+                    {/* Lookback (LKB) */}
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block">Temporalidad (TF)</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block">Lookback (Horas)</label>
                         <select 
-                            value={settings.timeframe}
-                            onChange={(e) => handleChange('timeframe', e.target.value)}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-black text-xs uppercase focus:border-brand-light/50 outline-none transition-all appearance-none"
+                            value={settings.lkb || 12}
+                            onChange={(e) => handleChange('lkb', parseInt(e.target.value))}
+                            className="w-full bg-brand-light/10 border border-brand-light/20 rounded-xl px-4 py-3 text-white font-black text-xs uppercase focus:border-brand-light/50 outline-none transition-all appearance-none"
                         >
-                            <option value="M1" className="bg-neutral-900">M1 (1 Minuto)</option>
-                            <option value="M5" className="bg-neutral-900">M5 (5 Minutos)</option>
-                            <option value="M15" className="bg-neutral-900">M15 (15 Minutos)</option>
-                            <option value="M30" className="bg-neutral-900">M30 (30 Minutos)</option>
-                            <option value="H1" className="bg-neutral-900">H1 (1 Hora)</option>
+                            <option value="6" className="bg-neutral-900">🚀 6H (Scalping Agresivo)</option>
+                            <option value="12" className="bg-neutral-900">🛡️ 12H (Estándar Sniper)</option>
+                            <option value="24" className="bg-neutral-900">🐢 24H (Swing Alta Precisión)</option>
                         </select>
                     </div>
 
-                    {/* --- SECCIÓN v8 PRICE MASTER --- */}
-                    <div className="col-span-full pt-4 border-t border-white/5 opacity-50 text-[8px] font-bold uppercase tracking-widest text-brand-light">
-                        Parámetros v8 Price Master
-                    </div>
-
-                    {/* BE Trigger */}
+                    {/* Lote Base Sniper */}
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block">Gatillo BE (Puntos)</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block">Lote Sniper Base (InpLots)</label>
                         <input 
                             type="number" 
-                            value={settings.be_trigger || 120}
-                            onChange={(e) => handleChange('be_trigger', parseInt(e.target.value))}
-                            className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-brand-light/50 outline-none transition-all"
+                            step="0.01"
+                            value={settings.lote_manual}
+                            onChange={(e) => handleChange('lote_manual', parseFloat(e.target.value))}
+                            className="w-full bg-brand-light/10 border border-brand-light/20 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-brand-light/50 outline-none transition-all"
                         />
                     </div>
 
-                    {/* Trailing Start */}
+                    {/* Protección B1 */}
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block">Inicio Trailing (Pts)</label>
-                        <input 
-                            type="number" 
-                            value={settings.trailing_start || 180}
-                            onChange={(e) => handleChange('trailing_start', parseInt(e.target.value))}
-                            className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-brand-light/50 outline-none transition-all"
-                        />
-                    </div>
-
-                    {/* Max Re-entries */}
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block">Max Re-entradas</label>
-                        <input 
-                            type="number" 
-                            value={settings.max_reentries || 2}
-                            onChange={(e) => handleChange('max_reentries', parseInt(e.target.value))}
-                            className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-brand-light/50 outline-none transition-all"
-                        />
-                    </div>
-
-                    {/* Sesión Horaria */}
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block">Horario (Inicio-Fin)</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block">Protección B1 (BE | GAR)</label>
                         <div className="flex gap-2">
                             <input 
                                 type="number" 
-                                placeholder="0"
-                                value={settings.start_hour ?? 8}
-                                onChange={(e) => handleChange('start_hour', parseInt(e.target.value))}
-                                className="w-1/2 bg-white/10 border border-white/10 rounded-xl px-2 py-3 text-white font-mono text-sm outline-none transition-all"
+                                value={settings.b1_be || 7.0}
+                                onChange={(e) => handleChange('b1_be', parseFloat(e.target.value))}
+                                className="w-1/2 bg-white/10 border border-white/10 rounded-xl px-3 py-3 text-white font-mono text-xs outline-none"
+                                placeholder="BE"
                             />
                             <input 
                                 type="number" 
-                                placeholder="23"
-                                value={settings.end_hour ?? 22}
-                                onChange={(e) => handleChange('end_hour', parseInt(e.target.value))}
-                                className="w-1/2 bg-white/10 border border-white/10 rounded-xl px-2 py-3 text-white font-mono text-sm outline-none transition-all"
+                                value={settings.b1_gar || 4.0}
+                                onChange={(e) => handleChange('b1_gar', parseFloat(e.target.value))}
+                                className="w-1/2 bg-white/10 border border-white/10 rounded-xl px-3 py-3 text-white font-mono text-xs outline-none"
+                                placeholder="GAR"
                             />
                         </div>
+                    </div>
+
+                    {/* Protección B2/GR */}
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block">Protección B2/GR (BE | GAR)</label>
+                        <div className="flex gap-2">
+                            <input 
+                                type="number" 
+                                value={settings.b2_be || 8.0}
+                                onChange={(e) => handleChange('b2_be', parseFloat(e.target.value))}
+                                className="w-1/2 bg-white/10 border border-white/10 rounded-xl px-3 py-3 text-white font-mono text-xs outline-none"
+                                placeholder="BE"
+                            />
+                            <input 
+                                type="number" 
+                                value={settings.b2_gar || 5.0}
+                                onChange={(e) => handleChange('b2_gar', parseFloat(e.target.value))}
+                                className="w-1/2 bg-white/10 border border-white/10 rounded-xl px-3 py-3 text-white font-mono text-xs outline-none"
+                                placeholder="GAR"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Toggles Sniper */}
+                    <div className="col-span-full grid grid-cols-2 gap-4">
+                        <button 
+                            onClick={() => handleChange('casOn', !settings.casOn)}
+                            className={`py-3 rounded-xl border-2 font-black text-[10px] uppercase tracking-widest transition-all ${
+                                settings.casOn ? 'bg-brand/20 border-brand-light text-brand-light shadow-[0_0_10px_rgba(168,85,247,0.3)]' : 'bg-white/5 border-white/10 text-white/20'
+                            }`}
+                        >
+                            Cascada {settings.casOn ? 'Activada ✅' : 'Apagada ❌'}
+                        </button>
+                        <button 
+                            onClick={() => handleChange('autoRA', !settings.autoRA)}
+                            className={`py-3 rounded-xl border-2 font-black text-[10px] uppercase tracking-widest transition-all ${
+                                settings.autoRA ? 'bg-success/20 border-success/40 text-success shadow-[0_0_10px_rgba(34,197,94,0.3)]' : 'bg-white/5 border-white/10 text-white/20'
+                            }`}
+                        >
+                            Re-Armar {settings.autoRA ? 'Activado ✅' : 'Apagado ❌'}
+                        </button>
                     </div>
                 </div>
 

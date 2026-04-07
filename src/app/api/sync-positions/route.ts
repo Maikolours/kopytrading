@@ -141,14 +141,22 @@ export async function POST(req: Request) {
         // Si el bot propone settings (cambios en el HUD), los guardamos.
         // Siempre devolvemos los settings actuales para que el bot esté sincronizado.
         const DEFAULT_SETTINGS = {
+            // General settings
             net_cycle: 5.0,
             hedge_trigger: 3.0,
-            lote_manual: 0.01,
+            lote_manual: 0.08,
             lote_rescate: 0.02,
             max_dd: 50.0,
-            trailling_stop: 0.0,
+            trailling_stop: 3.0,
             limit_dist: 500,
-            timeframe: "M5"
+            timeframe: "M5",
+            // Sniper Specific (v11.2)
+            lkb: 12,
+            b1_be: 7.0, b1_gar: 4.0,
+            b2_be: 8.0, b2_gar: 5.0,
+            gr_be: 8.0, gr_gar: 5.0,
+            casOn: true,
+            autoRA: true
         };
 
         let currentSettings = null;
