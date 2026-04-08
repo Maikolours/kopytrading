@@ -14,21 +14,42 @@ export async function GET(
 
         const { searchParams } = new URL(req.url);
         const account = searchParams.get("account") || "unknown";
+        const symbol = searchParams.get("symbol")?.toUpperCase();
+        const timeframe = searchParams.get("timeframe")?.toUpperCase();
 
         // @ts-ignore - Handle possible generation delay
-        let settings = await prisma.botSettings.findUnique({
+        let record = await prisma.botSettings.findUnique({
             where: { purchaseId_account: { purchaseId: id, account } }
         });
 
         // FALLBACK: Si pide "unknown" pero hay datos de una cuenta real, servimos esos
-        if (!settings && account === "unknown") {
-            settings = await prisma.botSettings.findFirst({
+        if (!record && account === "unknown") {
+            record = await prisma.botSettings.findFirst({
                 where: { purchaseId: id },
                 orderBy: { updatedAt: 'desc' }
             });
         }
 
-        return NextResponse.json(settings ? settings.settings : {});
+        if (!record) return NextResponse.json({});
+
+        const settings = record.settings as any;
+        
+        // LÓGICA DE MEMORIA TÁCTICA v12.0 (GET)
+        if (symbol && timeframe) {
+            const memoryKey = `${symbol}_${timeframe}`;
+            const memories = settings.memories || {};
+            // Si hay memoria específica la devolvemos, si no, devolvemos los globales
+            if (memories[memoryKey]) {
+                return NextResponse.json({
+                    ...settings,
+                    ...memories[memoryKey],
+                    isMemory: true,
+                    memoryKey
+                });
+            }
+        }
+
+        return NextResponse.json(settings);
     } catch (error) {
         console.error("GET Settings Error:", error);
         return new NextResponse("Error interno", { status: 500 });
@@ -45,15 +66,42 @@ export async function PATCH(
         if (!session?.user) return new NextResponse("No autorizado", { status: 401 });
 
         const body = await req.json();
-        const { account, settings } = body;
+        const { account, settings: newSettings, symbol, timeframe } = body;
 
         if (!account) return new NextResponse("Falta cuenta", { status: 400 });
 
         // @ts-ignore - Handle possible generation delay
+        const existingRecord = await prisma.botSettings.findUnique({
+            where: { purchaseId_account: { purchaseId: id, account: String(account) } }
+        });
+
+        let finalSettings = newSettings;
+
+        // LÓGICA DE MEMORIA TÁCTICA v12.0 (PATCH)
+        if (existingRecord && symbol && timeframe) {
+            const currentSettings = existingRecord.settings as any;
+            const memoryKey = `${symbol.toUpperCase()}_${timeframe.toUpperCase()}`;
+            const memories = currentSettings.memories || {};
+            
+            // Solo guardamos en la memoria específica los campos tácticos
+            const newMemories = {
+                ...memories,
+                [memoryKey]: {
+                    ...newSettings, // Guardamos el estado actual como memoria de este gráfico
+                }
+            };
+            
+            finalSettings = {
+                ...currentSettings,
+                ...newSettings, // También actualizamos el estado "global/último"
+                memories: newMemories
+            };
+        }
+
         const updated = await prisma.botSettings.upsert({
             where: { purchaseId_account: { purchaseId: id, account: String(account) } },
-            update: { settings },
-            create: { purchaseId: id, account: String(account), settings }
+            update: { settings: finalSettings },
+            create: { purchaseId: id, account: String(account), settings: finalSettings }
         });
 
         return NextResponse.json(updated);

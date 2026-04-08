@@ -195,22 +195,47 @@ export async function POST(req: Request) {
                 where: { purchaseId_account: { purchaseId: officialPurchaseId, account: String(account) } }
             });
 
-            const baseSettings = existingRecord ? (existingRecord.settings as any) : DEFAULT_SETTINGS;
+            const rawSettings = existingRecord ? (existingRecord.settings as any) : DEFAULT_SETTINGS;
             
+            // LÓGICA DE MEMORIA TÁCTICA v12.0 (Safe-JSON)
+            // Estructura: { ...globalSettings, memories: { "BTCUSD_M15": { ... }, "XAUUSD_H1": { ... } } }
+            const symbol = (body.symbol || "UNKNOWN").toUpperCase();
+            const timeframe = (body.tf || body.timeframe || "M5").toUpperCase();
+            const memoryKey = `${symbol}_${timeframe}`;
+            
+            const memories = rawSettings.memories || {};
+            const specificMemory = memories[memoryKey] || {};
+
             // Unificamos settings propuestos por el bot + telemetría
+            // Prioridad: 1. Body (Cambio manual web), 2. Memoria específica, 3. Globales
             const updatedSettings = {
-                ...baseSettings,
+                ...rawSettings,
                 ...(body.proposedSettings || {}),
                 ...telemetry,
-                balance: telemetry.balance, // Explicit reinforcement
+                balance: telemetry.balance,
                 equity: telemetry.equity,
                 pnl_today: telemetry.pnl_today,
-                // Conservar campos específicos del Sniper si vienen en la raíz
-                lots: Number(body.lots) || baseSettings.lots,
-                casOn: (body.cascada !== undefined || body.casOn !== undefined) ? (body.cascada === true || body.cascada === "true" || body.casOn === true || body.casOn === "true") : baseSettings.casOn,
-                giroOn: (body.giro !== undefined || body.giroOn !== undefined) ? (body.giro === true || body.giro === "true" || body.giroOn === true || body.giroOn === "true") : baseSettings.giroOn,
-                fearOn: (body.fear !== undefined || body.fearOn !== undefined) ? (body.fear === true || body.fear === "true" || body.fearOn === true || body.fearOn === "true") : baseSettings.fearOn,
+                lots: Number(body.lots) || rawSettings.lots || 0.08,
+                casOn: (body.cascada !== undefined || body.casOn !== undefined) ? (body.cascada === true || body.cascada === "true" || body.casOn === true || body.casOn === "true") : rawSettings.casOn,
+                giroOn: (body.giro !== undefined || body.giroOn !== undefined) ? (body.giro === true || body.giro === "true" || body.giroOn === true || body.giroOn === "true") : rawSettings.giroOn,
+                fearOn: (body.fear !== undefined || body.fearOn !== undefined) ? (body.fear === true || body.fear === "true" || body.fearOn === true || body.fearOn === "true") : rawSettings.fearOn,
             };
+
+            // Guardamos la versión específica en su "cajón" de memoria
+            const newMemories = {
+                ...memories,
+                [memoryKey]: {
+                    ...specificMemory,
+                    lkb: Number(body.lkb) || specificMemory.lkb || rawSettings.lkb,
+                    casOn: updatedSettings.casOn,
+                    giroOn: updatedSettings.giroOn,
+                    b1_be: Number(body.b1_be) || specificMemory.b1_be || rawSettings.b1_be,
+                    b1_gar: Number(body.b1_gar) || specificMemory.b1_gar || rawSettings.b1_gar,
+                    // ... otros ajustes que deben persistir por gráfico
+                }
+            };
+
+            updatedSettings.memories = newMemories;
 
             currentSettings = await prisma.botSettings.upsert({
                 where: { purchaseId_account: { purchaseId: officialPurchaseId, account: String(account) } },

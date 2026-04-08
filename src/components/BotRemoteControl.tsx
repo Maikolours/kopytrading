@@ -61,7 +61,10 @@ export function BotRemoteControl({
     const fetchBotData = async () => {
         setRefreshing(true);
         try {
-            const res = await fetch(`/api/purchase/${purchaseId}/settings?account=${account}`);
+            // Pasamos symbol y tf si están disponibles en el estado previo
+            const symbolParam = botData?.symbol ? `&symbol=${botData.symbol}` : '';
+            const tfParam = botData?.tf ? `&timeframe=${botData.tf}` : '';
+            const res = await fetch(`/api/purchase/${purchaseId}/settings?account=${account}${symbolParam}${tfParam}`);
             if (res.ok) {
                 const data = await res.json();
                 setBotData(data);
@@ -83,7 +86,14 @@ export function BotRemoteControl({
             const res = await fetch("/api/remote-control", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ purchaseId, command, value })
+                body: JSON.stringify({ 
+                    purchaseId, 
+                    command, 
+                    value,
+                    // Enviamos contexto para que la orden sepa a qué memoria afecta
+                    symbol: botData?.symbol,
+                    timeframe: botData?.tf
+                })
             });
 
             if (res.ok) {
@@ -116,8 +126,15 @@ export function BotRemoteControl({
                             <Activity size={12} className={isActualOnline ? 'animate-pulse' : ''} />
                         </div>
                         <div>
-                            <h4 className="text-[9px] font-black uppercase tracking-wider text-white/90 leading-none">Estatus v11.3.16</h4>
-                            <p className="text-[7px] text-white/40 font-bold uppercase tracking-widest leading-none mt-1 truncate max-w-[100px]">{botName}</p>
+                            <h4 className="text-[9px] font-black uppercase tracking-wider text-white/90 leading-none">Estatus v12.0 Elite</h4>
+                            <div className="flex flex-col gap-0.5 mt-1">
+                                <p className="text-[7px] text-white/40 font-bold uppercase tracking-widest leading-none truncate max-w-[100px]">{botName}</p>
+                                {botData?.symbol && (
+                                    <p className="text-[6px] font-black text-brand-light/80 uppercase tracking-tighter leading-none flex items-center gap-0.5">
+                                        <Clock size={6} /> {botData.symbol} {botData.tf}
+                                    </p>
+                                )}
+                            </div>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
