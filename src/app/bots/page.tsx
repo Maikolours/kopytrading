@@ -31,10 +31,10 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
 
     const categories = [
         { id: "", label: "Todos" },
-        { id: "BTCUSD", label: "Bitcoin" },
-        { id: "XAUUSD", label: "Oro" },
-        { id: "EURUSD", label: "Euro" },
-        { id: "USDJPY", label: "Yen" }
+        { id: "BTCUSD", label: "Storm Rider" },
+        { id: "XAUUSD", label: "La Ametralladora" },
+        { id: "EURUSD", label: "Euro Precision" },
+        { id: "USDJPY", label: "Ninja Ghost" }
     ];
 
     // Helper to map DB names to the requested specific branding
