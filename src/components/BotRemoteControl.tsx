@@ -116,7 +116,7 @@ export function BotRemoteControl({
                             <Activity size={12} className={isActualOnline ? 'animate-pulse' : ''} />
                         </div>
                         <div>
-                            <h4 className="text-[9px] font-black uppercase tracking-wider text-white/90 leading-none">Estatus</h4>
+                            <h4 className="text-[9px] font-black uppercase tracking-wider text-white/90 leading-none">Estatus v11.3.16</h4>
                             <p className="text-[7px] text-white/40 font-bold uppercase tracking-widest leading-none mt-1 truncate max-w-[100px]">{botName}</p>
                         </div>
                     </div>
@@ -234,13 +234,17 @@ export function BotRemoteControl({
                     <div className="grid grid-cols-2 gap-3">
                         <div className="col-span-2 space-y-1 mb-1">
                             <p className="text-[7px] font-black text-white/40 uppercase tracking-widest pl-1">Lookback (HTF)</p>
-                            <div className="grid grid-cols-5 gap-1">
+                            <div className="flex flex-wrap gap-1.5">
                                 {[1, 4, 6, 12, 24].map((h) => (
                                     <Button 
                                         key={h}
                                         variant="outline"
                                         size="sm"
-                                        className={`text-[9px] font-black ${botData?.lkb === h ? 'bg-brand/20 border-brand-light text-brand-light' : 'bg-white/5 border-white/10'}`}
+                                        className={`text-[10px] font-black flex-1 min-w-[45px] transition-all duration-300 ${
+                                            Number(botData?.lkb) === h 
+                                            ? 'bg-brand/30 border-brand-light text-brand-light shadow-[0_0_10px_rgba(36,206,203,0.2)]' 
+                                            : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10'
+                                        }`}
                                         onClick={() => sendCommand("SET_LOOKBACK", h.toString())}
                                     >
                                         {h}H
