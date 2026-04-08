@@ -137,11 +137,8 @@ export async function POST(req: Request) {
             }
         }
 
-        // 4. SINCRO DE CONFIGURACIÓN (v7.5)
-        // Si el bot propone settings (cambios en el HUD), los guardamos.
-        // Siempre devolvemos los settings actuales para que el bot esté sincronizado.
+        // 4. SINCRO DE CONFIGURACIÓN Y TELEMETRÍA (v11.5)
         const DEFAULT_SETTINGS = {
-            // General settings
             net_cycle: 5.0,
             hedge_trigger: 3.0,
             lote_manual: 0.08,
@@ -150,7 +147,6 @@ export async function POST(req: Request) {
             trailling_stop: 3.0,
             limit_dist: 500,
             timeframe: "M5",
-            // Sniper Specific (v11.2)
             lkb: 12,
             b1_be: 7.0, b1_gar: 4.0,
             b2_be: 8.0, b2_gar: 5.0,
@@ -159,32 +155,46 @@ export async function POST(req: Request) {
             autoRA: true
         };
 
+        const telemetry = {
+            balance: Number(body.balance) || 0,
+            equity: Number(body.equity) || 0,
+            pnl_today: Number(body.pnl_today) || 0,
+            lkb: Number(body.lkb) || 12,
+            trend: body.trend || "UNKNOWN",
+            armed: body.armed === true || body.armed === "true",
+            isOnline: true,
+            lastUpdate: new Date().toISOString()
+        };
+
         let currentSettings = null;
         try {
-            if (body.proposedSettings) {
-                currentSettings = await prisma.botSettings.upsert({
-                    where: { purchaseId_account: { purchaseId, account: String(account) } },
-                    update: { settings: body.proposedSettings },
-                    create: { purchaseId, account: String(account), settings: body.proposedSettings }
-                });
-            } else {
-                currentSettings = await prisma.botSettings.findUnique({
-                    where: { purchaseId_account: { purchaseId, account: String(account) } }
-                });
-                
-                // Si no hay settings aún, los creamos con los valores por defecto
-                if (!currentSettings) {
-                    currentSettings = await prisma.botSettings.create({
-                        data: {
-                            purchaseId,
-                            account: String(account),
-                            settings: DEFAULT_SETTINGS
-                        }
-                    });
-                }
-            }
+            // Buscamos settings existentes
+            const existingRecord = await prisma.botSettings.findUnique({
+                where: { purchaseId_account: { purchaseId, account: String(account) } }
+            });
+
+            const baseSettings = existingRecord ? (existingRecord.settings as any) : DEFAULT_SETTINGS;
+            
+            // Unificamos settings propuestos por el bot + telemetría
+            const updatedSettings = {
+                ...baseSettings,
+                ...(body.proposedSettings || {}),
+                ...telemetry,
+                // Conservar campos específicos del Sniper si vienen en la raíz
+                lots: Number(body.lots) || baseSettings.lots,
+                casOn: body.cascada !== undefined ? (body.cascada === true || body.cascada === "true") : baseSettings.casOn,
+                giroOn: body.giro !== undefined ? (body.giro === true || body.giro === "true") : baseSettings.giroOn,
+                fearOn: body.fear !== undefined ? (body.fear === true || body.fear === "true") : baseSettings.fearOn,
+            };
+
+            currentSettings = await prisma.botSettings.upsert({
+                where: { purchaseId_account: { purchaseId, account: String(account) } },
+                update: { settings: updatedSettings },
+                create: { purchaseId, account: String(account), settings: updatedSettings }
+            });
+
         } catch (sErr) {
-            console.error("Error syncing settings:", sErr);
+            console.error("Error syncing settings/telemetry:", sErr);
         }
 
         return NextResponse.json({ 

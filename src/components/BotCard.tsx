@@ -178,6 +178,7 @@ export const BotCard = memo(function BotCard({
                                     <BotRemoteControl 
                                         purchaseId={purchase.id} 
                                         botName={purchase.botProduct.name} 
+                                        account={purchase.activePositions?.[0]?.account || "unknown"}
                                         isOnline={purchase.lastSync && (new Date().getTime() - new Date(purchase.lastSync).getTime()) < 150000}
                                         theme={theme}
                                     />
