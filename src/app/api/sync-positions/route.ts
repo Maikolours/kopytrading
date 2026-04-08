@@ -76,7 +76,7 @@ export async function POST(req: Request) {
         }
 
         // VALIDACIÓN DE CRUCE: Verificar que el instrumento coincide (ej: XAUUSD no puede entrar en un bot de BTC)
-        const botSymbol = (positions && positions.length > 0 ? positions[0].symbol : (body.symbol || "XAUUSD")).toUpperCase();
+        const botSymbol = (positions && positions.length > 0 ? positions[0].symbol : (body.symbol || purchase.botProduct.instrument || "XAUUSD")).toUpperCase();
         const expectedInstrument = (purchase.botProduct.instrument || "").toUpperCase();
 
         if (expectedInstrument && !botSymbol.includes(expectedInstrument) && !expectedInstrument.includes(botSymbol)) {

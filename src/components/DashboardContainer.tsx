@@ -63,11 +63,11 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
             const instrument = (p.botProduct?.instrument || "").toUpperCase();
             let key = "Otros";
             
-            if (instrument.includes("BTC") || instrument.includes("BITCOIN") || name.includes("BITCOIN")) key = "BTC (Bitcoin)";
-            else if (instrument.includes("XAU") || instrument.includes("GOLD") || instrument.includes("ORO")) key = "GOLD (Oro)";
-            else if (instrument.includes("EUR") || name.includes("EURO")) key = "EUR (Euro)";
-            else if (instrument.includes("JPY") || name.includes("YEN")) key = "JPY (Yen)";
-            else if (name.includes("EVOLUTION")) key = "GOLD (Oro)"; // Fallback para los que solo tengan Evolution en el nombre
+            if (instrument.includes("BTC") || instrument.includes("BITCOIN") || name.includes("BITCOIN")) key = "Storm Rider ⚡";
+            else if (instrument.includes("XAU") || instrument.includes("GOLD") || instrument.includes("ORO")) key = "La Ametralladora 🔥";
+            else if (instrument.includes("EUR") || name.includes("EURO")) key = "Euro Precision 🎯";
+            else if (instrument.includes("JPY") || name.includes("YEN")) key = "Ninja Ghost 🥷";
+            else if (name.includes("EVOLUTION")) key = "La Ametralladora 🔥"; 
             
             if (!groups[key]) groups[key] = [];
             groups[key].push(p);
