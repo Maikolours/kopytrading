@@ -11,9 +11,10 @@ interface BotSettingsProps {
     account: string;
     theme: any;
     onClose?: () => void;
+    compact?: boolean;
 }
 
-export function BotSettings({ purchaseId, account, theme, onClose }: BotSettingsProps) {
+export function BotSettings({ purchaseId, account, theme, onClose, compact }: BotSettingsProps) {
     const [settings, setSettings] = useState<any>({
         net_cycle: 5.0,
         hedge_trigger: 3.0,
@@ -101,12 +102,12 @@ export function BotSettings({ purchaseId, account, theme, onClose }: BotSettings
         <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-6"
+            className={compact ? "" : "space-y-6"}
         >
-            <div className={`p-6 rounded-2xl bg-black/60 border-2 ${theme.border} shadow-2xl relative overflow-hidden group`}>
+            <div className={compact ? `p-4 rounded-xl bg-black/40 border ${theme.border} relative overflow-hidden` : `p-6 rounded-2xl bg-black/60 border-2 ${theme.border} shadow-2xl relative overflow-hidden group`}>
                 <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-10 pointer-events-none`} />
                 
-                <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
+                <div className={`flex items-center justify-between ${compact ? 'mb-4' : 'mb-6'} border-b border-white/5 pb-4`}>
                     <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg bg-white/5 border border-white/10 ${theme.accent}`}>
                             <Settings2 size={20} />

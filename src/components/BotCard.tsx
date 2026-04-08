@@ -7,8 +7,9 @@ import { BotRemoteControl } from "./BotRemoteControl";
 import { SyncStatus } from "./SyncStatus";
 import { CleanupButton } from "./CleanupButton";
 import { BotSettings } from "./BotSettings";
-import { Copy, CheckCircle2, ShieldCheck, Settings2 } from "lucide-react";
+import { Copy, CheckCircle2, ShieldCheck, Settings2, BarChart3 } from "lucide-react";
 import { useState } from "react";
+import TradingViewChart from "./TradingViewChart";
 
 interface BotCardProps {
     baseName: string;
@@ -184,39 +185,62 @@ export const BotCard = memo(function BotCard({
                         </div>
 
                         <div className="space-y-4">
-                            <div className="p-3 rounded-xl bg-gradient-to-br from-white/5 to-transparent border border-white/5 relative">
-                                <h4 className="text-[8px] font-black uppercase tracking-widest text-white/40 mb-2">Instalación</h4>
-                                <div className="flex flex-col gap-1">
-                                    {isMaintenance ? (
-                                        <div className={`bg-white/5 border ${assetTheme.border} p-2 rounded-lg text-center backdrop-blur-xl animate-pulse`}>
-                                            <p className={`text-[9px] font-black ${assetTheme.text} uppercase tracking-widest mb-0.5`}>Mantenimiento</p>
-                                        </div>
-                                    ) : (
-                                        <a href={`/api/download/${purchase.id}?type=ex5`} className="group">
-                                            <Button fullWidth className="bg-white text-black hover:bg-white/90 font-black tracking-tight flex items-center justify-between px-3 py-2 h-auto rounded-lg text-[10px]">
-                                                <span>Descargar Bot (.EX5)</span>
-                                                <span className="text-sm">📥</span>
-                                            </Button>
-                                        </a>
-                                    )}
+                            <div className="hidden lg:block">
+                                <TradingViewChart />
+                                <div className="mt-2 flex items-center justify-between px-2">
+                                    <span className="text-[7px] font-black text-white/20 uppercase tracking-[0.2em] flex items-center gap-1">
+                                        <BarChart3 size={8} /> LIVE MARKET DATA (BINANCE)
+                                    </span>
+                                    <span className="text-[7px] font-black text-success/40 uppercase tracking-widest animate-pulse">
+                                        Streaming Active
+                                    </span>
                                 </div>
                             </div>
 
-                            <div className="p-3 rounded-xl bg-black/60 border border-brand/20 shadow-xl premium-glass">
-                                <p className="text-[8px] text-brand-light uppercase tracking-widest font-black mb-2 flex items-center gap-2">
-                                    <ShieldCheck size={10} /> LICENCIA MT5
-                                </p>
-                                <div className="flex items-center gap-1.5">
-                                    <code className="text-[10px] font-black font-mono text-white select-all break-all tracking-tight uppercase p-2 bg-white/5 rounded border border-white/10 flex-1">
-                                        {purchase.id}
-                                    </code>
-                                    <Button 
-                                        size="sm" 
-                                        className={`h-9 w-9 p-0 flex items-center justify-center shrink-0 rounded-lg border ${copiedId === purchase.id ? 'bg-success border-success text-white' : `bg-white/5 ${assetTheme.border} text-white`}`}
-                                        onClick={() => onCopy(purchase.id)}
-                                    >
-                                        <Copy size={14} />
-                                    </Button>
+                            <div className="grid grid-cols-1 gap-4">
+                                <div className="p-3 rounded-xl bg-gradient-to-br from-white/5 to-transparent border border-white/5 relative">
+                                    <h4 className="text-[8px] font-black uppercase tracking-widest text-white/40 mb-2">Instalación</h4>
+                                    <div className="flex flex-col gap-1">
+                                        {isMaintenance ? (
+                                            <div className={`bg-white/5 border ${assetTheme.border} p-2 rounded-lg text-center backdrop-blur-xl animate-pulse`}>
+                                                <p className={`text-[9px] font-black ${assetTheme.text} uppercase tracking-widest mb-0.5`}>Mantenimiento</p>
+                                            </div>
+                                        ) : (
+                                            <a href={`/api/download/${purchase.id}?type=ex5`} className="group">
+                                                <Button fullWidth className="bg-white text-black hover:bg-white/90 font-black tracking-tight flex items-center justify-between px-3 py-2 h-auto rounded-lg text-[10px]">
+                                                    <span>Descargar Bot (.EX5)</span>
+                                                    <span className="text-sm">📥</span>
+                                                </Button>
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="p-3 rounded-xl bg-black/60 border border-brand/20 shadow-xl premium-glass">
+                                    <p className="text-[8px] text-brand-light uppercase tracking-widest font-black mb-2 flex items-center gap-2">
+                                        <ShieldCheck size={10} /> LICENCIA MT5
+                                    </p>
+                                    <div className="flex items-center gap-1.5">
+                                        <code className="text-[10px] font-black font-mono text-white select-all break-all tracking-tight uppercase p-2 bg-white/5 rounded border border-white/10 flex-1">
+                                            {purchase.id}
+                                        </code>
+                                        <Button 
+                                            size="sm" 
+                                            className={`h-9 w-9 p-0 flex items-center justify-center shrink-0 rounded-lg border ${copiedId === purchase.id ? 'bg-success border-success text-white' : `bg-white/5 ${assetTheme.border} text-white`}`}
+                                            onClick={() => onCopy(purchase.id)}
+                                        >
+                                            <Copy size={14} />
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="lg:hidden">
+                                <TradingViewChart />
+                                <div className="mt-2 text-center">
+                                    <span className="text-[7px] font-black text-white/20 uppercase tracking-[0.2em]">
+                                        Gráfico en Tiempo Real
+                                    </span>
                                 </div>
                             </div>
                         </div>

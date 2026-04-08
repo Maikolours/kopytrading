@@ -140,6 +140,7 @@ export function BotRemoteControl({
                             account={account} 
                             theme={theme}
                             onClose={() => setShowSettings(false)}
+                            compact
                         />
                     </div>
                 )}
@@ -166,15 +167,15 @@ export function BotRemoteControl({
                             {botData?.trend === "BULL" ? (
                                 <>
                                     <ArrowUpRight className="text-emerald-400" size={14} />
-                                    <span className="text-[10px] font-black text-emerald-400 uppercase">Bullish</span>
+                                    <span className="text-[10px] font-black text-emerald-400 uppercase">Alcista</span>
                                 </>
                             ) : botData?.trend === "BEAR" ? (
                                 <>
                                     <ArrowDownRight className="text-rose-400" size={14} />
-                                    <span className="text-[10px] font-black text-rose-400 uppercase">Bearish</span>
+                                    <span className="text-[10px] font-black text-rose-400 uppercase">Bajista</span>
                                 </>
                             ) : (
-                                <span className="text-[10px] font-black text-white/20 uppercase italic">Analyzando...</span>
+                                <span className="text-[10px] font-black text-white/20 uppercase italic font-mono tracking-tighter">Analizando...</span>
                             )}
                         </div>
                     </div>
@@ -254,7 +255,7 @@ export function BotRemoteControl({
                 <div className="grid grid-cols-2 gap-2 mb-4">
                     <Button 
                         variant="outline" 
-                        className="border-white/10 bg-white/5 hover:bg-white/10 text-[9px] font-black uppercase tracking-widest py-2.5 text-rose-400"
+                        className="border-white/10 bg-white/5 hover:bg-white/10 text-[9px] font-black uppercase tracking-widest py-2 text-rose-400"
                         onClick={() => sendCommand("PAUSE")}
                         loading={loading === "PAUSE"}
                     >
@@ -262,7 +263,7 @@ export function BotRemoteControl({
                     </Button>
                     <Button 
                         variant="outline" 
-                        className="border-white/10 bg-white/5 hover:bg-white/10 text-[9px] font-black uppercase tracking-widest py-2.5 text-emerald-400"
+                        className="border-white/10 bg-white/5 hover:bg-white/10 text-[9px] font-black uppercase tracking-widest py-2 text-emerald-400"
                         onClick={() => sendCommand("RESUME")}
                         loading={loading === "RESUME"}
                     >
