@@ -15,7 +15,11 @@ import {
     ArrowUpRight,
     ArrowDownRight,
     RefreshCw,
-    Settings2
+    Settings2,
+    Lock,
+    Unlock,
+    Settings,
+    Clock
 } from "lucide-react";
 import { BotSettings } from "./BotSettings";
 
@@ -42,6 +46,10 @@ export function BotRemoteControl({
     const [refreshing, setRefreshing] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
 
+    // Nuevos estados para parámetros de riesgo
+    const [beValue, setBeValue] = useState<string>("");
+    const [trValue, setTrValue] = useState<string>("");
+
     const isSniper = botName.toLowerCase().includes("sniper") || botName.toLowerCase().includes("v11");
 
     useEffect(() => {
@@ -57,6 +65,9 @@ export function BotRemoteControl({
             if (res.ok) {
                 const data = await res.json();
                 setBotData(data);
+                // Sincronizar inputs locales si no estamos editando
+                if (loading !== "SET_BE") setBeValue(data.b1_be?.toString() || "");
+                if (loading !== "SET_TR") setTrValue(data.trailling_val?.toString() || "3.0");
             }
         } catch (error) {
             console.error("Error fetching bot data:", error);
@@ -76,7 +87,7 @@ export function BotRemoteControl({
             });
 
             if (res.ok) {
-                setStatusMsg(`Orden "${command}" enviada con éxito.`);
+                setStatusMsg(`Orden enviada con éxito.`);
                 setTimeout(() => setStatusMsg(null), 3000);
             } else {
                 setStatusMsg("Error al enviar la orden.");
@@ -129,18 +140,6 @@ export function BotRemoteControl({
                     </div>
                 </div>
 
-                {showSettings && (
-                    <div className="mb-4">
-                        <BotSettings 
-                            purchaseId={purchaseId} 
-                            account={account} 
-                            theme={theme}
-                            onClose={() => setShowSettings(false)}
-                            compact
-                        />
-                    </div>
-                )}
-
                 <div className="grid grid-cols-2 gap-2 mb-4">
                     <div className="col-span-2 p-3 rounded-lg bg-white/5 border border-white/10 flex items-center justify-between">
                         <div className="space-y-0.5">
@@ -186,31 +185,93 @@ export function BotRemoteControl({
                     </div>
                 </div>
 
+                {/* Parámetros de Riesgo (Nuevos) */}
+                <div className="mb-4 bg-white/5 rounded-xl border border-white/5 p-3 space-y-3">
+                    <p className="text-[8px] font-black uppercase text-white/40 tracking-widest border-b border-white/5 pb-1 flex items-center gap-2">
+                        <ShieldAlert size={10} className="text-brand-light" /> Parámetros Tácticos
+                    </p>
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-1">
+                            <label className="text-[7px] font-black text-white/40 uppercase">Break-Even (USD)</label>
+                            <div className="flex gap-1">
+                                <input 
+                                    type="number" 
+                                    value={beValue} 
+                                    onChange={(e) => setBeValue(e.target.value)}
+                                    className="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px] font-bold text-white w-full outline-none focus:border-brand-light/40 transition-colors"
+                                />
+                                <Button 
+                                    size="sm" 
+                                    variant="outline" 
+                                    loading={loading === "SET_BE"}
+                                    onClick={() => sendCommand("SET_BE", beValue)}
+                                    className="px-2"
+                                >OK</Button>
+                            </div>
+                        </div>
+                        <div className="space-y-1">
+                            <label className="text-[7px] font-black text-white/40 uppercase">Trailing (USD)</label>
+                            <div className="flex gap-1">
+                                <input 
+                                    type="number" 
+                                    value={trValue} 
+                                    onChange={(e) => setTrValue(e.target.value)}
+                                    className="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px] font-bold text-white w-full outline-none focus:border-brand-light/40 transition-colors"
+                                />
+                                <Button 
+                                    size="sm" 
+                                    variant="outline" 
+                                    loading={loading === "SET_TR"}
+                                    onClick={() => sendCommand("SET_TR", trValue)}
+                                    className="px-2"
+                                >OK</Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div className="space-y-3 mb-6">
                     <div className="grid grid-cols-2 gap-3">
+                        <div className="col-span-2 space-y-1 mb-1">
+                            <p className="text-[7px] font-black text-white/40 uppercase tracking-widest pl-1">Lookback (HTF)</p>
+                            <div className="grid grid-cols-5 gap-1">
+                                {[1, 4, 6, 12, 24].map((h) => (
+                                    <Button 
+                                        key={h}
+                                        variant="outline"
+                                        size="sm"
+                                        className={`text-[9px] font-black ${botData?.lkb === h ? 'bg-brand/20 border-brand-light text-brand-light' : 'bg-white/5 border-white/10'}`}
+                                        onClick={() => sendCommand("SET_LOOKBACK", h.toString())}
+                                    >
+                                        {h}H
+                                    </Button>
+                                ))}
+                            </div>
+                        </div>
+
                         <Button 
                             variant="outline" 
                             className={`py-3 rounded-lg border flex flex-col gap-0.5 h-auto transition-all ${
-                                botData?.casOn 
+                                (botData?.casOn || botData?.cascada) 
                                 ? 'bg-brand/10 border-brand-light text-brand-light' 
                                 : 'bg-white/5 border-white/10 text-white/20'
                             }`}
-                            onClick={() => sendCommand("SET_SETTING", JSON.stringify({ casOn: !botData?.casOn }))}
+                            onClick={() => sendCommand("SET_SETTING", JSON.stringify({ casOn: !(botData?.casOn || botData?.cascada) }))}
                         >
-                            <span className="text-[9px] font-black tracking-widest uppercase">Cascada {botData?.casOn ? 'ON' : 'OFF'}</span>
+                            <span className="text-[9px] font-black tracking-widest uppercase">Cascada {(botData?.casOn || botData?.cascada) ? 'ON' : 'OFF'}</span>
                         </Button>
 
                         <Button 
                             variant="outline" 
                             className={`py-3 rounded-lg border flex flex-col gap-0.5 h-auto transition-all ${
-                                botData?.giroOn
+                                (botData?.giroOn || botData?.giro)
                                 ? 'bg-success/10 border-success/40 text-success' 
                                 : 'bg-white/5 border-white/10 text-white/20'
                             }`}
                             onClick={() => sendCommand("SET_SETTING", JSON.stringify({ giroOn: !(botData?.giroOn || botData?.giro) }))}
                         >
                             <RotateCcw size={14} />
-                            <span className="text-[9px] font-black tracking-widest uppercase">Giro: {botData?.giroOn ? 'ON' : 'OFF'}</span>
+                            <span className="text-[9px] font-black tracking-widest uppercase">Giro: {(botData?.giroOn || botData?.giro) ? 'ON' : 'OFF'}</span>
                         </Button>
                     </div>
                 </div>

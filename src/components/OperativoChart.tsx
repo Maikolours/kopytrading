@@ -35,13 +35,16 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
         });
         priceLinesRef.current = [];
 
-        if (data.p50 && data.p50 > 0) {
+        const levelsData = data.settings || data; // Handle both wrapped and unwrapped data
+        const p50 = Number(levelsData.p50);
+        
+        if (p50 && p50 > 0) {
             const levels = [
-                { price: data.p100, color: '#9ca3af', label: 'ORIGEN [100]' },
-                { price: data.p78, color: '#ef4444', label: 'STOP [78.6]' },
-                { price: data.p62, color: '#f59e0b', label: 'ENTRY [61.8]' },
-                { price: data.p50, color: '#3b82f6', label: 'GATILLO [50]' },
-                { price: data.p00, color: '#10b981', label: 'TARGET [0.0]' },
+                { price: Number(levelsData.p100), color: 'rgba(255,255,255,0.4)', label: 'ORIGEN [100]' },
+                { price: Number(levelsData.p78), color: '#ef4444', label: 'STOP [78.6]' },
+                { price: Number(levelsData.p62), color: '#f59e0b', label: 'ENTRY [61.8]' },
+                { price: p50, color: '#3b82f6', label: 'GATILLO [50]' },
+                { price: Number(levelsData.p00), color: '#10b981', label: 'TARGET [0.0]' },
             ];
 
             levels.forEach(lvl => {
