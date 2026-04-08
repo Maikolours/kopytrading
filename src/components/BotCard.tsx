@@ -9,6 +9,7 @@ import { CleanupButton } from "./CleanupButton";
 import { Copy, CheckCircle2, ShieldCheck, BarChart3 } from "lucide-react";
 import { useState } from "react";
 import TradingViewChart from "./TradingViewChart";
+import { OperativoChart } from "./OperativoChart";
 
 interface BotCardProps {
     baseName: string;
@@ -51,6 +52,7 @@ export const BotCard = memo(function BotCard({
     let accountTypeColor = hasRealSync ? "bg-success/20 text-success border-success/40" : "bg-orange-500/20 text-orange-400 border-orange-500/40";
     
     const dailyProfit = (purchase.pastTrades || []).reduce((acc: number, t: any) => acc + (Number(t.profit) || 0), 0);
+    const isSniper = purchase.botProduct.name.toLowerCase().includes("v11") || purchase.botProduct.name.toLowerCase().includes("sniper");
 
     return (
         <div className={`animate-in fade-in slide-in-from-bottom-6 duration-700 mb-8 ${assetTheme.class}`}>
@@ -91,7 +93,17 @@ export const BotCard = memo(function BotCard({
                         </div>
 
                         <div className="space-y-4">
-                            <TradingViewChart />
+                            {isSniper ? (
+                                <OperativoChart 
+                                    symbol={purchase.botProduct.instrument}
+                                    purchaseId={purchase.id}
+                                    account={purchase.activePositions?.[0]?.account || "unknown"}
+                                    theme={theme}
+                                />
+                            ) : (
+                                <TradingViewChart />
+                            )}
+                            
                             <div className="p-3 rounded-xl bg-black/60 border border-brand/20 shadow-xl">
                                 <p className="text-[8px] text-brand-light uppercase tracking-widest font-black mb-2 flex items-center gap-2">
                                     LICENCIA MT5

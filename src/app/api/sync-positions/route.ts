@@ -207,9 +207,9 @@ export async function POST(req: Request) {
                 pnl_today: telemetry.pnl_today,
                 // Conservar campos específicos del Sniper si vienen en la raíz
                 lots: Number(body.lots) || baseSettings.lots,
-                casOn: body.cascada !== undefined ? (body.cascada === true || body.cascada === "true") : baseSettings.casOn,
-                giroOn: body.giro !== undefined ? (body.giro === true || body.giro === "true") : baseSettings.giroOn,
-                fearOn: body.fear !== undefined ? (body.fear === true || body.fear === "true") : baseSettings.fearOn,
+                casOn: (body.cascada !== undefined || body.casOn !== undefined) ? (body.cascada === true || body.cascada === "true" || body.casOn === true || body.casOn === "true") : baseSettings.casOn,
+                giroOn: (body.giro !== undefined || body.giroOn !== undefined) ? (body.giro === true || body.giro === "true" || body.giroOn === true || body.giroOn === "true") : baseSettings.giroOn,
+                fearOn: (body.fear !== undefined || body.fearOn !== undefined) ? (body.fear === true || body.fear === "true" || body.fearOn === true || body.fearOn === "true") : baseSettings.fearOn,
             };
 
             currentSettings = await prisma.botSettings.upsert({

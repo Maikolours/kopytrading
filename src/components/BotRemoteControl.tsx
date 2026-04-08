@@ -207,7 +207,7 @@ export function BotRemoteControl({
                                 ? 'bg-success/10 border-success/40 text-success' 
                                 : 'bg-white/5 border-white/10 text-white/20'
                             }`}
-                            onClick={() => sendCommand("SET_SETTING", JSON.stringify({ giroOn: !botData?.giroOn }))}
+                            onClick={() => sendCommand("SET_SETTING", JSON.stringify({ giroOn: !(botData?.giroOn || botData?.giro) }))}
                         >
                             <RotateCcw size={14} />
                             <span className="text-[9px] font-black tracking-widest uppercase">Giro: {botData?.giroOn ? 'ON' : 'OFF'}</span>
