@@ -79,7 +79,10 @@ export async function POST(req: Request) {
         const botSymbol = (positions && positions.length > 0 ? positions[0].symbol : (body.symbol || purchase.botProduct.instrument || "XAUUSD")).toUpperCase();
         const expectedInstrument = (purchase.botProduct.instrument || "").toUpperCase();
 
-        if (expectedInstrument && !botSymbol.includes(expectedInstrument) && !expectedInstrument.includes(botSymbol)) {
+        // 🛡️ OWNER BYPASS: Si es el dueño, permitimos la sincronización aunque el instrumento no coincida perfectamente
+        const isOwner = purchase.userId === "cmmb2z6ml000dvhhoj1s9zmnf" || purchase.userId === "viajaconsakura";
+
+        if (!isOwner && expectedInstrument && !botSymbol.includes(expectedInstrument) && !expectedInstrument.includes(botSymbol)) {
             // Permitir casos especiales (XAUUSD vs GOLD)
             const isXAU = (botSymbol.includes("XAU") || botSymbol.includes("GOLD")) && (expectedInstrument.includes("XAU") || expectedInstrument.includes("GOLD"));
             if (!isXAU) {
