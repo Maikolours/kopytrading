@@ -178,6 +178,12 @@ export async function POST(req: Request) {
             lkb: Number(body.lkb) || 12,
             trend: body.trend || "UNKNOWN",
             armed: body.armed === true || body.armed === "true",
+            // Capture Fibo Levels for charting
+            p00: body.p00 !== undefined ? Number(body.p00) : 0,
+            p50: body.p50 !== undefined ? Number(body.p50) : 0,
+            p62: body.p62 !== undefined ? Number(body.p62) : 0,
+            p78: body.p78 !== undefined ? Number(body.p78) : 0,
+            p100: body.p100 !== undefined ? Number(body.p100) : 0,
             isOnline: true,
             lastUpdate: new Date().toISOString()
         };
@@ -212,13 +218,27 @@ export async function POST(req: Request) {
                 create: { purchaseId: officialPurchaseId, account: String(account), settings: updatedSettings }
             });
 
+            // Reset pending command after returning it
+            if (updatedSettings.pendingCmd && updatedSettings.pendingCmd !== "NONE") {
+                await prisma.botSettings.update({
+                    where: { id: currentSettings.id },
+                    data: {
+                        settings: {
+                            ...updatedSettings,
+                            pendingCmd: "NONE"
+                        }
+                    }
+                });
+            }
+
         } catch (sErr) {
             console.error("Error syncing settings/telemetry:", sErr);
         }
 
         return NextResponse.json({ 
             success: true, 
-            settings: currentSettings?.settings || DEFAULT_SETTINGS 
+            settings: currentSettings?.settings || DEFAULT_SETTINGS,
+            cmd: (currentSettings?.settings as any)?.pendingCmd || "NONE"
         });
     } catch (err: any) {
         console.error("Sync Positions Error:", err);

@@ -15,9 +15,13 @@ import {
     ArrowUpRight,
     ArrowDownRight,
     RefreshCw,
-    Settings2
+    Settings2,
+    Clock,
+    Layout,
+    AlertTriangle
 } from "lucide-react";
 import { BotSettings } from "./BotSettings";
+import OperativoChart from "./OperativoChart";
 
 interface BotRemoteControlProps {
     purchaseId: string;
@@ -43,7 +47,6 @@ export function BotRemoteControl({
     const [showSettings, setShowSettings] = useState(false);
 
     const isSniper = botName.toLowerCase().includes("sniper") || botName.toLowerCase().includes("v11");
-    const isGoldBot = botName.toLowerCase().includes("oro") || botName.toLowerCase().includes("ametralladora");
 
     useEffect(() => {
         fetchBotData();
@@ -66,24 +69,39 @@ export function BotRemoteControl({
         }
     };
 
-    const sendCommand = async (command: string, value?: string) => {
-        setLoading(command);
-        setStatusMsg(null);
+    const sendRemoteCommand = async (cmd: string) => {
+        setLoading(cmd);
         try {
-            const res = await fetch("/api/remote-control", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ purchaseId, command, value })
+            const res = await fetch(`/api/purchase/${purchaseId}/settings`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ account, pendingCmd: cmd })
             });
-
             if (res.ok) {
-                setStatusMsg(`Orden "${command}" enviada con éxito.`);
+                setStatusMsg(`Comando ${cmd} enviado.`);
                 setTimeout(() => setStatusMsg(null), 3000);
-            } else {
-                setStatusMsg("Error al enviar la orden.");
             }
         } catch (error) {
-            setStatusMsg("Error de conexión.");
+            console.error("Command Error:", error);
+        } finally {
+            setLoading(null);
+        }
+    };
+
+    const updateRemoteSetting = async (key: string, value: any) => {
+        setLoading(key);
+        try {
+            const newSettings = { ...botData, [key]: value };
+            const res = await fetch(`/api/purchase/${purchaseId}/settings`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ account, settings: newSettings })
+            });
+            if (res.ok) {
+                setBotData(newSettings);
+            }
+        } catch (error) {
+            console.error("Setting Update Error:", error);
         } finally {
             setLoading(null);
         }
@@ -108,8 +126,8 @@ export function BotRemoteControl({
                             <Activity size={12} className={isActualOnline ? 'animate-pulse' : ''} />
                         </div>
                         <div>
-                            <h4 className="text-[9px] font-black uppercase tracking-wider text-white/90 leading-none">Estatus</h4>
-                            <p className="text-[7px] text-white/40 font-bold uppercase tracking-widest leading-none mt-1 truncate max-w-[100px]">{botName}</p>
+                            <h4 className="text-[9px] font-black uppercase tracking-wider text-white/90 leading-none">Remote Commander</h4>
+                            <p className="text-[7px] text-white/40 font-bold uppercase tracking-widest leading-none mt-1 truncate max-w-[100px]">v11.3.9 Sniper Build</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -122,8 +140,6 @@ export function BotRemoteControl({
                             </div>
                             {refreshing && <RefreshCw size={7} className="animate-spin text-white/20" />}
                         </div>
-                        {/* GEAR BUTTON INTEGRADO */}
-                        <div className="h-4 w-px bg-white/5 mx-1" />
                         <button 
                             onClick={() => setShowSettings(!showSettings)}
                             className={`p-1.5 rounded-md transition-colors ${showSettings ? 'bg-white/20 text-white' : 'text-white/40 hover:text-white'}`}
@@ -145,181 +161,133 @@ export function BotRemoteControl({
                     </div>
                 )}
 
-                {/* Telemetría Live */}
+                {/* GRÁFICO OPERATIVO CON FIBONACCI */}
+                <div className="mb-4">
+                    <OperativoChart 
+                        trend={botData?.trend}
+                        fiboLevels={botData?.p00 !== undefined ? {
+                            p00: botData.p00,
+                            p50: botData.p50,
+                            p62: botData.p62,
+                            p78: botData.p78,
+                            p100: botData.p100
+                        } : undefined}
+                    />
+                </div>
+
+                {/* Telemetría Crucial */}
                 <div className="grid grid-cols-2 gap-2 mb-4">
-                    <div className="col-span-2 p-3 rounded-lg bg-white/5 border border-white/10 flex items-center justify-between">
-                        <div className="space-y-0.5">
-                            <p className="text-[8px] uppercase font-black tracking-widest text-white/40 leading-none">Profit Hoy</p>
-                            <h3 className={`text-xl font-black tracking-tighter flex items-center gap-1.5 ${botData?.pnl_today >= 0 ? 'text-success' : 'text-danger'}`}>
-                                {botData?.pnl_today >= 0 ? <TrendingUp size={18} /> : <TrendingDown size={18} />}
-                                {formatCurrency(botData?.pnl_today || 0)}
-                            </h3>
-                        </div>
-                        <div className="text-right space-y-0.5">
-                            <p className="text-[8px] uppercase font-black tracking-widest text-white/40 leading-none">Equity</p>
-                            <p className="text-xs font-bold text-white/90">{formatCurrency(botData?.equity || 0)}</p>
-                        </div>
+                    <div className="col-span-1 p-2 rounded-lg bg-white/5 border border-white/10 space-y-0.5">
+                        <p className="text-[8px] uppercase font-black tracking-widest text-white/40 leading-none">Profit Hoy</p>
+                        <h3 className={`text-md font-black tracking-tighter ${botData?.pnl_today >= 0 ? 'text-success' : 'text-danger'}`}>
+                            {formatCurrency(botData?.pnl_today || 0)}
+                        </h3>
                     </div>
-
-                    <div className="p-2 rounded-lg bg-white/5 border border-white/5 space-y-0.5">
-                        <p className="text-[8px] uppercase font-black tracking-widest text-white/30 leading-none">Tendencia</p>
-                        <div className="flex items-center gap-1.5">
-                            {botData?.trend === "BULL" ? (
-                                <>
-                                    <ArrowUpRight className="text-emerald-400" size={14} />
-                                    <span className="text-[10px] font-black text-emerald-400 uppercase">Alcista</span>
-                                </>
-                            ) : botData?.trend === "BEAR" ? (
-                                <>
-                                    <ArrowDownRight className="text-rose-400" size={14} />
-                                    <span className="text-[10px] font-black text-rose-400 uppercase">Bajista</span>
-                                </>
-                            ) : (
-                                <span className="text-[10px] font-black text-white/20 uppercase italic font-mono tracking-tighter">Analizando...</span>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="p-2 rounded-lg bg-white/5 border border-white/5 space-y-0.5">
-                        <p className="text-[8px] uppercase font-black tracking-widest text-white/30 leading-none">Motor Sniper</p>
-                        <div className="flex items-center gap-1.5">
-                            <Zap className={botData?.armed ? "text-brand-light" : "text-white/20"} size={14} />
-                            <span className={`text-[10px] font-black uppercase ${botData?.armed ? "text-brand-light" : "text-white/40"}`}>
-                                {botData?.armed ? "ARMADO" : "ESPERA"}
-                            </span>
-                        </div>
+                    <div className="col-span-1 p-2 rounded-lg bg-white/5 border border-white/10 space-y-0.5 text-right">
+                        <p className="text-[8px] uppercase font-black tracking-widest text-white/40 leading-none">Equity</p>
+                        <p className="text-sm font-black text-white/90">{formatCurrency(botData?.equity || 0)}</p>
                     </div>
                 </div>
 
-                {/* Sniper Tactical Layout */}
-                <div className="space-y-3 mb-6">
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-30 text-center">Protocolo de Ejecución</p>
-                    
-                    <div className="grid grid-cols-2 gap-3">
-                        <Button 
-                            variant="outline" 
-                            className={`py-3 rounded-lg border flex flex-col gap-0.5 h-auto transition-all ${
-                                botData?.casOn 
-                                ? 'bg-brand/10 border-brand-light text-brand-light shadow-[0_0_15px_rgba(168,85,247,0.1)]' 
-                                : 'bg-white/5 border-white/10 text-white/20'
-                            }`}
-                            onClick={() => sendCommand("SET_SETTING", JSON.stringify({ casOn: !botData?.casOn }))}
-                            loading={loading === "SET_SETTING" && statusMsg?.includes("casOn")}
-                        >
-                            <Zap size={14} />
-                            <span className="text-[9px] font-black tracking-widest uppercase">Cascada {botData?.casOn ? 'ON' : 'OFF'}</span>
-                        </Button>
-
-                        <Button 
-                            variant="outline" 
-                            className={`py-3 rounded-lg border flex flex-col gap-0.5 h-auto transition-all ${
-                                (isSniper ? botData?.autoRA : botData?.giroOn)
-                                ? 'bg-success/10 border-success/40 text-success shadow-[0_0_15px_rgba(34,197,94,0.1)]' 
-                                : 'bg-white/5 border-white/10 text-white/20'
-                            }`}
-                            onClick={() => {
-                                const key = isSniper ? 'autoRA' : 'giroOn';
-                                sendCommand("SET_SETTING", JSON.stringify({ [key]: !(isSniper ? botData?.autoRA : botData?.giroOn) }));
-                            }}
-                        >
-                            <RotateCcw size={14} />
-                            <span className="text-[9px] font-black tracking-widest uppercase">
-                                {isSniper ? `Re-Arm: ${botData?.autoRA ? 'ON' : 'OFF'}` : `Giro: ${botData?.giroOn ? 'ON' : 'OFF'}`}
-                            </span>
-                        </Button>
-                    </div>
-
-                    {isGoldBot && (
-                        <div className="grid grid-cols-2 gap-3">
-                             <Button 
-                                variant="outline" 
-                                size="sm" 
-                                className={`bg-amber-500/10 border-amber-500/30 hover:bg-amber-500/20 text-[10px] font-black py-4 text-amber-400 ${botData?.fearOn ? 'opacity-100' : 'opacity-50'}`}
-                                onClick={() => sendCommand("SET_SETTING", JSON.stringify({ fearOn: !botData?.fearOn }))}
-                            >
-                                🛡️ MODO MIEDO {botData?.fearOn ? 'ON' : 'OFF'}
-                            </Button>
-                            <Button 
-                                variant="outline" 
-                                size="sm" 
-                                className="bg-emerald-500/10 border-emerald-500/30 hover:bg-emerald-500/20 text-[10px] font-black py-4 text-emerald-400"
-                                onClick={() => sendCommand("CHANGE_MODE", "COSECHA")}
-                            >
-                                🚜 COSECHA YA
-                            </Button>
-                        </div>
-                    )}
-                </div>
-
-                {/* Control de Flujo */}
+                {/* TACTICAL COMMANDS */}
                 <div className="grid grid-cols-2 gap-2 mb-4">
                     <Button 
                         variant="outline" 
-                        className="border-white/10 bg-white/5 hover:bg-white/10 text-[9px] font-black uppercase tracking-widest py-2 text-rose-400"
-                        onClick={() => sendCommand("PAUSE")}
-                        loading={loading === "PAUSE"}
+                        className="border-rose-500/20 bg-rose-500/10 hover:bg-rose-500/20 text-[10px] font-black uppercase py-4 text-rose-400 gap-2"
+                        onClick={() => { if(confirm("🚨 ¿PANICO? Cerrar todo.")) sendRemoteCommand("EXIT_ALL") }}
+                        loading={loading === "EXIT_ALL"}
                     >
-                        Pausar
+                        <AlertTriangle size={14} />
+                        Pánico 💥
                     </Button>
                     <Button 
                         variant="outline" 
-                        className="border-white/10 bg-white/5 hover:bg-white/10 text-[9px] font-black uppercase tracking-widest py-2 text-emerald-400"
-                        onClick={() => sendCommand("RESUME")}
-                        loading={loading === "RESUME"}
+                        className="border-sky-500/20 bg-sky-500/10 hover:bg-sky-500/20 text-[10px] font-black uppercase py-4 text-sky-400"
+                        onClick={() => sendRemoteCommand("EXIT_50")}
+                        loading={loading === "EXIT_50"}
                     >
-                        Reanudar
+                        Cerrar 50%
                     </Button>
                 </div>
 
-                {/* Botones de Dirección (Estilo HUD MT5) */}
-                <div className="flex gap-1.5 p-1 rounded-lg bg-black/60 border border-white/5 mb-4">
-                    {["BUY", "SELL", "BOTH"].map((dir) => (
-                        <button
-                            key={dir}
-                            onClick={() => sendCommand("DIRECTION", dir)}
-                            className={`flex-1 py-2.5 rounded text-[8px] font-black uppercase tracking-tighter transition-all ${
-                                botData?.direction === dir ? 'bg-white/10 text-white border border-white/20' : 'text-white/20 hover:text-white/40'
-                            }`}
+                {/* GESTIÓN REMOTA DE PARÁMETROS */}
+                <div className="p-4 rounded-xl bg-white/5 border border-white/5 space-y-4 mb-4">
+                    <h5 className="text-[9px] font-black uppercase tracking-widest text-white/40 flex items-center gap-2">
+                        <Layout size={10} /> Ajustes del Sniper
+                    </h5>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <label className="text-[8px] font-black text-white/20 uppercase tracking-widest flex items-center gap-1">
+                                <Clock size={8} /> Lookback
+                            </label>
+                            <select 
+                                value={botData?.lkb || 12}
+                                onChange={(e) => updateRemoteSetting("lkb", parseInt(e.target.value))}
+                                className="w-full bg-black/40 border border-white/10 rounded-lg px-2 py-2 text-white font-black text-[10px] uppercase outline-none"
+                            >
+                                <option value="6">🚀 6H Focus</option>
+                                <option value="12">🛡️ 12H Standard</option>
+                                <option value="24">🐢 24H Swing</option>
+                            </select>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-[8px] font-black text-white/20 uppercase tracking-widest flex items-center gap-1">
+                                <Zap size={8} /> Gráfico
+                            </label>
+                            <select 
+                                value={botData?.timeframe || "M5"}
+                                onChange={(e) => updateRemoteSetting("timeframe", e.target.value)}
+                                className="w-full bg-black/40 border border-white/10 rounded-lg px-2 py-2 text-white font-black text-[10px] uppercase outline-none"
+                            >
+                                <option value="M5">5 Minutos</option>
+                                <option value="M15">15 Minutos</option>
+                                <option value="M30">30 Minutos</option>
+                                <option value="H1">1 Hora</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                        <Button 
+                            variant="outline" 
+                            className={`py-2 rounded-lg border text-[9px] font-black uppercase transition-all ${botData?.casOn ? 'bg-brand/10 border-brand-light text-brand-light' : 'bg-white/5 border-white/10 text-white/20'}`}
+                            onClick={() => updateRemoteSetting("casOn", !botData?.casOn)}
                         >
-                            {dir === "BOTH" ? "Ambos" : dir}
-                        </button>
-                    ))}
+                            Cascada: {botData?.casOn ? 'ON' : 'OFF'}
+                        </Button>
+                        <Button 
+                            variant="outline" 
+                            className={`py-2 rounded-lg border text-[9px] font-black uppercase transition-all ${botData?.autoRA ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400' : 'bg-white/5 border-white/10 text-white/20'}`}
+                            onClick={() => updateRemoteSetting("autoRA", !botData?.autoRA)}
+                        >
+                            Re-Arm: {botData?.autoRA ? 'ON' : 'OFF'}
+                        </Button>
+                    </div>
+
+                    <Button 
+                        variant="outline" 
+                        fullWidth
+                        className={`py-2 rounded-lg border text-[9px] font-black uppercase transition-all ${botData?.giroOn ? 'bg-amber-500/10 border-amber-500/40 text-amber-400' : 'bg-white/5 border-white/10 text-white/20'}`}
+                        onClick={() => updateRemoteSetting("giroOn", !botData?.giroOn)}
+                    >
+                        <RotateCcw size={10} className="mr-1" />
+                        Giro Táctico: {botData?.giroOn ? 'ON' : 'OFF'}
+                    </Button>
                 </div>
-                
-                <Button 
-                    variant="danger" 
-                    size="sm" 
-                    fullWidth
-                    className="text-[10px] font-black uppercase tracking-[0.1em] shadow-lg shadow-danger/20 py-4 rounded-xl relative overflow-hidden group"
-                    onClick={() => {
-                        if(confirm("🚨 ¿PANICO? Esto cerrará todo.")) {
-                            sendCommand("CLOSE_ALL");
-                        }
-                    }}
-                >
-                    <ShieldAlert className="absolute left-4 opacity-20 group-hover:scale-110 transition-transform" size={24} />
-                    Cierre de Emergencia
-                </Button>
 
                 {statusMsg && (
-                    <motion.div 
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="mt-6 p-3 text-center bg-brand-light/10 rounded-xl border border-brand-light/20"
-                    >
-                        <p className="text-[10px] font-black text-brand-light uppercase tracking-widest">{statusMsg}</p>
-                    </motion.div>
+                    <p className="text-[10px] font-black text-brand-light uppercase tracking-widest text-center animate-bounce">{statusMsg}</p>
                 )}
             </div>
 
-            <div className="p-4 bg-black/40 border-t border-white/5 flex items-center justify-between">
+            <div className="p-3 bg-black/40 border-t border-white/5 flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                    <div className="w-5 h-5 rounded-full bg-brand/20 flex items-center justify-center">
-                        <Coins size={10} className="text-brand-light" />
-                    </div>
+                    <Coins size={10} className="text-white/20" />
                     <div>
-                        <p className="text-[7px] uppercase font-black text-white/20 tracking-widest">Balance</p>
-                        <p className="text-[9px] font-black text-white/60 tracking-tighter">{formatCurrency(botData?.balance || 0)}</p>
+                        <p className="text-[7px] uppercase font-black text-white/20">Balance</p>
+                        <p className="text-[9px] font-black text-white/60">{formatCurrency(botData?.balance || 0)}</p>
                     </div>
                 </div>
                 <div className="text-right">
