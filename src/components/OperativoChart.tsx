@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, memo } from 'react';
-import { createChart, ColorType, ISeriesApi, IChartApi } from 'lightweight-charts';
+import { createChart, ColorType, ISeriesApi, IChartApi, IPriceLine } from 'lightweight-charts';
 
 interface OperativoChartProps {
     fiboLevels?: {
@@ -18,6 +18,7 @@ const OperativoChart: React.FC<OperativoChartProps> = ({ fiboLevels, trend }) =>
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<IChartApi | null>(null);
     const candleSeriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
+    const priceLinesRef = useRef<IPriceLine[]>([]);
 
     useEffect(() => {
         if (!chartContainerRef.current) return;
@@ -32,7 +33,7 @@ const OperativoChart: React.FC<OperativoChartProps> = ({ fiboLevels, trend }) =>
                 horzLines: { color: 'rgba(255, 255, 255, 0.05)' },
             },
             width: chartContainerRef.current.clientWidth,
-            height: 400,
+            height: 350,
             timeScale: {
                 borderColor: 'rgba(255, 255, 255, 0.1)',
                 timeVisible: true,
@@ -51,22 +52,34 @@ const OperativoChart: React.FC<OperativoChartProps> = ({ fiboLevels, trend }) =>
         chartRef.current = chart;
         candleSeriesRef.current = candleSeries;
 
-        // Fetch initial data (Binance Public 1h)
-        fetch('https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=100')
-            .then(res => res.json())
-            .then(data => {
-                const formattedData = data.map((d: any) => ({
-                    time: d[0] / 1000,
-                    open: parseFloat(d[1]),
-                    high: parseFloat(d[2]),
-                    low: parseFloat(d[3]),
-                    close: parseFloat(d[4]),
-                }));
-                candleSeries.setData(formattedData);
-            });
+        // Fetch initial data (Binance Public 1h) - Robust handling
+        const fetchInitialData = async () => {
+            try {
+                const res = await fetch('https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=100');
+                if (!res.ok) throw new Error("Binance API error");
+                const data = await res.json();
+                
+                if (Array.isArray(data)) {
+                    const formattedData = data.map((d: any) => ({
+                        time: d[0] / 1000,
+                        open: parseFloat(d[1]),
+                        high: parseFloat(d[2]),
+                        low: parseFloat(d[3]),
+                        close: parseFloat(d[4]),
+                    }));
+                    candleSeries.setData(formattedData);
+                }
+            } catch (error) {
+                console.error("OperativoChart Fetch Error:", error);
+            }
+        };
+
+        fetchInitialData();
 
         const handleResize = () => {
-            chart.applyOptions({ width: chartContainerRef.current?.clientWidth });
+            if (chartContainerRef.current) {
+                chart.applyOptions({ width: chartContainerRef.current.clientWidth });
+            }
         };
 
         window.addEventListener('resize', handleResize);
@@ -77,77 +90,90 @@ const OperativoChart: React.FC<OperativoChartProps> = ({ fiboLevels, trend }) =>
         };
     }, []);
 
-    // Effect to update Fibonacci Lines
+    // Effect to update Fibonacci Lines with proper cleanup (fixes memory leak)
     useEffect(() => {
         if (!candleSeriesRef.current || !fiboLevels) return;
 
+        // 1. Remove ONLY previous price lines
+        priceLinesRef.current.forEach(line => {
+            candleSeriesRef.current?.removePriceLine(line);
+        });
+        priceLinesRef.current = [];
+
         const { p00, p50, p62, p78, p100 } = fiboLevels;
         
+        // 2. Add new lines only if p00 is valid
         if (p00 > 0) {
-            // Eliminar todas las lineas de precio previas si fuera necesario
-            // candleSeriesRef.current.createPriceLine({...})
-            
+            const lines = [];
+
             // TARGET TP (0.0)
-            candleSeriesRef.current.createPriceLine({
+            lines.push(candleSeriesRef.current.createPriceLine({
                 price: p00,
                 color: '#10b981',
                 lineWidth: 2,
-                lineStyle: 0, // Solid
+                lineStyle: 0,
                 axisLabelVisible: true,
                 title: 'TARGET TP (0.0)',
-            });
+            }));
 
             // GATILLO (50.0)
-            candleSeriesRef.current.createPriceLine({
+            lines.push(candleSeriesRef.current.createPriceLine({
                 price: p50,
                 color: '#f59e0b',
                 lineWidth: 1,
-                lineStyle: 2, // Dashed
+                lineStyle: 2,
                 axisLabelVisible: true,
                 title: 'GATILLO (50.0)',
-            });
+            }));
 
             // ENTRADA (61.8)
-            candleSeriesRef.current.createPriceLine({
+            lines.push(candleSeriesRef.current.createPriceLine({
                 price: p62,
                 color: '#fbbf24',
                 lineWidth: 2,
                 lineStyle: 0,
                 axisLabelVisible: true,
                 title: 'ENTRADA (61.8)',
-            });
+            }));
 
             // STOP LOSS (78.6)
-            candleSeriesRef.current.createPriceLine({
+            lines.push(candleSeriesRef.current.createPriceLine({
                 price: p78,
                 color: '#ef4444',
                 lineWidth: 2,
                 lineStyle: 0,
                 axisLabelVisible: true,
                 title: 'STOP LOSS (78.6)',
-            });
+            }));
 
              // ORIGEN (100.0)
-             candleSeriesRef.current.createPriceLine({
+             lines.push(candleSeriesRef.current.createPriceLine({
                 price: p100,
                 color: '#9ca3af',
                 lineWidth: 1,
                 lineStyle: 2,
                 axisLabelVisible: true,
                 title: 'ORIGEN (100.0)',
-            });
+            }));
+
+            priceLinesRef.current = lines;
         }
     }, [fiboLevels]);
 
     return (
-        <div className="relative w-full rounded-2xl overflow-hidden border border-white/5 bg-black/40">
+        <div className="relative w-full rounded-2xl overflow-hidden border border-white/5 bg-black/40 min-h-[350px]">
             <div ref={chartContainerRef} className="w-full" />
             <div className="absolute top-4 left-4 flex flex-col gap-1 pointer-events-none">
-                <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Elite Sniper v11.3.9</span>
+                <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Elite Sniper v11.3.10</span>
                 <span className={`text-[12px] font-black uppercase tracking-widest ${trend === 'BULL' ? 'text-emerald-400' : 'text-rose-400'}`}>
                     Market: {trend === 'BULL' ? 'ALCISTA' : 'BAJISTA'}
                 </span>
             </div>
+            {!fiboLevels && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm pointer-events-none">
+                    <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] animate-pulse">Sincronizando Telemetría...</span>
+                </div>
+            )}
         </div>
     );
 };
