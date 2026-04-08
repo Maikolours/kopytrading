@@ -15,13 +15,9 @@ import {
     ArrowUpRight,
     ArrowDownRight,
     RefreshCw,
-    Settings2,
-    Clock,
-    Layout,
-    AlertTriangle
+    Settings2
 } from "lucide-react";
 import { BotSettings } from "./BotSettings";
-import OperativoChart from "./OperativoChart";
 
 interface BotRemoteControlProps {
     purchaseId: string;
@@ -50,7 +46,7 @@ export function BotRemoteControl({
 
     useEffect(() => {
         fetchBotData();
-        const interval = setInterval(fetchBotData, 5000); // Sincro cada 5s para máxima precisión
+        const interval = setInterval(fetchBotData, 5000); 
         return () => clearInterval(interval);
     }, [purchaseId, account]);
 
@@ -69,39 +65,24 @@ export function BotRemoteControl({
         }
     };
 
-    const sendRemoteCommand = async (cmd: string) => {
-        setLoading(cmd);
+    const sendCommand = async (command: string, value?: string) => {
+        setLoading(command);
+        setStatusMsg(null);
         try {
-            const res = await fetch(`/api/purchase/${purchaseId}/settings`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ account, pendingCmd: cmd })
+            const res = await fetch("/api/remote-control", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ purchaseId, command, value })
             });
-            if (res.ok) {
-                setStatusMsg(`Comando ${cmd} enviado.`);
-                setTimeout(() => setStatusMsg(null), 3000);
-            }
-        } catch (error) {
-            console.error("Command Error:", error);
-        } finally {
-            setLoading(null);
-        }
-    };
 
-    const updateRemoteSetting = async (key: string, value: any) => {
-        setLoading(key);
-        try {
-            const newSettings = { ...botData, [key]: value };
-            const res = await fetch(`/api/purchase/${purchaseId}/settings`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ account, settings: newSettings })
-            });
             if (res.ok) {
-                setBotData(newSettings);
+                setStatusMsg(`Orden "${command}" enviada con éxito.`);
+                setTimeout(() => setStatusMsg(null), 3000);
+            } else {
+                setStatusMsg("Error al enviar la orden.");
             }
         } catch (error) {
-            console.error("Setting Update Error:", error);
+            setStatusMsg("Error de conexión.");
         } finally {
             setLoading(null);
         }
@@ -115,19 +96,17 @@ export function BotRemoteControl({
 
     return (
         <div className={`mt-4 p-0.5 rounded-xl bg-black/40 border ${theme?.border || 'border-white/10'} shadow-2xl flex flex-col backdrop-blur-xl relative overflow-hidden`}>
-            {/* Animación de fondo sutil */}
             <div className={`absolute top-0 right-0 w-48 h-48 bg-gradient-to-br ${theme?.gradient || 'from-brand/20 to-transparent'} blur-3xl opacity-10 pointer-events-none`} />
             
             <div className="p-3 sm:p-4">
-                {/* Header: Estado y Título */}
                 <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
                     <div className="flex items-center gap-2">
                         <div className={`p-1 rounded-lg bg-white/5 border border-white/5 ${theme?.accent || 'text-brand-light'}`}>
                             <Activity size={12} className={isActualOnline ? 'animate-pulse' : ''} />
                         </div>
                         <div>
-                            <h4 className="text-[9px] font-black uppercase tracking-wider text-white/90 leading-none">Remote Commander</h4>
-                            <p className="text-[7px] text-white/40 font-bold uppercase tracking-widest leading-none mt-1 truncate max-w-[100px]">v11.3.9 Sniper Build</p>
+                            <h4 className="text-[9px] font-black uppercase tracking-wider text-white/90 leading-none">Estatus</h4>
+                            <p className="text-[7px] text-white/40 font-bold uppercase tracking-widest leading-none mt-1 truncate max-w-[100px]">{botName}</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -140,6 +119,7 @@ export function BotRemoteControl({
                             </div>
                             {refreshing && <RefreshCw size={7} className="animate-spin text-white/20" />}
                         </div>
+                        <div className="h-4 w-px bg-white/5 mx-1" />
                         <button 
                             onClick={() => setShowSettings(!showSettings)}
                             className={`p-1.5 rounded-md transition-colors ${showSettings ? 'bg-white/20 text-white' : 'text-white/40 hover:text-white'}`}
@@ -161,133 +141,111 @@ export function BotRemoteControl({
                     </div>
                 )}
 
-                {/* GRÁFICO OPERATIVO CON FIBONACCI */}
-                <div className="mb-4">
-                    <OperativoChart 
-                        trend={botData?.trend}
-                        fiboLevels={botData?.p00 !== undefined ? {
-                            p00: botData.p00,
-                            p50: botData.p50,
-                            p62: botData.p62,
-                            p78: botData.p78,
-                            p100: botData.p100
-                        } : undefined}
-                    />
-                </div>
-
-                {/* Telemetría Crucial */}
                 <div className="grid grid-cols-2 gap-2 mb-4">
-                    <div className="col-span-1 p-2 rounded-lg bg-white/5 border border-white/10 space-y-0.5">
-                        <p className="text-[8px] uppercase font-black tracking-widest text-white/40 leading-none">Profit Hoy</p>
-                        <h3 className={`text-md font-black tracking-tighter ${botData?.pnl_today >= 0 ? 'text-success' : 'text-danger'}`}>
-                            {formatCurrency(botData?.pnl_today || 0)}
-                        </h3>
-                    </div>
-                    <div className="col-span-1 p-2 rounded-lg bg-white/5 border border-white/10 space-y-0.5 text-right">
-                        <p className="text-[8px] uppercase font-black tracking-widest text-white/40 leading-none">Equity</p>
-                        <p className="text-sm font-black text-white/90">{formatCurrency(botData?.equity || 0)}</p>
-                    </div>
-                </div>
-
-                {/* TACTICAL COMMANDS */}
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                    <Button 
-                        variant="outline" 
-                        className="border-rose-500/20 bg-rose-500/10 hover:bg-rose-500/20 text-[10px] font-black uppercase py-4 text-rose-400 gap-2"
-                        onClick={() => { if(confirm("🚨 ¿PANICO? Cerrar todo.")) sendRemoteCommand("EXIT_ALL") }}
-                        loading={loading === "EXIT_ALL"}
-                    >
-                        <AlertTriangle size={14} />
-                        Pánico 💥
-                    </Button>
-                    <Button 
-                        variant="outline" 
-                        className="border-sky-500/20 bg-sky-500/10 hover:bg-sky-500/20 text-[10px] font-black uppercase py-4 text-sky-400"
-                        onClick={() => sendRemoteCommand("EXIT_50")}
-                        loading={loading === "EXIT_50"}
-                    >
-                        Cerrar 50%
-                    </Button>
-                </div>
-
-                {/* GESTIÓN REMOTA DE PARÁMETROS */}
-                <div className="p-4 rounded-xl bg-white/5 border border-white/5 space-y-4 mb-4">
-                    <h5 className="text-[9px] font-black uppercase tracking-widest text-white/40 flex items-center gap-2">
-                        <Layout size={10} /> Ajustes del Sniper
-                    </h5>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <label className="text-[8px] font-black text-white/20 uppercase tracking-widest flex items-center gap-1">
-                                <Clock size={8} /> Lookback
-                            </label>
-                            <select 
-                                value={botData?.lkb || 12}
-                                onChange={(e) => updateRemoteSetting("lkb", parseInt(e.target.value))}
-                                className="w-full bg-black/40 border border-white/10 rounded-lg px-2 py-2 text-white font-black text-[10px] uppercase outline-none"
-                            >
-                                <option value="6">🚀 6H Focus</option>
-                                <option value="12">🛡️ 12H Standard</option>
-                                <option value="24">🐢 24H Swing</option>
-                            </select>
+                    <div className="col-span-2 p-3 rounded-lg bg-white/5 border border-white/10 flex items-center justify-between">
+                        <div className="space-y-0.5">
+                            <p className="text-[8px] uppercase font-black tracking-widest text-white/40 leading-none">Profit Hoy</p>
+                            <h3 className={`text-xl font-black tracking-tighter flex items-center gap-1.5 ${botData?.pnl_today >= 0 ? 'text-success' : 'text-danger'}`}>
+                                {botData?.pnl_today >= 0 ? <TrendingUp size={18} /> : <TrendingDown size={18} />}
+                                {formatCurrency(botData?.pnl_today || 0)}
+                            </h3>
                         </div>
-
-                        <div className="space-y-2">
-                            <label className="text-[8px] font-black text-white/20 uppercase tracking-widest flex items-center gap-1">
-                                <Zap size={8} /> Gráfico
-                            </label>
-                            <select 
-                                value={botData?.timeframe || "M5"}
-                                onChange={(e) => updateRemoteSetting("timeframe", e.target.value)}
-                                className="w-full bg-black/40 border border-white/10 rounded-lg px-2 py-2 text-white font-black text-[10px] uppercase outline-none"
-                            >
-                                <option value="M5">5 Minutos</option>
-                                <option value="M15">15 Minutos</option>
-                                <option value="M30">30 Minutos</option>
-                                <option value="H1">1 Hora</option>
-                            </select>
+                        <div className="text-right space-y-0.5">
+                            <p className="text-[8px] uppercase font-black tracking-widest text-white/40 leading-none">Equity</p>
+                            <p className="text-xs font-bold text-white/90">{formatCurrency(botData?.equity || 0)}</p>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2">
-                        <Button 
-                            variant="outline" 
-                            className={`py-2 rounded-lg border text-[9px] font-black uppercase transition-all ${botData?.casOn ? 'bg-brand/10 border-brand-light text-brand-light' : 'bg-white/5 border-white/10 text-white/20'}`}
-                            onClick={() => updateRemoteSetting("casOn", !botData?.casOn)}
-                        >
-                            Cascada: {botData?.casOn ? 'ON' : 'OFF'}
-                        </Button>
-                        <Button 
-                            variant="outline" 
-                            className={`py-2 rounded-lg border text-[9px] font-black uppercase transition-all ${botData?.autoRA ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400' : 'bg-white/5 border-white/10 text-white/20'}`}
-                            onClick={() => updateRemoteSetting("autoRA", !botData?.autoRA)}
-                        >
-                            Re-Arm: {botData?.autoRA ? 'ON' : 'OFF'}
-                        </Button>
+                    <div className="p-2 rounded-lg bg-white/5 border border-white/5 space-y-0.5">
+                        <p className="text-[8px] uppercase font-black tracking-widest text-white/30 leading-none">Tendencia</p>
+                        <div className="flex items-center gap-1.5">
+                            {botData?.trend === "BULL" ? (
+                                <>
+                                    <ArrowUpRight className="text-emerald-400" size={14} />
+                                    <span className="text-[10px] font-black text-emerald-400 uppercase">Alcista</span>
+                                </>
+                            ) : botData?.trend === "BEAR" ? (
+                                <>
+                                    <ArrowDownRight className="text-rose-400" size={14} />
+                                    <span className="text-[10px] font-black text-rose-400 uppercase">Bajista</span>
+                                </>
+                            ) : (
+                                <span className="text-[10px] font-black text-white/20 uppercase italic font-mono tracking-tighter">Analizando...</span>
+                            )}
+                        </div>
                     </div>
 
-                    <Button 
-                        variant="outline" 
-                        fullWidth
-                        className={`py-2 rounded-lg border text-[9px] font-black uppercase transition-all ${botData?.giroOn ? 'bg-amber-500/10 border-amber-500/40 text-amber-400' : 'bg-white/5 border-white/10 text-white/20'}`}
-                        onClick={() => updateRemoteSetting("giroOn", !botData?.giroOn)}
-                    >
-                        <RotateCcw size={10} className="mr-1" />
-                        Giro Táctico: {botData?.giroOn ? 'ON' : 'OFF'}
-                    </Button>
+                    <div className="p-2 rounded-lg bg-white/5 border border-white/5 space-y-0.5">
+                        <p className="text-[8px] uppercase font-black tracking-widest text-white/30 leading-none">Estatus Bot</p>
+                        <div className="flex items-center gap-1.5">
+                            <Zap className={botData?.armed ? "text-brand-light" : "text-white/20"} size={14} />
+                            <span className={`text-[10px] font-black uppercase ${botData?.armed ? "text-brand-light" : "text-white/40"}`}>
+                                {botData?.armed ? "ARMADO" : "ESPERA"}
+                            </span>
+                        </div>
+                    </div>
                 </div>
+
+                <div className="space-y-3 mb-6">
+                    <div className="grid grid-cols-2 gap-3">
+                        <Button 
+                            variant="outline" 
+                            className={`py-3 rounded-lg border flex flex-col gap-0.5 h-auto transition-all ${
+                                botData?.casOn 
+                                ? 'bg-brand/10 border-brand-light text-brand-light' 
+                                : 'bg-white/5 border-white/10 text-white/20'
+                            }`}
+                            onClick={() => sendCommand("SET_SETTING", JSON.stringify({ casOn: !botData?.casOn }))}
+                        >
+                            <span className="text-[9px] font-black tracking-widest uppercase">Cascada {botData?.casOn ? 'ON' : 'OFF'}</span>
+                        </Button>
+
+                        <Button 
+                            variant="outline" 
+                            className={`py-3 rounded-lg border flex flex-col gap-0.5 h-auto transition-all ${
+                                botData?.giroOn
+                                ? 'bg-success/10 border-success/40 text-success' 
+                                : 'bg-white/5 border-white/10 text-white/20'
+                            }`}
+                            onClick={() => sendCommand("SET_SETTING", JSON.stringify({ giroOn: !botData?.giroOn }))}
+                        >
+                            <RotateCcw size={14} />
+                            <span className="text-[9px] font-black tracking-widest uppercase">Giro: {botData?.giroOn ? 'ON' : 'OFF'}</span>
+                        </Button>
+                    </div>
+                </div>
+
+                <Button 
+                    variant="danger" 
+                    size="sm" 
+                    fullWidth
+                    className="text-[10px] font-black uppercase py-4 rounded-xl"
+                    onClick={() => {
+                        if(confirm("🚨 ¿PANICO? Esto cerrará todo.")) {
+                            sendCommand("CLOSE_ALL");
+                        }
+                    }}
+                >
+                    Cierre de Emergencia
+                </Button>
 
                 {statusMsg && (
-                    <p className="text-[10px] font-black text-brand-light uppercase tracking-widest text-center animate-bounce">{statusMsg}</p>
+                    <motion.div 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-4 p-2 text-center bg-white/5 rounded-lg border border-white/5"
+                    >
+                        <p className="text-[9px] font-black text-white/60 uppercase tracking-widest">{statusMsg}</p>
+                    </motion.div>
                 )}
             </div>
 
-            <div className="p-3 bg-black/40 border-t border-white/5 flex items-center justify-between">
+            <div className="p-4 bg-black/40 border-t border-white/5 flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                     <Coins size={10} className="text-white/20" />
                     <div>
-                        <p className="text-[7px] uppercase font-black text-white/20">Balance</p>
-                        <p className="text-[9px] font-black text-white/60">{formatCurrency(botData?.balance || 0)}</p>
+                        <p className="text-[7px] uppercase font-black text-white/20 tracking-widest">Balance</p>
+                        <p className="text-[9px] font-black text-white/60 tracking-tighter">{formatCurrency(botData?.balance || 0)}</p>
                     </div>
                 </div>
                 <div className="text-right">
