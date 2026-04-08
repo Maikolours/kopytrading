@@ -74,33 +74,32 @@ export const BotCard = memo(function BotCard({
             <Card className={`relative overflow-hidden glass-card ${assetTheme.border} bg-surface/60 backdrop-blur-3xl shadow-2xl rounded-[2.5rem] border premium-card-glow`}>
                 <div className={`absolute inset-0 bg-gradient-to-b from-[var(--theme-color)]/10 to-[var(--theme-color)]/5 pointer-events-none opacity-40`} />
                 
-                <CardHeader className="relative z-10 border-b border-white/5 py-4 px-5 sm:px-6">
+                <CardHeader className="relative z-10 border-b border-white/5 py-3 px-4 sm:px-6">
                     <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
-                        <div className="flex-1">
-                            <div className="flex flex-wrap items-center gap-2 mb-3">
-                                <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black border ${accountTypeColor} tracking-widest uppercase`}>
+                        <div className="flex-1 w-full">
+                            <div className="flex flex-wrap items-center gap-1.5 mb-2">
+                                <span className={`px-2 py-0.5 rounded-lg text-[8px] font-black border ${accountTypeColor} tracking-widest uppercase`}>
                                     {accountTypeLabel}
                                 </span>
-                                <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black border uppercase tracking-widest ${isTrial ? 'bg-white/5 text-white/60 border-white/10' : 'bg-success/10 text-success border-success/20'}`}>
+                                <span className={`px-2 py-0.5 rounded-lg text-[8px] font-black border uppercase tracking-widest ${isTrial ? 'bg-white/5 text-white/60 border-white/10' : 'bg-success/10 text-success border-success/20'}`}>
                                     {isTrial ? "TRIAL" : "LIFETIME"}
                                 </span>
-                                <span className="px-2.5 py-1 rounded-lg text-[9px] font-bold bg-white/5 border border-white/5 text-gray-500 tracking-widest uppercase">
+                                <span className="px-2 py-0.5 rounded-lg text-[8px] font-bold bg-white/5 border border-white/5 text-gray-500 tracking-widest uppercase">
                                     {purchase.botProduct.instrument}
                                 </span>
                             </div>
 
-                            <CardTitle className="text-xl sm:text-2xl font-black text-white tracking-tighter leading-tight mb-1 uppercase">
+                            <CardTitle className="text-lg sm:text-2xl font-black text-white tracking-tighter leading-tight mb-0.5 uppercase">
                                 {purchase.botProduct.name.replace(/\(V5\.54\)|\(V1\.2\)/gi, "(UNIVERSAL)")}
                             </CardTitle>
                             
                             {/* SWITCHER DE VARIANTES */}
                             {variants.length > 1 && (
-                                <div className="flex flex-wrap gap-1.5 mt-3 mb-1">
+                                <div className="flex flex-wrap gap-1 mt-2 mb-0.5">
                                     {variants.map((v, idx) => {
                                         const isSel = selectedIndex === idx;
                                         const vName = (v.botProduct.name || "").toUpperCase();
                                         
-                                        // Detectar cuenta para el label de la pestaña
                                         const accountNum = v.activePositions?.[0]?.account;
                                         const isUltra = vName.includes("ULTRA");
                                         const isCentV = vName.includes("CENT") || vName.includes("CÉNTIMOS");
@@ -112,7 +111,7 @@ export const BotCard = memo(function BotCard({
                                         else if (isCentV) vShortName = "CENT";
                                         else if (isUniv) vShortName = "UNIVERSAL";
                                         
-                                        let label = accountNum ? `Cuenta ${accountNum}${vShortName ? ` (${vShortName})` : ''}` : (vShortName || `LIC ${idx+1}`);
+                                        let label = accountNum ? `Cuenta ${accountNum}` : (vShortName || `${idx+1}`);
                                         
                                         const posCount = (v.activePositions || []).length;
                                         const hasActiveOps = posCount > 0;
@@ -121,23 +120,20 @@ export const BotCard = memo(function BotCard({
                                             <button
                                                 key={v.id}
                                                 onClick={() => onSelectVariant(idx)}
-                                                className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all border-2 relative ${
+                                                className={`px-2 py-1 rounded-lg text-[8px] font-black uppercase transition-all border relative ${
                                                     isSel 
-                                                    ? 'bg-white/20 border-white/40 text-white shadow-xl' 
-                                                    : 'bg-white/5 border-white/5 text-white/30 hover:bg-white/10'
+                                                    ? 'bg-white/20 border-white/40 text-white' 
+                                                    : 'bg-white/2? border-white/5 text-white/30 hover:bg-white/10'
                                                 } ${hasActiveOps && !isSel ? 'border-amber-500/30' : ''}`}
                                             >
-                                                <span className="flex items-center gap-1.5">
+                                                <span className="flex items-center gap-1">
                                                     {label}
                                                     {hasActiveOps && (
-                                                        <span className={`inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-[8px] ${isSel ? 'bg-amber-500 text-black' : 'bg-amber-500/20 text-amber-500'} font-bold`}>
+                                                        <span className={`inline-flex items-center justify-center w-3 h-3 rounded-full text-[7px] ${isSel ? 'bg-amber-500 text-black' : 'bg-amber-500/20 text-amber-500'} font-bold`}>
                                                             {posCount}
                                                         </span>
                                                     )}
                                                 </span>
-                                                {hasActiveOps && !isSel && (
-                                                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-amber-500 rounded-full animate-ping" />
-                                                )}
                                             </button>
                                         );
                                     })}
@@ -145,117 +141,83 @@ export const BotCard = memo(function BotCard({
                             )}
                         </div>
 
-                        <div className="flex flex-col items-end gap-2">
-                            <div className="p-3 px-5 rounded-xl bg-black/40 border border-white/5 flex flex-col items-center justify-center min-w-28 text-center premium-glass shadow-purple-500/10">
-                                <span className="text-[8px] font-black uppercase tracking-[0.2em] opacity-40 mb-0.5">Total Hoy</span>
-                                <span className={`text-xl font-black font-mono ${dailyProfit >= 0 ? 'text-success' : 'text-danger'}`}>
-                                    {dailyProfit >= 0 ? '+' : ''}{dailyProfit.toFixed(2)} {currency}
+                        <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-2">
+                            <div className="p-2 px-3 rounded-lg bg-black/40 border border-white/5 flex flex-col items-center justify-center min-w-24 text-center">
+                                <span className="text-[7px] font-black uppercase tracking-[0.2em] opacity-40 mb-0">Profit Hoy</span>
+                                <span className={`text-base font-black font-mono ${dailyProfit >= 0 ? 'text-success' : 'text-danger'}`}>
+                                    {dailyProfit >= 0 ? '+' : ''}{dailyProfit.toFixed(2)}{currency}
                                 </span>
                             </div>
                             
-                            <div className={`flex items-center gap-2 p-1.5 px-3 rounded-lg bg-white/5 border ${assetTheme.border} animate-pulse-glow-heavy`}>
-                                <span className={`text-[8px] font-black uppercase tracking-widest ${assetTheme.text}`}>ID:</span>
-                                <code className="text-[10px] font-black font-mono text-white select-all">
-                                    {purchase.id.slice(0, 8)}...
+                            <div className={`flex items-center gap-1.5 p-1 px-2 rounded-lg bg-white/5 border ${assetTheme.border}`}>
+                                <code className="text-[9px] font-black font-mono text-white/60 select-all">
+                                    {purchase.id.slice(0, 6)}...
                                 </code>
                                 <Button 
                                     size="sm" 
-                                    className={`h-5 w-5 p-0 flex items-center justify-center shrink-0 rounded ${copiedId === purchase.id ? 'bg-success text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                                    className={`h-4 w-4 p-0 flex items-center justify-center shrink-0 rounded ${copiedId === purchase.id ? 'bg-success text-white' : 'bg-white/10 text-white'}`}
                                     onClick={() => onCopy(purchase.id)}
                                 >
-                                    {copiedId === purchase.id ? <CheckCircle2 size={10} /> : <Copy size={10} />}
+                                    {copiedId === purchase.id ? <CheckCircle2 size={8} /> : <Copy size={8} />}
                                 </Button>
                             </div>
                         </div>
                     </div>
                 </CardHeader>
 
-                <CardContent className="relative z-10 p-4 sm:p-5 space-y-6">
-                    <div className="grid lg:grid-cols-2 gap-6">
-                        <div className={`space-y-4 ${isMaintenance ? 'blur-md grayscale pointer-events-none opacity-40' : ''}`}>
-                            <div className="flex items-center gap-2">
-                                <div className="flex-1">
-                                    <BotRemoteControl 
-                                        purchaseId={purchase.id} 
-                                        botName={purchase.botProduct.name} 
-                                        account={purchase.activePositions?.[0]?.account || "unknown"}
-                                        isOnline={purchase.lastSync && (new Date().getTime() - new Date(purchase.lastSync).getTime()) < 150000}
-                                        theme={theme}
-                                    />
-                                </div>
-                                <button 
-                                    onClick={() => setShowSettings(!showSettings)}
-                                    className={`p-3 rounded-xl border-2 transition-all group ${
-                                        showSettings 
-                                        ? `bg-white/10 ${assetTheme.border} text-white ${assetTheme.glow}` 
-                                        : 'bg-white/5 border-white/5 text-white/40 hover:bg-white/10'
-                                    }`}
-                                    title="Configuración Remota"
-                                >
-                                    <Settings2 size={24} className={showSettings ? 'animate-spin-slow' : 'group-hover:rotate-45 transition-transform'} />
-                                </button>
-                            </div>
-                            
-                            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 rounded-xl bg-white/5 border border-white/5">
+                <CardContent className="relative z-10 p-3 sm:p-5 space-y-4">
+                    <div className="grid lg:grid-cols-2 gap-4">
+                        <div className={`space-y-3 ${isMaintenance ? 'blur-md grayscale pointer-events-none opacity-40' : ''}`}>
+                            <BotRemoteControl 
+                                purchaseId={purchase.id} 
+                                botName={purchase.botProduct.name} 
+                                account={purchase.activePositions?.[0]?.account || "unknown"}
+                                isOnline={purchase.lastSync && (Math.abs(Date.now() - new Date(purchase.lastSync).getTime()) < 300000)}
+                                theme={theme}
+                                initialData={purchase.botSettings?.[0]?.settings}
+                            />
+
+                            <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-white/5 border border-white/5">
                                 <SyncStatus initialLastSync={purchase.lastSync ? purchase.lastSync.toISOString() : null} />
                                 <CleanupButton purchaseId={purchase.id} />
                             </div>
-
-                            {showSettings && (
-                                <BotSettings 
-                                    purchaseId={purchase.id} 
-                                    account={purchase.activePositions?.[0]?.account || "unknown"} 
-                                    theme={theme}
-                                    onClose={() => setShowSettings(false)}
-                                />
-                            )}
                         </div>
 
                         <div className="space-y-4">
-                            <div className="p-4 rounded-xl bg-gradient-to-br from-white/5 to-transparent border border-white/5 relative">
-                                <h4 className="text-[9px] font-black uppercase tracking-widest text-white/40 mb-3 text-center sm:text-left">Instalación</h4>
-                                <div className="flex flex-col gap-2">
+                            <div className="p-3 rounded-xl bg-gradient-to-br from-white/5 to-transparent border border-white/5 relative">
+                                <h4 className="text-[8px] font-black uppercase tracking-widest text-white/40 mb-2">Instalación</h4>
+                                <div className="flex flex-col gap-1">
                                     {isMaintenance ? (
-                                        <div className={`bg-white/5 border ${assetTheme.border} p-3 rounded-lg text-center backdrop-blur-xl animate-pulse`}>
-                                            <p className={`text-[10px] font-black ${assetTheme.text} uppercase tracking-widest mb-1`}>En Mantenimiento</p>
-                                            <p className="text-[8px] text-gray-400">Calibrando algoritmos TITAN...</p>
+                                        <div className={`bg-white/5 border ${assetTheme.border} p-2 rounded-lg text-center backdrop-blur-xl animate-pulse`}>
+                                            <p className={`text-[9px] font-black ${assetTheme.text} uppercase tracking-widest mb-0.5`}>Mantenimiento</p>
                                         </div>
                                     ) : (
                                         <a href={`/api/download/${purchase.id}?type=ex5`} className="group">
-                                            <Button fullWidth className="bg-white text-black hover:bg-white/90 font-black tracking-tight flex items-center justify-between px-5 py-3 h-auto rounded-xl">
-                                                <div className="text-left leading-tight">
-                                                     <div className="text-[11px] uppercase font-black">Descargar última versión</div>
-                                                     <div className="text-[8px] opacity-40 font-bold tracking-tighter uppercase italic">Archivo .EX5 para MetaTrader 5</div>
-                                                </div>
-                                                <span className="text-xl group-hover:translate-x-1 transition-transform font-none">📥</span>
+                                            <Button fullWidth className="bg-white text-black hover:bg-white/90 font-black tracking-tight flex items-center justify-between px-3 py-2 h-auto rounded-lg text-[10px]">
+                                                <span>Descargar Bot (.EX5)</span>
+                                                <span className="text-sm">📥</span>
                                             </Button>
                                         </a>
                                     )}
                                 </div>
                             </div>
 
-                            <div className="p-4 rounded-xl bg-black/60 border border-brand/20 shadow-2xl premium-glass">
-                                <div className="flex items-center justify-between mb-3">
-                                    <p className="text-[9px] text-brand-light uppercase tracking-widest font-black flex items-center gap-2">
-                                        <ShieldCheck size={12} /> LICENCIA MT5 COMPLETA
-                                    </p>
-                                    <span className="text-[8px] text-white/40 font-bold uppercase">Copiar para MT5</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <code className="text-[12px] font-black font-mono text-white select-all break-all tracking-tight uppercase p-3 bg-white/5 rounded-lg border border-white/10 flex-1 shadow-inner">
+                            <div className="p-3 rounded-xl bg-black/60 border border-brand/20 shadow-xl premium-glass">
+                                <p className="text-[8px] text-brand-light uppercase tracking-widest font-black mb-2 flex items-center gap-2">
+                                    <ShieldCheck size={10} /> LICENCIA MT5
+                                </p>
+                                <div className="flex items-center gap-1.5">
+                                    <code className="text-[10px] font-black font-mono text-white select-all break-all tracking-tight uppercase p-2 bg-white/5 rounded border border-white/10 flex-1">
                                         {purchase.id}
                                     </code>
                                     <Button 
-                                        size="lg" 
-                                        className={`transition-all h-12 w-12 p-0 flex items-center justify-center shrink-0 rounded-xl border-2 ${copiedId === purchase.id ? 'bg-success border-success text-white' : `bg-white/5 ${assetTheme.border} text-white hover:bg-white/20`}`}
+                                        size="sm" 
+                                        className={`h-9 w-9 p-0 flex items-center justify-center shrink-0 rounded-lg border ${copiedId === purchase.id ? 'bg-success border-success text-white' : `bg-white/5 ${assetTheme.border} text-white`}`}
                                         onClick={() => onCopy(purchase.id)}
                                     >
-                                        {copiedId === purchase.id ? <CheckCircle2 size={20} /> : <Copy size={20} />}
+                                        <Copy size={14} />
                                     </Button>
                                 </div>
-                                <p className="text-[8px] text-white/30 mt-3 italic text-center uppercase tracking-tighter">
-                                    Introduce este ID en el parámetro "PurchaseID" del bot en MT5 para sincronizar.
-                                </p>
                             </div>
                         </div>
                     </div>

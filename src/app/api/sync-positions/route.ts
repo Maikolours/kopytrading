@@ -193,6 +193,9 @@ export async function POST(req: Request) {
                 ...baseSettings,
                 ...(body.proposedSettings || {}),
                 ...telemetry,
+                balance: telemetry.balance, // Explicit reinforcement
+                equity: telemetry.equity,
+                pnl_today: telemetry.pnl_today,
                 // Conservar campos específicos del Sniper si vienen en la raíz
                 lots: Number(body.lots) || baseSettings.lots,
                 casOn: body.cascada !== undefined ? (body.cascada === true || body.cascada === "true") : baseSettings.casOn,
