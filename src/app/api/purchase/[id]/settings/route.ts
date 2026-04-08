@@ -16,9 +16,17 @@ export async function GET(
         const account = searchParams.get("account") || "unknown";
 
         // @ts-ignore - Handle possible generation delay
-        const settings = await prisma.botSettings.findUnique({
+        let settings = await prisma.botSettings.findUnique({
             where: { purchaseId_account: { purchaseId: id, account } }
         });
+
+        // FALLBACK: Si pide "unknown" pero hay datos de una cuenta real, servimos esos
+        if (!settings && account === "unknown") {
+            settings = await prisma.botSettings.findFirst({
+                where: { purchaseId: id },
+                orderBy: { updatedAt: 'desc' }
+            });
+        }
 
         return NextResponse.json(settings ? settings.settings : {});
     } catch (error) {
