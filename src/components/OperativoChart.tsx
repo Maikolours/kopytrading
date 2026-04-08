@@ -81,8 +81,6 @@ const OperativoChart: React.FC<OperativoChartProps> = ({ fiboLevels, trend }) =>
     useEffect(() => {
         if (!candleSeriesRef.current || !fiboLevels) return;
 
-        // Limpiar líneas anteriores (una forma simple es guardarlas, pero aquí usaremos el mecanismo de lightweight)
-        // Por ahora, añadimos las líneas si los niveles son válidos
         const { p00, p50, p62, p78, p100 } = fiboLevels;
         
         if (p00 > 0) {
