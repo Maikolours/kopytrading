@@ -67,6 +67,9 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Purchase not found" }, { status: 404 });
         }
 
+        // ASEGURAR ID OFICIAL (Evitar desincronía por mayúsculas/minúsculas)
+        const officialPurchaseId = purchase.id;
+
         // 3b. VERIFICACIÓN DE PRODUCTO (Opcional): Si el bot envía licenseKey (XAU-MG, etc)
         if (body.licenseKey && purchase.botProduct.productKey && purchase.botProduct.productKey !== body.licenseKey) {
             await prisma.requestLog.create({
@@ -95,19 +98,19 @@ export async function POST(req: Request) {
 
         // Actualizar latido de conexión
         await prisma.purchase.update({
-            where: { id: purchaseId },
+            where: { id: officialPurchaseId },
             data: { lastSync: new Date() }
         });
 
         // Sincronizar posiciones abiertas: Borramos SOLO las de esta cuenta y creamos las nuevas
         await prisma.$transaction([
             prisma.livePosition.deleteMany({ 
-                where: { purchaseId, account } 
+                where: { purchaseId: officialPurchaseId, account } 
             }),
             ...(positions || []).map((pos: any) => 
                 prisma.livePosition.create({
                     data: {
-                        purchaseId,
+                        purchaseId: officialPurchaseId,
                         account,
                         ticket: String(pos.ticket),
                         type: pos.type || "UNKNOWN",
@@ -127,13 +130,13 @@ export async function POST(req: Request) {
         if (history && history.length > 0) {
             for (const h of history) {
                 const exists = await prisma.tradeHistory.findFirst({
-                    where: { purchaseId, account, ticket: String(h.ticket) }
+                    where: { purchaseId: officialPurchaseId, account, ticket: String(h.ticket) }
                 });
 
                 if (!exists) {
                     await prisma.tradeHistory.create({
                         data: {
-                            purchaseId,
+                            purchaseId: officialPurchaseId,
                             account,
                             ticket: String(h.ticket),
                             type: h.type || "UNKNOWN",
@@ -183,7 +186,7 @@ export async function POST(req: Request) {
         try {
             // Buscamos settings existentes
             const existingRecord = await prisma.botSettings.findUnique({
-                where: { purchaseId_account: { purchaseId, account: String(account) } }
+                where: { purchaseId_account: { purchaseId: officialPurchaseId, account: String(account) } }
             });
 
             const baseSettings = existingRecord ? (existingRecord.settings as any) : DEFAULT_SETTINGS;
@@ -204,9 +207,9 @@ export async function POST(req: Request) {
             };
 
             currentSettings = await prisma.botSettings.upsert({
-                where: { purchaseId_account: { purchaseId, account: String(account) } },
+                where: { purchaseId_account: { purchaseId: officialPurchaseId, account: String(account) } },
                 update: { settings: updatedSettings },
-                create: { purchaseId, account: String(account), settings: updatedSettings }
+                create: { purchaseId: officialPurchaseId, account: String(account), settings: updatedSettings }
             });
 
         } catch (sErr) {
