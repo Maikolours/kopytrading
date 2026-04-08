@@ -29,12 +29,8 @@ export async function POST(req: Request) {
         
         // NORMALIZACIÓN: Asegurar que el purchaseId sea siempre minúsculas y limpiar sufijos
         // Algunos bots envían cmmv3...-btccent o cmmv3...-oro
-        let purchaseId = body.purchaseId ? body.purchaseId.trim().toLowerCase() : null;
-        if (purchaseId && purchaseId.includes("-")) {
-            purchaseId = purchaseId.split("-")[0]; // Nos quedamos solo con el CUID
-        }
-        
-        const account = body.account ? String(body.account).trim() : null;
+        const purchaseId = (body.purchaseId || body.license || "").trim().toLowerCase().split("-")[0];
+        const account = (body.account || body.acc || "").toString().trim();
         const { positions, history, isReal } = body;
 
         if (!purchaseId || !account) {
