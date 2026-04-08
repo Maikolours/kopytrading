@@ -44,15 +44,29 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Missing purchaseId or account" }, { status: 400 });
         }
 
-        // 3. Verificar que la compra existe y cargar su producto
-        const purchase = await prisma.purchase.findUnique({
+        // 3. Verificar que la compra existe (Búsqueda Robusta)
+        let purchase = await prisma.purchase.findUnique({
             where: { id: purchaseId },
             include: { botProduct: true }
         });
 
+        // REINTENTO: Si no lo encuentra por ID exacto, lo buscamos en la base de datos sin importar mayúsculas
+        if (!purchase) {
+             const allPurchases = await prisma.purchase.findMany({
+                 select: { id: true }
+             });
+             const matchingId = allPurchases.find((p: { id: string }) => p.id.toLowerCase() === purchaseId.toLowerCase())?.id;
+             if (matchingId) {
+                 purchase = await prisma.purchase.findUnique({
+                     where: { id: matchingId },
+                     include: { botProduct: true }
+                 });
+             }
+        }
+
         if (!purchase) {
             await prisma.requestLog.create({
-                data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body), error: "Purchase not found: " + purchaseId }
+                data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body), error: "Purchase not found (Robust Search Failed): " + purchaseId }
             });
             return NextResponse.json({ error: "Purchase not found" }, { status: 404 });
         }
