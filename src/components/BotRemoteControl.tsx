@@ -18,7 +18,10 @@ import {
     Lock,
     Unlock,
     Settings,
-    Clock
+    Clock,
+    Eraser,
+    ShieldCheck,
+    Trash2
 } from "lucide-react";
 import { BotSettings } from "./BotSettings";
 
@@ -79,6 +82,16 @@ export function BotRemoteControl({
             console.error("Error fetching bot data:", error);
         } finally {
             setRefreshing(false);
+        }
+    };
+
+    const handleReset = () => {
+        if (confirm("🧹 ¿Resetear campos tácticos a Golden Settings?")) {
+            setBeValues({ B1: "0.8", B2: "0.8", GR: "1.0" });
+            setGarValues({ B1: "0.5", B2: "0.5", GR: "0.8" });
+            setTraValues({ B1: "1.2", B2: "1.0", GR: "1.5" });
+            setStatusMsg("Valores reseteados localmente.");
+            setTimeout(() => setStatusMsg(null), 2000);
         }
     };
 
@@ -278,57 +291,75 @@ export function BotRemoteControl({
                             </div>
                         </div>
 
-                        <Button 
-                            variant="outline" 
-                            className={`py-2 rounded-lg border flex flex-col gap-0.5 h-auto transition-all ${
-                                (botData?.casOn || botData?.cascada) 
-                                ? 'bg-brand/10 border-brand-light text-brand-light' 
-                                : 'bg-white/5 border-white/10 text-white/20'
-                            }`}
-                            onClick={() => sendCommand("SET_SETTING", JSON.stringify({ casOn: !(botData?.casOn || botData?.cascada) }))}
-                        >
-                            <span className="text-[8px] font-black tracking-widest uppercase">Cascada {(botData?.casOn || botData?.cascada) ? 'ON' : 'OFF'}</span>
-                        </Button>
+                {/* ACCIONES TÁCTICAS PRINCIPALES */}
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                    <Button 
+                        variant={ (botData?.casOn || botData?.cascada) ? "success" : "secondary"}
+                        className={`flex items-center justify-center gap-2 py-4 h-auto text-[10px] font-black uppercase tracking-wider transition-all duration-300 ${
+                            (botData?.casOn || botData?.cascada) ? 'shadow-[0_0_15px_rgba(34,197,94,0.3)]' : ''
+                        }`}
+                        onClick={() => sendCommand("SET_SETTING", JSON.stringify({ casOn: !(botData?.casOn || botData?.cascada) }))}
+                    >
+                        <Zap size={14} className={(botData?.casOn || botData?.cascada) ? "animate-pulse" : "text-white/20"} />
+                        Cascada {(botData?.casOn || botData?.cascada) ? 'ON' : 'OFF'}
+                    </Button>
 
-                        <Button 
-                            variant="outline" 
-                            className={`py-2 rounded-lg border flex flex-col gap-0.5 h-auto transition-all ${
-                                (botData?.giroOn || botData?.giro)
-                                ? 'bg-orange/10 border-orange/40 text-orange' 
-                                : 'bg-white/5 border-white/10 text-white/20'
-                            }`}
-                            onClick={() => sendCommand("SET_SETTING", JSON.stringify({ giroOn: !(botData?.giroOn || botData?.giro) }))}
-                        >
-                            <span className="text-[8px] font-black tracking-widest uppercase">Giro: {(botData?.giroOn || botData?.giro) ? 'ON' : 'OFF'}</span>
-                        </Button>
+                    <Button 
+                        variant={ (botData?.giroOn || botData?.giro) ? "success" : "secondary"}
+                        className={`flex items-center justify-center gap-2 py-4 h-auto text-[10px] font-black uppercase tracking-wider transition-all duration-300 ${
+                            (botData?.giroOn || botData?.giro) ? 'shadow-[0_0_15px_rgba(249,115,22,0.3)]' : ''
+                        }`}
+                        onClick={() => sendCommand("SET_SETTING", JSON.stringify({ giroOn: !(botData?.giroOn || botData?.giro) }))}
+                    >
+                        <RefreshCw size={14} className={(botData?.giroOn || botData?.giro) ? "animate-spin-slow" : "text-white/20"} />
+                        Giro {(botData?.giroOn || botData?.giro) ? 'ON' : 'OFF'}
+                    </Button>
 
-                        <Button 
-                            variant="outline" 
-                            className={`py-2 rounded-lg border flex flex-col gap-0.5 h-auto transition-all ${
-                                botData?.hideMinor 
-                                ? 'bg-cyan/10 border-cyan/40 text-cyan' 
-                                : 'bg-white/5 border-white/10 text-white/20'
-                            }`}
-                            onClick={() => sendCommand("SET_SETTING", JSON.stringify({ hideMinor: !botData?.hideMinor }))}
-                        >
-                            <span className="text-[8px] font-black tracking-widest uppercase">X-RAY: {botData?.hideMinor ? 'ON' : 'OFF'}</span>
-                        </Button>
-                    </div>
+                    <Button 
+                        variant={ botData?.hideMinor ? "success" : "secondary"}
+                        className="flex items-center justify-center gap-2 py-3 h-auto text-[10px] font-black uppercase tracking-wider"
+                        onClick={() => sendCommand("SET_SETTING", JSON.stringify({ hideMinor: !botData?.hideMinor }))}
+                    >
+                        <BarChart3 size={14} className={botData?.hideMinor ? "text-cyan" : "text-white/20"} />
+                        X-RAY {botData?.hideMinor ? 'ON' : 'OFF'}
+                    </Button>
+
+                    <Button 
+                        variant={ botData?.armed ? "success" : "secondary"}
+                        className="flex items-center justify-center gap-2 py-3 h-auto text-[10px] font-black uppercase tracking-wider"
+                        onClick={() => sendCommand("ARM_BOT", "TOGGLE")}
+                    >
+                        <ShieldCheck size={14} className={botData?.armed ? "text-brand-light" : "text-white/20"} />
+                        {botData?.armed ? 'Armado' : 'Espera'}
+                    </Button>
                 </div>
 
-                <Button 
-                    variant="danger" 
-                    size="sm" 
-                    fullWidth
-                    className="text-[10px] font-black uppercase py-4 rounded-xl"
-                    onClick={() => {
-                        if(confirm("🚨 ¿PANICO? Esto cerrará todo.")) {
-                            sendCommand("CLOSE_ALL");
-                        }
-                    }}
-                >
-                    Cierre de Emergencia
-                </Button>
+                <div className="space-y-2 pt-4 border-t border-white/10">
+                    <Button 
+                        variant="secondary"
+                        size="sm"
+                        className="w-full flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 border-white/10 text-[9px] font-bold uppercase tracking-widest text-white/60"
+                        onClick={handleReset}
+                    >
+                        <Eraser size={12} />
+                        Limpiar Inputs (Golden Reset)
+                    </Button>
+
+                    <Button 
+                        variant="danger" 
+                        size="sm" 
+                        fullWidth
+                        className="w-full flex items-center justify-center gap-3 py-5 rounded-xl text-xs font-black uppercase tracking-[0.2em] shadow-[0_0_25px_rgba(239,68,68,0.2)] hover:shadow-[0_0_35px_rgba(239,68,68,0.4)] transition-all"
+                        onClick={() => {
+                            if(confirm("🚨 ¿PANICO? Esto cerrará todo.")) {
+                                sendCommand("CLOSE_ALL");
+                            }
+                        }}
+                    >
+                        <ShieldAlert size={20} fill="red" />
+                        Pánico: Cierre Total
+                    </Button>
+                </div>
 
                 {statusMsg && (
                     <motion.div 
