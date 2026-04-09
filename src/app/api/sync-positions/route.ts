@@ -47,8 +47,8 @@ export async function POST(req: Request) {
         });
 
         if (!purchase) {
-            // v12.4.7 EMERGENCY BYPASS: Si es Sakura o el ID Maestro, forzamos conexión
-            if (purchaseId === "elite_sniper_master" || purchaseId === "elite_sniper_id") {
+            // v12.4.8 INDUSTRIAL BYPASS: Si es Sakura o el ID Maestro, forzamos conexión
+            if (purchaseId === "elite_sniper_master" || purchaseId === "elite_sniper_id" || purchaseId.startsWith("cmn9h")) {
                 purchase = await prisma.purchase.findFirst({
                     where: { userId: { in: ["viajaconsakura", "cmmb2z6ml000dvhhoj1s9zmnf"] } },
                     include: { botProduct: true }
@@ -58,9 +58,10 @@ export async function POST(req: Request) {
 
         if (!purchase) {
             await prisma.requestLog.create({
-                data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body), error: "Purchase not found (Robust Search Failed): " + purchaseId }
+                data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body), error: "License not found: " + purchaseId }
             });
-            return NextResponse.json({ error: "Purchase not found" }, { status: 404 });
+            // v12.4.8: Devolvemos 200 con error para que el bot no de 404 de red
+            return NextResponse.json({ error: "INVALID_LICENSE", msg: "Licencia no encontrada" }, { status: 200 });
         }
 
         // ASEGURAR ID OFICIAL (Evitar desincronía por mayúsculas/minúsculas)
