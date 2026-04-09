@@ -142,7 +142,7 @@ export function BotRemoteControl({
                             <Activity size={12} className={isActualOnline ? 'animate-pulse' : ''} />
                         </div>
                         <div>
-                            <h4 className="text-[9px] font-black uppercase tracking-wider text-brand-light leading-none">Sniper v12.4.6 GOLDEN</h4>
+                            <h4 className="text-[9px] font-black uppercase tracking-wider text-brand-light leading-none">Sniper v12.4.7 GOLDEN</h4>
                             <div className="flex flex-col gap-0.5 mt-1">
                                 <p className="text-[7px] text-white/40 font-bold uppercase tracking-widest leading-none truncate max-w-[100px]">Universal Matrix</p>
                                 {botData?.symbol && (
