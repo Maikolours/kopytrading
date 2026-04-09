@@ -8,7 +8,6 @@ import {
     TrendingUp, 
     TrendingDown, 
     Zap, 
-    Zap, 
     ShieldAlert, 
     Coins, 
     BarChart3,
