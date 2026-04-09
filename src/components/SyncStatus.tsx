@@ -18,12 +18,12 @@ export function SyncStatus({ initialLastSync }: SyncStatusProps) {
             }
             const now = new Date().getTime();
             const diff = now - lastSync.getTime();
-            // Consideramos online si hubo sync en los últimos 2.5 minutos
-            setIsOnline(diff < 150000);
+            // Consideramos online si hubo sync en los últimos 15 segundos
+            setIsOnline(diff < 15000);
         };
 
         checkStatus();
-        const interval = setInterval(checkStatus, 30000); // Check cada 30s
+        const interval = setInterval(checkStatus, 5000); // Check cada 5s
         return () => clearInterval(interval);
     }, [lastSync]);
 

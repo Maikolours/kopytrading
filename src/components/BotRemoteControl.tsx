@@ -8,7 +8,7 @@ import {
     TrendingUp, 
     TrendingDown, 
     Zap, 
-    RotateCcw, 
+    Zap, 
     ShieldAlert, 
     Coins, 
     BarChart3,
@@ -46,9 +46,10 @@ export function BotRemoteControl({
     const [refreshing, setRefreshing] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
 
-    // Nuevos estados para parámetros de riesgo
-    const [beValue, setBeValue] = useState<string>("");
-    const [trValue, setTrValue] = useState<string>("");
+    // v12.4.0: Matriz Táctica Triple
+    const [beValues, setBeValues] = useState<any>({ B1: "", B2: "", GR: "" });
+    const [garValues, setGarValues] = useState<any>({ B1: "", B2: "", GR: "" });
+    const [traValues, setTraValues] = useState<any>({ B1: "", B2: "", GR: "" });
 
     const isSniper = botName.toLowerCase().includes("sniper") || botName.toLowerCase().includes("v11");
 
@@ -68,9 +69,12 @@ export function BotRemoteControl({
             if (res.ok) {
                 const data = await res.json();
                 setBotData(data);
-                // Sincronizar inputs locales si no estamos editando
-                if (loading !== "SET_BE") setBeValue(data.b1_be?.toString() || "");
-                if (loading !== "SET_TR") setTrValue(data.trailling_val?.toString() || "3.0");
+                // Sincronizar inputs locales v12.4
+                if (!loading?.includes("SET_")) {
+                    setBeValues({ B1: data.b1_be || "", B2: data.b2_be || "", GR: data.gr_be || "" });
+                    setGarValues({ B1: data.b1_gar || "", B2: data.b2_gar || "", GR: data.gr_gar || "" });
+                    setTraValues({ B1: data.b1_tra || data.trailling_val || "", B2: data.b2_tra || "", GR: data.gr_tra || "" });
+                }
             }
         } catch (error) {
             console.error("Error fetching bot data:", error);
@@ -126,9 +130,9 @@ export function BotRemoteControl({
                             <Activity size={12} className={isActualOnline ? 'animate-pulse' : ''} />
                         </div>
                         <div>
-                            <h4 className="text-[9px] font-black uppercase tracking-wider text-white/90 leading-none">Estatus v12.0.4 Elite</h4>
+                            <h4 className="text-[9px] font-black uppercase tracking-wider text-brand-light leading-none">Sniper v12.4.0 Elite</h4>
                             <div className="flex flex-col gap-0.5 mt-1">
-                                <p className="text-[7px] text-white/40 font-bold uppercase tracking-widest leading-none truncate max-w-[100px]">{botName}</p>
+                                <p className="text-[7px] text-white/40 font-bold uppercase tracking-widest leading-none truncate max-w-[100px]">Universal Matrix</p>
                                 {botData?.symbol && (
                                     <p className="text-[6px] font-black text-brand-light/80 uppercase tracking-tighter leading-none flex items-center gap-0.5">
                                         <Clock size={6} /> {botData.symbol} {botData.tf}
@@ -202,65 +206,70 @@ export function BotRemoteControl({
                     </div>
                 </div>
 
-                {/* Parámetros de Riesgo (Nuevos) */}
+                {/* Matrix Táctica v12.4.0 */}
                 <div className="mb-4 bg-white/5 rounded-xl border border-white/5 p-3 space-y-3">
-                    <p className="text-[8px] font-black uppercase text-white/40 tracking-widest border-b border-white/5 pb-1 flex items-center gap-2">
-                        <ShieldAlert size={10} className="text-brand-light" /> Parámetros Tácticos
-                    </p>
-                    <div className="grid grid-cols-2 gap-3">
-                        <div className="space-y-1">
-                            <label className="text-[7px] font-black text-white/40 uppercase">Break-Even (USD)</label>
-                            <div className="flex gap-1">
-                                <input 
-                                    type="number" 
-                                    value={beValue} 
-                                    onChange={(e) => setBeValue(e.target.value)}
-                                    className="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px] font-bold text-white w-full outline-none focus:border-brand-light/40 transition-colors"
-                                />
-                                <Button 
-                                    size="sm" 
-                                    variant="outline" 
-                                    loading={loading === "SET_BE"}
-                                    onClick={() => sendCommand("SET_BE", beValue)}
-                                    className="px-2"
-                                >OK</Button>
-                            </div>
-                        </div>
-                        <div className="space-y-1">
-                            <label className="text-[7px] font-black text-white/40 uppercase">Trailing (USD)</label>
-                            <div className="flex gap-1">
-                                <input 
-                                    type="number" 
-                                    value={trValue} 
-                                    onChange={(e) => setTrValue(e.target.value)}
-                                    className="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px] font-bold text-white w-full outline-none focus:border-brand-light/40 transition-colors"
-                                />
-                                <Button 
-                                    size="sm" 
-                                    variant="outline" 
-                                    loading={loading === "SET_TR"}
-                                    onClick={() => sendCommand("SET_TR", trValue)}
-                                    className="px-2"
-                                >OK</Button>
-                            </div>
+                    <div className="flex items-center justify-between border-b border-white/5 pb-1">
+                        <p className="text-[8px] font-black uppercase text-white/40 tracking-widest flex items-center gap-2">
+                            <ShieldAlert size={10} className="text-brand-light" /> Tactical Matrix
+                        </p>
+                        <div className="flex gap-4 pr-10">
+                            <span className="text-[6px] font-black text-white/20 uppercase">BE</span>
+                            <span className="text-[6px] font-black text-white/20 uppercase">GAR</span>
+                            <span className="text-[6px] font-black text-white/20 uppercase">TRA</span>
                         </div>
                     </div>
+                    
+                    {['B1', 'B2', 'GR'].map((bot) => (
+                        <div key={bot} className="flex items-center gap-2">
+                            <div className="w-6">
+                                <span className={`text-[8px] font-black ${bot==='GR' ? 'text-gold' : 'text-white/40'}`}>{bot}</span>
+                            </div>
+                            <div className="flex-1 grid grid-cols-3 gap-1.5 ml-1">
+                                {['BE', 'GAR', 'TRA'].map((param) => {
+                                    const val = param === 'BE' ? beValues[bot] : param === 'GAR' ? garValues[bot] : traValues[bot];
+                                    const setter = param === 'BE' ? setBeValues : param === 'GAR' ? setGarValues : setTraValues;
+                                    const cmd = `SET_${bot}_${param}`;
+                                    
+                                    return (
+                                        <div key={param} className="flex flex-col gap-1">
+                                            <div className="flex bg-black/40 rounded border border-white/5 overflow-hidden focus-within:border-brand-light/30 transition-colors">
+                                                <input 
+                                                    type="number"
+                                                    value={val}
+                                                    step="0.1"
+                                                    onChange={(e) => setter({...val, [bot]: e.target.value})}
+                                                    className="w-full bg-transparent px-1 py-1 text-[9px] font-bold text-white outline-none text-center"
+                                                />
+                                                <button 
+                                                    onClick={() => sendCommand(cmd, val.toString())}
+                                                    disabled={loading === cmd}
+                                                    className="px-1 bg-white/5 text-[7px] font-black text-brand-light hover:bg-brand-light hover:text-black transition-colors"
+                                                >
+                                                    {loading === cmd ? '...' : 'OK'}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    ))}
                 </div>
 
                 <div className="space-y-3 mb-6">
-                    <div className="grid grid-cols-2 gap-3">
-                        <div className="col-span-2 space-y-1 mb-1">
-                            <p className="text-[7px] font-black text-white/40 uppercase tracking-widest pl-1">Lookback (HTF)</p>
+                    <div className="grid grid-cols-3 gap-2">
+                        <div className="col-span-3 space-y-1 mb-1 border-b border-white/5 pb-2">
+                            <p className="text-[7px] font-black text-white/40 uppercase tracking-widest pl-1">Lookback (HTF) & Masters</p>
                             <div className="flex flex-wrap gap-1.5">
                                 {[1, 4, 6, 12, 24].map((h) => (
                                     <Button 
                                         key={h}
                                         variant="outline"
                                         size="sm"
-                                        className={`text-[10px] font-black flex-1 min-w-[45px] transition-all duration-300 ${
+                                        className={`text-[9px] font-black flex-1 min-w-[40px] px-0 h-7 transition-all duration-300 ${
                                             Number(botData?.lkb) === h 
                                             ? 'bg-brand/30 border-brand-light text-brand-light shadow-[0_0_10px_rgba(36,206,203,0.2)]' 
-                                            : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10'
+                                            : 'bg-white/5 border-white/10 text-white/40'
                                         }`}
                                         onClick={() => sendCommand("SET_LOOKBACK", h.toString())}
                                     >
@@ -272,27 +281,38 @@ export function BotRemoteControl({
 
                         <Button 
                             variant="outline" 
-                            className={`py-3 rounded-lg border flex flex-col gap-0.5 h-auto transition-all ${
+                            className={`py-2 rounded-lg border flex flex-col gap-0.5 h-auto transition-all ${
                                 (botData?.casOn || botData?.cascada) 
                                 ? 'bg-brand/10 border-brand-light text-brand-light' 
                                 : 'bg-white/5 border-white/10 text-white/20'
                             }`}
                             onClick={() => sendCommand("SET_SETTING", JSON.stringify({ casOn: !(botData?.casOn || botData?.cascada) }))}
                         >
-                            <span className="text-[9px] font-black tracking-widest uppercase">Cascada {(botData?.casOn || botData?.cascada) ? 'ON' : 'OFF'}</span>
+                            <span className="text-[8px] font-black tracking-widest uppercase">Cascada {(botData?.casOn || botData?.cascada) ? 'ON' : 'OFF'}</span>
                         </Button>
 
                         <Button 
                             variant="outline" 
-                            className={`py-3 rounded-lg border flex flex-col gap-0.5 h-auto transition-all ${
+                            className={`py-2 rounded-lg border flex flex-col gap-0.5 h-auto transition-all ${
                                 (botData?.giroOn || botData?.giro)
-                                ? 'bg-success/10 border-success/40 text-success' 
+                                ? 'bg-orange/10 border-orange/40 text-orange' 
                                 : 'bg-white/5 border-white/10 text-white/20'
                             }`}
                             onClick={() => sendCommand("SET_SETTING", JSON.stringify({ giroOn: !(botData?.giroOn || botData?.giro) }))}
                         >
-                            <RotateCcw size={14} />
-                            <span className="text-[9px] font-black tracking-widest uppercase">Giro: {(botData?.giroOn || botData?.giro) ? 'ON' : 'OFF'}</span>
+                            <span className="text-[8px] font-black tracking-widest uppercase">Giro: {(botData?.giroOn || botData?.giro) ? 'ON' : 'OFF'}</span>
+                        </Button>
+
+                        <Button 
+                            variant="outline" 
+                            className={`py-2 rounded-lg border flex flex-col gap-0.5 h-auto transition-all ${
+                                botData?.hideMinor 
+                                ? 'bg-cyan/10 border-cyan/40 text-cyan' 
+                                : 'bg-white/5 border-white/10 text-white/20'
+                            }`}
+                            onClick={() => sendCommand("SET_SETTING", JSON.stringify({ hideMinor: !botData?.hideMinor }))}
+                        >
+                            <span className="text-[8px] font-black tracking-widest uppercase">X-RAY: {botData?.hideMinor ? 'ON' : 'OFF'}</span>
                         </Button>
                     </div>
                 </div>

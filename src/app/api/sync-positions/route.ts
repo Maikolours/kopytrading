@@ -157,25 +157,26 @@ export async function POST(req: Request) {
         const DEFAULT_SETTINGS = {
             net_cycle: 5.0,
             hedge_trigger: 3.0,
-            lote_manual: 0.08,
-            lote_rescate: 0.02,
-            max_dd: 50.0,
+            lote_manual: 0.01,
+            lote_rescate: 0.01,
+            max_dd: 20.0,
             trailling_stop: 3.0,
             limit_dist: 500,
             timeframe: "M5",
-            lkb: 12,
-            b1_be: 7.0, b1_gar: 4.0,
-            b2_be: 8.0, b2_gar: 5.0,
-            gr_be: 8.0, gr_gar: 5.0,
-            casOn: true,
-            autoRA: true
+            lkb: 4,
+            b1_be: 2.0, b1_gar: 1.0, b1_tra: 3.0,
+            b2_be: 2.0, b2_gar: 2.5, b2_tra: 3.0,
+            gr_be: 4.0, gr_gar: 2.5, gr_tra: 3.0,
+            casOn: false,
+            autoRA: true,
+            giroOn: false
         };
 
         const telemetry = {
             balance: Number(body.balance) || 0,
             equity: Number(body.equity) || 0,
             pnl_today: Number(body.pnl_today) || 0,
-            lkb: Number(body.lkb) || 12,
+            lkb: Number(body.lkb) || 4,
             trend: body.trend || "UNKNOWN",
             armed: body.armed === true || body.armed === "true",
             // Capture Fibo Levels for charting
@@ -184,6 +185,10 @@ export async function POST(req: Request) {
             p62: body.p62 !== undefined ? Number(body.p62) : 0,
             p78: body.p78 !== undefined ? Number(body.p78) : 0,
             p100: body.p100 !== undefined ? Number(body.p100) : 0,
+            // Tactical Matrix v12.4
+            b1_be: Number(body.b1_be), b1_gar: Number(body.b1_gar), b1_tra: Number(body.b1_tra),
+            b2_be: Number(body.b2_be), b2_gar: Number(body.b2_gar), b2_tra: Number(body.b2_tra),
+            gr_be: Number(body.gr_be), gr_gar: Number(body.gr_gar), gr_tra: Number(body.gr_tra),
             isOnline: true,
             lastUpdate: new Date().toISOString()
         };
@@ -229,8 +234,15 @@ export async function POST(req: Request) {
                     lkb: Number(body.lkb) || specificMemory.lkb || rawSettings.lkb,
                     casOn: updatedSettings.casOn,
                     giroOn: updatedSettings.giroOn,
-                    b1_be: Number(body.b1_be) || specificMemory.b1_be || rawSettings.b1_be,
-                    b1_gar: Number(body.b1_gar) || specificMemory.b1_gar || rawSettings.b1_gar,
+                    b1_be: telemetry.b1_be || specificMemory.b1_be || rawSettings.b1_be,
+                    b1_gar: telemetry.b1_gar || specificMemory.b1_gar || rawSettings.b1_gar,
+                    b1_tra: telemetry.b1_tra || specificMemory.b1_tra || rawSettings.b1_tra,
+                    b2_be: telemetry.b2_be || specificMemory.b2_be || rawSettings.b2_be,
+                    b2_gar: telemetry.b2_gar || specificMemory.b2_gar || rawSettings.b2_gar,
+                    b2_tra: telemetry.b2_tra || specificMemory.b2_tra || rawSettings.b2_tra,
+                    gr_be: telemetry.gr_be || specificMemory.gr_be || rawSettings.gr_be,
+                    gr_gar: telemetry.gr_gar || specificMemory.gr_gar || rawSettings.gr_gar,
+                    gr_tra: telemetry.gr_tra || specificMemory.gr_tra || rawSettings.gr_tra,
                     // ... otros ajustes que deben persistir por gráfico
                 }
             };
