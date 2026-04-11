@@ -15,15 +15,10 @@ import {
     ArrowDownRight,
     RefreshCw,
     Settings2,
-    Lock,
-    Unlock,
-    Settings,
-    Clock,
     Eraser,
     ShieldCheck,
-    Trash2
+    Clock
 } from "lucide-react";
-import { BotSettings } from "./BotSettings";
 
 interface BotRemoteControlProps {
     purchaseId: string;
@@ -48,15 +43,12 @@ export function BotRemoteControl({
     const [refreshing, setRefreshing] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
 
-    // v12.4.0: Matriz Táctica Triple
     const [beValues, setBeValues] = useState<any>({ B1: "", B2: "", GR: "" });
     const [garValues, setGarValues] = useState<any>({ B1: "", B2: "", GR: "" });
     const [traValues, setTraValues] = useState<any>({ B1: "", B2: "", GR: "" });
 
-    const isGold = botName.toLowerCase().includes("gold") || botName.toLowerCase().includes("ametralladora") || botName.toLowerCase().includes("evolution") || botData?.symbol === "XAUUSD";
-    const isSniper = botName.toLowerCase().includes("sniper") || botName.toLowerCase().includes("v11");
+    const isGold = botName?.toLowerCase()?.includes("gold") || botName?.toLowerCase()?.includes("ametralladora") || botData?.symbol === "XAUUSD";
 
-    // Tema dinámico según el metal
     const currentTheme = isGold ? {
         accent: "text-amber-400",
         border: "border-amber-500/30",
@@ -80,14 +72,12 @@ export function BotRemoteControl({
     const fetchBotData = async () => {
         setRefreshing(true);
         try {
-            // Pasamos symbol y tf si están disponibles en el estado previo
             const symbolParam = botData?.symbol ? `&symbol=${botData.symbol}` : '';
             const tfParam = botData?.tf ? `&timeframe=${botData.tf}` : '';
             const res = await fetch(`/api/purchase/${purchaseId}/settings?account=${account}${symbolParam}${tfParam}`);
             if (res.ok) {
                 const data = await res.json();
                 setBotData(data);
-                // Sincronizar inputs locales v12.4
                 if (!loading?.includes("SET_")) {
                     setBeValues({ B1: data.b1_be || "", B2: data.b2_be || "", GR: data.gr_be || "" });
                     setGarValues({ B1: data.b1_gar || "", B2: data.b2_gar || "", GR: data.gr_gar || "" });
@@ -122,7 +112,6 @@ export function BotRemoteControl({
                     purchaseId, 
                     command, 
                     value,
-                    // Enviamos contexto para que la orden sepa a qué memoria afecta
                     symbol: botData?.symbol,
                     timeframe: botData?.tf
                 })
@@ -150,7 +139,6 @@ export function BotRemoteControl({
     return (
         <div className={`mt-4 p-0.5 rounded-xl bg-black/40 border ${currentTheme.border} shadow-2xl flex flex-col backdrop-blur-xl relative overflow-hidden`}>
             <div className={`absolute top-0 right-0 w-48 h-48 bg-gradient-to-br ${currentTheme.gradient} blur-3xl opacity-10 pointer-events-none`} />
-            
             <div className="p-3 sm:p-4">
                 <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
                     <div className="flex items-center gap-2">
@@ -238,7 +226,6 @@ export function BotRemoteControl({
                     </div>
                 </div>
 
-                {/* Matrix Táctica v12.4.0 */}
                 <div className="mb-4 bg-white/5 rounded-xl border border-white/5 p-3 space-y-3">
                     <div className="flex items-center justify-between border-b border-white/5 pb-1">
                         <p className="text-[8px] font-black uppercase text-white/40 tracking-widest flex items-center gap-2">
@@ -273,7 +260,7 @@ export function BotRemoteControl({
                                                     className="w-full bg-transparent px-1 py-1 text-[9px] font-bold text-white outline-none text-center"
                                                 />
                                                 <button 
-                                                    onClick={() => sendCommand(cmd, val.toString())}
+                                                    onClick={() => sendCommand(cmd, String(val))}
                                                     disabled={loading === cmd}
                                                     className="px-1 bg-white/5 text-[7px] font-black text-brand-light hover:bg-brand-light hover:text-black transition-colors"
                                                 >
@@ -296,8 +283,6 @@ export function BotRemoteControl({
                                 {[1, 4, 6, 12, 24].map((h) => (
                                     <Button 
                                         key={h}
-                                        variant="outline"
-                                        size="sm"
                                         className={`text-[9px] font-black flex-1 min-w-[40px] px-0 h-7 transition-all duration-300 ${
                                             Number(botData?.lkb) === h 
                                             ? 'bg-brand/30 border-brand-light text-brand-light shadow-[0_0_10px_rgba(36,206,203,0.2)]' 
@@ -310,11 +295,12 @@ export function BotRemoteControl({
                                 ))}
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                {/* ACCIONES TÁCTICAS PRINCIPALES */}
                 <div className="grid grid-cols-2 gap-2 mb-4">
                     <Button 
-                        variant={ (botData?.casOn || botData?.cascada) ? "success" : "secondary"}
+                        variant={ (botData?.casOn || botData?.cascada) ? "accent" : "glass"}
                         className={`flex items-center justify-center gap-2 py-4 h-auto text-[10px] font-black uppercase tracking-wider transition-all duration-300 ${
                             (botData?.casOn || botData?.cascada) ? 'shadow-[0_0_15px_rgba(34,197,94,0.3)]' : ''
                         }`}
@@ -325,7 +311,7 @@ export function BotRemoteControl({
                     </Button>
 
                     <Button 
-                        variant={ (botData?.giroOn || botData?.giro) ? "success" : "secondary"}
+                        variant={ (botData?.giroOn || botData?.giro) ? "accent" : "glass"}
                         className={`flex items-center justify-center gap-2 py-4 h-auto text-[10px] font-black uppercase tracking-wider transition-all duration-300 ${
                             (botData?.giroOn || botData?.giro) ? 'shadow-[0_0_15px_rgba(249,115,22,0.3)]' : ''
                         }`}
@@ -336,7 +322,7 @@ export function BotRemoteControl({
                     </Button>
 
                     <Button 
-                        variant={ botData?.hideMinor ? "success" : "secondary"}
+                        variant={ botData?.hideMinor ? "accent" : "glass"}
                         className="flex items-center justify-center gap-2 py-3 h-auto text-[10px] font-black uppercase tracking-wider"
                         onClick={() => sendCommand("SET_SETTING", JSON.stringify({ hideMinor: !botData?.hideMinor }))}
                     >
@@ -345,7 +331,7 @@ export function BotRemoteControl({
                     </Button>
 
                     <Button 
-                        variant={ botData?.armed ? "success" : "secondary"}
+                        variant={ botData?.armed ? "accent" : "glass"}
                         className="flex items-center justify-center gap-2 py-3 h-auto text-[10px] font-black uppercase tracking-wider"
                         onClick={() => sendCommand("ARM_BOT", "TOGGLE")}
                     >
@@ -356,7 +342,7 @@ export function BotRemoteControl({
 
                 <div className="space-y-2 pt-4 border-t border-white/10">
                     <Button 
-                        variant="secondary"
+                        variant="glass"
                         size="sm"
                         className="w-full flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 border-white/10 text-[9px] font-bold uppercase tracking-widest text-white/60"
                         onClick={handleReset}
