@@ -70,7 +70,7 @@ export const BotCard = memo(function BotCard({
                             </div>
                             <CardTitle className="text-lg sm:text-2xl font-black text-white tracking-tighter uppercase">
                                 {isGold ? "Elite Gold Ametralladora ⚡" : 
-                                 purchase.botProduct.instrument === 'BTCUSD' ? "Elite Sniper v13 ⚡" : 
+                                 (purchase.botProduct.instrument.includes('BTC') || purchase.botProduct.name.includes('SNIPER')) ? "Elite Sniper v13 ⚡" : 
                                  purchase.botProduct.name}
                             </CardTitle>
                         </div>

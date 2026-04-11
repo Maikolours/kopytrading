@@ -35,7 +35,10 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
         });
         priceLinesRef.current = [];
 
-        const levelsData = data.settings || data; // Handle both wrapped and unwrapped data
+        if (!data) return;
+        const levelsData = data.settings || data; 
+        if (!levelsData) return;
+
         const p50 = Number(levelsData.p50);
         
         if (p50 && p50 > 0) {
@@ -123,7 +126,11 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
                 if (!res.ok) throw new Error("API Response Error");
                 
                 const data = await res.json();
-                if (!Array.isArray(data)) throw new Error("Invalid Data Format");
+                if (!data || !Array.isArray(data)) {
+                    console.warn("Invalid Binance data for", apiSymbol);
+                    setLoading(false);
+                    return;
+                }
 
                 const formattedData = data.map((d: any) => ({
                     time: d[0] / 1000,
@@ -136,11 +143,10 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
                 setLoading(false);
             } catch (err) {
                 console.error("Error fetching candles:", err);
-                // Si falla, detenemos el loading para que el panel al menos sea visible
                 setLoading(false);
             }
         };
-
+ Jonathan
         fetchKlines();
         fetchTelemetry();
 
