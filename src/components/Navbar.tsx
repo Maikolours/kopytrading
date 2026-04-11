@@ -68,6 +68,14 @@ export function Navbar() {
                         <span className="w-1.5 h-1.5 rounded-full bg-brand group-hover:animate-pulse"></span>
                         {isLoggedIn ? "Mi Panel" : "Mi Cuenta"}
                     </Link>
+                    {isLoggedIn && (
+                        <button 
+                            onClick={() => signOut()}
+                            className="ml-4 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white border border-danger/40 bg-danger/10 hover:bg-danger hover:border-danger rounded-md transition-all shadow-[0_0_10px_rgba(239,68,68,0.2)]"
+                        >
+                            Cerrar Sesión
+                        </button>
+                    )}
                 </nav>
 
                 <div className="flex items-center gap-4">

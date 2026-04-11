@@ -26,11 +26,11 @@ const RESULTS_VIDEOS: VideoResult[] = [
   },
   {
     id: "2",
-    title: "BTCUSD Storm Rider - Optimización",
-    description: "Análisis de entradas en Bitcoin tras la optimización del Momentum y filtros de volatilidad.",
+    title: "ELITE SNIPER v13 - Optimización",
+    description: "Análisis de entradas en Bitcoin tras la optimización del Momentum y filtros de volatilidad institucional.",
     videoUrl: "https://drive.google.com/file/d/1aIu398AEt4_HBW_ULl0UvGmK70eCV3b8/preview",
     date: "19 Mar 2026",
-    botName: "BTC Storm Rider",
+    botName: "ELITE SNIPER v13",
     profit: "+12.20 USD"
   },
 ];

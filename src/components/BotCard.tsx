@@ -52,7 +52,8 @@ export const BotCard = memo(function BotCard({
     let accountTypeColor = hasRealSync ? "bg-success/20 text-success border-success/40" : "bg-orange-500/20 text-orange-400 border-orange-500/40";
     
     const dailyProfit = (purchase.pastTrades || []).reduce((acc: number, t: any) => acc + (Number(t.profit) || 0), 0);
-    const isSniper = purchase.botProduct.name.toLowerCase().includes("v11") || purchase.botProduct.name.toLowerCase().includes("sniper");
+    const isGold = purchase.botProduct.name.toLowerCase().includes("gold") || purchase.botProduct.name.toLowerCase().includes("ametra");
+    const isSniper = purchase.botProduct.name.toLowerCase().includes("v11") || purchase.botProduct.name.toLowerCase().includes("sniper") || isGold;
 
     return (
         <div className={`animate-in fade-in slide-in-from-bottom-6 duration-700 mb-8 ${assetTheme.class}`}>
@@ -68,7 +69,7 @@ export const BotCard = memo(function BotCard({
                                 </span>
                             </div>
                             <CardTitle className="text-lg sm:text-2xl font-black text-white tracking-tighter uppercase">
-                                {purchase.botProduct.name}
+                                {isGold ? "Gold Ametralladora" : purchase.botProduct.name}
                             </CardTitle>
                         </div>
                         <div className="p-2 px-3 rounded-lg bg-black/40 border border-white/5 text-center">
@@ -101,7 +102,7 @@ export const BotCard = memo(function BotCard({
                                     theme={theme}
                                 />
                             ) : (
-                                <TradingViewChart />
+                                <TradingViewChart symbol={purchase.botProduct.instrument.includes("XAU") ? "OANDA:XAUUSD" : "BINANCE:BTCUSDT"} />
                             )}
                             
                             <div className="p-3 rounded-xl bg-black/60 border border-brand/20 shadow-xl">

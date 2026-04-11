@@ -22,6 +22,19 @@ export async function GET(
             where: { purchaseId_account: { purchaseId: id, account } }
         });
 
+        // 🛡️ SAKURA MASTER FETCH: Si eres tú, buscamos tu balance más fresco en todo el sistema.
+        const isSakura = session.user.email?.includes("viajaconsakura") || id.includes("viajaconsakura");
+        if (isSakura) {
+            const freshestRecord = await prisma.botSettings.findFirst({
+                where: { 
+                    purchase: { user: { email: { contains: "viajaconsakura" } } },
+                    account: account !== "unknown" ? account : undefined
+                },
+                orderBy: { updatedAt: 'desc' }
+            });
+            if (freshestRecord) record = freshestRecord;
+        }
+
         // FALLBACK: Si pide "unknown" pero hay datos de una cuenta real, servimos esos
         if (!record && account === "unknown") {
             record = await prisma.botSettings.findFirst({

@@ -2,7 +2,11 @@
 
 import React, { useEffect, useRef, memo } from 'react';
 
-function TradingViewChart() {
+interface TradingViewChartProps {
+  symbol?: string;
+}
+
+function TradingViewChart({ symbol = "BINANCE:BTCUSDT" }: TradingViewChartProps) {
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -14,7 +18,7 @@ function TradingViewChart() {
     script.async = true;
     script.innerHTML = JSON.stringify({
       "autosize": true,
-      "symbol": "BINANCE:BTCUSDT",
+      "symbol": symbol, // AHORA ES DINÁMICO
       "interval": "60",
       "timezone": "Etc/UTC",
       "theme": "dark",
@@ -34,7 +38,7 @@ function TradingViewChart() {
         container.current.innerHTML = "";
       }
     };
-  }, []);
+  }, [symbol]); // Recargar si cambia el símbolo
 
   return (
     <div className="tradingview-widget-container rounded-3xl overflow-hidden border border-white/5 bg-black/20" style={{ height: "400px", width: "100%" }}>

@@ -47,10 +47,20 @@ export async function POST(req: Request) {
         });
 
         if (!purchase) {
-            // v12.4.8 INDUSTRIAL BYPASS: Si es Sakura o el ID Maestro, forzamos conexión
-            if (purchaseId === "elite_sniper_master" || purchaseId === "elite_sniper_id" || purchaseId.startsWith("cmn9h")) {
+            // v13.0 MASTER BYPASS: Sakura Industrial Pass (Refined to support multiple products)
+            const isSakuraMaster = purchaseId === "viajaconsakura" || purchaseId.includes("viajaconsakura") || purchaseId === "elite_sniper_master" || purchaseId.startsWith("cmn9h");
+            if (isSakuraMaster) {
+                const targetKey = body.productKey || body.licenseKey || "SNIPER-ELITE";
                 purchase = await prisma.purchase.findFirst({
-                    where: { userId: { in: ["viajaconsakura", "cmmb2z6ml000dvhhoj1s9zmnf"] } },
+                    where: { 
+                        userId: { in: ["viajaconsakura", "cmmb2z6ml000dvhhoj1s9zmnf"] },
+                        botProduct: {
+                            OR: [
+                                { productKey: targetKey },
+                                { name: { contains: targetKey } }
+                            ]
+                        }
+                    },
                     include: { botProduct: true }
                 });
             }
@@ -93,11 +103,20 @@ export async function POST(req: Request) {
             }
         }
 
-        // Actualizar latido de conexión
-        await prisma.purchase.update({
-            where: { id: officialPurchaseId },
-            data: { lastSync: new Date() }
-        });
+        // 🛡️ SAKURA MASTER SYNC: Si eres tú, forzamos la actualización sin importar los errores previos
+        if (isSakuraMaster) {
+            await prisma.purchase.update({
+                where: { id: officialPurchaseId },
+                data: { lastSync: new Date() }
+            });
+            // Continuamos para guardar el balance en BotSettings
+        } else {
+            // Actualizar latido de conexión normal
+            await prisma.purchase.update({
+                where: { id: officialPurchaseId },
+                data: { lastSync: new Date() }
+            });
+        }
 
         // Sincronizar posiciones abiertas: Borramos SOLO las de esta cuenta y creamos las nuevas
         await prisma.$transaction([
@@ -247,11 +266,27 @@ export async function POST(req: Request) {
 
             updatedSettings.memories = newMemories;
 
-            currentSettings = await prisma.botSettings.upsert({
-                where: { purchaseId_account: { purchaseId: officialPurchaseId, account: String(account) } },
-                update: { settings: updatedSettings },
-                create: { purchaseId: officialPurchaseId, account: String(account), settings: updatedSettings }
-            });
+            // 🛡️ SAKURA PROPAGATION: Si es Sakura, actualizamos TODAS sus licencias con este balance
+            // para asegurar que el dashboard lo muestre bien use el ID que use.
+            if (isSakuraMaster) {
+                const allSakuraPurchases = await prisma.purchase.findMany({
+                    where: { userId: { in: ["viajaconsakura", "cmmb2z6ml000dvhhoj1s9zmnf"] } }
+                });
+                
+                for (const pur of allSakuraPurchases) {
+                    await prisma.botSettings.upsert({
+                        where: { purchaseId_account: { purchaseId: pur.id, account: String(account) } },
+                        update: { settings: updatedSettings },
+                        create: { purchaseId: pur.id, account: String(account), settings: updatedSettings }
+                    });
+                }
+            } else {
+                currentSettings = await prisma.botSettings.upsert({
+                    where: { purchaseId_account: { purchaseId: officialPurchaseId, account: String(account) } },
+                    update: { settings: updatedSettings },
+                    create: { purchaseId: officialPurchaseId, account: String(account), settings: updatedSettings }
+                });
+            }
 
             // Reset pending command after returning it
             if (updatedSettings.pendingCmd && updatedSettings.pendingCmd !== "NONE") {

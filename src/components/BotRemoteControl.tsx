@@ -53,7 +53,23 @@ export function BotRemoteControl({
     const [garValues, setGarValues] = useState<any>({ B1: "", B2: "", GR: "" });
     const [traValues, setTraValues] = useState<any>({ B1: "", B2: "", GR: "" });
 
+    const isGold = botName.toLowerCase().includes("gold") || botName.toLowerCase().includes("ametralladora") || botName.toLowerCase().includes("evolution") || botData?.symbol === "XAUUSD";
     const isSniper = botName.toLowerCase().includes("sniper") || botName.toLowerCase().includes("v11");
+
+    // Tema dinámico según el metal
+    const currentTheme = isGold ? {
+        accent: "text-amber-400",
+        border: "border-amber-500/30",
+        gradient: "from-amber-500/20 to-transparent",
+        bgIcon: "bg-amber-500/10",
+        label: "Gold Ametralladora"
+    } : {
+        accent: "text-brand-light",
+        border: "border-white/10",
+        gradient: "from-brand/20 to-transparent",
+        bgIcon: "bg-white/5",
+        label: "ELITE SNIPER v13"
+    };
 
     useEffect(() => {
         fetchBotData();
@@ -132,22 +148,26 @@ export function BotRemoteControl({
     const isActualOnline = botData?.isOnline || initialOnline;
 
     return (
-        <div className={`mt-4 p-0.5 rounded-xl bg-black/40 border ${theme?.border || 'border-white/10'} shadow-2xl flex flex-col backdrop-blur-xl relative overflow-hidden`}>
-            <div className={`absolute top-0 right-0 w-48 h-48 bg-gradient-to-br ${theme?.gradient || 'from-brand/20 to-transparent'} blur-3xl opacity-10 pointer-events-none`} />
+        <div className={`mt-4 p-0.5 rounded-xl bg-black/40 border ${currentTheme.border} shadow-2xl flex flex-col backdrop-blur-xl relative overflow-hidden`}>
+            <div className={`absolute top-0 right-0 w-48 h-48 bg-gradient-to-br ${currentTheme.gradient} blur-3xl opacity-10 pointer-events-none`} />
             
             <div className="p-3 sm:p-4">
                 <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
                     <div className="flex items-center gap-2">
-                        <div className={`p-1 rounded-lg bg-white/5 border border-white/5 ${theme?.accent || 'text-brand-light'}`}>
+                        <div className={`p-1 rounded-lg border border-white/5 ${currentTheme.bgIcon} ${currentTheme.accent}`}>
                             <Activity size={12} className={isActualOnline ? 'animate-pulse' : ''} />
                         </div>
                         <div>
-                            <h4 className="text-[9px] font-black uppercase tracking-wider text-brand-light leading-none">Sniper v12.5.0 GOLDEN</h4>
+                            <h4 className={`text-[9px] font-black uppercase tracking-wider leading-none ${currentTheme.accent}`}>
+                                {currentTheme.label}
+                            </h4>
                             <div className="flex flex-col gap-0.5 mt-1">
-                                <p className="text-[7px] text-white/40 font-bold uppercase tracking-widest leading-none truncate max-w-[100px]">Universal Matrix</p>
+                                <p className="text-[7px] text-white/40 font-bold uppercase tracking-widest leading-none truncate max-w-[100px]">
+                                    {isGold ? "Ametralladora XAUUSD" : "Universal Matrix"}
+                                </p>
                                 {botData?.symbol && (
-                                    <p className="text-[6px] font-black text-brand-light/80 uppercase tracking-tighter leading-none flex items-center gap-0.5">
-                                        <Clock size={6} /> {botData.symbol} {botData.tf}
+                                    <p className={`text-[6px] font-black uppercase tracking-tighter leading-none flex items-center gap-0.5 ${currentTheme.accent}/80`}>
+                                        <Clock size={6} /> {botData.symbol} {botData.tf || "M15"}
                                     </p>
                                 )}
                             </div>

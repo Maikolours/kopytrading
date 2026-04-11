@@ -24,7 +24,7 @@ const ASSETS = [
   { 
     id: "BTCUSD", 
     name: "BTCUSD (BITCOIN)", 
-    desc: "Captura las tendencias institucionales de la criptomoneda líder con nuestro Storm Rider.", 
+    desc: "Captura las tendencias institucionales de la criptomoneda líder con nuestro ELITE SNIPER v13.", 
     icon: "₿",
     stats: "H4/M30 | Explosividad",
     color: "border-purple-500/40 shadow-purple-500/10",
