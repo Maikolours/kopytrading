@@ -31,8 +31,8 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
 
     const categories = [
         { id: "", label: "Todos" },
-        { id: "BTCUSD", label: "Storm Rider" },
-        { id: "XAUUSD", label: "La Ametralladora" },
+        { id: "BTCUSD", label: "Elite Sniper v13" },
+        { id: "XAUUSD", label: "Elite Gold Ametralladora" },
         { id: "EURUSD", label: "Euro Precision" },
         { id: "USDJPY", label: "Ninja Ghost" }
     ];
@@ -40,8 +40,8 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
     // Helper to map DB names to the requested specific branding
     const getBotDisplayData = (bot: any) => {
         const name = bot.name.toLowerCase();
-        if (name.includes('storm')) return { name: "Storm Rider ⚡", accent: "text-brand-light", badge: "from-brand-light to-brand" };
-        if (name.includes('ametralladora')) return { name: "La Ametralladora 🔥", accent: "text-amber-400", badge: "from-amber-400 to-orange-600" };
+        if (name.includes('storm') || name.includes('sniper')) return { name: "Elite Sniper v13 ⚡", accent: "text-brand-light", badge: "from-brand-light to-brand" };
+        if (name.includes('ametralladora')) return { name: "Elite Gold Ametralladora 🔥", accent: "text-amber-400", badge: "from-amber-400 to-orange-600" };
         if (name.includes('ninja')) return { name: "Ninja Ghost 🥷", accent: "text-rose-400", badge: "from-rose-400 to-pink-600" };
         if (name.includes('precision') || name.includes('euro')) return { name: "Euro Precision 🎯", accent: "text-emerald-400", badge: "from-emerald-400 to-teal-600" };
         return { name: bot.name, accent: "text-white", badge: "from-white/20 to-white/5" };

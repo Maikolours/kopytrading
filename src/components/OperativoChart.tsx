@@ -116,8 +116,15 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
         // Fetch de velas (Simulado con Binance en tiempo real)
         const fetchKlines = async () => {
             try {
-                const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol.replace('/', '')}&interval=1m&limit=100`);
+                // Mapeo especial para ORO (Binance usa PAXGUSDT)
+                const apiSymbol = symbol.includes("XAU") ? "PAXGUSDT" : symbol.replace('/', '');
+                
+                const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${apiSymbol}&interval=1m&limit=100`);
+                if (!res.ok) throw new Error("API Response Error");
+                
                 const data = await res.json();
+                if (!Array.isArray(data)) throw new Error("Invalid Data Format");
+
                 const formattedData = data.map((d: any) => ({
                     time: d[0] / 1000,
                     open: parseFloat(d[1]),
@@ -129,6 +136,8 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
                 setLoading(false);
             } catch (err) {
                 console.error("Error fetching candles:", err);
+                // Si falla, detenemos el loading para que el panel al menos sea visible
+                setLoading(false);
             }
         };
 
