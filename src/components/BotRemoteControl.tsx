@@ -49,18 +49,18 @@ export function BotRemoteControl({
 
     const isGold = botName?.toLowerCase()?.includes("gold") || botName?.toLowerCase()?.includes("ametralladora") || botData?.symbol === "XAUUSD";
 
-    const currentTheme = isGold ? {
-        accent: "text-amber-400",
-        border: "border-amber-500/30",
-        gradient: "from-amber-500/20 to-transparent",
-        bgIcon: "bg-amber-500/10",
-        label: "Gold Ametralladora"
-    } : {
-        accent: "text-brand-light",
-        border: "border-white/10",
-        gradient: "from-brand/20 to-transparent",
-        bgIcon: "bg-white/5",
-        label: "ELITE SNIPER v13"
+    const getDynamicLabel = () => {
+        if (isGold) return "ELITE GOLD AMETRALLADORA";
+        if (botName.toUpperCase().includes("SNIPER") || botName.toUpperCase().includes("STORM")) return "ELITE SNIPER v13";
+        return botName; // Fallback al nombre real de la BD para Yen, Euro, etc.
+    };
+
+    const currentTheme = {
+        accent: theme?.accent || (isGold ? "text-amber-400" : "text-brand-light"),
+        border: theme?.border || (isGold ? "border-amber-500/30" : "border-white/10"),
+        gradient: theme?.gradient || (isGold ? "from-amber-500/20 to-transparent" : "from-brand/20 to-transparent"),
+        bgIcon: theme?.bgIcon || (isGold ? "bg-amber-500/10" : "bg-white/5"),
+        label: theme?.label || getDynamicLabel()
     };
 
     useEffect(() => {
@@ -151,7 +151,7 @@ export function BotRemoteControl({
                             </h4>
                             <div className="flex flex-col gap-0.5 mt-1">
                                 <p className="text-[7px] text-white/40 font-bold uppercase tracking-widest leading-none truncate max-w-[100px]">
-                                    {isGold ? "Ametralladora XAUUSD" : "Universal Matrix"}
+                                    {isGold ? "Ametralladora XAUUSD" : botName.includes("SNIPER") ? "Universal Matrix" : botName}
                                 </p>
                                 {botData?.symbol && (
                                     <p className={`text-[6px] font-black uppercase tracking-tighter leading-none flex items-center gap-0.5 ${currentTheme.accent}/80`}>

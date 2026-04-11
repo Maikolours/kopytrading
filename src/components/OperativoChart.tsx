@@ -116,18 +116,25 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
         chartRef.current = chart;
         seriesRef.current = candlestickSeries;
 
-        // Fetch de velas (Simulado con Binance en tiempo real)
+        // Fetch de velas (Crypto via Binance, Forex via fallback)
         const fetchKlines = async () => {
             try {
-                // Mapeo especial para ORO (Binance usa PAXGUSDT)
-                const apiSymbol = symbol.includes("XAU") ? "PAXGUSDT" : symbol.replace('/', '');
+                // Si no es un símbolo de Binance (Forex por ejemplo), manejamos el estado
+                const isCrypto = symbol.includes("BTC") || symbol.includes("ETH") || symbol.includes("XAU") || symbol.includes("USDT");
+                
+                if (!isCrypto) {
+                    console.log("Forex/Other asset detected, chart fallback mode active.");
+                    setLoading(false);
+                    return;
+                }
+
+                const apiSymbol = symbol.includes("XAU") ? "PAXGUSDT" : symbol.replace(/USD|USDT|\//g, "") + "USDT";
                 
                 const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${apiSymbol}&interval=1m&limit=100`);
                 if (!res.ok) throw new Error("API Response Error");
                 
                 const data = await res.json();
                 if (!data || !Array.isArray(data)) {
-                    console.warn("Invalid Binance data for", apiSymbol);
                     setLoading(false);
                     return;
                 }
@@ -146,7 +153,7 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
                 setLoading(false);
             }
         };
- Jonathan
+
         fetchKlines();
         fetchTelemetry();
 

@@ -53,7 +53,10 @@ export const BotCard = memo(function BotCard({
     
     const dailyProfit = (purchase.pastTrades || []).reduce((acc: number, t: any) => acc + (Number(t.profit) || 0), 0);
     const isGold = purchase.botProduct.name.toLowerCase().includes("gold") || purchase.botProduct.name.toLowerCase().includes("ametra");
-    const isSniper = purchase.botProduct.name.toLowerCase().includes("v11") || purchase.botProduct.name.toLowerCase().includes("sniper") || isGold;
+    const isSniper = true; // Forzamos modo institucional para todos los bots de Sakura
+    const botDisplayName = isGold ? "ELITE GOLD AMETRALLADORA" : 
+                           (purchase.botProduct.instrument.includes('BTC') || purchase.botProduct.name.includes('SNIPER')) ? "ELITE SNIPER v13" : 
+                           purchase.botProduct.name;
 
     return (
         <div className={`animate-in fade-in slide-in-from-bottom-6 duration-700 mb-8 ${assetTheme.class}`}>
@@ -69,9 +72,7 @@ export const BotCard = memo(function BotCard({
                                 </span>
                             </div>
                             <CardTitle className="text-lg sm:text-2xl font-black text-white tracking-tighter uppercase">
-                                {isGold ? "Elite Gold Ametralladora ⚡" : 
-                                 (purchase.botProduct.instrument.includes('BTC') || purchase.botProduct.name.includes('SNIPER')) ? "Elite Sniper v13 ⚡" : 
-                                 purchase.botProduct.name}
+                                {botDisplayName}
                             </CardTitle>
                         </div>
                         <div className="p-2 px-3 rounded-lg bg-black/40 border border-white/5 text-center">
@@ -88,7 +89,7 @@ export const BotCard = memo(function BotCard({
                         <div className={isMaintenance ? 'blur-md grayscale opacity-40' : ''}>
                             <BotRemoteControl 
                                 purchaseId={purchase.id} 
-                                botName={purchase.botProduct.name} 
+                                botName={botDisplayName} 
                                 account={purchase.activePositions?.[0]?.account || "unknown"}
                                 isOnline={purchase.lastSync && (Math.abs(Date.now() - new Date(purchase.lastSync).getTime()) < 300000)}
                                 theme={theme}
@@ -96,16 +97,12 @@ export const BotCard = memo(function BotCard({
                         </div>
 
                         <div className="space-y-4">
-                            {isSniper ? (
-                                <OperativoChart 
-                                    symbol={purchase.botProduct.instrument}
-                                    purchaseId={purchase.id}
-                                    account={purchase.activePositions?.[0]?.account || "unknown"}
-                                    theme={theme}
-                                />
-                            ) : (
-                                <TradingViewChart symbol={purchase.botProduct.instrument.includes("XAU") ? "OANDA:XAUUSD" : "BINANCE:BTCUSDT"} />
-                            )}
+                            <OperativoChart 
+                                symbol={purchase.botProduct.instrument || (isGold ? "XAUUSD" : "BTCUSDT")}
+                                purchaseId={purchase.id}
+                                account={purchase.activePositions?.[0]?.account || "unknown"}
+                                theme={theme}
+                            />
                             
                             <div className="p-3 rounded-xl bg-black/60 border border-brand/20 shadow-xl">
                                 <p className="text-[8px] text-brand-light uppercase tracking-widest font-black mb-2 flex items-center gap-2">
