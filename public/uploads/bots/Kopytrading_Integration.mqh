@@ -1,10 +1,10 @@
 //+------------------------------------------------------------------+
 //|                                   Kopytrading_Integration.mqh   |
 //|                     Módulo de integración con kopytrading.com    |
-//|                                   Versión 1.4 - Marzo 2026      |
+//|                                   Versión 1.5 - Abril 2026      |
 //+------------------------------------------------------------------+
 #property copyright "Copyright 2026, Kopytrading Corp."
-#property version   "1.40"
+#property version   "1.50"
 
 //--- Variables globales de integración (Nombres únicos)
 string   g_KopyPurchaseID = "";
@@ -22,7 +22,7 @@ bool ValidateLicense(string _p1, string _p2, int _p3) {
    g_KopyLicenseKey = _p2;
    g_KopyProductKey = _p2; 
    
-   if(g_KopyPurchaseID == "" || g_KopyPurchaseID == " ") {
+   if(g_KopyPurchaseID == "" || g_KopyPurchaseID == " " || g_KopyPurchaseID == "0") {
       // Lógica de Demo Simple
       string filename = "KOPY_INSTALL.dat";
       int h = FileOpen(filename, FILE_READ|FILE_BIN|FILE_COMMON);
@@ -36,12 +36,12 @@ bool ValidateLicense(string _p1, string _p2, int _p3) {
       }
       
       int days = (int)((TimeCurrent() - g_KopyInstall) / 86400);
-      if(days >= 30) { Print("❌ Demo expirada"); return false; }
-      Print("✅ Demo activa: " + IntegerToString(30-days) + " días.");
+      if(days >= 30) { Print("❌ Kopytrade: Demo expirada"); return false; }
+      Print("✅ Kopytrade: Demo activa (" + IntegerToString(30-days) + " días restantes)");
       return true;
    }
    
-   Print("✅ Licencia [" + g_KopyProductKey + "] registrada.");
+   Print("✅ Kopytrade: Licencia [" + g_KopyProductKey + "] registrada.");
    return true;
 }
 
@@ -49,10 +49,10 @@ bool ValidateLicense(string _p1, string _p2, int _p3) {
 //| Obtener estado remoto                                            |
 //+------------------------------------------------------------------+
 bool GetRemoteStatus() {
-   if(g_KopyPurchaseID == "" || g_KopyPurchaseID == " ") return false;
+   if(g_KopyPurchaseID == "" || g_KopyPurchaseID == " " || g_KopyPurchaseID == "0") return false;
    
    string url = "https://www.kopytrading.com/api/remote-control?purchaseId=" + g_KopyPurchaseID + "&account=" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
-   uchar d[1], r[];
+   uchar d[], r[];
    string rh;
    ArrayResize(d, 0);
    int res = WebRequest("GET", url, "", 5000, d, r, rh);
@@ -66,16 +66,26 @@ bool GetRemoteStatus() {
 }
 
 //+------------------------------------------------------------------+
-//| Sincronizar con servidor                                         |
+//| Sincronizar con servidor (v1.5 Telemetría Supreme)               |
 //+------------------------------------------------------------------+
 void SyncPositions(string _s, double _p=0, int _c=0) {
-   if(g_KopyPurchaseID == "" || g_KopyPurchaseID == " ") return;
-   if(TimeCurrent() < g_KopyLastSync + 30) return;
+   if(g_KopyPurchaseID == "" || g_KopyPurchaseID == " " || g_KopyPurchaseID == "0") return;
+   if(TimeCurrent() < g_KopyLastSync + 15) return; // Sincro cada 15s para telemetría ágil
    g_KopyLastSync = TimeCurrent();
    
    string url = "https://www.kopytrading.com/api/sync-positions";
    string hd = "Content-Type: application/json\r\n";
-   string body = "{\"purchaseId\":\"" + g_KopyPurchaseID + "\", \"account\":\"" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN)) + "\", \"status\":\"" + _s + "\", \"licenseKey\":\"" + g_KopyProductKey + "\"}";
+   
+   // Construcción de JSON Robusta con Telemetría
+   string body = "{";
+   body += "\"purchaseId\":\"" + g_KopyPurchaseID + "\",";
+   body += "\"account\":\"" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN)) + "\",";
+   body += "\"licenseKey\":\"" + g_KopyProductKey + "\",";
+   body += "\"symbol\":\"" + _Symbol + "\",";
+   body += "\"balance\":" + DoubleToString(AccountInfoDouble(ACCOUNT_BALANCE), 2) + ",";
+   body += "\"equity\":" + DoubleToString(AccountInfoDouble(ACCOUNT_EQUITY), 2) + ",";
+   body += "\"status\":\"" + _s + "\"";
+   body += "}";
    
    uchar p[], r[];
    string rh;

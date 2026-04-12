@@ -52,6 +52,9 @@ model Purchase {
   status                String          @default("COMPLETED")
   lastDownloadedVersion String?
   lastSync              DateTime?
+  balance               Float?
+  equity                Float?
+  lastStatus            String?
   createdAt             DateTime        @default(now())
   updatedAt             DateTime        @updatedAt
   expiresAt             DateTime?

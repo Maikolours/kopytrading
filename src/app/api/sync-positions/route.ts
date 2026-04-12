@@ -35,7 +35,7 @@ export async function POST(req: Request) {
         }
         
         const account = body.account ? String(body.account).trim() : null;
-        const { positions, history, isReal } = body;
+        const { positions, history, isReal, balance, equity, status } = body;
 
         if (!purchaseId || !account) {
             await prisma.requestLog.create({
@@ -45,10 +45,23 @@ export async function POST(req: Request) {
         }
 
         // 3. Verificar que la compra existe y cargar su producto
-        const purchase = await prisma.purchase.findUnique({
+        let purchase = await prisma.purchase.findUnique({
             where: { id: purchaseId },
             include: { botProduct: true }
         });
+
+        // FALLBACK: Si no lo encuentra por CUID, buscar por email del usuario (Usabilidad Supreme)
+        if (!purchase && purchaseId.includes("@")) {
+            const userPurchase = await prisma.purchase.findFirst({
+                where: { 
+                    user: { email: purchaseId },
+                    botProduct: { productKey: body.licenseKey || undefined } 
+                },
+                include: { botProduct: true },
+                orderBy: { createdAt: 'desc' }
+            });
+            if (userPurchase) purchase = userPurchase;
+        }
 
         if (!purchase) {
             await prisma.requestLog.create({
@@ -80,10 +93,15 @@ export async function POST(req: Request) {
             }
         }
 
-        // Actualizar latido de conexión
+        // Actualizar latido de conexión y telemetría
         await prisma.purchase.update({
-            where: { id: purchaseId },
-            data: { lastSync: new Date() }
+            where: { id: purchase.id },
+            data: { 
+                lastSync: new Date(),
+                balance: balance ? Number(balance) : undefined,
+                equity: equity ? Number(equity) : undefined,
+                lastStatus: status || undefined
+            }
         });
 
         // Sincronizar posiciones abiertas: Borramos SOLO las de esta cuenta y creamos las nuevas

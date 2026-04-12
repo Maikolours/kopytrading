@@ -84,6 +84,16 @@ export const BotCard = memo(function BotCard({
                                 <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black border uppercase tracking-widest ${isTrial ? 'bg-white/5 text-white/60 border-white/10' : 'bg-success/10 text-success border-success/20'}`}>
                                     {isTrial ? "TRIAL" : "LIFETIME"}
                                 </span>
+                                {purchase.lastStatus && (
+                                    <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black border uppercase tracking-widest flex items-center gap-1.5 ${
+                                        purchase.lastStatus === 'FUEGO' ? 'bg-orange-500/20 text-orange-400 border-orange-500/40 animate-pulse' : 
+                                        purchase.lastStatus === 'PAUSA' ? 'bg-danger/20 text-danger border-danger/40' :
+                                        'bg-brand-light/20 text-brand-light border-brand-light/40'
+                                    }`}>
+                                        <div className={`w-1 h-1 rounded-full ${purchase.lastStatus === 'FUEGO' ? 'bg-orange-400' : 'bg-current'} animate-pulse`} />
+                                        {purchase.lastStatus}
+                                    </span>
+                                )}
                                 <span className="px-2.5 py-1 rounded-lg text-[9px] font-bold bg-white/5 border border-white/5 text-gray-500 tracking-widest uppercase">
                                     {purchase.botProduct.instrument}
                                 </span>
@@ -146,11 +156,29 @@ export const BotCard = memo(function BotCard({
                         </div>
 
                         <div className="flex flex-col items-end gap-2">
-                            <div className="p-3 px-5 rounded-xl bg-black/40 border border-white/5 flex flex-col items-center justify-center min-w-28 text-center premium-glass shadow-purple-500/10">
-                                <span className="text-[8px] font-black uppercase tracking-[0.2em] opacity-40 mb-0.5">Total Hoy</span>
-                                <span className={`text-xl font-black font-mono ${dailyProfit >= 0 ? 'text-success' : 'text-danger'}`}>
-                                    {dailyProfit >= 0 ? '+' : ''}{dailyProfit.toFixed(2)} {currency}
-                                </span>
+                            <div className="flex gap-2">
+                                {purchase.balance !== null && purchase.balance !== undefined && (
+                                    <div className="p-2 px-3 rounded-lg bg-white/5 border border-white/5 flex flex-col items-center justify-center min-w-20 text-center premium-glass">
+                                        <span className="text-[7px] font-black uppercase tracking-[0.2em] opacity-40 mb-0.5">Balance</span>
+                                        <span className="text-sm font-black text-white font-mono">
+                                            {purchase.balance.toFixed(2)}
+                                        </span>
+                                    </div>
+                                )}
+                                {purchase.equity !== null && purchase.equity !== undefined && (
+                                    <div className="p-2 px-3 rounded-lg bg-brand-light/10 border border-brand-light/20 flex flex-col items-center justify-center min-w-20 text-center premium-glass">
+                                        <span className="text-[7px] font-black uppercase tracking-[0.2em] text-brand-light/40 mb-0.5">Equidad</span>
+                                        <span className="text-sm font-black text-brand-light font-mono">
+                                            {purchase.equity.toFixed(2)}
+                                        </span>
+                                    </div>
+                                )}
+                                <div className="p-3 px-5 rounded-xl bg-black/40 border border-white/5 flex flex-col items-center justify-center min-w-28 text-center premium-glass shadow-purple-500/10">
+                                    <span className="text-[8px] font-black uppercase tracking-[0.2em] opacity-40 mb-0.5">Profit Hoy</span>
+                                    <span className={`text-xl font-black font-mono ${dailyProfit >= 0 ? 'text-success' : 'text-danger'}`}>
+                                        {dailyProfit >= 0 ? '+' : ''}{dailyProfit.toFixed(2)} {currency}
+                                    </span>
+                                </div>
                             </div>
                             
                             <div className={`flex items-center gap-2 p-1.5 px-3 rounded-lg bg-white/5 border ${assetTheme.border} animate-pulse-glow-heavy`}>
