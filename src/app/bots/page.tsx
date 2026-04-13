@@ -2,15 +2,14 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
-
-export const metadata: Metadata = {
-  title: "Marketplace de Bots | MT5 Trading Algorítmico",
-  description: "Explora nuestro catálogo de Expert Advisors para MetaTrader 5. Consigue acceso a La Ametralladora Evolution, BTC Storm Rider y más.",
-};
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardTitle, CardHeader, CardFooter } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { Countdown } from "@/components/Countdown";
+
+export const metadata: Metadata = {
+  title: "Vanguard Marketplace | KopyTrading",
+  description: "Acceso institucional a algoritmos de alta frecuencia: Storm Rider, La Ametralladora y más.",
+};
 
 export const dynamic = "force-dynamic";
 
@@ -19,9 +18,8 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
     const isOwner = session?.user?.email === "viajaconsakura@gmail.com" || session?.user?.email === "viajaconsakura";
     const { asset } = await searchParams;
 
-    const whereClause: any = isOwner 
-        ? { productKey: { not: null } }  // Solo mostrar los bots "llave en mano" con ProductKey
-        : { isActive: true };
+    // Filters for the 4 master products
+    const whereClause: any = { isActive: true };
     if (asset) {
         whereClause.instrument = { contains: asset };
     }
@@ -33,42 +31,53 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
 
     const categories = [
         { id: "", label: "Todos" },
-        { id: "XAUUSD", label: "Oro (XAUUSD)" },
-        { id: "EURUSD", label: "EURUSD" },
-        { id: "USDJPY", label: "USDJPY" },
-        { id: "BTCUSD", label: "Bitcoin" }
+        { id: "BTCUSD", label: "Elite Sniper v13" },
+        { id: "XAUUSD", label: "Elite Gold Ametralladora" },
+        { id: "EURUSD", label: "Euro Precision" },
+        { id: "USDJPY", label: "Ninja Ghost" }
     ];
 
-    return (
-        <div className="min-h-screen pt-28 md:pt-32 pb-12 px-6 sm:px-6 lg:px-8 relative overflow-hidden">
+    // Helper to map DB names to the requested specific branding
+    const getBotDisplayData = (bot: any) => {
+        const name = bot.name.toLowerCase();
+        if (name.includes('storm') || name.includes('sniper')) return { name: "Elite Sniper v13 ⚡", accent: "text-brand-light", badge: "from-brand-light to-brand" };
+        if (name.includes('ametralladora')) return { name: "Elite Gold Ametralladora 🔥", accent: "text-amber-400", badge: "from-amber-400 to-orange-600" };
+        if (name.includes('ninja')) return { name: "Ninja Ghost 🥷", accent: "text-rose-400", badge: "from-rose-400 to-pink-600" };
+        if (name.includes('precision') || name.includes('euro')) return { name: "Euro Precision 🎯", accent: "text-emerald-400", badge: "from-emerald-400 to-teal-600" };
+        return { name: bot.name, accent: "text-white", badge: "from-white/20 to-white/5" };
+    };
 
-            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-brand-light/5 blur-[120px] rounded-full pointer-events-none" />
+    return (
+        <div className="min-h-screen pt-28 md:pt-32 pb-12 px-6 sm:px-6 lg:px-8 relative overflow-hidden bg-[#050505]">
+
+            {/* Vanguard Background GFX */}
+            <div className="absolute top-[-10%] right-[-10%] w-[800px] h-[800px] bg-brand-light/5 blur-[150px] rounded-full pointer-events-none" />
+            <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-brand/5 blur-[120px] rounded-full pointer-events-none" />
 
             <div className="max-w-7xl mx-auto relative z-10 mb-4">
-                <Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-white transition-colors">
-                    <span>←</span> Volver al inicio
+                <Link href="/" className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-text-muted hover:text-white transition-all group">
+                    <span className="group-hover:-translate-x-1 transition-transform">←</span> Volver al inicio
                 </Link>
             </div>
 
-
-            <div id="bot-catalog" className="max-w-7xl mx-auto mb-10 border-b border-white/10 pb-8 text-center">
-                <div className="mb-6">
-                    <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tighter mb-4 uppercase italic">Marketplace de Bots</h1>
-
-                    <p className="text-text-muted text-lg max-w-2xl mx-auto font-light">Encuentra los algoritmos más precisos para MetaTrader 5.</p>
+            <div id="bot-catalog" className="max-w-7xl mx-auto mb-16 pb-12 text-center relative">
+                <div className="mb-10">
+                    <h1 className="text-5xl sm:text-7xl font-black text-white tracking-tighter mb-4 uppercase italic leading-none">
+                        Vanguard <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-brand">Algorithms</span>
+                    </h1>
+                    <p className="text-text-muted text-lg max-w-2xl mx-auto font-light tracking-tight opacity-60 italic leading-relaxed">
+                        Sistemas de alta frecuencia y precisión institucional para el mercado MT5.
+                    </p>
                 </div>
 
                 <div className="flex flex-wrap gap-2 md:gap-3 justify-center">
                     {categories.map((cat) => (
                         <Link key={cat.id} href={cat.id ? `/bots?asset=${cat.id}` : "/bots"}>
-                            <span className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${(asset === cat.id || (!asset && cat.id === ""))
-                                ? "bg-brand text-white shadow-[0_0_15px_rgba(139,92,246,0.4)] relative"
-                                : "bg-surface-light border border-white/5 text-text-muted hover:text-white hover:border-brand/50 relative"
+                            <span className={`px-6 py-2.5 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all ${(asset === cat.id || (!asset && cat.id === ""))
+                                ? "bg-brand text-white shadow-[0_0_25px_rgba(168,85,247,0.4)] border border-brand-light/50"
+                                : "bg-white/[0.03] border border-white/5 text-text-muted hover:text-white hover:border-white/20"
                                 }`}>
                                 {cat.label}
-                                {(asset === cat.id || (!asset && cat.id === "")) && (
-                                    <div className="absolute inset-0 bg-brand blur opacity-50 rounded-full -z-10 animate-pulse"></div>
-                                )}
                             </span>
                         </Link>
                     ))}
@@ -76,120 +85,127 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
             </div>
 
             {bots.length === 0 ? (
-                <div className="text-center py-20 px-4 glass-card border border-dashed border-white/20">
-                    <h3 className="text-xl font-medium text-white mb-2">Aún no hay bots disponibles para esta categoría</h3>
-                    <p className="text-text-muted mb-6">Sigue explorando otros activos o vuelve pronto.</p>
-                    <Link href="/bots"><Button variant="outline">Ver todos los bots</Button></Link>
+                <div className="text-center py-20 px-4 glass-card border border-dashed border-white/10 rounded-[2rem]">
+                    <h3 className="text-2xl font-black text-white mb-4 italic uppercase tracking-tighter opacity-40">No hay terminales disponibles</h3>
+                    <p className="text-text-muted mb-8 max-w-md mx-auto">Nuestro equipo está calibrando los servidores para estos activos. Vuelve pronto.</p>
+                    <Link href="/bots"><Button variant="outline" className="rounded-xl border-white/10 text-white/40">Ver todos</Button></Link>
                 </div>
             ) : (
                 <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8`}>
                     {bots.map((bot: any) => {
-                        const instrument = (bot.instrument || '').trim().toUpperCase();
-                        const colorMap: Record<string, any> = {
-                            'XAUUSD': { border: 'hover:border-purple-500/50', badge: 'from-purple-500/80 to-indigo-600/80', glow: 'shadow-purple-500/40', accent: 'text-purple-400', bg: 'bg-purple-500/10' },
-                            'BTCUSD': { border: 'hover:border-amber-500/50', badge: 'from-amber-400/80 to-orange-600/80', glow: 'shadow-amber-500/40', accent: 'text-amber-400', bg: 'bg-amber-500/10' },
-                            'EURUSD': { border: 'hover:border-emerald-500/50', badge: 'from-emerald-400/80 to-teal-600/80', glow: 'shadow-emerald-500/40', accent: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-                            'USDJPY': { border: 'hover:border-rose-500/50', badge: 'from-rose-400/80 to-pink-600/80', glow: 'shadow-rose-500/40', accent: 'text-rose-400', bg: 'bg-rose-500/10' },
-                        };
-                        const colors = colorMap[instrument] || { border: 'hover:border-brand/50', badge: 'from-brand-light/80 to-brand/80', glow: 'shadow-brand/40', accent: 'text-brand-light', bg: 'bg-brand/10' };
+                        const display = getBotDisplayData(bot);
+                        const isUpcoming = bot.status === 'UPCOMING' || bot.status === 'MAINTENANCE';
 
                         return (
-                            <Card key={bot.id} interactive className={`flex flex-col h-full bg-white/[0.03] border-white/10 ${colors.border} transition-all duration-500 shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:shadow-2xl overflow-hidden group perspective-1000`}>
-                                <CardHeader className="relative overflow-hidden">
+                            <Card key={bot.id} interactive className={`flex flex-col h-full transition-all duration-700 overflow-hidden group relative rounded-[2rem] border ${
+                                isUpcoming 
+                                ? 'bg-white/[0.01] border-white/5 backdrop-blur-[2px]' 
+                                : `bg-white/[0.03] border-white/10 hover:border-brand-light/50 shadow-[0_20px_60px_rgba(0,0,0,0.6)]`
+                            }`}>
+                                <CardHeader className="relative overflow-hidden pb-4">
                                      {/* Background Glow Overlay */}
-                                    <div className={`absolute top-0 right-0 w-32 h-32 ${colors.bg} blur-3xl -mr-16 -mt-16 transition-opacity duration-700 group-hover:opacity-100 opacity-30`} />
+                                    <div className={`absolute top-0 right-0 w-32 h-32 bg-brand/10 blur-3xl -mr-16 -mt-16 transition-opacity duration-700 group-hover:opacity-100 opacity-20`} />
 
                                     <div className="flex justify-between items-start mb-2 relative z-10">
-                                        <CardTitle className="text-xl font-black italic tracking-tighter uppercase">{bot.name}</CardTitle>
-                                        <span className={`bg-gradient-to-br ${colors.badge} text-white px-3 py-1 rounded-full text-[10px] font-black tracking-widest shadow-lg uppercase`}>
+                                        <CardTitle className={`text-2xl font-black italic tracking-tighter uppercase transition-all duration-500 ${isUpcoming ? 'text-white/20' : 'text-white'}`}>
+                                            {display.name}
+                                        </CardTitle>
+                                        <span className={`bg-gradient-to-br ${display.badge} text-white px-3 py-1 rounded-full text-[9px] font-black tracking-widest shadow-lg uppercase ${isUpcoming && 'opacity-20 grayscale'}`}>
                                             {bot.instrument}
                                         </span>
                                     </div>
-                                    <p className="text-sm text-text-muted line-clamp-2 font-light">{bot.description}</p>
+                                    <p className={`text-xs text-text-muted line-clamp-2 font-light leading-relaxed ${isUpcoming ? 'opacity-20' : 'opacity-60'}`}>
+                                        {bot.description.replace(/⚡|🛠️|🛡️|🎯|🥷/g, '').replace('PRÓXIMO LANZAMIENTO', '').trim()}
+                                    </p>
                                 </CardHeader>
 
-                                <CardContent className="flex-grow relative z-10">
-                                    <div className="space-y-4 bg-white/[0.02] p-5 rounded-2xl border border-white/5 backdrop-blur-sm">
-                                        <div className="flex justify-between items-center text-xs pb-2 border-b border-white/5">
-                                            <span className="text-text-muted uppercase tracking-widest font-bold">Estrategia</span>
-                                            <span className={`font-black ${colors.accent}`}>{bot.strategyType}</span>
+                                <CardContent className="flex-grow relative z-10 px-6">
+                                    <div className={`space-y-4 p-5 rounded-2xl border transition-all duration-700 ${
+                                        isUpcoming ? 'bg-white/0 border-white/0 opacity-20' : 'bg-white/[0.02] border-white/5 backdrop-blur-sm'
+                                    }`}>
+                                        <div className="flex justify-between items-center text-[10px] pb-2 border-b border-white/5">
+                                            <span className="text-text-muted uppercase tracking-[0.2em] font-bold">Arquitectura</span>
+                                            <span className={`font-black tracking-tighter uppercase ${isUpcoming ? 'text-white/30' : display.accent}`}>
+                                                {isUpcoming ? 'Confidential' : bot.strategyType}
+                                            </span>
                                         </div>
-                                        <div className="flex justify-between items-center text-xs pb-2 border-b border-white/5">
-                                            <span className="text-text-muted uppercase tracking-widest font-bold">Riesgo</span>
-                                            <span className={`font-black flex items-center gap-1.5 ${bot.riskLevel === 'Low' ? 'text-success'
-                                                : bot.riskLevel === 'High' ? 'text-danger'
-                                                    : 'text-amber-400'
-                                                }`}>
-                                                <div className={`w-2 h-2 rounded-full ${bot.riskLevel === 'Low' ? 'bg-success' : bot.riskLevel === 'High' ? 'bg-danger' : 'bg-amber-400'} shadow-[0_0_8px_currentColor]`} />
-                                                {bot.riskLevel}
+                                        <div className="flex justify-between items-center text-[10px] pb-2 border-b border-white/5">
+                                            <span className="text-text-muted uppercase tracking-[0.2em] font-bold">Factor Riesgo</span>
+                                            <span className={`font-black flex items-center gap-2 uppercase ${
+                                                isUpcoming ? 'text-white/30' :
+                                                bot.riskLevel === 'Low' ? 'text-success' : 
+                                                bot.riskLevel === 'High' ? 'text-danger' : 'text-amber-400'
+                                            }`}>
+                                                {isUpcoming ? '???' : bot.riskLevel}
                                             </span>
                                         </div>
 
-                                        <div className="pt-3">
-                                            <div className="flex justify-between items-center mb-3">
-                                                <span className="text-[10px] uppercase tracking-[0.2em] font-black text-text-muted">Proyección Algorítmica</span>
-                                                <span className="text-[10px] text-success font-black flex items-center gap-1 bg-success/10 px-2 py-0.5 rounded-full">
-                                                    <span className="w-1 h-1 rounded-full bg-success animate-pulse"></span>
-                                                    ALPHA+
-                                                </span>
+                                        <div className="pt-2">
+                                            <div className="flex justify-between items-center mb-4">
+                                                <span className="text-[9px] uppercase tracking-[0.3em] font-black text-white/20 italic">Previsión Alpha</span>
+                                                {!isUpcoming && (
+                                                    <span className="flex items-center gap-1">
+                                                        <div className="w-1 h-1 rounded-full bg-success animate-ping" />
+                                                        <span className="text-[9px] text-success font-black tracking-widest uppercase">Live</span>
+                                                    </span>
+                                                )}
                                             </div>
-                                            <div className="h-12 flex items-end gap-1.5 w-full group/chart">
+                                            <div className="h-14 flex items-end gap-1.5 w-full">
                                                 {[25, 45, 30, 60, 55, 85, 70, 95, 80, 100].map((h, i) => (
                                                     <div
                                                         key={i}
-                                                        className={`flex-1 bg-gradient-to-t from-transparent via-success/10 to-success/60 rounded-t-sm transition-all duration-500 group-hover/chart:opacity-100`}
-                                                        style={{ height: `${h}%`, opacity: 0.2 + (i * 0.08) }}
+                                                        className={`flex-1 rounded-t-sm transition-all duration-[1.5s] ${
+                                                            isUpcoming 
+                                                            ? 'bg-white/5 opacity-20' 
+                                                            : 'bg-gradient-to-t from-transparent via-success/10 to-success/60 opacity-30 group-hover:opacity-100'
+                                                        }`}
+                                                        style={{ height: `${h}%`, transitionDelay: `${i * 50}ms` }}
                                                     />
                                                 ))}
                                             </div>
                                         </div>
                                     </div>
 
-                                    {/* STATUS OVERLAYS (GLASSMORPISM PRO) */}
-                                    {bot.status === "MAINTENANCE" && (
-                                        <div className="absolute inset-0 z-20 bg-bg-dark/60 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center border border-white/5 rounded-2xl scale-[1.01]">
-                                            <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-4 border border-white/10 shadow-2xl shadow-black">
-                                                <span className="text-4xl animate-pulse">⚙️</span>
+                                    {/* Glassmorphic "Upcoming" Overlay - Only for Public */}
+                                    {isUpcoming && (
+                                        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6 text-center transform scale-[1.05]">
+                                             <div className="px-5 py-2.5 rounded-full bg-brand/10 border border-brand/40 shadow-[0_0_40px_rgba(168,85,247,0.3)] backdrop-blur-xl mb-4 group-hover:scale-110 transition-transform duration-500">
+                                                <span className="text-[10px] font-black text-brand-light uppercase tracking-[0.5em] animate-pulse">
+                                                    {bot.status === 'MAINTENANCE' ? 'CALIBRANDO' : 'PRÓXIMO LANZAMIENTO'}
+                                                </span>
                                             </div>
-                                            <h4 className="text-2xl font-black text-white mb-2 uppercase tracking-tighter italic">Calibrando</h4>
-                                            <p className="text-xs text-text-muted font-medium bg-black/40 px-4 py-2 rounded-full border border-white/5">Acceso restringido temporalmente</p>
-                                        </div>
-                                    )}
-
-                                    {bot.status === "UPCOMING" && (
-                                        <div className="absolute inset-0 z-20 bg-brand-dark/40 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center scale-[1.01]">
-                                            <div className="w-16 h-16 rounded-full bg-brand/30 flex items-center justify-center mb-4 border border-brand/40 animate-bounce shadow-2xl shadow-brand/20">
-                                                <span className="text-3xl">☄️</span>
+                                            <div className="text-white/20 text-[8px] font-bold uppercase tracking-[0.3em] max-w-[160px] leading-relaxed italic">
+                                                Algoritmo en fase final de calibración institucional
                                             </div>
-                                            <h4 className="text-xl font-black text-white mb-1 uppercase tracking-tighter italic drop-shadow-2xl">Próximo Alpha</h4>
-                                            <Countdown targetDate="2026-04-01T00:00:00" />
                                         </div>
                                     )}
                                 </CardContent>
 
-                                <CardFooter className="justify-between items-center mt-auto border-t border-white/10 pt-6 bg-black/10">
+                                <CardFooter className="justify-between items-center mt-auto border-t border-white/5 pt-6 p-8 bg-black/10">
                                     <div className="flex flex-col">
                                         <div className="flex items-center gap-2">
-                                            <div className="text-3xl font-black text-white tracking-tighter">
-                                                ${bot.price.toFixed(2)}
+                                            <div className={`text-3xl font-black tracking-tighter italic ${isUpcoming ? 'text-white/10' : 'text-white'}`}>
+                                                ${bot.price.toFixed(0)}
                                             </div>
-                                            {bot.originalPrice && bot.originalPrice > bot.price && (
-                                                <div className="text-sm text-text-muted line-through opacity-30 font-bold">
-                                                    ${bot.originalPrice.toFixed(2)}
-                                                </div>
-                                            )}
+                                            <span className={`text-[9px] font-bold uppercase tracking-widest ${isUpcoming ? 'text-white/5' : 'text-white/30'}`}>USD</span>
                                         </div>
-                                        <div className="text-[9px] text-success font-black tracking-[0.2em] uppercase flex items-center gap-1 mt-1">
-                                            <span className="bg-success/10 px-2 py-0.5 rounded border border-success/20">Lanzamiento</span>
-                                        </div>
+                                        {!isUpcoming && (
+                                            <div className="text-[8px] text-success font-black tracking-[0.3em] uppercase flex items-center gap-1 mt-1 italic">
+                                                Pre-Venta Activa
+                                            </div>
+                                        )}
                                     </div>
-                                    <Link href={`/bots/${bot.id}`} className={(bot.status !== 'ACTIVE' && !isOwner) ? 'pointer-events-none opacity-20' : ''}>
+                                    <Link href={`/bots/${bot.id}`} className={(isUpcoming && !isOwner) ? 'pointer-events-none' : ''}>
                                         <Button 
                                             size="lg" 
-                                            className={`font-black uppercase tracking-widest text-[10px] px-6 h-10 shadow-2xl transition-all duration-300 ${bot.status === 'ACTIVE' || isOwner ? 'hover:scale-105 active:scale-95' : ''}`}
-                                            disabled={bot.status !== 'ACTIVE' && !isOwner}
+                                            className={`font-black uppercase tracking-[0.2em] text-[10px] px-8 h-11 shadow-2xl transition-all duration-500 rounded-xl ${
+                                                (!isUpcoming || isOwner) 
+                                                ? 'bg-white text-black hover:bg-brand-light hover:text-white hover:scale-105 active:scale-95' 
+                                                : 'bg-white/5 text-white/10 border border-white/5 cursor-not-allowed opacity-50'
+                                            }`}
+                                            disabled={isUpcoming && !isOwner}
                                         >
-                                            {(bot.status === 'ACTIVE' || isOwner) ? 'Invertir' : 'Cerrado'}
+                                            {(!isUpcoming || isOwner) ? 'Invertir' : 'Próximamente'}
                                         </Button>
                                     </Link>
                                 </CardFooter>

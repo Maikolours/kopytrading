@@ -55,7 +55,11 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                             Algorithmic Asset
                                         </span>
                                     </div>
-                                    <h1 className="text-5xl sm:text-6xl font-black text-white tracking-tighter uppercase italic leading-[0.9]">{bot.name}</h1>
+                                    <h1 className="text-5xl sm:text-6xl font-black text-white tracking-tighter uppercase italic leading-[0.9]">
+                                        {bot.instrument === 'BTCUSD' ? 'Elite Sniper v13 ⚡' : 
+                                         bot.instrument === 'XAUUSD' ? 'Elite Gold Ametralladora ⚡' : 
+                                         bot.name}
+                                    </h1>
                                 </div>
                                 <div className="flex flex-col items-start md:items-end">
                                     <div className="text-[10px] text-text-muted font-black uppercase tracking-widest mb-1">Estrategia Base</div>

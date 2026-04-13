@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 const ASSETS = [
   { 
     id: "XAUUSD", 
-    name: "XAUUSD (ORO)", 
-    desc: "Nuestro activo estrella. Alta volatilidad y precisión quirúrgica para traders ambiciosos.", 
+    name: "ELITE GOLD AMETRALLADORA ⚡", 
+    desc: "Nuestro activo estrella en ORO. Alta volatilidad y precisión quirúrgica para traders ambiciosos.", 
     icon: "🟡",
     stats: "M15 | +42.5% Histórico",
     color: "border-yellow-500/40 shadow-yellow-500/10",
@@ -23,8 +23,8 @@ const ASSETS = [
   },
   { 
     id: "BTCUSD", 
-    name: "BTCUSD (BITCOIN)", 
-    desc: "Captura las tendencias institucionales de la criptomoneda líder con nuestro Storm Rider.", 
+    name: "ELITE SNIPER v13 ⚡", 
+    desc: "Captura las tendencias institucionales de BITCOIN con nuestro algoritmo líder de alta frecuencia.", 
     icon: "₿",
     stats: "H4/M30 | Explosividad",
     color: "border-purple-500/40 shadow-purple-500/10",

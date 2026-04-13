@@ -21,16 +21,16 @@ const RESULTS_VIDEOS: VideoResult[] = [
     description: "Funcionamiento del sistema de rescate (Martingala Controlada) en cuenta real Cent. Verificación de lotajes y anclaje de seguridad.",
     videoUrl: "https://drive.google.com/file/d/1jbQWw8cuLm6gjqoH1TADWPqTNZ2199_u/preview",
     date: "20 Mar 2026",
-    botName: "Ametralladora Evolution",
+    botName: "ELITE GOLD AMETRALLADORA ⚡",
     profit: "+55.80 USC"
   },
   {
     id: "2",
-    title: "BTCUSD Storm Rider - Optimización",
-    description: "Análisis de entradas en Bitcoin tras la optimización del Momentum y filtros de volatilidad.",
+    title: "ELITE SNIPER v13 - Optimización",
+    description: "Análisis de entradas en Bitcoin tras la optimización del Momentum y filtros de volatilidad institucional.",
     videoUrl: "https://drive.google.com/file/d/1aIu398AEt4_HBW_ULl0UvGmK70eCV3b8/preview",
     date: "19 Mar 2026",
-    botName: "BTC Storm Rider",
+    botName: "ELITE SNIPER v13",
     profit: "+12.20 USD"
   },
 ];

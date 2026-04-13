@@ -27,16 +27,18 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                 border: 'border-amber-500/50',
                 accent: 'text-amber-400',
                 glow: 'bg-amber-500/20',
-                gradient: 'from-amber-600/40 via-amber-900/20 to-black',
-                badge: 'bg-amber-500/20 text-amber-300 border-amber-500/30'
+                gradient: 'from-amber-500/20 to-transparent',
+                badge: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+                label: 'ELITE GOLD AMETRALLADORA'
             };
         if (n.includes("BTC") || n.includes("BITCOIN"))
             return {
                 border: 'border-purple-500/50',
                 accent: 'text-purple-400',
                 glow: 'bg-purple-500/20',
-                gradient: 'from-purple-600/40 via-purple-900/20 to-black',
-                badge: 'bg-purple-500/20 text-purple-300 border-purple-500/30'
+                gradient: 'from-brand/20 to-transparent',
+                badge: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+                label: 'ELITE SNIPER v13'
             };
         if (n.includes("YEN") || n.includes("JPY"))
             return {
@@ -63,11 +65,11 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
             const instrument = (p.botProduct?.instrument || "").toUpperCase();
             let key = "Otros";
             
-            if (instrument.includes("BTC") || instrument.includes("BITCOIN") || name.includes("BITCOIN")) key = "BTC (Bitcoin)";
-            else if (instrument.includes("XAU") || instrument.includes("GOLD") || instrument.includes("ORO")) key = "GOLD (Oro)";
-            else if (instrument.includes("EUR") || name.includes("EURO")) key = "EUR (Euro)";
-            else if (instrument.includes("JPY") || name.includes("YEN")) key = "JPY (Yen)";
-            else if (name.includes("EVOLUTION")) key = "GOLD (Oro)"; // Fallback para los que solo tengan Evolution en el nombre
+            if (instrument.includes("BTC") || instrument.includes("BITCOIN") || name.includes("BITCOIN") || name.includes("SNIPER")) key = "ELITE SNIPER v13";
+            else if (instrument.includes("XAU") || instrument.includes("GOLD") || instrument.includes("ORO") || name.includes("AMETRA")) key = "ELITE GOLD AMETRALLADORA";
+            else if (instrument.includes("EUR") || name.includes("EURO")) key = "Euro Precision 🎯";
+            else if (instrument.includes("JPY") || name.includes("YEN")) key = "Ninja Ghost 🥷";
+            else if (name.includes("EVOLUTION")) key = "ELITE GOLD AMETRALLADORA"; 
             
             if (!groups[key]) groups[key] = [];
             groups[key].push(p);

@@ -28,13 +28,8 @@ export async function POST(req: Request) {
         }
         
         // NORMALIZACIÓN: Asegurar que el purchaseId sea siempre minúsculas y limpiar sufijos
-        // Algunos bots envían cmmv3...-btccent o cmmv3...-oro
-        let purchaseId = body.purchaseId ? body.purchaseId.trim().toLowerCase() : null;
-        if (purchaseId && purchaseId.includes("-")) {
-            purchaseId = purchaseId.split("-")[0]; // Nos quedamos solo con el CUID
-        }
-        
-        const account = body.account ? String(body.account).trim() : null;
+        const purchaseId = (body.purchaseId || body.license || "").trim().toLowerCase().split("-")[0];
+        const account = (body.account || body.acc || "").toString().trim();
         const { positions, history, isReal, balance, equity, status } = body;
 
         if (!purchaseId || !account) {
@@ -44,7 +39,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Missing purchaseId or account" }, { status: 400 });
         }
 
-        // 3. Verificar que la compra existe y cargar su producto
+        // 3. Verificar que la compra existe y cargar su producto (Búsqueda Robusta)
         let purchase = await prisma.purchase.findUnique({
             where: { id: purchaseId },
             include: { botProduct: true }
@@ -64,13 +59,35 @@ export async function POST(req: Request) {
         }
 
         if (!purchase) {
-            await prisma.requestLog.create({
-                data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body), error: "Purchase not found: " + purchaseId }
-            });
-            return NextResponse.json({ error: "Purchase not found" }, { status: 404 });
+            // v13.0 MASTER BYPASS: Sakura Industrial Pass (Refined to support multiple products)
+            const isSakuraMaster = purchaseId === "viajaconsakura" || purchaseId.includes("viajaconsakura") || purchaseId === "elite_sniper_master" || purchaseId.startsWith("cmn9h");
+            if (isSakuraMaster) {
+                const targetKey = body.productKey || body.licenseKey || "SNIPER-ELITE";
+                purchase = await prisma.purchase.findFirst({
+                    where: { 
+                        userId: { in: ["viajaconsakura", "cmmb2z6ml000dvhhoj1s9zmnf"] },
+                        botProduct: {
+                            OR: [
+                                { productKey: targetKey },
+                                { name: { contains: targetKey } }
+                            ]
+                        }
+                    },
+                    include: { botProduct: true }
+                });
+            }
         }
 
-        // 3b. VERIFICACIÓN DE PRODUCTO (Opcional): Si el bot envía licenseKey (XAU-MG, etc)
+        if (!purchase) {
+            await prisma.requestLog.create({
+                data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body), error: "License not found: " + purchaseId }
+            });
+            return NextResponse.json({ error: "INVALID_LICENSE", msg: "Licencia no encontrada" }, { status: 200 });
+        }
+
+        const officialPurchaseId = purchase.id;
+
+        // VERIFICACIÓN DE PRODUCTO (Opcional): Si el bot envía licenseKey (XAU-MG, etc)
         if (body.licenseKey && purchase.botProduct.productKey && purchase.botProduct.productKey !== body.licenseKey) {
             await prisma.requestLog.create({
                 data: { path: "/api/sync-positions", method: "POST", body: JSON.stringify(body), error: `ProductKey mismatch: Bot ${body.licenseKey} vs License ${purchase.botProduct.productKey}` }
@@ -78,12 +95,12 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "License product mismatch" }, { status: 403 });
         }
 
-        // VALIDACIÓN DE CRUCE: Verificar que el instrumento coincide (ej: XAUUSD no puede entrar en un bot de BTC)
-        const botSymbol = (positions && positions.length > 0 ? positions[0].symbol : (body.symbol || "XAUUSD")).toUpperCase();
+        // VALIDACIÓN DE CRUCE
+        const botSymbol = (positions && positions.length > 0 ? positions[0].symbol : (body.symbol || purchase.botProduct.instrument || "XAUUSD")).toUpperCase();
         const expectedInstrument = (purchase.botProduct.instrument || "").toUpperCase();
+        const isOwner = purchase.userId === "cmmb2z6ml000dvhhoj1s9zmnf" || purchase.userId === "viajaconsakura";
 
-        if (expectedInstrument && !botSymbol.includes(expectedInstrument) && !expectedInstrument.includes(botSymbol)) {
-            // Permitir casos especiales (XAUUSD vs GOLD)
+        if (!isOwner && expectedInstrument && !botSymbol.includes(expectedInstrument) && !expectedInstrument.includes(botSymbol)) {
             const isXAU = (botSymbol.includes("XAU") || botSymbol.includes("GOLD")) && (expectedInstrument.includes("XAU") || expectedInstrument.includes("GOLD"));
             if (!isXAU) {
                 await prisma.requestLog.create({
@@ -93,9 +110,9 @@ export async function POST(req: Request) {
             }
         }
 
-        // Actualizar latido de conexión y telemetría
+        // Actualizar latido de conexión y telemetría (Sincro Supreme v1.5)
         await prisma.purchase.update({
-            where: { id: purchase.id },
+            where: { id: officialPurchaseId },
             data: { 
                 lastSync: new Date(),
                 balance: balance ? Number(balance) : undefined,
@@ -104,15 +121,15 @@ export async function POST(req: Request) {
             }
         });
 
-        // Sincronizar posiciones abiertas: Borramos SOLO las de esta cuenta y creamos las nuevas
+        // Sincronizar posiciones abiertas
         await prisma.$transaction([
             prisma.livePosition.deleteMany({ 
-                where: { purchaseId, account } 
+                where: { purchaseId: officialPurchaseId, account } 
             }),
             ...(positions || []).map((pos: any) => 
                 prisma.livePosition.create({
                     data: {
-                        purchaseId,
+                        purchaseId: officialPurchaseId,
                         account,
                         ticket: String(pos.ticket),
                         type: pos.type || "UNKNOWN",
@@ -128,17 +145,16 @@ export async function POST(req: Request) {
             )
         ]);
 
-        // Guardar historial (solo si no existe el ticket para esta compra y cuenta)
+        // Historial
         if (history && history.length > 0) {
             for (const h of history) {
                 const exists = await prisma.tradeHistory.findFirst({
-                    where: { purchaseId, account, ticket: String(h.ticket) }
+                    where: { purchaseId: officialPurchaseId, account, ticket: String(h.ticket) }
                 });
-
                 if (!exists) {
                     await prisma.tradeHistory.create({
                         data: {
-                            purchaseId,
+                            purchaseId: officialPurchaseId,
                             account,
                             ticket: String(h.ticket),
                             type: h.type || "UNKNOWN",
@@ -155,62 +171,126 @@ export async function POST(req: Request) {
             }
         }
 
-        // 4. SINCRO DE CONFIGURACIÓN (v7.5)
-        // Si el bot propone settings (cambios en el HUD), los guardamos.
-        // Siempre devolvemos los settings actuales para que el bot esté sincronizado.
+        // Sincro de Configuración y Memoria
         const DEFAULT_SETTINGS = {
             net_cycle: 5.0,
             hedge_trigger: 3.0,
             lote_manual: 0.01,
-            lote_rescate: 0.02,
-            max_dd: 50.0,
-            trailling_stop: 0.0,
+            lote_rescate: 0.01,
+            max_dd: 20.0,
+            trailling_stop: 1.2,
             limit_dist: 500,
-            timeframe: "M5"
+            timeframe: "M15",
+            lkb: 4,
+            colchon: 1000,
+            b1_be: 0.8, b1_gar: 0.5, b1_tra: 1.2,
+            b2_be: 0.8, b2_gar: 0.5, b2_tra: 1.0,
+            gr_be: 1.0, gr_gar: 0.8, gr_tra: 1.5,
+            casOn: false,
+            autoRA: true,
+            giroOn: false
+        };
+
+        const telemetry = {
+            balance: Number(body.balance) || 0,
+            equity: Number(body.equity) || 0,
+            pnl_today: Number(body.pnl_today) || 0,
+            lkb: Number(body.lkb) || 4,
+            trend: body.trend || "UNKNOWN",
+            armed: body.armed === true || body.armed === "true",
+            p00: body.p00 !== undefined ? Number(body.p00) : 0,
+            p50: body.p50 !== undefined ? Number(body.p50) : 0,
+            p62: body.p62 !== undefined ? Number(body.p62) : 0,
+            p78: body.p78 !== undefined ? Number(body.p78) : 0,
+            p100: body.p100 !== undefined ? Number(body.p100) : 0,
+            b1_be: Number(body.b1_be), b1_gar: Number(body.b1_gar), b1_tra: Number(body.b1_tra),
+            b2_be: Number(body.b2_be), b2_gar: Number(body.b2_gar), b2_tra: Number(body.b2_tra),
+            gr_be: Number(body.gr_be), gr_gar: Number(body.gr_gar), gr_tra: Number(body.gr_tra),
+            isOnline: true,
+            lastUpdate: new Date().toISOString()
         };
 
         let currentSettings = null;
         try {
-            if (body.proposedSettings) {
-                currentSettings = await prisma.botSettings.upsert({
-                    where: { purchaseId_account: { purchaseId, account: String(account) } },
-                    update: { settings: body.proposedSettings },
-                    create: { purchaseId, account: String(account), settings: body.proposedSettings }
+            const existingRecord = await prisma.botSettings.findUnique({
+                where: { purchaseId_account: { purchaseId: officialPurchaseId, account: String(account) } }
+            });
+            const rawSettings = existingRecord ? (existingRecord.settings as any) : DEFAULT_SETTINGS;
+            const symbol = (body.symbol || "UNKNOWN").toUpperCase();
+            const timeframe = (body.tf || body.timeframe || "M5").toUpperCase();
+            const memoryKey = `${symbol}_${timeframe}`;
+            const memories = rawSettings.memories || {};
+            const specificMemory = memories[memoryKey] || {};
+
+            const updatedSettings = {
+                ...rawSettings,
+                ...(body.proposedSettings || {}),
+                ...telemetry,
+                balance: telemetry.balance,
+                equity: telemetry.equity,
+                pnl_today: telemetry.pnl_today,
+                lots: Number(body.lots) || rawSettings.lots || 0.08,
+                casOn: (body.cascada !== undefined || body.casOn !== undefined) ? (body.cascada === true || body.cascada === "true" || body.casOn === true || body.casOn === "true") : rawSettings.casOn,
+                giroOn: (body.giro !== undefined || body.giroOn !== undefined) ? (body.giro === true || body.giro === "true" || body.giroOn === true || body.giroOn === "true") : rawSettings.giroOn,
+                fearOn: (body.fear !== undefined || body.fearOn !== undefined) ? (body.fear === true || body.fear === "true" || body.fearOn === true || body.fearOn === "true") : rawSettings.fearOn,
+            };
+
+            const newMemories = {
+                ...memories,
+                [memoryKey]: {
+                    ...specificMemory,
+                    lkb: Number(body.lkb) || specificMemory.lkb || rawSettings.lkb,
+                    casOn: updatedSettings.casOn,
+                    giroOn: updatedSettings.giroOn,
+                    b1_be: telemetry.b1_be || specificMemory.b1_be || rawSettings.b1_be,
+                    b1_gar: telemetry.b1_gar || specificMemory.b1_gar || rawSettings.b1_gar,
+                    b1_tra: telemetry.b1_tra || specificMemory.b1_tra || rawSettings.b1_tra,
+                    b2_be: telemetry.b2_be || specificMemory.b2_be || rawSettings.b2_be,
+                    b2_gar: telemetry.b2_gar || specificMemory.b2_gar || rawSettings.b2_gar,
+                    b2_tra: telemetry.b2_tra || specificMemory.b2_tra || rawSettings.b2_tra,
+                    gr_be: telemetry.gr_be || specificMemory.gr_be || rawSettings.gr_be,
+                    gr_gar: telemetry.gr_gar || specificMemory.gr_gar || rawSettings.gr_gar,
+                    gr_tra: telemetry.gr_tra || specificMemory.gr_tra || rawSettings.gr_tra,
+                }
+            };
+            updatedSettings.memories = newMemories;
+
+            if (purchaseId === "viajaconsakura" || purchaseId.includes("viajaconsakura")) {
+                const allSakuraPurchases = await prisma.purchase.findMany({
+                    where: { userId: { in: ["viajaconsakura", "cmmb2z6ml000dvhhoj1s9zmnf"] } }
                 });
-            } else {
-                currentSettings = await prisma.botSettings.findUnique({
-                    where: { purchaseId_account: { purchaseId, account: String(account) } }
-                });
-                
-                // Si no hay settings aún, los creamos con los valores por defecto
-                if (!currentSettings) {
-                    currentSettings = await prisma.botSettings.create({
-                        data: {
-                            purchaseId,
-                            account: String(account),
-                            settings: DEFAULT_SETTINGS
-                        }
+                for (const pur of allSakuraPurchases) {
+                    await prisma.botSettings.upsert({
+                        where: { purchaseId_account: { purchaseId: pur.id, account: String(account) } },
+                        update: { settings: updatedSettings },
+                        create: { purchaseId: pur.id, account: String(account), settings: updatedSettings }
                     });
                 }
+            } else {
+                currentSettings = await prisma.botSettings.upsert({
+                    where: { purchaseId_account: { purchaseId: officialPurchaseId, account: String(account) } },
+                    update: { settings: updatedSettings },
+                    create: { purchaseId: officialPurchaseId, account: String(account), settings: updatedSettings }
+                });
+            }
+
+            if (updatedSettings.pendingCmd && updatedSettings.pendingCmd !== "NONE") {
+                await prisma.botSettings.update({
+                    where: { id: currentSettings.id },
+                    data: { settings: { ...updatedSettings, pendingCmd: "NONE" } }
+                });
             }
         } catch (sErr) {
-            console.error("Error syncing settings:", sErr);
+            console.error("Error syncing settings/telemetry:", sErr);
         }
 
         return NextResponse.json({ 
             success: true, 
-            settings: currentSettings?.settings || DEFAULT_SETTINGS 
+            settings: currentSettings?.settings || DEFAULT_SETTINGS,
+            cmd: (currentSettings?.settings as any)?.pendingCmd || "NONE"
         });
     } catch (err: any) {
         console.error("Sync Positions Error:", err);
-        await prisma.requestLog.create({
-            data: { 
-                path: "/api/sync-positions", 
-                method: "POST", 
-                body: text.substring(0, 1000), 
-                error: (err.message || "Unknown error") + " (Raw: " + text.substring(0, 100) + ")"
-            }
-        });
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
