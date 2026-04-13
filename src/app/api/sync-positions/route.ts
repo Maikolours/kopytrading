@@ -45,17 +45,39 @@ export async function POST(req: Request) {
             include: { botProduct: true }
         });
 
-        // FALLBACK: Si no lo encuentra por CUID, buscar por email del usuario (Usabilidad Supreme)
+        // FALLBACK SUPREME: Si no lo encuentra por CUID, buscar por email del usuario
         if (!purchase && purchaseId.includes("@")) {
-            const userPurchase = await prisma.purchase.findFirst({
-                where: { 
-                    user: { email: purchaseId },
-                    botProduct: { productKey: body.licenseKey || undefined } 
-                },
+            // Buscamos todas las compras de este usuario
+            const userPurchases = await prisma.purchase.findMany({
+                where: { user: { email: purchaseId } },
                 include: { botProduct: true },
-                orderBy: { createdAt: 'desc' }
+                orderBy: { updatedAt: 'desc' }
             });
-            if (userPurchase) purchase = userPurchase;
+
+            if (userPurchases.length > 0) {
+                const botSymbol = (positions && positions.length > 0 ? positions[0].symbol : (body.symbol || "XAUUSD")).toUpperCase();
+                
+                // Prioridad 1: Match exacto de licenseKey
+                purchase = userPurchases.find(p => p.botProduct.productKey === (body.licenseKey || body.productKey));
+                
+                // Prioridad 2: Match por Instrumento (BTCUSD, XAUUSD, etc)
+                if (!purchase) {
+                   purchase = userPurchases.find(p => {
+                      const pInst = (p.botProduct.instrument || "").toUpperCase();
+                      return botSymbol.includes(pInst) || pInst.includes(botSymbol);
+                   });
+                }
+                
+                // Prioridad 3: Match por nombre de producto (Elite, Sniper, etc)
+                if (!purchase && body.licenseKey) {
+                   purchase = userPurchases.find(p => p.botProduct.name.toUpperCase().includes(body.licenseKey.toUpperCase()));
+                }
+
+                // Prioridad 4: Última compra activa (Si es Sakura, permitimos el bypass total)
+                if (!purchase && (purchaseId === "viajaconsakura@gmail.com" || purchaseId.includes("viajaconsakura"))) {
+                   purchase = userPurchases[0];
+                }
+            }
         }
 
         if (!purchase) {
