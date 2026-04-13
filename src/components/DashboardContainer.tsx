@@ -138,7 +138,7 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                         variants={variants}
                         selectedIndex={selectedBotIndices[baseName] || 0}
                         onSelectVariant={(idx) => setSelectedBotIndices(prev => ({ ...prev, [baseName]: idx }))}
-                        theme={getBotTheme(variants[0].botProduct.name)}
+                        theme={getBotTheme(variants[0]?.botProduct?.name)}
                         onCopy={handleCopy}
                         copiedId={copiedId}
                         isOwner={isOwner}
