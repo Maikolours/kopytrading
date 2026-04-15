@@ -49,8 +49,6 @@ export async function POST(req: Request) {
         }
         
         // NORMALIZACIÓN: Asegurar que el purchaseId sea siempre minúsculas y limpiar sufijos
-        const purchaseId = (body.purchaseId || body.license || "").trim().toLowerCase().split("-")[0];
-        const account = (body.account || body.acc || "").toString().trim();
         // --- FUZZY MAPPING v15.1 (Recover data with non-standard keys) ---
         const findValue = (keys: string[]) => {
             const lowerBody: any = {};

@@ -51,7 +51,7 @@ bool ValidateLicense(string _p1, string _p2, int _p3) {
 bool GetRemoteStatus() {
    if(g_KopyPurchaseID == "" || g_KopyPurchaseID == " " || g_KopyPurchaseID == "0") return false;
    
-   string url = "https://www.kopytrading.com/api/remote-control?purchaseId=" + g_KopyPurchaseID + "&account=" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
+   string url = "https://kopytrading-ltt9lvp4y-maikolours-projects.vercel.app/api/remote-control?purchaseId=" + g_KopyPurchaseID + "&account=" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
    uchar d[], r[];
    string rh;
    ArrayResize(d, 0);
@@ -73,7 +73,7 @@ void SyncPositions(string _s, double _p=0, int _c=0) {
    if(TimeCurrent() < g_KopyLastSync + 15) return; // Sincro cada 15s para telemetría ágil
    g_KopyLastSync = TimeCurrent();
    
-   string url = "https://www.kopytrading.com/api/sync-positions";
+   string url = "https://kopytrading-ltt9lvp4y-maikolours-projects.vercel.app/api/sync-positions";
    string hd = "Content-Type: application/json\r\n";
    
    // Construcción de JSON Robusta con Telemetría
