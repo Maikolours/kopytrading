@@ -23,11 +23,19 @@ export async function GET(
         });
 
         // 🛡️ SAKURA MASTER FETCH: Si eres tú, buscamos tu balance más fresco en todo el sistema.
+        // v14.0: Ahora filtramos por instrumento para evitar cruces en tiempo real
         const isSakura = session.user.email?.includes("viajaconsakura") || id.includes("viajaconsakura");
         if (isSakura) {
+            const botSymbolPrefix = symbol ? symbol.substring(0, 3) : null;
+            
             const freshestRecord = await prisma.botSettings.findFirst({
                 where: { 
-                    purchase: { user: { email: { contains: "viajaconsakura" } } },
+                    purchase: { 
+                        user: { email: { contains: "viajaconsakura" } },
+                        botProduct: botSymbolPrefix ? {
+                            instrument: { contains: botSymbolPrefix }
+                        } : undefined
+                    },
                     account: account !== "unknown" ? account : undefined
                 },
                 orderBy: { updatedAt: 'desc' }
