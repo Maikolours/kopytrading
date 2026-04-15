@@ -11,6 +11,7 @@ import { PasswordChangeForm } from "./PasswordChangeForm";
 import { BotCard } from "./BotCard";
 import { PerformanceSection } from "./PerformanceSection";
 import { useSession } from "next-auth/react";
+import { ErrorBoundary } from "./ErrorBoundary";
 
 interface DashboardContainerProps {
     purchases: any[];
@@ -131,22 +132,26 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
 
             {/* Contenido Principal: Centrado y Optimizado */}
             <div className="flex-1 min-w-0 max-w-4xl mx-auto w-full">
-                {Object.entries(botsByBaseName).map(([baseName, variants]: [string, any[]]) => (
-                    <BotCard
-                        key={baseName}
-                        baseName={baseName}
-                        variants={variants}
-                        selectedIndex={selectedBotIndices[baseName] || 0}
-                        onSelectVariant={(idx) => setSelectedBotIndices(prev => ({ ...prev, [baseName]: idx }))}
-                        theme={getBotTheme(variants[0]?.botProduct?.name)}
-                        onCopy={handleCopy}
-                        copiedId={copiedId}
-                        isOwner={isOwner}
-                    />
-                ))}
+                <ErrorBoundary fallbackTitle="Error en Lista de Bots">
+                    {Object.entries(botsByBaseName).map(([baseName, variants]: [string, any[]]) => (
+                        <BotCard
+                            key={baseName}
+                            baseName={baseName}
+                            variants={variants}
+                            selectedIndex={selectedBotIndices[baseName] || 0}
+                            onSelectVariant={(idx) => setSelectedBotIndices(prev => ({ ...prev, [baseName]: idx }))}
+                            theme={getBotTheme(variants[0]?.botProduct?.name)}
+                            onCopy={handleCopy}
+                            copiedId={copiedId}
+                            isOwner={isOwner}
+                        />
+                    ))}
+                </ErrorBoundary>
 
                 {activeCategory === "📈 RENDIMIENTO" && (
-                    <PerformanceSection purchases={purchases} />
+                    <ErrorBoundary fallbackTitle="Error en Gráfico de Rendimiento">
+                        <PerformanceSection purchases={purchases} />
+                    </ErrorBoundary>
                 )}
 
                 {activeCategory === "⚙️ AJUSTES" && (

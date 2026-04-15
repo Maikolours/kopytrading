@@ -80,101 +80,119 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
 
     useEffect(() => {
         if (!chartContainerRef.current) return;
+        
+        // Prevención de crash: Asegurar dimensiones mínimas
+        if (chartContainerRef.current.clientWidth === 0) {
+            console.warn("Chart container has 0 width, postponing initialization.");
+            return;
+        }
 
-        // Inicialización segura del gráfico
-        const chart = createChart(chartContainerRef.current, {
-            width: chartContainerRef.current.clientWidth,
-            height: 350,
-            layout: {
-                background: { color: 'transparent' },
-                textColor: '#d1d5db',
-            },
-            grid: {
-                vertLines: { color: 'rgba(255, 255, 255, 0.05)' },
-                horzLines: { color: 'rgba(255, 255, 255, 0.05)' },
-            },
-            crosshair: {
-                mode: 0,
-            },
-            rightPriceScale: {
-                borderColor: 'rgba(255, 255, 255, 0.1)',
-            },
-            timeScale: {
-                borderColor: 'rgba(255, 255, 255, 0.1)',
-                visible: false, // Ocultamos tiempo para simplificar
-            },
-        });
+        let chart: IChartApi | null = null;
 
-        const candlestickSeries = chart.addCandlestickSeries({
-            upColor: '#10b981',
-            downColor: '#ef4444',
-            borderVisible: false,
-            wickUpColor: '#10b981',
-            wickDownColor: '#ef4444',
-        });
+        try {
+            // Inicialización segura del gráfico
+            chart = createChart(chartContainerRef.current, {
+                width: chartContainerRef.current.clientWidth,
+                height: 350,
+                layout: {
+                    background: { color: 'transparent' },
+                    textColor: '#d1d5db',
+                },
+                grid: {
+                    vertLines: { color: 'rgba(255, 255, 255, 0.05)' },
+                    horzLines: { color: 'rgba(255, 255, 255, 0.05)' },
+                },
+                crosshair: {
+                    mode: 0,
+                },
+                rightPriceScale: {
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                },
+                timeScale: {
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    visible: false, // Ocultamos tiempo para simplificar
+                },
+            });
 
-        chartRef.current = chart;
-        seriesRef.current = candlestickSeries;
+            const candlestickSeries = chart.addCandlestickSeries({
+                upColor: '#10b981',
+                downColor: '#ef4444',
+                borderVisible: false,
+                wickUpColor: '#10b981',
+                wickDownColor: '#ef4444',
+            });
 
-        // Fetch de velas (Crypto via Binance, Forex via fallback)
-        const fetchKlines = async () => {
-            try {
-                // Si no es un símbolo de Binance (Forex por ejemplo), manejamos el estado
-                const isCrypto = symbol.includes("BTC") || symbol.includes("ETH") || symbol.includes("XAU") || symbol.includes("USDT");
-                
-                if (!isCrypto) {
-                    console.log("Forex/Other asset detected, chart fallback mode active.");
+            chartRef.current = chart;
+            seriesRef.current = candlestickSeries;
+
+            // Fetch de velas (Crypto via Binance, Forex via fallback)
+            const fetchKlines = async () => {
+                try {
+                    // Si no es un símbolo de Binance (Forex por ejemplo), manejamos el estado
+                    const isCrypto = symbol.includes("BTC") || symbol.includes("ETH") || symbol.includes("XAU") || symbol.includes("USDT");
+                    
+                    if (!isCrypto) {
+                        console.log("Forex/Other asset detected, chart fallback mode active.");
+                        setLoading(false);
+                        return;
+                    }
+
+                    const apiSymbol = symbol.includes("XAU") ? "PAXGUSDT" : symbol.replace(/USD|USDT|\//g, "") + "USDT";
+                    
+                    const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${apiSymbol}&interval=1m&limit=100`);
+                    if (!res.ok) throw new Error("API Response Error");
+                    
+                    const data = await res.json();
+                    if (!data || !Array.isArray(data)) {
+                        setLoading(false);
+                        return;
+                    }
+
+                    const formattedData = data.map((d: any) => ({
+                        time: d[0] / 1000,
+                        open: parseFloat(d[1]),
+                        high: parseFloat(d[2]),
+                        low: parseFloat(d[3]),
+                        close: parseFloat(d[4]),
+                    }));
+                    candlestickSeries.setData(formattedData);
                     setLoading(false);
-                    return;
-                }
-
-                const apiSymbol = symbol.includes("XAU") ? "PAXGUSDT" : symbol.replace(/USD|USDT|\//g, "") + "USDT";
-                
-                const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${apiSymbol}&interval=1m&limit=100`);
-                if (!res.ok) throw new Error("API Response Error");
-                
-                const data = await res.json();
-                if (!data || !Array.isArray(data)) {
+                } catch (err) {
+                    console.error("Error fetching candles:", err);
                     setLoading(false);
-                    return;
                 }
+            };
 
-                const formattedData = data.map((d: any) => ({
-                    time: d[0] / 1000,
-                    open: parseFloat(d[1]),
-                    high: parseFloat(d[2]),
-                    low: parseFloat(d[3]),
-                    close: parseFloat(d[4]),
-                }));
-                candlestickSeries.setData(formattedData);
-                setLoading(false);
-            } catch (err) {
-                console.error("Error fetching candles:", err);
-                setLoading(false);
-            }
-        };
+            fetchKlines();
+            fetchTelemetry();
 
-        fetchKlines();
-        fetchTelemetry();
+            const interval = setInterval(fetchTelemetry, 5000);
 
-        const interval = setInterval(fetchTelemetry, 5000);
+            const handleResize = () => {
+                if (chartContainerRef.current && chart) {
+                    try {
+                        chart.applyOptions({ width: chartContainerRef.current.clientWidth });
+                    } catch (e) {}
+                }
+            };
+            window.addEventListener('resize', handleResize);
 
-        const handleResize = () => {
-            if (chartContainerRef.current) {
-                chart.applyOptions({ width: chartContainerRef.current.clientWidth });
-            }
-        };
-        window.addEventListener('resize', handleResize);
-
-        // CLEANUP: Esta es la clave para la estabilidad
-        return () => {
-            window.removeEventListener('resize', handleResize);
-            clearInterval(interval);
-            if (chartRef.current) {
-                chartRef.current.remove();
-                chartRef.current = null;
-            }
-        };
+            // CLEANUP: Esta es la clave para la estabilidad
+            return () => {
+                window.removeEventListener('resize', handleResize);
+                clearInterval(interval);
+                if (chartRef.current) {
+                    try {
+                        chartRef.current.remove();
+                    } catch (e) {}
+                    chartRef.current = null;
+                }
+            };
+        } catch (err) {
+            console.error("Critical error in OperativoChart:", err);
+            setLoading(false);
+            return () => {};
+        }
     }, [symbol, purchaseId, account]);
 
     return (

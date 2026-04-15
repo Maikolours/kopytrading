@@ -40,7 +40,10 @@ export function PerformanceSection({ purchaseId: initialPurchaseId, botName: ini
         const days = parseInt(filter);
         const cutoff = new Date();
         cutoff.setDate(cutoff.getDate() - days);
-        return data.filter(d => new Date(d.date) >= cutoff);
+        return data.filter(d => {
+            const date = new Date(d.date);
+            return !isNaN(date.getTime()) && date >= cutoff;
+        });
     }, [data, filter]);
 
     const totalProfit = useMemo(() => {
