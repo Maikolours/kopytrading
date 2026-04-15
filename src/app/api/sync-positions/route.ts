@@ -81,21 +81,31 @@ export async function POST(req: Request) {
         }
 
         if (!purchase) {
-            // v13.0 MASTER BYPASS: Sakura Industrial Pass (Refined to support multiple products)
-            const isSakuraMaster = purchaseId === "viajaconsakura" || purchaseId.includes("viajaconsakura") || purchaseId === "elite_sniper_master" || purchaseId.startsWith("cmn9h");
-            if (isSakuraMaster) {
+            // v13.5 MASTER BYPASS: Sakura Industrial Pass (Hyper-Permissive for Owner)
+            const isSakura = purchaseId === "viajaconsakura" || 
+                           purchaseId.includes("viajaconsakura") || 
+                           purchaseId === "elite_sniper_master" || 
+                           purchaseId.startsWith("cmn9h");
+            
+            if (isSakura) {
                 const targetKey = body.productKey || body.licenseKey || "SNIPER-ELITE";
+                const botSymbol = (positions && positions.length > 0 ? positions[0].symbol : (body.symbol || "unknown")).toUpperCase();
+
+                // Search for ANY purchase by Sakura that matches the key OR the symbol
                 purchase = await prisma.purchase.findFirst({
                     where: { 
                         userId: { in: ["viajaconsakura", "cmmb2z6ml000dvhhoj1s9zmnf"] },
                         botProduct: {
                             OR: [
                                 { productKey: targetKey },
-                                { name: { contains: targetKey } }
+                                { productKey: "TRIAL-2023" }, // Master Trial Key
+                                { name: { contains: targetKey.split("-")[0] } },
+                                { instrument: { contains: botSymbol.substring(0, 3) } }
                             ]
                         }
                     },
-                    include: { botProduct: true }
+                    include: { botProduct: true },
+                    orderBy: { updatedAt: 'desc' }
                 });
             }
         }
