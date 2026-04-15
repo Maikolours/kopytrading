@@ -81,6 +81,7 @@ export async function POST(req: Request) {
                     error: `DEBUG_SAKURA_RAW_PAYLOAD: Bal=${balance}, Equ=${equity}, Acc=${account}` 
                 }
             });
+        }
         if (!purchaseId || !account) {
             await prisma.requestLog.create({
                 data: { path: "/api/sync-positions", method: "POST", body: text.substring(0, 1000), error: "Missing purchaseId or account" }
