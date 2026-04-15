@@ -51,7 +51,26 @@ export async function POST(req: Request) {
         // NORMALIZACIÓN: Asegurar que el purchaseId sea siempre minúsculas y limpiar sufijos
         const purchaseId = (body.purchaseId || body.license || "").trim().toLowerCase().split("-")[0];
         const account = (body.account || body.acc || "").toString().trim();
-        const { positions, history, isReal, balance, equity, status } = body;
+        // --- FUZZY MAPPING v15.1 (Recover data with non-standard keys) ---
+        const findValue = (keys: string[]) => {
+            const lowerBody: any = {};
+            Object.keys(body).forEach(k => lowerBody[k.toLowerCase()] = body[k]);
+            for (const key of keys) {
+                if (lowerBody[key.toLowerCase()] !== undefined) return lowerBody[key.toLowerCase()];
+            }
+            return null;
+        };
+
+        const balance = findValue(['balance', 'bal', 'acc_balance', 'account_balance', 'balance_cuenta']);
+        const equity = findValue(['equity', 'equ', 'acc_equity', 'active_equity', 'equidad_activa', 'equidad']);
+        const pnl = findValue(['pnl', 'profit', 'today_profit', 'pnl_today', 'beneficio_hoy', 'beneficio']);
+        const status = findValue(['status', 'state', 'bot_status', 'estatus']);
+        const symbol = findValue(['symbol', 'instrument', 'pair', 'activo']) || body.symbol;
+        const account = String(findValue(['account', 'acc', 'cuenta', 'num_cuenta']) || body.account || "unknown");
+        const purchaseId = String(body.purchaseId || body.license || body.licenseKey || "").trim().toLowerCase();
+        const { positions, history, isReal } = body;
+
+        console.log(`[SYNC-FUZZY] Mapped: BAL:${balance} EQU:${equity} ACC:${account} ID:${purchaseId}`);
 
         if (!purchaseId || !account) {
             await prisma.requestLog.create({
@@ -65,6 +84,15 @@ export async function POST(req: Request) {
             where: { id: purchaseId },
             include: { botProduct: true }
         });
+
+        // Fallback por licencia (LicenseKey)
+        if (!purchase && (body.licenseKey || body.license)) {
+            const lKey = body.licenseKey || body.license;
+            purchase = await prisma.purchase.findFirst({
+                where: { botProduct: { productKey: lKey } },
+                include: { botProduct: true }
+            });
+        }
 
         // FALLBACK SUPREME: Si no lo encuentra por CUID, buscar por email del usuario
         if (!purchase && purchaseId.includes("@")) {
