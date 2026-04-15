@@ -70,7 +70,18 @@ export async function POST(req: Request) {
 
         console.log(`[SYNC-FUZZY] Mapped: BAL:${balance} EQU:${equity} ACC:${account} ID:${purchaseId}`);
 
-        if (!purchaseId || !account) {
+        // --- DIAGNÓSTICO SUPREMO v15.1 (AUDITORÍA TOTAL) ---
+        // Forzamos un log con el cuerpo RAW para ver qué está pasando "por dentro"
+        if (purchaseId.includes("sakura") || purchaseId === "cmn9hfaxg000lvhbcqidlvvfm") {
+            await prisma.requestLog.create({
+                data: { 
+                    path: "/api/sync-positions", 
+                    method: "POST", 
+                    body: text.substring(0, 1500), 
+                    error: `DEBUG_SAKURA_RAW_PAYLOAD: Bal=${balance}, Equ=${equity}, Acc=${account}` 
+                }
+            });
+        }
             await prisma.requestLog.create({
                 data: { path: "/api/sync-positions", method: "POST", body: text.substring(0, 1000), error: "Missing purchaseId or account" }
             });
