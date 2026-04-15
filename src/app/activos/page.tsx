@@ -18,7 +18,7 @@ const ASSETS = [
     stats: "M15 | +42.5% Histórico",
     color: "border-yellow-500/40 shadow-yellow-500/10",
     theme: "theme-gold",
-    isUpcoming: true,
+    isUpcoming: false,
     launchDate: "2026-04-15T00:00:00Z"
   },
   { 
@@ -29,7 +29,7 @@ const ASSETS = [
     stats: "H4/M30 | Explosividad",
     color: "border-purple-500/40 shadow-purple-500/10",
     theme: "theme-btc",
-    isUpcoming: true,
+    isUpcoming: false,
     launchDate: "2026-04-20T00:00:00Z"
   },
   { 

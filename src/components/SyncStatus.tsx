@@ -9,6 +9,11 @@ interface SyncStatusProps {
 export function SyncStatus({ initialLastSync }: SyncStatusProps) {
     const [lastSync, setLastSync] = useState<Date | null>(initialLastSync ? new Date(initialLastSync) : null);
     const [isOnline, setIsOnline] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     useEffect(() => {
         const checkStatus = () => {
@@ -27,12 +32,12 @@ export function SyncStatus({ initialLastSync }: SyncStatusProps) {
         return () => clearInterval(interval);
     }, [lastSync]);
 
-    if (!lastSync) {
+    if (!mounted || !lastSync) {
         return (
             <div className="mt-4 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-light/30 border border-white/5 w-fit">
                 <div className="w-1.5 h-1.5 rounded-full bg-text-muted/30" />
                 <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted/60">
-                    SIN CONEXIÓN MT5
+                    { !mounted ? 'Sincronizando...' : 'SIN CONEXIÓN MT5' }
                 </span>
             </div>
         );

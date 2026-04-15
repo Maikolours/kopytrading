@@ -6,7 +6,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { DashboardRefresher } from "@/components/DashboardRefresher";
 import { DashboardContainer } from "@/components/DashboardContainer";
-
 // Evitar cacheo
 export const dynamic = "force-dynamic";
 
@@ -35,7 +34,7 @@ export default async function DashboardPage() {
     let purchases: any[] = [];
     let error: string | null = null;
     try {
-        const rawPurchases = await prisma.purchase.findMany({
+        purchases = await prisma.purchase.findMany({
             where: { userId: currentUserId },
             include: { 
                 botProduct: true,
@@ -54,14 +53,12 @@ export default async function DashboardPage() {
             },
             orderBy: { createdAt: 'desc' }
         });
-
-        // Agrupar por botProductId
-        purchases = rawPurchases;
-    } catch (e: any) {
-        console.error("Prisma Error Dashboard:", e);
-        error = e.message || "Error al conectar con la base de datos";
+    } catch (e) {
+        error = "No se pudieron cargar tus bots.";
     }
 
+    // Deeply serialize the data to ensure only POJOs are passed to the client (Dates to strings)
+    const serializedPurchases = JSON.parse(JSON.stringify(purchases));
 
     return (
         <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
@@ -101,7 +98,7 @@ export default async function DashboardPage() {
                         </Link>
                     </div>
                 ) : (
-                    <DashboardContainer purchases={purchases} />
+                    <DashboardContainer purchases={serializedPurchases} />
                 )}
             </div>
         </div>

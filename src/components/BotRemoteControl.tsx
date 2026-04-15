@@ -42,6 +42,11 @@ export function BotRemoteControl({
     const [botData, setBotData] = useState<any>(initialData || null);
     const [refreshing, setRefreshing] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const [beValues, setBeValues] = useState<any>({ B1: "", B2: "", GR: "" });
     const [garValues, setGarValues] = useState<any>({ B1: "", B2: "", GR: "" });
@@ -389,7 +394,7 @@ export function BotRemoteControl({
                 <div className="text-right">
                     <p className="text-[8px] uppercase font-black text-white/20 tracking-widest">Last Sync</p>
                     <p className="text-[8px] font-medium text-white/40 italic">
-                        {botData?.lastUpdate ? new Date(botData.lastUpdate).toLocaleTimeString() : '---'}
+                        {(!mounted || !botData?.lastUpdate) ? '---' : new Date(botData.lastUpdate).toLocaleTimeString()}
                     </p>
                 </div>
             </div>

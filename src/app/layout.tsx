@@ -122,8 +122,8 @@ export default function RootLayout({
                   <div className="space-y-4">
                     <h4 className="text-white font-bold text-sm uppercase tracking-widest">Sistemas</h4>
                     <ul className="space-y-2 text-xs text-text-muted">
-                      <li><Link href="/bots/cmmv3xu5f0006vhmcqmuq1b4a" className="hover:text-accent transition-colors">La Ametralladora (Oro)</Link></li>
-                      <li><Link href="/bots/cmmv3xugt000cvhmc7nqjwwji-btcusd" className="hover:text-accent transition-colors">BTC Storm Rider</Link></li>
+                      <li><Link href="/bots/cmn9hf8yc0000vhbcq9hbxk0j" className="hover:text-accent transition-colors">La Ametralladora (Oro)</Link></li>
+                      <li><Link href="/bots/cmn9hf9bm0003vhbckaamkqal" className="hover:text-accent transition-colors">BTC Storm Rider</Link></li>
                       <li><Link href="/bots" className="hover:text-accent transition-colors font-semibold text-accent/80">Todos los Bots →</Link></li>
                     </ul>
                   </div>
