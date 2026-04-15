@@ -6,21 +6,42 @@ export async function POST(req: Request) {
     let text = "";
     try {
         text = await req.text();
+        const rawLength = text.length;
+        
         // Limpiar posibles caracteres nulos al final (común en MQL5) y espacios
         const cleanText = text.replace(/\0/g, '').trim();
         
+        if (text.includes("viajaconsakura")) {
+            console.log(`[SYNC-DEBUG] Incoming packet from Sakura. Raw Length: ${rawLength}, Clean Length: ${cleanText.length}`);
+        }
+
         try {
             body = JSON.parse(cleanText);
         } catch (e) {
-            // ROBUSTEZ: Si falla el parseo, intentamos extraer solo el primer objeto JSON {...}
-            // Útil para buffers de MT5 que vienen con basura extra al final
+            // ROBUSTEZ SUPREMA: Si falla el parseo, intentamos extraer el primer objeto vlido
             const firstBrace = cleanText.indexOf('{');
             const lastBrace = cleanText.lastIndexOf('}');
             if (firstBrace !== -1 && lastBrace !== -1) {
                 try {
-                    body = JSON.parse(cleanText.substring(firstBrace, lastBrace + 1));
+                    // Si el lastBrace no es el final, talvez el JSON est truncado
+                    // Intentamos parsear lo que tenemos cerrando llaves si es necesario
+                    let candidate = cleanText.substring(firstBrace, lastBrace + 1);
+                    try {
+                        body = JSON.parse(candidate);
+                    } catch (innerE) {
+                        // Si falla, es probable que falten llaves de cierre al final
+                        candidate = candidate + "}".repeat(5); // Fuerza cierre
+                        const repairBrace = candidate.lastIndexOf('}');
+                        // Intento de reparacin recursiva simple
+                        for(let i=0; i<5; i++) {
+                           try {
+                              body = JSON.parse(candidate.substring(0, repairBrace - i + 1));
+                              if (body) break;
+                           } catch(e2) {}
+                        }
+                    }
                 } catch (innerE) {
-                    throw new Error("Invalid JSON structure even after extraction");
+                    throw new Error("Invalid JSON structure even after extraction attempt");
                 }
             } else {
                 throw e;
@@ -147,8 +168,8 @@ export async function POST(req: Request) {
             where: { id: officialPurchaseId },
             data: { 
                 lastSync: new Date(),
-                balance: balance ? Number(balance) : undefined,
-                equity: equity ? Number(equity) : undefined,
+                balance: (balance !== null && balance !== undefined) ? Number(balance) : undefined,
+                equity: (equity !== null && equity !== undefined) ? Number(equity) : undefined,
                 lastStatus: status || undefined
             }
         });

@@ -8,19 +8,87 @@ interface OperativoChartProps {
     purchaseId: string;
     account: string;
     theme?: any;
+    activePositions?: any[];
 }
 
 export const OperativoChart: React.FC<OperativoChartProps> = ({ 
     symbol = "BTCUSDT", 
     purchaseId, 
     account,
-    theme 
+    theme,
+    activePositions = []
 }) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<IChartApi | null>(null);
     const seriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
     const priceLinesRef = useRef<IPriceLine[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const positionLinesRef = useRef<IPriceLine[]>([]);
+
+    const updatePositionLines = (positions: any[]) => {
+        if (!seriesRef.current) return;
+
+        // Limpiar líneas de posición anteriores
+        positionLinesRef.current.forEach(line => {
+            try {
+                seriesRef.current?.removePriceLine(line);
+            } catch (e) {}
+        });
+        positionLinesRef.current = [];
+
+        if (!positions || positions.length === 0) return;
+
+        positions.forEach(pos => {
+            const price = Number(pos.openPrice);
+            if (!price || price <= 0) return;
+
+            const isSell = pos.type?.toUpperCase().includes("SELL");
+            const color = isSell ? "#ef4444" : "#10b981";
+            const label = `${pos.type?.toUpperCase() || "POS"} ${pos.lots || ""} @ ${price.toFixed(2)}`;
+
+            try {
+                // Línea de Entrada
+                const line = seriesRef.current?.createPriceLine({
+                    price: price,
+                    color: color,
+                    lineWidth: 2,
+                    lineStyle: 0, // Solid
+                    axisLabelVisible: true,
+                    title: label,
+                });
+                if (line) positionLinesRef.current.push(line);
+
+                // Línea de TP
+                if (pos.tp && Number(pos.tp) > 0) {
+                    const tpLine = seriesRef.current?.createPriceLine({
+                        price: Number(pos.tp),
+                        color: "#10b981",
+                        lineWidth: 1,
+                        lineStyle: 2, // Dashed
+                        axisLabelVisible: true,
+                        title: "TP",
+                    });
+                    if (tpLine) positionLinesRef.current.push(tpLine);
+                }
+
+                // Línea de SL
+                if (pos.sl && Number(pos.sl) > 0) {
+                    const slLine = seriesRef.current?.createPriceLine({
+                        price: Number(pos.sl),
+                        color: "#ef4444",
+                        lineWidth: 1,
+                        lineStyle: 1, // Dotted
+                        axisLabelVisible: true,
+                        title: "SL",
+                    });
+                    if (slLine) positionLinesRef.current.push(slLine);
+                }
+            } catch (e) {
+                console.warn("Error drawing position line:", e);
+            }
+        });
+    };
 
     const updateFiboLevels = (data: any) => {
         if (!seriesRef.current) return;
@@ -52,15 +120,17 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
 
             levels.forEach(lvl => {
                 if (lvl.price > 0) {
-                    const line = seriesRef.current?.createPriceLine({
-                        price: lvl.price,
-                        color: lvl.color,
-                        lineWidth: 2,
-                        lineStyle: 2, // Dashed
-                        axisLabelVisible: true,
-                        title: lvl.label,
-                    });
-                    if (line) priceLinesRef.current.push(line);
+                    try {
+                        const line = seriesRef.current?.createPriceLine({
+                            price: lvl.price,
+                            color: lvl.color,
+                            lineWidth: 2,
+                            lineStyle: 2, // Dashed
+                            axisLabelVisible: true,
+                            title: lvl.label,
+                        });
+                        if (line) priceLinesRef.current.push(line);
+                    } catch (e) {}
                 }
             });
         }
@@ -77,6 +147,10 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
             console.error("Error fetching telemetry for chart:", error);
         }
     };
+
+    useEffect(() => {
+        updatePositionLines(activePositions);
+    }, [activePositions]);
 
     useEffect(() => {
         if (!chartContainerRef.current) return;

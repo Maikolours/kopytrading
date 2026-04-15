@@ -63,6 +63,7 @@ export const BotCard = memo(function BotCard({
     // Formateo seguro para balance y equidad
     const balance = purchase?.balance !== null && purchase?.balance !== undefined ? Number(purchase.balance) : null;
     const equity = purchase?.equity !== null && purchase?.equity !== undefined ? Number(purchase.equity) : null;
+    const isSyncing = !balance && purchase?.lastStatus === "CARGANDO...";
 
     return (
         <div className={`animate-in fade-in slide-in-from-bottom-6 duration-700 mb-8 ${assetTheme.class}`}>
@@ -80,10 +81,11 @@ export const BotCard = memo(function BotCard({
                                     <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black border uppercase tracking-widest flex items-center gap-1.5 ${
                                         purchase.lastStatus === 'FUEGO' ? 'bg-orange-500/20 text-orange-400 border-orange-500/40 animate-pulse' : 
                                         purchase.lastStatus === 'PAUSA' ? 'bg-danger/20 text-danger border-danger/40' :
+                                        isSyncing ? 'bg-brand/20 text-brand-light border-brand/40 animate-pulse' :
                                         'bg-brand-light/20 text-brand-light border-brand-light/40'
                                     }`}>
-                                        <div className={`w-1 h-1 rounded-full ${purchase.lastStatus === 'FUEGO' ? 'bg-orange-400' : 'bg-current'} animate-pulse`} />
-                                        {purchase.lastStatus}
+                                        <div className={`w-1 h-1 rounded-full ${purchase.lastStatus === 'FUEGO' || isSyncing ? 'bg-brand-light' : 'bg-current'} animate-pulse`} />
+                                        {isSyncing ? 'SINCRONIZANDO DATOS...' : purchase.lastStatus}
                                     </span>
                                 )}
                                 <span className="px-2.5 py-1 rounded-lg text-[9px] font-bold bg-white/5 border border-white/5 text-gray-500 tracking-widest uppercase">
@@ -156,6 +158,7 @@ export const BotCard = memo(function BotCard({
                                 purchaseId={purchase?.id || "unknown"}
                                 account={purchase?.activePositions?.[0]?.account || "unknown"}
                                 theme={theme}
+                                activePositions={purchase?.activePositions || []}
                             />
                             
                             <div className="p-3 rounded-xl bg-black/60 border border-brand/20 shadow-xl">
