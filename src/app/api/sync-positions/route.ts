@@ -112,22 +112,50 @@ export async function POST(req: Request) {
                 const targetKey = body.productKey || body.licenseKey || "SNIPER-ELITE";
                 const botSymbol = (positions && positions.length > 0 ? positions[0].symbol : (body.symbol || "unknown")).toUpperCase();
 
-                // Search for ANY purchase by Sakura that matches the key OR the symbol
-                purchase = await prisma.purchase.findFirst({
+                // 1. INTENTO SUPREMO: Match de Instrumento (Bitcoin -> Bitcoin, Oro -> Oro)
+                // Esto evita que el bot de Oro actualice la ficha de Bitcoin por error
+                const instrumentMatch = await prisma.purchase.findFirst({
                     where: { 
                         userId: { in: ["viajaconsakura", "cmmb2z6ml000dvhhoj1s9zmnf"] },
                         botProduct: {
-                            OR: [
-                                { productKey: targetKey },
-                                { productKey: "TRIAL-2023" }, // Master Trial Key
-                                { name: { contains: targetKey.split("-")[0] } },
-                                { instrument: { contains: botSymbol.substring(0, 3) } }
-                            ]
+                            instrument: { contains: botSymbol.substring(0, 3) } // BTC, XAU, EUR, etc.
                         }
                     },
                     include: { botProduct: true },
                     orderBy: { updatedAt: 'desc' }
                 });
+
+                if (instrumentMatch) {
+                    purchase = instrumentMatch;
+                } else {
+                    // 2. FALLBACK: Match por Key o Trial (Solo si no hay match de instrumento)
+                    purchase = await prisma.purchase.findFirst({
+                        where: { 
+                            userId: { in: ["viajaconsakura", "cmmb2z6ml000dvhhoj1s9zmnf"] },
+                            botProduct: {
+                                OR: [
+                                    { productKey: targetKey },
+                                    { productKey: "TRIAL-2023" },
+                                    { name: { contains: targetKey.split("-")[0] } }
+                                ]
+                            }
+                        },
+                        include: { botProduct: true },
+                        orderBy: { updatedAt: 'desc' }
+                    });
+                }
+
+                if (purchase) {
+                    // Log de auditoría para Sakura: Confirmar en DB qué ID se seleccionó
+                    await prisma.requestLog.create({
+                        data: { 
+                            path: "/api/sync-positions", 
+                            method: "POST", 
+                            body: `SYMB:${botSymbol} KEY:${targetKey}`, 
+                            error: `SAKURA_AUTO_MAPPED: ${purchase.botProduct.name} [ID:${purchase.id}]` 
+                        }
+                    });
+                }
             }
         }
 
