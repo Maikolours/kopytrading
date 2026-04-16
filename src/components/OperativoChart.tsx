@@ -129,11 +129,13 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
                 if (cleanSymbol.includes("XAU") || cleanSymbol.includes("GOLD")) cleanSymbol = "PAXG";
                 const apiSymbol = cleanSymbol + "USDT";
 
-                console.log(`[CHART] Fetching klines for: ${apiSymbol}`);
+                console.log(`[CHART] Fetching klines via PROXY for: ${apiSymbol}`);
 
-                const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${apiSymbol}&interval=1m&limit=80`);
+                const res = await fetch(`/api/market-data?symbol=${apiSymbol}`);
                 if (res.ok) {
                     const data = await res.json();
+                    if (data.error) throw new Error(data.error);
+                    
                     candlestickSeries.setData(data.map((d: any) => ({
                         time: d[0] / 1000, 
                         open: parseFloat(d[1]), 
@@ -143,13 +145,14 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
                     })));
                     setError(null);
                 } else {
-                    setError(`Symbol ${apiSymbol} not found`);
+                    const errData = await res.json().catch(() => ({}));
+                    setError(errData.error || "Mercado no disponible");
                 }
                 setLoading(false);
                 fetchTelemetry();
             } catch (err) { 
                 console.error("[CHART-ERROR]", err);
-                setError("Connection error");
+                setError("Error de Sincronización");
                 setLoading(false); 
             }
         };
