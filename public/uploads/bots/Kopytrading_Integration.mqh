@@ -1,101 +1,78 @@
 //+------------------------------------------------------------------+
 //|                                   Kopytrading_Integration.mqh   |
 //|                     Módulo de integración con kopytrading.com    |
-//|                                   Versión 1.5 - Abril 2026      |
+//|                                   Versión 1.6 - Abril 2026      |
 //+------------------------------------------------------------------+
 #property copyright "Copyright 2026, Kopytrading Corp."
-#property version   "1.50"
+#property version   "1.60"
 
-//--- Variables globales de integración (Nombres únicos)
+//--- Variables globales de integración
 string   g_KopyPurchaseID = "";
 string   g_KopyProductKey = ""; 
 string   g_KopyLicenseKey = "";
 datetime g_KopyLastSync   = 0;
 bool     g_KopyPaused     = false;
-datetime g_KopyInstall    = 0;
 
 //+------------------------------------------------------------------+
-//| Validar licencia (Nombres de parámetros únicos _p1, _p2...)      |
+//| Validar licencia                                                 |
 //+------------------------------------------------------------------+
-bool ValidateLicense(string _p1, string _p2, int _p3) {
-   g_KopyPurchaseID = _p1;
-   g_KopyLicenseKey = _p2;
-   g_KopyProductKey = _p2; 
-   
-   if(g_KopyPurchaseID == "" || g_KopyPurchaseID == " " || g_KopyPurchaseID == "0") {
-      // Lógica de Demo Simple
-      string filename = "KOPY_INSTALL.dat";
-      int h = FileOpen(filename, FILE_READ|FILE_BIN|FILE_COMMON);
-      if(h != INVALID_HANDLE) {
-         g_KopyInstall = (datetime)FileReadLong(h);
-         FileClose(h);
-      } else {
-         g_KopyInstall = TimeCurrent();
-         h = FileOpen(filename, FILE_WRITE|FILE_BIN|FILE_COMMON);
-         if(h != INVALID_HANDLE) { FileWriteLong(h, g_KopyInstall); FileClose(h); }
-      }
-      
-      int days = (int)((TimeCurrent() - g_KopyInstall) / 86400);
-      if(days >= 30) { Print("❌ Kopytrade: Demo expirada"); return false; }
-      Print("✅ Kopytrade: Demo activa (" + IntegerToString(30-days) + " días restantes)");
-      return true;
-   }
-   
-   Print("✅ Kopytrade: Licencia [" + g_KopyProductKey + "] registrada.");
+bool ValidateLicense(string _id, string _key, int _sincro=15) {
+   g_KopyPurchaseID = _id;
+   g_KopyLicenseKey = _key;
+   g_KopyProductKey = _key; 
+   Print("✅ Kopytrade: Autenticado [" + g_KopyPurchaseID + "]");
    return true;
 }
 
 //+------------------------------------------------------------------+
-//| Obtener estado remoto                                            |
+//| Sincronización Completa (Full Telemetry v1.6)                    |
 //+------------------------------------------------------------------+
-bool GetRemoteStatus() {
-   if(g_KopyPurchaseID == "" || g_KopyPurchaseID == " " || g_KopyPurchaseID == "0") return false;
-   
-   string url = "https://kopytrading-ltt9lvp4y-maikolours-projects.vercel.app/api/remote-control?purchaseId=" + g_KopyPurchaseID + "&account=" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
-   uchar d[], r[];
-   string rh;
-   ArrayResize(d, 0);
-   int res = WebRequest("GET", url, "", 5000, d, r, rh);
-   
-   if(res == 200) {
-      string resp = CharArrayToString(r);
-      if(StringFind(resp, "\"paused\":true") != -1) g_KopyPaused = true;
-      else if(StringFind(resp, "\"paused\":false") != -1) g_KopyPaused = false;
-   }
-   return g_KopyPaused;
-}
-
-//+------------------------------------------------------------------+
-//| Sincronizar con servidor (v1.5 Telemetría Supreme)               |
-//+------------------------------------------------------------------+
-void SyncPositions(string _s, double _p=0, int _c=0) {
-   if(g_KopyPurchaseID == "" || g_KopyPurchaseID == " " || g_KopyPurchaseID == "0") return;
-   if(TimeCurrent() < g_KopyLastSync + 15) return; // Sincro cada 15s para telemetría ágil
+void SyncFull(string _stat, string _trend, bool _armed, double _pnl,
+              double _p100, double _p78, double _p62, double _p50, double _p1,
+              double _be=0.8, double _gar=0.5, double _tra=1.2) {
+              
+   if(g_KopyPurchaseID == "" || g_KopyPurchaseID == "0") return;
+   if(TimeCurrent() < g_KopyLastSync + 5) return; // Alta frecuencia (5s) para Sniper
    g_KopyLastSync = TimeCurrent();
    
    string url = "https://kopytrading-ltt9lvp4y-maikolours-projects.vercel.app/api/sync-positions";
    string hd = "Content-Type: application/json\r\n";
    
-   // Construcción de JSON Robusta con Telemetría
    string body = "{";
    body += "\"purchaseId\":\"" + g_KopyPurchaseID + "\",";
    body += "\"account\":\"" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN)) + "\",";
-   body += "\"licenseKey\":\"" + g_KopyProductKey + "\",";
    body += "\"symbol\":\"" + _Symbol + "\",";
+   body += "\"tf\":\"" + EnumToString(Period()) + "\",";
    body += "\"balance\":" + DoubleToString(AccountInfoDouble(ACCOUNT_BALANCE), 2) + ",";
    body += "\"equity\":" + DoubleToString(AccountInfoDouble(ACCOUNT_EQUITY), 2) + ",";
-   body += "\"status\":\"" + _s + "\"";
+   body += "\"pnl_today\":" + DoubleToString(_pnl, 2) + ",";
+   body += "\"status\":\"" + _stat + "\",";
+   body += "\"trend\":\"" + _trend + "\",";
+   body += "\"armed\":" + (_armed ? "true" : "false") + ",";
+   
+   // Niveles Fibonacci
+   body += "\"p100\":" + DoubleToString(_p100, _Digits) + ",";
+   body += "\"p78\":" + DoubleToString(_p78, _Digits) + ",";
+   body += "\"p62\":" + DoubleToString(_p62, _Digits) + ",";
+   body += "\"p50\":" + DoubleToString(_p50, _Digits) + ",";
+   body += "\"p00\":" + DoubleToString(_p1, _Digits) + ",";
+   
+   // Tactical Matrix (B1 por defecto)
+   body += "\"b1_be\":" + DoubleToString(_be, 1) + ",";
+   body += "\"b1_gar\":" + DoubleToString(_gar, 1) + ",";
+   body += "\"b1_tra\":" + DoubleToString(_tra, 1);
    body += "}";
    
    uchar p[], r[];
    string rh;
    StringToCharArray(body, p);
-   WebRequest("POST", url, hd, 5000, p, r, rh);
+   WebRequest("POST", url, hd, 3000, p, r, rh);
 }
 
-string GetLicenseStatus() {
-   if(g_KopyPurchaseID == "" || g_KopyPurchaseID == " ") return "MODO DEMO";
-   return "LICENCIA FULL";
+//--- Función legacy para compatibilidad
+void SyncPositions(string _s, double _p=0, int _c=0) {
+   SyncFull(_s, "NONE", false, _p, 0,0,0,0,0);
 }
 
 bool IsRemotePaused() { return g_KopyPaused; }
+string GetLicenseStatus() { return "FULL SNIPER v1.6"; }

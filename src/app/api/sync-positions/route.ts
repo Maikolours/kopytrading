@@ -49,6 +49,9 @@ export async function POST(req: Request) {
         }
         
         // NORMALIZACIÓN: Asegurar que el purchaseId sea siempre minúsculas y limpiar sufijos
+        const purchaseId = String(body.purchaseId || body.license || body.licenseKey || "").trim().toLowerCase();
+        const account = String(findValue(['account', 'acc', 'cuenta', 'num_cuenta']) || body.account || "unknown");
+        
         // --- FUZZY MAPPING v15.1 (Recover data with non-standard keys) ---
         const findValue = (keys: string[]) => {
             const lowerBody: any = {};
@@ -61,12 +64,15 @@ export async function POST(req: Request) {
 
         const balance = findValue(['balance', 'bal', 'acc_balance', 'account_balance', 'balance_cuenta']);
         const equity = findValue(['equity', 'equ', 'acc_equity', 'active_equity', 'equidad_activa', 'equidad']);
-        const pnl = findValue(['pnl', 'profit', 'today_profit', 'pnl_today', 'beneficio_hoy', 'beneficio']);
         const status = findValue(['status', 'state', 'bot_status', 'estatus']);
+        const pnl = findValue(['pnl', 'profit', 'today_profit', 'pnl_today', 'beneficio_hoy', 'beneficio']);
         const symbol = findValue(['symbol', 'instrument', 'pair', 'activo']) || body.symbol;
-        const account = String(findValue(['account', 'acc', 'cuenta', 'num_cuenta']) || body.account || "unknown");
-        const purchaseId = String(body.purchaseId || body.license || body.licenseKey || "").trim().toLowerCase();
         const { positions, history, isReal } = body;
+
+        // Log de depuración pericial para Sakura
+        if (purchaseId?.includes("cmn9hfax") || purchaseId?.includes("viaja")) {
+            console.log(`[SYNC-DEBUG] Sakura Sync: Bal=${balance}, Equ=${equity}, Status=${status}, ID=${purchaseId}`);
+        }
 
         console.log(`[SYNC-FUZZY] Mapped: BAL:${balance} EQU:${equity} ACC:${account} ID:${purchaseId}`);
 
@@ -317,14 +323,14 @@ export async function POST(req: Request) {
             lkb: Number(body.lkb) || 4,
             trend: body.trend || "UNKNOWN",
             armed: body.armed === true || body.armed === "true",
-            p00: body.p00 !== undefined ? Number(body.p00) : 0,
-            p50: body.p50 !== undefined ? Number(body.p50) : 0,
-            p62: body.p62 !== undefined ? Number(body.p62) : 0,
-            p78: body.p78 !== undefined ? Number(body.p78) : 0,
-            p100: body.p100 !== undefined ? Number(body.p100) : 0,
-            b1_be: Number(body.b1_be), b1_gar: Number(body.b1_gar), b1_tra: Number(body.b1_tra),
-            b2_be: Number(body.b2_be), b2_gar: Number(body.b2_gar), b2_tra: Number(body.b2_tra),
-            gr_be: Number(body.gr_be), gr_gar: Number(body.gr_gar), gr_tra: Number(body.gr_tra),
+            p00: (body.p00 !== undefined && !isNaN(Number(body.p00))) ? Number(body.p00) : 0,
+            p50: (body.p50 !== undefined && !isNaN(Number(body.p50))) ? Number(body.p50) : 0,
+            p62: (body.p62 !== undefined && !isNaN(Number(body.p62))) ? Number(body.p62) : 0,
+            p78: (body.p78 !== undefined && !isNaN(Number(body.p78))) ? Number(body.p78) : 0,
+            p100: (body.p100 !== undefined && !isNaN(Number(body.p100))) ? Number(body.p100) : 0,
+            b1_be: Number(body.b1_be) || 0, b1_gar: Number(body.b1_gar) || 0, b1_tra: Number(body.b1_tra) || 0,
+            b2_be: Number(body.b2_be) || 0, b2_gar: Number(body.b2_gar) || 0, b2_tra: Number(body.b2_tra) || 0,
+            gr_be: Number(body.gr_be) || 0, gr_gar: Number(body.gr_gar) || 0, gr_tra: Number(body.gr_tra) || 0,
             isOnline: true,
             lastUpdate: new Date().toISOString()
         };

@@ -48,9 +48,9 @@ export function BotRemoteControl({
         setMounted(true);
     }, []);
 
-    const [beValues, setBeValues] = useState<any>({ B1: "", B2: "", GR: "" });
-    const [garValues, setGarValues] = useState<any>({ B1: "", B2: "", GR: "" });
-    const [traValues, setTraValues] = useState<any>({ B1: "", B2: "", GR: "" });
+    const [beValues, setBeValues] = useState<any>({ B1: "---", B2: "---", GR: "---" });
+    const [garValues, setGarValues] = useState<any>({ B1: "---", B2: "---", GR: "---" });
+    const [traValues, setTraValues] = useState<any>({ B1: "---", B2: "---", GR: "---" });
 
     const isGold = botName?.toLowerCase()?.includes("gold") || botName?.toLowerCase()?.includes("ametralladora") || botData?.symbol === "XAUUSD";
 
@@ -84,9 +84,9 @@ export function BotRemoteControl({
                 const data = await res.json();
                 setBotData(data);
                 if (!loading?.includes("SET_")) {
-                    setBeValues({ B1: data.b1_be || "", B2: data.b2_be || "", GR: data.gr_be || "" });
-                    setGarValues({ B1: data.b1_gar || "", B2: data.b2_gar || "", GR: data.gr_gar || "" });
-                    setTraValues({ B1: data.b1_tra || data.trailling_val || "", B2: data.b2_tra || "", GR: data.gr_tra || "" });
+                    setBeValues({ B1: data.b1_be || "---", B2: data.b2_be || "---", GR: data.gr_be || "---" });
+                    setGarValues({ B1: data.b1_gar || "---", B2: data.b2_gar || "---", GR: data.gr_gar || "---" });
+                    setTraValues({ B1: data.b1_tra || data.trailling_val || "---", B2: data.b2_tra || "---", GR: data.gr_tra || "---" });
                 }
             }
         } catch (error) {

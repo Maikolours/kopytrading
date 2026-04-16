@@ -43,8 +43,9 @@ export async function GET(
             if (freshestRecord) record = freshestRecord;
         }
 
-        // FALLBACK: Si pide "unknown" pero hay datos de una cuenta real, servimos esos
-        if (!record && account === "unknown") {
+        // FALLBACK UNIVERSAL: Si no hay registro para esa cuenta, o la cuenta es "unknown", 
+        // servimos los datos más frescos que tengamos para este bot.
+        if (!record) {
             record = await prisma.botSettings.findFirst({
                 where: { purchaseId: id },
                 orderBy: { updatedAt: 'desc' }
