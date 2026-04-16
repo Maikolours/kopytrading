@@ -23,6 +23,7 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
     const seriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
     const priceLinesRef = useRef<IPriceLine[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     const positionLinesRef = useRef<IPriceLine[]>([]);
 
@@ -60,7 +61,7 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
         priceLinesRef.current = [];
         if (!data) return;
         const levelsData = data.settings || data; 
-        if (!levelsData || !levelsData.p50) return;
+        if (!levelsData || (!levelsData.p50 && levelsData.balance === undefined)) return;
 
         const levels = [
             { price: Number(levelsData.p100), color: 'rgba(255,255,255,0.4)', label: 'ORIGEN [100]' },
@@ -102,9 +103,10 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
 
         const init = async () => {
             if (!chartContainerRef.current) return;
-            if (chartContainerRef.current.clientWidth === 0 && retryCount < 15) {
+            // Esperar a que el contenedor tenga tamaño real
+            if (chartContainerRef.current.clientWidth === 0 && retryCount < 20) {
                 retryCount++;
-                setTimeout(init, 250);
+                setTimeout(init, 150);
                 return;
             }
 
@@ -122,21 +124,38 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
                 chartRef.current = chart;
                 seriesRef.current = candlestickSeries;
 
-                const apiSymbol = symbol.includes("XAU") ? "PAXGUSDT" : symbol.replace(/USD|USDT|\//g, "") + "USDT";
+                // NORMALIZACIÓN DE SÍMBOLO BINANCE
+                let cleanSymbol = (symbol || "BTCUSDT").toUpperCase().replace(/USD|USDT|\//g, "");
+                if (cleanSymbol.includes("XAU") || cleanSymbol.includes("GOLD")) cleanSymbol = "PAXG";
+                const apiSymbol = cleanSymbol + "USDT";
+
+                console.log(`[CHART] Fetching klines for: ${apiSymbol}`);
+
                 const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${apiSymbol}&interval=1m&limit=80`);
                 if (res.ok) {
                     const data = await res.json();
                     candlestickSeries.setData(data.map((d: any) => ({
-                        time: d[0] / 1000, open: parseFloat(d[1]), high: parseFloat(d[2]), low: parseFloat(d[3]), close: parseFloat(d[4]),
+                        time: d[0] / 1000, 
+                        open: parseFloat(d[1]), 
+                        high: parseFloat(d[2]), 
+                        low: parseFloat(d[3]), 
+                        close: parseFloat(d[4]),
                     })));
+                    setError(null);
+                } else {
+                    setError(`Symbol ${apiSymbol} not found`);
                 }
                 setLoading(false);
                 fetchTelemetry();
-            } catch (err) { setLoading(false); }
+            } catch (err) { 
+                console.error("[CHART-ERROR]", err);
+                setError("Connection error");
+                setLoading(false); 
+            }
         };
 
         init();
-        const interval = setInterval(fetchTelemetry, 10000);
+        const interval = setInterval(fetchTelemetry, 7000);
         const handleResize = () => { if (chartContainerRef.current && chart) chart.applyOptions({ width: chartContainerRef.current.clientWidth }); };
         window.addEventListener('resize', handleResize);
 
@@ -148,10 +167,21 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
     }, [symbol, purchaseId, account]);
 
     return (
-        <div className="relative w-full rounded-3xl overflow-hidden border border-white/5 bg-black/40 backdrop-blur-md shadow-2xl">
+        <div className="relative w-full rounded-3xl overflow-hidden border border-white/5 bg-black/40 backdrop-blur-md shadow-2xl min-h-[350px]">
             {loading && (
                 <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/60">
-                    <div className="w-8 h-8 border-4 border-brand border-t-transparent rounded-full animate-spin" />
+                    <div className="flex flex-col items-center gap-3">
+                        <div className="w-8 h-8 border-4 border-brand border-t-transparent rounded-full animate-spin" />
+                        <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">CARGANDO MERCADO...</span>
+                    </div>
+                </div>
+            )}
+            {error && !loading && (
+                <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/80">
+                    <div className="p-4 rounded-xl bg-danger/10 border border-danger/20 text-center max-w-[80%]">
+                        <p className="text-xs font-black text-danger uppercase mb-1">DATA ERROR</p>
+                        <p className="text-[10px] text-white/60 uppercase">{error}: {symbol}</p>
+                    </div>
                 </div>
             )}
             <div ref={chartContainerRef} className="w-full" style={{ height: '350px' }} />
