@@ -331,6 +331,8 @@ export async function POST(req: Request) {
             b1_be: Number(body.b1_be) || 0, b1_gar: Number(body.b1_gar) || 0, b1_tra: Number(body.b1_tra) || 0,
             b2_be: Number(body.b2_be) || 0, b2_gar: Number(body.b2_gar) || 0, b2_tra: Number(body.b2_tra) || 0,
             gr_be: Number(body.gr_be) || 0, gr_gar: Number(body.gr_gar) || 0, gr_tra: Number(body.gr_tra) || 0,
+            mode: body.mode !== undefined ? Number(body.mode) : undefined,
+            dir: body.dir !== undefined ? Number(body.dir) : undefined,
             isOnline: true,
             lastUpdate: new Date().toISOString()
         };
@@ -354,6 +356,8 @@ export async function POST(req: Request) {
                 balance: telemetry.balance,
                 equity: telemetry.equity,
                 pnl_today: telemetry.pnl_today,
+                mode: telemetry.mode !== undefined ? telemetry.mode : rawSettings.mode,
+                dir: telemetry.dir !== undefined ? telemetry.dir : rawSettings.dir,
                 lots: Number(body.lots) || rawSettings.lots || 0.08,
                 casOn: (body.cascada !== undefined || body.casOn !== undefined) ? (body.cascada === true || body.cascada === "true" || body.casOn === true || body.casOn === "true") : rawSettings.casOn,
                 giroOn: (body.giro !== undefined || body.giroOn !== undefined) ? (body.giro === true || body.giro === "true" || body.giroOn === true || body.giroOn === "true") : rawSettings.giroOn,

@@ -303,74 +303,90 @@ export function BotRemoteControl({
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                    <Button 
-                        variant={ (botData?.casOn || botData?.cascada) ? "accent" : "glass"}
-                        className={`flex items-center justify-center gap-2 py-4 h-auto text-[10px] font-black uppercase tracking-wider transition-all duration-300 ${
-                            (botData?.casOn || botData?.cascada) ? 'shadow-[0_0_15px_rgba(34,197,94,0.3)]' : ''
-                        }`}
-                        onClick={() => sendCommand("SET_SETTING", JSON.stringify({ casOn: !(botData?.casOn || botData?.cascada) }))}
-                    >
-                        <Zap size={14} className={(botData?.casOn || botData?.cascada) ? "animate-pulse" : "text-white/20"} />
-                        Cascada {(botData?.casOn || botData?.cascada) ? 'ON' : 'OFF'}
-                    </Button>
+                <div className="space-y-4 mb-6">
+                    {/* MODOS DE OPERACIÓN */}
+                    <div className="space-y-2">
+                        <p className="text-[8px] font-black uppercase text-white/40 tracking-widest pl-1">Modo de Operación</p>
+                        <div className="grid grid-cols-2 gap-2">
+                            <Button 
+                                variant={ botData?.mode === 0 ? "accent" : "glass"}
+                                className={`flex items-center justify-center gap-2 py-4 h-auto text-[10px] font-black uppercase tracking-wider transition-all duration-300 ${
+                                    botData?.mode === 0 ? 'bg-indigo-600/30 border-indigo-400 text-indigo-400 shadow-[0_0_15px_rgba(129,140,248,0.3)]' : 'bg-white/5 opacity-50'
+                                }`}
+                                onClick={() => sendCommand("SET_SETTING", JSON.stringify({ mode: 0 }))}
+                            >
+                                <Zap size={14} className={botData?.mode === 0 ? "animate-pulse" : "text-white/20"} />
+                                Modo Zen
+                            </Button>
 
-                    <Button 
-                        variant={ (botData?.giroOn || botData?.giro) ? "accent" : "glass"}
-                        className={`flex items-center justify-center gap-2 py-4 h-auto text-[10px] font-black uppercase tracking-wider transition-all duration-300 ${
-                            (botData?.giroOn || botData?.giro) ? 'shadow-[0_0_15px_rgba(249,115,22,0.3)]' : ''
-                        }`}
-                        onClick={() => sendCommand("SET_SETTING", JSON.stringify({ giroOn: !(botData?.giroOn || botData?.giro) }))}
-                    >
-                        <RefreshCw size={14} className={(botData?.giroOn || botData?.giro) ? "animate-spin-slow" : "text-white/20"} />
-                        Giro {(botData?.giroOn || botData?.giro) ? 'ON' : 'OFF'}
-                    </Button>
+                            <Button 
+                                variant={ botData?.mode === 1 ? "accent" : "glass"}
+                                className={`flex items-center justify-center gap-2 py-4 h-auto text-[10px] font-black uppercase tracking-wider transition-all duration-300 ${
+                                    botData?.mode === 1 ? 'bg-orange-600/30 border-orange-400 text-orange-400 shadow-[0_0_15px_rgba(251,146,60,0.3)]' : 'bg-white/5 opacity-50'
+                                }`}
+                                onClick={() => sendCommand("SET_SETTING", JSON.stringify({ mode: 1 }))}
+                            >
+                                <RefreshCw size={14} className={botData?.mode === 1 ? "animate-spin-slow" : "text-white/20"} />
+                                Cosecha
+                            </Button>
+                        </div>
+                    </div>
 
-                    <Button 
-                        variant={ botData?.hideMinor ? "accent" : "glass"}
-                        className="flex items-center justify-center gap-2 py-3 h-auto text-[10px] font-black uppercase tracking-wider"
-                        onClick={() => sendCommand("SET_SETTING", JSON.stringify({ hideMinor: !botData?.hideMinor }))}
-                    >
-                        <BarChart3 size={14} className={botData?.hideMinor ? "text-cyan" : "text-white/20"} />
-                        X-RAY {botData?.hideMinor ? 'ON' : 'OFF'}
-                    </Button>
+                    {/* FILTRO DE DIRECCIÓN */}
+                    <div className="space-y-2">
+                        <p className="text-[8px] font-black uppercase text-white/40 tracking-widest pl-1">Filtro de Dirección</p>
+                        <div className="grid grid-cols-3 gap-2">
+                            <Button 
+                                variant={ botData?.dir === 0 ? "accent" : "glass"}
+                                className={`flex flex-col items-center justify-center gap-1 py-3 h-auto text-[9px] font-black uppercase tracking-wider transition-all duration-300 ${
+                                    botData?.dir === 0 ? 'bg-blue-600/40 border-blue-400 text-blue-100 shadow-[0_0_15px_rgba(59,130,246,0.3)]' : 'bg-white/5 text-white/40'
+                                }`}
+                                onClick={() => sendCommand("SET_SETTING", JSON.stringify({ dir: 0 }))}
+                            >
+                                <TrendingUp size={12} />
+                                Buy
+                            </Button>
 
-                    <Button 
-                        variant={ botData?.armed ? "accent" : "glass"}
-                        className="flex items-center justify-center gap-2 py-3 h-auto text-[10px] font-black uppercase tracking-wider"
-                        onClick={() => sendCommand("ARM_BOT", "TOGGLE")}
-                    >
-                        <ShieldCheck size={14} className={botData?.armed ? "text-brand-light" : "text-white/20"} />
-                        {botData?.armed ? 'Armado' : 'Espera'}
-                    </Button>
+                            <Button 
+                                variant={ botData?.dir === 2 ? "accent" : "glass"}
+                                className={`flex flex-col items-center justify-center gap-1 py-3 h-auto text-[9px] font-black uppercase tracking-wider transition-all duration-300 ${
+                                    botData?.dir === 2 ? 'bg-blue-600/40 border-blue-400 text-blue-100 shadow-[0_0_15px_rgba(59,130,246,0.3)]' : 'bg-white/5 text-white/40'
+                                }`}
+                                onClick={() => sendCommand("SET_SETTING", JSON.stringify({ dir: 2 }))}
+                            >
+                                <RefreshCw size={12} />
+                                Ambas
+                            </Button>
+
+                            <Button 
+                                variant={ botData?.dir === 1 ? "accent" : "glass"}
+                                className={`flex flex-col items-center justify-center gap-1 py-3 h-auto text-[9px] font-black uppercase tracking-wider transition-all duration-300 ${
+                                    botData?.dir === 1 ? 'bg-blue-600/40 border-blue-400 text-blue-100 shadow-[0_0_15px_rgba(59,130,246,0.3)]' : 'bg-white/5 text-white/40'
+                                }`}
+                                onClick={() => sendCommand("SET_SETTING", JSON.stringify({ dir: 1 }))}
+                            >
+                                <TrendingDown size={12} />
+                                Sell
+                            </Button>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="space-y-2 pt-4 border-t border-white/10">
                     <Button 
-                        variant="glass"
-                        size="sm"
-                        className="w-full flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 border-white/10 text-[9px] font-bold uppercase tracking-widest text-white/60"
-                        onClick={handleReset}
-                    >
-                        <Eraser size={12} />
-                        Limpiar Inputs (Golden Reset)
-                    </Button>
-
-                    <Button 
                         variant="danger" 
                         size="sm" 
                         fullWidth
-                        className="w-full flex items-center justify-center gap-3 py-5 rounded-xl text-xs font-black uppercase tracking-[0.2em] shadow-[0_0_25px_rgba(239,68,68,0.2)] hover:shadow-[0_0_35px_rgba(239,68,68,0.4)] transition-all"
+                        className="w-full flex items-center justify-center gap-3 py-6 rounded-xl text-xs font-black uppercase tracking-[0.2em] shadow-[0_0_25px_rgba(239,68,68,0.2)] hover:shadow-[0_0_40px_rgba(239,68,68,0.5)] transition-all bg-red-600 hover:bg-red-500 border-none group"
                         onClick={() => {
-                            if(confirm("🚨 ¿PANICO? Esto cerrará todo.")) {
+                            if(confirm("🚨 ¿ESTÁS SEGURO? Esto cerrará TODAS las posiciones de este bot inmediatamente.")) {
                                 sendCommand("CLOSE_ALL");
                             }
                         }}
                     >
-                        <ShieldAlert size={20} fill="red" />
-                        Pánico: Cierre Total
+                        <ShieldAlert size={20} className="group-hover:animate-bounce" />
+                        CLOSE ALL POSITIONS
                     </Button>
-                </div>
 
                 {statusMsg && (
                     <motion.div 

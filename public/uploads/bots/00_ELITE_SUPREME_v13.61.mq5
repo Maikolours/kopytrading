@@ -1,9 +1,8 @@
-//+------------------------------------------------------------------+
-//|                00_ELITE_SUPREME_v13.66_ABSOLUTE                  |
-//|      STRATEGY: FIBONACCI OTE | HUD: PREMIUM | SYNC: FORCED v1.6  |
+//|                00_ELITE_SUPREME_v13.67_ABSOLUTE                  |
+//|      STRATEGY: FIBONACCI OTE | HUD: PREMIUM | SYNC: FORCED v1.67 |
 //+------------------------------------------------------------------+
 #property copyright "Copyright 2026, Kopytrade Corp."
-#property version   "13.66"
+#property version   "13.67"
 #property strict
 
 #include <Trade/Trade.mqh>
@@ -70,6 +69,8 @@ void AbsoluteSync() {
    body += "\"pnl_today\":" + DoubleToString(pnlToday, 2) + ",";
    body += "\"status\":\"" + botStatus + "\",";
    body += "\"trend\":\"" + (h1Dir == 1 ? "BULL" : "BEAR") + "\",";
+   body += "\"mode\":" + IntegerToString(currentMode) + ",";
+   body += "\"dir\":" + IntegerToString(currentDir) + ",";
    body += "\"armed\":true,";
    body += "\"p100\":" + DoubleToString(f100, _Digits) + ",";
    body += "\"p78\":" + DoubleToString(f78, _Digits) + ",";
@@ -85,8 +86,32 @@ void AbsoluteSync() {
    
    int res = WebRequest("POST", url, "Content-Type: application/json\r\n", 3000, p, r, rh);
    
+   if(res == 200) {
+      string response = CharArrayToString(r);
+      // PARSER LIGHTWEIGHT DE COMANDOS v1.67
+      if(StringFind(response, "\"cmd\":\"CLOSE_ALL\"") != -1) {
+         Print("🚨 [REMOTE] COMANDO RECIBIDO: CLOSE_ALL");
+         for(int i=PositionsTotal()-1; i>=0; i--) if(posInfo.SelectByIndex(i) && posInfo.Magic()==InpMagic) trade.PositionClose(posInfo.Ticket());
+      }
+      if(StringFind(response, "\"mode\":0") != -1 && currentMode != MODE_ZEN) {
+         currentMode = MODE_ZEN; CrearPanel(); Print("📡 [REMOTE] CAMBIO A MODO ZEN");
+      }
+      if(StringFind(response, "\"mode\":1") != -1 && currentMode != MODE_COSECHA) {
+         currentMode = MODE_COSECHA; CrearPanel(); Print("📡 [REMOTE] CAMBIO A MODO COSECHA");
+      }
+      if(StringFind(response, "\"dir\":0") != -1 && currentDir != DIR_COMPRAS) {
+         currentDir = DIR_COMPRAS; CrearPanel(); Print("📡 [REMOTE] CAMBIO A DIRECCIÓN BUY");
+      }
+      if(StringFind(response, "\"dir\":1") != -1 && currentDir != DIR_VENTAS) {
+         currentDir = DIR_VENTAS; CrearPanel(); Print("📡 [REMOTE] CAMBIO A DIRECCIÓN SELL");
+      }
+      if(StringFind(response, "\"dir\":2") != -1 && currentDir != DIR_AMBAS) {
+         currentDir = DIR_AMBAS; CrearPanel(); Print("📡 [REMOTE] CAMBIO A DIRECCIÓN AMBAS");
+      }
+   }
+
    if(TimeCurrent() > lastLogTime + 10) {
-      if(res == 200) Print("✅ [SUPREME-SYNC] OK | Bal: " + DoubleToString(bal, 2) + " | Status: " + botStatus);
+      if(res == 200) {} // Silent OK
       else if(res == -1) Print("❌ [SUPREME-SYNC] ERROR: Verifique URLs permitidas en MT5.");
       else Print("❌ [SUPREME-SYNC] ERROR HTTP: " + IntegerToString(res));
       lastLogTime = TimeCurrent();
@@ -193,7 +218,7 @@ void CrearPanel() {
       CrBtn("b_sell", x+190, y+200, 85, 25, "SELL", currentDir==DIR_VENTAS?C'180,40,40':C'35,35,65', clrWhite);
       
       CrBtn("b_close", x+10, y+245, 270, 45, "CLOSE ALL POSITIONS", C'210,50,50', clrWhite);
-      CrLabel("rem", x+15, y+315, "SYNC: ABSOLUTE v1.64", clrWhite, 8);
+      CrLabel("rem", x+15, y+315, "SYNC: ABSOLUTE v1.67", clrWhite, 8);
    }
    ChartRedraw(0);
 }

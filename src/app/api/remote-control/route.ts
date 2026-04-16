@@ -17,14 +17,38 @@ export async function POST(req: Request) {
 
         if (!purchase) return new NextResponse("Forbidden", { status: 403 });
 
-        // Crear el comando
+        // Crear el comando histórico
         const remoteCommand = await prisma.remoteCommand.create({
-            data: {
-                purchaseId,
-                command,
-                value
-            }
+            data: { purchaseId, command, value }
         });
+
+        // ACTUALIZACIÓN EN TIEMPO REAL v1.67
+        // Buscamos todas las configuraciones activas para esta compra
+        const settings = await prisma.botSettings.findMany({
+            where: { purchaseId }
+        });
+
+        for (const setting of settings) {
+            let updatedJson: any = { ...(setting.settings as any) };
+
+            if (command === "SET_SETTING" && value) {
+                try {
+                    const newVals = JSON.parse(value);
+                    updatedJson = { ...updatedJson, ...newVals };
+                } catch (e) {}
+            }
+
+            if (command === "CLOSE_ALL") {
+                updatedJson.pendingCmd = "CLOSE_ALL";
+            } else if (command === "ARM_BOT") {
+                updatedJson.armed = value === "TRUE" || value === "TOGGLE" ? !updatedJson.armed : value === "TRUE";
+            }
+
+            await prisma.botSettings.update({
+                where: { id: setting.id },
+                data: { settings: updatedJson }
+            });
+        }
 
         return NextResponse.json(remoteCommand);
     } catch (error) {
