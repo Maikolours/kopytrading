@@ -59,7 +59,7 @@ void AbsoluteSync() {
       }
    }
 
-   string url = "https://kopytrading-ltt9lvp4y-maikolours-projects.vercel.app/api/sync-positions";
+   string url = "https://kopytrading.vercel.app/api/sync-positions";
    string body = "{";
    body += "\"purchaseId\":\"" + InpMasterID + "\",";
    body += "\"account\":\"" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN)) + "\",";
