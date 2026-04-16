@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
-//|                00_ELITE_SUPREME_v13.64_ABSOLUTE                  |
+//|                00_ELITE_SUPREME_v13.66_ABSOLUTE                  |
 //|      STRATEGY: FIBONACCI OTE | HUD: PREMIUM | SYNC: FORCED v1.6  |
 //+------------------------------------------------------------------+
 #property copyright "Copyright 2026, Kopytrade Corp."
-#property version   "13.64"
+#property version   "13.66"
 #property strict
 
 #include <Trade/Trade.mqh>
