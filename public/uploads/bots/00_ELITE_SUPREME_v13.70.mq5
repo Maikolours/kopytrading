@@ -41,14 +41,15 @@ CPositionInfo  posInfo;
 ENUM_STATE     state = STATE_WAIT_IMPULSE;
 ENUM_MODE      currentMode = MODE_COSECHA;
 ENUM_DIR       currentDir = DIR_AMBAS;
-int            hEmaH1;
-int            h1Dir = 0; 
+int            hEmaH4, hEmaH1;
+int            h4Dir = 0, h1Dir = 0; 
 double         f100=0, f78=0, f62=0, f50=0, f0=0;
 string         botStatus = "INICIALIZANDO...";
 bool           isMinimized = false;
 datetime       lastLogTime = 0;
 datetime       lastSyncTime = 0;
 #define PNL "SUPREME_"
+#define FIBO_NAME "SUP_FIBO_OTE"
 
 //--- VARIABLES DE CONTROL REMOTO (Override de Inputs)
 int      curSL, curTP, curBE, curTra, curLkb;
@@ -82,7 +83,7 @@ void AbsoluteSync() {
    body += "\"equity\":" + DoubleToString(equ, 2) + ",";
    body += "\"pnl_today\":" + DoubleToString(pnlToday, 2) + ",";
    body += "\"status\":\"" + botStatus + "\",";
-   body += "\"trend\":\"" + (h1Dir == 1 ? "BULL" : "BEAR") + "\",";
+   body += "\"trend\":\"" + (h4Dir == 1 ? "BULL" : "BEAR") + "\","; // Tendencia Macro
    body += "\"mode\":" + IntegerToString(currentMode) + ",";
    body += "\"dir\":" + IntegerToString(currentDir) + ",";
    body += "\"sl\":" + IntegerToString(curSL) + ",";
@@ -179,27 +180,31 @@ ENUM_TIMEFRAMES StringToTF(string tf) {
 
 //+------------------------------------------------------------------+
 //| OnInit & OnTick                                                  |
+//+------------------------------------------//+------------------------------------------------------------------+
+//| OnInit & OnTick                                                  |
 //+------------------------------------------------------------------+
 int OnInit() {
    trade.SetExpertMagicNumber(InpMagic);
    
-   // Inicializar variables de control con los inputs
    curSL = InpSL_Pips; curTP = InpTP_Pips; curBE = InpBE_Trigger; 
    curTra = InpTrailingStop; curLkb = InpLookback;
    curTF_Trend = InpTF_Trend; curTF_Fibo = InpTF_Fibo; curTF_Entry = InpTF_Entry;
 
+   hEmaH4 = iMA(_Symbol, PERIOD_H4, InpEMA, 0, MODE_EMA, PRICE_CLOSE);
    hEmaH1 = iMA(_Symbol, curTF_Trend, InpEMA, 0, MODE_EMA, PRICE_CLOSE);
+   
    CrearPanel();
    EventSetTimer(1); 
    return(INIT_SUCCEEDED);
 }
 
-void OnDeinit(const int r) { ObjectsDeleteAll(0, PNL); IndicatorRelease(hEmaH1); }
+void OnDeinit(const int r) { ObjectsDeleteAll(0, PNL); ObjectsDeleteAll(0, "SUP_"); IndicatorRelease(hEmaH4); IndicatorRelease(hEmaH1); }
 
 void OnTick() {
+   UpdateH4Trend();
    UpdateH1Trend();
    AbsoluteSync();
-   ManageExits(); // Gestión de BE y Trailing
+   ManageExits();
    
    if(CountPositions() > 0) {
       botStatus = "🚀 POSICIÓN ABIERTA";
@@ -208,35 +213,75 @@ void OnTick() {
       else if(state == STATE_WAIT_RETRACE) MonitorRetracement();
       else if(state == STATE_WAIT_CONFIRM) ScanM5Confirmation();
    }
-
    ActualizarPanel();
+}
+
+void UpdateH4Trend() {
+   double ema[1]; CopyBuffer(hEmaH4, 0, 1, 1, ema);
+   h4Dir = (iClose(_Symbol, PERIOD_H4, 1) > ema[0]) ? 1 : -1;
+}
+
+void UpdateH1Trend() {
+   double ema[1]; CopyBuffer(hEmaH1, 0, 1, 1, ema);
+   h1Dir = (iClose(_Symbol, curTF_Trend, 1) > ema[0]) ? 1 : -1;
+}
+
+//+------------------------------------------------------------------+
+//| VISUAL ENGINE: DIBUJO FIBONACCI                                  |
+//+------------------------------------------------------------------+
+void DrawFiboVisuals(double p100, double p0, bool bull) {
+   ObjectsDeleteAll(0, FIBO_NAME);
+   if(!ObjectCreate(0, FIBO_NAME, OBJ_FIBO, 0, iTime(_Symbol, curTF_Fibo, curLkb), p100, iTime(_Symbol, curTF_Fibo, 0), p0)) return;
+   
+   ObjectSetInteger(0, FIBO_NAME, OBJPROP_COLOR, bull ? clrSkyBlue : clrLightPink);
+   ObjectSetInteger(0, FIBO_NAME, OBJPROP_WIDTH, 2);
+   ObjectSetInteger(0, FIBO_NAME, OBJPROP_STYLE, STYLE_DOT);
+   ObjectSetInteger(0, FIBO_NAME, OBJPROP_BACK, true);
+   
+   // Niveles Institucionales
+   ObjectSetInteger(0, FIBO_NAME, OBJPROP_LEVELS, 7);
+   ObjectSetDouble(0, FIBO_NAME, OBJPROP_LEVELVALUE, 0, 0.0);
+   ObjectSetDouble(0, FIBO_NAME, OBJPROP_LEVELVALUE, 1, 0.236);
+   ObjectSetDouble(0, FIBO_NAME, OBJPROP_LEVELVALUE, 2, 0.382);
+   ObjectSetDouble(0, FIBO_NAME, OBJPROP_LEVELVALUE, 3, 0.50);
+   ObjectSetDouble(0, FIBO_NAME, OBJPROP_LEVELVALUE, 4, 0.618); // OTE START
+   ObjectSetDouble(0, FIBO_NAME, OBJPROP_LEVELVALUE, 5, 0.786); // OTE END
+   ObjectSetDouble(0, FIBO_NAME, OBJPROP_LEVELVALUE, 6, 1.0);
+   
+   ObjectSetString(0, FIBO_NAME, OBJPROP_LEVELTEXT, 4, "OTE ZONA (GOLD)");
+   ObjectSetInteger(0, FIBO_NAME, OBJPROP_LEVELCOLOR, 4, clrGold);
+   ObjectSetInteger(0, FIBO_NAME, OBJPROP_LEVELCOLOR, 5, clrGold);
+   
+   ChartRedraw(0);
 }
 
 //+------------------------------------------------------------------+
 //| LÓGICA INSTITUCIONAL FIBONACCI                                   |
 //+------------------------------------------------------------------+
 void ScanM15Impulse() {
+   if(h4Dir == 0 || h1Dir == 0) return;
+   
    int hh = iHighest(_Symbol, curTF_Fibo, MODE_HIGH, curLkb, 1);
    int ll = iLowest(_Symbol, curTF_Fibo, MODE_LOW, curLkb, 1);
    double range = iHigh(_Symbol, curTF_Fibo, hh) - iLow(_Symbol, curTF_Fibo, ll);
    
    if(range > 400 * _Point) {
-      if(h1Dir == 1 && iClose(_Symbol, curTF_Fibo, 1) > iHigh(_Symbol, curTF_Fibo, hh)) {
+      // Filtro Triple: 4H + 1H + 15M Break
+      if(h4Dir == 1 && h1Dir == 1 && iClose(_Symbol, curTF_Fibo, 1) > iHigh(_Symbol, curTF_Fibo, hh)) {
          f100 = iLow(_Symbol, curTF_Fibo, ll); f0 = iHigh(_Symbol, curTF_Fibo, hh);
          f62 = f0 - (f0-f100)*0.618; f78 = f0 - (f0-f100)*0.786; f50 = f0 - (f0-f100)*0.5;
-         state = STATE_WAIT_RETRACE; botStatus = "FIBO ACTIVADO";
-         DrawFiboLevels(f100, f0, true);
+         state = STATE_WAIT_RETRACE; botStatus = "OTE: 4H/1H ALINEADOS";
+         DrawFiboVisuals(f100, f0, true);
       }
-      else if(h1Dir == -1 && iClose(_Symbol, curTF_Fibo, 1) < iLow(_Symbol, curTF_Fibo, ll)) {
-         f100 = iHigh(_Symbol, curTF_Fibo, hh); f0 = iHigh(_Symbol, curTF_Fibo, ll);
+      else if(h4Dir == -1 && h1Dir == -1 && iClose(_Symbol, curTF_Fibo, 1) < iLow(_Symbol, curTF_Fibo, ll)) {
+         f100 = iHigh(_Symbol, curTF_Fibo, hh); f0 = iLow(_Symbol, curTF_Fibo, ll);
          f62 = f0 + (f100-f0)*0.618; f78 = f0 + (f100-f0)*0.786; f50 = f0 + (f100-f0)*0.5;
-         state = STATE_WAIT_RETRACE; botStatus = "FIBO ACTIVADO";
-         DrawFiboLevels(f100, f0, false);
+         state = STATE_WAIT_RETRACE; botStatus = "OTE: 4H/1H ALINEADOS";
+         DrawFiboVisuals(f100, f0, false);
       } else {
-         botStatus = (h1Dir == 1) ? "BUSCANDO IMPULSO BULL" : "BUSCANDO IMPULSO BEAR";
-      }
+         botStatus = (h4Dir == 1) ? "4H BULL | ESPERANDO 1H" : "4H BEAR | ESPERANDO 1H";
    } else {
-      botStatus = "ANALIZANDO RANGO...";
+      botStatus = "BUSCANDO IMPULSO MACRO...";
    }
 }
 

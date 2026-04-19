@@ -60,6 +60,8 @@ export function BotRemoteControl({
         dir: 2
     });
 
+    const [showAdvanced, setShowAdvanced] = useState(false);
+
     useEffect(() => {
         setMounted(true);
     }, []);
@@ -254,7 +256,12 @@ export function BotRemoteControl({
                             <p className="text-[9px] font-black uppercase text-brand-light tracking-[0.15em] flex items-center gap-2">
                                 <Zap size={12} fill="currentColor" /> OTE RISK ENGINE
                             </p>
-                            <Settings2 size={12} className="text-white/20" />
+                            <button 
+                                onClick={() => setShowAdvanced(!showAdvanced)}
+                                className={`p-1 rounded-md transition-all ${showAdvanced ? 'bg-brand/20 text-brand-light' : 'text-white/20 hover:text-white'}`}
+                            >
+                                <Settings2 size={12} className={showAdvanced ? "animate-spin-slow" : ""} />
+                            </button>
                         </div>
 
                         {/* RIESGO GRID */}
@@ -297,40 +304,49 @@ export function BotRemoteControl({
                             </div>
                         </div>
 
-                        {/* STRATEGY CONTEXT */}
-                        <div className="space-y-3 pt-2 border-t border-white/5">
-                            <div className="flex items-center justify-between">
-                                <p className="text-[7px] font-black text-white/30 uppercase tracking-[0.2em]">Strategy Context</p>
-                                <div className="flex items-center gap-1 bg-black/40 rounded px-1.5 py-0.5">
-                                    <span className="text-[7px] font-black text-white/40">LOOKBACK:</span>
-                                    <input 
-                                        type="number" 
-                                        value={localSettings.lkb} 
-                                        className="w-6 bg-transparent text-[8px] font-black text-brand-light outline-none text-center"
-                                        onChange={(e) => setLocalSettings({...localSettings, lkb: e.target.value})}
-                                    />
-                                </div>
-                            </div>
-                            
-                            <div className="grid grid-cols-2 gap-3">
-                                <div className="space-y-1">
-                                    <p className="text-[6px] font-bold text-white/20 uppercase tracking-tighter">Tendencia (H1)</p>
-                                    <div className="flex gap-1">
-                                        {["H4", "H1", "M30"].map(t => (
-                                            <TimeframeOption key={t} label={t} value={`PERIOD_${t}`} current={localSettings} setter={setLocalSettings} keyName="tf_trend" />
-                                        ))}
+                        {/* STRATEGY CONTEXT (COLLAPSIBLE) */}
+                        <AnimatePresence>
+                            {showAdvanced && (
+                                <motion.div 
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: "auto", opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    className="space-y-3 pt-2 border-t border-white/5 overflow-hidden"
+                                >
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-[7px] font-black text-white/30 uppercase tracking-[0.2em]">Strategy Context</p>
+                                        <div className="flex items-center gap-1 bg-black/40 rounded px-1.5 py-0.5">
+                                            <span className="text-[7px] font-black text-white/40">LOOKBACK:</span>
+                                            <input 
+                                                type="number" 
+                                                value={localSettings.lkb} 
+                                                className="w-6 bg-transparent text-[8px] font-black text-brand-light outline-none text-center"
+                                                onChange={(e) => setLocalSettings({...localSettings, lkb: e.target.value})}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="space-y-1">
-                                    <p className="text-[6px] font-bold text-white/20 uppercase tracking-tighter">Análisis (M15)</p>
-                                    <div className="flex gap-1">
-                                        {["M30", "M15", "M5"].map(t => (
-                                            <TimeframeOption key={t} label={t} value={`PERIOD_${t}`} current={localSettings} setter={setLocalSettings} keyName="tf_fibo" />
-                                        ))}
+                                    
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="space-y-1">
+                                            <p className="text-[6px] font-bold text-white/20 uppercase tracking-tighter">Tendencia (4H/1H)</p>
+                                            <div className="flex gap-1">
+                                                {["H4", "H1", "M30"].map(t => (
+                                                    <TimeframeOption key={t} label={t} value={`PERIOD_${t}`} current={localSettings} setter={setLocalSettings} keyName="tf_trend" />
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-[6px] font-bold text-white/20 uppercase tracking-tighter">Fibo Analysis</p>
+                                            <div className="flex gap-1">
+                                                {["M30", "M15", "M5"].map(t => (
+                                                    <TimeframeOption key={t} label={t} value={`PERIOD_${t}`} current={localSettings} setter={setLocalSettings} keyName="tf_fibo" />
+                                                ))}
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
 
                         {/* APPLY BUTTON */}
                         <Button 
