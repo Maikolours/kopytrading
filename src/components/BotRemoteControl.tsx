@@ -82,7 +82,7 @@ export function BotRemoteControl({
                 // Si no estamos cargando (aplicando), actualizamos los locales con la telemetría real del bot
                 if (!loading) {
                     setLocalSettings({
-                        sl: data.sl || data.lote_manual || 250,
+                        sl: data.sl || 250,
                         tp: data.tp || 500,
                         be: data.be || 150,
                         tra: data.tra || 100,
