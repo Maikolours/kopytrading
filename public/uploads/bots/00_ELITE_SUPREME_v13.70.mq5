@@ -50,8 +50,12 @@ datetime       lastLogTime = 0;
 datetime       lastSyncTime = 0;
 #define PNL "SUPREME_"
 
+//--- VARIABLES DE CONTROL REMOTO (Override de Inputs)
+int      curSL, curTP, curBE, curTra, curLkb;
+ENUM_TIMEFRAMES curTF_Trend, curTF_Fibo, curTF_Entry;
+
 //+------------------------------------------------------------------+
-//| MOTOR DE SINCRONIZACIÓN ABSOLUTA (v1.6B)                         |
+//| MOTOR DE SINCRONIZACIÓN SUPREMA (v1.70)                          |
 //+------------------------------------------------------------------+
 void AbsoluteSync() {
    if(TimeCurrent() < lastSyncTime + 5) return; 
@@ -81,13 +85,16 @@ void AbsoluteSync() {
    body += "\"trend\":\"" + (h1Dir == 1 ? "BULL" : "BEAR") + "\",";
    body += "\"mode\":" + IntegerToString(currentMode) + ",";
    body += "\"dir\":" + IntegerToString(currentDir) + ",";
+   body += "\"sl\":" + IntegerToString(curSL) + ",";
+   body += "\"tp\":" + IntegerToString(curTP) + ",";
+   body += "\"be\":" + IntegerToString(curBE) + ",";
+   body += "\"tra\":" + IntegerToString(curTra) + ",";
+   body += "\"lkb\":" + IntegerToString(curLkb) + ",";
+   body += "\"tf_trend\":\"" + EnumToString(curTF_Trend) + "\",";
+   body += "\"tf_fibo\":\"" + EnumToString(curTF_Fibo) + "\",";
+   body += "\"tf_entry\":\"" + EnumToString(curTF_Entry) + "\",";
    body += "\"armed\":true,";
-   body += "\"p100\":" + DoubleToString(f100, _Digits) + ",";
-   body += "\"p78\":" + DoubleToString(f78, _Digits) + ",";
-   body += "\"p62\":" + DoubleToString(f62, _Digits) + ",";
-   body += "\"p50\":" + DoubleToString(f50, _Digits) + ",";
-   body += "\"p00\":" + DoubleToString(f0, _Digits) + ",";
-   body += "\"b1_be\":0.8, \"b1_gar\":0.5, \"b1_tra\":1.2";
+   body += "\"version\":\"13.70\"";
    body += "}";
    
    uchar p[], r[]; string rh;
@@ -98,34 +105,76 @@ void AbsoluteSync() {
    
    if(res == 200) {
       string response = CharArrayToString(r);
-      // PARSER LIGHTWEIGHT DE COMANDOS v1.67
+      
+      // 1. COMANDOS DE ACCIÓN RÁPIDA
       if(StringFind(response, "\"cmd\":\"CLOSE_ALL\"") != -1) {
-         Print("🚨 [REMOTE] COMANDO RECIBIDO: CLOSE_ALL");
+         Print("🚨 [REMOTE] CERRANDO POSICIONES...");
          for(int i=PositionsTotal()-1; i>=0; i--) if(posInfo.SelectByIndex(i) && posInfo.Magic()==InpMagic) trade.PositionClose(posInfo.Ticket());
       }
-      if(StringFind(response, "\"mode\":0") != -1 && currentMode != MODE_ZEN) {
-         currentMode = MODE_ZEN; CrearPanel(); Print("📡 [REMOTE] CAMBIO A MODO ZEN");
-      }
-      if(StringFind(response, "\"mode\":1") != -1 && currentMode != MODE_COSECHA) {
-         currentMode = MODE_COSECHA; CrearPanel(); Print("📡 [REMOTE] CAMBIO A MODO COSECHA");
-      }
-      if(StringFind(response, "\"dir\":0") != -1 && currentDir != DIR_COMPRAS) {
-         currentDir = DIR_COMPRAS; CrearPanel(); Print("📡 [REMOTE] CAMBIO A DIRECCIÓN BUY");
-      }
-      if(StringFind(response, "\"dir\":1") != -1 && currentDir != DIR_VENTAS) {
-         currentDir = DIR_VENTAS; CrearPanel(); Print("📡 [REMOTE] CAMBIO A DIRECCIÓN SELL");
-      }
-      if(StringFind(response, "\"dir\":2") != -1 && currentDir != DIR_AMBAS) {
-         currentDir = DIR_AMBAS; CrearPanel(); Print("📡 [REMOTE] CAMBIO A DIRECCIÓN AMBAS");
-      }
+      
+      // 2. PARSER DE SETTINGS BINARIO/RELAXED
+      if(StringFind(response, "\"mode\":0") != -1) currentMode = MODE_ZEN;
+      if(StringFind(response, "\"mode\":1") != -1) currentMode = MODE_COSECHA;
+      if(StringFind(response, "\"dir\":0") != -1) currentDir = DIR_COMPRAS;
+      if(StringFind(response, "\"dir\":1") != -1) currentDir = DIR_VENTAS;
+      if(StringFind(response, "\"dir\":2") != -1) currentDir = DIR_AMBAS;
+
+      // 3. PARSER DE RIESGO OTE (v13.70)
+      ParseRemoteRisk(response);
    }
 
    if(TimeCurrent() > lastLogTime + 10) {
-      if(res == 200) {} // Silent OK
-      else if(res == -1) Print("❌ [SUPREME-SYNC] ERROR: Verifique URLs permitidas en MT5.");
-      else Print("❌ [SUPREME-SYNC] ERROR HTTP: " + IntegerToString(res));
+      if(res != 200) Print("❌ [SYNC-ERROR]: " + IntegerToString(res));
       lastLogTime = TimeCurrent();
    }
+}
+
+void ParseRemoteRisk(string json) {
+    int start = StringFind(json, "\"settings\":{");
+    if(start == -1) return;
+    
+    // Extracción de parámetros individuales
+    curSL = ExtractInt(json, "\"sl\":", curSL);
+    curTP = ExtractInt(json, "\"tp\":", curTP);
+    curBE = ExtractInt(json, "\"be\":", curBE);
+    curTra = ExtractInt(json, "\"tra\":", curTra);
+    curLkb = ExtractInt(json, "\"lkb\":", curLkb);
+    
+    // Temporalidades (Si cambian, forzamos reinicio de handles)
+    ENUM_TIMEFRAMES oldTrend = curTF_Trend;
+    curTF_Trend = StringToTF(ExtractStr(json, "\"tf_trend\":"));
+    if(curTF_Trend != oldTrend) { IndicatorRelease(hEmaH1); hEmaH1 = iMA(_Symbol, curTF_Trend, InpEMA, 0, MODE_EMA, PRICE_CLOSE); }
+    
+    curTF_Fibo = StringToTF(ExtractStr(json, "\"tf_fibo\":"));
+    curTF_Entry = StringToTF(ExtractStr(json, "\"tf_entry\":"));
+}
+
+int ExtractInt(string json, string key, int def) {
+    int pos = StringFind(json, key);
+    if(pos == -1) return def;
+    int start = pos + StringLen(key);
+    int end = StringFind(json, ",", start);
+    if(end == -1) end = StringFind(json, "}", start);
+    string val = StringSubstr(json, start, end - start);
+    return (int)StringToInteger(val);
+}
+
+string ExtractStr(string json, string key) {
+    int pos = StringFind(json, key);
+    if(pos == -1) return "";
+    int start = pos + StringLen(key) + 1; // Saltar comilla
+    int end = StringFind(json, "\"", start);
+    return StringSubstr(json, start, end - start);
+}
+
+ENUM_TIMEFRAMES StringToTF(string tf) {
+    if(tf == "PERIOD_H1" || tf == "H1") return PERIOD_H1;
+    if(tf == "PERIOD_M15" || tf == "M15") return PERIOD_M15;
+    if(tf == "PERIOD_M5" || tf == "M5") return PERIOD_M5;
+    if(tf == "PERIOD_M1" || tf == "M1") return PERIOD_M1;
+    if(tf == "PERIOD_M30" || tf == "M30") return PERIOD_M30;
+    if(tf == "PERIOD_H4" || tf == "H4") return PERIOD_H4;
+    return curTF_Fibo; // Fallback
 }
 
 //+------------------------------------------------------------------+
@@ -133,7 +182,13 @@ void AbsoluteSync() {
 //+------------------------------------------------------------------+
 int OnInit() {
    trade.SetExpertMagicNumber(InpMagic);
-   hEmaH1 = iMA(_Symbol, PERIOD_H1, InpEMA, 0, MODE_EMA, PRICE_CLOSE);
+   
+   // Inicializar variables de control con los inputs
+   curSL = InpSL_Pips; curTP = InpTP_Pips; curBE = InpBE_Trigger; 
+   curTra = InpTrailingStop; curLkb = InpLookback;
+   curTF_Trend = InpTF_Trend; curTF_Fibo = InpTF_Fibo; curTF_Entry = InpTF_Entry;
+
+   hEmaH1 = iMA(_Symbol, curTF_Trend, InpEMA, 0, MODE_EMA, PRICE_CLOSE);
    CrearPanel();
    EventSetTimer(1); 
    return(INIT_SUCCEEDED);
@@ -161,19 +216,19 @@ void OnTick() {
 //| LÓGICA INSTITUCIONAL FIBONACCI                                   |
 //+------------------------------------------------------------------+
 void ScanM15Impulse() {
-   int hh = iHighest(_Symbol, InpTF_Fibo, MODE_HIGH, InpLookback, 1);
-   int ll = iLowest(_Symbol, InpTF_Fibo, MODE_LOW, InpLookback, 1);
-   double range = iHigh(_Symbol, InpTF_Fibo, hh) - iLow(_Symbol, InpTF_Fibo, ll);
+   int hh = iHighest(_Symbol, curTF_Fibo, MODE_HIGH, curLkb, 1);
+   int ll = iLowest(_Symbol, curTF_Fibo, MODE_LOW, curLkb, 1);
+   double range = iHigh(_Symbol, curTF_Fibo, hh) - iLow(_Symbol, curTF_Fibo, ll);
    
    if(range > 400 * _Point) {
-      if(h1Dir == 1 && iClose(_Symbol, InpTF_Fibo, 1) > iHigh(_Symbol, InpTF_Fibo, hh)) {
-         f100 = iLow(_Symbol, InpTF_Fibo, ll); f0 = iHigh(_Symbol, InpTF_Fibo, hh);
+      if(h1Dir == 1 && iClose(_Symbol, curTF_Fibo, 1) > iHigh(_Symbol, curTF_Fibo, hh)) {
+         f100 = iLow(_Symbol, curTF_Fibo, ll); f0 = iHigh(_Symbol, curTF_Fibo, hh);
          f62 = f0 - (f0-f100)*0.618; f78 = f0 - (f0-f100)*0.786; f50 = f0 - (f0-f100)*0.5;
          state = STATE_WAIT_RETRACE; botStatus = "FIBO ACTIVADO";
          DrawFiboLevels(f100, f0, true);
       }
-      else if(h1Dir == -1 && iClose(_Symbol, InpTF_Fibo, 1) < iLow(_Symbol, InpTF_Fibo, ll)) {
-         f100 = iHigh(_Symbol, InpTF_Fibo, hh); f0 = iLow(_Symbol, InpTF_Fibo, ll);
+      else if(h1Dir == -1 && iClose(_Symbol, curTF_Fibo, 1) < iLow(_Symbol, curTF_Fibo, ll)) {
+         f100 = iHigh(_Symbol, curTF_Fibo, hh); f0 = iHigh(_Symbol, curTF_Fibo, ll);
          f62 = f0 + (f100-f0)*0.618; f78 = f0 + (f100-f0)*0.786; f50 = f0 + (f100-f0)*0.5;
          state = STATE_WAIT_RETRACE; botStatus = "FIBO ACTIVADO";
          DrawFiboLevels(f100, f0, false);
@@ -193,7 +248,7 @@ void MonitorRetracement() {
 }
 
 void ScanM5Confirmation() {
-   double o = iOpen(_Symbol, InpTF_Entry, 1); double c = iClose(_Symbol, InpTF_Entry, 1);
+   double o = iOpen(_Symbol, curTF_Entry, 1); double c = iClose(_Symbol, curTF_Entry, 1);
    bool ok = (h1Dir == 1 && c > o && (currentDir==DIR_COMPRAS || currentDir==DIR_AMBAS)) ||
              (h1Dir == -1 && c < o && (currentDir==DIR_VENTAS || currentDir==DIR_AMBAS));
    if(ok) { ExecuteTrade(); state = STATE_WAIT_IMPULSE; }
@@ -202,8 +257,8 @@ void ScanM5Confirmation() {
 void ExecuteTrade() {
    double ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
    double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
-   double sl = (h1Dir==1) ? ask - InpSL_Pips*_Point : bid + InpSL_Pips*_Point;
-   double tp = (h1Dir==1) ? ask + InpTP_Pips*_Point : bid - InpTP_Pips*_Point;
+   double sl = (h1Dir==1) ? ask - curSL*_Point : bid + curSL*_Point;
+   double tp = (h1Dir==1) ? ask + curTP*_Point : bid - curTP*_Point;
    
    if(h1Dir == 1) trade.Buy(0.01, _Symbol, ask, sl, tp, "SUPREME OTE");
    else trade.Sell(0.01, _Symbol, bid, sl, tp, "SUPREME OTE");
@@ -299,7 +354,7 @@ void DrawFiboLevels(double p100, double p0, bool isBull) {
    string name = "SUP_FiboOTE";
    ObjectsDeleteAll(0, "SUP_FIBO");
    
-   ObjectCreate(0, name, OBJ_FIBO, 0, iTime(_Symbol, InpTF_Fibo, 1), p100, iTime(_Symbol, InpTF_Fibo, 0), p0);
+   ObjectCreate(0, name, OBJ_FIBO, 0, iTime(_Symbol, curTF_Fibo, 1), p100, iTime(_Symbol, curTF_Fibo, 0), p0);
    ObjectSetInteger(0, name, OBJPROP_COLOR, clrDarkOrchid);
    ObjectSetInteger(0, name, OBJPROP_WIDTH, 1);
    ObjectSetInteger(0, name, OBJPROP_BACK, true);
@@ -321,14 +376,14 @@ void ManageExits() {
          double pnl_points = (posInfo.PositionType()==POSITION_TYPE_BUY) ? (cur-open)/_Point : (open-cur)/_Point;
          
          // 1. BREAK EVEN
-         if(InpBE_Trigger > 0 && pnl_points >= InpBE_Trigger && MathAbs(sl-open) > _Point) {
+         if(curBE > 0 && pnl_points >= curBE && MathAbs(sl-open) > _Point) {
             trade.PositionModify(posInfo.Ticket(), open, posInfo.TakeProfit());
             Print("🛡️ [OTE] BREAK EVEN ACTIVADO");
          }
          
          // 2. TRAILING STOP
-         if(InpTrailingStop > 0 && pnl_points > InpTrailingStop + 50) {
-            double newSL = (posInfo.PositionType()==POSITION_TYPE_BUY) ? cur - InpTrailingStop*_Point : cur + InpTrailingStop*_Point;
+         if(curTra > 0 && pnl_points > curTra + 50) {
+            double newSL = (posInfo.PositionType()==POSITION_TYPE_BUY) ? cur - curTra*_Point : cur + curTra*_Point;
             if((posInfo.PositionType()==POSITION_TYPE_BUY && newSL > sl + 10*_Point) || (posInfo.PositionType()==POSITION_TYPE_SELL && (newSL < sl - 10*_Point || sl==0))) {
                trade.PositionModify(posInfo.Ticket(), newSL, posInfo.TakeProfit());
             }

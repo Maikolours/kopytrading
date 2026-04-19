@@ -328,6 +328,16 @@ export async function POST(req: Request) {
             p62: (body.p62 !== undefined && !isNaN(Number(body.p62))) ? Number(body.p62) : 0,
             p78: (body.p78 !== undefined && !isNaN(Number(body.p78))) ? Number(body.p78) : 0,
             p100: (body.p100 !== undefined && !isNaN(Number(body.p100))) ? Number(body.p100) : 0,
+            // v13.70 Elite Supreme Fields
+            sl: Number(body.sl) || 0,
+            tp: Number(body.tp) || 0,
+            be: Number(body.be) || 0,
+            tra: Number(body.tra) || 0,
+            tf_trend: body.tf_trend || "PERIOD_H1",
+            tf_fibo: body.tf_fibo || "PERIOD_M15",
+            tf_entry: body.tf_entry || "PERIOD_M5",
+            version: body.version || "13.67",
+            
             b1_be: Number(body.b1_be) || 0, b1_gar: Number(body.b1_gar) || 0, b1_tra: Number(body.b1_tra) || 0,
             b2_be: Number(body.b2_be) || 0, b2_gar: Number(body.b2_gar) || 0, b2_tra: Number(body.b2_tra) || 0,
             gr_be: Number(body.gr_be) || 0, gr_gar: Number(body.gr_gar) || 0, gr_tra: Number(body.gr_tra) || 0,
