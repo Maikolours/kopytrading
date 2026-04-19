@@ -52,12 +52,13 @@ export function BotRemoteControl({
         tp: 500,
         be: 150,
         tra: 100,
-        lkb: 25,
+        lkb: 48,
         tf_trend: "PERIOD_H1",
-        tf_fibo: "PERIOD_M15",
+        tf_macro: "PERIOD_H4",
         tf_entry: "PERIOD_M5",
         mode: 1,
-        dir: 2
+        dir: 2,
+        exec: 1 // 0: Market, 1: Limit
     });
 
     const [showAdvanced, setShowAdvanced] = useState(false);
@@ -181,10 +182,10 @@ export function BotRemoteControl({
                             </div>
                             <div>
                                 <h4 className="text-[11px] font-black uppercase tracking-widest text-white leading-none">
-                                    ELITE SUPREME
+                                    ELITE INSTITUTIONAL
                                 </h4>
                                 <p className="text-[8px] font-bold text-brand-light mt-1 tracking-tighter">
-                                    VERSION 13.70 OTE ENGINE
+                                    VERSION 13.80 SUPREME ENGINE
                                 </p>
                             </div>
                         </div>
@@ -229,16 +230,7 @@ export function BotRemoteControl({
 
                     <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-2">
                         <p className="text-[8px] uppercase font-black tracking-widest text-white/20 flex items-center gap-1">
-                            <BarChart3 size={8} /> ESTATUS
-                        </p>
-                        <p className={`text-[10px] font-black uppercase truncate ${botData?.status?.includes("OTE") ? "text-brand-light" : "text-white/60"}`}>
-                            {botData?.status || "STANDBY"}
-                        </p>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-2">
-                        <p className="text-[8px] uppercase font-black tracking-widest text-white/20 flex items-center gap-1">
-                            <ShieldAlert size={8} /> TREND (H1)
+                            <ShieldAlert size={8} /> MACRO (4H)
                         </p>
                         <div className="flex items-center gap-1.5">
                             <div className={`w-1 h-1 rounded-full ${botData?.trend === 'BULL' ? 'bg-success' : 'bg-danger'}`} />
@@ -246,6 +238,15 @@ export function BotRemoteControl({
                                 {botData?.trend === 'BULL' ? 'ALCISTA' : 'BAJISTA'}
                             </span>
                         </div>
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-2">
+                         <p className="text-[8px] uppercase font-black tracking-widest text-white/20 flex items-center gap-1">
+                            <Clock size={8} /> 5M STATUS
+                        </p>
+                        <p className={`text-[9px] font-black uppercase truncate ${botData?.status?.includes("BOS") || botData?.status?.includes("OTE") ? "text-brand-light" : "text-white/40"}`}>
+                            {botData?.status || "BUSCANDO..."}
+                        </p>
                     </div>
                 </div>
 
@@ -328,18 +329,27 @@ export function BotRemoteControl({
                                     
                                     <div className="grid grid-cols-2 gap-3">
                                         <div className="space-y-1">
-                                            <p className="text-[6px] font-bold text-white/20 uppercase tracking-tighter">Tendencia (4H/1H)</p>
+                                            <p className="text-[6px] font-bold text-white/20 uppercase tracking-tighter">Execution Type</p>
                                             <div className="flex gap-1">
-                                                {["H4", "H1", "M30"].map(t => (
-                                                    <TimeframeOption key={t} label={t} value={`PERIOD_${t}`} current={localSettings} setter={setLocalSettings} keyName="tf_trend" />
-                                                ))}
+                                                <button 
+                                                    onClick={() => setLocalSettings({ ...localSettings, exec: 0 })}
+                                                    className={`px-1.5 py-1 text-[8px] font-black rounded border transition-all ${localSettings.exec === 0 ? 'bg-brand/30 border-brand-light text-brand-light' : 'bg-white/5 border-white/10 text-white/40'}`}
+                                                >
+                                                    MARKET
+                                                </button>
+                                                <button 
+                                                    onClick={() => setLocalSettings({ ...localSettings, exec: 1 })}
+                                                    className={`px-1.5 py-1 text-[8px] font-black rounded border transition-all ${localSettings.exec === 1 ? 'bg-brand/30 border-brand-light text-brand-light' : 'bg-white/5 border-white/10 text-white/40'}`}
+                                                >
+                                                    LIMIT
+                                                </button>
                                             </div>
                                         </div>
                                         <div className="space-y-1">
-                                            <p className="text-[6px] font-bold text-white/20 uppercase tracking-tighter">Fibo Analysis</p>
+                                            <p className="text-[6px] font-bold text-white/20 uppercase tracking-tighter">BOS Confirmation</p>
                                             <div className="flex gap-1">
-                                                {["M30", "M15", "M5"].map(t => (
-                                                    <TimeframeOption key={t} label={t} value={`PERIOD_${t}`} current={localSettings} setter={setLocalSettings} keyName="tf_fibo" />
+                                                {["M15", "M5", "M1"].map(t => (
+                                                    <TimeframeOption key={t} label={t} value={`PERIOD_${t}`} current={localSettings} setter={setLocalSettings} keyName="tf_entry" />
                                                 ))}
                                             </div>
                                         </div>
