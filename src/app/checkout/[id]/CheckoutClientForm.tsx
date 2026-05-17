@@ -8,8 +8,8 @@ import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial?: boolean }) {
     const [mounted, setMounted] = useState(false);
 
-    // 🚧 MODO MANTENIMIENTO FORZADO (Cámbialo a false cuando quieras abrir la tienda)
-    const isMaintenance = true; 
+    // 🚧 MODO MANTENIMIENTO FORZADO (Cámbialo a true cuando quieras cerrar la tienda)
+    const isMaintenance = false; 
 
     useEffect(() => {
         setMounted(true);
@@ -92,7 +92,7 @@ function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
                 formData.append("paypalOrderId", details.id);
                 formData.append("paypalPayer", details.payer?.email_address || email);
 
-                const res = await fetch("/api/checkout/mock", { method: "POST", body: formData });
+                const res = await fetch("/api/checkout/paypal", { method: "POST", body: formData });
                 const data = await res.json();
 
                 if (data.success && data.autoLogin) {

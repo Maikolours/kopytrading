@@ -94,7 +94,8 @@ export function BotRemoteControl({
                         tf_fibo: data.tf_fibo || "PERIOD_M15",
                         tf_entry: data.tf_entry || "PERIOD_M5",
                         mode: data.mode !== undefined ? data.mode : 1,
-                        dir: data.dir !== undefined ? data.dir : 2
+                        dir: data.dir !== undefined ? data.dir : 2,
+                        insights_on: data.insights_on !== undefined ? data.insights_on : true
                     });
                 }
             }
@@ -185,7 +186,7 @@ export function BotRemoteControl({
                                     ELITE INSTITUTIONAL
                                 </h4>
                                 <p className="text-[8px] font-bold text-brand-light mt-1 tracking-tighter">
-                                    VERSION 13.80 SUPREME ENGINE
+                                    VERSION {botData?.version || "13.80"} SUPREME ENGINE
                                 </p>
                             </div>
                         </div>
@@ -228,13 +229,22 @@ export function BotRemoteControl({
                         </div>
                     </div>
 
+                    <div className="col-span-2 p-3 rounded-xl bg-brand/5 border border-brand/20 space-y-2">
+                         <p className="text-[8px] uppercase font-black tracking-widest text-brand-light flex items-center gap-1">
+                            <Target size={10} /> PLAN DE ATAQUE
+                        </p>
+                        <p className={`text-[10px] font-bold leading-tight ${botData?.narrative?.includes("🎯") || botData?.narrative?.includes("⚡") ? "text-white" : "text-white/60"}`}>
+                            {botData?.narrative || "Sincronizando narrativa..."}
+                        </p>
+                    </div>
+
                     <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-2">
                         <p className="text-[8px] uppercase font-black tracking-widest text-white/20 flex items-center gap-1">
-                            <ShieldAlert size={8} /> MACRO (4H)
+                            <ShieldAlert size={8} /> BIAS (4H)
                         </p>
                         <div className="flex items-center gap-1.5">
                             <div className={`w-1 h-1 rounded-full ${botData?.trend === 'BULL' ? 'bg-success' : 'bg-danger'}`} />
-                            <span className={`text-[10px] font-black uppercase ${botData?.trend === 'BULL' ? 'text-success' : 'text-danger'}`}>
+                            <span className={`text-[9px] font-black uppercase ${botData?.trend === 'BULL' ? 'text-success' : 'text-danger'}`}>
                                 {botData?.trend === 'BULL' ? 'ALCISTA' : 'BAJISTA'}
                             </span>
                         </div>
@@ -242,7 +252,7 @@ export function BotRemoteControl({
 
                     <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-2">
                          <p className="text-[8px] uppercase font-black tracking-widest text-white/20 flex items-center gap-1">
-                            <Clock size={8} /> 5M STATUS
+                            <Activity size={8} /> STATUS
                         </p>
                         <p className={`text-[9px] font-black uppercase truncate ${botData?.status?.includes("BOS") || botData?.status?.includes("OTE") ? "text-brand-light" : "text-white/40"}`}>
                             {botData?.status || "BUSCANDO..."}
@@ -353,6 +363,16 @@ export function BotRemoteControl({
                                                 ))}
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                                        <p className="text-[7px] font-black text-white/40 uppercase tracking-widest">Mostrar Insights en MT5</p>
+                                        <button 
+                                            onClick={() => setLocalSettings({ ...localSettings, insights_on: !localSettings.insights_on })}
+                                            className={`w-8 h-4 rounded-full transition-all relative ${localSettings.insights_on ? 'bg-brand' : 'bg-white/10'}`}
+                                        >
+                                            <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all ${localSettings.insights_on ? 'right-0.5' : 'left-0.5'}`} />
+                                        </button>
                                     </div>
                                 </motion.div>
                             )}

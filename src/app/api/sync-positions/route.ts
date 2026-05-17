@@ -343,6 +343,8 @@ export async function POST(req: Request) {
             gr_be: Number(body.gr_be) || 0, gr_gar: Number(body.gr_gar) || 0, gr_tra: Number(body.gr_tra) || 0,
             mode: body.mode !== undefined ? Number(body.mode) : undefined,
             dir: body.dir !== undefined ? Number(body.dir) : undefined,
+            insights_on: body.insights_on === true || body.insights_on === "true",
+            narrative: body.narrative || "Calculando...",
             isOnline: true,
             lastUpdate: new Date().toISOString()
         };
