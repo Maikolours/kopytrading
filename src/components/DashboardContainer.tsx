@@ -30,31 +30,33 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                 glow: 'bg-amber-500/20',
                 gradient: 'from-amber-500/20 to-transparent',
                 badge: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-                label: 'ELITE GOLD AMETRALLADORA'
+                label: 'ELITE GOLD MAIKO SNIPER'
             };
-        if (n.includes("BTC") || n.includes("BITCOIN"))
+        if (n.includes("BTC") || n.includes("BITCOIN") || n.includes("WEEKEND"))
             return {
                 border: 'border-purple-500/50',
                 accent: 'text-purple-400',
                 glow: 'bg-purple-500/20',
                 gradient: 'from-brand/20 to-transparent',
                 badge: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
-                label: 'ELITE SNIPER v13'
+                label: 'MAIKO BTC WEEKEND'
             };
-        if (n.includes("YEN") || n.includes("JPY"))
+        if (n.includes("YEN") || n.includes("JPY") || n.includes("CENT") || n.includes("PRO CENT"))
             return {
                 border: 'border-cyan-500/50',
                 accent: 'text-cyan-400',
                 glow: 'bg-cyan-500/20',
                 gradient: 'from-cyan-600/40 via-cyan-900/20 to-black',
-                badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30'
+                badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+                label: 'MAIKO SNIPER PRO CENT'
             };
         return {
             border: 'border-brand/50',
             accent: 'text-brand-light',
             glow: 'bg-brand/20',
             gradient: 'from-brand/30 via-brand-dark/20 to-black',
-            badge: 'bg-brand/20 text-brand-light border-brand/30'
+            badge: 'bg-brand/20 text-brand-light border-brand/30',
+            label: 'MAIKO SNIPER PRO'
         };
     };
 
@@ -64,13 +66,11 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
         purchases.forEach(p => {
             const name = (p.botProduct?.name || "").toUpperCase();
             const instrument = (p.botProduct?.instrument || "").toUpperCase();
-            let key = "Otros";
+            let key = "MAIKO SNIPER PRO 🎯";
             
-            if (instrument.includes("BTC") || instrument.includes("BITCOIN") || name.includes("BITCOIN") || name.includes("SNIPER")) key = "ELITE SNIPER v13";
-            else if (instrument.includes("XAU") || instrument.includes("GOLD") || instrument.includes("ORO") || name.includes("AMETRA")) key = "ELITE GOLD AMETRALLADORA";
-            else if (instrument.includes("EUR") || name.includes("EURO")) key = "Euro Precision 🎯";
-            else if (instrument.includes("JPY") || name.includes("YEN")) key = "Ninja Ghost 🥷";
-            else if (name.includes("EVOLUTION")) key = "ELITE GOLD AMETRALLADORA"; 
+            if (instrument.includes("BTC") || instrument.includes("BITCOIN") || name.includes("BITCOIN") || name.includes("WEEKEND") || name.includes("SNIPER V13")) key = "MAIKO BTC WEEKEND ⚡";
+            else if (instrument.includes("XAU") || instrument.includes("GOLD") || instrument.includes("ORO") || name.includes("AMETRA") || name.includes("EVOLUTION")) key = "ELITE GOLD MAIKO SNIPER 🔥";
+            else if (name.includes("CENT") || instrument.includes("JPY") || name.includes("NINJA")) key = "MAIKO SNIPER PRO CENT 🥷";
             
             if (!groups[key]) groups[key] = [];
             groups[key].push(p);

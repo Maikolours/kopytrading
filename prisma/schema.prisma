@@ -23,13 +23,12 @@ model User {
 model BotProduct {
   id              String     @id @default(cuid())
   name            String
-  productKey      String?    @unique // Identifier for bots (e.g. XAU-MG)
+  productKey      String?    @unique
   description     String
   instrument      String
   strategyType    String
   riskLevel       String
   price           Float
-  originalPrice   Float?
   version         String     @default("1.0")
   ex5FilePath     String?
   pdfFilePath     String?
@@ -40,6 +39,7 @@ model BotProduct {
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
   status          String     @default("ACTIVE")
+  originalPrice   Float?
   purchases       Purchase[]
 }
 
@@ -47,24 +47,24 @@ model Purchase {
   id                    String          @id @default(cuid())
   userId                String
   botProductId          String
-  productKey            String?         // Snapshotted productKey for safety
   amount                Float
   status                String          @default("COMPLETED")
   lastDownloadedVersion String?
+  createdAt             DateTime        @default(now())
+  expiresAt             DateTime?
   lastSync              DateTime?
+  updatedAt             DateTime        @updatedAt
+  productKey            String?
   balance               Float?
   equity                Float?
   lastStatus            String?
-  createdAt             DateTime        @default(now())
-  updatedAt             DateTime        @updatedAt
-  expiresAt             DateTime?
-  activePositions       LivePosition[]
-  pastTrades            TradeHistory[]
   botSettings           BotSettings[]
-  licenseSessions       LicenseSession[]
+  licenseSessions       LicenseSession?
+  activePositions       LivePosition[]
   botProduct            BotProduct      @relation(fields: [botProductId], references: [id])
   user                  User            @relation(fields: [userId], references: [id])
   remoteCommands        RemoteCommand[]
+  pastTrades            TradeHistory[]
 
   @@index([botProductId], map: "Purchase_botProductId_fkey")
   @@index([userId], map: "Purchase_userId_fkey")
@@ -72,13 +72,12 @@ model Purchase {
 
 model LicenseSession {
   id           String   @id @default(cuid())
-  purchaseId   String
+  purchaseId   String   @unique
   account      String
   lastActivity DateTime @default(now())
   isActive     Boolean  @default(true)
   purchase     Purchase @relation(fields: [purchaseId], references: [id])
 
-  @@unique([purchaseId]) // One active session per purchase
   @@index([purchaseId])
 }
 
@@ -88,8 +87,8 @@ model RemoteCommand {
   command    String
   value      String?
   createdAt  DateTime           @default(now())
-  purchase   Purchase           @relation(fields: [purchaseId], references: [id])
   executions CommandExecution[]
+  purchase   Purchase           @relation(fields: [purchaseId], references: [id])
 
   @@index([purchaseId])
 }
@@ -116,9 +115,9 @@ model LivePosition {
   tp         Float
   sl         Float
   profit     Float
+  updatedAt  DateTime @updatedAt
   account    String   @default("unknown")
   isReal     Boolean  @default(false)
-  updatedAt  DateTime @updatedAt
   purchase   Purchase @relation(fields: [purchaseId], references: [id])
 
   @@index([purchaseId])
@@ -134,14 +133,13 @@ model TradeHistory {
   openPrice  Float
   closePrice Float
   profit     Float
+  closedAt   DateTime
   account    String   @default("unknown")
   isReal     Boolean  @default(false)
-  closedAt   DateTime
   purchase   Purchase @relation(fields: [purchaseId], references: [id])
 
   @@index([purchaseId])
 }
-
 
 model RequestLog {
   id        String   @id @default(cuid())
@@ -156,7 +154,7 @@ model BotSettings {
   id         String   @id @default(cuid())
   purchaseId String
   account    String
-  settings   Json
+  settings   String   @db.LongText
   updatedAt  DateTime @updatedAt
   purchase   Purchase @relation(fields: [purchaseId], references: [id])
 
