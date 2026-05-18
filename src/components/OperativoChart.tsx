@@ -55,13 +55,6 @@ export const OperativoChart: React.FC<OperativoChartProps> = ({
                 onLoad={() => setLoading(false)}
             />
 
-            <div className="absolute top-4 left-4 z-10 flex flex-col gap-1 pointer-events-none">
-                <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-brand animate-pulse shadow-[0_0_10px_#24cecb]" />
-                    <span className="text-[10px] font-black text-white/90 uppercase tracking-widest">PRO LIVE FEED: {tvSymbol.split(':')[1] || tvSymbol}</span>
-                </div>
-            </div>
-            
             {/* Overlay sutil para matching estético con el resto del dashboard */}
             <div className="absolute inset-0 pointer-events-none border border-white/5 rounded-3xl" />
         </div>

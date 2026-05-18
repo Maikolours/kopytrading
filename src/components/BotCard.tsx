@@ -56,9 +56,7 @@ export const BotCard = memo(function BotCard({
     
     const dailyProfit = (purchase?.pastTrades || []).reduce((acc: number, t: any) => acc + (Number(t.profit) || 0), 0);
     const isGold = botProduct.name.toLowerCase().includes("gold") || botProduct.name.toLowerCase().includes("ametra");
-    const botDisplayName = isGold ? "ELITE GOLD AMETRALLADORA" : 
-                           (botProduct.instrument.includes('BTC') || botProduct.name.includes('SNIPER')) ? "ELITE SNIPER v13" : 
-                           botProduct.name;
+    const botDisplayName = theme?.label || botProduct.name || baseName;
 
     // Formateo seguro para balance y equidad
     const balance = purchase?.balance !== null && purchase?.balance !== undefined ? Number(purchase.balance) : null;
