@@ -54,7 +54,7 @@ export async function GET(
 
         if (!record) return NextResponse.json({});
 
-        const settings = record.settings as any;
+        const settings = typeof record.settings === 'string' ? JSON.parse(record.settings) : (record.settings || {});
         
         // LÓGICA DE MEMORIA TÁCTICA v12.0 (GET)
         if (symbol && timeframe) {
@@ -101,7 +101,7 @@ export async function PATCH(
 
         // LÓGICA DE MEMORIA TÁCTICA v12.0 (PATCH)
         if (existingRecord && symbol && timeframe) {
-            const currentSettings = existingRecord.settings as any;
+            const currentSettings = typeof existingRecord.settings === 'string' ? JSON.parse(existingRecord.settings) : (existingRecord.settings || {});
             const memoryKey = `${symbol.toUpperCase()}_${timeframe.toUpperCase()}`;
             const memories = currentSettings.memories || {};
             
@@ -122,8 +122,8 @@ export async function PATCH(
 
         const updated = await prisma.botSettings.upsert({
             where: { purchaseId_account: { purchaseId: id, account: String(account) } },
-            update: { settings: finalSettings },
-            create: { purchaseId: id, account: String(account), settings: finalSettings }
+            update: { settings: JSON.stringify(finalSettings) },
+            create: { purchaseId: id, account: String(account), settings: JSON.stringify(finalSettings) }
         });
 
         return NextResponse.json(updated);

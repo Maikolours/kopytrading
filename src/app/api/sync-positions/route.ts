@@ -349,12 +349,12 @@ export async function POST(req: Request) {
             lastUpdate: new Date().toISOString()
         };
 
-        let currentSettings = null;
+        let currentSettings: any = null;
         try {
             const existingRecord = await prisma.botSettings.findUnique({
                 where: { purchaseId_account: { purchaseId: officialPurchaseId, account: String(account) } }
             });
-            const rawSettings = existingRecord ? (existingRecord.settings as any) : DEFAULT_SETTINGS;
+            const rawSettings = existingRecord ? (typeof existingRecord.settings === 'string' ? JSON.parse(existingRecord.settings) : existingRecord.settings) : DEFAULT_SETTINGS;
             const symbol = (body.symbol || "UNKNOWN").toUpperCase();
             const timeframe = (body.tf || body.timeframe || "M5").toUpperCase();
             const memoryKey = `${symbol}_${timeframe}`;
@@ -403,15 +403,15 @@ export async function POST(req: Request) {
                 for (const pur of allSakuraPurchases) {
                     await prisma.botSettings.upsert({
                         where: { purchaseId_account: { purchaseId: pur.id, account: String(account) } },
-                        update: { settings: updatedSettings },
-                        create: { purchaseId: pur.id, account: String(account), settings: updatedSettings }
+                        update: { settings: JSON.stringify(updatedSettings) },
+                        create: { purchaseId: pur.id, account: String(account), settings: JSON.stringify(updatedSettings) }
                     });
                 }
             } else {
                 currentSettings = await prisma.botSettings.upsert({
                     where: { purchaseId_account: { purchaseId: officialPurchaseId, account: String(account) } },
-                    update: { settings: updatedSettings },
-                    create: { purchaseId: officialPurchaseId, account: String(account), settings: updatedSettings }
+                    update: { settings: JSON.stringify(updatedSettings) },
+                    create: { purchaseId: officialPurchaseId, account: String(account), settings: JSON.stringify(updatedSettings) }
                 });
             }
 
@@ -427,7 +427,7 @@ export async function POST(req: Request) {
 
         return NextResponse.json({ 
             success: true, 
-            settings: currentSettings?.settings || DEFAULT_SETTINGS,
+            settings: currentSettings ? (typeof currentSettings.settings === 'string' ? JSON.parse(currentSettings.settings) : currentSettings.settings) : DEFAULT_SETTINGS,
             cmd: (currentSettings?.settings as any)?.pendingCmd || "NONE"
         });
     } catch (err: any) {
