@@ -48,19 +48,19 @@ export async function POST(req: Request) {
             }
         }
         
-        // NORMALIZACIÓN: Asegurar que el purchaseId sea siempre minúsculas y limpiar sufijos
-        const purchaseId = String(body.purchaseId || body.license || body.licenseKey || "").trim().toLowerCase();
-        const account = String(findValue(['account', 'acc', 'cuenta', 'num_cuenta']) || body.account || "unknown");
-        
         // --- FUZZY MAPPING v15.1 (Recover data with non-standard keys) ---
         const findValue = (keys: string[]) => {
             const lowerBody: any = {};
-            Object.keys(body).forEach(k => lowerBody[k.toLowerCase()] = body[k]);
+            Object.keys(body || {}).forEach(k => lowerBody[k.toLowerCase()] = body[k]);
             for (const key of keys) {
                 if (lowerBody[key.toLowerCase()] !== undefined) return lowerBody[key.toLowerCase()];
             }
             return null;
         };
+
+        // NORMALIZACIÓN: Asegurar que el purchaseId sea siempre minúsculas y limpiar sufijos
+        const purchaseId = String(body.purchaseId || body.license || body.licenseKey || "").trim().toLowerCase();
+        const account = String(findValue(['account', 'acc', 'cuenta', 'num_cuenta']) || body.account || "unknown");
 
         const balance = findValue(['balance', 'bal', 'acc_balance', 'account_balance', 'balance_cuenta']);
         const equity = findValue(['equity', 'equ', 'acc_equity', 'active_equity', 'equidad_activa', 'equidad']);
