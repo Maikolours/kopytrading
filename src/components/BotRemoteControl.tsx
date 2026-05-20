@@ -183,10 +183,10 @@ export function BotRemoteControl({
                             </div>
                             <div>
                                 <h4 className="text-[11px] font-black uppercase tracking-widest text-white leading-none">
-                                    ELITE INSTITUTIONAL
+                                    {botName || "MAIKO SNIPER PRO"}
                                 </h4>
                                 <p className="text-[8px] font-bold text-brand-light mt-1 tracking-tighter">
-                                    VERSION {botData?.version || "13.80"} SUPREME ENGINE
+                                    v{botData?.version || "13.92"} MAIKO ENGINE
                                 </p>
                             </div>
                         </div>

@@ -30,7 +30,7 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                 glow: 'bg-amber-500/20',
                 gradient: 'from-amber-500/20 to-transparent',
                 badge: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-                label: 'ELITE GOLD MAIKO SNIPER'
+                label: 'MAIKO SNIPER PRO ✨'
             };
         if (n.includes("BTC") || n.includes("BITCOIN") || n.includes("WEEKEND"))
             return {
