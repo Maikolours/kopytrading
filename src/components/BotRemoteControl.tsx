@@ -170,8 +170,8 @@ export function BotRemoteControl({
     );
 
     return (
-        <div className="w-full px-4 sm:px-0 flex justify-center py-4">
-            <div className={`w-full max-w-[340px] rounded-2xl bg-black/40 border border-white/10 shadow-2xl flex flex-col backdrop-blur-xl relative overflow-hidden`}>
+        <div className="w-full sm:flex sm:justify-center py-2 sm:py-4">
+            <div className={`w-full max-w-full sm:max-w-[400px] rounded-2xl bg-black/40 border border-white/10 shadow-2xl flex flex-col backdrop-blur-xl relative overflow-hidden mx-auto`}>
                 <div className={`absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-brand/20 to-transparent blur-3xl opacity-20 pointer-events-none`} />
                 
                 {/* HEADER */}
@@ -214,47 +214,47 @@ export function BotRemoteControl({
                 </div>
 
                 {/* TELEMETRY CARDS */}
-                <div className="p-4 grid grid-cols-2 gap-3">
-                    <div className="col-span-2 p-4 rounded-xl bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex items-center justify-between group">
+                <div className="p-3 sm:p-4 grid grid-cols-2 gap-2 sm:gap-3">
+                    <div className="col-span-2 p-4 sm:p-5 rounded-xl bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex items-center justify-between group">
                         <div className="space-y-1">
-                            <p className="text-[8px] uppercase font-black tracking-[0.2em] text-white/30 leading-none">PROFIT TODAY</p>
-                            <h3 className={`text-2xl font-black tracking-tighter flex items-center gap-2 ${botData?.pnl_today >= 0 ? 'text-success' : 'text-danger'}`}>
-                                {botData?.pnl_today >= 0 ? <TrendingUp size={20} /> : <TrendingDown size={20} />}
+                            <p className="text-[9px] sm:text-[10px] uppercase font-black tracking-[0.2em] text-white/30 leading-none">PROFIT HOY</p>
+                            <h3 className={`text-3xl sm:text-4xl font-black tracking-tighter flex items-center gap-1 sm:gap-2 ${botData?.pnl_today >= 0 ? 'text-success' : 'text-danger'}`}>
+                                {botData?.pnl_today >= 0 ? <TrendingUp size={24} /> : <TrendingDown size={24} />}
                                 {formatCurrency(botData?.pnl_today || 0)}
                             </h3>
                         </div>
                         <div className="text-right space-y-1">
-                            <p className="text-[8px] uppercase font-black tracking-[0.2em] text-white/30 leading-none">EQUITY</p>
-                            <p className="text-[10px] font-black text-white group-hover:text-brand-light transition-colors">{formatCurrency(botData?.equity || 0)}</p>
+                            <p className="text-[9px] sm:text-[10px] uppercase font-black tracking-[0.2em] text-white/30 leading-none">EQUIDAD</p>
+                            <p className="text-sm sm:text-lg font-black text-white group-hover:text-brand-light transition-colors">{formatCurrency(botData?.equity || 0)}</p>
                         </div>
                     </div>
 
-                    <div className="col-span-2 p-3 rounded-xl bg-brand/5 border border-brand/20 space-y-2">
-                         <p className="text-[8px] uppercase font-black tracking-widest text-brand-light flex items-center gap-1">
-                            <Target size={10} /> PLAN DE ATAQUE
+                    <div className="col-span-2 p-3 sm:p-4 rounded-xl bg-brand/5 border border-brand/20 space-y-2">
+                         <p className="text-[9px] uppercase font-black tracking-widest text-brand-light flex items-center gap-1">
+                            <Target size={12} /> PLAN DE ATAQUE
                         </p>
-                        <p className={`text-[10px] font-bold leading-tight ${botData?.narrative?.includes("🎯") || botData?.narrative?.includes("⚡") ? "text-white" : "text-white/60"}`}>
+                        <p className={`text-xs sm:text-sm font-bold leading-tight ${botData?.narrative?.includes("🎯") || botData?.narrative?.includes("⚡") ? "text-white" : "text-white/60"}`}>
                             {botData?.narrative || "Sincronizando narrativa..."}
                         </p>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-2">
-                        <p className="text-[8px] uppercase font-black tracking-widest text-white/20 flex items-center gap-1">
-                            <ShieldAlert size={8} /> BIAS (4H)
+                    <div className="p-3 sm:p-4 rounded-xl bg-white/5 border border-white/5 space-y-2">
+                        <p className="text-[9px] uppercase font-black tracking-widest text-white/20 flex items-center gap-1">
+                            <ShieldAlert size={10} /> BIAS (4H)
                         </p>
                         <div className="flex items-center gap-1.5">
-                            <div className={`w-1 h-1 rounded-full ${botData?.trend === 'BULL' ? 'bg-success' : 'bg-danger'}`} />
-                            <span className={`text-[9px] font-black uppercase ${botData?.trend === 'BULL' ? 'text-success' : 'text-danger'}`}>
+                            <div className={`w-2 h-2 rounded-full ${botData?.trend === 'BULL' ? 'bg-success' : 'bg-danger'}`} />
+                            <span className={`text-[10px] font-black uppercase ${botData?.trend === 'BULL' ? 'text-success' : 'text-danger'}`}>
                                 {botData?.trend === 'BULL' ? 'ALCISTA' : 'BAJISTA'}
                             </span>
                         </div>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-2">
-                         <p className="text-[8px] uppercase font-black tracking-widest text-white/20 flex items-center gap-1">
-                            <Activity size={8} /> STATUS
+                    <div className="p-3 sm:p-4 rounded-xl bg-white/5 border border-white/5 space-y-2">
+                         <p className="text-[9px] uppercase font-black tracking-widest text-white/20 flex items-center gap-1">
+                            <Activity size={10} /> STATUS
                         </p>
-                        <p className={`text-[9px] font-black uppercase truncate ${botData?.status?.includes("BOS") || botData?.status?.includes("OTE") ? "text-brand-light" : "text-white/40"}`}>
+                        <p className={`text-[10px] sm:text-[11px] font-black uppercase truncate ${botData?.status?.includes("BOS") || botData?.status?.includes("OTE") ? "text-brand-light" : "text-white/40"}`}>
                             {botData?.status || "BUSCANDO..."}
                         </p>
                     </div>
@@ -263,16 +263,16 @@ export function BotRemoteControl({
 
 
                 {/* EMERGENCY STOP */}
-                <div className="p-4 bg-black/60 border-t border-white/5">
+                <div className="p-4 sm:p-5 bg-black/60 border-t border-white/5">
                     <button 
-                        className="w-full flex items-center justify-center gap-3 py-4 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] bg-red-600/20 text-red-500 border border-red-500/30 hover:bg-red-600 hover:text-white transition-all group"
+                        className="w-full flex items-center justify-center gap-3 py-4 sm:py-5 rounded-xl text-xs font-black uppercase tracking-[0.2em] bg-red-600/20 text-red-500 border border-red-500/30 hover:bg-red-600 hover:text-white transition-all group"
                         onClick={() => {
                             if(confirm("🚨 ¿ESTÁS SEGURO? Se cerrarán TODAS las posiciones inmediatamente.")) {
                                 sendAction("CLOSE_ALL");
                             }
                         }}
                     >
-                        <ShieldAlert size={14} className="group-hover:animate-bounce" />
+                        <ShieldAlert size={18} className="group-hover:animate-bounce" />
                         STOP & CLOSE ALL
                     </button>
                     
@@ -288,17 +288,17 @@ export function BotRemoteControl({
                 </div>
 
                 {/* FOOTER STATS */}
-                <div className="px-4 py-3 bg-white/5 flex items-center justify-between">
+                <div className="px-4 py-4 bg-white/5 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <Coins size={12} className="text-white/20" />
+                        <Coins size={14} className="text-white/20" />
                         <div>
-                            <p className="text-[6px] uppercase font-black text-white/20 tracking-widest">MT5 BALANCE</p>
-                            <p className="text-[10px] font-black text-white/80">{formatCurrency(botData?.balance || 0)}</p>
+                            <p className="text-[7px] sm:text-[8px] uppercase font-black text-white/20 tracking-widest">MT5 BALANCE</p>
+                            <p className="text-xs sm:text-sm font-black text-white/80">{formatCurrency(botData?.balance || 0)}</p>
                         </div>
                     </div>
                     <div className="text-right">
-                        <p className="text-[6px] uppercase font-black text-white/20 tracking-widest">LAST PULSE</p>
-                        <p className="text-[8px] font-bold text-white/40 font-mono italic">
+                        <p className="text-[7px] sm:text-[8px] uppercase font-black text-white/20 tracking-widest">LAST PULSE</p>
+                        <p className="text-[9px] sm:text-[10px] font-bold text-white/40 font-mono italic">
                             {(!mounted || !botData?.lastUpdate) ? 'SYSTEM SYNCING' : new Date(botData.lastUpdate).toLocaleTimeString()}
                         </p>
                     </div>
