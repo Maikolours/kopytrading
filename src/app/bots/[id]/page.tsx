@@ -118,7 +118,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                 <div className="grid grid-cols-2 gap-8">
                                     <div className="space-y-1">
                                         <p className="text-[10px] text-text-muted uppercase tracking-widest">Timeframes</p>
-                                        <p className="text-xl font-black text-white italic">{bot.timeframes || 'H1 / M15'}</p>
+                                        <p className="text-xl font-black text-white italic">{bot.timeframes || 'M1'}</p>
                                     </div>
                                     <div className="space-y-1">
                                         <p className="text-[10px] text-text-muted uppercase tracking-widest">Capital Mínimo</p>

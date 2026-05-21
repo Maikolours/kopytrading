@@ -103,9 +103,9 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                 {/* Upcoming overlay */}
                                 {isUpcoming && !isDemo && (
                                     <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20">
-                                        <span className="bg-brand/20 border border-brand/50 text-brand-light text-[8px] font-black px-3 py-1 rounded-full tracking-[0.2em] uppercase shadow-[0_0_20px_rgba(168,85,247,0.3)]">
-                                            ⚡ PRÓXIMO LANZAMIENTO
-                                        </span>
+                                        <span className="bg-brand/20 border border-brand/50 text-brand-light text-[8px] font-black px-3 py-1 rounded-full tracking-[0.15em] uppercase shadow-[0_0_20px_rgba(168,85,247,0.3)] whitespace-nowrap">
+                                        ⚡ PRÓXIMO LANZAMIENTO
+                                    </span>
                                     </div>
                                 )}
 
@@ -172,41 +172,33 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                     </div>
                                 </CardContent>
 
-                                <CardFooter className="justify-between items-center mt-auto border-t border-white/5 pt-5 p-6 bg-black/10 gap-3">
-                                    {/* Sección de precio / estado */}
-                                    <div className="flex flex-col min-w-0">
-                                        {isDemo ? (
-                                            /* Demo: muestra 1€ */
-                                            <>
-                                                <div className="flex items-baseline gap-1">
-                                                    <span className="text-2xl font-black tracking-tighter italic text-white">1€</span>
-                                                    <span className="text-[8px] font-bold uppercase tracking-widest text-white/30">EUR</span>
+                                <CardFooter className="flex-col items-center mt-auto border-t border-white/5 pt-5 px-5 pb-5 bg-black/10 gap-3">
+                                    {isDemo ? (
+                                        /* Demo: precio centrado + botón */
+                                        <>
+                                            <div className="text-center">
+                                                <div className="flex items-baseline justify-center gap-1 mb-0.5">
+                                                    <span className="text-3xl font-black tracking-tighter italic text-white">1€</span>
+                                                    <span className="text-[8px] font-bold uppercase tracking-widest text-white/30">/ 30 días</span>
                                                 </div>
-                                                <div className="text-[7px] text-amber-400 font-black tracking-[0.25em] uppercase mt-0.5 italic">
-                                                    Licencia 30 Días Demo
+                                                <div className="text-[7px] text-amber-400 font-black tracking-[0.25em] uppercase italic">
+                                                    Licencia Demo
                                                 </div>
-                                            </>
-                                        ) : (
-                                            /* Bots comerciales: precio oculto elegante */
-                                            <>
-                                                <span className="text-xl font-black text-white/12 tracking-[0.4em] italic select-none leading-none">— —</span>
-                                                <span className="text-[7px] font-black text-brand-light/50 uppercase tracking-[0.2em] mt-0.5">✦ Próxima revelación</span>
-                                            </>
-                                        )}
-                                    </div>
-
-                                    {/* Botón de acción */}
-                                    <Link href={`/bots/${bot.id}`} className="shrink-0">
-                                        <Button
-                                            size="sm"
-                                            className={`font-black uppercase tracking-[0.15em] text-[9px] px-5 h-10 shadow-xl transition-all duration-500 rounded-xl whitespace-nowrap ${isDemo
-                                                ? 'bg-white text-black hover:bg-brand-light hover:text-white hover:scale-105 active:scale-95'
-                                                : 'bg-brand/10 text-brand-light border border-brand/30 hover:bg-brand/20 hover:scale-105 active:scale-95'
-                                            }`}
-                                        >
-                                            {isDemo ? 'Activar Demo ⚡' : 'Próximamente →'}
-                                        </Button>
-                                    </Link>
+                                            </div>
+                                            <Link href={`/bots/${bot.id}`} className="w-full">
+                                                <Button size="sm" className="w-full font-black uppercase tracking-[0.12em] text-[9px] h-10 shadow-xl transition-all duration-500 rounded-xl bg-white text-black hover:bg-brand-light hover:text-white hover:scale-105 active:scale-95">
+                                                    Activar Demo ⚡
+                                                </Button>
+                                            </Link>
+                                        </>
+                                    ) : (
+                                        /* Comerciales: solo botón centrado */
+                                        <Link href={`/bots/${bot.id}`} className="w-full">
+                                            <Button size="sm" className="w-full font-black uppercase tracking-[0.12em] text-[9px] h-10 shadow-xl transition-all duration-500 rounded-xl bg-brand/10 text-brand-light border border-brand/30 hover:bg-brand/20 hover:scale-105 active:scale-95">
+                                                Próxima Revelación
+                                            </Button>
+                                        </Link>
+                                    )}
                                 </CardFooter>
                             </Card>
                         );
