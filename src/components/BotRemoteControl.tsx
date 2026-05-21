@@ -26,6 +26,7 @@ interface BotRemoteControlProps {
     purchaseId: string;
     botName: string;
     account: string;
+    symbol?: string;
     isOnline?: boolean;
     theme?: any;
     initialData?: any;
@@ -35,6 +36,7 @@ export function BotRemoteControl({
     purchaseId, 
     botName, 
     account, 
+    symbol,
     isOnline: initialOnline, 
     theme,
     initialData
@@ -73,12 +75,13 @@ export function BotRemoteControl({
         fetchBotData();
         const interval = setInterval(fetchBotData, 5000); 
         return () => clearInterval(interval);
-    }, [purchaseId, account]);
+    }, [purchaseId, account, symbol]);
 
     const fetchBotData = async () => {
         setRefreshing(true);
         try {
-            const res = await fetch(`/api/purchase/${purchaseId}/settings?account=${account}`);
+            const symbolParam = symbol ? `&symbol=${symbol}` : "";
+            const res = await fetch(`/api/purchase/${purchaseId}/settings?account=${account}${symbolParam}`);
             if (res.ok) {
                 const data = await res.json();
                 setBotData(data);

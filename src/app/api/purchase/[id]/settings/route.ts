@@ -26,7 +26,18 @@ export async function GET(
         // v14.0: Ahora filtramos por instrumento para evitar cruces en tiempo real
         const isSakura = session.user.email?.includes("viajaconsakura") || id.includes("viajaconsakura");
         if (isSakura) {
-            const botSymbolPrefix = symbol ? symbol.substring(0, 3) : null;
+            let botSymbolPrefix = symbol ? symbol.substring(0, 3) : null;
+            
+            // Robustez: si no viene el símbolo por query, lo resolvemos a partir de la compra
+            if (!botSymbolPrefix) {
+                const currentPurchase = await prisma.purchase.findUnique({
+                    where: { id },
+                    include: { botProduct: true }
+                });
+                if (currentPurchase?.botProduct?.instrument) {
+                    botSymbolPrefix = currentPurchase.botProduct.instrument.substring(0, 3).toUpperCase();
+                }
+            }
             
             const freshestRecord = await prisma.botSettings.findFirst({
                 where: { 

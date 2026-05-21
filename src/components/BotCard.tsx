@@ -130,6 +130,7 @@ export const BotCard = memo(function BotCard({
                             <BotRemoteControl 
                                 purchaseId={purchase?.id || "unknown"} 
                                 botName={botDisplayName} 
+                                symbol={botProduct.instrument}
                                 account={purchase?.activePositions?.[0]?.account || "unknown"}
                                 isOnline={purchase?.lastSync && (Math.abs(Date.now() - new Date(purchase.lastSync).getTime()) < 300000)}
                                 theme={theme}
@@ -144,6 +145,65 @@ export const BotCard = memo(function BotCard({
                                 theme={theme}
                                 activePositions={purchase?.activePositions || []}
                             />
+
+                            {/* TERMINAL DE POSICIONES EN VIVO */}
+                            <div className="p-4 rounded-[1.5rem] bg-black/60 border border-white/5 shadow-xl space-y-3">
+                                <div className="flex items-center justify-between pb-2 border-b border-white/5">
+                                    <p className="text-[9px] text-brand-light uppercase tracking-widest font-black flex items-center gap-2">
+                                        <span className="relative flex h-2 w-2">
+                                            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${(purchase?.activePositions || []).length > 0 ? 'bg-emerald-400' : 'bg-amber-400'}`}></span>
+                                            <span className={`relative inline-flex rounded-full h-2 w-2 ${(purchase?.activePositions || []).length > 0 ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
+                                        </span>
+                                        TERMINAL DE OPERACIONES EN VIVO
+                                    </p>
+                                    <span className="text-[8px] font-bold text-white/30 font-mono">
+                                        {(purchase?.activePositions || []).length} POSICIONES
+                                    </span>
+                                </div>
+
+                                {(purchase?.activePositions || []).length === 0 ? (
+                                    <div className="py-6 text-center text-white/40 space-y-1">
+                                        <p className="text-[10px] font-black uppercase tracking-wider text-white/30">🟢 BUSCANDO ENTRADAS...</p>
+                                        <p className="text-[8px] font-bold">Esperando que el bot inicie un ciclo en MetaTrader 5</p>
+                                    </div>
+                                ) : (
+                                    <div className="max-h-[220px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+                                        {(purchase?.activePositions || []).map((pos: any, idx: number) => {
+                                            const isBuy = String(pos.type).toUpperCase().includes("BUY");
+                                            const profitVal = Number(pos.profit) || 0;
+                                            return (
+                                                <div 
+                                                    key={pos.id || idx} 
+                                                    className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between hover:bg-white/10 transition-all"
+                                                >
+                                                    <div className="space-y-1">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className={`px-1.5 py-0.5 rounded text-[8px] font-black tracking-wider uppercase ${isBuy ? 'bg-success/20 text-success border border-success/30' : 'bg-danger/20 text-danger border border-danger/30'}`}>
+                                                                {isBuy ? 'COMPRA' : 'VENTA'}
+                                                            </span>
+                                                            <span className="text-[9px] font-black text-white font-mono">
+                                                                {pos.lots.toFixed(2)} Lot.
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-[7px] font-bold text-white/40 font-mono">
+                                                            TKT: {pos.ticket} • {pos.symbol}
+                                                        </p>
+                                                    </div>
+
+                                                    <div className="text-right space-y-0.5">
+                                                        <p className="text-[9px] font-bold text-white/85 font-mono">
+                                                            {pos.openPrice.toFixed(isGold ? 2 : 5)}
+                                                        </p>
+                                                        <p className={`text-[10px] font-black font-mono leading-none ${profitVal >= 0 ? 'text-success' : 'text-danger'}`}>
+                                                            {profitVal >= 0 ? '+' : ''}{profitVal.toFixed(2)} {currency}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
                             
                             <div className="p-3 rounded-xl bg-black/60 border border-brand/20 shadow-xl">
                                 <p className="text-[8px] text-brand-light uppercase tracking-widest font-black mb-2 flex items-center gap-2">
