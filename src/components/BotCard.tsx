@@ -56,7 +56,7 @@ export const BotCard = memo(function BotCard({
     
     const dailyProfit = (purchase?.pastTrades || []).reduce((acc: number, t: any) => acc + (Number(t.profit) || 0), 0);
     const isGold = botProduct.name.toLowerCase().includes("gold") || botProduct.name.toLowerCase().includes("ametra");
-    const botDisplayName = theme?.label || botProduct.name || baseName;
+    const botDisplayName = botProduct.name || theme?.label || baseName;
 
     // Formateo seguro para balance y equidad
     const balance = purchase?.balance !== null && purchase?.balance !== undefined ? Number(purchase.balance) : null;
@@ -127,13 +127,15 @@ export const BotCard = memo(function BotCard({
                 <CardContent className="relative z-10 p-3 sm:p-5 space-y-4">
                     <div className="grid lg:grid-cols-2 gap-4">
                         <div className={isMaintenance ? 'blur-md grayscale opacity-40' : ''}>
-                            <BotRemoteControl 
+                             <BotRemoteControl 
                                 purchaseId={purchase?.id || "unknown"} 
                                 botName={botDisplayName} 
                                 symbol={botProduct.instrument}
                                 account={purchase?.activePositions?.[0]?.account || "unknown"}
                                 isOnline={purchase?.lastSync && (Math.abs(Date.now() - new Date(purchase.lastSync).getTime()) < 300000)}
                                 theme={theme}
+                                isReal={hasRealSync}
+                                isOwner={isOwner}
                             />
                         </div>
 
@@ -205,6 +207,27 @@ export const BotCard = memo(function BotCard({
                                 )}
                             </div>
                             
+                            {/* SECCIÓN DE DESCARGAS DE ARCHIVOS */}
+                            <div className={`p-4 rounded-xl bg-black/60 border ${theme?.border || 'border-brand/20'} shadow-xl space-y-3`}>
+                                <p className={`text-[8px] ${theme?.accent || 'text-brand-light'} uppercase tracking-widest font-black flex items-center gap-2`}>
+                                    📥 DESCARGAS INSTITUCIONALES
+                                </p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    <a 
+                                        href={`/api/download/${purchase.id}?type=ex5`}
+                                        className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-[9px] font-black uppercase tracking-wider text-center text-white bg-white/5 border border-white/10 hover:border-brand-light/50 hover:bg-brand/10 transition-all hover:scale-[1.02] active:scale-[0.98] duration-300"
+                                    >
+                                        🤖 DESCARGAR BOT (.EX5)
+                                    </a>
+                                    <a 
+                                        href={`/api/download/${purchase.id}?type=pdf`}
+                                        className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-[9px] font-black uppercase tracking-wider text-center text-white bg-white/5 border border-white/10 hover:border-amber-400/50 hover:bg-amber-400/10 transition-all hover:scale-[1.02] active:scale-[0.98] duration-300"
+                                    >
+                                        📚 DESCARGAR MANUAL (PDF)
+                                    </a>
+                                </div>
+                            </div>
+
                             <div className="p-3 rounded-xl bg-black/60 border border-brand/20 shadow-xl">
                                 <p className="text-[8px] text-brand-light uppercase tracking-widest font-black mb-2 flex items-center gap-2">
                                     LICENCIA MT5
@@ -225,7 +248,7 @@ export const BotCard = memo(function BotCard({
                         </div>
                     </div>
 
-                    <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-white/5 border border-white/5">
+                     <div className="flex flex-col min-[520px]:flex-row items-center justify-between gap-3 p-2 rounded-lg bg-white/5 border border-white/5">
                         <SyncStatus initialLastSync={purchase?.lastSync ? String(purchase.lastSync) : null} />
                         <CleanupButton purchaseId={purchase?.id || "unknown"} />
                     </div>

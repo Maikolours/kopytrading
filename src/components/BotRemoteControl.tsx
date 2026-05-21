@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "./ui/Button";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -19,7 +19,9 @@ import {
     Clock,
     Target,
     Save,
-    ChevronDown
+    ChevronDown,
+    Lock,
+    RotateCcw
 } from "lucide-react";
 
 interface BotRemoteControlProps {
@@ -30,6 +32,8 @@ interface BotRemoteControlProps {
     isOnline?: boolean;
     theme?: any;
     initialData?: any;
+    isOwner?: boolean;
+    isReal?: boolean;
 }
 
 export function BotRemoteControl({ 
@@ -39,7 +43,9 @@ export function BotRemoteControl({
     symbol,
     isOnline: initialOnline, 
     theme,
-    initialData
+    initialData,
+    isOwner = false,
+    isReal = false
 }: BotRemoteControlProps) {
     const [loading, setLoading] = useState<string | null>(null);
     const [statusMsg, setStatusMsg] = useState<string | null>(null);
@@ -56,11 +62,15 @@ export function BotRemoteControl({
         tra: 100,
         lkb: 48,
         tf_trend: "PERIOD_H1",
-        tf_macro: "PERIOD_H4",
+        tf_fibo: "PERIOD_M15",
         tf_entry: "PERIOD_M5",
         mode: 1,
         dir: 2,
-        exec: 1 // 0: Market, 1: Limit
+        exec: 1, // 0: Market, 1: Limit
+        insights_on: true,
+        lote_manual: 0.08,
+        max_reentries: 8,
+        casOn: true
     });
 
     const [showAdvanced, setShowAdvanced] = useState(false);
@@ -98,7 +108,10 @@ export function BotRemoteControl({
                         tf_entry: data.tf_entry || "PERIOD_M5",
                         mode: data.mode !== undefined ? data.mode : 1,
                         dir: data.dir !== undefined ? data.dir : 2,
-                        insights_on: data.insights_on !== undefined ? data.insights_on : true
+                        insights_on: data.insights_on !== undefined ? data.insights_on : true,
+                        lote_manual: data.lote_manual !== undefined ? data.lote_manual : 0.08,
+                        max_reentries: data.max_reentries !== undefined ? data.max_reentries : 8,
+                        casOn: data.casOn !== undefined ? data.casOn : true
                     });
                 }
             }
@@ -135,6 +148,78 @@ export function BotRemoteControl({
             setLoading(null);
         }
     };
+
+    const handleResetToSafeConfig = async () => {
+        setLoading("APPLY");
+        setStatusMsg("Restableciendo valores seguros...");
+        
+        // Conservamos los valores fijos optimizados por Maiko
+        const safeSettings = {
+            ...localSettings,
+            lote_manual: 0.08,
+            max_reentries: 8,
+            casOn: true,
+            sl: 250,
+            tp: 500,
+            be: 150,
+            tra: 100,
+            lkb: 48,
+            tf_trend: "PERIOD_H1",
+            tf_fibo: "PERIOD_M15",
+            tf_entry: "PERIOD_M5",
+            mode: 1,
+            dir: 2,
+            exec: 1,
+            insights_on: true
+        };
+        
+        setLocalSettings(safeSettings);
+        
+        try {
+            const res = await fetch("/api/remote-control", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    purchaseId, 
+                    command: "SET_SETTING", 
+                    value: JSON.stringify(safeSettings)
+                })
+            });
+
+            if (res.ok) {
+                setStatusMsg("✅ ¡Configuración segura aplicada!");
+                setTimeout(() => setStatusMsg(null), 3000);
+            } else {
+                setStatusMsg("❌ Error al aplicar configuración segura.");
+            }
+        } catch (error) {
+            setStatusMsg("❌ Error de red.");
+        } finally {
+            setLoading(null);
+        }
+    };
+
+    const displayNarrative = useMemo(() => {
+        if (isOwner) return botData?.narrative || "Sincronizando narrativa...";
+        if (!botData?.narrative) return "Sincronizando narrativa...";
+        
+        const containsTech = /bos|ote|fibo|orderblock|fvg|breaker|liquidity|rsl/i.test(botData.narrative);
+        if (containsTech) {
+            return "🎯 Estrategia institucional activa. El bot está analizando rangos de alta precisión buscando zonas óptimas de oferta y demanda en tiempo real.";
+        }
+        return botData.narrative;
+    }, [botData?.narrative, isOwner]);
+
+    const displayStatus = useMemo(() => {
+        if (isOwner) return botData?.status || "BUSCANDO...";
+        if (!botData?.status) return "BUSCANDO...";
+        
+        const containsTech = /bos|ote|fibo|orderblock|fvg|breaker|liquidity/i.test(botData.status);
+        if (containsTech) {
+            return "CICLO ACTIVO ⚡";
+        }
+        return botData.status;
+    }, [botData?.status, isOwner]);
 
     const sendAction = async (command: string, value?: string) => {
         setLoading(command);
@@ -237,7 +322,7 @@ export function BotRemoteControl({
                             <Target size={12} /> PLAN DE ATAQUE
                         </p>
                         <p className={`text-xs sm:text-sm font-bold leading-tight ${botData?.narrative?.includes("🎯") || botData?.narrative?.includes("⚡") ? "text-white" : "text-white/60"}`}>
-                            {botData?.narrative || "Sincronizando narrativa..."}
+                            {displayNarrative}
                         </p>
                     </div>
 
@@ -258,10 +343,277 @@ export function BotRemoteControl({
                             <Activity size={10} /> STATUS
                         </p>
                         <p className={`text-[10px] sm:text-[11px] font-black uppercase truncate ${botData?.status?.includes("BOS") || botData?.status?.includes("OTE") ? "text-brand-light" : "text-white/40"}`}>
-                            {botData?.status || "BUSCANDO..."}
+                            {displayStatus}
                         </p>
                     </div>
                 </div>
+
+                {/* SETTINGS TRIGGER BUTTON (Visible only for Owner, or clients on Demo accounts) */}
+                {(isOwner || !isReal) && (
+                    <div className="px-4 pb-4">
+                        <button
+                            onClick={() => setShowSettings(!showSettings)}
+                            className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all shadow-md group"
+                        >
+                            <span className="flex items-center gap-2">
+                                <Settings2 size={14} className="group-hover:rotate-45 transition-transform duration-300 text-brand-light" />
+                                {showSettings ? "Ocultar Ajustes" : "⚙️ CONFIGURACIÓN DE PARÁMETROS"}
+                            </span>
+                            <ChevronDown size={14} className={`text-white/40 transition-transform duration-300 ${showSettings ? 'rotate-180' : ''}`} />
+                        </button>
+                    </div>
+                )}
+
+                {/* SETTINGS DROPDOWN PANEL */}
+                <AnimatePresence>
+                    {showSettings && (isOwner || !isReal) && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="px-4 pb-4 overflow-hidden"
+                        >
+                            <div className="p-4 rounded-xl bg-black/60 border border-white/5 space-y-4 shadow-inner">
+                                <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                                    <span className="text-[10px] font-black uppercase tracking-wider text-brand-light">
+                                        {isOwner ? "🎛️ PANEL MASTER ADMINISTRADOR" : "🎛️ CONFIGURACIÓN DE ALGORITMO (DEMO)"}
+                                    </span>
+                                    {isOwner && (
+                                        <span className="text-[8px] font-black uppercase text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 rounded">
+                                            Raquel Sak.
+                                        </span>
+                                    )}
+                                </div>
+
+                                {/* FORMULARIO */}
+                                <div className="space-y-3">
+                                    {/* SECCIÓN CAPADA / BÁSICA - Visible para ambos (Owner y Demo) */}
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="space-y-1">
+                                            <label className="text-[8px] font-black uppercase text-white/40 tracking-wider">
+                                                LOTE SNIPER BASE
+                                            </label>
+                                            <input
+                                                type="number"
+                                                step="0.01"
+                                                min="0.01"
+                                                className="w-full bg-white/5 border border-white/10 text-white text-xs font-bold font-mono px-2 py-1.5 rounded focus:outline-none focus:border-brand-light"
+                                                value={localSettings.lote_manual}
+                                                onChange={(e) => setLocalSettings({ ...localSettings, lote_manual: parseFloat(e.target.value) || 0.01 })}
+                                            />
+                                        </div>
+
+                                        <div className="space-y-1">
+                                            <label className="text-[8px] font-black uppercase text-white/40 tracking-wider">
+                                                MAX RE-ENTRADAS
+                                            </label>
+                                            <select
+                                                className="w-full bg-white/5 border border-white/10 text-white text-xs font-bold px-2 py-1.5 rounded focus:outline-none focus:border-brand-light"
+                                                value={localSettings.max_reentries}
+                                                onChange={(e) => setLocalSettings({ ...localSettings, max_reentries: parseInt(e.target.value) || 1 })}
+                                            >
+                                                {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                                                    <option key={num} value={num} className="bg-black text-white">
+                                                        {num} niveles
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-between p-2.5 rounded-lg bg-white/5 border border-white/5">
+                                        <div>
+                                            <p className="text-[9px] font-black uppercase text-white/80">OPERATIVA EN CASCADA</p>
+                                            <p className="text-[7px] text-white/40">Permitir re-entradas automáticas</p>
+                                        </div>
+                                        <button
+                                            onClick={() => setLocalSettings({ ...localSettings, casOn: !localSettings.casOn })}
+                                            className={`px-3 py-1.5 rounded text-[8px] font-black uppercase border transition-all ${
+                                                localSettings.casOn 
+                                                ? 'bg-success/20 border-success text-success' 
+                                                : 'bg-white/5 border-white/10 text-white/40'
+                                            }`}
+                                        >
+                                            {localSettings.casOn ? "ACTIVADO" : "DESACTIVADO"}
+                                        </button>
+                                    </div>
+
+                                    {/* SI ES SAKURA / OWNER, RENDERIZAR CONFIGURACIÓN AVANZADA COMPLETA */}
+                                    {isOwner && (
+                                        <div className="space-y-3 pt-3 border-t border-white/5">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-[8px] font-black uppercase text-purple-400 tracking-widest">
+                                                    ⚡ AJUSTES AVANZADOS DE ESTRATEGIA
+                                                </span>
+                                            </div>
+
+                                            <div className="grid grid-cols-3 gap-2">
+                                                <div className="space-y-1">
+                                                    <label className="text-[7px] font-bold uppercase text-white/30">TAKE PROFIT (TP)</label>
+                                                    <input
+                                                        type="number"
+                                                        className="w-full bg-white/5 border border-white/10 text-white text-[10px] font-bold font-mono px-2 py-1 rounded"
+                                                        value={localSettings.tp}
+                                                        onChange={(e) => setLocalSettings({ ...localSettings, tp: parseInt(e.target.value) || 0 })}
+                                                    />
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <label className="text-[7px] font-bold uppercase text-white/30">STOP LOSS (SL)</label>
+                                                    <input
+                                                        type="number"
+                                                        className="w-full bg-white/5 border border-white/10 text-white text-[10px] font-bold font-mono px-2 py-1 rounded"
+                                                        value={localSettings.sl}
+                                                        onChange={(e) => setLocalSettings({ ...localSettings, sl: parseInt(e.target.value) || 0 })}
+                                                    />
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <label className="text-[7px] font-bold uppercase text-white/30">BREAK EVEN (BE)</label>
+                                                    <input
+                                                        type="number"
+                                                        className="w-full bg-white/5 border border-white/10 text-white text-[10px] font-bold font-mono px-2 py-1 rounded"
+                                                        value={localSettings.be}
+                                                        onChange={(e) => setLocalSettings({ ...localSettings, be: parseInt(e.target.value) || 0 })}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <div className="space-y-1">
+                                                    <label className="text-[7px] font-bold uppercase text-white/30">TRAILING (TRA)</label>
+                                                    <input
+                                                        type="number"
+                                                        className="w-full bg-white/5 border border-white/10 text-white text-[10px] font-bold font-mono px-2 py-1 rounded"
+                                                        value={localSettings.tra}
+                                                        onChange={(e) => setLocalSettings({ ...localSettings, tra: parseInt(e.target.value) || 0 })}
+                                                    />
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <label className="text-[7px] font-bold uppercase text-white/30">LOOKBACK (LKB)</label>
+                                                    <input
+                                                        type="number"
+                                                        className="w-full bg-white/5 border border-white/10 text-white text-[10px] font-bold font-mono px-2 py-1 rounded"
+                                                        value={localSettings.lkb}
+                                                        onChange={(e) => setLocalSettings({ ...localSettings, lkb: parseInt(e.target.value) || 0 })}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="grid grid-cols-3 gap-2">
+                                                <div className="space-y-1">
+                                                    <label className="text-[7px] font-bold uppercase text-white/30">TF TENDENCIA</label>
+                                                    <select
+                                                        className="w-full bg-white/5 border border-white/10 text-white text-[8px] font-bold px-1 py-1 rounded"
+                                                        value={localSettings.tf_trend}
+                                                        onChange={(e) => setLocalSettings({ ...localSettings, tf_trend: e.target.value })}
+                                                    >
+                                                        {["PERIOD_M5", "PERIOD_M15", "PERIOD_M30", "PERIOD_H1", "PERIOD_H4", "PERIOD_D1"].map((tf) => (
+                                                            <option key={tf} value={tf} className="bg-black">{tf.replace("PERIOD_", "")}</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <label className="text-[7px] font-bold uppercase text-white/30">TF FIBONACCI</label>
+                                                    <select
+                                                        className="w-full bg-white/5 border border-white/10 text-white text-[8px] font-bold px-1 py-1 rounded"
+                                                        value={localSettings.tf_fibo}
+                                                        onChange={(e) => setLocalSettings({ ...localSettings, tf_fibo: e.target.value })}
+                                                    >
+                                                        {["PERIOD_M5", "PERIOD_M15", "PERIOD_M30", "PERIOD_H1", "PERIOD_H4", "PERIOD_D1"].map((tf) => (
+                                                            <option key={tf} value={tf} className="bg-black">{tf.replace("PERIOD_", "")}</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <label className="text-[7px] font-bold uppercase text-white/30">TF ENTRADA</label>
+                                                    <select
+                                                        className="w-full bg-white/5 border border-white/10 text-white text-[8px] font-bold px-1 py-1 rounded"
+                                                        value={localSettings.tf_entry}
+                                                        onChange={(e) => setLocalSettings({ ...localSettings, tf_entry: e.target.value })}
+                                                    >
+                                                        {["PERIOD_M1", "PERIOD_M5", "PERIOD_M15", "PERIOD_M30", "PERIOD_H1"].map((tf) => (
+                                                            <option key={tf} value={tf} className="bg-black">{tf.replace("PERIOD_", "")}</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <div className="space-y-1">
+                                                    <label className="text-[7px] font-bold uppercase text-white/30">DIRECCIÓN</label>
+                                                    <select
+                                                        className="w-full bg-white/5 border border-white/10 text-white text-[9px] font-bold px-2 py-1 rounded"
+                                                        value={localSettings.dir}
+                                                        onChange={(e) => setLocalSettings({ ...localSettings, dir: parseInt(e.target.value) })}
+                                                    >
+                                                        <option value={0} className="bg-black">SOLO COMPRAS (BUY)</option>
+                                                        <option value={1} className="bg-black">SOLO VENTAS (SELL)</option>
+                                                        <option value={2} className="bg-black">BIDIRECCIONAL (BOTH)</option>
+                                                    </select>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <label className="text-[7px] font-bold uppercase text-white/30">MODO OPERATIVO</label>
+                                                    <select
+                                                        className="w-full bg-white/5 border border-white/10 text-white text-[9px] font-bold px-2 py-1 rounded"
+                                                        value={localSettings.mode}
+                                                        onChange={(e) => setLocalSettings({ ...localSettings, mode: parseInt(e.target.value) })}
+                                                    >
+                                                        <option value={0} className="bg-black">SNIPER (CONSERVADOR)</option>
+                                                        <option value={1} className="bg-black">MODERADO</option>
+                                                        <option value={2} className="bg-black">AGRESIVO</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-between p-2 rounded bg-white/5 border border-white/5">
+                                                <span className="text-[8px] font-bold uppercase text-white/60">MOSTRAR NARRATIVA</span>
+                                                <button
+                                                    onClick={() => setLocalSettings({ ...localSettings, insights_on: !localSettings.insights_on })}
+                                                    className={`px-2 py-1 rounded text-[7px] font-black uppercase transition-all ${
+                                                        localSettings.insights_on 
+                                                        ? 'bg-purple-500/20 border border-purple-500 text-purple-300' 
+                                                        : 'bg-white/5 border border-white/10 text-white/40'
+                                                    }`}
+                                                >
+                                                    {localSettings.insights_on ? "SÍ" : "NO"}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* BANNER COMERCIAL ENCRIPCIÓN PARA CLIENTES NORMALES EN DEMO */}
+                                    {!isOwner && (
+                                        <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/25 flex gap-2 items-start mt-2">
+                                            <Lock size={14} className="text-amber-400 shrink-0 mt-0.5" />
+                                            <p className="text-[8px] font-bold text-amber-300/90 leading-normal text-left">
+                                                🔑 <strong>PROTECCIÓN COGNITIVA ACTIVA:</strong> Los parámetros avanzados del algoritmo institucional (Take Profit, Stop Loss, Break-Even dinámico y timeframes cruzados del núcleo Maiko Engine) se encuentran encriptados bajo caja negra para proteger la estrategia exclusiva de Maiko.
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    {/* BOTONES DE ACCIÓN */}
+                                    <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/5">
+                                        <button
+                                            onClick={handleResetToSafeConfig}
+                                            disabled={loading !== null}
+                                            className="flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-[9px] font-black uppercase tracking-wider bg-white/5 hover:bg-white/10 text-white/70 border border-white/10 hover:text-white transition-all disabled:opacity-50"
+                                        >
+                                            <RotateCcw size={10} />
+                                            REINICIAR CONFIG. SEGURA
+                                        </button>
+                                        <button
+                                            onClick={handleApplySettings}
+                                            disabled={loading !== null}
+                                            className="flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-[9px] font-black uppercase tracking-wider bg-brand hover:bg-brand-light text-white shadow-[0_0_10px_rgba(36,206,203,0.3)] transition-all disabled:opacity-50"
+                                        >
+                                            <Save size={10} />
+                                            {loading === "APPLY" ? "GUARDANDO..." : "GUARDAR Y APLICAR"}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
 
 

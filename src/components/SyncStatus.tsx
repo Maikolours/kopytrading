@@ -34,7 +34,7 @@ export function SyncStatus({ initialLastSync }: SyncStatusProps) {
 
     if (!mounted || !lastSync) {
         return (
-            <div className="mt-4 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-light/30 border border-white/5 w-fit">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-light/30 border border-white/5 w-fit">
                 <div className="w-1.5 h-1.5 rounded-full bg-text-muted/30" />
                 <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted/60">
                     { !mounted ? 'Sincronizando...' : 'SIN CONEXIÓN MT5' }
@@ -44,7 +44,7 @@ export function SyncStatus({ initialLastSync }: SyncStatusProps) {
     }
 
     return (
-        <div className="mt-4 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-light/30 border border-white/5 w-fit">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-light/30 border border-white/5 w-fit">
             <div className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-success animate-pulse' : 'bg-text-muted/30'}`} />
             <span className={`text-[10px] font-bold uppercase tracking-wider ${isOnline ? 'text-success' : 'text-text-muted/60'}`}>
                 {isOnline ? '📡 LINK MT5: OK' : '📡 LINK MT5: OFFLINE'}

@@ -8,10 +8,18 @@ import { prisma } from "@/lib/prisma";
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { purchaseId, licenseKey, account, email } = body;
+        const { purchaseId, licenseKey, account, email, isReal } = body;
+
+        const isRealAccount = isReal === true || isReal === "true" || isReal === 1 || isReal === "1";
 
         // 1. MODO DEMO: Si no hay purchaseId o se usa la key de trial genérica
         if (!purchaseId || purchaseId === "TRIAL-2026") {
+            if (isRealAccount) {
+                return NextResponse.json({ 
+                    valid: false, 
+                    message: 'El bot en versión DEMO de prueba no está permitido en cuentas Reales de MT5.' 
+                }, { status: 403 });
+            }
             return NextResponse.json({ 
                 valid: true, 
                 type: 'DEMO_30', 
@@ -39,6 +47,15 @@ export async function POST(req: Request) {
                 valid: false, 
                 message: 'Licencia no válida o no encontrada en el servidor' 
             }, { status: 401 });
+        }
+
+        // VERIFICACIÓN DE SEGURIDAD PARA CUENTAS DEMO
+        const isProductDemo = purchase.botProduct.name.toUpperCase().includes("DEMO");
+        if (isProductDemo && isRealAccount) {
+            return NextResponse.json({ 
+                valid: false, 
+                message: 'Esta licencia de prueba (DEMO) solo es válida para cuentas de prueba (Demo) de MT5 y no puede ejecutarse en cuentas Reales.' 
+            }, { status: 403 });
         }
 
         // VERIFICACIÓN DE EMAIL

@@ -12,10 +12,10 @@ export const metadata: Metadata = {
 const ASSETS = [
   { 
     id: "XAUUSD", 
-    name: "ELITE GOLD AMETRALLADORA ⚡", 
-    desc: "Nuestro activo estrella en ORO. Alta volatilidad y precisión quirúrgica para traders ambiciosos.", 
+    name: "MAIKO SNIPER PRO GOLD 🏆", 
+    desc: "Nuestro algoritmo de alta precisión en ORO (XAUUSD). Ejecución milimétrica de ondas institucionales y acción del precio optimizada.", 
     icon: "🟡",
-    stats: "M15 | +42.5% Histórico",
+    stats: "M15 | Precisión Algorítmica",
     color: "border-yellow-500/40 shadow-yellow-500/10",
     theme: "theme-gold",
     isUpcoming: false,
@@ -23,10 +23,10 @@ const ASSETS = [
   },
   { 
     id: "BTCUSD", 
-    name: "ELITE SNIPER v13 ⚡", 
-    desc: "Captura las tendencias institucionales de BITCOIN con nuestro algoritmo líder de alta frecuencia.", 
+    name: "MAIKO SNIPER PRO BTC ₿", 
+    desc: "Captura los ciclos institucionales de BITCOIN (BTCUSD) con nuestro algoritmo de alta frecuencia y análisis de liquidez en rango.", 
     icon: "₿",
-    stats: "H4/M30 | Explosividad",
+    stats: "H4/M30 | Momentum Alpha",
     color: "border-purple-500/40 shadow-purple-500/10",
     theme: "theme-btc",
     isUpcoming: false,

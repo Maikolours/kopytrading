@@ -68,9 +68,13 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
             const instrument = (p.botProduct?.instrument || "").toUpperCase();
             let key = "MAIKO SNIPER PRO 🎯";
             
-            if (instrument.includes("BTC") || instrument.includes("BITCOIN") || name.includes("BITCOIN") || name.includes("WEEKEND") || name.includes("SNIPER V13")) key = "MAIKO BTC WEEKEND ⚡";
-            else if (instrument.includes("XAU") || instrument.includes("GOLD") || instrument.includes("ORO") || name.includes("AMETRA") || name.includes("EVOLUTION")) key = "ELITE GOLD MAIKO SNIPER 🔥";
-            else if (name.includes("CENT") || instrument.includes("JPY") || name.includes("NINJA")) key = "MAIKO SNIPER PRO CENT 🥷";
+            if (instrument.includes("BTC") || name.includes("BTC")) {
+                key = "MAIKO SNIPER PRO BTC ₿";
+            } else if (name.includes("CENT")) {
+                key = "MAIKO SNIPER PRO GOLD CENT ⚡";
+            } else if (instrument.includes("XAU") || name.includes("GOLD") || name.includes("ORO")) {
+                key = "MAIKO SNIPER PRO GOLD 🏆";
+            }
             
             if (!groups[key]) groups[key] = [];
             groups[key].push(p);
@@ -89,25 +93,27 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
         setTimeout(() => setCopiedId(null), 2000);
     };
 
-    // Memoizar la agrupación por Nombre Base + Real/Demo dentro de la categoría activa
+    // Estado para controlar qué bot específico está seleccionado para visualización completa
+    const [selectedPurchaseId, setSelectedPurchaseId] = useState<string | null>(null);
+
+    const handleCategoryChange = (cat: string) => {
+        setActiveCategory(cat);
+        setSelectedPurchaseId(null);
+    };
+
+    // Memoizar la agrupación de bots individuales por ID de compra en lugar de agruparlos de forma agresiva
     const botsByBaseName = useMemo(() => {
         const groups: Record<string, any[]> = {};
         const currentCategoryPurchases = categoryGroups[activeCategory] || [];
         currentCategoryPurchases.forEach(p => {
-            let baseName = (p.botProduct?.name || "").toUpperCase();
-            // Detectar si alguna posición activa o el bot en sí es Real para separar la tarjeta
-            const hasRealSync = (p.activePositions || []).some((pos: any) => pos.isReal);
-            const realityKey = hasRealSync ? "REAL" : "DEMO";
-            
-            // Limpieza agresiva de variantes para agrupar
-            baseName = baseName.replace(/ULTRA|CÉNTIMOS|CENT|BTCUSD|XAUUSD|XAU|JPY|YEN|EUR|USD|GHOST|NINJA|\(|\)/gi, "").trim();
-            const groupKey = `${baseName}_${realityKey}`;
-            
-            if (!groups[groupKey]) groups[groupKey] = [];
-            groups[groupKey].push(p);
+            // Usamos el ID de la compra como clave para garantizar que cada una sea su propia tarjeta independiente
+            const groupKey = p.id;
+            groups[groupKey] = [p];
         });
         return groups;
     }, [categoryGroups, activeCategory]);
+
+    const activeCategoryPurchases = categoryGroups[activeCategory] || [];
 
     return (
         <div className="flex flex-col gap-6">
@@ -117,7 +123,7 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                     {categories.map(cat => (
                         <button
                             key={cat}
-                            onClick={() => setActiveCategory(cat)}
+                            onClick={() => handleCategoryChange(cat)}
                             className={`px-4 py-2.5 rounded-xl text-left transition-all whitespace-nowrap md:whitespace-normal font-black uppercase tracking-tighter text-[10px] border ${
                                 activeCategory === cat 
                                 ? 'bg-brand/20 border-brand-light text-white shadow-[0_0_15px_rgba(168,85,247,0.2)]' 
@@ -132,21 +138,149 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
 
             {/* Contenido Principal: Centrado y Optimizado */}
             <div className="flex-1 min-w-0 max-w-4xl mx-auto w-full">
-                <ErrorBoundary fallbackTitle="Error en Lista de Bots">
-                    {Object.entries(botsByBaseName).map(([baseName, variants]: [string, any[]]) => (
-                        <BotCard
-                            key={baseName}
-                            baseName={baseName}
-                            variants={variants}
-                            selectedIndex={selectedBotIndices[baseName] || 0}
-                            onSelectVariant={(idx) => setSelectedBotIndices(prev => ({ ...prev, [baseName]: idx }))}
-                            theme={getBotTheme(variants[0]?.botProduct?.name)}
-                            onCopy={handleCopy}
-                            copiedId={copiedId}
-                            isOwner={isOwner}
-                        />
-                    ))}
-                </ErrorBoundary>
+                {activeCategory !== "📈 RENDIMIENTO" && activeCategory !== "⚙️ AJUSTES" && (
+                    <ErrorBoundary fallbackTitle="Error en Selector de Bots">
+                        {selectedPurchaseId === null ? (
+                            /* ================= CATÁLOGO DE MINI-TARJETAS (VISTA PRINCIPAL) ================= */
+                            <div className="space-y-6">
+                                <div className="text-center md:text-left">
+                                    <h3 className="text-xl sm:text-2xl font-black text-white tracking-tighter uppercase italic">
+                                        🖥️ Panel de Control de Algoritmos
+                                    </h3>
+                                    <p className="text-xs text-gray-400 mt-1 italic">
+                                        Selecciona un bot para abrir su dashboard exclusivo de operaciones en vivo y telemetría.
+                                    </p>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+                                    {activeCategoryPurchases.map((p: any) => {
+                                        const botProduct = p.botProduct || { name: "Bot Desconocido", instrument: "UNKNOWN" };
+                                        const botTheme = getBotTheme(botProduct.name);
+                                        const isOnline = p.lastSync && (Math.abs(Date.now() - new Date(p.lastSync).getTime()) < 300000);
+                                        
+                                        const isCent = botProduct.name.toUpperCase().includes("CENT");
+                                        const currency = isCent ? "USC" : "$";
+                                        
+                                        const activeAcc = p.activePositions?.[0];
+                                        const hasRealSync = (p.activePositions || []).some((pos: any) => pos.isReal);
+                                        const accountTypeLabel = hasRealSync ? (isCent ? "REAL (CENT)" : "REAL (USD)") : "DEMO";
+                                        const accountTypeColor = hasRealSync ? "bg-success/20 text-success border-success/40" : "bg-orange-500/20 text-orange-400 border-orange-500/40";
+
+                                        // Cálculo de Expiración / Demo 30 días
+                                        const now = new Date();
+                                        const expiresAt = p.expiresAt ? new Date(p.expiresAt) : null;
+                                        let daysRemaining = null;
+                                        if (expiresAt) {
+                                            const diffTime = expiresAt.getTime() - now.getTime();
+                                            daysRemaining = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+                                        }
+
+                                        return (
+                                            <div 
+                                                key={p.id}
+                                                className={`group relative overflow-hidden rounded-[2rem] border ${botTheme.border} bg-surface/40 backdrop-blur-2xl p-6 transition-all duration-500 hover:scale-[1.02] hover:border-brand-light/50 hover:shadow-[0_15px_35px_rgba(168,85,247,0.15)] flex flex-col justify-between h-[260px]`}
+                                            >
+                                                {/* Glow de fondo decorativo */}
+                                                <div className={`absolute top-0 right-0 w-32 h-32 ${botTheme.glow} blur-[50px] -mr-10 -mt-10 rounded-full transition-all duration-700 opacity-30 group-hover:opacity-60`} />
+                                                
+                                                {/* Header de la Mini-Tarjeta */}
+                                                <div className="space-y-3 relative z-10">
+                                                    <div className="flex items-center justify-between">
+                                                        <span className={`px-2 py-0.5 rounded-lg text-[8px] font-black border ${accountTypeColor} tracking-widest uppercase`}>
+                                                            {accountTypeLabel}
+                                                        </span>
+                                                        <div className="flex items-center gap-1.5 bg-black/40 px-2 py-0.5 rounded-lg border border-white/5">
+                                                            <div className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-success animate-pulse' : 'bg-white/20'}`} />
+                                                            <span className={`text-[7px] font-black tracking-widest uppercase ${isOnline ? 'text-success' : 'text-white/30'}`}>
+                                                                {isOnline ? 'ONLINE' : 'OFFLINE'}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div>
+                                                        <h4 className="text-base font-black tracking-tighter text-white uppercase group-hover:text-brand-light transition-colors leading-tight">
+                                                            {botProduct.name}
+                                                        </h4>
+                                                        <p className="text-[9px] font-bold text-white/40 tracking-wider mt-1 uppercase">
+                                                            Activo: {botProduct.instrument} • ID: {p.id.substring(0, 8)}...
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Balance & Info de Prueba */}
+                                                <div className="py-2 flex items-center justify-between border-t border-white/5 mt-auto relative z-10">
+                                                    <div>
+                                                        <p className="text-[7px] font-black uppercase tracking-widest text-white/25">Balance MT5</p>
+                                                        <p className="text-lg font-black text-white font-mono leading-none mt-1">
+                                                            {p.balance !== null && p.balance !== undefined ? `${Number(p.balance).toFixed(2)} ${currency}` : "---"}
+                                                        </p>
+                                                    </div>
+
+                                                    {/* Contador de Días Demo */}
+                                                    <div className="text-right">
+                                                        {botProduct.name.toUpperCase().includes("DEMO") ? (
+                                                            isOwner ? (
+                                                                <span className="text-[8px] font-black text-brand-light uppercase tracking-widest bg-brand/10 border border-brand/20 px-2 py-1 rounded">
+                                                                    ♾️ ACCESO DEMO ILIMITADO
+                                                                </span>
+                                                            ) : expiresAt ? (
+                                                                <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded border ${daysRemaining && daysRemaining > 5 ? 'text-orange-400 bg-orange-500/10 border-orange-500/20' : 'text-danger bg-danger/10 border-danger/20'}`}>
+                                                                    ⏳ {daysRemaining} DÍAS RESTANTES
+                                                                </span>
+                                                            ) : (
+                                                                <span className="text-[8px] font-black text-orange-400 uppercase tracking-widest bg-orange-500/10 border border-orange-500/20 px-2 py-1 rounded">
+                                                                    ⏳ 30 DÍAS DEMO
+                                                                </span>
+                                                            )
+                                                        ) : (
+                                                            <span className="text-[8px] font-black text-white/20 uppercase tracking-widest">
+                                                                LICENCIA COMPLETA
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                {/* Botón de Entrada */}
+                                                <button
+                                                    onClick={() => setSelectedPurchaseId(p.id)}
+                                                    className="w-full mt-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest text-center text-black bg-white hover:bg-brand-light hover:text-white hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-all relative z-10 shrink-0"
+                                                >
+                                                    Entrar al Dashboard ⚡
+                                                </button>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        ) : (
+                            /* ================= DASHBOARD EXCLUSIVO DE UN SOLO BOT (NIVEL 2) ================= */
+                            <div className="animate-in fade-in duration-500">
+                                <button 
+                                    onClick={() => setSelectedPurchaseId(null)}
+                                    className="mb-6 flex items-center gap-2 px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest bg-white/5 border border-white/10 hover:bg-white/10 hover:border-brand-light/50 text-white transition-all shadow-lg"
+                                >
+                                    ← Volver al panel de bots
+                                </button>
+
+                                {Object.entries(botsByBaseName)
+                                    .filter(([id]) => id === selectedPurchaseId)
+                                    .map(([id, variants]: [string, any[]]) => (
+                                        <BotCard
+                                            key={id}
+                                            baseName={variants[0]?.botProduct?.name || "BOT"}
+                                            variants={variants}
+                                            selectedIndex={0}
+                                            onSelectVariant={() => {}}
+                                            theme={getBotTheme(variants[0]?.botProduct?.name)}
+                                            onCopy={handleCopy}
+                                            copiedId={copiedId}
+                                            isOwner={isOwner}
+                                        />
+                                    ))}
+                            </div>
+                        )}
+                    </ErrorBoundary>
+                )}
 
                 {activeCategory === "📈 RENDIMIENTO" && (
                     <ErrorBoundary fallbackTitle="Error en Gráfico de Rendimiento">
@@ -155,6 +289,7 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                 )}
 
                 {activeCategory === "⚙️ AJUSTES" && (
+
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <Card className="glass-card bg-black/90 border-brand/20 shadow-2xl rounded-3xl p-8 border-2">
                             <CardHeader className="px-0 pt-0 pb-6 border-b border-white/5">

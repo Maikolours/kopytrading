@@ -195,7 +195,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                         /* Comerciales: solo botón centrado */
                                         <Link href={`/bots/${bot.id}`} className="w-full">
                                             <Button size="sm" className="w-full font-black uppercase tracking-[0.12em] text-[9px] h-10 shadow-xl transition-all duration-500 rounded-xl bg-brand/10 text-brand-light border border-brand/30 hover:bg-brand/20 hover:scale-105 active:scale-95">
-                                                Próxima Revelación
+                                                Próximamente
                                             </Button>
                                         </Link>
                                     )}
