@@ -96,26 +96,26 @@ export const BotCard = memo(function BotCard({
                         </div>
 
                         <div className="flex flex-col items-stretch sm:items-end gap-2 w-full sm:w-auto">
-                            <div className="grid grid-cols-3 gap-1.5 w-full sm:flex sm:w-auto sm:gap-2">
+                            <div className="grid grid-cols-3 gap-1 w-full sm:flex sm:w-auto sm:gap-2">
                                 {balance !== null && (
-                                    <div className="p-1.5 sm:p-2 px-2 sm:px-3 rounded-lg bg-white/5 border border-white/5 flex flex-col items-center justify-center min-w-0 sm:min-w-20 text-center premium-glass">
-                                        <span className="text-[6px] sm:text-[7px] font-black uppercase tracking-[0.2em] opacity-40 mb-0.5">Balance</span>
-                                        <span className="text-xs sm:text-sm font-black text-white font-mono truncate max-w-full">
+                                    <div className="p-1 sm:p-2 px-1 sm:px-3 rounded-lg bg-white/5 border border-white/5 flex flex-col items-center justify-center min-w-0 sm:min-w-20 text-center premium-glass">
+                                        <span className="text-[5px] min-[375px]:text-[6px] sm:text-[7px] font-black uppercase tracking-[0.1em] min-[375px]:tracking-[0.2em] opacity-40 mb-0.5">Balance</span>
+                                        <span className="text-[9px] min-[375px]:text-[10px] min-[410px]:text-xs sm:text-sm font-black text-white font-mono truncate max-w-full">
                                             {balance.toFixed(2)}
                                         </span>
                                     </div>
                                 )}
                                 {equity !== null && (
-                                    <div className="p-1.5 sm:p-2 px-2 sm:px-3 rounded-lg bg-brand-light/10 border border-brand-light/20 flex flex-col items-center justify-center min-w-0 sm:min-w-20 text-center premium-glass">
-                                        <span className="text-[6px] sm:text-[7px] font-black uppercase tracking-[0.2em] text-brand-light/40 mb-0.5">Equidad</span>
-                                        <span className="text-xs sm:text-sm font-black text-brand-light font-mono truncate max-w-full">
+                                    <div className="p-1 sm:p-2 px-1 sm:px-3 rounded-lg bg-brand-light/10 border border-brand-light/20 flex flex-col items-center justify-center min-w-0 sm:min-w-20 text-center premium-glass">
+                                        <span className="text-[5px] min-[375px]:text-[6px] sm:text-[7px] font-black uppercase tracking-[0.1em] min-[375px]:tracking-[0.2em] text-brand-light/40 mb-0.5">Equidad</span>
+                                        <span className="text-[9px] min-[375px]:text-[10px] min-[410px]:text-xs sm:text-sm font-black text-brand-light font-mono truncate max-w-full">
                                             {equity.toFixed(2)}
                                         </span>
                                     </div>
                                 )}
-                                <div className="p-1.5 sm:p-3 px-2 sm:px-5 rounded-lg sm:rounded-xl bg-black/40 border border-white/5 flex flex-col items-center justify-center min-w-0 sm:min-w-28 text-center premium-glass shadow-purple-500/10">
-                                    <span className="text-[6px] sm:text-[8px] font-black uppercase tracking-[0.2em] opacity-40 mb-0.5">Profit Hoy</span>
-                                    <span className={`text-xs sm:text-xl font-black font-mono truncate max-w-full ${dailyProfit >= 0 ? 'text-success' : 'text-danger'}`}>
+                                <div className="p-1 sm:p-3 px-1 sm:px-5 rounded-lg sm:rounded-xl bg-black/40 border border-white/5 flex flex-col items-center justify-center min-w-0 sm:min-w-28 text-center premium-glass shadow-purple-500/10">
+                                    <span className="text-[5px] min-[375px]:text-[6px] sm:text-[8px] font-black uppercase tracking-[0.1em] min-[375px]:tracking-[0.2em] opacity-40 mb-0.5">Profit Hoy</span>
+                                    <span className={`text-[9px] min-[375px]:text-[11px] min-[410px]:text-sm sm:text-xl font-black font-mono truncate max-w-full ${dailyProfit >= 0 ? 'text-success' : 'text-danger'}`}>
                                         {dailyProfit >= 0 ? '+' : ''}{dailyProfit.toFixed(2)} {currency}
                                     </span>
                                 </div>
