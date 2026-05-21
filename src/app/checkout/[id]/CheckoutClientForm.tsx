@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 
-export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any, isTrial?: boolean }) {
+export default function CheckoutClientForm({ bot }: { bot: any }) {
     const [mounted, setMounted] = useState(false);
 
     // 🚧 MODO MANTENIMIENTO FORZADO (Cámbialo a true cuando quieras cerrar la tienda)
@@ -49,12 +49,12 @@ export default function CheckoutClientForm({ bot, isTrial = false }: { bot: any,
 
     return (
         <PayPalScriptProvider options={paypalOptions}>
-            <CheckoutFormContent bot={bot} isTrial={isTrial} />
+            <CheckoutFormContent bot={bot} />
         </PayPalScriptProvider>
     );
 }
 
-function CheckoutFormContent({ bot, isTrial }: { bot: any, isTrial: boolean }) {
+function CheckoutFormContent({ bot }: { bot: any }) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [email, setEmail] = useState("");

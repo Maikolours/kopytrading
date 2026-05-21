@@ -16,7 +16,7 @@ const BOTS_DATA = [
         features: [true, true, true, true],
         icon: "🎯",
         color: "from-blue-500 to-cyan-500",
-        price: "$149"
+        price: "—"
     },
     {
         id: "ninja-yen",
@@ -30,7 +30,7 @@ const BOTS_DATA = [
         features: [true, true, true, true],
         icon: "🥷",
         color: "from-purple-500 to-indigo-500",
-        price: "$149"
+        price: "—"
     },
     {
         id: "ametralladora",
@@ -44,7 +44,7 @@ const BOTS_DATA = [
         features: [true, true, true, true],
         icon: "💎",
         color: "from-amber-400 to-amber-600",
-        price: "$224",
+        price: "—",
         popular: true
     },
     {
@@ -59,7 +59,7 @@ const BOTS_DATA = [
         features: [true, true, true, true],
         icon: "⚡",
         color: "from-yellow-400 to-orange-500",
-        price: "$224"
+        price: "—"
     }
 ];
 
@@ -176,12 +176,19 @@ export function BotComparisonTable() {
 
                         {/* Fila Precios / Botones */}
                         <div className="grid grid-cols-5 bg-white/5 group">
-                            <div className="p-6 text-sm font-bold text-white flex items-center justify-start sticky left-0 z-10 bg-[#0a0a0a]/95 backdrop-blur-md border-r border-white/10">Licencia de por vida</div>
+                            <div className="p-6 text-sm font-bold text-white flex items-center justify-start sticky left-0 z-10 bg-[#0a0a0a]/95 backdrop-blur-md border-r border-white/10">Licencia Anual</div>
                             {BOTS_DATA.map((bot, i) => (
                                 <div key={i} className={`p-6 text-center border-l border-white/5 flex flex-col justify-end gap-3 rounded-b-2xl ${bot.popular ? 'bg-brand/10 shadow-[inner_0_-10px_20px_rgba(139,92,246,0.1)]' : ''}`}>
-                                    <div className="text-xl sm:text-2xl font-extrabold text-white">{bot.price}</div>
+                                    {bot.price === "—" ? (
+                                        <div className="flex flex-col items-center gap-1">
+                                            <span className="text-2xl font-black text-white/20 tracking-[0.5em] italic select-none">— —</span>
+                                            <span className="text-[8px] font-black text-brand-light/40 uppercase tracking-[0.3em]">✦ PRÓXIMA REVELACIÓN</span>
+                                        </div>
+                                    ) : (
+                                        <div className="text-base sm:text-lg font-extrabold text-brand-light/70 italic">{bot.price}</div>
+                                    )}
                                     <Link href="/bots" className={`w-full py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all border ${bot.popular ? 'bg-brand hover:bg-brand-light text-white border-transparent shadow-[0_0_15px_rgba(139,92,246,0.3)] animate-pulse-glow' : 'bg-transparent text-white border-white/20 hover:bg-white/10'}`}>
-                                        Descargar
+                                        Ver Detalles
                                     </Link>
                                 </div>
                             ))}

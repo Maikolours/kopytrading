@@ -17,23 +17,23 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["ametralladora", "xauusd", "oro", "gold"],
-        response: "🔥 **La Ametralladora (XAUUSD)** — El más popular\n\n• Temporalidad: **M15**\n• Estrategia: Scalping + Hedge Inteligente\n• Horario: 9h - 21h\n• Objetivo por operación: $5\n• Break Even: a los $2\n• Capital mínimo: 1.000$\n• Riesgo: Medio\n• Precio: 249€ (pago único)\n\n⚠️ El Oro es súper volátil. Usa siempre lotaje 0.01 por cada 1.000$."
+        response: "🔥 **MAIKO SNIPER PRO GOLD (XAUUSD)** — El más popular\n\n• Temporalidad: **M15**\n• Estrategia: Scalping + Hedge Inteligente\n• Horario: 9h - 21h\n• Capital mínimo: 1.000$\n• Riesgo: Medio\n• Precio: Próximo Lanzamiento\n\n⚠️ El Oro es súper volátil. Usa siempre lotaje 0.01 por cada 1.000$.\n\n🎁 **Prueba nuestra versión Demo por 1$ durante 30 días** y luego podrás adquirir tu licencia válida para un año."
     },
     {
         keywords: ["euro", "precision", "eurusd", "eur"],
-        response: "🎯 **Euro Precision Flow (EURUSD)** — El más seguro\n\n• Temporalidad: **H1**\n• Estrategia: Cruce de EMA 21/50 + Filtro RSI\n• Horario: 8h - 20h\n• Capital mínimo: 500$\n• Riesgo: BAJO ✅\n• Precio: 149€ (pago único)\n\n💡 Puede tardar días en abrir porque espera la alineación perfecta del cruce institucional (H1)."
+        response: "🎯 **Euro Precision Flow (EURUSD)** — El más seguro\n\n• Temporalidad: **H1**\n• Estrategia: Cruce de EMA 21/50 + Filtro RSI\n• Horario: 8h - 20h\n• Capital mínimo: 500$\n• Riesgo: BAJO ✅\n• Precio: Próximo Lanzamiento\n\n💡 Puede tardar días en abrir porque espera la alineación perfecta del cruce institucional (H1)."
     },
     {
         keywords: ["yen", "usdjpy", "ninja", "jpy", "asia", "asiática", "asiatica"],
-        response: "🥷 **Yen Ninja Ghost (USDJPY)** — Operativa nocturna\n\n• Temporalidad: **M30**\n• Estrategia: Rebote Bollingers + RSI\n• Horario: 0h - 8h (noche europea)\n• Capital mínimo: 500$\n• Riesgo: Medio\n• Precio: 99€ (pago único)\n\n🌙 Perfecto para aprovechar los rangos aburridos de la sesión asiática."
+        response: "🥷 **Yen Ninja Ghost (USDJPY)** — Operativa nocturna\n\n• Temporalidad: **M30**\n• Estrategia: Rebote Bollingers + RSI\n• Horario: 0h - 8h (noche europea)\n• Capital mínimo: 500$\n• Riesgo: Medio\n• Precio: Próximo Lanzamiento\n\n🌙 Perfecto para aprovechar los rangos aburridos de la sesión asiática."
     },
     {
         keywords: ["bitcoin", "btc", "crypto", "cripto", "storm"],
-        response: "⚡ **BTC Storm Rider (BTCUSD)** — Solo para verdaderos expertos\n\n• Temporalidad: **H4 o M30 según set**\n• Estrategia: Breakout/Tendencia Fuerte\n• Horario: 24/7\n• Capital mínimo: 2.000$\n• Riesgo: ALTO ⚠️\n• Precio: 299€ (pago único)\n\nDiseñado para capturar la enorme inercia y volatilidad de la criptomoneda madre."
+        response: "⚡ **MAIKO SNIPER PRO BTC (BTCUSD)** — Solo para verdaderos expertos\n\n• Temporalidad: **H4 o M30 según set**\n• Estrategia: Breakout/Tendencia Fuerte\n• Horario: 24/7\n• Capital mínimo: 2.000$\n• Riesgo: ALTO ⚠️\n• Precio: Próximo Lanzamiento\n\nDiseñado para capturar la enorme inercia y volatilidad de la criptomoneda madre."
     },
     {
         keywords: ["precio", "cuánto cuesta", "cuanto cuesta", "costo", "coste", "todos", "comparar"],
-        response: "💰 **Precios de las Licencias Universales (Pago Único):**\n\n• La Ametralladora (XAUUSD) — 249€\n• Euro Precision Flow (EURUSD) — 149€\n• Yen Ninja Ghost (USDJPY) — 99€\n• BTC Storm Rider (BTCUSD) — 299€\n\nIncluye licencia ilimitada en el tiempo para la cuenta, actualizaciones futuras gratis y soporte técnico."
+        response: "💰 **Precios de las Licencias:**\n\nActualmente todos nuestros bots están en fase de lanzamiento y el precio definitivo está por determinar.\n\n⚡ **Lo único disponible ahora mismo** es la versión demo del bot estrella **MAIKO PRO GOLD**, que puedes activar durante **30 días por solo 1$** en una cuenta DEMO de MetaTrader 5.\n\nTras el período de demo, podrás adquirir tu licencia válida para un año. Visita la sección de [Bots](/bots) para más información."
     },
     {
         keywords: ["vps", "servidor", "cloud", "siempre encendido", "apago el ordenador", "se apaga", "nube"],
@@ -53,7 +53,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["gratis", "demo", "trial", "mes gratis", "free", "prueba"],
-        response: "🆓 **Licencias Demo (Ilimitadas)**\n\nPor el momento regalamos la evaluación en Tiempo Real (Prueba Gratuita).\nPuedes ir a descargar cualquier robot y conectarlo tranquilamente a tu cuenta Demo de MetaTrader5 y observar su comportamiento sin límite de días y sin pagar nada.\n\n¡Queremos clientes convencidos antes de usar euros reales!"
+        response: "⚡ **Demo del MAIKO PRO GOLD:**\n\nPuedes activar la demo del bot estrella **MAIKO PRO GOLD** durante **30 días** en una cuenta DEMO de MetaTrader 5 por solo **1$**.\n\nEl algoritmo opera en **M1** con estrategia de scalping institucional. Conectado a tu cuenta DEMO de tu broker, podrás observar cómo opera en tiempo real sin arriesgar dinero real.\n\nTras los 30 días, podrás adquirir tu licencia válida para un año. \n\n🔗 [Activar Demo](/bots/cmn9hf8yc0000vhbcq9hbxk0j)"
     },
     {
         keywords: ["pago", "comprar", "stripe", "paypal", "bizum", "cómo pago", "tarjeta", "pagar"],
@@ -197,7 +197,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["donde abro cuenta", "donde me registro", "registro", "crear cuenta"],
-        response: "👤 **Acceso a KopyTrading:**\n\nNo necesitas un botón de registro previo. Al pulsar en **'Probar Gratis'** o comprar un bot, el sistema te pedirá tu email y te creará la cuenta automáticamente. Recibirás tus datos de acceso al instante."
+        response: "👤 **Acceso a KopyTrading:**\n\nNo necesitas un botón de registro previo. Al pulsar en **'Activar Demo'** o adquirir una licencia, el sistema te pedirá tu email y te creará la cuenta automáticamente. Recibirás tus datos de acceso al instante.\n\n⚡ Por solo **1$** puedes activar el bot estrella **MAIKO PRO GOLD** durante 30 días en demo. [Empieza aquí](/bots/cmn9hf8yc0000vhbcq9hbxk0j)"
     }
 ];
 

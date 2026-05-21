@@ -5,6 +5,10 @@ import { Button } from "@/components/ui/Button";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
+const GOLD_DEMO_BOT_ID = "cmn9hf8yc0000vhbcq9hbxk0j";
+const GOLD_REAL_BOT_ID = "cmn9hf9440001vhbclffx9no6";
+const BTC_REAL_BOT_ID  = "cmn9hf9bm0003vhbckaamkqal";
+
 export default async function BotDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
 
@@ -25,6 +29,8 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
         'EURUSD': { accent: 'text-emerald-400', badge: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30', glow: 'bg-emerald-500/5', button: 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-500/40', shadow: 'shadow-emerald-500/20' },
         'USDJPY': { accent: 'text-rose-400', badge: 'bg-rose-500/20 text-rose-400 border-rose-500/30', glow: 'bg-rose-500/5', button: 'bg-rose-600 hover:bg-rose-500 shadow-rose-500/40', shadow: 'shadow-rose-500/20' },
     }[bot.instrument as string] || { accent: 'text-brand-light', badge: 'bg-brand/20 text-brand-light border-brand/30', glow: 'bg-brand/5', button: 'bg-brand hover:bg-brand-light shadow-brand/40', shadow: 'shadow-brand/20' };
+
+    const isDemo = bot.id === GOLD_DEMO_BOT_ID;
 
     return (
         <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden max-w-full relative">
@@ -54,11 +60,14 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                         <span className="text-[10px] text-text-muted font-bold uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full border border-white/5">
                                             Algorithmic Asset
                                         </span>
+                                        {isDemo && (
+                                            <span className="text-[10px] font-bold uppercase tracking-widest bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20">
+                                                DEMO · 30 Días
+                                            </span>
+                                        )}
                                     </div>
                                     <h1 className="text-5xl sm:text-6xl font-black text-white tracking-tighter uppercase italic leading-[0.9]">
-                                        {bot.instrument === 'BTCUSD' ? 'Elite Sniper v13 ⚡' : 
-                                         bot.instrument === 'XAUUSD' ? 'Elite Gold Ametralladora ⚡' : 
-                                         bot.name}
+                                        {bot.name}
                                     </h1>
                                 </div>
                                 <div className="flex flex-col items-start md:items-end">
@@ -78,11 +87,22 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                 
                                 {/* STATUS OVERLAYS for Detail Page */}
                                 {bot.status === "MAINTENANCE" && (
-                                    <div className="mt-12 bg-amber-500/10 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-6 text-center shadow-2xl shadow-amber-500/10">
+                                    <div className="mt-12 bg-amber-500/10 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-6 text-center shadow-2xl shadow-amber-500/10 animate-pulse">
                                         <p className="text-amber-400 font-black flex items-center justify-center gap-3 uppercase tracking-widest text-sm italic">
-                                            <span className="animate-spin text-xl">⚙️</span> CALIBRACIÓN TÉCNICA EN CURSO
+                                            <span className="text-xl">⚙️</span> CALIBRACIÓN TÉCNICA EN CURSO
                                         </p>
                                         <p className="text-[10px] text-amber-500/60 mt-2 uppercase tracking-widest">El acceso a este modelo está restringido temporalmente por mantenimiento.</p>
+                                    </div>
+                                )}
+                                {bot.status === "UPCOMING" && (
+                                    <div className="mt-12 bg-brand/10 backdrop-blur-xl border border-brand/30 rounded-2xl p-6 text-center shadow-2xl shadow-brand/10">
+                                        <p className="text-brand-light font-black flex items-center justify-center gap-3 uppercase tracking-widest text-sm italic animate-pulse">
+                                            <span className="text-xl">🚀</span> PRÓXIMO LANZAMIENTO
+                                        </p>
+                                        <p className="text-[10px] text-brand-light/75 mt-2 uppercase tracking-widest leading-relaxed">
+                                            Este algoritmo de alta frecuencia se encuentra en fase de optimización final.
+                                            <br />Vuelve pronto para adquirir tu licencia o ponte en contacto para la preventa.
+                                        </p>
                                     </div>
                                 )}
                             </div>
@@ -188,59 +208,96 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             {/* Decorative Glow */}
                             <div className={`absolute -top-24 -right-24 w-48 h-48 ${colors.glow} blur-[80px] rounded-full group-hover/side:opacity-100 opacity-50 transition-opacity`} />
                             
+                            {/* Precio / Estado */}
                             <div className="text-center mb-10 pb-10 border-b border-white/5 relative z-10">
-                                <p className="text-[10px] text-text-muted mb-4 uppercase tracking-[0.4em] font-black">Licencia Profesional</p>
-                                <div className="text-7xl font-black text-white tracking-tighter leading-none italic mb-4">
-                                    <span className="text-3xl align-top mr-1">$</span>
-                                    {bot.price.toFixed(0)}
-                                    <span className="text-lg text-text-muted ml-1 italic">.00</span>
-                                </div>
-                                <div className="inline-flex items-center gap-2 bg-success/10 text-success text-[10px] font-black px-4 py-1.5 rounded-full border border-success/20 uppercase tracking-widest">
-                                    ✓ Lifetime Access
-                                </div>
+                                {isDemo ? (
+                                    // Gold Demo: mostrar precio de 1€ con badge de 30 días
+                                    <>
+                                        <p className="text-[10px] text-text-muted mb-4 uppercase tracking-[0.4em] font-black">Licencia Demo (30 Días)</p>
+                                        <div className="text-7xl font-black text-white tracking-tighter leading-none italic mb-4">
+                                            {bot.price.toFixed(0)}
+                                            <span className="text-3xl text-amber-400 ml-1">€</span>
+                                            <span className="text-lg text-text-muted ml-1 italic">.00</span>
+                                        </div>
+                                        <div className="inline-flex items-center gap-2 bg-amber-500/10 text-amber-400 text-[10px] font-black px-4 py-1.5 rounded-full border border-amber-500/20 uppercase tracking-widest">
+                                            ⏱ 30 Días Acceso Demo
+                                        </div>
+                                    </>
+                                ) : (
+                                    // Bots comerciales: precio oculto elegante
+                                    <>
+                                        <p className="text-[10px] text-text-muted mb-4 uppercase tracking-[0.4em] font-black">Licencia Anual</p>
+                                        <div className="text-6xl font-black text-white/10 tracking-[0.6em] italic mb-3 select-none">— —</div>
+                                        <div className="inline-flex items-center gap-2 bg-brand/5 text-brand-light/40 text-[10px] font-black px-4 py-1.5 rounded-full border border-brand/10 uppercase tracking-widest">
+                                            ✦ PRÓXIMA REVELACIÓN
+                                        </div>
+                                    </>
+                                )}
                             </div>
 
+                            {/* Features list */}
                             <div className="space-y-4 mb-10 relative z-10">
-                                {[
+                                {(isDemo ? [
+                                    '✓ Compilación Nativa .ex5',
+                                    '✓ Acceso Exclusivo Demo MT5',
+                                    '✓ Dashboard Connectivity',
+                                    '✓ Soporte en Cuenta Demo',
+                                    '✓ Válido por 30 Días',
+                                ] : [
                                     'Compilación Nativa .ex5',
                                     'Soporte Técnico 24/7',
                                     'Dashboard Connectivity',
                                     'Multi-cuenta (Binding)',
-                                    'Actualizaciones de por vida'
-                                ].map((item, i) => (
+                                    'Actualizaciones de por vida',
+                                ]).map((item, i) => (
                                     <div key={i} className="flex items-center gap-4 text-sm text-text-muted group/item">
-                                        <div className={`w-1.5 h-1.5 rounded-full bg-white/20 group-hover/item:bg-${bot.instrument === 'XAUUSD' ? 'purple-400' : 'brand-light'} transition-colors`}></div>
+                                        <div className={`w-1.5 h-1.5 rounded-full ${isDemo ? 'bg-amber-400/60' : 'bg-white/20'} group-hover/item:bg-brand-light transition-colors`}></div>
                                         <span className="font-medium group-hover/item:text-white transition-colors">{item}</span>
                                     </div>
                                 ))}
                             </div>
 
+                            {/* CTAs */}
                             <div className="space-y-4 relative z-10">
-                                {bot.status === 'ACTIVE' ? (
-                                    <>
-                                        <Link href={`/checkout/${bot.id}`} className="block">
-                                            <Button size="lg" fullWidth className={`text-base py-8 shadow-2xl uppercase tracking-widest font-black italic transition-all hover:scale-[1.02] active:scale-[0.98] ${colors.button}`}>
-                                                Invertir Ahora
-                                            </Button>
-                                        </Link>
-
-                                        <Link href={`/checkout/${bot.id}?trial=true`} className="block">
-                                            <Button size="lg" variant="outline" fullWidth className="py-7 border-white/10 text-white font-black uppercase tracking-widest text-[10px] hover:bg-white/5 h-10">
-                                                🎁 Demo Gratuita (30 Días)
-                                            </Button>
-                                        </Link>
-                                    </>
-                                ) : (
-                                    <div className="space-y-6">
-                                        <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 text-center backdrop-blur-sm">
-                                            <p className="text-[10px] text-text-muted mb-2 uppercase tracking-widest font-black">Disponibilidad</p>
-                                            <p className="text-xl font-black text-white uppercase italic tracking-tighter">
-                                                {bot.status === 'MAINTENANCE' ? 'En Mantenimiento' : 'Próximamente'}
-                                            </p>
-                                        </div>
-                                        <Button disabled size="lg" fullWidth className="py-8 opacity-30 grayscale cursor-not-allowed font-black uppercase tracking-widest italic">
-                                            No Disponible
+                                {isDemo ? (
+                                    /* Gold Demo → Checkout directo */
+                                    <Link href={`/checkout/${bot.id}`} className="block">
+                                        <Button size="lg" fullWidth className={`text-base py-8 shadow-2xl uppercase tracking-widest font-black italic transition-all hover:scale-[1.02] active:scale-[0.98] ${colors.button}`}>
+                                            Activar Demo · 1.00 EUR
                                         </Button>
+                                    </Link>
+                                ) : (
+                                    /* Bots comerciales */
+                                    <div className="space-y-4">
+                                        {/* Botón principal: siempre deshabilitado para prelanzamiento */}
+                                        <div className="space-y-2">
+                                            <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 text-center backdrop-blur-sm">
+                                                <p className="text-[9px] text-text-muted mb-1 uppercase tracking-widest font-black">Versión Real</p>
+                                                <p className="text-sm font-black text-white uppercase italic tracking-tighter">
+                                                    {bot.status === 'MAINTENANCE' ? 'En Mantenimiento' : 'Próximamente'}
+                                                </p>
+                                            </div>
+                                            <Button disabled size="lg" fullWidth className="py-6 opacity-30 grayscale cursor-not-allowed font-black uppercase tracking-widest text-xs italic">
+                                                Real No Disponible
+                                            </Button>
+                                        </div>
+
+                                        {/* Botón de Demo → Solo para Oro Real y BTC */}
+                                        {bot.id === GOLD_REAL_BOT_ID ? (
+                                            /* Oro Real → Ofrece el Gold Demo por 1€ */
+                                            <Link href="/checkout/cmn9hf8yc0000vhbcq9hbxk0j" className="block mt-2">
+                                                <Button size="lg" variant="outline" fullWidth className="py-7 border-brand-light/30 hover:border-brand-light text-brand-light font-black uppercase tracking-widest text-[10px] hover:bg-brand/10 h-10 shadow-lg shadow-brand/10">
+                                                    🎁 Activar Demo · 1€ (30 Días)
+                                                </Button>
+                                            </Link>
+                                        ) : bot.id === BTC_REAL_BOT_ID ? (
+                                            /* BTC Real → Demo próximamente */
+                                            <div className="mt-2">
+                                                <Button disabled size="lg" variant="outline" fullWidth className="py-6 opacity-40 border-white/10 text-white/50 font-black uppercase tracking-widest text-[10px] h-10 cursor-not-allowed">
+                                                    🎁 Demo · Próximamente
+                                                </Button>
+                                            </div>
+                                        ) : null /* Cent no tiene botón de prueba */}
                                     </div>
                                 )}
                             </div>

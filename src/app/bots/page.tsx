@@ -7,18 +7,20 @@ import { Card, CardContent, CardTitle, CardHeader, CardFooter } from "@/componen
 import { Button } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
-  title: "Vanguard Marketplace | KopyTrading",
-  description: "Acceso institucional a algoritmos de alta frecuencia: Storm Rider, La Ametralladora y más.",
+  title: "Maiko Algorithms | KopyTrading",
+  description: "Algoritmos de alta precisión para MetaTrader 5. Diseñados por traders para traders.",
 };
 
 export const dynamic = "force-dynamic";
+
+const GOLD_DEMO_ID = "cmn9hf8yc0000vhbcq9hbxk0j";
+const GOLD_REAL_ID = "cmn9hf9440001vhbclffx9no6";
 
 export default async function BotsPage({ searchParams }: { searchParams: Promise<{ asset?: string }> }) {
     const session = await getServerSession(authOptions);
     const isOwner = session?.user?.email === "viajaconsakura@gmail.com" || session?.user?.email === "viajaconsakura";
     const { asset } = await searchParams;
 
-    // Filters for the 4 master products
     const whereClause: any = { isActive: true };
     if (asset) {
         whereClause.instrument = { contains: asset };
@@ -26,31 +28,25 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
 
     const bots = await prisma.botProduct.findMany({
         where: whereClause,
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'asc' }
     });
 
     const categories = [
         { id: "", label: "Todos" },
-        { id: "BTCUSD", label: "Elite Sniper v13" },
-        { id: "XAUUSD", label: "Elite Gold Ametralladora" },
-        { id: "EURUSD", label: "Euro Precision" },
-        { id: "USDJPY", label: "Ninja Ghost" }
+        { id: "XAUUSD", label: "Maiko Gold" },
+        { id: "BTCUSD", label: "Maiko BTC" },
     ];
 
-    // Helper to map DB names to the requested specific branding
-    const getBotDisplayData = (bot: any) => {
-        const name = bot.name.toLowerCase();
-        if (name.includes('storm') || name.includes('sniper')) return { name: "Elite Sniper v13 ⚡", accent: "text-brand-light", badge: "from-brand-light to-brand" };
-        if (name.includes('ametralladora')) return { name: "Elite Gold Ametralladora 🔥", accent: "text-amber-400", badge: "from-amber-400 to-orange-600" };
-        if (name.includes('ninja')) return { name: "Ninja Ghost 🥷", accent: "text-rose-400", badge: "from-rose-400 to-pink-600" };
-        if (name.includes('precision') || name.includes('euro')) return { name: "Euro Precision 🎯", accent: "text-emerald-400", badge: "from-emerald-400 to-teal-600" };
-        return { name: bot.name, accent: "text-white", badge: "from-white/20 to-white/5" };
+    const getBotAccent = (bot: any) => {
+        if (bot.instrument === 'BTCUSD') return { accent: "text-amber-400", badge: "from-amber-500 to-orange-600", glow: "bg-amber-500/10" };
+        if (bot.id === GOLD_DEMO_ID) return { accent: "text-purple-400", badge: "from-purple-500 to-violet-600", glow: "bg-purple-500/10" };
+        return { accent: "text-brand-light", badge: "from-brand to-brand-light", glow: "bg-brand/10" };
     };
 
     return (
-        <div className="min-h-screen pt-28 md:pt-32 pb-12 px-6 sm:px-6 lg:px-8 relative overflow-hidden bg-[#050505]">
+        <div className="min-h-screen pt-28 md:pt-32 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-[#050505]">
 
-            {/* Vanguard Background GFX */}
+            {/* Background GFX */}
             <div className="absolute top-[-10%] right-[-10%] w-[800px] h-[800px] bg-brand-light/5 blur-[150px] rounded-full pointer-events-none" />
             <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-brand/5 blur-[120px] rounded-full pointer-events-none" />
 
@@ -60,20 +56,23 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                 </Link>
             </div>
 
-            <div id="bot-catalog" className="max-w-7xl mx-auto mb-16 pb-12 text-center relative">
+            {/* Header */}
+            <div id="bot-catalog" className="max-w-7xl mx-auto mb-14 pb-10 text-center relative">
                 <div className="mb-10">
-                    <h1 className="text-5xl sm:text-7xl font-black text-white tracking-tighter mb-4 uppercase italic leading-none">
-                        Vanguard <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-brand">Algorithms</span>
+                    {/* Título con font adaptado para móvil */}
+                    <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tighter mb-4 uppercase italic leading-none px-2">
+                        Maiko <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-brand">Algorithms</span>
                     </h1>
-                    <p className="text-text-muted text-lg max-w-2xl mx-auto font-light tracking-tight opacity-60 italic leading-relaxed">
+                    <p className="text-text-muted text-base max-w-2xl mx-auto font-light tracking-tight opacity-60 italic leading-relaxed">
                         Sistemas de alta frecuencia y precisión institucional para el mercado MT5.
                     </p>
                 </div>
 
+                {/* Filtros por categoría */}
                 <div className="flex flex-wrap gap-2 md:gap-3 justify-center">
                     {categories.map((cat) => (
                         <Link key={cat.id} href={cat.id ? `/bots?asset=${cat.id}` : "/bots"}>
-                            <span className={`px-6 py-2.5 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all ${(asset === cat.id || (!asset && cat.id === ""))
+                            <span className={`px-5 py-2.5 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all whitespace-nowrap ${(asset === cat.id || (!asset && cat.id === ""))
                                 ? "bg-brand text-white shadow-[0_0_25px_rgba(168,85,247,0.4)] border border-brand-light/50"
                                 : "bg-white/[0.03] border border-white/5 text-text-muted hover:text-white hover:border-white/20"
                                 }`}>
@@ -84,6 +83,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                 </div>
             </div>
 
+            {/* Grid de bots */}
             {bots.length === 0 ? (
                 <div className="text-center py-20 px-4 glass-card border border-dashed border-white/10 rounded-[2rem]">
                     <h3 className="text-2xl font-black text-white mb-4 italic uppercase tracking-tighter opacity-40">No hay terminales disponibles</h3>
@@ -91,121 +91,120 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                     <Link href="/bots"><Button variant="outline" className="rounded-xl border-white/10 text-white/40">Ver todos</Button></Link>
                 </div>
             ) : (
-                <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8`}>
+                <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
                     {bots.map((bot: any) => {
-                        const display = getBotDisplayData(bot);
+                        const colors = getBotAccent(bot);
                         const isUpcoming = bot.status === 'UPCOMING' || bot.status === 'MAINTENANCE';
+                        const isDemo = bot.id === GOLD_DEMO_ID;
 
                         return (
-                            <Card key={bot.id} interactive className={`flex flex-col h-full transition-all duration-700 overflow-hidden group relative rounded-[2rem] border ${
-                                isUpcoming 
-                                ? 'bg-white/[0.01] border-white/5 backdrop-blur-[2px]' 
-                                : `bg-white/[0.03] border-white/10 hover:border-brand-light/50 shadow-[0_20px_60px_rgba(0,0,0,0.6)]`
-                            }`}>
-                                <CardHeader className="relative overflow-hidden pb-4">
-                                     {/* Background Glow Overlay */}
-                                    <div className={`absolute top-0 right-0 w-32 h-32 bg-brand/10 blur-3xl -mr-16 -mt-16 transition-opacity duration-700 group-hover:opacity-100 opacity-20`} />
+                            <Card key={bot.id} interactive className={`flex flex-col h-full transition-all duration-700 overflow-hidden group relative rounded-[2rem] border bg-white/[0.03] border-white/10 hover:border-brand-light/50 hover:shadow-[0_20px_50px_rgba(168,85,247,0.15)] shadow-[0_20px_60px_rgba(0,0,0,0.6)]`}>
 
-                                    <div className="flex justify-between items-start mb-2 relative z-10">
-                                        <CardTitle className={`text-2xl font-black italic tracking-tighter uppercase transition-all duration-500 ${isUpcoming ? 'text-white/20' : 'text-white'}`}>
-                                            {display.name}
-                                        </CardTitle>
-                                        <span className={`bg-gradient-to-br ${display.badge} text-white px-3 py-1 rounded-full text-[9px] font-black tracking-widest shadow-lg uppercase ${isUpcoming && 'opacity-20 grayscale'}`}>
-                                            {bot.instrument}
+                                {/* Upcoming overlay */}
+                                {isUpcoming && !isDemo && (
+                                    <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20">
+                                        <span className="bg-brand/20 border border-brand/50 text-brand-light text-[8px] font-black px-3 py-1 rounded-full tracking-[0.2em] uppercase shadow-[0_0_20px_rgba(168,85,247,0.3)]">
+                                            ⚡ PRÓXIMO LANZAMIENTO
                                         </span>
                                     </div>
-                                    <p className={`text-xs text-text-muted line-clamp-2 font-light leading-relaxed ${isUpcoming ? 'opacity-20' : 'opacity-60'}`}>
-                                        {bot.description.replace(/⚡|🛠️|🛡️|🎯|🥷/g, '').replace('PRÓXIMO LANZAMIENTO', '').trim()}
+                                )}
+
+                                <CardHeader className="relative overflow-hidden pb-4 pt-8">
+                                    <div className={`absolute top-0 right-0 w-32 h-32 ${colors.glow} blur-3xl -mr-16 -mt-16 transition-opacity duration-700 group-hover:opacity-100 opacity-20`} />
+
+                                    <div className="flex justify-between items-start mb-3 relative z-10">
+                                        {/* Nombre del bot — con min-w-0 para que truncate funcione */}
+                                        <CardTitle className="text-xl font-black italic tracking-tighter uppercase transition-all duration-500 text-white group-hover:text-brand-light min-w-0 pr-2 leading-tight">
+                                            {bot.name}
+                                        </CardTitle>
+                                        <div className="flex flex-col items-end gap-1.5 shrink-0">
+                                            <span className={`bg-gradient-to-br ${colors.badge} text-white px-2.5 py-1 rounded-full text-[9px] font-black tracking-widest shadow-lg uppercase whitespace-nowrap`}>
+                                                {bot.instrument}
+                                            </span>
+                                            {isDemo && (
+                                                <span className="bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[7px] font-black px-2 py-0.5 rounded-full tracking-widest uppercase whitespace-nowrap">
+                                                    DEMO · 30 días
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-text-muted line-clamp-3 font-light leading-relaxed opacity-70 group-hover:opacity-95 transition-opacity">
+                                        {bot.description}
                                     </p>
                                 </CardHeader>
 
-                                <CardContent className="flex-grow relative z-10 px-6">
-                                    <div className={`space-y-4 p-5 rounded-2xl border transition-all duration-700 ${
-                                        isUpcoming ? 'bg-white/0 border-white/0 opacity-20' : 'bg-white/[0.02] border-white/5 backdrop-blur-sm'
-                                    }`}>
-                                        <div className="flex justify-between items-center text-[10px] pb-2 border-b border-white/5">
-                                            <span className="text-text-muted uppercase tracking-[0.2em] font-bold">Arquitectura</span>
-                                            <span className={`font-black tracking-tighter uppercase ${isUpcoming ? 'text-white/30' : display.accent}`}>
-                                                {isUpcoming ? 'Confidential' : bot.strategyType}
+                                <CardContent className="flex-grow relative z-10 px-5">
+                                    <div className="space-y-3 p-4 rounded-2xl border bg-white/[0.02] border-white/5 backdrop-blur-sm">
+                                        {/* Arquitectura — con truncate para evitar overflow */}
+                                        <div className="flex justify-between items-center text-[10px] pb-2 border-b border-white/5 gap-3">
+                                            <span className="text-text-muted uppercase tracking-[0.15em] font-bold shrink-0">Arquitectura</span>
+                                            <span className={`font-black uppercase ${colors.accent} text-right leading-tight text-[9px] truncate max-w-[120px]`}>
+                                                {bot.strategyType}
                                             </span>
                                         </div>
-                                        <div className="flex justify-between items-center text-[10px] pb-2 border-b border-white/5">
-                                            <span className="text-text-muted uppercase tracking-[0.2em] font-bold">Factor Riesgo</span>
-                                            <span className={`font-black flex items-center gap-2 uppercase ${
-                                                isUpcoming ? 'text-white/30' :
-                                                bot.riskLevel === 'Low' ? 'text-success' : 
-                                                bot.riskLevel === 'High' ? 'text-danger' : 'text-amber-400'
-                                            }`}>
-                                                {isUpcoming ? '???' : bot.riskLevel}
+                                        {/* Factor Riesgo */}
+                                        <div className="flex justify-between items-center text-[10px] pb-2 border-b border-white/5 gap-3">
+                                            <span className="text-text-muted uppercase tracking-[0.15em] font-bold shrink-0">Factor Riesgo</span>
+                                            <span className={`font-black uppercase text-[9px] ${bot.riskLevel === 'Low' ? 'text-success' : bot.riskLevel === 'High' ? 'text-danger' : 'text-amber-400'}`}>
+                                                {bot.riskLevel}
                                             </span>
                                         </div>
 
-                                        <div className="pt-2">
-                                            <div className="flex justify-between items-center mb-4">
-                                                <span className="text-[9px] uppercase tracking-[0.3em] font-black text-white/20 italic">Previsión Alpha</span>
-                                                {!isUpcoming && (
-                                                    <span className="flex items-center gap-1">
-                                                        <div className="w-1 h-1 rounded-full bg-success animate-ping" />
-                                                        <span className="text-[9px] text-success font-black tracking-widest uppercase">Live</span>
-                                                    </span>
-                                                )}
+                                        {/* Mini chart */}
+                                        <div className="pt-1">
+                                            <div className="flex justify-between items-center mb-2">
+                                                <span className="text-[8px] uppercase tracking-[0.3em] font-black text-white/20 italic">Previsión Alpha</span>
+                                                <span className="flex items-center gap-1">
+                                                    <div className="w-1 h-1 rounded-full bg-success animate-ping" />
+                                                    <span className="text-[8px] text-success font-black tracking-widest uppercase">Live</span>
+                                                </span>
                                             </div>
-                                            <div className="h-14 flex items-end gap-1.5 w-full">
+                                            <div className="h-10 flex items-end gap-1 w-full">
                                                 {[25, 45, 30, 60, 55, 85, 70, 95, 80, 100].map((h, i) => (
                                                     <div
                                                         key={i}
-                                                        className={`flex-1 rounded-t-sm transition-all duration-[1.5s] ${
-                                                            isUpcoming 
-                                                            ? 'bg-white/5 opacity-20' 
-                                                            : 'bg-gradient-to-t from-transparent via-success/10 to-success/60 opacity-30 group-hover:opacity-100'
-                                                        }`}
+                                                        className="flex-1 rounded-t-sm transition-all duration-[1.5s] bg-gradient-to-t from-transparent via-success/10 to-success/60 opacity-40 group-hover:opacity-100"
                                                         style={{ height: `${h}%`, transitionDelay: `${i * 50}ms` }}
                                                     />
                                                 ))}
                                             </div>
                                         </div>
                                     </div>
-
-                                    {/* Glassmorphic "Upcoming" Overlay - Only for Public */}
-                                    {isUpcoming && (
-                                        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6 text-center transform scale-[1.05]">
-                                             <div className="px-5 py-2.5 rounded-full bg-brand/10 border border-brand/40 shadow-[0_0_40px_rgba(168,85,247,0.3)] backdrop-blur-xl mb-4 group-hover:scale-110 transition-transform duration-500">
-                                                <span className="text-[10px] font-black text-brand-light uppercase tracking-[0.5em] animate-pulse">
-                                                    {bot.status === 'MAINTENANCE' ? 'CALIBRANDO' : 'PRÓXIMO LANZAMIENTO'}
-                                                </span>
-                                            </div>
-                                            <div className="text-white/20 text-[8px] font-bold uppercase tracking-[0.3em] max-w-[160px] leading-relaxed italic">
-                                                Algoritmo en fase final de calibración institucional
-                                            </div>
-                                        </div>
-                                    )}
                                 </CardContent>
 
-                                <CardFooter className="justify-between items-center mt-auto border-t border-white/5 pt-6 p-8 bg-black/10">
-                                    <div className="flex flex-col">
-                                        <div className="flex items-center gap-2">
-                                            <div className={`text-3xl font-black tracking-tighter italic ${isUpcoming ? 'text-white/10' : 'text-white'}`}>
-                                                ${bot.price.toFixed(0)}
-                                            </div>
-                                            <span className={`text-[9px] font-bold uppercase tracking-widest ${isUpcoming ? 'text-white/5' : 'text-white/30'}`}>USD</span>
-                                        </div>
-                                        {!isUpcoming && (
-                                            <div className="text-[8px] text-success font-black tracking-[0.3em] uppercase flex items-center gap-1 mt-1 italic">
-                                                Pre-Venta Activa
-                                            </div>
+                                <CardFooter className="justify-between items-center mt-auto border-t border-white/5 pt-5 p-6 bg-black/10 gap-3">
+                                    {/* Sección de precio / estado */}
+                                    <div className="flex flex-col min-w-0">
+                                        {isDemo ? (
+                                            /* Demo: muestra 1€ */
+                                            <>
+                                                <div className="flex items-baseline gap-1">
+                                                    <span className="text-2xl font-black tracking-tighter italic text-white">1€</span>
+                                                    <span className="text-[8px] font-bold uppercase tracking-widest text-white/30">EUR</span>
+                                                </div>
+                                                <div className="text-[7px] text-amber-400 font-black tracking-[0.25em] uppercase mt-0.5 italic">
+                                                    Licencia 30 Días Demo
+                                                </div>
+                                            </>
+                                        ) : (
+                                            /* Bots comerciales: precio oculto elegante */
+                                            <>
+                                                <span className="text-xl font-black text-white/12 tracking-[0.4em] italic select-none leading-none">— —</span>
+                                                <span className="text-[7px] font-black text-brand-light/50 uppercase tracking-[0.2em] mt-0.5">✦ Próxima revelación</span>
+                                            </>
                                         )}
                                     </div>
-                                    <Link href={`/bots/${bot.id}`} className={(isUpcoming && !isOwner) ? 'pointer-events-none' : ''}>
-                                        <Button 
-                                            size="lg" 
-                                            className={`font-black uppercase tracking-[0.2em] text-[10px] px-8 h-11 shadow-2xl transition-all duration-500 rounded-xl ${
-                                                (!isUpcoming || isOwner) 
-                                                ? 'bg-white text-black hover:bg-brand-light hover:text-white hover:scale-105 active:scale-95' 
-                                                : 'bg-white/5 text-white/10 border border-white/5 cursor-not-allowed opacity-50'
+
+                                    {/* Botón de acción */}
+                                    <Link href={`/bots/${bot.id}`} className="shrink-0">
+                                        <Button
+                                            size="sm"
+                                            className={`font-black uppercase tracking-[0.15em] text-[9px] px-5 h-10 shadow-xl transition-all duration-500 rounded-xl whitespace-nowrap ${isDemo
+                                                ? 'bg-white text-black hover:bg-brand-light hover:text-white hover:scale-105 active:scale-95'
+                                                : 'bg-brand/10 text-brand-light border border-brand/30 hover:bg-brand/20 hover:scale-105 active:scale-95'
                                             }`}
-                                            disabled={isUpcoming && !isOwner}
                                         >
-                                            {(!isUpcoming || isOwner) ? 'Invertir' : 'Próximamente'}
+                                            {isDemo ? 'Activar Demo ⚡' : 'Próximamente →'}
                                         </Button>
                                     </Link>
                                 </CardFooter>

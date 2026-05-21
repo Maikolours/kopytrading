@@ -70,7 +70,7 @@ export default function Home() {
                     ¡PRÓXIMO LANZAMIENTO: EVOLUTION PRO!
                   </h3>
                   <p className="text-text-muted leading-relaxed max-w-2xl">
-                    Estamos preparando el lanzamiento de <span className="text-brand-light font-bold">La Ametralladora Evolution PRO</span>. 
+                    Estamos preparando el lanzamiento de <span className="text-brand-light font-bold">MAIKO SNIPER PRO GOLD</span>. 
                     <strong className="text-white"> Muy pronto podrás conseguirlo con un 25% de DESCUENTO </strong> 
                     y disfrutar del nuevo sistema de control desde el <span className="text-success font-bold">MÓVIL</span>.
                   </p>
@@ -102,7 +102,7 @@ export default function Home() {
               </h1>
 
               <p className="text-lg sm:text-xl text-text-muted max-w-xl mx-auto lg:mx-0 font-light leading-relaxed">
-                Algoritmos de alta precisión para MetaTrader 5. Diseñados por traders para traders. <strong className="text-white font-bold">Pruébalos gratis 30 días.</strong>
+                Algoritmos de alta precisión para MetaTrader 5. Diseñados por traders para traders.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
@@ -120,7 +120,6 @@ export default function Home() {
               <div className="pt-8 flex flex-wrap justify-center lg:justify-start gap-10 border-t border-white/5">
                 {[
                   { val: "4", label: "Bots Activos" },
-                  { val: "30 Días", label: "Prueba Gratis" },
                   { val: "$500", label: "Capital Mínimo" },
                 ].map((s, i) => (
                   <div key={i}>
@@ -184,8 +183,8 @@ export default function Home() {
                     <span className="text-3xl sm:text-4xl">🎁</span>
                   </div>
                   <div className="text-left">
-                    <h2 className="text-xl sm:text-2xl font-black text-white uppercase italic mb-1 tracking-tight">Prueba cualquier Bot GRATIS</h2>
-                    <p className="text-sm sm:text-base text-text-muted font-light">Acceso completo durante 30 días · Sin tarjeta de crédito · Sin compromiso</p>
+                    <h2 className="text-xl sm:text-2xl font-black text-white uppercase italic mb-1 tracking-tight">Prueba el Sniper Pro Gold por 1$</h2>
+                    <p className="text-sm sm:text-base text-text-muted font-light">30 días de prueba en cuenta DEMO · Sin riesgo real · Licencia anual tras la prueba</p>
                   </div>
                 </div>
                 <div className="flex-shrink-0 z-10 w-full lg:w-auto">

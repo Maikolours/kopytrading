@@ -59,7 +59,7 @@ const FAQS = [
             },
             {
                 q: "¿Puedo probar el bot antes de comprar?",
-                a: "Sí, todos nuestros bots incluyen una opción de PRUEBA GRATUITA DE 30 DÍAS. Te recomendamos siempre usar esta opción primero, instalarlo en una cuenta DEMO virtual con tu broker y probarlo durante 2-4 semanas. Si el comportamiento te convence, puedes adquirir la licencia vitalicia después. Si no te convence, la prueba simplemente expirará sin coste alguno."
+                a: "Sí, tenemos disponible una versión de prueba del bot estrella **MAIKO SNIPER PRO GOLD** por solo 1$ durante 30 días en cuenta DEMO. Te recomendamos siempre usarlo en una cuenta DEMO virtual con tu broker y probarlo durante 2-4 semanas. Si el comportamiento te convence, podrás adquirir la licencia anual correspondiente. Si no te convence, la prueba simplemente expira al cabo de los 30 días."
             },
             {
                 q: "¿KopyTrading tiene acceso a mi cuenta del broker?",
@@ -71,16 +71,16 @@ const FAQS = [
         category: "🎁 Pruebas y Cuentas",
         items: [
             {
-                q: "¿Cómo activo mi prueba gratuita de 30 días?",
-                a: "Es muy sencillo. En el Marketplace, elige el bot que quieras probar y pulsa en 'Probar Gratis'. Solo tendrás que introducir tu email. El sistema te creará una cuenta automáticamente y te llevará a 'Mi Panel', donde podrás descargar el bot (.ex5) y el manual PDF al instante."
+                q: "¿Cómo activo mi prueba demo de 30 días?",
+                a: "Es muy sencillo. En el Marketplace, elige el bot **MAIKO SNIPER PRO GOLD (DEMO)** y pulsa en 'Activar Demo'. Introduce tu email, paga 1$ a través de PayPal y el sistema te creará una cuenta automáticamente y te llevará a 'Mi Panel', donde podrás descargar el bot (.ex5) y el manual PDF al instante. Tendrás 30 días completos para probar la estrategia en tu cuenta DEMO de MetaTrader 5."
             },
             {
                 q: "¿Cuál es mi contraseña y cómo accedo a mi cuenta?",
                 a: "Al activar una prueba o realizar una compra, el sistema te registra automáticamente. Tu contraseña temporal por defecto es '123456'. Puedes usarla para entrar en 'Mi Cuenta' o 'Mi Panel' en cualquier momento. Te recomendamos cambiarla por una más segura una vez dentro del panel."
             },
             {
-                q: "¿Puedo usar la prueba gratuita en una cuenta real?",
-                a: "No. Las licencias de prueba de 30 días están limitadas técnicamente para funcionar SOLO en cuentas de tipo DEMO (dinero ficticio). Esto es para que puedas testear la estrategia sin riesgo. Para operar en una cuenta REAL, necesitarás adquirir la licencia vitalicia (LIFETIME)."
+                q: "¿Puedo usar la prueba demo en una cuenta real?",
+                a: "No. Las licencias de prueba de 30 días están limitadas técnicamente para funcionar SOLO en cuentas de tipo DEMO (dinero ficticio). Esto es para que puedas testear la estrategia sin riesgo. Para operar en una cuenta REAL, necesitarás adquirir la licencia anual correspondiente, cuyo precio se anunciará en breve."
             },
         ]
     },
