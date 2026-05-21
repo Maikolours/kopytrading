@@ -95,44 +95,30 @@ export const BotCard = memo(function BotCard({
                             </CardTitle>
                         </div>
 
-                        <div className="flex flex-col items-end gap-2">
-                            <div className="flex gap-2">
+                        <div className="flex flex-col items-stretch sm:items-end gap-2 w-full sm:w-auto">
+                            <div className="grid grid-cols-3 gap-1.5 w-full sm:flex sm:w-auto sm:gap-2">
                                 {balance !== null && (
-                                    <div className="p-2 px-3 rounded-lg bg-white/5 border border-white/5 flex flex-col items-center justify-center min-w-20 text-center premium-glass">
-                                        <span className="text-[7px] font-black uppercase tracking-[0.2em] opacity-40 mb-0.5">Balance</span>
-                                        <span className="text-sm font-black text-white font-mono">
+                                    <div className="p-1.5 sm:p-2 px-2 sm:px-3 rounded-lg bg-white/5 border border-white/5 flex flex-col items-center justify-center min-w-0 sm:min-w-20 text-center premium-glass">
+                                        <span className="text-[6px] sm:text-[7px] font-black uppercase tracking-[0.2em] opacity-40 mb-0.5">Balance</span>
+                                        <span className="text-xs sm:text-sm font-black text-white font-mono truncate max-w-full">
                                             {balance.toFixed(2)}
                                         </span>
                                     </div>
                                 )}
                                 {equity !== null && (
-                                    <div className="p-2 px-3 rounded-lg bg-brand-light/10 border border-brand-light/20 flex flex-col items-center justify-center min-w-20 text-center premium-glass">
-                                        <span className="text-[7px] font-black uppercase tracking-[0.2em] text-brand-light/40 mb-0.5">Equidad</span>
-                                        <span className="text-sm font-black text-brand-light font-mono">
+                                    <div className="p-1.5 sm:p-2 px-2 sm:px-3 rounded-lg bg-brand-light/10 border border-brand-light/20 flex flex-col items-center justify-center min-w-0 sm:min-w-20 text-center premium-glass">
+                                        <span className="text-[6px] sm:text-[7px] font-black uppercase tracking-[0.2em] text-brand-light/40 mb-0.5">Equidad</span>
+                                        <span className="text-xs sm:text-sm font-black text-brand-light font-mono truncate max-w-full">
                                             {equity.toFixed(2)}
                                         </span>
                                     </div>
                                 )}
-                                <div className="p-3 px-5 rounded-xl bg-black/40 border border-white/5 flex flex-col items-center justify-center min-w-28 text-center premium-glass shadow-purple-500/10">
-                                    <span className="text-[8px] font-black uppercase tracking-[0.2em] opacity-40 mb-0.5">Profit Hoy</span>
-                                    <span className={`text-xl font-black font-mono ${dailyProfit >= 0 ? 'text-success' : 'text-danger'}`}>
+                                <div className="p-1.5 sm:p-3 px-2 sm:px-5 rounded-lg sm:rounded-xl bg-black/40 border border-white/5 flex flex-col items-center justify-center min-w-0 sm:min-w-28 text-center premium-glass shadow-purple-500/10">
+                                    <span className="text-[6px] sm:text-[8px] font-black uppercase tracking-[0.2em] opacity-40 mb-0.5">Profit Hoy</span>
+                                    <span className={`text-xs sm:text-xl font-black font-mono truncate max-w-full ${dailyProfit >= 0 ? 'text-success' : 'text-danger'}`}>
                                         {dailyProfit >= 0 ? '+' : ''}{dailyProfit.toFixed(2)} {currency}
                                     </span>
                                 </div>
-                            </div>
-                            
-                            <div className={`flex items-center gap-2 p-1.5 px-3 rounded-lg bg-white/5 border ${assetTheme.border} animate-pulse-glow-heavy`}>
-                                <span className={`text-[8px] font-black uppercase tracking-widest ${assetTheme.text}`}>ID:</span>
-                                <code className="text-[10px] font-black font-mono text-white select-all">
-                                    {purchase?.id?.slice(0, 8) || "unknown"}...
-                                </code>
-                                <Button 
-                                    size="sm" 
-                                    className={`h-5 w-5 p-0 flex items-center justify-center shrink-0 rounded ${copiedId === purchase?.id ? 'bg-success text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}
-                                    onClick={() => onCopy(purchase?.id || "")}
-                                >
-                                    {copiedId === purchase?.id ? <CheckCircle2 size={10} /> : <Copy size={10} />}
-                                </Button>
                             </div>
                         </div>
                     </div>
@@ -167,6 +153,13 @@ export const BotCard = memo(function BotCard({
                                     <code className="text-[10px] font-black font-mono text-white select-all p-2 bg-white/5 rounded border border-white/10 flex-1 truncate">
                                         {purchase?.id || "N/A"}
                                     </code>
+                                    <Button 
+                                        size="sm" 
+                                        className={`h-9 w-9 p-0 flex items-center justify-center shrink-0 rounded bg-white/10 text-white hover:bg-white/20 transition-all ${copiedId === purchase?.id ? 'bg-success text-white' : ''}`}
+                                        onClick={() => onCopy(purchase?.id || "")}
+                                    >
+                                        {copiedId === purchase?.id ? <CheckCircle2 size={14} /> : <Copy size={14} />}
+                                    </Button>
                                 </div>
                             </div>
                         </div>
