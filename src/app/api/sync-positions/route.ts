@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
-    let body = null;
+    let body: any = null;
     let text = "";
     try {
         text = await req.text();
@@ -123,19 +123,19 @@ export async function POST(req: Request) {
                 const botSymbol = (positions && positions.length > 0 ? positions[0].symbol : (body.symbol || "XAUUSD")).toUpperCase();
                 
                 // Prioridad 1: Match exacto de licenseKey
-                purchase = userPurchases.find(p => p.botProduct.productKey === (body.licenseKey || body.productKey));
+                purchase = userPurchases.find(p => p.botProduct.productKey === (body.licenseKey || body.productKey)) || null;
                 
                 // Prioridad 2: Match por Instrumento (BTCUSD, XAUUSD, etc)
                 if (!purchase) {
                    purchase = userPurchases.find(p => {
                       const pInst = (p.botProduct.instrument || "").toUpperCase();
                       return botSymbol.includes(pInst) || pInst.includes(botSymbol);
-                   });
+                   }) || null;
                 }
                 
                 // Prioridad 3: Match por nombre de producto (Elite, Sniper, etc)
                 if (!purchase && body.licenseKey) {
-                   purchase = userPurchases.find(p => p.botProduct.name.toUpperCase().includes(body.licenseKey.toUpperCase()));
+                   purchase = userPurchases.find(p => p.botProduct.name.toUpperCase().includes(body.licenseKey.toUpperCase())) || null;
                 }
 
                 // Prioridad 4: Última compra activa (Si es Sakura, permitimos el bypass total)
@@ -345,6 +345,7 @@ export async function POST(req: Request) {
             dir: body.dir !== undefined ? Number(body.dir) : undefined,
             insights_on: body.insights_on === true || body.insights_on === "true",
             narrative: body.narrative || "Calculando...",
+            status: body.status || "ONLINE",
             isOnline: true,
             lastUpdate: new Date().toISOString()
         };
@@ -368,6 +369,7 @@ export async function POST(req: Request) {
                 balance: telemetry.balance,
                 equity: telemetry.equity,
                 pnl_today: telemetry.pnl_today,
+                status: telemetry.status,
                 mode: telemetry.mode !== undefined ? telemetry.mode : rawSettings.mode,
                 dir: telemetry.dir !== undefined ? telemetry.dir : rawSettings.dir,
                 lots: Number(body.lots) || rawSettings.lots || 0.08,

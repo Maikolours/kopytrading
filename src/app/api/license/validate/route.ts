@@ -85,7 +85,7 @@ export async function POST(req: Request) {
 
         // 6. CONTROL MULTI-CUENTA (CONFLICTO): Solo una cuenta activa por licencia
         const accountStr = account ? String(account).trim() : "unknown";
-        const activeSession = purchase.licenseSessions[0];
+        const activeSession = purchase.licenseSessions;
 
         if (activeSession && activeSession.account !== accountStr) {
              // Comprobamos si el último latido fue hace más de 1 hora para permitir "reset" automático

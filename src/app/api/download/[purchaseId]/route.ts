@@ -58,7 +58,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ purchase
             status: 200,
             headers,
         });
-    } catch (error) {
-        return new NextResponse("Error leyendo archivo. Posiblemente no existe en el disco.", { status: 500 });
+    } catch (error: any) {
+        console.error("DOWNLOAD ERROR:", error);
+        return new NextResponse("Error leyendo archivo. Posiblemente no existe en el disco. " + error.message, { status: 500 });
     }
 }

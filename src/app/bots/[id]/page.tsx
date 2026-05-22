@@ -9,6 +9,37 @@ const GOLD_DEMO_BOT_ID = "cmn9hf8yc0000vhbcq9hbxk0j";
 const GOLD_REAL_BOT_ID = "cmn9hf9440001vhbclffx9no6";
 const BTC_REAL_BOT_ID  = "cmn9hf9bm0003vhbckaamkqal";
 
+const formatBotName = (name: string, instrument: string, isTitle: boolean = false) => {
+    let emoji = '⚡';
+    let gradient = 'from-brand-light to-brand';
+    
+    if (instrument === 'XAUUSD') {
+        emoji = '👑';
+        gradient = 'from-yellow-300 to-amber-500';
+    } else if (instrument === 'BTCUSD') {
+        emoji = '₿';
+        gradient = 'from-orange-400 to-orange-600';
+    } else if (name.includes('CENT')) {
+        emoji = '🪙';
+        gradient = 'from-slate-300 to-slate-400';
+    }
+
+    const highlightedName = name.split(' ').map((word, i) => {
+        if (['GOLD', 'BTC', 'CENT', 'DEMO'].includes(word)) {
+            const wordGradient = word === 'DEMO' ? 'from-purple-400 to-brand' : gradient;
+            return <span key={i} className={`text-transparent bg-clip-text bg-gradient-to-r ${wordGradient}`}>{word} </span>;
+        }
+        return word + ' ';
+    });
+
+    return (
+        <span className="inline-flex items-center gap-x-3 flex-wrap">
+            <span>{highlightedName}</span>
+            <span className={`${isTitle ? 'text-4xl sm:text-6xl' : 'text-xl'} drop-shadow-xl not-italic translate-y-[-4px]`}>{emoji}</span>
+        </span>
+    );
+};
+
 export default async function BotDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
 
@@ -67,7 +98,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                         )}
                                     </div>
                                     <h1 className="text-5xl sm:text-6xl font-black text-white tracking-tighter uppercase italic leading-[0.9]">
-                                        {bot.name}
+                                        {formatBotName(bot.name, bot.instrument, true)}
                                     </h1>
                                 </div>
                                 <div className="flex flex-col items-start md:items-end">

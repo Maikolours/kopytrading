@@ -38,6 +38,9 @@ export default async function DashboardPage() {
             where: { userId: currentUserId },
             include: { 
                 botProduct: true,
+                botSettings: {
+                    orderBy: { updatedAt: 'desc' }
+                },
                 activePositions: {
                     orderBy: { updatedAt: 'desc' }
                 },

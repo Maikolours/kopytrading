@@ -16,6 +16,37 @@ export const dynamic = "force-dynamic";
 const GOLD_DEMO_ID = "cmn9hf8yc0000vhbcq9hbxk0j";
 const GOLD_REAL_ID = "cmn9hf9440001vhbclffx9no6";
 
+const formatBotName = (name: string, instrument: string, isTitle: boolean = false) => {
+    let emoji = '⚡';
+    let gradient = 'from-brand-light to-brand';
+    
+    if (instrument === 'XAUUSD') {
+        emoji = '👑';
+        gradient = 'from-yellow-300 to-amber-500';
+    } else if (instrument === 'BTCUSD') {
+        emoji = '₿';
+        gradient = 'from-orange-400 to-orange-600';
+    } else if (name.includes('CENT')) {
+        emoji = '🪙';
+        gradient = 'from-slate-300 to-slate-400';
+    }
+
+    const highlightedName = name.split(' ').map((word, i) => {
+        if (['GOLD', 'BTC', 'CENT', 'DEMO'].includes(word)) {
+            const wordGradient = word === 'DEMO' ? 'from-purple-400 to-brand' : gradient;
+            return <span key={i} className={`text-transparent bg-clip-text bg-gradient-to-r ${wordGradient}`}>{word} </span>;
+        }
+        return word + ' ';
+    });
+
+    return (
+        <span className="inline-flex items-center gap-x-2 flex-wrap">
+            <span>{highlightedName}</span>
+            <span className={`${isTitle ? 'text-4xl sm:text-5xl' : 'text-xl'} drop-shadow-xl not-italic translate-y-[-2px]`}>{emoji}</span>
+        </span>
+    );
+};
+
 export default async function BotsPage({ searchParams }: { searchParams: Promise<{ asset?: string }> }) {
     const session = await getServerSession(authOptions);
     const isOwner = session?.user?.email === "viajaconsakura@gmail.com" || session?.user?.email === "viajaconsakura";
@@ -60,8 +91,9 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
             <div id="bot-catalog" className="max-w-7xl mx-auto mb-14 pb-10 text-center relative">
                 <div className="mb-10">
                     {/* Título con font adaptado para móvil */}
-                    <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tighter mb-4 uppercase italic leading-none px-2">
-                        Maiko <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-brand">Algorithms</span>
+                    <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight mb-4 uppercase italic leading-none px-2">
+                        Maiko{" "}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-brand tracking-normal">Algorithms</span>
                     </h1>
                     <p className="text-text-muted text-base max-w-2xl mx-auto font-light tracking-tight opacity-60 italic leading-relaxed">
                         Sistemas de alta frecuencia y precisión institucional para el mercado MT5.
@@ -115,7 +147,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                     <div className="flex justify-between items-start mb-3 relative z-10">
                                         {/* Nombre del bot — con min-w-0 para que truncate funcione */}
                                         <CardTitle className="text-xl font-black italic tracking-tighter uppercase transition-all duration-500 text-white group-hover:text-brand-light min-w-0 pr-2 leading-tight">
-                                            {bot.name}
+                                            {formatBotName(bot.name, bot.instrument)}
                                         </CardTitle>
                                         <div className="flex flex-col items-end gap-1.5 shrink-0">
                                             <span className={`bg-gradient-to-br ${colors.badge} text-white px-2.5 py-1 rounded-full text-[9px] font-black tracking-widest shadow-lg uppercase whitespace-nowrap`}>

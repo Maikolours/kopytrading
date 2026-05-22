@@ -54,7 +54,12 @@ export const BotCard = memo(function BotCard({
     let accountTypeLabel = hasRealSync ? (isCent ? "CUENTA REAL (CENT)" : "CUENTA REAL (USD)") : "CUENTA DEMO";
     let accountTypeColor = hasRealSync ? "bg-success/20 text-success border-success/40" : "bg-orange-500/20 text-orange-400 border-orange-500/40";
     
-    const dailyProfit = (purchase?.pastTrades || []).reduce((acc: number, t: any) => acc + (Number(t.profit) || 0), 0);
+    const botSettings = purchase?.botSettings?.[0]?.settings;
+    const telemetryPnl = botSettings ? (typeof botSettings === 'string' ? JSON.parse(botSettings).pnl_today : botSettings.pnl_today) : null;
+    const dailyProfit = telemetryPnl !== null && telemetryPnl !== undefined 
+        ? Number(telemetryPnl) 
+        : (purchase?.pastTrades || []).reduce((acc: number, t: any) => acc + (Number(t.profit) || 0), 0);
+        
     const isGold = botProduct.name.toLowerCase().includes("gold") || botProduct.name.toLowerCase().includes("ametra");
     const botDisplayName = botProduct.name || theme?.label || baseName;
 
