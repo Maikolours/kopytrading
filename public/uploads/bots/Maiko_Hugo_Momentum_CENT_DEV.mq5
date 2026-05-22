@@ -13,10 +13,8 @@ input string MiLicencia = "23449251";
 input bool CUENTA_REAL_CENT = true; 
 input datetime FechaInicioMaiko = D'2026.05.07 00:00'; 
 
-// --- GESTIÓN HUGO MOMENTUM (HEDGING & TRAILING) ---
-input bool UsarTrailingStop = true;
-input double TrailingStartPips = 1.5;    // Pips a favor para activar Trailing (MUY RÁPIDO)
-input double TrailingPips = 0.5;         // Distancia del Trailing (PEGADO AL PRECIO)
+// --- GESTIÓN HUGO MOMENTUM (CIERRE VIRTUAL POR DINERO) ---
+input double ObjetivoBeneficioDinero = 10.0;  // Cierra cuando la operación gane X dinero (ej: 10 centavos)
 
 // --- FILTRO DE NOTICIAS ---
 input bool UsarFiltroNoticias = false;   // Por defecto desactivado para no perder entradas
@@ -68,7 +66,7 @@ datetime ultimaCestaCerrada = 0;
 string txtVoz = "SISTEMA ONLINE.";
 string txtVeredicto = "ESPERANDO...";
 string txtConsolidado = "HEDGING BIDIRECCIONAL M1";
-string txtProteccion = "TRAILING INDIVIDUAL ACTIVADO ⚡"; 
+string txtProteccion = "CIERRE VIRTUAL POR DINERO ⚡"; 
 
 int hEMA_H1, hEMA_M15, hEMA_M5, hEMA_M1, hEMA_M1_9, hRSI, hATR;
 int hRadar[7];
@@ -214,10 +212,10 @@ void OnTick() {
     if(!BotActivo) { txtVoz = "SISTEMA EN PAUSA."; return; }
     if(bloqueadoPorNoticia) { txtVoz = "PAUSA POR NOTICIAS."; return; }
     
-    // GESTIÓN DE TRAILING INDIVIDUAL
+    // GESTIÓN DE CIERRES VIRTUALES
     if(ArraySize(pos) > 0) {
-        txtVoz = "VIGILANDO CON TRAILING (HEDGE)...";
-        if(UsarTrailingStop) GestionarTrailingStop();
+        txtVoz = "VIGILANDO (HEDGE & CIERRE VIRTUAL)...";
+        GestionarCierreVirtual();
     }
     
     // FILTROS PARA ENTRAR
@@ -266,30 +264,12 @@ void OnTick() {
     }
 }
 
-void GestionarTrailingStop() {
-    double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
-    double ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
-    
-    for(int i=0; i<ArraySize(pos); i++) {
-        if(pos[i].t == POSITION_TYPE_BUY) {
-            double distProfit = (bid - pos[i].pr) / _Point / 10;
-            if(distProfit >= TrailingStartPips) {
-                double newSL = bid - (TrailingPips * _Point * 10);
-                if(pos[i].sl < newSL || pos[i].sl == 0) {
-                    trade.PositionModify(pos[i].ticket, newSL, pos[i].tp);
-                    txtVeredicto = "TRAILING STOP COMPRA AJUSTADO 📈";
-                }
-            }
-        } 
-        else if(pos[i].t == POSITION_TYPE_SELL) {
-            double distProfit = (pos[i].pr - ask) / _Point / 10;
-            if(distProfit >= TrailingStartPips) {
-                double newSL = ask + (TrailingPips * _Point * 10);
-                if(pos[i].sl > newSL || pos[i].sl == 0) {
-                    trade.PositionModify(pos[i].ticket, newSL, pos[i].tp);
-                    txtVeredicto = "TRAILING STOP VENTA AJUSTADO 📉";
-                }
-            }
+void GestionarCierreVirtual() {
+    for(int i=ArraySize(pos)-1; i>=0; i--) {
+        if(pos[i].p >= ObjetivoBeneficioDinero) {
+            trade.PositionClose(pos[i].ticket);
+            txtVeredicto = "💰 OBJETIVO ALCANZADO (" + DoubleToString(ObjetivoBeneficioDinero, 2) + ")";
+            ultimaCestaCerrada = TimeCurrent();
         }
     }
 }
