@@ -6,98 +6,104 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const goldMd = `
-# MANUAL OFICIAL: MAIKO PRO GOLD
-**Versión del Algoritmo:** 5.84 (Maiko Engine)
-**Instrumento Optimizado:** XAUUSD (Oro al contado)
-**Temporalidad (Timeframe):** M1 (Optimizado) - Aunque lee H4 y M5 internamente.
+<div style="text-align: center; margin-bottom: 2rem;">
+  <h1 style="color: #FFD700; font-size: 2.5rem; margin-bottom: 0;">MAIKO PRO GOLD 🏆</h1>
+  <h3 style="color: #666; margin-top: 0;">Manual de Usuario y Estrategia</h3>
+</div>
 
----
+## 1. LO QUE SE ESPERA DE ESTE BOT
+**MAIKO PRO GOLD** es nuestro algoritmo más agresivo y sofisticado, diseñado para aprovechar al máximo la alta volatilidad del mercado del Oro (XAUUSD). 
+- **Perfil de Riesgo:** Medio-Alto. Está pensado para generar beneficios rápidos y diarios.
+- **Rendimiento Esperado:** Busca cerrar un objetivo diario concreto (ej: $100 - $150) y luego "irse a dormir". 
+- **Comportamiento en Flotante:** Es normal que a lo largo de su operativa acumule un "flotante negativo" temporal. El bot promedia precios para buscar un punto de salida matemático; por tanto, **ver operaciones en rojo es parte natural de su estrategia**. No te asustes, el algoritmo tiene sus propios cortafuegos.
 
-## 1. ESTRATEGIA Y FUNCIONAMIENTO
-**MAIKO PRO GOLD** es nuestro algoritmo insignia diseñado específicamente para dominar la volatilidad del Oro. Utiliza una arquitectura **Sniper Grid** en temporalidad **M1**.
-- **Entradas de Alta Precisión (Sniper):** El bot analiza divergencias y agotamiento del precio mediante filtros de RSI, MACD, y acción del precio. No dispara por disparar.
-- **Gestor de Drawdown (Grid/Martingala Dinámica):** Si el precio se gira en contra, el bot ejecuta un "Modo SOS" abriendo posiciones de refuerzo en niveles clave (promediando el precio de entrada) para poder salir rápido del mercado en cuanto haya un pequeño rebote.
-- **Filtros Institucionales:** Tiene activados bloqueos por Spreads altos (Spread Spike Detection) y filtros de direccionalidad en temporalidades mayores (H4, H1, M15).
+## 2. LA ESTRATEGIA: CÓMO FUNCIONA
+Utiliza una estrategia mixta de **Sniper Scalping** y **Recuperación Elástica (SOS)**:
+1. **Análisis de Tendencia:** Internamente escanea el mercado en temporalidades largas (H4, H1 y M15) para identificar si el día es alcista o bajista.
+2. **Entrada de Precisión:** Baja a la temporalidad de 1 Minuto (M1) para buscar divergencias y retrocesos usando RSI y ATR. Entra justo cuando el mercado está "sobre-estirado" en el corto plazo.
+3. **Gestión de Crisis (SOS / Cascada):** Si el precio se gira repentinamente en contra tras la entrada, el bot no asume la pérdida inmediatamente. En su lugar, activa el Modo SOS: despliega operaciones adicionales más abajo con un lotaje fríamente calculado (Martingala dinámica) para "promediar" el precio de entrada. En cuanto el Oro hace un pequeño retroceso (que siempre lo hace), el bot cierra toda la cesta de golpe en ganancia.
 
-## 2. REQUISITOS DEL SISTEMA
-- **Capital Mínimo Recomendado:** $1,000 USD (Para trabajar con holgura).
-- **Cuenta:** Cuenta estándar o ECN con bajo Spread.
-- **Apalancamiento:** 1:500 o superior.
-- **VPS:** Altamente recomendado (un VPS garantiza conexión 24/5 con el mercado).
+## 3. CONSEJOS DE TEMPORALIDAD
+- **Temporalidad (Timeframe) Obligatoria:** M1 (1 Minuto).
+- **Aviso:** Aunque lo pongas en M1, su "cerebro" está analizando H4 y M15 en segundo plano. Nunca lo pongas en H1 o H4, ya que las distancias matemáticas se romperían.
 
-## 3. INSTALACIÓN Y CONEXIÓN
-1. Descarga el archivo \`.ex5\` del dashboard de Kopytrade.
-2. Abre tu **MetaTrader 5**. Ve a \`Archivo > Abrir Carpeta de Datos > MQL5 > Experts\` y pega ahí el archivo \`.ex5\`.
-3. En MT5, ve a \`Herramientas > Opciones > Asesores Expertos\` y marca **"Permitir WebRequest para las siguientes URL"**. Añade: \`https://www.kopytrading.com\`
-4. Refresca la ventana de "Navegador" en MT5, arrastra el bot a un gráfico de **XAUUSD en M1**.
-5. En la ventana de configuración del bot, introduce tu **Email de Compra**, tu **Clave de Licencia (ID)** que aparece en el dashboard, y asegúrate de activar el botón "Algo Trading".
+## 4. INSTRUCCIONES DE USO E INSTALACIÓN
+1. **Descarga:** Obtén el archivo \`.ex5\` desde tu dashboard de Kopytrading.
+2. **Ubicación:** Cópialo en tu MetaTrader 5, dentro de \`Archivo > Abrir Carpeta de Datos > MQL5 > Experts\`.
+3. **Permisos Web:** En MT5 ve a \`Herramientas > Opciones > Asesores Expertos\` y marca "Permitir WebRequest para las siguientes URL". Añade: \`https://www.kopytrading.com\`.
+4. **Gráfico:** Abre un gráfico de XAUUSD (Oro) y ponlo en M1. Arrastra el bot al gráfico.
+5. **Autenticación:** En la ventana que aparece, pon tu **Email de Kopytrading** y la **Clave de Licencia (ID)** que te aparece en la web.
+6. **Ejecución:** Asegúrate de que el botón **"Algo Trading"** de arriba está en verde.
 
-## 4. CONSEJOS DE USO
-- **¡No cierres posiciones manualmente!** El bot tiene un TP (Take Profit) global invisible. Si cierras una operación suelta, puedes romper la cesta matemática del Grid.
-- **Eventos de Noticias (NFP, IPC):** Aunque el bot tiene protección de spreads, se recomienda **PAUSAR** el bot (desde el dashboard o MT5) 30 minutos antes de noticias de muy alto impacto si tienes posiciones abiertas y flotante negativo alto.
-- **Supervisión remota:** Utiliza el Dashboard Web de Kopytrade para pausarlo, cerrarlo en caso de emergencia, o monitorear el Profit del Día sin necesidad de entrar a tu VPS.
+## 5. RECOMENDACIONES VITALES
+- **Capital Mínimo:** Se recomienda encarecidamente $1,000 USD de balance para soportar los flotantes en modo SOS.
+- **NO INTERVENIR:** Nunca cierres una operación manualmente si el bot tiene un grupo de operaciones abiertas. Romperías el cálculo matemático de su cierre automático.
+- **Noticias:** Durante noticias extremas (NFP, IPC), el mercado se vuelve caótico. El bot tiene un filtro, pero se recomienda pausarlo 30 minutos antes de estos eventos.
 `;
 
 const centMd = `
-# MANUAL OFICIAL: MAIKO PRO CENT
-**Versión del Algoritmo:** 2.0 (Maiko Engine)
-**Instrumento Optimizado:** XAUUSD (Oro) / Pares Mayores
-**Temporalidad (Timeframe):** M1 (Optimizado)
+<div style="text-align: center; margin-bottom: 2rem;">
+  <h1 style="color: #00FF7F; font-size: 2.5rem; margin-bottom: 0;">MAIKO PRO CENT 🟢</h1>
+  <h3 style="color: #666; margin-top: 0;">Manual de Usuario y Estrategia</h3>
+</div>
 
----
+## 1. LO QUE SE ESPERA DE ESTE BOT
+**MAIKO PRO CENT** es la versión "Blindada" del motor Maiko. Al estar diseñado exclusivamente para operar en Cuentas CENT (donde 100 dólares equivalen a 10.000 centavos), es un bot extremadamente conservador en cuanto a riesgo real, pero constante.
+- **Perfil de Riesgo:** Muy Bajo.
+- **Rendimiento Esperado:** Menos dólares netos al día que la versión Gold, pero con una curva de crecimiento mucho más suave y sostenida (ideal para Interés Compuesto).
+- **Comportamiento en Flotante:** Soportará drawdowns enormes sin apenas inmutarse. Si el Oro cae 1000 pips de golpe, tu cuenta CENT apenas sufrirá un porcentaje minúsculo de riesgo gracias al amplio margen de los centavos.
 
-## 1. ESTRATEGIA Y FUNCIONAMIENTO
-**MAIKO PRO CENT** contiene el mismo motor letal que la versión Gold, pero está **calibrado específicamente para cuentas CENT**.
-- **Exposición de Capital Reducida:** En una cuenta CENT, $100 USD se ven como $10,000 centavos. El bot aprovecha este margen enorme para poder abrir cuadrículas (Grid) mucho más largas sin poner en riesgo el capital real.
-- **Entradas Sniper:** Al igual que su hermano mayor, espera confirmaciones en los indicadores internos para lanzar la primera operación.
-- **Recuperación Elástica:** Utiliza las posiciones de refuerzo (SOS) a mayores distancias, lo que le permite sobrevivir a movimientos direccionales muy fuertes del Oro sin quemar la cuenta.
+## 2. LA ESTRATEGIA: CÓMO FUNCIONA
+Es exactamente el mismo "Motor de Inteligencia" que el MAIKO PRO GOLD, pero sus distancias matemáticas están reajustadas:
+1. **Entradas Sniper:** Analiza M1 para entrar en los retrocesos del mercado.
+2. **Red de Seguridad Ampliada:** Al tener decenas de miles de "centavos" de margen, su modo Cascada/SOS puede permitirse abrir posiciones con mucha más distancia entre ellas. En lugar de estresarse por un retroceso rápido, el bot teje una red amplia que atrapará el precio con total seguridad, incluso si la tendencia tarda semanas en darse la vuelta.
 
-## 2. REQUISITOS DEL SISTEMA
-- **Capital Mínimo Recomendado:** $100 USD (que serán 10,000 centavos).
-- **Tipo de Cuenta:** OBLIGATORIO usar una cuenta **CENT** o Micro.
-- **Apalancamiento:** 1:500 a 1:1000.
+## 3. CONSEJOS DE TEMPORALIDAD
+- **Temporalidad (Timeframe) Obligatoria:** M1 (1 Minuto).
+- Al igual que el Gold, aunque la gráfica esté en M1, el bot realiza sus cálculos de tendencia mayor analizando H1 y M15 de forma invisible.
 
-## 3. INSTALACIÓN Y CONEXIÓN
-1. Descarga el archivo \`.ex5\` desde tu dashboard.
-2. Cópialo a \`Archivo > Abrir Carpeta de Datos > MQL5 > Experts\` en tu MetaTrader 5.
-3. Activa las WebRequests en \`Herramientas > Opciones > Asesores Expertos\` y añade: \`https://www.kopytrading.com\`
-4. Arrastra el bot a un gráfico de **XAUUSD en M1**. (Algunos brokers tienen el Oro Cent como XAUUSDc o GOLD.c, asegúrate de arrastrarlo al símbolo correcto que te permita operar).
-5. Introduce tus credenciales (Licencia ID y Email) en la pestaña "Parámetros de Entrada" y activa "Algo Trading".
+## 4. INSTRUCCIONES DE USO E INSTALACIÓN
+1. **Verificar Broker:** Asegúrate de que tu cuenta en el broker es tipo **CENT**, Micro o USC. Si instalas este bot en una cuenta Standard con $100, la quemarás.
+2. **Instalación:** Pega el archivo \`.ex5\` en \`MQL5 > Experts\` de tu MetaTrader 5.
+3. **WebRequests:** Añade \`https://www.kopytrading.com\` en las Opciones de Asesores Expertos.
+4. **Gráfico:** Abre el gráfico de Oro (frecuentemente llamado XAUUSDc, XAUUSD.c o GOLD.c en cuentas Cent). Ponlo en M1.
+5. **Configuración:** Pon tu Email y tu Licencia (ID). Enciende el "Algo Trading".
 
-## 4. CONSEJOS DE USO
-- Al ser una cuenta CENT, los beneficios diarios en dólares serán menores (por ejemplo $1 o $2 al día), pero el riesgo es extremadamente bajo comparado con una cuenta Estándar. Es ideal para interés compuesto a largo plazo.
-- Puedes dejarlo correr con noticias sin tanto miedo, ya que el margen operativo en CENTs es inmenso.
+## 5. RECOMENDACIONES VITALES
+- **Paciencia:** Al ver las ganancias en centavos, muchos usuarios se impacientan y suben los lotes. **No lo hagas**. El poder del bot CENT reside en sobrevivir a crisis mundiales del mercado sin estrés. Deja que el interés compuesto haga su magia mes a mes.
 `;
 
 const btcMd = `
-# MANUAL OFICIAL: MAIKO PRO BTC
-**Versión del Algoritmo:** 7.11 (Maiko Engine)
-**Instrumento Optimizado:** BTCUSD (Bitcoin)
-**Temporalidad (Timeframe):** M1 (Optimizado)
+<div style="text-align: center; margin-bottom: 2rem;">
+  <h1 style="color: #F7931A; font-size: 2.5rem; margin-bottom: 0;">MAIKO PRO BTC ₿</h1>
+  <h3 style="color: #666; margin-top: 0;">Manual de Usuario y Estrategia</h3>
+</div>
 
----
+## 1. LO QUE SE ESPERA DE ESTE BOT
+**MAIKO PRO BTC** es un algoritmo Institucional diseñado para domar la bestia de las Criptomonedas, operando de Lunes a Domingo.
+- **Perfil de Riesgo:** Medio-Alto (Bitcoin es altamente volátil).
+- **Rendimiento Esperado:** Ganancias explosivas, seguidas de largos periodos de inactividad. A diferencia del Forex, el Bitcoin se mueve por "sacudidas". El bot no estará operando 24 horas seguidas; es un depredador paciente.
+- **Operativa de Fin de Semana:** El fin de semana baja el volumen institucional. El bot está diseñado para aprovechar esta lateralización y realizar entradas seguras en los soportes y resistencias.
 
-## 1. ESTRATEGIA Y FUNCIONAMIENTO
-**MAIKO PRO BTC** es un desarrollo institucional para operar en el mercado cripto.
-- **Especialidad Fin de Semana:** El Bitcoin opera 24/7. Este algoritmo está especialmente diseñado para aprovechar la volatilidad reducida y los "micropulsos" de fin de semana, aunque puede operar perfectamente de Lunes a Viernes.
-- **Mapeo de EMAs y RSI:** Utiliza análisis de Cruces de Medias Móviles en M5 y M1, junto a niveles dinámicos de RSI para identificar sobrecompras y sobreventas en Bitcoin.
-- **Cierre por Drawdown (Trailing DD):** Incluye funciones únicas de protección de equidad máxima que detectan si el Bitcoin entra en un ciclo bajista/alcista salvaje incontrolable.
+## 2. LA ESTRATEGIA: CÓMO FUNCIONA
+A diferencia de los pares de divisas, el Bitcoin no respeta los canales lógicos y tiene fuertes impulsos (pumps y dumps). Por eso, la estrategia es radicalmente distinta:
+1. **Filtro de Sobrecompra Extrema:** El bot no persigue el precio. Se queda escondido hasta que detecta que el Bitcoin ha sido sobre-vendido de manera irracional (pánico de mercado) analizando niveles de RSI y ATR en temporalidades cortas.
+2. **Entrada Anti-Dump:** Entra en compra sólo cuando detecta que la fuerza vendedora se ha agotado.
+3. **Protección Anti-Liquidación (Trailing DD):** En Bitcoin no podemos usar una cascada profunda porque una caída puede durar meses. El bot utiliza un sistema de límite de equidad y salidas de emergencia para cortar pérdidas antes de que ocurra un desastre.
 
-## 2. REQUISITOS DEL SISTEMA
-- **Capital Mínimo Recomendado:** $2,000 USD (El Bitcoin mueve muchos pips muy rápido).
-- **Cuenta:** Cuenta Crypto o ECN que permita operar BTC los fines de semana.
-- **Spreads:** Busca un broker con spreads bajos en BTCUSD.
+## 3. CONSEJOS DE TEMPORALIDAD
+- **Temporalidad (Timeframe) Obligatoria:** M1 (1 Minuto).
+- Si lo dejas en M1, él se encargará de medir la velocidad a la que baja el precio para dictaminar si es una simple corrección o un colapso del mercado.
 
-## 3. INSTALACIÓN Y CONEXIÓN
-1. Descarga tu archivo \`.ex5\` y colócalo en la carpeta \`MQL5 > Experts\` de tu MetaTrader 5.
-2. Habilita los WebRequests (\`https://www.kopytrading.com\`) en las opciones del terminal.
-3. Arrastra el bot al gráfico **BTCUSD en M1**.
-4. En los ajustes de entrada, coloca tu Licencia (ID del dashboard) y tu correo. 
-5. Asegúrate de tener el botón verde de "Algo Trading" encendido.
+## 4. INSTRUCCIONES DE USO E INSTALACIÓN
+1. **Descarga el .ex5** desde Kopytrading y cópialo a \`MQL5 > Experts\`.
+2. **Permisos Web:** Activa "Permitir WebRequest" hacia \`https://www.kopytrading.com\`.
+3. **Broker Crypto-Friendly:** Asegúrate de que tu broker permite operar Bitcoin los fines de semana y tiene un SPREAD BAJO. (Si el spread es gigantesco, el bot se negará a operar).
+4. **Gráfico:** Ábrelo en BTCUSD (M1), pon tu Licencia y Email, y enciende "Algo Trading".
 
-## 4. CONSEJOS DE USO
-- El Bitcoin no respeta horarios institucionales como Forex. Por lo que **MAIKO PRO BTC** puede estar largo rato en "Buscando Entradas" (Status). Es normal, espera a que el mercado esté maduro.
-- Controla el SPREAD. En fin de semana los brokers suelen ensanchar el spread de las criptos. El bot tiene un filtro automático (\`MaxSpreadPips\`) que evitará entrar si el spread es abusivo.
+## 5. RECOMENDACIONES VITALES
+- **Status "Buscando...":** Verás que el bot pasa horas o incluso días sin abrir operaciones. **No está roto, está analizando**. El Bitcoin requiere extrema precisión.
+- **Capital Mínimo:** Recomendamos $2,000 USD de capital operativo para soportar las fluctuaciones del precio del Bitcoin de forma cómoda.
 `;
 
 async function generateManuals() {
@@ -118,25 +124,6 @@ async function generateManuals() {
     } catch (e) {
         console.error("Error generating PDFs:", e);
     }
-
-    // Update DB
-    console.log("Updating Database...");
-    await prisma.botProduct.updateMany({
-        where: { name: { contains: 'GOLD' } },
-        data: { pdfFilePath: '/uploads/Manual_Maiko_Pro_Gold.pdf' }
-    });
-    
-    await prisma.botProduct.updateMany({
-        where: { name: { contains: 'CENT' } },
-        data: { pdfFilePath: '/uploads/Manual_Maiko_Pro_Cent.pdf' }
-    });
-    
-    await prisma.botProduct.updateMany({
-        where: { name: { contains: 'BTC' } },
-        data: { pdfFilePath: '/uploads/Manual_Maiko_Pro_BTC.pdf' }
-    });
-
-    console.log("Database updated.");
 }
 
 generateManuals().catch(console.error);

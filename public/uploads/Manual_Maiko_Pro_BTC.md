@@ -1,29 +1,31 @@
 
-# MANUAL OFICIAL: MAIKO PRO BTC
-**Versión del Algoritmo:** 7.11 (Maiko Engine)
-**Instrumento Optimizado:** BTCUSD (Bitcoin)
-**Temporalidad (Timeframe):** M1 (Optimizado)
+<div style="text-align: center; margin-bottom: 2rem;">
+  <h1 style="color: #F7931A; font-size: 2.5rem; margin-bottom: 0;">MAIKO PRO BTC ₿</h1>
+  <h3 style="color: #666; margin-top: 0;">Manual de Usuario y Estrategia</h3>
+</div>
 
----
+## 1. LO QUE SE ESPERA DE ESTE BOT
+**MAIKO PRO BTC** es un algoritmo Institucional diseñado para domar la bestia de las Criptomonedas, operando de Lunes a Domingo.
+- **Perfil de Riesgo:** Medio-Alto (Bitcoin es altamente volátil).
+- **Rendimiento Esperado:** Ganancias explosivas, seguidas de largos periodos de inactividad. A diferencia del Forex, el Bitcoin se mueve por "sacudidas". El bot no estará operando 24 horas seguidas; es un depredador paciente.
+- **Operativa de Fin de Semana:** El fin de semana baja el volumen institucional. El bot está diseñado para aprovechar esta lateralización y realizar entradas seguras en los soportes y resistencias.
 
-## 1. ESTRATEGIA Y FUNCIONAMIENTO
-**MAIKO PRO BTC** es un desarrollo institucional para operar en el mercado cripto.
-- **Especialidad Fin de Semana:** El Bitcoin opera 24/7. Este algoritmo está especialmente diseñado para aprovechar la volatilidad reducida y los "micropulsos" de fin de semana, aunque puede operar perfectamente de Lunes a Viernes.
-- **Mapeo de EMAs y RSI:** Utiliza análisis de Cruces de Medias Móviles en M5 y M1, junto a niveles dinámicos de RSI para identificar sobrecompras y sobreventas en Bitcoin.
-- **Cierre por Drawdown (Trailing DD):** Incluye funciones únicas de protección de equidad máxima que detectan si el Bitcoin entra en un ciclo bajista/alcista salvaje incontrolable.
+## 2. LA ESTRATEGIA: CÓMO FUNCIONA
+A diferencia de los pares de divisas, el Bitcoin no respeta los canales lógicos y tiene fuertes impulsos (pumps y dumps). Por eso, la estrategia es radicalmente distinta:
+1. **Filtro de Sobrecompra Extrema:** El bot no persigue el precio. Se queda escondido hasta que detecta que el Bitcoin ha sido sobre-vendido de manera irracional (pánico de mercado) analizando niveles de RSI y ATR en temporalidades cortas.
+2. **Entrada Anti-Dump:** Entra en compra sólo cuando detecta que la fuerza vendedora se ha agotado.
+3. **Protección Anti-Liquidación (Trailing DD):** En Bitcoin no podemos usar una cascada profunda porque una caída puede durar meses. El bot utiliza un sistema de límite de equidad y salidas de emergencia para cortar pérdidas antes de que ocurra un desastre.
 
-## 2. REQUISITOS DEL SISTEMA
-- **Capital Mínimo Recomendado:** $2,000 USD (El Bitcoin mueve muchos pips muy rápido).
-- **Cuenta:** Cuenta Crypto o ECN que permita operar BTC los fines de semana.
-- **Spreads:** Busca un broker con spreads bajos en BTCUSD.
+## 3. CONSEJOS DE TEMPORALIDAD
+- **Temporalidad (Timeframe) Obligatoria:** M1 (1 Minuto).
+- Si lo dejas en M1, él se encargará de medir la velocidad a la que baja el precio para dictaminar si es una simple corrección o un colapso del mercado.
 
-## 3. INSTALACIÓN Y CONEXIÓN
-1. Descarga tu archivo `.ex5` y colócalo en la carpeta `MQL5 > Experts` de tu MetaTrader 5.
-2. Habilita los WebRequests (`https://www.kopytrading.com`) en las opciones del terminal.
-3. Arrastra el bot al gráfico **BTCUSD en M1**.
-4. En los ajustes de entrada, coloca tu Licencia (ID del dashboard) y tu correo. 
-5. Asegúrate de tener el botón verde de "Algo Trading" encendido.
+## 4. INSTRUCCIONES DE USO E INSTALACIÓN
+1. **Descarga el .ex5** desde Kopytrading y cópialo a `MQL5 > Experts`.
+2. **Permisos Web:** Activa "Permitir WebRequest" hacia `https://www.kopytrading.com`.
+3. **Broker Crypto-Friendly:** Asegúrate de que tu broker permite operar Bitcoin los fines de semana y tiene un SPREAD BAJO. (Si el spread es gigantesco, el bot se negará a operar).
+4. **Gráfico:** Ábrelo en BTCUSD (M1), pon tu Licencia y Email, y enciende "Algo Trading".
 
-## 4. CONSEJOS DE USO
-- El Bitcoin no respeta horarios institucionales como Forex. Por lo que **MAIKO PRO BTC** puede estar largo rato en "Buscando Entradas" (Status). Es normal, espera a que el mercado esté maduro.
-- Controla el SPREAD. En fin de semana los brokers suelen ensanchar el spread de las criptos. El bot tiene un filtro automático (`MaxSpreadPips`) que evitará entrar si el spread es abusivo.
+## 5. RECOMENDACIONES VITALES
+- **Status "Buscando...":** Verás que el bot pasa horas o incluso días sin abrir operaciones. **No está roto, está analizando**. El Bitcoin requiere extrema precisión.
+- **Capital Mínimo:** Recomendamos $2,000 USD de capital operativo para soportar las fluctuaciones del precio del Bitcoin de forma cómoda.

@@ -1,29 +1,30 @@
 
-# MANUAL OFICIAL: MAIKO PRO CENT
-**Versión del Algoritmo:** 2.0 (Maiko Engine)
-**Instrumento Optimizado:** XAUUSD (Oro) / Pares Mayores
-**Temporalidad (Timeframe):** M1 (Optimizado)
+<div style="text-align: center; margin-bottom: 2rem;">
+  <h1 style="color: #00FF7F; font-size: 2.5rem; margin-bottom: 0;">MAIKO PRO CENT 🟢</h1>
+  <h3 style="color: #666; margin-top: 0;">Manual de Usuario y Estrategia</h3>
+</div>
 
----
+## 1. LO QUE SE ESPERA DE ESTE BOT
+**MAIKO PRO CENT** es la versión "Blindada" del motor Maiko. Al estar diseñado exclusivamente para operar en Cuentas CENT (donde 100 dólares equivalen a 10.000 centavos), es un bot extremadamente conservador en cuanto a riesgo real, pero constante.
+- **Perfil de Riesgo:** Muy Bajo.
+- **Rendimiento Esperado:** Menos dólares netos al día que la versión Gold, pero con una curva de crecimiento mucho más suave y sostenida (ideal para Interés Compuesto).
+- **Comportamiento en Flotante:** Soportará drawdowns enormes sin apenas inmutarse. Si el Oro cae 1000 pips de golpe, tu cuenta CENT apenas sufrirá un porcentaje minúsculo de riesgo gracias al amplio margen de los centavos.
 
-## 1. ESTRATEGIA Y FUNCIONAMIENTO
-**MAIKO PRO CENT** contiene el mismo motor letal que la versión Gold, pero está **calibrado específicamente para cuentas CENT**.
-- **Exposición de Capital Reducida:** En una cuenta CENT, $100 USD se ven como $10,000 centavos. El bot aprovecha este margen enorme para poder abrir cuadrículas (Grid) mucho más largas sin poner en riesgo el capital real.
-- **Entradas Sniper:** Al igual que su hermano mayor, espera confirmaciones en los indicadores internos para lanzar la primera operación.
-- **Recuperación Elástica:** Utiliza las posiciones de refuerzo (SOS) a mayores distancias, lo que le permite sobrevivir a movimientos direccionales muy fuertes del Oro sin quemar la cuenta.
+## 2. LA ESTRATEGIA: CÓMO FUNCIONA
+Es exactamente el mismo "Motor de Inteligencia" que el MAIKO PRO GOLD, pero sus distancias matemáticas están reajustadas:
+1. **Entradas Sniper:** Analiza M1 para entrar en los retrocesos del mercado.
+2. **Red de Seguridad Ampliada:** Al tener decenas de miles de "centavos" de margen, su modo Cascada/SOS puede permitirse abrir posiciones con mucha más distancia entre ellas. En lugar de estresarse por un retroceso rápido, el bot teje una red amplia que atrapará el precio con total seguridad, incluso si la tendencia tarda semanas en darse la vuelta.
 
-## 2. REQUISITOS DEL SISTEMA
-- **Capital Mínimo Recomendado:** $100 USD (que serán 10,000 centavos).
-- **Tipo de Cuenta:** OBLIGATORIO usar una cuenta **CENT** o Micro.
-- **Apalancamiento:** 1:500 a 1:1000.
+## 3. CONSEJOS DE TEMPORALIDAD
+- **Temporalidad (Timeframe) Obligatoria:** M1 (1 Minuto).
+- Al igual que el Gold, aunque la gráfica esté en M1, el bot realiza sus cálculos de tendencia mayor analizando H1 y M15 de forma invisible.
 
-## 3. INSTALACIÓN Y CONEXIÓN
-1. Descarga el archivo `.ex5` desde tu dashboard.
-2. Cópialo a `Archivo > Abrir Carpeta de Datos > MQL5 > Experts` en tu MetaTrader 5.
-3. Activa las WebRequests en `Herramientas > Opciones > Asesores Expertos` y añade: `https://www.kopytrading.com`
-4. Arrastra el bot a un gráfico de **XAUUSD en M1**. (Algunos brokers tienen el Oro Cent como XAUUSDc o GOLD.c, asegúrate de arrastrarlo al símbolo correcto que te permita operar).
-5. Introduce tus credenciales (Licencia ID y Email) en la pestaña "Parámetros de Entrada" y activa "Algo Trading".
+## 4. INSTRUCCIONES DE USO E INSTALACIÓN
+1. **Verificar Broker:** Asegúrate de que tu cuenta en el broker es tipo **CENT**, Micro o USC. Si instalas este bot en una cuenta Standard con $100, la quemarás.
+2. **Instalación:** Pega el archivo `.ex5` en `MQL5 > Experts` de tu MetaTrader 5.
+3. **WebRequests:** Añade `https://www.kopytrading.com` en las Opciones de Asesores Expertos.
+4. **Gráfico:** Abre el gráfico de Oro (frecuentemente llamado XAUUSDc, XAUUSD.c o GOLD.c en cuentas Cent). Ponlo en M1.
+5. **Configuración:** Pon tu Email y tu Licencia (ID). Enciende el "Algo Trading".
 
-## 4. CONSEJOS DE USO
-- Al ser una cuenta CENT, los beneficios diarios en dólares serán menores (por ejemplo $1 o $2 al día), pero el riesgo es extremadamente bajo comparado con una cuenta Estándar. Es ideal para interés compuesto a largo plazo.
-- Puedes dejarlo correr con noticias sin tanto miedo, ya que el margen operativo en CENTs es inmenso.
+## 5. RECOMENDACIONES VITALES
+- **Paciencia:** Al ver las ganancias en centavos, muchos usuarios se impacientan y suben los lotes. **No lo hagas**. El poder del bot CENT reside en sobrevivir a crisis mundiales del mercado sin estrés. Deja que el interés compuesto haga su magia mes a mes.
