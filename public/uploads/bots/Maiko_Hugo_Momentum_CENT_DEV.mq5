@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                MAIKO HUGO MOMENTUM | EDITION REAL CENT            |
-//|      "ULTRA FAST SAR & TRAILING" | VERSION 14.0                   |
+//|      "HEDGING BI-DIRECCIONAL M1" | VERSION 15.0                   |
 //+------------------------------------------------------------------+
 #property copyright "Elite Gold MAIKO Momentum"
-#property version   "14.00"
+#property version   "15.00"
 #property strict
 
 #include <Trade\Trade.mqh>
@@ -13,19 +13,18 @@ input string MiLicencia = "23449251";
 input bool CUENTA_REAL_CENT = true; 
 input datetime FechaInicioMaiko = D'2026.05.07 00:00'; 
 
-// --- GESTIÓN HUGO MOMENTUM (SAR & TRAILING) ---
-input bool UsarStopAndReverse = true;    // Cerrar y Girar si cambia la vela M1
+// --- GESTIÓN HUGO MOMENTUM (HEDGING & TRAILING) ---
 input bool UsarTrailingStop = true;
-input double TrailingStartPips = 4.0;    // Pips a favor para activar Trailing
-input double TrailingPips = 2.0;         // Distancia del Trailing
+input double TrailingStartPips = 1.5;    // Pips a favor para activar Trailing (MUY RÁPIDO)
+input double TrailingPips = 0.5;         // Distancia del Trailing (PEGADO AL PRECIO)
 
 // --- FILTRO DE NOTICIAS ---
-input bool UsarFiltroNoticias = true;    
+input bool UsarFiltroNoticias = false;   // Por defecto desactivado para no perder entradas
 input string HoraProximaNoticia = "14:30"; 
 input int MinsAntesNoticia = 15;         
 input int MinsDespuesNoticia = 15;       
 
-// --- FILTROS DE TENDENCIA (AHORA SOLO CONFIRMACIONALES) ---
+// --- FILTROS DE ESPERA ---
 input double SegundosReAnalisis = 5; // Re-análisis hiper rápido (5 seg)
 
 // --- SINCRONIZACIÓN CON KOPYTRADING.COM ---
@@ -33,14 +32,14 @@ input string PurchaseID = "";          // ID de licencia (del dashboard de kopyt
 input string SyncURL = "https://www.kopytrading.com/api/sync-positions";
 input int SyncIntervalSec = 5;         // Cada cuántos segundos enviar datos 
 
-// --- NUEVOS FILTROS ---
+// --- NUEVOS FILTROS HORARIOS ---
 input bool UsarFiltroHorario = true;
-input int HoraInicioSesion = 9;  // 09:00
-input int HoraFinSesion = 17;    // 17:00
+input int HoraInicioSesion = 0;  // 00:00 por defecto para que opere siempre
+input int HoraFinSesion = 24;    // 24:00 por defecto
 
 // --- FILTROS SNIPER ---
 input double MaxSpreadPips = 4.5; 
-input double MinCuerpoVelaPips = 2.0; // Reducido para entrar más rápido
+input double MinCuerpoVelaPips = 2.0; // Reducido para entrar rápido
 
 // --- GESTION DE LOTAJE ---
 input double LotajeInicial = 0.05;   
@@ -54,7 +53,7 @@ input color ColorHeader = C'30,30,30';
 input color BodyColor = C'15,15,15';
 input int HUD_X = 15;
 input int PosY_HUD = 25;
-input string TradeComment = "MAIKO_HUGO_CENT";
+input string TradeComment = "MAIKO_HUGO_HEDGE";
 
 // Globales
 CTrade trade;
@@ -68,8 +67,8 @@ bool bloqueadoPorNoticia = false;
 datetime ultimaCestaCerrada = 0;
 string txtVoz = "SISTEMA ONLINE.";
 string txtVeredicto = "ESPERANDO...";
-string txtConsolidado = "HUGO MOMENTUM M1";
-string txtProteccion = "TRAILING & SAR ACTIVOS ⚡"; 
+string txtConsolidado = "HEDGING BIDIRECCIONAL M1";
+string txtProteccion = "TRAILING INDIVIDUAL ACTIVADO ⚡"; 
 
 int hEMA_H1, hEMA_M15, hEMA_M5, hEMA_M1, hEMA_M1_9, hRSI, hATR;
 int hRadar[7];
@@ -144,7 +143,7 @@ void EnviarTelemetria() {
     string json = StringFormat(
         "{\"purchaseId\":\"%s\",\"account\":\"%s\",\"balance\":%.2f,\"equity\":%.2f,"
         "\"pnl_today\":%.2f,\"status\":\"%s\",\"symbol\":\"%s\",\"narrative\":\"%s\","
-        "\"isReal\":true,\"version\":\"14.00\",\"positions\":%s}",
+        "\"isReal\":true,\"version\":\"15.00\",\"positions\":%s}",
         PurchaseID, account, balance, equity,
         ganadoHoy, status, _Symbol, txtVeredicto, posJson
     );
@@ -215,12 +214,10 @@ void OnTick() {
     if(!BotActivo) { txtVoz = "SISTEMA EN PAUSA."; return; }
     if(bloqueadoPorNoticia) { txtVoz = "PAUSA POR NOTICIAS."; return; }
     
-    // GESTIÓN DE OPERACIONES ACTIVAS (TRAILING & SAR)
+    // GESTIÓN DE TRAILING INDIVIDUAL
     if(ArraySize(pos) > 0) {
-        txtVoz = "VIGILANDO (TRAILING & SAR)...";
+        txtVoz = "VIGILANDO CON TRAILING (HEDGE)...";
         if(UsarTrailingStop) GestionarTrailingStop();
-        if(UsarStopAndReverse) GestionarSAR(emaM1_9[0]);
-        return; 
     }
     
     // FILTROS PARA ENTRAR
@@ -239,19 +236,31 @@ void OnTick() {
         }
     }
 
+    // CONTAR OPERACIONES ACTUALES PARA MODO HEDGE (MÁXIMO 1 POR SENTIDO)
+    int countBuy = 0, countSell = 0;
+    for(int i=0; i<ArraySize(pos); i++) {
+        if(pos[i].t == POSITION_TYPE_BUY) countBuy++;
+        if(pos[i].t == POSITION_TYPE_SELL) countSell++;
+    }
+
     // LOGICA DE ENTRADA HUGO MOMENTUM M1
     int pM1 = AnalizarPatronPriceAction(PERIOD_M1, 1);
     bool buyMomentum = (pM1 == 2 && bid > emaM1_9[0]);
     bool sellMomentum = (pM1 == -2 && bid < emaM1_9[0]);
 
-    if(buyMomentum) {
-        txtVeredicto = "🚀 MOMENTUM ALCISTA DETECTADO";
+    if(buyMomentum && countBuy < 1) {
+        txtVeredicto = "🚀 MOMENTUM ALCISTA: COMPRANDO";
         trade.Buy(LotajeInicial, _Symbol, 0, 0, 0, TradeComment);
+        ultimaCestaCerrada = TimeCurrent();
     } 
-    else if(sellMomentum) {
-        txtVeredicto = "💥 MOMENTUM BAJISTA DETECTADO";
+    else if(sellMomentum && countSell < 1) {
+        txtVeredicto = "💥 MOMENTUM BAJISTA: VENDIENDO";
         trade.Sell(LotajeInicial, _Symbol, 0, 0, 0, TradeComment);
+        ultimaCestaCerrada = TimeCurrent();
     } 
+    else if (buyMomentum || sellMomentum) {
+        txtVeredicto = "MOMENTUM DETECTADO (POSICIONES LLENAS)";
+    }
     else {
         txtVeredicto = "ESPERANDO VELAS DE FUERZA (M1)...";
     }
@@ -268,7 +277,7 @@ void GestionarTrailingStop() {
                 double newSL = bid - (TrailingPips * _Point * 10);
                 if(pos[i].sl < newSL || pos[i].sl == 0) {
                     trade.PositionModify(pos[i].ticket, newSL, pos[i].tp);
-                    txtVeredicto = "TRAILING STOP AJUSTADO 📈";
+                    txtVeredicto = "TRAILING STOP COMPRA AJUSTADO 📈";
                 }
             }
         } 
@@ -278,34 +287,8 @@ void GestionarTrailingStop() {
                 double newSL = ask + (TrailingPips * _Point * 10);
                 if(pos[i].sl > newSL || pos[i].sl == 0) {
                     trade.PositionModify(pos[i].ticket, newSL, pos[i].tp);
-                    txtVeredicto = "TRAILING STOP AJUSTADO 📉";
+                    txtVeredicto = "TRAILING STOP VENTA AJUSTADO 📉";
                 }
-            }
-        }
-    }
-}
-
-void GestionarSAR(double emaM1_9) {
-    double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
-    int pM1 = AnalizarPatronPriceAction(PERIOD_M1, 1);
-    
-    for(int i=ArraySize(pos)-1; i>=0; i--) {
-        if(pos[i].t == POSITION_TYPE_BUY) {
-            // Si la vela gira fuertemente a bajista y cruza bajo la EMA rápida, Cerramos y Vendemos
-            if(pM1 == -2 && bid < emaM1_9) {
-                trade.PositionClose(pos[i].ticket);
-                txtVeredicto = "🔄 SAR: COMPRA CERRADA -> GIRANDO A VENTA";
-                trade.Sell(LotajeInicial, _Symbol, 0, 0, 0, TradeComment + "_SAR");
-                ultimaCestaCerrada = TimeCurrent();
-            }
-        }
-        else if(pos[i].t == POSITION_TYPE_SELL) {
-            // Si la vela gira fuertemente a alcista y cruza sobre la EMA rápida, Cerramos y Compramos
-            if(pM1 == 2 && bid > emaM1_9) {
-                trade.PositionClose(pos[i].ticket);
-                txtVeredicto = "🔄 SAR: VENTA CERRADA -> GIRANDO A COMPRA";
-                trade.Buy(LotajeInicial, _Symbol, 0, 0, 0, TradeComment + "_SAR");
-                ultimaCestaCerrada = TimeCurrent();
             }
         }
     }
@@ -360,7 +343,7 @@ void CrearInterfazMaster() {
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_XSIZE, w); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_YSIZE, h);
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_BGCOLOR, BodyColor); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_ZORDER, 9999); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_BACK, false);
     CrearBoton("MAIKO_Head", x, y, w, 35, "", ColorHeader, clrNONE, 10000); 
-    CrearLabel("MAIKO_T", x+10, y+10, "MAIKO HUGO MOMENTUM v14.0", ColorMain, 11, 10001); 
+    CrearLabel("MAIKO_T", x+10, y+10, "MAIKO HUGO MOMENTUM v15.0", ColorMain, 11, 10001); 
     CrearBoton("MAIKO_BtnMin", x+w-35, y+5, 30, 25, "_", clrGray, clrWhite, 10010);
     string rads[]={"W1","D1","H4","H1","M15","M5","M1"};
     for(int i=0; i<7; i++) {
