@@ -29,7 +29,7 @@ input bool CheckH4 = true;
 input bool CheckH1 = true;
 input bool CheckM15 = true;
 input bool CheckM5 = true;
-input double SegundosReAnalisis = 60; 
+input double SegundosReAnalisis = 30.0; 
 
 // --- MEJORAS INSTITUCIONALES HUGO ---
 input bool UsarFiltroADX = true; // Activar Filtro ADX (H1 > 25)
@@ -40,12 +40,12 @@ input double MaxSpreadDeltaPips = 10.0; // Desviación Máxima del Spread en pip
 // --- SINCRONIZACIÓN CON KOPYTRADING.COM ---
 input string PurchaseID = "";          // ID de licencia (del dashboard de kopytrading.com)
 input string SyncURL = "https://www.kopytrading.com/api/sync-positions";
-input int SyncIntervalSec = 5;         // Cada cuántos segundos enviar datos 
+input int SyncIntervalSec = 3;         // Cada cuántos segundos enviar datos 
 
 // --- NUEVOS FILTROS ---
 input bool UsarFiltroHorario = true;
 input int HoraInicioSesion = 9;  // 09:00
-input int HoraFinSesion = 17;    // 17:00
+input int HoraFinSesion = 22;    // 17:00
 input bool UsarFiltroATR = true;
 input double MinATR_Pips = 5.0; // Mínimo movimiento (Pips) de ATR para entrar
 
@@ -54,23 +54,23 @@ input bool UsarATR_Dinamico = true;
 input bool UsarFiltroSR = true;      
 input double MargenZonaPips = 2.0;    
 input double MinDistanciaEMAPips = 1.0; 
-input bool EsperarGiroM1_SOS = false;    // Espera vela cerrada M1 para abrir SOS (false = al toque)
+input bool EsperarGiroM1_SOS = true;     // Espera vela cerrada M1 para abrir SOS (false = al toque)
 input double MaxRSI_Compra = 70.0;   
 input double MinRSI_Venta = 30.0;    
 input double MaxSpreadPips = 4.5; 
 input double MinCuerpoVelaPips = 3.0; 
 
 // --- GESTION DE LOTAJE ---
-input double LotajeMinimo = 0.01;     // Lote para entradas 1 y 2 (mínimo, protege la cesta)
+input double LotajeMinimo = 0.02;     // Lote para entradas 1 y 2 (mínimo, protege la cesta)
 input double LotajeInicial = 0.05;   // Lote referencia
 input double MultiplicadorRefuerzo = 1.0; 
 input double MaxLoteIndividual = 0.05; // Lote SOS (rescates desde posición 3)
 input double MaxLoteTotal = 0.45; 
-input int LimitePosicionesSOS = 15; 
+input int LimitePosicionesSOS = 3; 
 
 // --- OBJETIVOS DE PROFIT ---
 input bool UsarModoScalp = true;        // Cierra posiciones individuales en ganancia
-input double ProfitScalpIndividual = 20.0; // Profit individual para posiciones SOS (cents)
+input double ProfitScalpIndividual = 10.0; // Profit individual para posiciones SOS (cents)
 input double ProfitScalpMinLote = 10.0;    // Profit individual para posiciones de 0.01 (cents)
 input bool UsarEmergenciaAuto = true;    // Activa la salida de emergencia inteligente
 input double ProfitEmergenciaCents = 75.0; // TP de emergencia global (cents)
@@ -208,9 +208,10 @@ void EnviarTelemetria() {
     string json = StringFormat(
         "{\"purchaseId\":\"%s\",\"account\":\"%s\",\"balance\":%.2f,\"equity\":%.2f,"
         "\"pnl_today\":%.2f,\"status\":\"%s\",\"symbol\":\"%s\",\"narrative\":\"%s\","
-        "\"isReal\":true,\"version\":\"13.92\",\"positions\":%s}",
+        "\"armed\":%s,\"isReal\":true,\"version\":\"13.92\",\"positions\":%s}",
         PurchaseID, account, balance, equity,
-        ganadoHoy, status, _Symbol, txtVeredicto, posJson
+        ganadoHoy, status, _Symbol, txtVeredicto,
+        BotActivo ? "true" : "false", posJson
     );
     
     char postData[];
@@ -218,7 +219,31 @@ void EnviarTelemetria() {
     char result[];
     string headers = "Content-Type: application/json\r\n";
     string resHeaders;
-    WebRequest("POST", SyncURL, headers, 3000, postData, result, resHeaders);
+    int res = WebRequest("POST", SyncURL, headers, 3000, postData, result, resHeaders);
+    if(res == 200) {
+        string response = CharArrayToString(result, 0, WHOLE_ARRAY, CP_UTF8);
+        
+        // 1. Control Remoto: Cierre de Emergencia
+        if(StringFind(response, "\"cmd\":\"CLOSE_ALL\"") >= 0) {
+            CerrarTodo();
+            Print("MAIKO REMOTE CONTROL: Cierre total (CLOSE_ALL) ejecutado desde el panel web.");
+        }
+        
+        // 2. Control Remoto: Encendido / Apagado
+        if(StringFind(response, "\"armed\":true") >= 0) {
+            if(!BotActivo) {
+                BotActivo = true;
+                Print("MAIKO REMOTE CONTROL: Bot activado (ENCENDIDO) desde el panel web.");
+            }
+        } else if(StringFind(response, "\"armed\":false") >= 0) {
+            if(BotActivo) {
+                BotActivo = false;
+                Print("MAIKO REMOTE CONTROL: Bot desactivado (PAUSADO) desde el panel web.");
+            }
+        }
+    } else {
+        Print("MAIKO SYNC: WebRequest returned code ", res);
+    }
 }
 
 bool IsNewsBlocked() {
@@ -404,6 +429,8 @@ void OnTick() {
     ActualizarInterfazMaster();
 
     if(!BotActivo) { txtVoz = "SISTEMA EN PAUSA."; return; }
+    else if (txtVoz == "SISTEMA EN PAUSA.") { txtVoz = "ANALIZANDO MERCADO..."; }
+    
     if(bloqueadoPorNoticia) { txtVoz = "PAUSA POR NOTICIAS."; return; }
     
     long diffEspera = TimeCurrent() - ultimaCestaCerrada;

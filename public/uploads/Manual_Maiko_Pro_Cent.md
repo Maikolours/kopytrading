@@ -15,9 +15,9 @@ Es exactamente el mismo "Motor de Inteligencia" que el MAIKO PRO GOLD, pero sus 
 1. **Entradas Sniper:** Analiza M1 para entrar en los retrocesos del mercado.
 2. **Red de Seguridad Ampliada:** Al tener decenas de miles de "centavos" de margen, su modo Cascada/SOS puede permitirse abrir posiciones con mucha más distancia entre ellas. En lugar de estresarse por un retroceso rápido, el bot teje una red amplia que atrapará el precio con total seguridad, incluso si la tendencia tarda semanas en darse la vuelta.
 
-## 3. CONSEJOS DE TEMPORALIDAD
-- **Temporalidad (Timeframe) Obligatoria:** M1 (1 Minuto).
-- Al igual que el Gold, aunque la gráfica esté en M1, el bot realiza sus cálculos de tendencia mayor analizando H1 y M15 de forma invisible.
+## 3. CONSEJOS DE TEMPORALIDAD Y RECOMENDACIÓN
+- **Temporalidades Compatibles:** M1 (1 Minuto) y M5 (5 Minutos).
+- **Recomendación General:** **Aconsejamos operar en M5 (5 Minutos)** para una seguridad máxima y un crecimiento constante y suave. Si deseas una frecuencia de entradas más alta, puedes utilizar M1, ya que las cuentas CENT disponen de un enorme margen de flotante que permite absorber cualquier movimiento de mercado con facilidad.
 
 ## 4. INSTRUCCIONES DE USO E INSTALACIÓN
 1. **Verificar Broker:** Asegúrate de que tu cuenta en el broker es tipo **CENT**, Micro o USC. Si instalas este bot en una cuenta Standard con $100, la quemarás.

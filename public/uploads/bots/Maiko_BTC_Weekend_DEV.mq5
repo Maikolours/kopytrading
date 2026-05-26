@@ -475,7 +475,8 @@ void OnTick() {
     ActualizarRadarMaster();
     ActualizarInterfazMaster();
 
-    if(!BotActivo) { txtVoz = "BTC PAUSADO."; return; }
+    if(!BotActivo) { txtVoz = "SISTEMA EN PAUSA."; return; }
+    else if (txtVoz == "SISTEMA EN PAUSA.") { txtVoz = "ANALIZANDO MERCADO..."; }
     
     long diffEspera = TimeCurrent() - ultimaCestaCerrada;
     if(diffEspera < (long)SegundosReAnalisis) { 

@@ -278,10 +278,10 @@ void EnviarTelemetria() {
     string json = StringFormat(
         "{\"purchaseId\":\"%s\",\"account\":\"%s\",\"balance\":%.2f,\"equity\":%.2f,"
         "\"pnl_today\":%.2f,\"status\":\"%s\",\"symbol\":\"%s\",\"narrative\":\"%s\","
-        "\"isReal\":true,\"version\":\"13.92\",\"positions\":%s}",
+        "\"armed\":%s,\"isReal\":true,\"version\":\"13.92\",\"positions\":%s}",
         PurchaseID, account, balance, equity,
         ganadoHoy, status, _Symbol,
-        txtVeredicto, posJson
+        txtVeredicto, BotActivo ? "true" : "false", posJson
     );
     
     char postData[];
@@ -296,6 +296,26 @@ void EnviarTelemetria() {
         Print("MAIKO SYNC SERVER ERROR: Code ", res, ". Response: ", CharArrayToString(result));
     } else {
         Print("MAIKO SYNC SUCCESS: Data sent to dashboard. Length: ", StringLen(json));
+        string response = CharArrayToString(result, 0, WHOLE_ARRAY, CP_UTF8);
+        
+        // 1. Control Remoto: Cierre de Emergencia
+        if(StringFind(response, "\"cmd\":\"CLOSE_ALL\"") >= 0) {
+            CerrarTodo();
+            Print("MAIKO REMOTE CONTROL: Cierre total (CLOSE_ALL) ejecutado desde el panel web.");
+        }
+        
+        // 2. Control Remoto: Encendido / Apagado
+        if(StringFind(response, "\"armed\":true") >= 0) {
+            if(!BotActivo) {
+                BotActivo = true;
+                Print("MAIKO REMOTE CONTROL: Bot activado (ENCENDIDO) desde el panel web.");
+            }
+        } else if(StringFind(response, "\"armed\":false") >= 0) {
+            if(BotActivo) {
+                BotActivo = false;
+                Print("MAIKO REMOTE CONTROL: Bot desactivado (PAUSADO) desde el panel web.");
+            }
+        }
     }
 }
 

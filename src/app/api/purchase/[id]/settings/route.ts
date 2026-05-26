@@ -23,18 +23,24 @@ export async function GET(
         });
 
         // 🛡️ SAKURA MASTER FETCH: Si eres tú, buscamos tu balance más fresco en todo el sistema.
-        // v14.0: Ahora filtramos por instrumento para evitar cruces en tiempo real
+        // v14.0: Ahora filtramos por instrumento y tipo de bot para evitar cruces en tiempo real
         const isSakura = session.user.email?.includes("viajaconsakura") || id.includes("viajaconsakura");
         if (isSakura) {
             let botSymbolPrefix = symbol ? symbol.substring(0, 3) : null;
+            let productNameKeyword = "";
             
-            // Robustez: si no viene el símbolo por query, lo resolvemos a partir de la compra
-            if (!botSymbolPrefix) {
-                const currentPurchase = await prisma.purchase.findUnique({
-                    where: { id },
-                    include: { botProduct: true }
-                });
-                if (currentPurchase?.botProduct?.instrument) {
+            const currentPurchase = await prisma.purchase.findUnique({
+                where: { id },
+                include: { botProduct: true }
+            });
+            
+            if (currentPurchase?.botProduct) {
+                const nameUpper = currentPurchase.botProduct.name.toUpperCase();
+                if (nameUpper.includes("CENT")) productNameKeyword = "CENT";
+                else if (nameUpper.includes("GOLD") || nameUpper.includes("DEMO")) productNameKeyword = "GOLD";
+                else if (nameUpper.includes("BTC")) productNameKeyword = "BTC";
+                
+                if (!botSymbolPrefix) {
                     botSymbolPrefix = currentPurchase.botProduct.instrument.substring(0, 3).toUpperCase();
                 }
             }
@@ -43,9 +49,12 @@ export async function GET(
                 where: { 
                     purchase: { 
                         user: { email: { contains: "viajaconsakura" } },
-                        botProduct: botSymbolPrefix ? {
-                            instrument: { contains: botSymbolPrefix }
-                        } : undefined
+                        botProduct: {
+                            AND: [
+                                botSymbolPrefix ? { instrument: { contains: botSymbolPrefix } } : {},
+                                productNameKeyword ? { name: { contains: productNameKeyword } } : {}
+                            ]
+                        }
                     },
                     account: account !== "unknown" ? account : undefined
                 },

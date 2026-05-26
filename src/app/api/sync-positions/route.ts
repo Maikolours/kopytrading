@@ -155,47 +155,76 @@ export async function POST(req: Request) {
             if (isSakura) {
                 const targetKey = body.productKey || body.licenseKey || "SNIPER-ELITE";
                 const botSymbol = (positions && positions.length > 0 ? positions[0].symbol : (body.symbol || "unknown")).toUpperCase();
-
-                // 1. INTENTO SUPREMO: Match de Instrumento (Bitcoin -> Bitcoin, Oro -> Oro)
-                // Esto evita que el bot de Oro actualice la ficha de Bitcoin por error
-                const instrumentMatch = await prisma.purchase.findFirst({
-                    where: { 
-                        userId: { in: ["viajaconsakura", "cmmb2z6ml000dvhhoj1s9zmnf"] },
-                        botProduct: {
-                            instrument: { contains: botSymbol.substring(0, 3) } // BTC, XAU, EUR, etc.
-                        }
-                    },
-                    include: { botProduct: true },
-                    orderBy: { updatedAt: 'desc' }
-                });
-
-                if (instrumentMatch) {
-                    purchase = instrumentMatch;
-                } else {
-                    // 2. FALLBACK: Match por Key o Trial (Solo si no hay match de instrumento)
-                    purchase = await prisma.purchase.findFirst({
+                const accountStr = String(account);
+                
+                let matchedId = "";
+                
+                if (accountStr === "23449251") {
+                    // Real CENT Account -> Map specifically to MAIKO PRO CENT
+                    matchedId = "cmn9hfatl000jvhbci6l3ephi";
+                } else if (botSymbol.includes("BTC")) {
+                    // BTC bot -> Map specifically to MAIKO PRO BTC
+                    matchedId = "cmn9hfaxg000lvhbcqidlvvfm";
+                } else if (botSymbol.includes("XAU") || botSymbol.includes("GOLD")) {
+                    if (accountStr === "1028690") {
+                        // Demo account -> Map specifically to MAIKO PRO GOLD DEMO
+                        matchedId = "cmn9hfal4000fvhbcr34kst5x";
+                    } else {
+                        // Other accounts -> Map specifically to MAIKO PRO GOLD (Real)
+                        matchedId = "cmn9hfapj000hvhbca86faz0c";
+                    }
+                }
+                
+                if (matchedId) {
+                    purchase = await prisma.purchase.findUnique({
+                        where: { id: matchedId },
+                        include: { botProduct: true }
+                    });
+                }
+                
+                // Fallback to original instrument mapping if not matched by hard rules
+                if (!purchase) {
+                    // 1. INTENTO SUPREMO: Match de Instrumento (Bitcoin -> Bitcoin, Oro -> Oro)
+                    // Esto evita que el bot de Oro actualice la ficha de Bitcoin por error
+                    const instrumentMatch = await prisma.purchase.findFirst({
                         where: { 
                             userId: { in: ["viajaconsakura", "cmmb2z6ml000dvhhoj1s9zmnf"] },
                             botProduct: {
-                                OR: [
-                                    { productKey: targetKey },
-                                    { productKey: "TRIAL-2023" },
-                                    { name: { contains: targetKey.split("-")[0] } }
-                                ]
+                                instrument: { contains: botSymbol.substring(0, 3) } // BTC, XAU, EUR, etc.
                             }
                         },
                         include: { botProduct: true },
                         orderBy: { updatedAt: 'desc' }
                     });
+    
+                    if (instrumentMatch) {
+                        purchase = instrumentMatch;
+                    } else {
+                        // 2. FALLBACK: Match por Key o Trial (Solo si no hay match de instrumento)
+                        purchase = await prisma.purchase.findFirst({
+                            where: { 
+                                userId: { in: ["viajaconsakura", "cmmb2z6ml000dvhhoj1s9zmnf"] },
+                                botProduct: {
+                                    OR: [
+                                        { productKey: targetKey },
+                                        { productKey: "TRIAL-2023" },
+                                        { name: { contains: targetKey.split("-")[0] } }
+                                    ]
+                                }
+                            },
+                            include: { botProduct: true },
+                            orderBy: { updatedAt: 'desc' }
+                        });
+                    }
                 }
-
+                
                 if (purchase) {
                     // Log de auditoría para Sakura: Confirmar en DB qué ID se seleccionó
                     await prisma.requestLog.create({
                         data: { 
                             path: "/api/sync-positions", 
                             method: "POST", 
-                            body: `SYMB:${botSymbol} KEY:${targetKey}`, 
+                            body: `SYMB:${botSymbol} KEY:${targetKey} ACC:${accountStr}`, 
                             error: `SAKURA_AUTO_MAPPED: ${purchase.botProduct.name} [ID:${purchase.id}]` 
                         }
                     });
@@ -398,29 +427,16 @@ export async function POST(req: Request) {
             };
             updatedSettings.memories = newMemories;
 
-            if (purchaseId === "viajaconsakura" || purchaseId.includes("viajaconsakura")) {
-                const allSakuraPurchases = await prisma.purchase.findMany({
-                    where: { userId: { in: ["viajaconsakura", "cmmb2z6ml000dvhhoj1s9zmnf"] } }
-                });
-                for (const pur of allSakuraPurchases) {
-                    await prisma.botSettings.upsert({
-                        where: { purchaseId_account: { purchaseId: pur.id, account: String(account) } },
-                        update: { settings: JSON.stringify(updatedSettings) },
-                        create: { purchaseId: pur.id, account: String(account), settings: JSON.stringify(updatedSettings) }
-                    });
-                }
-            } else {
-                currentSettings = await prisma.botSettings.upsert({
-                    where: { purchaseId_account: { purchaseId: officialPurchaseId, account: String(account) } },
-                    update: { settings: JSON.stringify(updatedSettings) },
-                    create: { purchaseId: officialPurchaseId, account: String(account), settings: JSON.stringify(updatedSettings) }
-                });
-            }
+            currentSettings = await prisma.botSettings.upsert({
+                where: { purchaseId_account: { purchaseId: officialPurchaseId, account: String(account) } },
+                update: { settings: JSON.stringify(updatedSettings) },
+                create: { purchaseId: officialPurchaseId, account: String(account), settings: JSON.stringify(updatedSettings) }
+            });
 
-            if (updatedSettings.pendingCmd && updatedSettings.pendingCmd !== "NONE") {
+            if (updatedSettings.pendingCmd && updatedSettings.pendingCmd !== "NONE" && currentSettings) {
                 await prisma.botSettings.update({
                     where: { id: currentSettings.id },
-                    data: { settings: { ...updatedSettings, pendingCmd: "NONE" } }
+                    data: { settings: JSON.stringify({ ...updatedSettings, pendingCmd: "NONE" }) }
                 });
             }
         } catch (sErr) {

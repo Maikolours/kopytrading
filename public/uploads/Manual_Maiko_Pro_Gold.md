@@ -16,9 +16,10 @@ Utiliza una estrategia mixta de **Sniper Scalping** y **Recuperación Elástica 
 2. **Entrada de Precisión:** Baja a la temporalidad de 1 Minuto (M1) para buscar divergencias y retrocesos usando RSI y ATR. Entra justo cuando el mercado está "sobre-estirado" en el corto plazo.
 3. **Gestión de Crisis (SOS / Cascada):** Si el precio se gira repentinamente en contra tras la entrada, el bot no asume la pérdida inmediatamente. En su lugar, activa el Modo SOS: despliega operaciones adicionales más abajo con un lotaje fríamente calculado (Martingala dinámica) para "promediar" el precio de entrada. En cuanto el Oro hace un pequeño retroceso (que siempre lo hace), el bot cierra toda la cesta de golpe en ganancia.
 
-## 3. CONSEJOS DE TEMPORALIDAD
-- **Temporalidad (Timeframe) Obligatoria:** M1 (1 Minuto).
-- **Aviso:** Aunque lo pongas en M1, su "cerebro" está analizando H4 y M15 en segundo plano. Nunca lo pongas en H1 o H4, ya que las distancias matemáticas se romperían.
+## 3. CONSEJOS DE TEMPORALIDAD Y RECOMENDACIÓN
+- **Temporalidades Compatibles:** M1 (1 Minuto) y M5 (5 Minutos).
+- **Recomendación General:** **Recomendamos la temporalidad M5 (5 Minutos)**. Ofrece una operativa más estable, segura y robusta para gestionar las cestas SOS con un flotante más controlado. Si prefieres scalping agresivo de alta frecuencia, puedes usar M1, pero requiere mayor control y capital.
+- **Aviso:** Nunca coloques el bot en temporalidades mayores como H1 o H4, ya que las distancias de rescate matemático se desconfigurarán.
 
 ## 4. INSTRUCCIONES DE USO E INSTALACIÓN
 1. **Descarga:** Obtén el archivo `.ex5` desde tu dashboard de Kopytrading.

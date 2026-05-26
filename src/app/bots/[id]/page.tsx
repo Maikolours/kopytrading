@@ -272,14 +272,14 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                     '✓ Compilación Nativa .ex5',
                                     '✓ Acceso Exclusivo Demo MT5',
                                     '✓ Dashboard Connectivity',
-                                    '✓ Soporte en Cuenta Demo',
+                                    '✓ Soporte Técnico Directo',
                                     '✓ Válido por 30 Días',
                                 ] : [
                                     'Compilación Nativa .ex5',
-                                    'Soporte Técnico 24/7',
+                                    'Soporte Técnico Directo',
                                     'Dashboard Connectivity',
-                                    'Multi-cuenta (Binding)',
-                                    'Actualizaciones de por vida',
+                                    'Licencia Vinculada a Cuenta',
+                                    'Actualizaciones Disponibles',
                                 ]).map((item, i) => (
                                     <div key={i} className="flex items-center gap-4 text-sm text-text-muted group/item">
                                         <div className={`w-1.5 h-1.5 rounded-full ${isDemo ? 'bg-amber-400/60' : 'bg-white/20'} group-hover/item:bg-brand-light transition-colors`}></div>

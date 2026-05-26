@@ -29,7 +29,13 @@ export async function POST(req: Request) {
         });
 
         for (const setting of settings) {
-            let updatedJson: any = { ...(setting.settings as any) };
+            let updatedJson: any = {};
+            try {
+                updatedJson = typeof setting.settings === 'string' ? JSON.parse(setting.settings) : setting.settings;
+            } catch (e) {
+                console.error("Error parsing settings in remote-control:", e);
+                updatedJson = {};
+            }
 
             if (command === "SET_SETTING" && value) {
                 try {
@@ -46,7 +52,7 @@ export async function POST(req: Request) {
 
             await prisma.botSettings.update({
                 where: { id: setting.id },
-                data: { settings: updatedJson }
+                data: { settings: JSON.stringify(updatedJson) }
             });
         }
 

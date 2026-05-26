@@ -16,9 +16,10 @@ A diferencia de los pares de divisas, el Bitcoin no respeta los canales lógicos
 2. **Entrada Anti-Dump:** Entra en compra sólo cuando detecta que la fuerza vendedora se ha agotado.
 3. **Protección Anti-Liquidación (Trailing DD):** En Bitcoin no podemos usar una cascada profunda porque una caída puede durar meses. El bot utiliza un sistema de límite de equidad y salidas de emergencia para cortar pérdidas antes de que ocurra un desastre.
 
-## 3. CONSEJOS DE TEMPORALIDAD
-- **Temporalidad (Timeframe) Obligatoria:** M1 (1 Minuto).
-- Si lo dejas en M1, él se encargará de medir la velocidad a la que baja el precio para dictaminar si es una simple corrección o un colapso del mercado.
+## 3. HORARIO DE OPERATIVA Y TEMPORALIDAD
+- **Horario 24/7 de Lunes a Domingo:** El bot de Bitcoin opera **ininterrumpidamente durante toda la semana**. No es un bot exclusivo de fin de semana; está encendido buscando activamente la mejor entrada a cualquier hora. Los fines de semana son muy atractivos debido a la lateralización y reducción de volumen institucional, pero opera cualquier día si se dan las condiciones exactas.
+- **Paciencia y Precisión (Filtro ADX):** El bot utiliza un filtro ADX exigente para medir la fuerza de la tendencia antes de entrar. Si el mercado está en rangos sucios o indecisos, el bot permanecerá en estado "Buscando..." durante horas o días. Es completamente normal y forma parte de su escudo de seguridad.
+- **Temporalidades Compatibles:** M1 (temporalidad recomendada para capturar micropulsos de volatilidad) y M5 (para mayor filtrado de ruido).
 
 ## 4. INSTRUCCIONES DE USO E INSTALACIÓN
 1. **Descarga el .ex5** desde Kopytrading y cópialo a `MQL5 > Experts`.
