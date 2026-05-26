@@ -317,7 +317,7 @@ void EnviarTelemetria() {
     } else if (res != 200) {
         Print("MAIKO SYNC SERVER ERROR: Code ", res, ". Response: ", CharArrayToString(result));
     } else {
-        Print("MAIKO SYNC SUCCESS: Data sent to dashboard. Length: ", StringLen(json));
+        // Print("MAIKO SYNC SUCCESS: Data sent to dashboard. Length: ", StringLen(json));
     }
 }
 

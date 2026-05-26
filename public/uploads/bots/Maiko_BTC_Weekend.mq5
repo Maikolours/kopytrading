@@ -295,7 +295,7 @@ void EnviarTelemetria() {
     } else if (res != 200) {
         Print("MAIKO SYNC SERVER ERROR: Code ", res, ". Response: ", CharArrayToString(result));
     } else {
-        Print("MAIKO SYNC SUCCESS: Data sent to dashboard. Length: ", StringLen(json));
+        // Print("MAIKO SYNC SUCCESS: Data sent to dashboard. Length: ", StringLen(json));
         string response = CharArrayToString(result, 0, WHOLE_ARRAY, CP_UTF8);
         
         // 1. Control Remoto: Cierre de Emergencia
