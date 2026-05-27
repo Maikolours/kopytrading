@@ -110,9 +110,9 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
             <div id="bot-catalog" className="max-w-7xl mx-auto mb-14 pb-10 text-center relative">
                 <div className="mb-10">
                     {/* Título con font adaptado para móvil */}
-                    <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight mb-4 uppercase italic leading-none px-2">
+                    <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight mb-4 uppercase italic leading-tight py-2 px-2">
                         Maiko{" "}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-brand tracking-normal">Algorithms</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-brand tracking-normal pb-2">Algorithms</span>
                     </h1>
                     <p className="text-text-muted text-base max-w-2xl mx-auto font-light tracking-tight opacity-60 italic leading-relaxed">
                         Sistemas de alta frecuencia y precisión institucional para el mercado MT5.
