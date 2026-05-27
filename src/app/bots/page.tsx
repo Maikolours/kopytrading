@@ -69,9 +69,21 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
     ];
 
     const getBotAccent = (bot: any) => {
-        if (bot.instrument === 'BTCUSD') return { accent: "text-amber-400", badge: "from-amber-500 to-orange-600", glow: "bg-amber-500/10" };
-        if (bot.id === GOLD_DEMO_ID) return { accent: "text-purple-400", badge: "from-purple-500 to-violet-600", glow: "bg-purple-500/10" };
-        return { accent: "text-brand-light", badge: "from-brand to-brand-light", glow: "bg-brand/10" };
+        let image = "";
+        if (bot.instrument === 'BTCUSD') {
+            image = "/images/maiko-btc.png";
+            return { accent: "text-amber-400", badge: "from-amber-500 to-orange-600", glow: "bg-amber-500/10", image };
+        }
+        if (bot.id === GOLD_DEMO_ID) {
+            image = "/images/maiko-gold.png";
+            return { accent: "text-purple-400", badge: "from-purple-500 to-violet-600", glow: "bg-purple-500/10", image };
+        }
+        if (bot.name.includes('CENT') || bot.instrument === 'EURUSD' || bot.instrument === 'USDJPY') {
+            image = "/images/maiko-cent.png";
+            return { accent: "text-brand-light", badge: "from-brand to-brand-light", glow: "bg-brand/10", image };
+        }
+        image = "/images/maiko-gold.png";
+        return { accent: "text-brand-light", badge: "from-brand to-brand-light", glow: "bg-brand/10", image };
     };
 
     return (
@@ -130,19 +142,24 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                         const isDemo = bot.id === GOLD_DEMO_ID;
 
                         return (
-                            <Card key={bot.id} interactive className={`flex flex-col h-full transition-all duration-700 overflow-hidden group relative rounded-[2rem] border bg-white/[0.03] border-white/10 hover:border-brand-light/50 hover:shadow-[0_20px_50px_rgba(168,85,247,0.15)] shadow-[0_20px_60px_rgba(0,0,0,0.6)]`}>
+                            <Card key={bot.id} interactive className={`flex flex-col h-full transition-all duration-700 overflow-hidden group relative rounded-[2rem] border bg-white/[0.03] border-white/10 hover:border-brand-light/50 hover:shadow-[0_20px_50px_rgba(168,85,247,0.15)] shadow-[0_20px_60px_rgba(0,0,0,0.6)] ${isUpcoming && !isDemo ? 'opacity-60 hover:opacity-100' : 'opacity-100 shadow-[0_0_40px_rgba(168,85,247,0.2)] border-brand/40'}`}>
 
                                 {/* Upcoming overlay */}
                                 {isUpcoming && !isDemo && (
                                     <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20">
                                         <span className="bg-brand/20 border border-brand/50 text-brand-light text-[8px] font-black px-3 py-1 rounded-full tracking-[0.15em] uppercase shadow-[0_0_20px_rgba(168,85,247,0.3)] whitespace-nowrap">
-                                        ⚡ PRÓXIMO LANZAMIENTO
-                                    </span>
+                                        ⚡ PRÓXIMO LANZAMIENTO - 25% DTO
+                                        </span>
                                     </div>
                                 )}
 
-                                <CardHeader className="relative overflow-hidden pb-4 pt-8">
+                                <CardHeader className="relative overflow-hidden pb-4 pt-10">
                                     <div className={`absolute top-0 right-0 w-32 h-32 ${colors.glow} blur-3xl -mr-16 -mt-16 transition-opacity duration-700 group-hover:opacity-100 opacity-20`} />
+                                    
+                                    {/* Maiko Avatar */}
+                                    <div className="absolute top-[-20px] right-[-20px] w-32 h-32 opacity-20 group-hover:opacity-60 transition-opacity duration-700 mix-blend-screen pointer-events-none z-0">
+                                        {colors.image && <img src={colors.image} alt="Maiko Warrior" className="w-full h-full object-cover rounded-full" />}
+                                    </div>
 
                                     <div className="flex justify-between items-start mb-3 relative z-10">
                                         {/* Nombre del bot — con min-w-0 para que truncate funcione */}

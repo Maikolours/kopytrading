@@ -212,7 +212,7 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                                                     <div>
                                                         <p className="text-[7px] font-black uppercase tracking-widest text-white/25">Balance MT5</p>
                                                         <p className="text-lg font-black text-white font-mono leading-none mt-1">
-                                                            {p.balance !== null && p.balance !== undefined ? `${Number(p.balance).toFixed(2)} ${currency}` : "---"}
+                                                            {p.balance && Number(p.balance) > 0 ? `${Number(p.balance).toFixed(2)} ${currency}` : <span className="text-xs text-white/40 font-normal">Sin Sincronizar</span>}
                                                         </p>
                                                     </div>
 

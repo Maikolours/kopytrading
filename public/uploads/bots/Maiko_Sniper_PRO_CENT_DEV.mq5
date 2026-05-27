@@ -176,6 +176,16 @@ void OnTimer() {
     ActualizarEstadoMaster();
     ganadoPeriodo = CalcularGanadoUltraPreciso(idxPeriodo);
     flotante = CalcularProfit();
+    
+    // Comprobacion de horario en el timer (funciona aunque no haya ticks)
+    if(UsarFiltroHorario && ArraySize(pos) == 0) {
+        MqlDateTime dt; TimeCurrent(dt);
+        if(dt.hour < HoraInicioSesion || dt.hour >= HoraFinSesion) {
+            txtVeredicto = "FUERA DE SESION (DORMIDO)";
+            txtVoz = StringFormat("SESION CERRADA - Reabre a las %02d:00", HoraInicioSesion);
+        }
+    }
+    
     ActualizarInterfazMaster();
     ChartRedraw();
     // Sync con kopytrading.com
@@ -482,6 +492,7 @@ void OnTick() {
             MqlDateTime dt; TimeCurrent(dt);
             if(dt.hour < HoraInicioSesion || dt.hour >= HoraFinSesion) {
                 txtVeredicto = "FUERA DE SESION (DORMIDO)";
+                txtVoz = StringFormat("SESION CERRADA - Reabre a las %02d:00", HoraInicioSesion);
                 return;
             }
         }
@@ -684,7 +695,7 @@ void CrearInterfazMaster() {
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_XSIZE, w); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_YSIZE, h);
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_BGCOLOR, BodyColor); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_ZORDER, 9999); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_BACK, false);
     CrearBoton("MAIKO_Head", x, y, w, 35, "", ColorHeader, clrNONE, 10000); 
-    CrearLabel("MAIKO_T", x+10, y+10, "MAIKO PRO | CENT v13.92", ColorMain, 11, 10001); 
+    CrearLabel("MAIKO_T", x+10, y+10, "MAIKO PRO | CENT DEV v13.92", ColorMain, 11, 10001); 
     CrearBoton("MAIKO_BtnMin", x+w-35, y+5, 30, 25, "_", clrGray, clrWhite, 10010);
     string rads[]={"W1","D1","H4","H1","M15","M5","M1"};
     for(int i=0; i<7; i++) {

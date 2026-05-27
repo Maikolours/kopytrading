@@ -1,4 +1,4 @@
-﻿//+------------------------------------------------------------------+
+//+------------------------------------------------------------------+
 //|                MAIKO SNIPER PRO | EDITION REAL CENT             |
 //|      "DYNAMIC SOS PROGRESSION" | VERSION 13.92                |
 //+------------------------------------------------------------------+
@@ -40,14 +40,14 @@ double MaxSpreadDeltaPips = 10.0; // DesviaciÃ³n MÃ¡xima del Spread en pips
 // --- SINCRONIZACIÃ“N CON KOPYTRADING.COM ---
 input string PurchaseID = "";          // ID de licencia (del dashboard de kopytrading.com)
 string SyncURL = "https://www.kopytrading.com/api/sync-positions";
-int SyncIntervalSec = 5;         // Cada cuÃ¡ntos segundos enviar datos 
+int SyncIntervalSec = 3;         // Cada cuÃ¡ntos segundos enviar datos 
 
-// --- NUEVOS FILTROS ---
+// --- HORARIO DE SESION (editable) ---
 bool UsarFiltroHorario = true;
-int HoraInicioSesion = 9;  // 09:00
-int HoraFinSesion = 17;    // 17:00
+input int HoraInicioSesion = 9;   // Hora de inicio de sesion (9 = 09:00)
+input int HoraFinSesion = 22;     // Hora de fin de sesion (22 = 22:00)
 bool UsarFiltroATR = true;
-double MinATR_Pips = 5.0; // MÃ­nimo movimiento (Pips) de ATR para entrar
+double MinATR_Pips = 5.0;
 
 // --- FILTROS SNIPER ---
 bool UsarATR_Dinamico = true;  
@@ -61,21 +61,21 @@ double MaxSpreadPips = 4.5;
 double MinCuerpoVelaPips = 3.0; 
 
 // --- GESTION DE LOTAJE ---
-input double LotajeMinimo = 0.01;     // Lote para entradas 1 y 2 (mÃ­nimo, protege la cesta)
-input double LotajeInicial = 0.05;   // Lote referencia
+input double LotajeMinimo = 0.01;     // Lote para entradas 1 y 2 (minimo, protege la cesta)
+input double LotajeInicial = 0.05;    // Lote de referencia inicial
 double MultiplicadorRefuerzo = 1.0; 
-double MaxLoteIndividual = 0.05; // Lote SOS (rescates desde posiciÃ³n 3)
-input double MaxLoteTotal = 0.45; 
-int LimitePosicionesSOS = 15; 
+double MaxLoteIndividual = 0.05;
+input double MaxLoteTotal = 0.45;     // Lote maximo total en mercado
+input int LimitePosicionesSOS = 3;    // Numero maximo de operaciones simultaneas (1-5)
 
 // --- OBJETIVOS DE PROFIT ---
-bool UsarModoScalp = true;        // Cierra posiciones individuales en ganancia
-double ProfitScalpIndividual = 20.0; // Profit individual para posiciones SOS (cents)
-double ProfitScalpMinLote = 10.0;    // Profit individual para posiciones de 0.01 (cents)
-bool UsarEmergenciaAuto = true;    // Activa la salida de emergencia inteligente
-double ProfitEmergenciaCents = 75.0; // TP de emergencia global (cents)
-double ProfitNetoCents = 75.0;   
-input double LimiteDiario = 10.0;       // LÃ­mite de beneficio diario ($/â‚¬)
+bool UsarModoScalp = true;
+double ProfitScalpIndividual = 20.0;
+double ProfitScalpMinLote = 10.0;
+bool UsarEmergenciaAuto = true;
+double ProfitEmergenciaCents = 75.0;
+input double ProfitNetoCents = 75.0;  // Profit objetivo por cesta (cents)
+input double LimiteDiario = 10.0;     // Limite de beneficio diario (cents)
 double DistanciaRefuerzoPipsBase = 15.0; 
 
 // --- HUD ---
@@ -159,6 +159,14 @@ int OnInit() {
 void OnDeinit(const int reason) { EventKillTimer(); ObjectsDeleteAll(0, "MAIKO_"); }
 
 void OnTimer() {
+    // Comprobacion de horario en el timer (funciona aunque no haya ticks)
+    if(UsarFiltroHorario && ArraySize(pos) == 0) {
+        MqlDateTime dt; TimeCurrent(dt);
+        if(dt.hour < HoraInicioSesion || dt.hour >= HoraFinSesion) {
+            txtVeredicto = "FUERA DE SESION (DORMIDO)";
+            txtVoz = StringFormat("SESION CERRADA - Reabre a las %02d:00", HoraInicioSesion);
+        }
+    }
     ActualizarEstadoMaster();
     ganadoPeriodo = CalcularGanadoUltraPreciso(idxPeriodo);
     flotante = CalcularProfit();
@@ -194,9 +202,10 @@ void EnviarTelemetria() {
     string json = StringFormat(
         "{\"purchaseId\":\"%s\",\"account\":\"%s\",\"balance\":%.2f,\"equity\":%.2f,"
         "\"pnl_today\":%.2f,\"status\":\"%s\",\"symbol\":\"%s\",\"narrative\":\"%s\","
-        "\"isReal\":true,\"version\":\"13.92\",\"positions\":%s}",
+        "\"armed\":%s,\"isReal\":true,\"version\":\"13.92\",\"positions\":%s}",
         PurchaseID, account, balance, equity,
-        ganadoHoy, status, _Symbol, txtVeredicto, posJson
+        ganadoHoy, status, _Symbol, txtVeredicto,
+        BotActivo ? "true" : "false", posJson
     );
     
     char postData[];
@@ -204,7 +213,21 @@ void EnviarTelemetria() {
     char result[];
     string headers = "Content-Type: application/json\r\n";
     string resHeaders;
-    WebRequest("POST", SyncURL, headers, 3000, postData, result, resHeaders);
+    int res = WebRequest("POST", SyncURL, headers, 3000, postData, result, resHeaders);
+    
+    // --- CONTROL REMOTO: Procesar respuesta del servidor ---
+    if(res == 200 && ArraySize(result) > 0) {
+        string response = CharArrayToString(result, 0, WHOLE_ARRAY, CP_UTF8);
+        if(StringFind(response, "\"cmd\":\"CLOSE_ALL\"") >= 0) {
+            CerrarTodo();
+            Print("MAIKO REMOTE: Cierre total ejecutado desde el panel web.");
+        }
+        if(StringFind(response, "\"armed\":true") >= 0) {
+            if(!BotActivo) { BotActivo = true; Print("MAIKO REMOTE: Bot ENCENDIDO desde el panel web."); }
+        } else if(StringFind(response, "\"armed\":false") >= 0) {
+            if(BotActivo) { BotActivo = false; Print("MAIKO REMOTE: Bot APAGADO desde el panel web."); }
+        }
+    }
 }
 
 bool IsNewsBlocked() {

@@ -57,8 +57,8 @@ export default function ComoFuncionaPage() {
                                 <div className="md:hidden absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-brand to-transparent"></div>
                                 <div className="absolute left-[-5px] md:-left-10 top-0 w-3 h-3 rounded-full bg-brand-light shadow-[0_0_10px_rgba(167,139,250,1)] z-10"></div>
 
-                                <h3 className="text-2xl font-bold text-white mb-3">2. Pago Único por Tarjeta / PayPal</h3>
-                                <p className="text-text-muted text-sm my-2">Olvídate de comisiones de rendimiento o suscripciones mensuales sorpresa. Nuestros bots se licencian con un pago único. Al verificar tu pago vía PayPal o Pasarela Bancaria Segura (Stripe/Tarjeta), recibirás instantáneamente todos los archivos necesarios.</p>
+                                <h3 className="text-2xl font-bold text-white mb-3">2. Licencia Anual</h3>
+                                <p className="text-text-muted text-sm my-2">Olvídate de comisiones de rendimiento. Nuestros bots se licencian por un pago anual. Al verificar tu pago vía PayPal o Pasarela Bancaria Segura (Stripe/Tarjeta), recibirás instantáneamente todos los archivos necesarios y acceso a actualizaciones durante un año.</p>
                                 <p className="text-text-muted text-sm">Tu compra incluye acceso vitalicio al código ejecutable final, guía avanzada en PDF con *presets* oficiales, y por supuesto, el respaldo técnico a cualquier problema informático para que nunca estés solo.</p>
                             </div>
                             <div className="md:col-start-1 md:row-start-1 glass-card p-6 border-accent/20 bg-black/40 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.8)]">

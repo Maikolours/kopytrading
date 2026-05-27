@@ -51,7 +51,7 @@ input double LotajeInicial = 0.01;   // Lote referencia
 input double MultiplicadorRefuerzo = 1.0; 
 input double MaxLoteIndividual = 0.01; // Lote SOS (rescates desde posición 3)
 input double MaxLoteTotal = 0.12;      
-input int LimitePosicionesSOS = 12; 
+input int LimitePosicionesSOS = 3; 
 
 // --- GESTION DE DISTANCIAS SOS (Configurables) ---
 input double DistanciaSOS_Nivel1 = 150.0; 
@@ -111,7 +111,7 @@ int hEMA_H4, hEMA_H1, hEMA_M15, hEMA_M5, hEMA_M1;
 int hRadar[7];
 double emaH4[1], emaH1[1], emaM15[1], emaM5[1], emaM1[1];
 double rsiM5[1], macdM15[1], atrM15[1];
-ENUM_TIMEFRAMES etfs[7] = {PERIOD_M1, PERIOD_M5, PERIOD_M15, PERIOD_H1, PERIOD_H4, PERIOD_D1, PERIOD_W1};
+ENUM_TIMEFRAMES etfs[7] = {PERIOD_W1, PERIOD_D1, PERIOD_H4, PERIOD_H1, PERIOD_M15, PERIOD_M5, PERIOD_M1};
 
 // GLOBALES DE SYNC
 datetime ultimoSync = 0;
@@ -506,15 +506,19 @@ void OnTick() {
         GestionarRefuerzoInteligente(distSOS, prExtrema, distContActual); 
         if(UsarModoCascada) GestionarModoCascada(direccion, emaM1[0]);
     } else {
-        txtProteccion = ""; ObjectDelete(0, "MAIKO_SOS_Line"); ObjectDelete(0, "MAIKO_TP_Line");
-        if(spreadActual > MaxSpreadPips) { txtVeredicto = "SPREAD CRYPTO ALTO"; return; }
-        if(UsarFiltroSpreadDelta && spreadDelta > MaxSpreadDeltaPips) { txtVeredicto = "SPREAD SPIKE DETECTED 🛑"; return; }
-        if(UsarFiltroADX && adxActual < ADX_MinLevel) { txtVeredicto = StringFormat("MERCADO LATERAL ADX (%.1f < %d)", adxActual, ADX_MinLevel); return; }
+        txtProteccion = " "; ObjectDelete(0, "MAIKO_SOS_Line"); ObjectDelete(0, "MAIKO_TP_Line");
+        txtVoz = (direccion == 1) ? "BTC: BUSCANDO COMPRA" : "BTC: BUSCANDO VENTA";
+        
+        if(spreadActual > MaxSpreadPips) { txtVeredicto = "SPREAD CRYPTO ALTO"; txtVoz = "BTC: SPREAD ALTO"; return; }
+        if(UsarFiltroSpreadDelta && spreadDelta > MaxSpreadDeltaPips) { txtVeredicto = "SPREAD SPIKE DETECTED 🛑"; txtVoz = "BTC: SPIKE DE SPREAD"; return; }
+        if(UsarFiltroADX && adxActual < ADX_MinLevel) { 
+            txtVeredicto = StringFormat("MERCADO LATERAL ADX (%.1f < %d)", adxActual, ADX_MinLevel); 
+            txtVoz = "BTC: MERCADO LATERAL (ADX)";
+            return; 
+        }
         
         int pM5 = AnalizarPatronPriceAction(PERIOD_M5, 1);
         int pM1 = AnalizarPatronPriceAction(PERIOD_M1, 1);
-        
-        txtVoz = (direccion == 1) ? "BTC: BUSCANDO COMPRA" : "BTC: BUSCANDO VENTA";
         
         bool emaOK = (direccion == 1 && bid > emaM5[0] && bid > emaM1[0]) || (direccion == -1 && bid < emaM5[0] && bid < emaM1[0]);
         
@@ -722,7 +726,7 @@ void CrearInterfazMaster() {
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_XSIZE, w); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_YSIZE, h);
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_BGCOLOR, BodyColor); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_ZORDER, 9999); 
     CrearBoton("MAIKO_Head", x, y, w, 35, "", ColorHeader, clrNONE, 10000); 
-    CrearLabel("MAIKO_T", x+10, y+10, "MAIKO PRO | CRYPTO v13.92", ColorMain, 11, 10001);  
+    CrearLabel("MAIKO_T", x+10, y+10, "MAIKO PRO | BTC v13.92", ColorMain, 11, 10001);  
     CrearBoton("MAIKO_BtnMin", x+w-35, y+5, 30, 25, "_", clrGray, clrWhite, 10010);
     string rads[]={"W1","D1","H4","H1","M15","M5","M1"};
     for(int i=0; i<7; i++) {
@@ -754,7 +758,7 @@ void ActualizarInterfazMaster() {
     ObjectSetInteger(0, "MAIKO_Flotante", OBJPROP_COLOR, flotante >= 0 ? clrSpringGreen : clrRed); 
     
     if(metaEscapeTP > 0) ObjectSetString(0, "MAIKO_TP", OBJPROP_TEXT, StringFormat("META ESCAPE TP: %.2f", metaEscapeTP));
-    else ObjectSetString(0, "MAIKO_TP", OBJPROP_TEXT, "");
+    else ObjectSetString(0, "MAIKO_TP", OBJPROP_TEXT, " ");
     
     // Telemetría Visual de Filtros Hugo
     string adxState = (adxActual >= ADX_MinLevel) ? "FUERTE ✅" : "LATERAL ❌";

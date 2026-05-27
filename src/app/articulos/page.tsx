@@ -24,7 +24,7 @@ export default function ArticulosPage() {
                                 <div className="absolute inset-0 bg-gradient-to-br from-brand/10 to-transparent opacity-40 group-hover:opacity-100 transition-opacity" />
                                 
                                 <CardHeader className="relative z-10 border-none pb-4 pt-10 px-8 sm:px-10">
-                                    <div className="flex justify-between items-center mb-8">
+                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-8">
                                         <div className="flex items-center gap-3">
                                             <span className="w-2 h-2 rounded-full bg-brand animate-pulse shadow-[0_0_10px_rgba(139,92,246,0.8)]" />
                                             <span className="text-[11px] font-black text-brand-light uppercase tracking-[0.3em]">{article.category}</span>

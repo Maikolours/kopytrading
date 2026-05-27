@@ -67,11 +67,11 @@ export default function Home() {
                 
                 <div className="flex-1 text-center md:text-left z-10">
                   <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-2">
-                    ¡PRÓXIMO LANZAMIENTO: EVOLUTION PRO!
+                    ¡PRÓXIMO LANZAMIENTO: LA NUEVA SERIE MAIKO!
                   </h3>
                   <p className="text-text-muted leading-relaxed max-w-2xl">
-                    Estamos preparando el lanzamiento de <span className="text-brand-light font-bold">MAIKO SNIPER PRO GOLD</span>. 
-                    <strong className="text-white"> Muy pronto podrás conseguirlo con un 25% de DESCUENTO </strong> 
+                    Estamos preparando el lanzamiento de la serie <span className="text-brand-light font-bold">MAIKO PRO</span>. 
+                    <strong className="text-white"> Muy pronto podrás conseguirlos con un 25% de DESCUENTO </strong> 
                     y disfrutar del nuevo sistema de control desde el <span className="text-success font-bold">MÓVIL</span>.
                   </p>
                 </div>
@@ -119,7 +119,7 @@ export default function Home() {
               {/* Stats */}
               <div className="pt-8 flex flex-wrap justify-center lg:justify-start gap-10 border-t border-white/5">
                 {[
-                  { val: "4", label: "Bots Activos" },
+                  { val: "1", label: "Bot Activo" },
                   { val: "$500", label: "Capital Mínimo" },
                 ].map((s, i) => (
                   <div key={i}>
@@ -164,7 +164,7 @@ export default function Home() {
                     </div>
                     
                     <Link href="/bots" className="relative group/btn block text-center bg-white/5 hover:bg-brand py-5 rounded-3xl transition-all duration-500 font-black text-[10px] uppercase tracking-[0.2em] border border-white/10 hover:border-brand shadow-xl">
-                       <span className="relative z-10 text-white">Ver Análisis Detallado →</span>
+                       <span className="relative z-10 text-white">Ver Próximos Lanzamientos →</span>
                     </Link>
                  </div>
               </div>
@@ -183,7 +183,7 @@ export default function Home() {
                     <span className="text-3xl sm:text-4xl">🎁</span>
                   </div>
                   <div className="text-left">
-                    <h2 className="text-xl sm:text-2xl font-black text-white uppercase italic mb-1 tracking-tight">Prueba el Sniper Pro Gold por 1$</h2>
+                    <h2 className="text-xl sm:text-2xl font-black text-white uppercase italic mb-1 tracking-tight">Prueba MAIKO PRO GOLD DEMO por 1$</h2>
                     <p className="text-sm sm:text-base text-text-muted font-light">30 días de prueba en cuenta DEMO · Sin riesgo real · Licencia anual tras la prueba</p>
                   </div>
                 </div>
@@ -197,10 +197,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* === SECCIÓN CALCULADORA === */}
-        <section className="px-4 py-20 bg-black/40">
-           <ProfitCalculator />
-        </section>
+        {/* === SECCIÓN CALCULADORA ELIMINADA === */}
 
         {/* === SECCIÓN COMPARATIVA === */}
         <section className="px-4 py-20 border-t border-white/5">

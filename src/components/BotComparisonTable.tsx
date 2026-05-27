@@ -6,7 +6,7 @@ import { useState } from "react";
 const BOTS_DATA = [
     {
         id: "euro-precision",
-        name: "Euro Precision Flow",
+        name: "MAIKO EURO PRECISION",
         pair: "EUR/USD",
         timeframe: "H1",
         risk: "Bajo",
@@ -15,12 +15,13 @@ const BOTS_DATA = [
         amortization: "~ 6 semanas",
         features: [true, true, true, true],
         icon: "🎯",
+        image: "/images/maiko-gold.png",
         color: "from-blue-500 to-cyan-500",
         price: "—"
     },
     {
         id: "ninja-yen",
-        name: "Yen Ninja Ghost",
+        name: "MAIKO YEN GHOST",
         pair: "USD/JPY",
         timeframe: "M30",
         risk: "Medio",
@@ -29,36 +30,39 @@ const BOTS_DATA = [
         amortization: "~ 4 semanas",
         features: [true, true, true, true],
         icon: "🥷",
+        image: "/images/maiko-cent.png",
         color: "from-purple-500 to-indigo-500",
         price: "—"
     },
     {
         id: "ametralladora",
-        name: "Evolution PRO v5.84",
+        name: "MAIKO PRO GOLD",
         pair: "XAU/USD",
-        timeframe: "M15 (PRO)",
-        risk: "Dinámico",
+        timeframe: "M15",
+        risk: "Medio",
         minCapital: "$1,000",
-        frequency: "Muy Alta (HFT)",
+        frequency: "Alta (Scalping)",
         amortization: "~ 2 semanas",
         features: [true, true, true, true],
-        icon: "💎",
+        icon: "👑",
+        image: "/images/maiko-gold.png",
         color: "from-amber-400 to-amber-600",
         price: "—",
         popular: true
     },
     {
         id: "btc-storm",
-        name: "BTC Storm Rider v7.11",
+        name: "MAIKO PRO BTC",
         pair: "BTC/USD",
         timeframe: "M30-H1",
-        risk: "Medio-Alto",
+        risk: "Alto",
         minCapital: "$2,000",
         frequency: "Breakout (IA)",
         amortization: "~ 4 semanas",
         features: [true, true, true, true],
-        icon: "⚡",
-        color: "from-yellow-400 to-orange-500",
+        icon: "₿",
+        image: "/images/maiko-btc.png",
+        color: "from-orange-400 to-orange-600",
         price: "—"
     }
 ];
@@ -94,8 +98,11 @@ export function BotComparisonTable() {
                                 {bot.popular && (
                                     <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-brand-light to-brand"></div>
                                 )}
-                                <div className={`w-12 h-12 mx-auto rounded-xl bg-gradient-to-br ${bot.color} flex items-center justify-center text-2xl shadow-lg mb-3`}>
-                                    {bot.icon}
+                                <div className={`w-16 h-16 mx-auto rounded-full bg-gradient-to-br ${bot.color} flex items-center justify-center shadow-lg mb-3 overflow-hidden border-2 border-white/10 relative`}>
+                                    <img src={bot.image} alt={bot.name} className="w-full h-full object-cover" />
+                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                                        <span className="text-2xl drop-shadow-md">{bot.icon}</span>
+                                    </div>
                                 </div>
                                 <h4 className="font-bold text-white text-sm sm:text-base leading-tight mb-1">{bot.name}</h4>
                                 <p className="text-xs text-brand-light font-mono bg-white/5 inline-block px-2 py-0.5 rounded uppercase">{bot.pair}</p>

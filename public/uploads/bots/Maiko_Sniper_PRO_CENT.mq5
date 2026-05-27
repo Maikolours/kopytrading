@@ -59,7 +59,7 @@ input double LotajeInicial = 0.05;   // Lote referencia
 input double MultiplicadorRefuerzo = 1.0; 
 input double MaxLoteIndividual = 0.05; // Lote SOS (rescates desde posición 3)
 input double MaxLoteTotal = 0.45; 
-input int LimitePosicionesSOS = 15; 
+input int LimitePosicionesSOS = 3; 
 
 // --- OBJETIVOS DE PROFIT ---
 input bool UsarModoScalp = true;        // Cierra posiciones individuales en ganancia

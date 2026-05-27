@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Navbar } from "@/components/Navbar";
 import CookieBanner from "@/components/CookieBanner";
+import RiskBanner from "@/components/RiskBanner";
 import FloatingChat from "@/components/FloatingChat";
 import { MaintenanceMode } from "@/components/MaintenanceMode";
 import { Analytics } from "@vercel/analytics/react";
@@ -91,6 +92,33 @@ export default function RootLayout({
             gtag('config', 'G-QWJ1GK9417');
           `}
         </Script>
+        {/* Schema.org JSON-LD para SEO */}
+        <Script id="json-ld" type="application/ld+json" strategy="afterInteractive">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "WebSite",
+                  "name": "KopyTrading",
+                  "url": "https://www.kopytrading.com",
+                  "description": "Automatiza tu trading en MetaTrader 5 con nuestros bots de alta precisión."
+                },
+                {
+                  "@type": "SoftwareApplication",
+                  "name": "KopyTrading Bots",
+                  "applicationCategory": "FinanceApplication",
+                  "operatingSystem": "Windows (MT5)",
+                  "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD"
+                  }
+                }
+              ]
+            }
+          `}
+        </Script>
       </head>
       <body className={`${outfit.className} min-h-screen bg-black text-slate-50 antialiased selection:bg-brand/30 selection:text-white`}>
 
@@ -154,9 +182,9 @@ export default function RootLayout({
                 <div className="border-t border-white/5 pt-8 flex flex-col items-center gap-6">
                   <div className="flex flex-col items-center gap-2 text-[10px] text-text-muted/40 text-center max-w-3xl">
                     <p suppressHydrationWarning>© {new Date().getFullYear()} KopyTrading. Todos los derechos reservados.</p>
-                    <p className="mt-4 leading-relaxed">
-                      KopyTrading es un proveedor de software tecnológico. NO constituye asesoramiento financiero ni recomendaciones de inversión. 
-                      El trading en CFDs, Forex y Criptomonedas implica un riesgo significativo. Solo debes operar con capital que puedas permitirte perder completamente. 
+                    <p className="mt-4 leading-relaxed text-xs">
+                      <strong className="text-white">KopyTrading es EXCLUSIVAMENTE un proveedor de software tecnológico. NO somos asesores financieros ni proporcionamos recomendaciones de inversión.</strong><br/>
+                      El trading en CFDs, Forex y Criptomonedas conlleva un <strong>ALTO RIESGO</strong> de pérdida rápida de capital debido al apalancamiento. Los rendimientos pasados de nuestros algoritmos (backtests o cuentas auditadas) no garantizan beneficios futuros. Al utilizar nuestro software, aceptas que eres el único responsable de tus decisiones de trading. Nunca operes con dinero que no te puedas permitir perder.
                     </p>
                     <div className="flex items-center gap-4 mt-2">
                         <span className="text-accent/40 font-bold uppercase tracking-[0.2em]">E-E-A-T Certified</span>
@@ -168,6 +196,7 @@ export default function RootLayout({
               </div>
             </footer>
             <CookieBanner />
+            <RiskBanner />
             <FloatingChat />
             <Analytics />
             <SpeedInsights />

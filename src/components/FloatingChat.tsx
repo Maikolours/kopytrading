@@ -57,7 +57,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["pago", "comprar", "stripe", "paypal", "bizum", "cómo pago", "tarjeta", "pagar"],
-        response: "💳 **Métodos de Compra:**\n\nPronto implementaremos Stripe directo, PayPal Express y otras pasarelas. Nuestros bots son de pago único sin suscripciones mensuales."
+        response: "💳 **Métodos de Compra:**\n\nPronto implementaremos Stripe directo, PayPal Express y otras pasarelas. Nuestros bots funcionan con un modelo de Licencia Anual."
     },
     {
         keywords: ["no funciona", "error", "problema", "ayuda", "bug", "fallo", "cuenta no autorizada"],

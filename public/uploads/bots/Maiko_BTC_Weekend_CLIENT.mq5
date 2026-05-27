@@ -32,10 +32,10 @@ double SegundosReAnalisis = 60;
 // --- SINCRONIZACIÃ“N CON KOPYTRADING.COM ---
 input string PurchaseID = "";          // ID de licencia (del dashboard de kopytrading.com)
 string SyncURL = "https://www.kopytrading.com/api/sync-positions"; // URL de sincronizaciÃ³n
-int SyncIntervalSec = 5;         // Cada cuÃ¡ntos segundos enviar datos al dashboard 
+int SyncIntervalSec = 3;         // Cada cuÃ¡ntos segundos enviar datos al dashboard 
 
 // --- NUEVOS FILTROS ---
-bool UsarFiltroHorario = true;
+bool UsarFiltroHorario = false;
 int HoraInicioSesion = 9;  // 09:00
 int HoraFinSesion = 21;    // 21:00
 bool UsarFiltroATR = true;
@@ -52,13 +52,13 @@ double MinRSI_Venta = 30.0;
 double MaxSpreadPips = 500.0; 
 double MinCuerpoVelaPips = 25.0; 
 
-// --- GESTION DE LOTAJE ($500 Account - ULTRA SAFETY) ---
-input double LotajeMinimo = 0.01;     // Lote para entradas 1 y 2 (mÃ­nimo, protege la cesta)
-input double LotajeInicial = 0.01;   // Lote referencia
+// --- GESTION DE LOTAJE ---
+input double LotajeMinimo = 0.01;     // Lote para entradas 1 y 2 (minimo, protege la cesta)
+input double LotajeInicial = 0.01;    // Lote de referencia inicial
 double MultiplicadorRefuerzo = 1.0; 
-double MaxLoteIndividual = 0.01; // Lote SOS (rescates desde posiciÃ³n 3)
-input double MaxLoteTotal = 0.12;      
-int LimitePosicionesSOS = 12; 
+double MaxLoteIndividual = 0.01;
+input double MaxLoteTotal = 0.12;     // Lote maximo total en mercado
+input int LimitePosicionesSOS = 3;    // Numero maximo de operaciones simultaneas (1-5)
 
 // --- GESTION DE DISTANCIAS SOS (Configurables) ---
 double DistanciaSOS_Nivel1 = 150.0; 
@@ -66,13 +66,13 @@ double DistanciaSOS_Nivel2 = 300.0;
 double DistanciaSOS_Nivel3 = 500.0; 
 
 // --- OBJETIVOS DE PROFIT ---
-bool UsarModoScalp = true;        // Cierra posiciones individuales en ganancia
-double ProfitScalpIndividual = 2.00; // Profit individual para posiciones SOS ($)
-double ProfitScalpMinLote = 0.50;    // Profit individual para posiciones de 0.01 ($)
-bool UsarEmergenciaAuto = true;    // Activa la salida de emergencia inteligente
-double ProfitEmergenciaUSD = 3.00;  // TP de emergencia global ($)
-double ProfitGlobalEscape = 0.50; 
-input double LimiteDiario = 50.0;       // LÃ­mite de beneficio diario ($)
+bool UsarModoScalp = true;
+double ProfitScalpIndividual = 2.00;
+double ProfitScalpMinLote = 0.50;
+bool UsarEmergenciaAuto = true;
+double ProfitEmergenciaUSD = 3.00;
+input double ProfitGlobalEscape = 0.50; // Profit objetivo por cesta ($)
+input double LimiteDiario = 50.0;       // Limite de beneficio diario ($)
 
 // --- MEJORAS INSTITUCIONALES HUGO ---
 bool UsarFiltroADX = true;              // Usar Filtro ADX de fuerza de tendencia
@@ -118,7 +118,7 @@ int hEMA_H4, hEMA_H1, hEMA_M15, hEMA_M5, hEMA_M1, hEMA_M1_9;
 int hRadar[7];
 double emaH4[1], emaH1[1], emaM15[1], emaM5[1], emaM1[1];
 double rsiM5[1], macdM15[1], atrM15[1];
-ENUM_TIMEFRAMES etfs[7] = {PERIOD_M1, PERIOD_M5, PERIOD_M15, PERIOD_H1, PERIOD_H4, PERIOD_D1, PERIOD_W1};
+ENUM_TIMEFRAMES etfs[7] = {PERIOD_W1, PERIOD_D1, PERIOD_H4, PERIOD_H1, PERIOD_M15, PERIOD_M5, PERIOD_M1};
 
 // GLOBALES DE SYNC
 datetime ultimoSync = 0;
@@ -286,10 +286,10 @@ void EnviarTelemetria() {
     string json = StringFormat(
         "{\"purchaseId\":\"%s\",\"account\":\"%s\",\"balance\":%.2f,\"equity\":%.2f,"
         "\"pnl_today\":%.2f,\"status\":\"%s\",\"symbol\":\"%s\",\"narrative\":\"%s\","
-        "\"isReal\":true,\"version\":\"13.92\",\"positions\":%s}",
+        "\"armed\":%s,\"isReal\":true,\"version\":\"13.92\",\"positions\":%s}",
         PurchaseID, account, balance, equity,
         ganadoHoy, status, _Symbol,
-        txtVeredicto, posJson
+        txtVeredicto, BotActivo ? "true" : "false", posJson
     );
     
     char postData[];
@@ -299,11 +299,21 @@ void EnviarTelemetria() {
     string resHeaders;
     int res = WebRequest("POST", SyncURL, headers, 3000, postData, result, resHeaders);
     if (res == -1) {
-        Print("MAIKO SYNC ERROR: WebRequest failed. Error code: ", GetLastError(), ". Verifica 'Allow WebRequest' para: ", SyncURL);
-    } else if (res != 200) {
-        Print("MAIKO SYNC SERVER ERROR: Code ", res, ". Response: ", CharArrayToString(result));
-    } else {
-        // Print("MAIKO SYNC SUCCESS: Data sent to dashboard. Length: ", StringLen(json));
+        Print("MAIKO SYNC ERROR: WebRequest failed. Error code: ", GetLastError());
+    } else if (res == 200 && ArraySize(result) > 0) {
+        string response = CharArrayToString(result, 0, WHOLE_ARRAY, CP_UTF8);
+        // --- CONTROL REMOTO: Procesar respuesta del servidor ---
+        if(StringFind(response, "\"cmd\":\"CLOSE_ALL\"") >= 0) {
+            CerrarTodo();
+            Print("MAIKO REMOTE: Cierre total ejecutado desde el panel web.");
+        }
+        if(StringFind(response, "\"armed\":true") >= 0) {
+            if(!BotActivo) { BotActivo = true; Print("MAIKO REMOTE: Bot ENCENDIDO desde el panel web."); }
+        } else if(StringFind(response, "\"armed\":false") >= 0) {
+            if(BotActivo) { BotActivo = false; Print("MAIKO REMOTE: Bot APAGADO desde el panel web."); }
+        }
+    } else if(res != 200) {
+        Print("MAIKO SYNC SERVER ERROR: Code ", res);
     }
 }
 
@@ -496,13 +506,16 @@ void OnTick() {
         GestionarRefuerzoInteligente(distSOS, prExtrema, distContActual); 
         if(UsarModoCascada) GestionarModoCascada(direccion, emaM1[0]);
     } else {
-        txtProteccion = ""; ObjectDelete(0, "MAIKO_SOS_Line"); ObjectDelete(0, "MAIKO_TP_Line");
-        if(spreadActual > MaxSpreadPips) { txtVeredicto = "SPREAD CRYPTO ALTO"; return; }
+        txtProteccion = " "; ObjectDelete(0, "MAIKO_SOS_Line"); ObjectDelete(0, "MAIKO_TP_Line");
+        txtVoz = (direccion == 1) ? "BTC: BUSCANDO COMPRA" : "BTC: BUSCANDO VENTA";
+        
+        if(spreadActual > MaxSpreadPips) { txtVeredicto = "SPREAD CRYPTO ALTO"; txtVoz = "BTC: SPREAD ALTO"; return; }
         
         if(UsarFiltroHorario) {
             MqlDateTime dt; TimeCurrent(dt);
             if(dt.hour < HoraInicioSesion || dt.hour >= HoraFinSesion) {
                 txtVeredicto = "FUERA DE SESION (DORMIDO)";
+                txtVoz = "BTC: FUERA DE SESION";
                 return;
             }
         }
@@ -511,17 +524,20 @@ void OnTick() {
             double atrPips = (atr_buf[0] / _Point / 10);
             if(atrPips < MinATR_Pips) {
                 txtVeredicto = "ATR MUY BAJO (RANGO)";
+                txtVoz = "BTC: ATR BAJO (LATERAL)";
                 return;
             }
         }
         
-        if(UsarFiltroSpreadDelta && spreadDelta > MaxSpreadDeltaPips) { txtVeredicto = "SPREAD SPIKE DETECTED ðŸ›‘"; return; }
-        if(UsarFiltroADX && adxActual < ADX_MinLevel) { txtVeredicto = StringFormat("MERCADO LATERAL ADX (%.1f < %d)", adxActual, ADX_MinLevel); return; }
+        if(UsarFiltroSpreadDelta && spreadDelta > MaxSpreadDeltaPips) { txtVeredicto = "SPREAD SPIKE DETECTED ðŸ›‘"; txtVoz = "BTC: SPIKE DE SPREAD"; return; }
+        if(UsarFiltroADX && adxActual < ADX_MinLevel) { 
+            txtVeredicto = StringFormat("MERCADO LATERAL ADX (%.1f < %d)", adxActual, ADX_MinLevel); 
+            txtVoz = "BTC: MERCADO LATERAL (ADX)";
+            return; 
+        }
         
         int pM5 = AnalizarPatronPriceAction(PERIOD_M5, 1);
         int pM1 = AnalizarPatronPriceAction(PERIOD_M1, 1);
-        
-        txtVoz = (direccion == 1) ? "BTC: BUSCANDO COMPRA" : "BTC: BUSCANDO VENTA";
         
         bool emaOK = (direccion == 1 && bid > emaM5[0] && bid > emaM1[0] && bid > emaM1_9[0]) || (direccion == -1 && bid < emaM5[0] && bid < emaM1[0] && bid < emaM1_9[0]);
         
@@ -729,7 +745,7 @@ void CrearInterfazMaster() {
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_XSIZE, w); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_YSIZE, h);
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_BGCOLOR, BodyColor); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_ZORDER, 9999); 
     CrearBoton("MAIKO_Head", x, y, w, 35, "", ColorHeader, clrNONE, 10000); 
-    CrearLabel("MAIKO_T", x+10, y+10, "MAIKO PRO | CRYPTO v13.92", ColorMain, 11, 10001);  
+    CrearLabel("MAIKO_T", x+10, y+10, "MAIKO PRO | BTC v13.92", ColorMain, 11, 10001);  
     CrearBoton("MAIKO_BtnMin", x+w-35, y+5, 30, 25, "_", clrGray, clrWhite, 10010);
     string rads[]={"W1","D1","H4","H1","M15","M5","M1"};
     for(int i=0; i<7; i++) {
@@ -761,7 +777,7 @@ void ActualizarInterfazMaster() {
     ObjectSetInteger(0, "MAIKO_Flotante", OBJPROP_COLOR, flotante >= 0 ? clrSpringGreen : clrRed); 
     
     if(metaEscapeTP > 0) ObjectSetString(0, "MAIKO_TP", OBJPROP_TEXT, StringFormat("META ESCAPE TP: %.2f", metaEscapeTP));
-    else ObjectSetString(0, "MAIKO_TP", OBJPROP_TEXT, "");
+    else ObjectSetString(0, "MAIKO_TP", OBJPROP_TEXT, " ");
     
     // TelemetrÃ­a Visual de Filtros Hugo
     string adxState = (adxActual >= ADX_MinLevel) ? "FUERTE âœ…" : "LATERAL âŒ";

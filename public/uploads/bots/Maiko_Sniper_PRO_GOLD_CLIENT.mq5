@@ -1,4 +1,4 @@
-﻿//+------------------------------------------------------------------+
+//+------------------------------------------------------------------+
 //|                ELITE GOLD MAIKO SNIPER | EDITION DEMO           |
 //|      "DYNAMIC SOS PROGRESSION" | VERSION 13.92                |
 //+------------------------------------------------------------------+
@@ -33,21 +33,21 @@ double SegundosReAnalisis = 60;
 
 // --- MEJORAS INSTITUCIONALES HUGO ---
 bool UsarFiltroADX = true; // Activar Filtro ADX (H1 > 25)
-int ADX_MinLevel = 25; // Nivel MÃ­nimo ADX para entrar (Tendencia)
-bool UsarFiltroSpreadDelta = true; // Activar ProtecciÃ³n Spread Delta
-double MaxSpreadDeltaPips = 10.0; // DesviaciÃ³n MÃ¡xima del Spread en pips 
+int ADX_MinLevel = 25; // Nivel Mínimo ADX para entrar (Tendencia)
+bool UsarFiltroSpreadDelta = true; // Activar Protección Spread Delta
+double MaxSpreadDeltaPips = 10.0; // Desviación Máxima del Spread en pips 
 
-// --- SINCRONIZACIÃ“N CON KOPYTRADING.COM ---
+// --- SINCRONIZACIÓN CON KOPYTRADING.COM ---
 input string PurchaseID = "";          // ID de licencia (del dashboard de kopytrading.com)
 string SyncURL = "https://www.kopytrading.com/api/sync-positions";
-int SyncIntervalSec = 5;         // Cada cuÃ¡ntos segundos enviar datos 
+int SyncIntervalSec = 3;         // Cada cuántos segundos enviar datos 
 
-// --- NUEVOS FILTROS ---
+// --- HORARIO DE SESION (editable) ---
 bool UsarFiltroHorario = true;
-int HoraInicioSesion = 9;  // 09:00
-int HoraFinSesion = 17;    // 17:00
+input int HoraInicioSesion = 9;  // Hora de inicio de sesion (9 = 09:00)
+input int HoraFinSesion = 22;    // Hora de fin de sesion (22 = 22:00)
 bool UsarFiltroATR = true;
-double MinATR_Pips = 5.0; // MÃ­nimo movimiento (Pips) de ATR para entrar
+double MinATR_Pips = 5.0; // Mínimo movimiento (Pips) de ATR para entrar
 
 // --- FILTROS SNIPER ---
 bool UsarATR_Dinamico = true;  
@@ -61,12 +61,12 @@ double MaxSpreadPips = 3.5;
 double MinCuerpoVelaPips = 3.0; 
 
 // --- GESTION DE LOTAJE (DEMO NORMAL) ---
-input double LotajeMinimo = 0.01;     // Lote para entradas 1 y 2 (mÃ­nimo, protege la cesta)
-double LotajeInicial = 0.01;   // Lote referencia (usado internamente)
+input double LotajeMinimo = 0.01;     // Lote para entradas 1 y 2 (mínimo, protege la cesta)
+input double LotajeInicial = 0.01;   // Lote referencia (usado internamente)
 double MultiplicadorRefuerzo = 1.0; 
-double MaxLoteIndividual = 0.05; // Lote SOS (rescates desde posiciÃ³n 3)
+double MaxLoteIndividual = 0.05; // Lote SOS (rescates desde posición 3)
 input double MaxLoteTotal = 0.50; 
-int LimitePosicionesSOS = 15; 
+input int LimitePosicionesSOS = 3; 
 
 // --- OBJETIVOS DE PROFIT (DEMO NORMAL) ---
 bool UsarModoScalp = true;        // Cierra posiciones individuales en ganancia
@@ -74,8 +74,8 @@ double ProfitScalpIndividual = 1.50; // Profit individual para posiciones SOS ($
 double ProfitScalpMinLote = 0.75;    // Profit individual para posiciones de 0.01 ($)
 bool UsarEmergenciaAuto = true;    // Activa la salida de emergencia inteligente
 double ProfitEmergenciaUSD = 1.00;  // TP de emergencia global ($)
-double ProfitNetoUSD = 1.00;   
-input double LimiteDiario = 250.0;      // LÃ­mite de beneficio diario ($)
+input double ProfitNetoUSD = 1.00;   
+input double LimiteDiario = 250.0;      // Límite de beneficio diario ($)
 double DistanciaRefuerzoPipsBase = 15.0; 
 
 // --- HUD ---
@@ -124,15 +124,15 @@ int OnInit() {
     hEMA_M5 = iMA(_Symbol, PERIOD_M5, 50, 0, MODE_EMA, PRICE_CLOSE);
     hEMA_M1 = iMA(_Symbol, PERIOD_M1, 50, 0, MODE_EMA, PRICE_CLOSE);
     hEMA_M1_9 = iMA(_Symbol, PERIOD_M1, 9, 0, MODE_EMA, PRICE_CLOSE);
-    hRSI = iRSI(_Symbol, _Period, 14, PRICE_CLOSE);     // Usa el TF actual del grÃ¡fico
-    hMACD = iMACD(_Symbol, _Period, 12, 26, 9, PRICE_CLOSE); // Usa el TF actual del grÃ¡fico
+    hRSI = iRSI(_Symbol, _Period, 14, PRICE_CLOSE);     // Usa el TF actual del gráfico
+    hMACD = iMACD(_Symbol, _Period, 12, 26, 9, PRICE_CLOSE); // Usa el TF actual del gráfico
     hATR = iATR(_Symbol, _Period, 14);
     hADX = iADX(_Symbol, PERIOD_H1, 14);
     hADX_Chart = iADX(_Symbol, _Period, 14);
     for(int i=0; i<7; i++) hRadar[i] = iMA(_Symbol, etfs[i], 50, 0, MODE_EMA, PRICE_CLOSE);
     
     ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false); // Desactivado para evitar manchas en el HUD
-    ChartSetInteger(0, CHART_FOREGROUND, false); // Forzar grÃ¡fico al fondo para HUD limpio
+    ChartSetInteger(0, CHART_FOREGROUND, false); // Forzar gráfico al fondo para HUD limpio
     EventSetTimer(1);
     CrearInterfazMaster();
     // Calcular estado inicial (funciona incluso con mercado cerrado)
@@ -146,7 +146,15 @@ int OnInit() {
 void OnDeinit(const int reason) { EventKillTimer(); ObjectsDeleteAll(0, "MAIKO_"); }
 
 void OnTimer() {
-    // Indicadores visuales diferidos (MT5 necesita que el chart estÃ© listo)
+    // Comprobacion de horario en el timer (funciona aunque no haya ticks)
+    if(UsarFiltroHorario && ArraySize(pos) == 0) {
+        MqlDateTime dt; TimeCurrent(dt);
+        if(dt.hour < HoraInicioSesion || dt.hour >= HoraFinSesion) {
+            txtVeredicto = "FUERA DE SESION (DORMIDO)";
+            txtVoz = StringFormat("SESION CERRADA - Reabre a las %02d:00", HoraInicioSesion);
+        }
+    }
+    // Indicadores visuales diferidos (MT5 necesita que el chart esté listo)
     if(!indicadoresVisualesOK) {
         int totalWin = (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL);
         int winRSI = -1, winMACD = -1, winADX = -1;
@@ -203,9 +211,10 @@ void EnviarTelemetria() {
     string json = StringFormat(
         "{\"purchaseId\":\"%s\",\"account\":\"%s\",\"balance\":%.2f,\"equity\":%.2f,"
         "\"pnl_today\":%.2f,\"status\":\"%s\",\"symbol\":\"%s\",\"narrative\":\"%s\","
-        "\"isReal\":false,\"version\":\"13.92\",\"positions\":%s}",
+        "\"armed\":%s,\"isReal\":false,\"version\":\"13.92\",\"positions\":%s}",
         PurchaseID, account, balance, equity,
-        ganadoHoy, status, _Symbol, txtVeredicto, posJson
+        ganadoHoy, status, _Symbol, txtVeredicto,
+        BotActivo ? "true" : "false", posJson
     );
     
     char postData[];
@@ -213,7 +222,23 @@ void EnviarTelemetria() {
     char result[];
     string headers = "Content-Type: application/json\r\n";
     string resHeaders;
-    WebRequest("POST", SyncURL, headers, 3000, postData, result, resHeaders);
+    int res = WebRequest("POST", SyncURL, headers, 3000, postData, result, resHeaders);
+    
+    // --- CONTROL REMOTO: Procesar respuesta del servidor ---
+    if(res == 200 && ArraySize(result) > 0) {
+        string response = CharArrayToString(result, 0, WHOLE_ARRAY, CP_UTF8);
+        // Cierre de emergencia remoto
+        if(StringFind(response, "\"cmd\":\"CLOSE_ALL\"") >= 0) {
+            CerrarTodo();
+            Print("MAIKO REMOTE: Cierre total ejecutado desde el panel web.");
+        }
+        // Encendido/apagado remoto
+        if(StringFind(response, "\"armed\":true") >= 0) {
+            if(!BotActivo) { BotActivo = true; Print("MAIKO REMOTE: Bot ENCENDIDO desde el panel web."); }
+        } else if(StringFind(response, "\"armed\":false") >= 0) {
+            if(BotActivo) { BotActivo = false; Print("MAIKO REMOTE: Bot APAGADO desde el panel web."); }
+        }
+    }
 }
 
 bool IsNewsBlocked() {
@@ -653,7 +678,7 @@ void CrearInterfazMaster() {
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_XSIZE, w); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_YSIZE, h);
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_BGCOLOR, BodyColor); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_ZORDER, 9999); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_BACK, false);
     CrearBoton("MAIKO_Head", x, y, w, 35, "", ColorHeader, clrNONE, 10000); 
-    CrearLabel("MAIKO_T", x+10, y+10, "MAIKO PRO | DEMO v13.92", ColorMain, 11, 10001); 
+    CrearLabel("MAIKO_T", x+10, y+10, "MAIKO PRO | GOLD v13.92", ColorMain, 11, 10001); 
     CrearBoton("MAIKO_BtnMin", x+w-35, y+5, 30, 25, "_", clrGray, clrWhite, 10010);
     string rads[]={"W1","D1","H4","H1","M15","M5","M1"};
     for(int i=0; i<7; i++) {

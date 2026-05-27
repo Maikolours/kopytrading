@@ -40,12 +40,12 @@ input double MaxSpreadDeltaPips = 10.0; // Desviación Máxima del Spread en pip
 // --- SINCRONIZACIÓN CON KOPYTRADING.COM ---
 input string PurchaseID = "";          // ID de licencia (del dashboard de kopytrading.com)
 input string SyncURL = "https://www.kopytrading.com/api/sync-positions";
-input int SyncIntervalSec = 5;         // Cada cuántos segundos enviar datos 
+input int SyncIntervalSec = 3;         // Cada cuántos segundos enviar datos 
 
 // --- NUEVOS FILTROS ---
 input bool UsarFiltroHorario = true;
 input int HoraInicioSesion = 9;  // 09:00
-input int HoraFinSesion = 17;    // 17:00
+input int HoraFinSesion = 22;    // 17:00
 input bool UsarFiltroATR = true;
 input double MinATR_Pips = 5.0; // Mínimo movimiento (Pips) de ATR para entrar
 
@@ -66,7 +66,7 @@ input double LotajeInicial = 0.01;   // Lote referencia (usado internamente)
 input double MultiplicadorRefuerzo = 1.0; 
 input double MaxLoteIndividual = 0.02; // Lote SOS (rescates desde posición 3)
 input double MaxLoteTotal = 0.50; 
-input int LimitePosicionesSOS = 5; 
+input int LimitePosicionesSOS = 3; 
 
 // --- OBJETIVOS DE PROFIT (DEMO NORMAL) ---
 input bool UsarModoScalp = true;        // Cierra posiciones individuales en ganancia
@@ -175,6 +175,16 @@ void OnTimer() {
     ActualizarEstadoMaster();
     ganadoPeriodo = CalcularGanadoUltraPreciso(idxPeriodo);
     flotante = CalcularProfit();
+    
+    // Comprobacion de horario en el timer (funciona aunque no haya ticks)
+    if(UsarFiltroHorario && ArraySize(pos) == 0) {
+        MqlDateTime dt; TimeCurrent(dt);
+        if(dt.hour < HoraInicioSesion || dt.hour >= HoraFinSesion) {
+            txtVeredicto = "FUERA DE SESION (DORMIDO)";
+            txtVoz = StringFormat("SESION CERRADA - Reabre a las %02d:00", HoraInicioSesion);
+        }
+    }
+    
     ActualizarInterfazMaster();
     ChartRedraw();
     // Sync con kopytrading.com
@@ -482,6 +492,7 @@ void OnTick() {
             MqlDateTime dt; TimeCurrent(dt);
             if(dt.hour < HoraInicioSesion || dt.hour >= HoraFinSesion) {
                 txtVeredicto = "FUERA DE SESION (DORMIDO)";
+                txtVoz = StringFormat("SESION CERRADA - Reabre a las %02d:00", HoraInicioSesion);
                 return;
             }
         }
@@ -684,7 +695,7 @@ void CrearInterfazMaster() {
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_XSIZE, w); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_YSIZE, h);
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_BGCOLOR, BodyColor); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_ZORDER, 9999); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_BACK, false);
     CrearBoton("MAIKO_Head", x, y, w, 35, "", ColorHeader, clrNONE, 10000); 
-    CrearLabel("MAIKO_T", x+10, y+10, "MAIKO PRO | GOLD v13.92", ColorMain, 11, 10001); 
+    CrearLabel("MAIKO_T", x+10, y+10, "MAIKO PRO | GOLD DEV v13.92", ColorMain, 11, 10001); 
     CrearBoton("MAIKO_BtnMin", x+w-35, y+5, 30, 25, "_", clrGray, clrWhite, 10010);
     string rads[]={"W1","D1","H4","H1","M15","M5","M1"};
     for(int i=0; i<7; i++) {

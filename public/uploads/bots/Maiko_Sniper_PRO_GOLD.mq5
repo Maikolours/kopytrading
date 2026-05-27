@@ -59,7 +59,7 @@ input double LotajeInicial = 0.01;   // Lote referencia (usado internamente)
 input double MultiplicadorRefuerzo = 1.0; 
 input double MaxLoteIndividual = 0.05; // Lote SOS (rescates desde posición 3)
 input double MaxLoteTotal = 0.50; 
-input int LimitePosicionesSOS = 15; 
+input int LimitePosicionesSOS = 3; 
 
 // --- OBJETIVOS DE PROFIT (DEMO NORMAL) ---
 input bool UsarModoScalp = true;        // Cierra posiciones individuales en ganancia
@@ -627,7 +627,7 @@ void CrearInterfazMaster() {
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_XSIZE, w); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_YSIZE, h);
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_BGCOLOR, BodyColor); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_ZORDER, 9999); ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_BACK, false);
     CrearBoton("MAIKO_Head", x, y, w, 35, "", ColorHeader, clrNONE, 10000); 
-    CrearLabel("MAIKO_T", x+10, y+10, "MAIKO PRO | DEMO v13.92", ColorMain, 11, 10001); 
+    CrearLabel("MAIKO_T", x+10, y+10, "MAIKO PRO | GOLD v13.92", ColorMain, 11, 10001); 
     CrearBoton("MAIKO_BtnMin", x+w-35, y+5, 30, 25, "_", clrGray, clrWhite, 10010);
     string rads[]={"W1","D1","H4","H1","M15","M5","M1"};
     for(int i=0; i<7; i++) {
