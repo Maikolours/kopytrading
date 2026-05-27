@@ -53,7 +53,7 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                         {article.title}
                     </h1>
                     <div className="flex flex-wrap items-center justify-center sm:justify-start gap-6 text-[11px] text-text-muted font-bold uppercase tracking-widest">
-                        <span className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/5">📅 {article.date}</span>
+                        <span className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/5">✍️ Maikolours</span>
                         <span className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/5">⏱ {article.readTime}</span>
                     </div>
                 </header>
@@ -67,6 +67,7 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                         if (!trimmed) return null;
                         if (trimmed.startsWith('## ')) return <h2 key={i} className="text-2xl sm:text-4xl font-black text-white mt-16 mb-8 tracking-tighter uppercase italic border-l-4 border-brand pl-6">{trimmed.replace('## ', '')}</h2>;
                         if (trimmed.startsWith('### ')) return <h3 key={i} className="text-lg sm:text-xl font-black text-brand-light mt-12 mb-6 tracking-tight uppercase flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full bg-brand" /> {trimmed.replace('### ', '')}</h3>;
+                        if (trimmed.startsWith('#### ')) return <h4 key={i} className="text-base sm:text-lg font-bold text-white mt-8 mb-4 tracking-tight uppercase border-b border-white/10 pb-2">{trimmed.replace('#### ', '')}</h4>;
                         if (trimmed.startsWith('---')) return <hr key={i} className="border-white/5 my-14" />;
                         if (trimmed.startsWith('⚠️')) return (
                             <div key={i} className="relative group my-12">
@@ -88,9 +89,22 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
 
                         // Lists
                         if (trimmed.match(/^(\d+\.|[-•✅❌])\s/m)) {
-                            const items = trimmed.split('\n').filter(l => l.trim());
-                            return (
-                                <ul key={i} className="space-y-6 my-10 pl-2">
+                            // Si empieza con un heading y luego tiene una lista pegada (bug fix)
+                            let contentToParse = trimmed;
+                            let preHeading = null;
+                            if (trimmed.startsWith('### ')) {
+                                const lines = trimmed.split('\n');
+                                preHeading = <h3 key={i + 'h3'} className="text-lg sm:text-xl font-black text-brand-light mt-12 mb-6 tracking-tight uppercase flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full bg-brand" /> {lines[0].replace('### ', '')}</h3>;
+                                contentToParse = lines.slice(1).join('\n');
+                            } else if (trimmed.startsWith('## ')) {
+                                const lines = trimmed.split('\n');
+                                preHeading = <h2 key={i + 'h2'} className="text-2xl sm:text-4xl font-black text-white mt-16 mb-8 tracking-tighter uppercase italic border-l-4 border-brand pl-6">{lines[0].replace('## ', '')}</h2>;
+                                contentToParse = lines.slice(1).join('\n');
+                            }
+                            
+                            const items = contentToParse.split('\n').filter(l => l.trim());
+                            const list = (
+                                <ul key={i + 'ul'} className="space-y-6 my-10 pl-2">
                                     {items.map((item, li) => (
                                         <li key={li} className="text-slate-300 text-lg leading-relaxed flex items-start gap-5 group">
                                             <span className="mt-1 flex-shrink-0 w-8 h-8 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-xs font-black text-brand-light group-hover:bg-brand group-hover:text-white transition-all shadow-lg">{li + 1}</span>
@@ -99,6 +113,7 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                                     ))}
                                 </ul>
                             );
+                            return preHeading ? <div key={i}>{preHeading}{list}</div> : list;
                         }
                         // Tables
                         if (trimmed.includes('|')) {
@@ -111,7 +126,7 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                                                 <tr key={ri} className={ri === 0 ? 'bg-white/5 border-b border-white/10' : 'border-b border-white/[0.03] hover:bg-brand/[0.02] transition-colors'}>
                                                     {row.split('|').filter(c => c.trim()).map((cell, ci) => (
                                                         <td key={ci} className={`py-5 px-8 ${ri === 0 ? 'font-black text-brand-light text-[10px] uppercase tracking-[0.3em]' : 'text-slate-300'}`}>
-                                                            <span dangerouslySetInnerHTML={{ __html: cell.trim().replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>') }} />
+                                                            <span dangerouslySetInnerHTML={{ __html: cell.trim().replace(/\*\*(.*?)\*\*/gs, '<strong class="text-white font-bold">$1</strong>') }} />
                                                         </td>
                                                     ))}
                                                 </tr>
@@ -126,7 +141,7 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                         const isFirstParagraph = i === 1 || (i === 0 && !trimmed.startsWith('#'));
                         return <p key={i} className={`text-slate-300 text-[17px] sm:text-[19px] leading-[1.8] font-normal mb-10 opacity-90 hover:opacity-100 transition-opacity ${isFirstParagraph ? 'first-letter:text-6xl first-letter:font-black first-letter:text-brand first-letter:mr-3 first-letter:float-left first-letter:leading-[0.85]' : ''}`} dangerouslySetInnerHTML={{
                             __html: trimmed
-                                .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>')
+                                .replace(/\*\*(.*?)\*\*/gs, '<strong class="text-white font-bold">$1</strong>')
                                 .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-brand-light hover:text-white font-bold underline decoration-brand/40 underline-offset-4 transition-all hover:decoration-white">$1</a>')
                         }} />;
                     })}
