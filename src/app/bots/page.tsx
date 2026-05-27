@@ -17,22 +17,22 @@ const GOLD_DEMO_ID = "cmn9hf8yc0000vhbcq9hbxk0j";
 const GOLD_REAL_ID = "cmn9hf9440001vhbclffx9no6";
 
 const formatBotName = (name: string, instrument: string, isTitle: boolean = false) => {
-    let emoji = '⚡';
     let gradient = 'from-brand-light to-brand';
     
     if (instrument === 'XAUUSD') {
-        emoji = '👑';
         gradient = 'from-yellow-300 to-amber-500';
     } else if (instrument === 'BTCUSD') {
-        emoji = '₿';
         gradient = 'from-orange-400 to-orange-600';
+    } else if (instrument === 'EURUSD') {
+        gradient = 'from-blue-400 to-cyan-500';
+    } else if (instrument === 'USDJPY') {
+        gradient = 'from-purple-500 to-indigo-500';
     } else if (name.includes('CENT')) {
-        emoji = '🪙';
         gradient = 'from-slate-300 to-slate-400';
     }
 
     const highlightedName = name.split(' ').map((word, i) => {
-        if (['GOLD', 'BTC', 'CENT', 'DEMO'].includes(word)) {
+        if (['GOLD', 'BTC', 'CENT', 'DEMO', 'EURO', 'YEN', 'GHOST', 'PRECISION', 'NINJA'].includes(word)) {
             const wordGradient = word === 'DEMO' ? 'from-purple-400 to-brand' : gradient;
             return <span key={i} className={`text-transparent bg-clip-text bg-gradient-to-r ${wordGradient}`}>{word} </span>;
         }
@@ -42,7 +42,6 @@ const formatBotName = (name: string, instrument: string, isTitle: boolean = fals
     return (
         <span className="inline-flex items-center gap-x-2 flex-wrap">
             <span>{highlightedName}</span>
-            <span className={`${isTitle ? 'text-4xl sm:text-5xl' : 'text-xl'} drop-shadow-xl not-italic translate-y-[-2px]`}>{emoji}</span>
         </span>
     );
 };
@@ -157,7 +156,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                     <div className={`absolute top-0 right-0 w-32 h-32 ${colors.glow} blur-3xl -mr-16 -mt-16 transition-opacity duration-700 group-hover:opacity-100 opacity-20`} />
                                     
                                     {/* Maiko Avatar */}
-                                    <div className="absolute top-[-20px] right-[-20px] w-32 h-32 opacity-20 group-hover:opacity-60 transition-opacity duration-700 mix-blend-screen pointer-events-none z-0">
+                                    <div className="absolute top-[-20px] right-[-20px] w-32 h-32 opacity-60 group-hover:opacity-100 transition-opacity duration-700 mix-blend-screen pointer-events-none z-0">
                                         {colors.image && <img src={colors.image} alt="Maiko Warrior" className="w-full h-full object-cover rounded-full" />}
                                     </div>
 

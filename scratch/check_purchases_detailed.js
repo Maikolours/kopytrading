@@ -2,29 +2,48 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-    const userId = 'cmmb2z6ml000dvhhoj1s9zmnf';
-    console.log(`--- DETAIL OF PURCHASES FOR USER ${userId} ---`);
+    console.log("=== COMPRAS DETALLADAS DE SAKURA ===");
+    
+    // Obtener el ID de usuario de viajaconsakura@gmail.com
+    const user = await prisma.user.findUnique({
+        where: { email: "viajaconsakura@gmail.com" }
+    });
+    
+    if (!user) {
+        console.error("Usuario no encontrado");
+        return;
+    }
     
     const purchases = await prisma.purchase.findMany({
-        where: { userId: userId },
+        where: { userId: user.id },
         include: {
             botProduct: true,
-            activePositions: true,
-            pastTrades: { take: 5 }
+            botSettings: true
         }
     });
-
+    
     purchases.forEach(p => {
-        console.log(`\nPurchase ID: ${p.id}`);
-        console.log(`Bot Product Name: ${p.botProduct?.name}`);
-        console.log(`Instrument in DB: ${p.botProduct?.instrument}`);
-        console.log(`Status in DB: ${p.status}`);
+        console.log(`\n--------------------------------------------`);
+        console.log(`Purchase ID: ${p.id}`);
+        console.log(`Bot Product Name: ${p.botProduct.name}`);
+        console.log(`Purchase Balance: ${p.balance}`);
+        console.log(`Purchase Equity: ${p.equity}`);
         console.log(`Last Sync: ${p.lastSync}`);
-        console.log(`Balance: ${p.balance} | Equity: ${p.equity}`);
-        console.log(`Last Status: ${p.lastStatus}`);
-        console.log(`Active Positions synced: ${p.activePositions?.length || 0}`);
-        console.log(`Past Trades in history: ${p.pastTrades?.length || 0}`);
+        console.log(`BotSettings Count: ${p.botSettings.length}`);
+        
+        p.botSettings.forEach(s => {
+            console.log(`  - Account: ${s.account}`);
+            console.log(`  - Settings sample: ${s.settings.substring(0, 150)}...`);
+            try {
+                const parsed = JSON.parse(s.settings);
+                console.log(`    * Parsed settings balance: ${parsed.balance}`);
+                console.log(`    * Parsed settings equity: ${parsed.equity}`);
+                console.log(`    * Parsed settings status: ${parsed.status}`);
+            } catch (err) {}
+        });
     });
 }
 
-main().catch(console.error).finally(() => prisma.$disconnect());
+main()
+    .catch(console.error)
+    .finally(() => prisma.$disconnect());
