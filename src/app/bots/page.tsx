@@ -74,7 +74,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
             return { accent: "text-amber-400", badge: "from-amber-500 to-orange-600", glow: "bg-amber-500/10", image };
         }
         if (bot.id === GOLD_DEMO_ID) {
-            image = "/images/maiko-gold.png";
+            image = "/images/maiko-gold-demo.png";
             return { accent: "text-purple-400", badge: "from-purple-500 to-violet-600", glow: "bg-purple-500/10", image };
         }
         if (bot.name.includes('CENT') || bot.instrument === 'EURUSD' || bot.instrument === 'USDJPY') {
