@@ -208,9 +208,9 @@ export function BotComparisonTable() {
                             {BOTS_DATA.map((bot, i) => (
                                 <div key={i} className={`p-6 text-center border-l border-white/5 flex flex-col justify-end gap-3 rounded-b-2xl ${bot.popular ? 'bg-brand/10 shadow-[inner_0_-10px_20px_rgba(139,92,246,0.1)]' : ''}`}>
                                     {bot.price === "Próximamente" || bot.price === "En fabricación" ? (
-                                        <div className="flex flex-col items-center gap-1">
-                                            <span className="text-xl font-black text-white/30 uppercase tracking-[0.2em] italic">{bot.price}</span>
-                                            <span className="text-[8px] font-black text-brand-light/40 uppercase tracking-[0.3em]">✦ PRÓXIMA REVELACIÓN</span>
+                                        <div className="flex flex-col items-center gap-1 w-full overflow-hidden">
+                                            <span className="text-xs sm:text-sm font-black text-white/30 uppercase tracking-widest italic text-center leading-tight whitespace-normal">{bot.price}</span>
+                                            <span className="text-[8px] font-black text-brand-light/40 uppercase tracking-widest text-center">✦ PRÓXIMA REVELACIÓN</span>
                                         </div>
                                     ) : (
                                         <div className="text-base sm:text-lg font-extrabold text-brand-light/70 italic">{bot.price}</div>
