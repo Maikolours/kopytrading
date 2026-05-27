@@ -147,6 +147,18 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                     })}
                 </article>
 
+                {/* Navigation Footer */}
+                <div className="mt-12 flex justify-between items-center border-t border-white/5 pt-8 px-4">
+                    <Link href="/articulos" className="text-brand-light hover:text-white transition-all text-sm flex items-center gap-2 group">
+                        <span className="group-hover:-translate-x-1 transition-transform inline-block">←</span> 
+                        <span className="font-bold uppercase tracking-widest text-[10px]">Volver al Blog</span>
+                    </Link>
+                    <a href="#" className="text-brand-light hover:text-white transition-all text-sm flex items-center gap-2 group">
+                        <span className="font-bold uppercase tracking-widest text-[10px]">Volver al inicio</span>
+                        <span className="group-hover:-translate-y-1 transition-transform inline-block">↑</span>
+                    </a>
+                </div>
+
                 {/* CTA */}
                 <div className="mt-24 relative group">
                     <div className="absolute -inset-2 bg-gradient-to-r from-brand via-accent to-brand rounded-[3rem] blur opacity-10 group-hover:opacity-30 transition duration-1000 animate-pulse"></div>
