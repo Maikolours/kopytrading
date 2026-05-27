@@ -77,9 +77,17 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
             image = "/images/maiko-gold-demo.png";
             return { accent: "text-purple-400", badge: "from-purple-500 to-violet-600", glow: "bg-purple-500/10", image };
         }
-        if (bot.name.includes('CENT') || bot.instrument === 'EURUSD' || bot.instrument === 'USDJPY') {
+        if (bot.instrument === 'EURUSD') {
+            image = "/images/maiko-euro.png"; 
+            return { accent: "text-blue-400", badge: "from-blue-500 to-cyan-500", glow: "bg-blue-500/10", image };
+        }
+        if (bot.instrument === 'USDJPY') {
+            image = "/images/maiko-yen.png"; 
+            return { accent: "text-purple-400", badge: "from-purple-500 to-indigo-500", glow: "bg-purple-500/10", image };
+        }
+        if (bot.name.includes('CENT')) {
             image = "/images/maiko-cent.png";
-            return { accent: "text-brand-light", badge: "from-brand to-brand-light", glow: "bg-brand/10", image };
+            return { accent: "text-slate-400", badge: "from-slate-400 to-slate-500", glow: "bg-slate-400/10", image };
         }
         image = "/images/maiko-gold.png";
         return { accent: "text-brand-light", badge: "from-brand to-brand-light", glow: "bg-brand/10", image };
