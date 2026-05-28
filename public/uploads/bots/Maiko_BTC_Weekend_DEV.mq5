@@ -222,17 +222,7 @@ int OnInit() {
     if(winADX == -1) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hADX_Chart);
     if(winATR == -1) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hATR);
     
-    int numInd = ChartIndicatorsTotal(0, 0);
-    bool ema50YaExiste = false;
-    bool ema9YaExiste = false;
-    for(int i=numInd-1; i>=0; i--) {
-        string iname = ChartIndicatorName(0, 0, i);
-        if(StringFind(iname, "MA") >= 0 || StringFind(iname, "Average") >= 0) {
-            if(StringFind(iname, "(50)") >= 0) ema50YaExiste = true;
-            if(StringFind(iname, "(9)") >= 0) ema9YaExiste = true;
-        }
-    }
-    if(!ema50YaExiste) ChartIndicatorAdd(0, 0, hEMA_M1);
+    ChartIndicatorAdd(0, 0, hEMA_M1);
     ChartIndicatorAdd(0, 0, hEMA_M1_9);
     
     ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false); // Desactivado para evitar manchas en el HUD

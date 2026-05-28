@@ -223,6 +223,7 @@ int OnInit() {
     if(winMACD == -1) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hMACD);
     if(winADX == -1) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hADX_Chart);
     ChartIndicatorAdd(0, 0, hEMA_M1);
+    ChartIndicatorAdd(0, 0, hEMA_M1_9);
     
     ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false); // Desactivado para evitar manchas en el HUD
     ChartSetInteger(0, CHART_FOREGROUND, false); // Forzar grÃ¡fico al fondo para HUD limpio
