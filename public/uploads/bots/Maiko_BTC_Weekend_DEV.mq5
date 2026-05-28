@@ -115,6 +115,7 @@ double lastSpread = 0;
 double adxActual = 0;
 
 int hEMA_H4, hEMA_H1, hEMA_M15, hEMA_M5, hEMA_M1, hEMA_M1_9;
+int hEMA_Visual50, hEMA_Visual9; // Handles para visualización en el TF del gráfico
 int hRadar[7];
 
 double rsiM5[1], macdM15[1], atrM15[1];
@@ -207,6 +208,10 @@ int OnInit() {
     equityPeak = AccountInfoDouble(ACCOUNT_EQUITY);
     for(int i=0; i<7; i++) hRadar[i] = iMA(_Symbol, etfs[i], 50, 0, MODE_EMA, PRICE_CLOSE);
     
+    // Handles visuales en el TF del gráfico (siempre visibles independientemente del TF)
+    hEMA_Visual50 = iMA(_Symbol, _Period, 50, 0, MODE_EMA, PRICE_CLOSE);
+    hEMA_Visual9  = iMA(_Symbol, _Period, 9,  0, MODE_EMA, PRICE_CLOSE);
+
     // Gestion Inteligente de Indicadores
     int totalWindows = (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL);
     int winRSI = -1, winMACD = -1, winADX = -1, winATR = -1;
@@ -222,8 +227,8 @@ int OnInit() {
     if(winADX == -1) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hADX_Chart);
     if(winATR == -1) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hATR);
     
-    ChartIndicatorAdd(0, 0, hEMA_M1);
-    ChartIndicatorAdd(0, 0, hEMA_M1_9);
+    ChartIndicatorAdd(0, 0, hEMA_Visual50);
+    ChartIndicatorAdd(0, 0, hEMA_Visual9);
     
     ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false); // Desactivado para evitar manchas en el HUD
     ChartSetInteger(0, CHART_FOREGROUND, false); // Forzar gráfico al fondo para HUD limpio
