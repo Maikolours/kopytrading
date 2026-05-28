@@ -9,6 +9,9 @@
 #include <Trade\Trade.mqh>
 
 // --- CONFIGURACION ---
+// --- PROTECCION DE EQUIDAD (STOP LOSS) ---
+input bool InpUsarProteccionEquidad = false; // Activar Stop Loss por Equidad (Drawdown)
+input double InpMaxDrawdownPorcentaje = 20.0; // % Maximo de Drawdown permitido
 input string MiLicencia = "23449251"; 
 input bool CUENTA_REAL_CENT = false; // Marcamos como false para Demo normal
 input datetime FechaInicioMaiko = D'2026.04.01 00:00'; 
@@ -45,7 +48,7 @@ input int SyncIntervalSec = 5;         // Cada cuántos segundos enviar datos
 // --- FILTROS SNIPER ---
 input bool UsarATR_Dinamico = true;  
 input bool UsarFiltroSR = true;      
-input double MargenZonaPips = 2.0;    
+input double MargenZonaPips = 5.0;    
 input double MinDistanciaEMAPips = 1.0; 
 input bool EsperarGiroM1_SOS = false;    // Espera vela cerrada M1 para abrir SOS (false = al toque)
 input double MaxRSI_Compra = 70.0;   
@@ -107,7 +110,12 @@ int idxPeriodo = 0;
 string labelPeriodo[] = {"HOY (NETO)", "ESTA SEMANA", "ESTE MES", "MAIKO PROFIT"};
 datetime ultimoSync = 0;
 
+bool UsarProteccionEquidad = false;
+double MaxDrawdownPorcentaje = 20.0;
+
 int OnInit() {
+      UsarProteccionEquidad = InpUsarProteccionEquidad;
+      MaxDrawdownPorcentaje = InpMaxDrawdownPorcentaje;
     ObjectsDeleteAll(0, "MAIKO_");
     trade.SetExpertMagicNumber(ExpertMagic);
     equityPeak = AccountInfoDouble(ACCOUNT_EQUITY);

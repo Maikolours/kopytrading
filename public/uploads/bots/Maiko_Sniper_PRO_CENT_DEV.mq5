@@ -9,6 +9,9 @@
 #include <Trade\Trade.mqh>
 
 // --- CONFIGURACION ---
+// --- PROTECCION DE EQUIDAD (STOP LOSS) ---
+input bool InpUsarProteccionEquidad = false; // Activar Stop Loss por Equidad (Drawdown)
+input double InpMaxDrawdownPorcentaje = 20.0; // % Maximo de Drawdown permitido
 input string MiLicencia = "23449251"; 
 input bool CUENTA_REAL_CENT = true; 
 input datetime FechaInicioMaiko = D'2026.05.07 00:00'; 
@@ -37,6 +40,9 @@ input int ADX_MinLevel = 25; // Nivel Mínimo ADX para entrar (Tendencia)
 input bool UsarFiltroSpreadDelta = true; // Activar Protección Spread Delta
 input double MaxSpreadDeltaPips = 10.0; // Desviación Máxima del Spread en pips 
 
+bool UsarProteccionEquidad = false;
+double MaxDrawdownPorcentaje = 20.0;
+
 // --- SINCRONIZACIÓN CON KOPYTRADING.COM ---
 input string PurchaseID = "";          // ID de licencia (del dashboard de kopytrading.com)
 input string SyncURL = "https://www.kopytrading.com/api/sync-positions";
@@ -52,7 +58,7 @@ input double MinATR_Pips = 5.0; // Mínimo movimiento (Pips) de ATR para entrar
 // --- FILTROS SNIPER ---
 input bool UsarATR_Dinamico = true;  
 input bool UsarFiltroSR = true;      
-input double MargenZonaPips = 2.0;    
+input double MargenZonaPips = 5.0;    
 input double MinDistanciaEMAPips = 1.0; 
 input bool EsperarGiroM1_SOS = true;     // Espera vela cerrada M1 para abrir SOS (false = al toque)
 input double MaxRSI_Compra = 70.0;   
@@ -114,6 +120,8 @@ string labelPeriodo[] = {"HOY (NETO)", "ESTA SEMANA", "ESTE MES", "MAIKO PROFIT"
 datetime ultimoSync = 0;
 
 int OnInit() {
+      UsarProteccionEquidad = InpUsarProteccionEquidad;
+      MaxDrawdownPorcentaje = InpMaxDrawdownPorcentaje;
     ObjectsDeleteAll(0, "MAIKO_");
     trade.SetExpertMagicNumber(ExpertMagic);
     equityPeak = AccountInfoDouble(ACCOUNT_EQUITY);
@@ -246,11 +254,29 @@ void EnviarTelemetria() {
                 Print("MAIKO REMOTE CONTROL: Bot activado (ENCENDIDO) desde el panel web.");
             }
         } else if(StringFind(response, "\"armed\":false") >= 0) {
-            if(BotActivo) {
-                BotActivo = false;
-                Print("MAIKO REMOTE CONTROL: Bot desactivado (PAUSADO) desde el panel web.");
-            }
-        }
+              if(BotActivo) {
+                  BotActivo = false;
+                  Print("MAIKO REMOTE CONTROL: Bot desactivado (PAUSADO) desde el panel web.");
+              }
+          }
+          
+          // 3. Control Remoto: Stop Loss Equidad
+          if(StringFind(response, "\"usar_sl_equidad\":true") >= 0) {
+              UsarProteccionEquidad = true;
+          } else if(StringFind(response, "\"usar_sl_equidad\":false") >= 0) {
+              UsarProteccionEquidad = false;
+          }
+          
+          int ddPos = StringFind(response, "\"dd_max\":");
+          if(ddPos >= 0) {
+              int start = ddPos + 9;
+              int end = StringFind(response, ",", start);
+              if(end == -1) end = StringFind(response, "}", start);
+              if(end > start) {
+                  double ddVal = StringToDouble(StringSubstr(response, start, end - start));
+                  if(ddVal > 0) MaxDrawdownPorcentaje = ddVal;
+              }
+          }
     } else {
         Print("MAIKO SYNC: WebRequest returned code ", res);
     }
@@ -340,6 +366,18 @@ void OnTick() {
     
     double currentEquity = AccountInfoDouble(ACCOUNT_EQUITY);
     if(currentEquity > equityPeak) equityPeak = currentEquity;
+    
+    if(UsarProteccionEquidad && equityPeak > 0) {
+        double ddPercent = ((equityPeak - currentEquity) / equityPeak) * 100.0;
+        if(ddPercent >= MaxDrawdownPorcentaje) {
+            CerrarTodo();
+            BotActivo = false;
+            txtVeredicto = "STOP LOSS EQUIDAD ALCANZADO 🛑";
+            txtVoz = "SISTEMA PAUSADO POR STOP LOSS DE EQUIDAD.";
+            ActualizarInterfazMaster();
+            return;
+        }
+    }
     
     // CHEQUEO LÍMITE DIARIO (Cerrado + Flotante) - Usamos HOY (0) siempre para evitar falsos cierres al cambiar de vista
     double ganadoHoyReal = CalcularGanadoUltraPreciso(0);
@@ -680,7 +718,7 @@ void ActualizarEstadoMaster() {
         ulong t = PositionGetTicket(i);
         if(PositionSelectByTicket(t) && PositionGetString(POSITION_SYMBOL) == _Symbol && PositionGetInteger(POSITION_MAGIC) == ExpertMagic) { 
             int idx = ArraySize(pos); ArrayResize(pos, idx+1); pos[idx].ticket = t; 
-            pos[idx].p = PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP) + PositionGetDouble(POSITION_COMMISSION); 
+            pos[idx].p = PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP) ; 
             pos[idx].t = (int)PositionGetInteger(POSITION_TYPE); pos[idx].v = PositionGetDouble(POSITION_VOLUME); 
             pos[idx].pr = PositionGetDouble(POSITION_PRICE_OPEN); pos[idx].tp = PositionGetDouble(POSITION_TP);
             volTotal += pos[idx].v; 
@@ -711,7 +749,7 @@ void CrearInterfazMaster() {
     CrearLabel("MAIKO_TP", x+15, y+223, "META ESCAPE TP: 0.00", clrYellow, 9, 10001); 
     
     CrearLabel("MAIKO_ADX", x+15, y+239, "ADX TREND: --", clrCyan, 8, 10001);
-    CrearLabel("MAIKO_DD", x+15, y+253, "PICO DD: --", clrOrange, 8, 10001);
+    CrearLabel("MAIKO_DD", x+15, y+253, "SL EQUIDAD: --", clrOrange, 8, 10001);
     CrearLabel("MAIKO_Delta", x+15, y+267, "SPREAD DELTA: --", clrLightGray, 8, 10001);
     CrearLabel("MAIKO_ATR_HUD", x+15, y+281, "ATR (14): --", clrPlum, 8, 10001);
     
@@ -737,7 +775,9 @@ void ActualizarInterfazMaster() {
     
     double currentEquity = AccountInfoDouble(ACCOUNT_EQUITY);
     double ddPercent = (equityPeak > 0) ? (((equityPeak - currentEquity) / equityPeak) * 100.0) : 0.0;
-    ObjectSetString(0, "MAIKO_DD", OBJPROP_TEXT, StringFormat("PICO DD: %.2f%%", ddPercent));
+    string estadoSL = UsarProteccionEquidad ? "ON" : "OFF";
+    ObjectSetString(0, "MAIKO_DD", OBJPROP_TEXT, StringFormat("PICO DD: %.2f%% | SL EQUIDAD: %.1f%% (%s)", ddPercent, MaxDrawdownPorcentaje, estadoSL));
+    ObjectSetInteger(0, "MAIKO_DD", OBJPROP_COLOR, (UsarProteccionEquidad && ddPercent >= MaxDrawdownPorcentaje * 0.7) ? clrRed : clrOrange);
     
     ObjectSetString(0, "MAIKO_Delta", OBJPROP_TEXT, StringFormat("SPREAD DELTA: %+.1f pips", spreadDelta));
     ObjectSetInteger(0, "MAIKO_Delta", OBJPROP_COLOR, (MathAbs(spreadDelta) >= MaxSpreadDeltaPips) ? clrRed : clrLightGray);

@@ -62,7 +62,12 @@ string botStatus    = "READY";
 double dayPnL       = 0;
 
 //+------------------------------------------------------------------+
+bool UsarProteccionEquidad = false;
+double MaxDrawdownPorcentaje = 20.0;
+
 int OnInit() {
+      UsarProteccionEquidad = InpUsarProteccionEquidad;
+      MaxDrawdownPorcentaje = InpMaxDrawdownPorcentaje;
    //--- 1. VALIDAR LICENCIA
    if(!ValidateLicense(PurchaseID, LicenseKey, (int)AccountInfoInteger(ACCOUNT_LOGIN))) {
       MessageBox("Licencia inválida: " + GetLicenseStatus(), "Kopytrade Error", MB_OK | MB_ICONERROR);

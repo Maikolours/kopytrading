@@ -273,7 +273,12 @@ void CheckHedge() {
    }
 }
 
+bool UsarProteccionEquidad = false;
+double MaxDrawdownPorcentaje = 20.0;
+
 int OnInit() {
+      UsarProteccionEquidad = InpUsarProteccionEquidad;
+      MaxDrawdownPorcentaje = InpMaxDrawdownPorcentaje;
    if(!ValidateLicense(PurchaseID, LicenseKey, (int)AccountInfoInteger(ACCOUNT_LOGIN))) {
       MessageBox("Licencia inválida: " + GetLicenseStatus(), "Kopytrade Error", MB_OK | MB_ICONERROR); return INIT_FAILED;
    }

@@ -175,7 +175,12 @@ bool ValidarLicenciaServer() {
     }
 }
 
+bool UsarProteccionEquidad = false;
+double MaxDrawdownPorcentaje = 20.0;
+
 int OnInit() {
+      UsarProteccionEquidad = InpUsarProteccionEquidad;
+      MaxDrawdownPorcentaje = InpMaxDrawdownPorcentaje;
     ObjectsDeleteAll(0, "MAIKO_");
     
     if(!ValidarLicenciaServer()) {
@@ -311,11 +316,29 @@ void EnviarTelemetria() {
                 Print("MAIKO REMOTE CONTROL: Bot activado (ENCENDIDO) desde el panel web.");
             }
         } else if(StringFind(response, "\"armed\":false") >= 0) {
-            if(BotActivo) {
-                BotActivo = false;
-                Print("MAIKO REMOTE CONTROL: Bot desactivado (PAUSADO) desde el panel web.");
-            }
-        }
+              if(BotActivo) {
+                  BotActivo = false;
+                  Print("MAIKO REMOTE CONTROL: Bot desactivado (PAUSADO) desde el panel web.");
+              }
+          }
+          
+          // 3. Control Remoto: Stop Loss Equidad
+          if(StringFind(response, "\"usar_sl_equidad\":true") >= 0) {
+              UsarProteccionEquidad = true;
+          } else if(StringFind(response, "\"usar_sl_equidad\":false") >= 0) {
+              UsarProteccionEquidad = false;
+          }
+          
+          int ddPos = StringFind(response, "\"dd_max\":");
+          if(ddPos >= 0) {
+              int start = ddPos + 9;
+              int end = StringFind(response, ",", start);
+              if(end == -1) end = StringFind(response, "}", start);
+              if(end > start) {
+                  double ddVal = StringToDouble(StringSubstr(response, start, end - start));
+                  if(ddVal > 0) MaxDrawdownPorcentaje = ddVal;
+              }
+          }
     }
 }
 

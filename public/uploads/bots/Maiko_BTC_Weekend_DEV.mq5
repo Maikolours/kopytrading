@@ -116,7 +116,7 @@ double adxActual = 0;
 
 int hEMA_H4, hEMA_H1, hEMA_M15, hEMA_M5, hEMA_M1, hEMA_M1_9;
 int hRadar[7];
-double emaH4[1], emaH1[1], emaM15[1], emaM5[1], emaM1[1];
+
 double rsiM5[1], macdM15[1], atrM15[1];
 ENUM_TIMEFRAMES etfs[7] = {PERIOD_W1, PERIOD_D1, PERIOD_H4, PERIOD_H1, PERIOD_M15, PERIOD_M5, PERIOD_M1};
 
@@ -733,7 +733,7 @@ void ActualizarEstadoMaster() {
         ulong t = PositionGetTicket(i);
         if(PositionSelectByTicket(t) && PositionGetString(POSITION_SYMBOL) == _Symbol && PositionGetInteger(POSITION_MAGIC) == ExpertMagic) { 
             int idx = ArraySize(pos); ArrayResize(pos, idx+1); pos[idx].ticket = t; 
-            pos[idx].p = PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP) + PositionGetDouble(POSITION_COMMISSION); 
+            pos[idx].p = PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP); 
             pos[idx].t = (int)PositionGetInteger(POSITION_TYPE); pos[idx].v = PositionGetDouble(POSITION_VOLUME); 
             pos[idx].pr = PositionGetDouble(POSITION_PRICE_OPEN); 
             pos[idx].tp = PositionGetDouble(POSITION_TP);

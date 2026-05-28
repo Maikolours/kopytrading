@@ -63,7 +63,12 @@ double ganadoPeriodo = 0;
 double flotante = 0;
 double spreadActual = 0;
 
+bool UsarProteccionEquidad = false;
+double MaxDrawdownPorcentaje = 20.0;
+
 int OnInit() {
+      UsarProteccionEquidad = InpUsarProteccionEquidad;
+      MaxDrawdownPorcentaje = InpMaxDrawdownPorcentaje;
     ObjectsDeleteAll(0, "MAIKO_");
     ObjectsDeleteAll(0, "OB_");
     trade.SetExpertMagicNumber(ExpertMagic);

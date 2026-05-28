@@ -188,7 +188,12 @@ ENUM_TIMEFRAMES StringToTF(string tf) {
 //+------------------------------------------------------------------+
 //| OnInit & OnTick                                                  |
 //+------------------------------------------------------------------+
+bool UsarProteccionEquidad = false;
+double MaxDrawdownPorcentaje = 20.0;
+
 int OnInit() {
+      UsarProteccionEquidad = InpUsarProteccionEquidad;
+      MaxDrawdownPorcentaje = InpMaxDrawdownPorcentaje;
    trade.SetExpertMagicNumber(InpMagic);
    
    curSL = InpSL_Pips; curTP = InpTP_Pips; curBE = InpBE_Trigger; 
