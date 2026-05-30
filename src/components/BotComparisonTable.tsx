@@ -13,24 +13,10 @@ const BOTS_DATA = [
         minCapital: "$1,000",
         frequency: "Alta (Scalping)",
         amortization: "Demo 30 Días",
-        features: [true, true, true, true],
+        features: [true, true, true, true, true],
         image: "/images/maiko-gold-demo.png",
         color: "from-amber-400 to-amber-600",
         price: "1€"
-    },
-    {
-        id: "pro-cent",
-        name: "MAIKO PRO CENT",
-        pair: "CENT",
-        timeframe: "H1",
-        risk: "Bajo",
-        minCapital: "$100",
-        frequency: "Media",
-        amortization: "~ 8 semanas",
-        features: [true, true, true, true],
-        image: "/images/maiko-cent.png",
-        color: "from-slate-400 to-slate-600",
-        price: "Próximamente"
     },
     {
         id: "ametralladora",
@@ -41,11 +27,25 @@ const BOTS_DATA = [
         minCapital: "$1,000",
         frequency: "Alta (Scalping)",
         amortization: "~ 2 semanas",
-        features: [true, true, true, true],
+        features: [true, true, true, true, true],
         image: "/images/maiko-gold.png",
         color: "from-amber-400 to-amber-600",
         price: "Próximamente",
         popular: true
+    },
+    {
+        id: "pro-cent",
+        name: "MAIKO PRO CENT",
+        pair: "CENT",
+        timeframe: "H1",
+        risk: "Bajo",
+        minCapital: "$100",
+        frequency: "Media",
+        amortization: "~ 8 semanas",
+        features: [true, true, true, true, true],
+        image: "/images/maiko-cent.png",
+        color: "from-slate-400 to-slate-600",
+        price: "Próximamente"
     },
     {
         id: "btc-storm",
@@ -56,7 +56,7 @@ const BOTS_DATA = [
         minCapital: "$2,000",
         frequency: "Breakout (IA)",
         amortization: "~ 4 semanas",
-        features: [true, true, true, true],
+        features: [true, true, true, true, true],
         image: "/images/maiko-btc.png",
         color: "from-orange-400 to-orange-600",
         price: "Próximamente"
@@ -70,7 +70,7 @@ const BOTS_DATA = [
         minCapital: "$500",
         frequency: "Baja (1-3 / sem)",
         amortization: "~ 6 semanas",
-        features: [true, true, true, true],
+        features: [true, true, true, true, true],
         image: "/images/maiko-euro.png",
         color: "from-blue-500 to-cyan-500",
         price: "En fabricación"
@@ -84,7 +84,7 @@ const BOTS_DATA = [
         minCapital: "$500",
         frequency: "Media (Noche)",
         amortization: "~ 4 semanas",
-        features: [true, true, true, true],
+        features: [true, true, true, true, true],
         image: "/images/maiko-yen.png",
         color: "from-purple-500 to-indigo-500",
         price: "En fabricación"
@@ -95,7 +95,8 @@ const FEATURE_LABELS = [
     "Stop Loss Físico Automático",
     "Break Even Dinámico",
     "Filtro de Horario y Noticias",
-    "Protección Anti-Drawdown Diario"
+    "Protección Anti-Drawdown Diario",
+    "Stop Loss por Equidad Ajustable"
 ];
 
 export function BotComparisonTable() {

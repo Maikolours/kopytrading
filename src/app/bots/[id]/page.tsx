@@ -53,6 +53,12 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
         notFound();
     }
 
+    const demoBot = await prisma.botProduct.findUnique({
+        where: { id: GOLD_DEMO_BOT_ID }
+    });
+    const demoIsUpcoming = demoBot ? (demoBot.status === "UPCOMING" || demoBot.status === "MAINTENANCE") : true;
+    const isUpcoming = bot.status === "UPCOMING" || bot.status === "MAINTENANCE";
+
     const colors = {
         'XAUUSD': { accent: 'text-purple-400', badge: 'bg-purple-500/20 text-purple-400 border-purple-500/30', glow: 'bg-purple-500/5', button: 'bg-purple-600 hover:bg-purple-500 shadow-purple-500/40', shadow: 'shadow-purple-500/20' },
         'BTCUSD': { accent: 'text-amber-400', badge: 'bg-amber-500/20 text-amber-400 border-amber-500/30', glow: 'bg-amber-500/5', button: 'bg-amber-600 hover:bg-amber-500 shadow-amber-500/40', shadow: 'shadow-amber-500/20' },
@@ -289,7 +295,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
 
                             {/* CTAs */}
                             <div className="space-y-4 relative z-10">
-                                {isDemo ? (
+                                {isDemo && !isUpcoming ? (
                                     /* Gold Demo → Checkout directo */
                                     <Link href={`/checkout/${bot.id}`} className="block">
                                         <Button size="lg" fullWidth className={`text-base py-8 shadow-2xl uppercase tracking-widest font-black italic transition-all hover:scale-[1.02] active:scale-[0.98] ${colors.button}`}>
@@ -297,23 +303,25 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                         </Button>
                                     </Link>
                                 ) : (
-                                    /* Bots comerciales */
+                                    /* Bots comerciales o Demo Desconectada */
                                     <div className="space-y-4">
-                                        {/* Botón principal: siempre deshabilitado para prelanzamiento */}
+                                        {/* Botón principal: siempre deshabilitado para prelanzamiento o demo desconectada */}
                                         <div className="space-y-2">
                                             <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 text-center backdrop-blur-sm">
-                                                <p className="text-[9px] text-text-muted mb-1 uppercase tracking-widest font-black">Versión Real</p>
+                                                <p className="text-[9px] text-text-muted mb-1 uppercase tracking-widest font-black">
+                                                    {isDemo ? 'Licencia Demo' : 'Versión Real'}
+                                                </p>
                                                 <p className="text-sm font-black text-white uppercase italic tracking-tighter">
                                                     {bot.status === 'MAINTENANCE' ? 'En Mantenimiento' : 'Próximamente'}
                                                 </p>
                                             </div>
                                             <Button disabled size="lg" fullWidth className="py-6 opacity-30 grayscale cursor-not-allowed font-black uppercase tracking-widest text-xs italic">
-                                                Real No Disponible
+                                                {bot.status === 'MAINTENANCE' ? 'No Disponible' : 'Próximamente'}
                                             </Button>
                                         </div>
 
                                         {/* Botón de Demo → Solo para Oro Real y BTC */}
-                                        {bot.id === GOLD_REAL_BOT_ID ? (
+                                        {bot.id === GOLD_REAL_BOT_ID && !demoIsUpcoming ? (
                                             /* Oro Real → Ofrece el Gold Demo por 1€ */
                                             <Link href="/checkout/cmn9hf8yc0000vhbcq9hbxk0j" className="block mt-2">
                                                 <Button size="lg" variant="outline" fullWidth className="py-7 border-brand-light/30 hover:border-brand-light text-brand-light font-black uppercase tracking-widest text-[10px] hover:bg-brand/10 h-10 shadow-lg shadow-brand/10">

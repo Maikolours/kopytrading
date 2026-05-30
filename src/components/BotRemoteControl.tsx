@@ -70,7 +70,9 @@ export function BotRemoteControl({
         insights_on: true,
         lote_manual: 0.08,
         max_reentries: 8,
-        casOn: true
+        casOn: true,
+        usar_sl_equidad: false,
+        dd_max: 20.0
     });
 
     const [showAdvanced, setShowAdvanced] = useState(false);
@@ -111,7 +113,9 @@ export function BotRemoteControl({
                         insights_on: data.insights_on !== undefined ? data.insights_on : true,
                         lote_manual: data.lote_manual !== undefined ? data.lote_manual : 0.08,
                         max_reentries: data.max_reentries !== undefined ? data.max_reentries : 8,
-                        casOn: data.casOn !== undefined ? data.casOn : true
+                        casOn: data.casOn !== undefined ? data.casOn : true,
+                        usar_sl_equidad: data.usar_sl_equidad !== undefined ? data.usar_sl_equidad : false,
+                        dd_max: data.dd_max !== undefined ? data.dd_max : 20.0
                     });
                 }
             }
@@ -159,6 +163,8 @@ export function BotRemoteControl({
             lote_manual: 0.08,
             max_reentries: 8,
             casOn: true,
+            usar_sl_equidad: false,
+            dd_max: 20.0,
             sl: 250,
             tp: 500,
             be: 150,
@@ -436,6 +442,42 @@ export function BotRemoteControl({
                                         >
                                             {localSettings.casOn ? "ACTIVADO" : "DESACTIVADO"}
                                         </button>
+                                    </div>
+                                    
+                                    <div className="flex flex-col gap-2 p-2.5 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-1.5">
+                                                <ShieldAlert size={12} className="text-orange-400" />
+                                                <div>
+                                                    <p className="text-[9px] font-black uppercase text-orange-400">STOP LOSS POR EQUIDAD</p>
+                                                    <p className="text-[7px] text-orange-400/60">Cierra TODO si el drawdown supera el %</p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => setLocalSettings({ ...localSettings, usar_sl_equidad: !localSettings.usar_sl_equidad })}
+                                                className={`px-3 py-1.5 rounded text-[8px] font-black uppercase border transition-all ${
+                                                    localSettings.usar_sl_equidad 
+                                                    ? 'bg-orange-500/20 border-orange-500 text-orange-400' 
+                                                    : 'bg-white/5 border-white/10 text-white/40'
+                                                }`}
+                                            >
+                                                {localSettings.usar_sl_equidad ? "ACTIVADO" : "DESACTIVADO"}
+                                            </button>
+                                        </div>
+                                        {localSettings.usar_sl_equidad && (
+                                            <div className="flex items-center gap-3 pt-2 border-t border-orange-500/10">
+                                                <span className="text-[8px] font-bold text-orange-400/80 uppercase">Drawdown Máx (%)</span>
+                                                <input
+                                                    type="number"
+                                                    step="0.5"
+                                                    min="1"
+                                                    max="99"
+                                                    className="flex-1 bg-black/40 border border-orange-500/30 text-orange-400 text-xs font-bold font-mono px-2 py-1 rounded focus:outline-none focus:border-orange-500"
+                                                    value={localSettings.dd_max}
+                                                    onChange={(e) => setLocalSettings({ ...localSettings, dd_max: parseFloat(e.target.value) || 20 })}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
 
                                     {/* SI ES SAKURA / OWNER, RENDERIZAR CONFIGURACIÓN AVANZADA COMPLETA */}

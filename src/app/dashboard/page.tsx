@@ -73,9 +73,11 @@ export default async function DashboardPage() {
                         <p className="text-text-muted">Hola, {session.user.name || session.user.email}</p>
                     </div>
                     {(session.user as any).role === "ADMIN" && (
-                        <Button variant="outline" size="sm" className="border-brand-light text-brand-light">
-                            Panel de Configuración Admin
-                        </Button>
+                        <Link href="/admin">
+                            <Button variant="outline" size="sm" className="border-brand-light text-brand-light">
+                                Panel de Configuración Admin
+                            </Button>
+                        </Link>
                     )}
                 </div>
 

@@ -149,16 +149,16 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                         const isDemo = bot.id === GOLD_DEMO_ID;
 
                         return (
-                            <Card key={bot.id} interactive className={`flex flex-col h-full transition-all duration-700 overflow-hidden group relative rounded-[2rem] border bg-white/[0.03] border-white/10 hover:border-brand-light/50 hover:shadow-[0_20px_50px_rgba(168,85,247,0.15)] shadow-[0_20px_60px_rgba(0,0,0,0.6)] ${isUpcoming && !isDemo ? 'opacity-60 hover:opacity-100' : 'opacity-100 shadow-[0_0_40px_rgba(168,85,247,0.2)] border-brand/40'}`}>
+                             <Card key={bot.id} interactive className={`flex flex-col h-full transition-all duration-700 overflow-hidden group relative rounded-[2rem] border bg-white/[0.03] border-white/10 hover:border-brand-light/50 hover:shadow-[0_20px_50px_rgba(168,85,247,0.15)] shadow-[0_20px_60px_rgba(0,0,0,0.6)] ${isUpcoming ? 'opacity-60 hover:opacity-100' : 'opacity-100 shadow-[0_0_40px_rgba(168,85,247,0.2)] border-brand/40'}`}>
 
-                                {/* Upcoming overlay */}
-                                {isUpcoming && !isDemo && (
-                                    <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20">
-                                        <span className="bg-brand/20 border border-brand/50 text-brand-light text-[8px] font-black px-3 py-1 rounded-full tracking-[0.15em] uppercase shadow-[0_0_20px_rgba(168,85,247,0.3)] whitespace-nowrap">
-                                        ⚡ PRÓXIMO LANZAMIENTO - 25% DTO
-                                        </span>
-                                    </div>
-                                )}
+                                 {/* Upcoming overlay */}
+                                 {isUpcoming && (
+                                     <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20">
+                                         <span className="bg-brand/20 border border-brand/50 text-brand-light text-[8px] font-black px-3 py-1 rounded-full tracking-[0.15em] uppercase shadow-[0_0_20px_rgba(168,85,247,0.3)] whitespace-nowrap">
+                                         ⚡ {bot.status === 'MAINTENANCE' ? 'MANTENIMIENTO' : 'PRÓXIMAMENTE'}
+                                         </span>
+                                     </div>
+                                 )}
 
                                 <CardHeader className="relative overflow-hidden pb-4 pt-10">
                                     <div className={`absolute top-0 right-0 w-32 h-32 ${colors.glow} blur-3xl -mr-16 -mt-16 transition-opacity duration-700 group-hover:opacity-100 opacity-20`} />
@@ -229,7 +229,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                 </CardContent>
 
                                 <CardFooter className="flex-col items-center mt-auto border-t border-white/5 pt-5 px-5 pb-5 bg-black/10 gap-3">
-                                    {isDemo ? (
+                                    {isDemo && !isUpcoming ? (
                                         /* Demo: precio centrado + botón */
                                         <>
                                             <div className="text-center">
@@ -248,10 +248,10 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                             </Link>
                                         </>
                                     ) : (
-                                        /* Comerciales: solo botón centrado */
+                                        /* Comerciales o Demos Desconectadas: solo botón centrado */
                                         <Link href={`/bots/${bot.id}`} className="w-full">
                                             <Button size="sm" className="w-full font-black uppercase tracking-[0.12em] text-[9px] h-10 shadow-xl transition-all duration-500 rounded-xl bg-brand/10 text-brand-light border border-brand/30 hover:bg-brand/20 hover:scale-105 active:scale-95">
-                                                Próximamente
+                                                {bot.status === 'MAINTENANCE' ? 'En Mantenimiento' : 'Próximamente'}
                                             </Button>
                                         </Link>
                                     )}

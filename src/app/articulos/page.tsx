@@ -30,7 +30,7 @@ export default function ArticulosPage() {
                                             <span className="text-[11px] font-black text-brand-light uppercase tracking-[0.3em]">{article.category}</span>
                                         </div>
                                         <div className="flex items-center gap-4 text-[10px] text-text-muted font-bold uppercase tracking-[0.2em] opacity-60">
-                                            <span>{article.date}</span>
+                                            <span>✍️ Maikolours</span>
                                             <span className="w-1 h-1 rounded-full bg-white/20"></span>
                                             <span className="flex items-center gap-1.5 whitespace-nowrap">⏱ {article.readTime}</span>
                                         </div>
@@ -40,7 +40,14 @@ export default function ArticulosPage() {
                                     </CardTitle>
                                 </CardHeader>
                                 
-                                <CardContent className="relative z-10 px-8 sm:px-10 pb-12">
+                                {article.image && (
+                                    <div className="relative w-full h-48 sm:h-56 overflow-hidden">
+                                        <img src={article.image} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-transparent to-transparent opacity-80" />
+                                    </div>
+                                )}
+                                
+                                <CardContent className="relative z-10 px-8 sm:px-10 pb-12 pt-6">
                                     <p className="text-text-muted text-sm sm:text-base leading-relaxed opacity-70 group-hover:opacity-100 transition-opacity mb-10 line-clamp-3 font-medium">
                                         {article.excerpt}
                                     </p>

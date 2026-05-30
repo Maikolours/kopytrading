@@ -27,7 +27,9 @@ input bool CheckH4 = true;
 input bool CheckH1 = true;
 input bool CheckM15 = true;
 input bool CheckM5 = true;
-input double SegundosReAnalisis = 60; 
+input double SegundosReAnalisis = 60;        // Segundos base de espera tras cerrar cesta
+input double MultiplicadorMechazo = 2.5;     // Multiplica la espera si hay vela de mechazo (mecha > 2x ATR)
+input double UmbralMechazo_ATR = 2.0;        // Cuántas veces el ATR tiene que medir la mecha para considerarlo mechazo
 
 // --- SINCRONIZACIÓN CON KOPYTRADING.COM ---
 input string PurchaseID = "";          // ID de licencia (del dashboard de kopytrading.com)
@@ -46,7 +48,7 @@ input bool UsarATR_Dinamico = true;
 input bool UsarFiltroSR = true;      
 input double MargenZonaPips = 20.0;    
 input double MinDistanciaEMAPips = 5.0; 
-input bool EsperarGiroM1_SOS = false;    // Espera vela cerrada M1 para abrir SOS (false = al toque)
+input bool EsperarGiroM1_SOS = true;    // Espera vela cerrada M1 para abrir SOS (false = al toque)
 input double MaxRSI_Compra = 70.0;   
 input double MinRSI_Venta = 30.0;    
 input double MaxSpreadPips = 500.0; 
@@ -100,6 +102,7 @@ double ganadoPeriodo = 0, flotante = 0, volTotal = 0, spreadActual = 0, rsiActua
 bool BotActivo = false;
 bool hudMinimizado = false;
 datetime ultimaCestaCerrada = 0;
+bool mechazoDetectado = false; // Flag: hubo mechazo en la última vela cerrada
 string txtVoz = "SISTEMA CRYPTO ONLINE.";
 string txtVeredicto = "MONITOREANDO SOS...";
 string txtConsolidado = "ANALIZANDO BTC...";
@@ -473,9 +476,21 @@ void OnTick() {
     if(!BotActivo) { txtVoz = "SISTEMA EN PAUSA."; return; }
     else if (txtVoz == "SISTEMA EN PAUSA.") { txtVoz = "ANALIZANDO MERCADO..."; }
     
+    // Detectar mechazo en la última vela cerrada (mecha total > UmbralMechazo_ATR * ATR)
+    if(atr_buf[0] > 0) {
+        double mechaUp   = iHigh(_Symbol, _Period, 1) - MathMax(iOpen(_Symbol, _Period, 1), iClose(_Symbol, _Period, 1));
+        double mechaDown = MathMin(iOpen(_Symbol, _Period, 1), iClose(_Symbol, _Period, 1)) - iLow(_Symbol, _Period, 1);
+        double mechaMax  = MathMax(mechaUp, mechaDown);
+        mechazoDetectado = (mechaMax > atr_buf[0] * UmbralMechazo_ATR);
+    }
+    
+    long esperaEfectiva = (long)(mechazoDetectado ? SegundosReAnalisis * MultiplicadorMechazo : SegundosReAnalisis);
     long diffEspera = TimeCurrent() - ultimaCestaCerrada;
-    if(diffEspera < (long)SegundosReAnalisis) { 
-        txtVoz = StringFormat("RELAX CRYPTO (%d seg)...", (int)(SegundosReAnalisis - diffEspera)); 
+    if(diffEspera < esperaEfectiva) { 
+        if(mechazoDetectado)
+            txtVoz = StringFormat("⚡ MECHAZO BTC — ENFRIANDO (%d seg restantes)...", (int)(esperaEfectiva - diffEspera));
+        else
+            txtVoz = StringFormat("RELAX CRYPTO (%d seg)...", (int)(esperaEfectiva - diffEspera)); 
         return; 
     }
     

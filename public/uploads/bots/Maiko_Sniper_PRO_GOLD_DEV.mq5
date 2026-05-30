@@ -32,7 +32,9 @@ input bool CheckH4 = true;
 input bool CheckH1 = true;
 input bool CheckM15 = true;
 input bool CheckM5 = true;
-input double SegundosReAnalisis = 60; 
+input double SegundosReAnalisis = 60;         // Segundos base de espera tras cerrar cesta
+input double MultiplicadorMechazo = 2.5;      // Multiplica la espera si hay vela de mechazo (mecha > 2x ATR)
+input double UmbralMechazo_ATR = 2.0;         // Cuántas veces el ATR tiene que medir la mecha para considerarlo mechazo
 
 // --- MEJORAS INSTITUCIONALES HUGO ---
 input bool UsarFiltroADX = true; // Activar Filtro ADX (H1 > 25)
@@ -60,7 +62,7 @@ input bool UsarATR_Dinamico = true;
 input bool UsarFiltroSR = true;      
 input double MargenZonaPips = 5.0;    
 input double MinDistanciaEMAPips = 1.0; 
-input bool EsperarGiroM1_SOS = false;    // Espera vela cerrada M1 para abrir SOS (false = al toque)
+input bool EsperarGiroM1_SOS = true;    // Espera vela cerrada M1 para abrir SOS (false = al toque)
 input double MaxRSI_Compra = 70.0;   
 input double MinRSI_Venta = 30.0;    
 input double MaxSpreadPips = 3.5; 
@@ -103,6 +105,7 @@ bool BotActivo = false;
 bool hudMinimizado = false;
 bool bloqueadoPorNoticia = false;
 datetime ultimaCestaCerrada = 0;
+bool mechazoDetectado = false; // Flag: hubo mechazo en la última vela cerrada
 string txtVoz = "SISTEMA ONLINE.";
 string txtVeredicto = "ESPERANDO...";
 string txtConsolidado = "ANALIZANDO...";
@@ -481,9 +484,21 @@ void OnTick() {
     
     if(bloqueadoPorNoticia) { txtVoz = "PAUSA POR NOTICIAS."; return; }
     
+    // Detectar mechazo en la última vela cerrada (mecha total > UmbralMechazo_ATR * ATR)
+    if(atr_buf[0] > 0) {
+        double mechaUp   = iHigh(_Symbol, _Period, 1) - MathMax(iOpen(_Symbol, _Period, 1), iClose(_Symbol, _Period, 1));
+        double mechaDown = MathMin(iOpen(_Symbol, _Period, 1), iClose(_Symbol, _Period, 1)) - iLow(_Symbol, _Period, 1);
+        double mechaMax  = MathMax(mechaUp, mechaDown);
+        mechazoDetectado = (mechaMax > atr_buf[0] * UmbralMechazo_ATR);
+    }
+    
+    long esperaEfectiva = (long)(mechazoDetectado ? SegundosReAnalisis * MultiplicadorMechazo : SegundosReAnalisis);
     long diffEspera = TimeCurrent() - ultimaCestaCerrada;
-    if(diffEspera < (long)SegundosReAnalisis) { 
-        txtVoz = StringFormat("MEDITANDO (%d seg restantes)...", (int)(SegundosReAnalisis - diffEspera)); 
+    if(diffEspera < esperaEfectiva) { 
+        if(mechazoDetectado)
+            txtVoz = StringFormat("⚡ MECHAZO DETECTADO — ENFRIANDO (%d seg restantes)...", (int)(esperaEfectiva - diffEspera));
+        else
+            txtVoz = StringFormat("MEDITANDO (%d seg restantes)...", (int)(esperaEfectiva - diffEspera)); 
         return; 
     }
     
@@ -695,7 +710,7 @@ double CalcularGanadoUltraPreciso(int modo) {
     else if(modo == 3) { start = FechaInicioMaiko; }
     double total = 0; HistorySelect(start, TimeCurrent()); 
     for(int i=HistoryDealsTotal()-1; i>=0; i--) {
-        ulong t = HistoryDealGetTicket(i); if(HistoryDealGetString(t, DEAL_SYMBOL) != _Symbol) continue;
+        ulong t = HistoryDealGetTicket(i); if(HistoryDealGetString(t, DEAL_SYMBOL) != _Symbol || HistoryDealGetInteger(t, DEAL_MAGIC) != ExpertMagic) continue;
         total += HistoryDealGetDouble(t, DEAL_PROFIT) + HistoryDealGetDouble(t, DEAL_SWAP) + HistoryDealGetDouble(t, DEAL_COMMISSION); 
     }
     return total;
