@@ -3,7 +3,7 @@ export const ARTICLES = [
         slug: "resultados-reales-oro-marzo-2026",
         title: "🔥 Resultados Reales: +426.97 USC Operando Oro en Marzo 2026",
         category: "XAUUSD | Resultados",
-        excerpt: "Analizamos una sesión real de trading con el bot 'Evolution v7.4.2 Blindado'. Gestión de riesgo estricta y resultados consistentes en cuenta Cent.",
+        excerpt: "Analizamos una sesión real de trading con el bot 'MAIKO SNIPER PRO CENT'. Gestión de riesgo estricta y resultados consistentes en cuenta Cent.",
         date: "27 Mar, 2026",
         readTime: "5 min",
         image: "/images/ai-algorithmic-trading.png"
@@ -199,7 +199,7 @@ export const ARTICLES = [
     },
     {
         slug: "configuracion-titan-shield-v8",
-        title: "🛡️ Guía Maestra: Configuración de Titan Shield v8.3.0",
+        title: "🛡️ Guía Maestra: Configuración de MAIKO SNIPER PRO GOLD",
         category: "Bots | Tutorial",
         excerpt: "Aprende a configurar paso a paso el nuevo motor de protección. Trailing stop dinámico y filtros institucionales explicados.",
         date: "28 Mar, 2026",
@@ -239,7 +239,7 @@ Hoy desglosamos una sesión operativa real que resultó en una ganancia neta de 
 
 ### Marco de Tiempo: El Contexto Institucional (Analizando el H4 y H1)
 
-Antes de que nuestro bot **Evolution v7.4.2 Blindado** ejecutara la primera orden, el sistema analizó la estructura macro. El Oro venía de una fase de consolidación lateral de tres semanas. Los bancos centrales habían finalizado sus compras masivas del primer trimestre, dejando un vacío de liquidez (FVG) justo por debajo del nivel psicológico de los 2,850$.
+Antes de que nuestro bot **MAIKO SNIPER PRO CENT** ejecutara la primera orden, el sistema analizó la estructura macro. El Oro venía de una fase de consolidación lateral de tres semanas. Los bancos centrales habían finalizado sus compras masivas del primer trimestre, dejando un vacío de liquidez (FVG) justo por debajo del nivel psicológico de los 2,850$.
 
 El algoritmo identificó un **Order Block (OB)** en el gráfico de 4 horas (H4) que actuaba como un imán para el precio. Nuestra tesis era clara: el precio debía "limpiar" los stop losses de los compradores minoristas antes de iniciar el rally alcista de finales de marzo.
 
@@ -319,7 +319,7 @@ Operar en máximos históricos es psicológicamente agotador. El trader minorist
 1. **Intentar adivinar el techo:** Vender solo porque el precio está "muy caro". En un mercado alcista parabólico, nada es demasiado caro.
 2. **Entrar tarde por FOMO:** Comprar justo en la punta del movimiento sin esperar un retroceso a zonas de descuento.
 
-Nuestros algoritmos, como el **Titan Shield**, están programados para ignorar el "vértigo". Si la estructura es alcista, el bot seguirá buscando compras en niveles de Fibonacci premium, sin importar el número absoluto del precio.
+Nuestros algoritmos, como el **MAIKO SNIPER PRO GOLD**, están programados para ignorar el "vértigo". Si la estructura es alcista, el bot seguirá buscando compras en niveles de Fibonacci premium, sin importar el número absoluto del precio.
 
 ### Hoja de Ruta para el Inversor Algorítmico
 
@@ -372,9 +372,9 @@ Desde una perspectiva de **Smart Money Concepts (SMC)**, el rango actual de Bitc
 
 ### Estrategia Algorítmica en Cripto
 
-Operar Bitcoin con nuestros bots, como el [Storm Rider](/bots/BTC-SR), requiere entender que la volatilidad cripto es intrínsecamente diferente a la de Forex.
+Operar Bitcoin con nuestros bots, como el [MAIKO SNIPER PRO BTC](/bots/BTC-SR), requiere entender que la volatilidad cripto es intrínsecamente diferente a la de Forex.
 
-1. **Gestión de Drawdown:** En un rango lateral de 15,000$, es fácil quedar atrapado en operaciones pequeñas. El bot Storm Rider utiliza un filtro de volatilidad que detiene la operativa si el rango se estrecha demasiado, evitando el "chopping" o desgaste de la cuenta.
+1. **Gestión de Drawdown:** En un rango lateral de 15,000$, es fácil quedar atrapado en operaciones pequeñas. El bot MAIKO SNIPER PRO BTC utiliza un filtro de volatilidad que detiene la operativa si el rango se estrecha demasiado, evitando el "chopping" o desgaste de la cuenta.
 2. **Entradas basadas en Volumen:** A diferencia de los indicadores tradicionales como el RSI (que puede dar señales falsas en rangos largos), nuestro sistema se basa en el **Perfil de Volumen**. Buscamos entrar donde el volumen de transacciones institucionales es máximo (POC - Point of Control).
 
 ### El Factor Macro: ETFs y Adopción Soberana
@@ -432,7 +432,7 @@ No todos los VPS son iguales. La regla de oro es: **Ubica tu VPS lo más cerca p
 - **Si tu broker opera en Europa:** Tu VPS debe estar en Londres o Frankfurt.
 - **Si tu activo principal es el Oro o Cripto:** A menudo, los servidores de liquidez están en Nueva York o Tokio.
 
-Al reducir la distancia física, reduces la latencia electrónica. En KopyTrading, todos nuestros sistemas están optimizados para ejecutarse en entornos de baja latencia, maximizando la precisión de las entradas del [Titan Shield](/bots/XAU-TS).
+Al reducir la distancia física, reduces la latencia electrónica. En KopyTrading, todos nuestros sistemas están optimizados para ejecutarse en entornos de baja latencia, maximizando la precisión de las entradas del [MAIKO SNIPER PRO GOLD](/bots/XAU-TS).
 
 ### Coste vs. Beneficio: Una Inversión Inteligente
 
@@ -725,7 +725,7 @@ La arquitectura ARM de los nuevos Mac ha cambiado las reglas. Ya no sufrimos sob
 
 ### Método 1: La Opción Institucional (VPS + Remote Desktop)
 
-Si tu objetivo es ejecutar bots como el [Titan Shield](/bots/XAU-TS) las 24 horas del día, esta es la **única opción real**. No instalas el terminal en tu Mac para que opere, sino que te conectas a un servidor potente que ya lo tiene todo configurado.
+Si tu objetivo es ejecutar bots como el [MAIKO SNIPER PRO GOLD](/bots/XAU-TS) las 24 horas del día, esta es la **única opción real**. No instalas el terminal en tu Mac para que opere, sino que te conectas a un servidor potente que ya lo tiene todo configurado.
 
 1. **Contrata un [VPS de Alta Calidad](/articulos/mejores-vps-trading-2026)** ubicado en Londres o NY.
 2. **Descarga Microsoft Remote Desktop** desde la App Store oficial de Mac.
@@ -1173,7 +1173,7 @@ En nuestra plataforma, recomendamos a los usuarios de bots institucionales segui
 1. **Bucket 1 (Dólar):** Elige un bot para EURUSD or GBPUSD.
 2. **Bucket 2 (Materias Primas):** Activa el [Gold Ametralladora](/bots/XAU-AM). El oro tiene dinámicas propias de refugio.
 3. **Bucket 3 (Safe Haven):** Considera el Yen Japonés (JPY). El [Yen Ninja Ghost](/bots/JPY-NG) suele ser un excelente diversificador cuando hay pánico en las bolsas.
-4. **Bucket 4 (Cripto):** El Bitcoin (BTC) con nuestro bot [Storm Rider](/bots/BTC-SR) tiene una correlación muy baja con el mercado de divisas tradicional, lo que lo convierte en el diversificador perfecto.
+4. **Bucket 4 (Cripto):** El Bitcoin (BTC) con nuestro bot [MAIKO SNIPER PRO BTC](/bots/BTC-SR) tiene una correlación muy baja con el mercado de divisas tradicional, lo que lo convierte en el diversificador perfecto.
 
 ### El Impacto del "Risk-On / Risk-Off"
 
@@ -1296,27 +1296,27 @@ El Smart Money Concepts es un excelente mapa para entender *por qué* se mueve e
 ⚠️ *Precaución: Cuidado con los "gurús" que venden SMC como algo infalible. En el mercado institucional de 2026, hasta los bancos pierden. La gestión de riesgo sigue siendo tu única armadura real.*`
     },
     "configuracion-titan-shield-v8": {
-        title: "Guía Maestra: Optimizando el Titan Shield v8 para 2026",
+        title: "Guía Maestra: Optimizando el MAIKO SNIPER PRO GOLD para 2026",
         category: "Bots | Tutorial",
         date: "01 Nov, 2025",
         readTime: "15 min",
         image: "/images/titan-shield-setup.png",
-        keywords: ["Titan Shield", "ajustes bot", "MT5 setups", "optimización experto", "set files", "gestion de riesgo bot"],
-        metaDescription: "Domina la serie Titan Shield v8. Aprende a configurar los filtros de volatilidad y la gestión de equidad para maximizar tus beneficios en 2026.",
-        content: `## La Evolución del Blindaje Financiero: Titan Shield v8
+        keywords: ["MAIKO SNIPER PRO GOLD", "ajustes bot", "MT5 setups", "optimización experto", "set files", "gestion de riesgo bot"],
+        metaDescription: "Domina la serie MAIKO SNIPER PRO GOLD. Aprende a configurar los filtros de volatilidad y la gestión de equidad para maximizar tus beneficios en 2026.",
+        content: `## La Evolución del Blindaje Financiero: MAIKO SNIPER PRO GOLD
 
-La serie **Titan Shield v8** no es solo un asesor experto (EA); es una suite completa de gestión de activos diseñada para sobrevivir en los mercados hiper-volátiles de 2026. A diferencia de las versiones anteriores, la v8 integra un motor de inteligencia artificial que ajusta los parámetros de entrada basándose en la liquidez del momento. Sin embargo, para que esta "bestia" trabaje a tu favor, debes conocer los interruptores que rigen su comportamiento.
+La serie **MAIKO SNIPER PRO GOLD** no es solo un asesor experto (EA); es una suite completa de gestión de activos diseñada para sobrevivir en los mercados hiper-volátiles de 2026. A diferencia de las versiones anteriores, la v8 integra un motor de inteligencia artificial que ajusta los parámetros de entrada basándose en la liquidez del momento. Sin embargo, para que esta "bestia" trabaje a tu favor, debes conocer los interruptores que rigen su comportamiento.
 
 En esta guía, desglosamos la configuración de élite utilizada por nuestros gestores senior.
 
 <div class="my-8 rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-    <img src="/images/titan-shield-setup.png" alt="Configuración Titan Shield v8 2026" class="w-full h-auto" />
+    <img src="/images/titan-shield-setup.png" alt="Configuración MAIKO SNIPER PRO GOLD 2026" class="w-full h-auto" />
     <p class="text-[10px] text-center text-text-muted py-2 bg-white/5">Panel de Control: Interfaz de configuración avanzada para el filtrado de volatilidad y gestión de lotaje.</p>
 </div>
 
 ### 1. Gestión de Lote Inteligente (Auto-Lot)
 
-El error número uno es utilizar un lotaje fijo en una cuenta que crece. El Titan Shield v8 permite la gestión dinámica:
+El error número uno es utilizar un lotaje fijo en una cuenta que crece. El MAIKO SNIPER PRO GOLD permite la gestión dinámica:
 - **Riesgo Conservador (0.5%):** Recomendado para cuentas de fondeo (FTMO, Topstep) donde el drawdown máximo es estricto.
 - **Riesgo Moderado (1.5%):** El equilibrio perfecto para cuentas personales de más de 5,000$.
 - **Riesgo Agresivo (3%+):** Solo para cuentas de "crecimiento rápido" donde el trader acepta una alta probabilidad de Drawdown a cambio de retornos exponenciales.
@@ -1339,13 +1339,13 @@ Cada activo se comporta de forma diferente. No uses la misma configuración para
 
 ### Consejos Pro de la Comunidad KopyTrading
 
-1. **Evita el 'Rollover':** El Titan Shield v8 tiene una opción para "Pausar durante el Cambio de Día". Actívala siempre 15 minutos antes y 15 minutos después del cierre de Nueva York para evitar los spreads de 20 pips que pueden quemar tu margen.
+1. **Evita el 'Rollover':** El MAIKO SNIPER PRO GOLD tiene una opción para "Pausar durante el Cambio de Día". Actívala siempre 15 minutos antes y 15 minutos después del cierre de Nueva York para evitar los spreads de 20 pips que pueden quemar tu margen.
 2. **Revisión Semanal de Historial:** Cada domingo, descarga el historial de operaciones y cárgalo en nuestro analizador web. Esto te permitirá ver si el bot está teniendo problemas con el slippage de tu broker actual.
 3. **VPS Obligatorio:** No ejecutes este EA desde tu casa. La latencia de una conexión doméstica puede hacer que el Trailing Stop se ejecute con retraso, costándote pips valiosos en cada operación.
 
 ### Conclusión
 
-Configurar el **Titan Shield v8** es un ejercicio de equilibrio entre ambición y seguridad. Al dominar estas herramientas, dejas de ser un espectador de tus finanzas para convertirte en el arquitecto de tu propia rentabilidad. La serie v8 es robusta, pero tú eres quien tiene el mapa de navegación. Úsalo con sabiduría.
+Configurar el **MAIKO SNIPER PRO GOLD** es un ejercicio de equilibrio entre ambición y seguridad. Al dominar estas herramientas, dejas de ser un espectador de tus finanzas para convertirte en el arquitecto de tu propia rentabilidad. La serie v8 es robusta, pero tú eres quien tiene el mapa de navegación. Úsalo con sabiduría.
 
 ---
 ⚠️ *Aviso Crítico: La configuración por defecto del bot es segura, pero no es la más eficiente. Dedica al menos 2 horas a probar tus ajustes en una cuenta demo antes de arriesgar capital real.*`
