@@ -6,7 +6,7 @@ export const ARTICLES = [
         excerpt: "Analizamos una sesión real de trading con el bot 'Evolution v7.4.2 Blindado'. Gestión de riesgo estricta y resultados consistentes en cuenta Cent.",
         date: "27 Mar, 2026",
         readTime: "5 min",
-        image: "/images/results-march-27.png"
+        image: "/images/ai-algorithmic-trading.png"
     },
     {
         slug: "oro-supera-maximos",
@@ -15,7 +15,7 @@ export const ARTICLES = [
         excerpt: "El precio del Oro (XAUUSD) ha vuelto a marcar máximos históricos en las primeras semanas de 2026, superando los 2.900$ la onza. El principal catalizador sigue siendo la compra masiva de bancos centrales asiáticos (China, India, Turquía) que buscan diversificar sus reservas lejos del dólar.",
         date: "20 Feb, 2026",
         readTime: "8 min",
-        image: "/images/gold-trading.png"
+        image: "/images/candlestick-patterns.png"
     },
     {
         slug: "eurusd-analisis",
@@ -24,7 +24,7 @@ export const ARTICLES = [
         excerpt: "El par EURUSD ha mostrado una rebaja significativa en los meses recientes, presionado por la divergencia de políticas monetarias entre la Reserva Federal (FED) y el Banco Central Europeo (BCE). Esta divergencia crea oportunidades claras para los bots tendenciales.",
         date: "17 Feb, 2026",
         readTime: "7 min",
-        image: "/images/maiko-euro.png"
+        image: "/images/crypto-liquidity-pool.png"
     },
     {
         slug: "usdjpy-boj",
@@ -33,7 +33,7 @@ export const ARTICLES = [
         excerpt: "El Banco de Japón (BoJ) sorprendió al mercado con una subida de tipos a 0.50%, la más alta en más de 15 años. Esto provocó una apreciación violenta del Yen de casi 300 pips en pocas horas. Un recordatorio crucial de la importancia del calendario económico.",
         date: "14 Feb, 2026",
         readTime: "7 min",
-        image: "/images/maiko-cent.png"
+        image: "/images/eurusd-divergence-2026.png"
     },
     {
         slug: "bitcoin-consolidacion",
@@ -42,7 +42,7 @@ export const ARTICLES = [
         excerpt: "Bitcoin lleva semanas en un rango de consolidación entre los 90.000$ y 105.000$ tras el rally post-halvening de 2024. Los analistas on-chain detectan volumen estable y salidas mínimas de los exchanges, señales clásicas de acumulación institucional.",
         date: "10 Feb, 2026",
         readTime: "8 min",
-        image: "/images/titan-shield-setup.png"
+        image: "/images/fibonacci-golden-ratio.png"
     },
     {
         slug: "vps-trading",
@@ -51,7 +51,7 @@ export const ARTICLES = [
         excerpt: "Una de las diferencias más grandes entre un trader algorítmico amateur y uno avanzado no está en el bot que usa, sino en la infraestructura con la que lo ejecuta. Un VPS garantiza latencia baja, conexión ininterrumpida 24/5 y ejecución consistente.",
         date: "05 Feb, 2026",
         readTime: "7 min",
-        image: "/images/vps-setup.png"
+        image: "/images/forex-trading.png"
     },
     {
         slug: "gestion-riesgo",
@@ -60,7 +60,7 @@ export const ARTICLES = [
         excerpt: "El mayor error de los traders novatos no es elegir mal la estrategia, sino sobredimensionar el tamaño de sus posiciones (oversizing). Aprende las 5 reglas de oro de KopyTrading para sobrevivir en los mercados.",
         date: "01 Feb, 2026",
         readTime: "9 min",
-        image: "/images/maiko-gold-demo.png"
+        image: "/images/gold-trading.png"
     },
     {
         slug: "indicadores-volatilidad-atr",
@@ -69,7 +69,7 @@ export const ARTICLES = [
         excerpt: "Uno de los errores más comunes es colocar un Stop Loss fijo. Descubre cómo usar el Average True Range (ATR) para medir la volatilidad real del mercado y colocar tu Stop Loss de forma matemática.",
         date: "28 Feb, 2026",
         readTime: "7 min",
-        image: "/images/mt5-guide.png"
+        image: "/images/institutional-order-flow.png"
     },
     {
         slug: "trading-algoritmico-vs-manual",
@@ -78,7 +78,7 @@ export const ARTICLES = [
         excerpt: "Comparamos la velocidad y disciplina de los bots frente a la intuición humana. Bienvenido a la era de la automatización en el trading financiero.",
         date: "25 Feb, 2026",
         readTime: "8 min",
-        image: "/images/titan-shield-setup.png"
+        image: "/images/maiko-btc.png"
     },
     {
         slug: "por-que-fallan-bots-trading",
@@ -87,7 +87,7 @@ export const ARTICLES = [
         excerpt: "Overfitting, martingalas y falta de Stop Loss. Aprende a identificar bots basura y operar con algoritmos institucionales de alta calidad.",
         date: "05 Mar, 2026",
         readTime: "7 min",
-        image: "/images/gold-trading.png"
+        image: "/images/maiko-cent.png"
     },
     {
         slug: "configurar-metatrader-5-mac",
@@ -96,7 +96,7 @@ export const ARTICLES = [
         excerpt: "Guía paso a paso para usuarios de Apple. VPS, Crossover o Parallels: elige la mejor vía para tus bots en macOS y Silicon Chips.",
         date: "08 Mar, 2026",
         readTime: "7 min",
-        image: "/images/vps-setup.png"
+        image: "/images/maiko-euro.png"
     },
     {
         slug: "mejores-vps-trading-2026",
@@ -105,7 +105,7 @@ export const ARTICLES = [
         excerpt: "Analizamos Contabo, ForexVPS y las opciones gratuitas de los brokers. Latencia y estabilidad puestas a prueba para MetaTrader 5.",
         date: "10 Mar, 2026",
         readTime: "8 min",
-        image: "/images/vps-setup.png"
+        image: "/images/maiko-gold-demo.png"
     },
     {
         slug: "psicologia-trading-emociones",
@@ -114,7 +114,7 @@ export const ARTICLES = [
         excerpt: "Miedo y avaricia: los destructores de cuentas. Descubre cómo los bots eliminan el sesgo emocional de tu operativa diaria.",
         date: "12 Mar, 2026",
         readTime: "10 min",
-        image: "/images/mt5-guide.png"
+        image: "/images/maiko-gold.png"
     },
     {
         slug: "guia-backtesting-mt5",
@@ -123,7 +123,7 @@ export const ARTICLES = [
         excerpt: "Aprende a realizar pruebas de estrategia profesionales. No adivines, valida tu bot con datos de ticks reales y spread variable.",
         date: "15 Mar, 2026",
         readTime: "12 min",
-        image: "/images/mt5-guide.png"
+        image: "/images/maiko-yen.png"
     },
     {
         slug: "cuentas-hedging-vs-netting",
@@ -132,7 +132,7 @@ export const ARTICLES = [
         excerpt: "Por qué elegir la cuenta correcta es vital. El sistema Hedging es obligatorio para el correcto funcionamiento de nuestros EAs sofisticados.",
         date: "18 Mar, 2026",
         readTime: "7 min",
-        image: "/images/maiko-btc.png"
+        image: "/images/mt5-guide.png"
     },
     {
         slug: "spread-slippage-costes-ocultos",
@@ -141,7 +141,7 @@ export const ARTICLES = [
         excerpt: "No todo es ganar pips. Aprende cómo el spread y el deslizamiento pueden devorar tus beneficios en operativa real de alta frecuencia.",
         date: "20 Mar, 2026",
         readTime: "9 min",
-        image: "/images/titan-shield-setup.png"
+        image: "/images/mt5-mac-silicon-2026.png"
     },
     {
         slug: "trading-noticias-nfp",
@@ -150,7 +150,7 @@ export const ARTICLES = [
         excerpt: "Analizamos el impacto de las Nóminas No Agrícolas y por qué la prudencia es la mejor estrategia durante las noticias de impacto rojo.",
         date: "22 Mar, 2026",
         readTime: "8 min",
-        image: "/images/gold-trading.png"
+        image: "/images/mt5-server-farm.png"
     },
     {
         slug: "correlacion-divisas-riesgo",
@@ -159,7 +159,7 @@ export const ARTICLES = [
         excerpt: "EURUSD y GBPUSD suelen moverse igual. Aprende a diversificar de verdad tus activos para no sobreexponerte innecesariamente.",
         date: "23 Mar, 2026",
         readTime: "8 min",
-        image: "/images/vps-setup.png"
+        image: "/images/results-march-27.png"
     },
     {
         slug: "entender-drawdown-trading",
@@ -168,7 +168,7 @@ export const ARTICLES = [
         excerpt: "El drawdown es natural. Aprende a diferenciar entre una racha esperada y un sistema que ha dejado de funcionar mecánicamente.",
         date: "24 Mar, 2026",
         readTime: "7 min",
-        image: "/images/mt5-guide.png"
+        image: "/images/smart-money-concepts.png"
     },
     {
         slug: "accion-precio-vs-indicadores",
@@ -177,7 +177,7 @@ export const ARTICLES = [
         excerpt: "Descubre por qué la acción del precio es el rey y cómo los indicadores solo sirven como confirmación secundaria del impulso.",
         date: "25 Mar, 2026",
         readTime: "9 min",
-        image: "/images/maiko-yen.png"
+        image: "/images/titan-shield-setup.png"
     },
     {
         slug: "smart-money-concepts-realidad",
@@ -186,7 +186,7 @@ export const ARTICLES = [
         excerpt: "Desmitificamos el SMC. ¿Realmente operamos como bancos? Analizamos la liquidez institucional desde una perspectiva técnica.",
         date: "26 Mar, 2026",
         readTime: "11 min",
-        image: "/images/titan-shield-setup.png"
+        image: "/images/volatility-trading.png"
     },
     {
         slug: "elegir-broker-algoritmico",
@@ -195,7 +195,7 @@ export const ARTICLES = [
         excerpt: "No todos los brokers sirven. Comparamos regulación, latencia y ejecución para que tu algoritmo rinda al máximo rendimiento.",
         date: "26 Mar, 2026",
         readTime: "9 min",
-        image: "/images/forex-trading.png"
+        image: "/images/vps-setup.png"
     },
     {
         slug: "configuracion-titan-shield-v8",
@@ -204,7 +204,7 @@ export const ARTICLES = [
         excerpt: "Aprende a configurar paso a paso el nuevo motor de protección. Trailing stop dinámico y filtros institucionales explicados.",
         date: "28 Mar, 2026",
         readTime: "12 min",
-        image: "/images/titan-shield-setup.png"
+        image: "/images/ai-algorithmic-trading.png"
     }
 ];
 
@@ -225,7 +225,7 @@ export const ARTICLES_DATA: Record<string, {
         readTime: "12 min",
         keywords: ["resultados trading", "oro cent", "XAUUSD real", "profit trading bot", "operativa real gold"],
         metaDescription: "Análisis técnico exhaustivo de una sesión real de trading en Oro. Gestión de riesgo institucional y beneficios reales documentados.",
-        image: "/images/results-march-27.png",
+        image: "/images/candlestick-patterns.png",
         content: `## El Oro en 2026: Entre la Volatilidad y la Precisión Algorítmica
 
 Operar el mercado del Oro (**XAUUSD**) en marzo de 2026 ha sido un desafío constante incluso para los traders más experimentados. La convergencia de tensiones geopolíticas y una política monetaria global en transición ha inyectado una volatilidad que solo puede ser navegada con precisión quirúrgica. En KopyTrading, no basamos nuestro éxito en la intuición, sino en la **evidencia estadística y la ejecución matemática**.
@@ -283,7 +283,7 @@ En la próxima sesión, estaremos monitoreando el impacto de los nuevos datos de
         category: "XAUUSD | Análisis",
         date: "20 Feb, 2026",
         readTime: "14 min",
-        image: "/images/gold-trading.png",
+        image: "/images/crypto-liquidity-pool.png",
         keywords: ["oro", "XAUUSD", "trading oro", "precio del oro 2026", "invertir en oro", "máximos históricos oro", "bancos centrales oro"],
         metaDescription: "Análisis técnico y fundamental del rally del oro en 2026. Niveles psicológicos, impacto de bancos centrales y liquidez global.",
         content: `## El Oro en Territorio Desconocido: Rompiendo los 2,900$
@@ -340,7 +340,7 @@ El rally del oro en 2026 es el reflejo de un mundo en transformación. No es un 
         category: "BTCUSD | Cripto",
         date: "10 Feb, 2026",
         readTime: "14 min",
-        image: "/images/maiko-btc.png",
+        image: "/images/eurusd-divergence-2026.png",
         keywords: ["Bitcoin", "BTCUSD", "consolidación bitcoin", "trading cripto", "halvening", "acumulación bitcoin"],
         metaDescription: "Bitcoin entre 90.000$ y 105.000$. Profundizamos en el análisis on-chain, ballenas institucionales y la psicología de los rangos laterales.",
         content: `## Bitcoin en 2026: El Gigante Respira en los 100,000$
@@ -395,7 +395,7 @@ La consolidación actual de Bitcoin no es una señal de debilidad, sino una demo
         category: "Tecnología | Educación",
         date: "05 Feb, 2026",
         readTime: "12 min",
-        image: "/images/vps-setup.png",
+        image: "/images/fibonacci-golden-ratio.png",
         keywords: ["VPS trading", "latencia MT5", "servidor trading", "uptime MetaTrader"],
         metaDescription: "Por qué un VPS es obligatorio para el trading algorítmico profesional y cómo configurarlo para obtener la mínima latencia.",
         content: `## La Infraestructura Invisible: El Poder del VPS en 2026
@@ -457,7 +457,7 @@ El trading en 2026 es una carrera armamentística tecnológica. Mientras otros t
         category: "Educación | Esencial",
         date: "01 Feb, 2026",
         readTime: "9 min",
-        image: "/images/mt5-guide.png",
+        image: "/images/forex-trading.png",
         keywords: ["gestión de riesgo", "money management", "stop loss", "drawdown"],
         metaDescription: "Aprende a proteger tu capital. Sin gestión de riesgo, incluso la mejor estrategia del mundo terminará quemando tu cuenta.",
         content: `## El Escudo del Trader: Más allá de las Ganancias
@@ -498,7 +498,7 @@ Implementar estas medidas de seguridad no reducirá tu rentabilidad a largo plaz
         category: "Técnico | Educación",
         date: "28 Jan, 2026",
         readTime: "13 min",
-        image: "/images/maiko-euro.png",
+        image: "/images/gold-trading.png",
         keywords: ["ATR", "indicador volatilidad", "stop loss dinámico", "rango promedio verdadero", "trading algorítmico"],
         metaDescription: "Aprende a usar el Average True Range (ATR) para configurar stop losses dinámicos y entender la estructura del mercado en 2026.",
         content: `## Midiendo el Pulso del Mercado: El Average True Range (ATR)
@@ -564,7 +564,7 @@ El ATR es, posiblemente, el único indicador técnico que nunca miente. Refleja 
         category: "Educación | Estrategia",
         date: "25 Feb, 2026",
         readTime: "14 min",
-        image: "/images/mt5-guide.png",
+        image: "/images/institutional-order-flow.png",
         keywords: ["trading algorítmico", "trading manual", "automatización", "ventajas bots", "psicología trading"],
         metaDescription: "Comparamos la velocidad y disciplina de los bots frente a la intuición humana. Descubre cuál se adapta mejor a tu perfil de inversor en 2026.",
         content: `## El Dilema del Trader Moderno: ¿Hombre o Máquina?
@@ -635,7 +635,7 @@ Empieza hoy a explorar nuestros [Bots Gratuitos](/bots) y descubre cómo la auto
         category: "Educación | Errores",
         date: "05 Mar, 2026",
         readTime: "13 min",
-        image: "/images/titan-shield-setup.png",
+        image: "/images/maiko-btc.png",
         keywords: ["fallos bots", "estafas trading", "overfitting", "trading algorítmico", "martingala", "riesgos EA"],
         metaDescription: "Overfitting, martingalas y falta de stop loss. Aprende a identificar algoritmos basura y operar con herramientas de alta calidad técnica en 2026.",
         content: `## La Realidad Detrás de las "Curvas Milagrosas"
@@ -705,7 +705,7 @@ En KopyTrading, todos nuestros bots pasan por un proceso de auditoría técnica 
         category: "Tecnología | Tutoriales",
         date: "08 Mar, 2026",
         readTime: "12 min",
-        image: "/images/mt5-mac-silicon-2026.png",
+        image: "/images/maiko-cent.png",
         keywords: ["MT5 Mac", "MetaTrader Apple", "Wine MT5", "macOS trading", "M1 M2 M3 trading", "trading en macbook"],
         metaDescription: "Guía definitiva 2026 para instalar MetaTrader 5 en macOS (Silicon Chips). Optimización de rendimiento, VPS y estabilidad para trading profesional.",
         content: `## El Mito Roto: Trading Profesional en macOS
@@ -772,7 +772,7 @@ Operar en un Mac en 2026 es una delicia visual y técnica. La combinación ganad
         category: "Tecnología | Comparativa",
         date: "12 Jan, 2026",
         readTime: "13 min",
-        image: "/images/vps-setup.png",
+        image: "/images/maiko-euro.png",
         keywords: ["mejores vps", "vultr trading", "aws trading", "beeks", "servidor trading", "latencia forex", "vps metatrader"],
         metaDescription: "Analizamos y comparamos latencia, hardware y precio de los mejores proveedores VPS para MetaTrader 5 en 2026. Beeks, Vultr y más.",
         content: `## La Batalla por el Milisegundo: Eligiendo tu Servidor en 2026
@@ -848,7 +848,7 @@ Recuerda: Tu bot es solo tan bueno como la conexión que lo sustenta. No escatim
         category: "Psicología | Mentalidad",
         date: "12 Mar, 2026",
         readTime: "13 min",
-        image: "/images/mt5-guide.png",
+        image: "/images/maiko-gold-demo.png",
         keywords: ["psicología trading", "fomo", "miedo", "avaricia", "sesgos cognitivos", "disciplina trading"],
         metaDescription: "Miedo y avaricia: los destructores de cuentas. Descubre las estrategias mentales para mantener la disciplina en 2026 y el poder de la automatización.",
         content: `## El Campo de Batalla está en tu Mente
@@ -908,7 +908,7 @@ Dominar tu mente en 2026 es el activo más valioso que puedes poseer. El mercado
         category: "Tecnología | Guía",
         date: "15 Mar, 2026",
         readTime: "15 min",
-        image: "/images/mt5-guide.png",
+        image: "/images/maiko-gold.png",
         keywords: ["backtesting MT5", "optimización bot", "estrategia MT5", "probador estrategias", "calidad de ticks", "monte carlo trading"],
         metaDescription: "No adivines, valida. Aprende a realizar pruebas de estrategia profesionales con datos de ticks reales, spread variable y simulaciones Monte Carlo en 2026.",
         content: `## El Laboratorio del Trader: Donde las Ideas se Convierten en Algoritmos
@@ -968,7 +968,7 @@ El backtesting es el seguro de vida de tu capital. En nuestra plataforma, todos 
         category: "Tecnología | Cuentas",
         date: "25 Nov, 2025",
         readTime: "12 min",
-        image: "/images/maiko-cent.png",
+        image: "/images/maiko-yen.png",
         keywords: ["hedging", "netting", "MT5 cuenta", "FIFO rule", "cobertura trading", "posiciones simultaneas"],
         metaDescription: "Explicamos la diferencia técnica fundamental entre los modos de cuenta de MT5. Por qué el modo Hedging es vital para los algoritmos sofisticados en 2026.",
         content: `## El Corazón de tu Terminal: ¿Hedged o Netted?
@@ -1024,7 +1024,7 @@ Para el 99% de las estrategias automatizadas de 2026, **el modo Hedging es oblig
         category: "Educación | Ejecución",
         date: "20 Nov, 2025",
         readTime: "14 min",
-        image: "/images/maiko-gold-demo.png",
+        image: "/images/mt5-guide.png",
         keywords: ["spread", "slippage", "latencia", "deslizamiento de precio", "ecn stp", "market impact", "toxic flow"],
         metaDescription: "Cómo los costes de ejecución invisibles pueden destruir una estrategia ganadora. Aprende a minimizarlos con tecnología ECN y baja latencia en 2026.",
         content: `## La Fuga de Capital: Lo que tu Broker no te Cuenta
@@ -1079,7 +1079,7 @@ La rentabilidad en el trading es una suma de pequeñas eficiencias. Ganar 1 pip 
         category: "Macro | Estrategia",
         date: "22 Mar, 2026",
         readTime: "13 min",
-        image: "/images/gold-trading.png",
+        image: "/images/mt5-mac-silicon-2026.png",
         keywords: ["NFP", "Non-Farm Payrolls", "noticias impacto", "trading fundamental", "volatilidad", "liquidez mercado", "empleo usa"],
         metaDescription: "Analizamos el impacto de las Nóminas No Agrícolas en 2026 y por qué la prudencia es la mejor estrategia durante las noticias de impacto rojo.",
         content: `## El Terremoto Mensual: Comprendiendo el NFP
@@ -1133,7 +1133,7 @@ En el trading institucional, saber cuándo *no* operar es tan importante como sa
         category: "Gestión | Estrategia",
         date: "15 Nov, 2025",
         readTime: "12 min",
-        image: "/images/forex-trading.png",
+        image: "/images/mt5-server-farm.png",
         keywords: ["correlación divisas", "riesgo correlacionado", "diversificación trading", "portfolio management", "coeficiente pearson", "exposicion usd"],
         metaDescription: "Si operas EURUSD y AUDUSD simultáneamente, podrías estar arriesgando el doble. Aprende a gestionar la correlación de divisas como un profesional en 2026.",
         content: `## El Espejismo de la Diversificación
@@ -1191,7 +1191,7 @@ No operes a ciegas. Antes de añadir un nuevo bot a tu arsenal, revisa si ya tie
         category: "Psicología | Gestión",
         date: "10 Nov, 2025",
         readTime: "13 min",
-        image: "/images/titan-shield-setup.png",
+        image: "/images/results-march-27.png",
         keywords: ["drawdown", "pérdida máxima", "recuperación cuenta", "gestión de riesgo", "psicología trading", "máximo drawdown"],
         metaDescription: "El drawdown es el peaje inevitable del éxito. Aprende las estrategias mentales y técnicas para superar las rachas de pérdidas en 2026 sin perder la cabeza.",
         content: `## El Drawdown: Tu Compañero de Viaje Inevitable
@@ -1252,7 +1252,7 @@ El drawdown no es un fracaso; es el precio del negocio. Igual que una tienda tie
         category: "Educación | Análisis",
         date: "05 Nov, 2025",
         readTime: "15 min",
-        image: "/images/maiko-btc.png",
+        image: "/images/smart-money-concepts.png",
         keywords: ["SMC", "Smart Money Concepts", "Liquidez", "Order blocks", "Fair Value Gap", "trading institucional", "market structure"],
         metaDescription: "¿Son los Order Blocks la solución definitiva o solo una moda pasajera? Desmitificamos el Smart Money Concepts (SMC) para el trading de 2026.",
         content: `## El Auge del "Dinero Inteligente"
@@ -1355,7 +1355,7 @@ Configurar el **Titan Shield v8** es un ejercicio de equilibrio entre ambición 
         category: "EURUSD | Forex",
         date: "17 Feb, 2026",
         readTime: "15 min",
-        image: "/images/eurusd-divergence-2026.png",
+        image: "/images/volatility-trading.png",
         keywords: ["EURUSD", "análisis euro", "proyección forex", "DXY", "liquidez institucional", "macroeconomía"],
         metaDescription: "Analizamos el par rey EURUSD. Divergencias entre el BCE y la FED, imanes de liquidez y proyecciones para el primer trimestre de 2026.",
         content: `## El Euro en la Encrucijada: Divergencia de Políticas en 2026
@@ -1413,7 +1413,7 @@ Nuestros modelos matemáticos sugieren que el par se mantendrá en un rango baji
         category: "USDJPY | Macro",
         date: "14 Feb, 2026",
         readTime: "15 min",
-        image: "/images/maiko-yen.png",
+        image: "/images/vps-setup.png",
         keywords: ["USDJPY", "Yen", "BoJ", "política monetaria", "carry trade", "volatilidad forex"],
         metaDescription: "Análisis del terremoto financiero tras la subida de tipos del Banco de Japón (BoJ). Cómo afecta al USDJPY y estrategias de trading para 2026.",
         content: `## El Fin de una Era: El Yen Despierta en 2026
@@ -1466,7 +1466,7 @@ El USDJPY ya no es un par de "comprar y olvidar". Ha entrado en una fase de alta
         category: "Análisis | Educación",
         date: "25 Mar, 2026",
         readTime: "15 min",
-        image: "/images/mt5-guide.png",
+        image: "/images/ai-algorithmic-trading.png",
         keywords: ["acción del precio", "Price Action", "indicadores vs precio", "RSI", "MACD", "trading naked", "lectura de velas"],
         metaDescription: "¿Por qué los traders institucionales prefieren el gráfico limpio? Analizamos las ventajas del análisis naked vs el uso de indicadores técnicos en 2026.",
         content: `## ¿Gráfico Limpio o "Árbol de Navidad"?
@@ -1523,7 +1523,7 @@ Recuerda: Los indicadores son herramientas creadas para facilitar la lectura del
         category: "Educación | Corretaje",
         date: "26 Mar, 2026",
         readTime: "9 min",
-        image: "/images/forex-trading.png",
+        image: "/images/candlestick-patterns.png",
         keywords: ["elegir broker", "broker ECN", "STP broker", "comisiones trading", "ejecución de órdenes"],
         metaDescription: "No todos los brokers permiten bots. Aprende a identificar los que tienen mejores condiciones ecn, spreads bajos y ejecución ultra rápida.",
         content: `## Buscando al Socio Ideal: El Broker ECN y la Latencia
