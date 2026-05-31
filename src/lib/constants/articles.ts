@@ -1,13 +1,5 @@
 export const ARTICLES = [
-    {
-        slug: "resultados-reales-oro-marzo-2026",
-        title: "🔥 Resultados Reales: +426.97 USC Operando Oro en Marzo 2026",
-        category: "XAUUSD | Resultados",
-        excerpt: "Analizamos una sesión real de trading con el bot 'MAIKO SNIPER PRO CENT'. Gestión de riesgo estricta y resultados consistentes en cuenta Cent.",
-        date: "27 Mar, 2026",
-        readTime: "5 min",
-        image: "/images/ai-algorithmic-trading.png"
-    },
+    
     {
         slug: "oro-supera-maximos",
         title: "🥇 El Oro Supera Máximos Históricos: ¿Qué Está Impulsando el Rally?",
@@ -197,87 +189,7 @@ export const ARTICLES = [
         readTime: "9 min",
         image: "/images/vps-setup.png"
     },
-    {
-        slug: "configuracion-titan-shield-v8",
-        title: "🛡️ Guía Maestra: Configuración de MAIKO SNIPER PRO GOLD",
-        category: "Bots | Tutorial",
-        excerpt: "Aprende a configurar paso a paso el nuevo motor de protección. Trailing stop dinámico y filtros institucionales explicados.",
-        date: "28 Mar, 2026",
-        readTime: "12 min",
-        image: "/images/ai-algorithmic-trading.png"
-    }
-];
-
-export const ARTICLES_DATA: Record<string, {
-    title: string;
-    category: string;
-    date: string;
-    readTime: string;
-    keywords: string[];
-    metaDescription: string;
-    content: string;
-    image: string;
-}> = {
-    "resultados-reales-oro-marzo-2026": {
-        title: "Resultados Reales: +426.97 USC Operando Oro en Marzo 2026",
-        category: "XAUUSD | Resultados",
-        date: "27 Mar, 2026",
-        readTime: "12 min",
-        keywords: ["resultados trading", "oro cent", "XAUUSD real", "profit trading bot", "operativa real gold"],
-        metaDescription: "Análisis técnico exhaustivo de una sesión real de trading en Oro. Gestión de riesgo institucional y beneficios reales documentados.",
-        image: "/images/candlestick-patterns.png",
-        content: `## El Oro en 2026: Entre la Volatilidad y la Precisión Algorítmica
-
-Operar el mercado del Oro (**XAUUSD**) en marzo de 2026 ha sido un desafío constante incluso para los traders más experimentados. La convergencia de tensiones geopolíticas y una política monetaria global en transición ha inyectado una volatilidad que solo puede ser navegada con precisión quirúrgica. En KopyTrading, no basamos nuestro éxito en la intuición, sino en la **evidencia estadística y la ejecución matemática**.
-
-Hoy desglosamos una sesión operativa real que resultó en una ganancia neta de **+426.97 USC** (Unidades de Cuenta Cent). A simple vista, puede parecer una cifra modesta, pero cuando se analiza desde la perspectiva del interés compuesto y la gestión del riesgo porcentual, representa un avance significativo en la curva de equidad.
-
-<div class="my-8 rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-    <img src="/images/results-march-27.png" alt="Historial Real Oro Marzo 2026" class="w-full h-auto" />
-    <p class="text-[10px] text-center text-text-muted py-2 bg-white/5">Visualización de la ejecución: El algoritmo detectando zonas de liquidez vendedora antes del movimiento impulsivo.</p>
-</div>
-
-### Marco de Tiempo: El Contexto Institucional (Analizando el H4 y H1)
-
-Antes de que nuestro bot **MAIKO SNIPER PRO CENT** ejecutara la primera orden, el sistema analizó la estructura macro. El Oro venía de una fase de consolidación lateral de tres semanas. Los bancos centrales habían finalizado sus compras masivas del primer trimestre, dejando un vacío de liquidez (FVG) justo por debajo del nivel psicológico de los 2,850$.
-
-El algoritmo identificó un **Order Block (OB)** en el gráfico de 4 horas (H4) que actuaba como un imán para el precio. Nuestra tesis era clara: el precio debía "limpiar" los stop losses de los compradores minoristas antes de iniciar el rally alcista de finales de marzo.
-
-### Desglose de la Operativa: Tres Actos de Disciplina
-
-#### 1. La Cacería de Liquidez (Asia/Londres)
-Durante la sesión asiática, el bot detectó señales de debilidad. Sin embargo, en lugar de entrar agresivamente, utilizó lotajes de prueba (**0.01 lotes**). Estas son "puntas de lanza" diseñadas para medir la fuerza de la contraparte institucional. Los resultados fueron pequeños pero consistentes: **+4.87** y **+6.75** USC. La clave aquí fue la paciencia; el mercado estaba preparando el gran movimiento.
-
-#### 2. La Prueba de Fuego: El Stop Loss Ejecutado
-Cerca de la apertura de Nueva York, ocurrió lo que muchos traders temen: un movimiento violento en contra. La volatilidad del par aumentó repentinamente debido a un rumor sobre los tipos de interés. El sistema, siguiendo su protocolo de **gestión de riesgo estricta**, cerró una posición en **-92.40 USC**. 
-
-> [!IMPORTANT]
-> Aceptar una pérdida es la mayor victoria de un trader algorítmico. Sin ese Stop Loss, el drawdown flotante habría superado el 15% de la cuenta en cuestión de minutos. El bot mantuvo la cabeza fría, algo que un humano rara vez logra bajo presión.
-
-#### 3. La Recuperación Matemática
-Tras la limpieza de liquidez, el precio reaccionó exactamente en el bloque institucional que habíamos mapeado. El algoritmo **Evolution** activó su módulo de recuperación de alta precisión. Entró con una orden de compra confirmada por volumen, capturando la expansión completa del rango. El resultado fue la compensación de la pérdida anterior y un excedente que llevó el balance final al verde.
-
-### Métricas de Rendimiento Real
-
-Para validar cualquier estrategia, debemos mirar más allá del beneficio neto. Durante esta sesión de marzo de 2026, las métricas fueron las siguientes:
-
-- **Profit Factor:** 1.84 (Por cada dólar arriesgado, se ganaron 1.84).
-- **Drawdown Máximo de Sesión:** 3.4% (Extremadamente controlado para el Oro).
-- **Win Rate (Tasa de Acierto):** 62% (Suficiente con una gestión R:R de 1:2).
-
-### ¿Por qué Cuentas Cent para el Oro?
-
-Muchos usuarios nos preguntan por qué operamos con USC en lugar de USD directamente en estas pruebas. La respuesta es la **escalabilidad y la psicología**. Las cuentas Cent permiten que el algoritmo utilice estrategias de cobertura (hedging) con lotajes microscópicos que serían imposibles en una cuenta estándar para capitales menores de 1,000$. Esto permite "sobrevivir" a las mechas del Oro que a menudo queman cuentas pequeñas.
-
-### Conclusión y Perspectiva para Abril
-
-El Oro sigue siendo el activo refugio por excelencia, pero su manipulación institucional es máxima en 2026. Los resultados de **+426.97 USC** demuestran que, con la tecnología adecuada y una mentalidad de preservación de capital, el mercado es una fuente de ingresos predecible. 
-
-En la próxima sesión, estaremos monitoreando el impacto de los nuevos datos de inflación. Nuestro bot ya ha sido actualizado con los filtros de volatilidad dinámicos para proteger los beneficios acumulados este mes.
-
----
-⚠️ *Advertencia de Riesgo: El trading de CFD y metales conlleva un alto nivel de riesgo. Los resultados mostrados son reales pero no garantizan rentabilidades futuras. Nunca inviertas dinero que necesites para tus gastos básicos.*`
-    },
+    
     "oro-supera-maximos": {
         title: "El Oro Supera Máximos Históricos: ¿Qué Está Impulsando el Rally?",
         category: "XAUUSD | Análisis",
@@ -319,7 +231,7 @@ Operar en máximos históricos es psicológicamente agotador. El trader minorist
 1. **Intentar adivinar el techo:** Vender solo porque el precio está "muy caro". En un mercado alcista parabólico, nada es demasiado caro.
 2. **Entrar tarde por FOMO:** Comprar justo en la punta del movimiento sin esperar un retroceso a zonas de descuento.
 
-Nuestros algoritmos, como el **MAIKO SNIPER PRO GOLD**, están programados para ignorar el "vértigo". Si la estructura es alcista, el bot seguirá buscando compras en niveles de Fibonacci premium, sin importar el número absoluto del precio.
+Nuestros algoritmos, están programados para ignorar el "vértigo". Si la estructura es alcista, el bot seguirá buscando compras en niveles de Fibonacci premium, sin importar el número absoluto del precio.
 
 ### Hoja de Ruta para el Inversor Algorítmico
 
@@ -372,7 +284,7 @@ Desde una perspectiva de **Smart Money Concepts (SMC)**, el rango actual de Bitc
 
 ### Estrategia Algorítmica en Cripto
 
-Operar Bitcoin con nuestros bots, como el [MAIKO SNIPER PRO BTC](/bots/BTC-SR), requiere entender que la volatilidad cripto es intrínsecamente diferente a la de Forex.
+Operar Bitcoin con nuestros bots, requiere entender que la volatilidad cripto es intrínsecamente diferente a la de Forex.
 
 1. **Gestión de Drawdown:** En un rango lateral de 15,000$, es fácil quedar atrapado en operaciones pequeñas. El bot MAIKO SNIPER PRO BTC utiliza un filtro de volatilidad que detiene la operativa si el rango se estrecha demasiado, evitando el "chopping" o desgaste de la cuenta.
 2. **Entradas basadas en Volumen:** A diferencia de los indicadores tradicionales como el RSI (que puede dar señales falsas en rangos largos), nuestro sistema se basa en el **Perfil de Volumen**. Buscamos entrar donde el volumen de transacciones institucionales es máximo (POC - Point of Control).
@@ -534,7 +446,7 @@ Si el ATR es de 10 pips y usas un multiplicador de 2.0x, tu Stop Loss debe estar
 
 ### Cómo el ATR Protege tu Estrategia Algorítmica
 
-En KopyTrading, todos nuestros bots utilizan el ATR para dos funciones críticas:
+En el trading algorítmico avanzado se utiliza el ATR para dos funciones críticas:
 
 #### 1. Filtro de Entrada (Volatility Filter)
 Si el ATR es extremadamente bajo (mercado muerto), el bot no entra. Operar sin volatilidad es costoso debido a los spreads. Si el ATR es extremadamente alto (pánico en el mercado), el bot reduce el lotaje para compensar el riesgo.
@@ -995,7 +907,7 @@ El modo Netting es el sistema tradicional utilizado en la mayoría de las bolsas
 El modo Hedging es la razón por la cual MetaTrader 5 superó finalmente a MT4. Permite tener **posiciones múltiples e independientes** sobre el mismo activo, incluso en direcciones opuestas.
 
 - **Cómo funciona:** Puedes tener una compra de 1 lote abierta y, simultáneamente, abrir una venta de 1 lote. Ambas aparecerán como líneas separadas en tu terminal. El margen (margin) requerido suele ser menor en posiciones "hedged" porque el broker considera que el riesgo está neutralizado.
-- **Por qué es vital para KopyTrading:** Nuestros sistemas más avanzados, como el [Gold Ametralladora](/bots/XAU-AM), utilizan el hedging para proteger el capital durante picos de volatilidad. Si el precio cae inesperadamente, el bot puede abrir una posición de cobertura para frenar el drawdown mientras espera el retroceso.
+- **Por qué es vital para KopyTrading:** Nuestros sistemas más avanzados, para el mercado del oro, utilizan el hedging para proteger el capital durante picos de volatilidad. Si el precio cae inesperadamente, el bot puede abrir una posición de cobertura para frenar el drawdown mientras espera el retroceso.
 
 ### Ventajas Técnicas del Hedging en 2026
 
@@ -1295,61 +1207,7 @@ El Smart Money Concepts es un excelente mapa para entender *por qué* se mueve e
 ---
 ⚠️ *Precaución: Cuidado con los "gurús" que venden SMC como algo infalible. En el mercado institucional de 2026, hasta los bancos pierden. La gestión de riesgo sigue siendo tu única armadura real.*`
     },
-    "configuracion-titan-shield-v8": {
-        title: "Guía Maestra: Optimizando el MAIKO SNIPER PRO GOLD para 2026",
-        category: "Bots | Tutorial",
-        date: "01 Nov, 2025",
-        readTime: "15 min",
-        image: "/images/titan-shield-setup.png",
-        keywords: ["MAIKO SNIPER PRO GOLD", "ajustes bot", "MT5 setups", "optimización experto", "set files", "gestion de riesgo bot"],
-        metaDescription: "Domina la serie MAIKO SNIPER PRO GOLD. Aprende a configurar los filtros de volatilidad y la gestión de equidad para maximizar tus beneficios en 2026.",
-        content: `## La Evolución del Blindaje Financiero: MAIKO SNIPER PRO GOLD
-
-La serie **MAIKO SNIPER PRO GOLD** no es solo un asesor experto (EA); es una suite completa de gestión de activos diseñada para sobrevivir en los mercados hiper-volátiles de 2026. A diferencia de las versiones anteriores, la v8 integra un motor de inteligencia artificial que ajusta los parámetros de entrada basándose en la liquidez del momento. Sin embargo, para que esta "bestia" trabaje a tu favor, debes conocer los interruptores que rigen su comportamiento.
-
-En esta guía, desglosamos la configuración de élite utilizada por nuestros gestores senior.
-
-<div class="my-8 rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-    <img src="/images/titan-shield-setup.png" alt="Configuración MAIKO SNIPER PRO GOLD 2026" class="w-full h-auto" />
-    <p class="text-[10px] text-center text-text-muted py-2 bg-white/5">Panel de Control: Interfaz de configuración avanzada para el filtrado de volatilidad y gestión de lotaje.</p>
-</div>
-
-### 1. Gestión de Lote Inteligente (Auto-Lot)
-
-El error número uno es utilizar un lotaje fijo en una cuenta que crece. El MAIKO SNIPER PRO GOLD permite la gestión dinámica:
-- **Riesgo Conservador (0.5%):** Recomendado para cuentas de fondeo (FTMO, Topstep) donde el drawdown máximo es estricto.
-- **Riesgo Moderado (1.5%):** El equilibrio perfecto para cuentas personales de más de 5,000$.
-- **Riesgo Agresivo (3%+):** Solo para cuentas de "crecimiento rápido" donde el trader acepta una alta probabilidad de Drawdown a cambio de retornos exponenciales.
-
-### 2. El Filtro de Volatilidad Dinámico (ATR Filter)
-
-Esta es la joya de la corona de la versión v8. El bot no solo mira el precio, sino el "estrés" del mercado. 
-- **Cómo configurarlo:** Recomendamos un multiplicador ATR de **1.5 en M15**. Esto significa que si el mercado se mueve repentinamente 1.5 veces más rápido de lo habitual, el bot pausará nuevas entradas, asumiendo que hay una noticia de alto impacto o un movimiento de manipulación institucional.
-
-### 3. Equity Guard: Tu Seguro de Vida
-
-El **Equity Guard** es un sistema de seguridad que cierra todas las operaciones si el flotante negativo alcanza un porcentaje específico.
-- **Set Recomendado:** Para el Oro (XAUUSD), configuramos el Equity Guard en un **12%**. Es preferible aceptar una pérdida del 12% y recalibrar, que ver cómo una tendencia salvaje sin retrocesos consume el 50% de tu cuenta.
-
-### Optimizando por Activo: Los '.set' Files
-
-Cada activo se comporta de forma diferente. No uses la misma configuración para todos:
-- **EURUSD Precision:** Prioriza entradas basadas en el RSI y niveles de Fibonacci. El trailing stop debe ser corto (10-15 pips).
-- **Gold Predator (XAUUSD):** Necesita un "espacio de respiración" mayor. El trailing step debe estar en 50-70 puntos para evitar que el ruido del oro te saque de una tendencia ganadora demasiado pronto.
-
-### Consejos Pro de la Comunidad KopyTrading
-
-1. **Evita el 'Rollover':** El MAIKO SNIPER PRO GOLD tiene una opción para "Pausar durante el Cambio de Día". Actívala siempre 15 minutos antes y 15 minutos después del cierre de Nueva York para evitar los spreads de 20 pips que pueden quemar tu margen.
-2. **Revisión Semanal de Historial:** Cada domingo, descarga el historial de operaciones y cárgalo en nuestro analizador web. Esto te permitirá ver si el bot está teniendo problemas con el slippage de tu broker actual.
-3. **VPS Obligatorio:** No ejecutes este EA desde tu casa. La latencia de una conexión doméstica puede hacer que el Trailing Stop se ejecute con retraso, costándote pips valiosos en cada operación.
-
-### Conclusión
-
-Configurar el **MAIKO SNIPER PRO GOLD** es un ejercicio de equilibrio entre ambición y seguridad. Al dominar estas herramientas, dejas de ser un espectador de tus finanzas para convertirte en el arquitecto de tu propia rentabilidad. La serie v8 es robusta, pero tú eres quien tiene el mapa de navegación. Úsalo con sabiduría.
-
----
-⚠️ *Aviso Crítico: La configuración por defecto del bot es segura, pero no es la más eficiente. Dedica al menos 2 horas a probar tus ajustes en una cuenta demo antes de arriesgar capital real.*`
-    },
+    
     "eurusd-analisis": {
         title: "EURUSD: Análisis Semanal y Proyecciones Macro 2026",
         category: "EURUSD | Forex",
@@ -1387,7 +1245,7 @@ Para el trader que utiliza **Smart Money Concepts (SMC)**, el EURUSD está ofrec
 
 ### Estrategia con Algoritmos KopyTrading
 
-Nuestros usuarios que operan con el bot [Euro Precision Flow](/bots/EUR-EPF) han visto cómo el sistema prioriza las ventas en este entorno. 
+Nuestros usuarios que operan con sistemas de tendencia han visto cómo el sistema prioriza las ventas en este entorno. 
 
 - **Filtro de Tendencia:** El algoritmo utiliza una media móvil institucional de 200 periodos en H4. Mientras el precio se mantenga por debajo de esta línea, el bot solo buscará configuraciones de venta, evitando las "trampas de toros" que suelen quemar a los traders minoristas.
 - **Gestión de Noticias:** Dada la sensibilidad del par a las declaraciones de Christine Lagarde y Jerome Powell, recomendamos activar el filtro de noticias automáticas. El bot pausa la operativa 15 minutos antes de los anuncios de alto impacto para evitar el ensanchamiento de spreads.
@@ -1443,9 +1301,9 @@ En cuestión de 48 horas tras el anuncio, el par USDJPY cayó más de 500 pips, 
 
 ### El Rol del Algoritmo Yen Ninja Ghost
 
-Operar el Yen en 2026 requiere nervios de acero o una tecnología superior. Nuestro bot [Yen Ninja Ghost](/bots/JPY-NG) está diseñado específicamente para estos entornos de **volatilidad asimétrica**. 
+Operar el Yen en 2026 requiere nervios de acero o una tecnología superior. Un algoritmo avanzado está diseñado específicamente para estos entornos de **volatilidad asimétrica**. 
 
-A diferencia de los robots tradicionales que intentan "adivinar" el suelo, el Ninja Ghost utiliza un detector de volumen institucional que confirma cuando los grandes bancos han dejado de vender. Durante el desplome de febrero, el sistema logró proteger la cuenta desactivando las compras automáticas justo antes de la rotura de los 150.000, una funcionalidad de seguridad que ahorró a nuestros usuarios un drawdown masivo.
+A diferencia de los robots tradicionales que intentan "adivinar" el suelo, el sistema utiliza un detector de volumen institucional que confirma cuando los grandes bancos han dejado de vender. Durante el desplome de febrero, el sistema logró proteger la cuenta desactivando las compras automáticas justo antes de la rotura de los 150.000, una funcionalidad de seguridad que ahorró a nuestros usuarios un drawdown masivo.
 
 ### Perspectivas para 2026: ¿Hacia dónde va el Yen?
 
