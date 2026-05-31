@@ -24,7 +24,7 @@ export const ARTICLES = [
         excerpt: "El par EURUSD ha mostrado una rebaja significativa en los meses recientes, presionado por la divergencia de políticas monetarias entre la Reserva Federal (FED) y el Banco Central Europeo (BCE). Esta divergencia crea oportunidades claras para los bots tendenciales.",
         date: "17 Feb, 2026",
         readTime: "7 min",
-        image: "/images/forex-trading.png"
+        image: "/images/maiko-euro.png"
     },
     {
         slug: "usdjpy-boj",
@@ -33,7 +33,7 @@ export const ARTICLES = [
         excerpt: "El Banco de Japón (BoJ) sorprendió al mercado con una subida de tipos a 0.50%, la más alta en más de 15 años. Esto provocó una apreciación violenta del Yen de casi 300 pips en pocas horas. Un recordatorio crucial de la importancia del calendario económico.",
         date: "14 Feb, 2026",
         readTime: "7 min",
-        image: "/images/forex-trading.png"
+        image: "/images/maiko-cent.png"
     },
     {
         slug: "bitcoin-consolidacion",
@@ -60,7 +60,7 @@ export const ARTICLES = [
         excerpt: "El mayor error de los traders novatos no es elegir mal la estrategia, sino sobredimensionar el tamaño de sus posiciones (oversizing). Aprende las 5 reglas de oro de KopyTrading para sobrevivir en los mercados.",
         date: "01 Feb, 2026",
         readTime: "9 min",
-        image: "/images/mt5-guide.png"
+        image: "/images/maiko-gold-demo.png"
     },
     {
         slug: "indicadores-volatilidad-atr",
@@ -132,7 +132,7 @@ export const ARTICLES = [
         excerpt: "Por qué elegir la cuenta correcta es vital. El sistema Hedging es obligatorio para el correcto funcionamiento de nuestros EAs sofisticados.",
         date: "18 Mar, 2026",
         readTime: "7 min",
-        image: "/images/forex-trading.png"
+        image: "/images/maiko-btc.png"
     },
     {
         slug: "spread-slippage-costes-ocultos",
@@ -141,7 +141,7 @@ export const ARTICLES = [
         excerpt: "No todo es ganar pips. Aprende cómo el spread y el deslizamiento pueden devorar tus beneficios en operativa real de alta frecuencia.",
         date: "20 Mar, 2026",
         readTime: "9 min",
-        image: "/images/forex-trading.png"
+        image: "/images/titan-shield-setup.png"
     },
     {
         slug: "trading-noticias-nfp",
@@ -159,7 +159,7 @@ export const ARTICLES = [
         excerpt: "EURUSD y GBPUSD suelen moverse igual. Aprende a diversificar de verdad tus activos para no sobreexponerte innecesariamente.",
         date: "23 Mar, 2026",
         readTime: "8 min",
-        image: "/images/forex-trading.png"
+        image: "/images/vps-setup.png"
     },
     {
         slug: "entender-drawdown-trading",
@@ -177,7 +177,7 @@ export const ARTICLES = [
         excerpt: "Descubre por qué la acción del precio es el rey y cómo los indicadores solo sirven como confirmación secundaria del impulso.",
         date: "25 Mar, 2026",
         readTime: "9 min",
-        image: "/images/mt5-guide.png"
+        image: "/images/maiko-yen.png"
     },
     {
         slug: "smart-money-concepts-realidad",
@@ -498,7 +498,7 @@ Implementar estas medidas de seguridad no reducirá tu rentabilidad a largo plaz
         category: "Técnico | Educación",
         date: "28 Jan, 2026",
         readTime: "13 min",
-        image: "/images/forex-trading.png",
+        image: "/images/maiko-euro.png",
         keywords: ["ATR", "indicador volatilidad", "stop loss dinámico", "rango promedio verdadero", "trading algorítmico"],
         metaDescription: "Aprende a usar el Average True Range (ATR) para configurar stop losses dinámicos y entender la estructura del mercado en 2026.",
         content: `## Midiendo el Pulso del Mercado: El Average True Range (ATR)
@@ -968,7 +968,7 @@ El backtesting es el seguro de vida de tu capital. En nuestra plataforma, todos 
         category: "Tecnología | Cuentas",
         date: "25 Nov, 2025",
         readTime: "12 min",
-        image: "/images/forex-trading.png",
+        image: "/images/maiko-cent.png",
         keywords: ["hedging", "netting", "MT5 cuenta", "FIFO rule", "cobertura trading", "posiciones simultaneas"],
         metaDescription: "Explicamos la diferencia técnica fundamental entre los modos de cuenta de MT5. Por qué el modo Hedging es vital para los algoritmos sofisticados en 2026.",
         content: `## El Corazón de tu Terminal: ¿Hedged o Netted?
@@ -1024,7 +1024,7 @@ Para el 99% de las estrategias automatizadas de 2026, **el modo Hedging es oblig
         category: "Educación | Ejecución",
         date: "20 Nov, 2025",
         readTime: "14 min",
-        image: "/images/forex-trading.png",
+        image: "/images/maiko-gold-demo.png",
         keywords: ["spread", "slippage", "latencia", "deslizamiento de precio", "ecn stp", "market impact", "toxic flow"],
         metaDescription: "Cómo los costes de ejecución invisibles pueden destruir una estrategia ganadora. Aprende a minimizarlos con tecnología ECN y baja latencia en 2026.",
         content: `## La Fuga de Capital: Lo que tu Broker no te Cuenta
@@ -1191,7 +1191,7 @@ No operes a ciegas. Antes de añadir un nuevo bot a tu arsenal, revisa si ya tie
         category: "Psicología | Gestión",
         date: "10 Nov, 2025",
         readTime: "13 min",
-        image: "/images/mt5-guide.png",
+        image: "/images/titan-shield-setup.png",
         keywords: ["drawdown", "pérdida máxima", "recuperación cuenta", "gestión de riesgo", "psicología trading", "máximo drawdown"],
         metaDescription: "El drawdown es el peaje inevitable del éxito. Aprende las estrategias mentales y técnicas para superar las rachas de pérdidas en 2026 sin perder la cabeza.",
         content: `## El Drawdown: Tu Compañero de Viaje Inevitable
@@ -1252,7 +1252,7 @@ El drawdown no es un fracaso; es el precio del negocio. Igual que una tienda tie
         category: "Educación | Análisis",
         date: "05 Nov, 2025",
         readTime: "15 min",
-        image: "/images/forex-trading.png",
+        image: "/images/maiko-btc.png",
         keywords: ["SMC", "Smart Money Concepts", "Liquidez", "Order blocks", "Fair Value Gap", "trading institucional", "market structure"],
         metaDescription: "¿Son los Order Blocks la solución definitiva o solo una moda pasajera? Desmitificamos el Smart Money Concepts (SMC) para el trading de 2026.",
         content: `## El Auge del "Dinero Inteligente"

@@ -35,7 +35,7 @@ export default function ArticulosPage() {
                                             <span className="flex items-center gap-1.5 whitespace-nowrap">⏱ {article.readTime}</span>
                                         </div>
                                     </div>
-                                    <CardTitle className="text-2xl sm:text-4xl font-black text-white group-hover:text-brand-light transition-all duration-500 leading-[1.1] uppercase italic tracking-tighter mb-4">
+                                    <CardTitle className="text-2xl sm:text-4xl font-black text-white group-hover:text-brand-light transition-all duration-500 leading-[1.2] tracking-tight mb-4">
                                         {article.title}
                                     </CardTitle>
                                 </CardHeader>

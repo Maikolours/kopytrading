@@ -49,7 +49,7 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                     <div className="inline-block px-3 py-1 rounded-full bg-brand/10 border border-brand/20 mb-4">
                         <span className="text-[10px] font-black text-brand-light uppercase tracking-[0.2em]">{article.category}</span>
                     </div>
-                    <h1 className="text-3xl sm:text-5xl font-black text-white mt-1 mb-6 leading-[1.1] tracking-tighter uppercase italic drop-shadow-2xl">
+                    <h1 className="text-3xl sm:text-5xl font-black text-white mt-1 mb-6 leading-[1.2] tracking-normal drop-shadow-2xl">
                         {article.title}
                     </h1>
                     <div className="flex flex-wrap items-center justify-center sm:justify-start gap-6 text-[11px] text-text-muted font-bold uppercase tracking-widest">
@@ -65,10 +65,7 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                     {contentBlocks.map((block, i) => {
                         const trimmed = block.trim();
                         if (!trimmed) return null;
-                        if (trimmed.startsWith('## ')) return <h2 key={i} className="text-2xl sm:text-4xl font-black text-white mt-16 mb-8 tracking-tighter uppercase italic border-l-4 border-brand pl-6">{trimmed.replace('## ', '')}</h2>;
-                        if (trimmed.startsWith('### ')) return <h3 key={i} className="text-lg sm:text-xl font-black text-brand-light mt-12 mb-6 tracking-tight uppercase flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full bg-brand" /> {trimmed.replace('### ', '')}</h3>;
-                        if (trimmed.startsWith('#### ')) return <h4 key={i} className="text-base sm:text-lg font-bold text-white mt-8 mb-4 tracking-tight uppercase border-b border-white/10 pb-2">{trimmed.replace('#### ', '')}</h4>;
-                        if (trimmed.startsWith('---')) return <hr key={i} className="border-white/5 my-14" />;
+
                         if (trimmed.startsWith('⚠️')) return (
                             <div key={i} className="relative group my-12">
                                 <div className="absolute -inset-1 bg-gradient-to-r from-danger/30 to-orange-500/20 rounded-3xl blur opacity-30 group-hover:opacity-50 transition-all duration-500" />
@@ -94,11 +91,11 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                             let preHeading = null;
                             if (trimmed.startsWith('### ')) {
                                 const lines = trimmed.split('\n');
-                                preHeading = <h3 key={i + 'h3'} className="text-lg sm:text-xl font-black text-brand-light mt-12 mb-6 tracking-tight uppercase flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full bg-brand" /> {lines[0].replace('### ', '')}</h3>;
+                                preHeading = <h3 key={i + 'h3'} className="text-lg sm:text-xl font-black text-brand-light mt-12 mb-6 tracking-normal flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full bg-brand" /> {lines[0].replace('### ', '')}</h3>;
                                 contentToParse = lines.slice(1).join('\n');
                             } else if (trimmed.startsWith('## ')) {
                                 const lines = trimmed.split('\n');
-                                preHeading = <h2 key={i + 'h2'} className="text-2xl sm:text-4xl font-black text-white mt-16 mb-8 tracking-tighter uppercase italic border-l-4 border-brand pl-6">{lines[0].replace('## ', '')}</h2>;
+                                preHeading = <h2 key={i + 'h2'} className="text-2xl sm:text-4xl font-black text-white mt-16 mb-8 tracking-tight border-l-4 border-brand pl-6">{lines[0].replace('## ', '')}</h2>;
                                 contentToParse = lines.slice(1).join('\n');
                             }
                             
@@ -136,6 +133,12 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                                 </div>
                             );
                         }
+
+                        // Normal Headings (If not matched by list above)
+                        if (trimmed.startsWith('## ')) return <h2 key={i} className="text-2xl sm:text-4xl font-black text-white mt-16 mb-8 tracking-tight border-l-4 border-brand pl-6">{trimmed.replace('## ', '')}</h2>;
+                        if (trimmed.startsWith('### ')) return <h3 key={i} className="text-lg sm:text-xl font-black text-brand-light mt-12 mb-6 tracking-normal flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full bg-brand" /> {trimmed.replace('### ', '')}</h3>;
+                        if (trimmed.startsWith('#### ')) return <h4 key={i} className="text-base sm:text-lg font-bold text-white mt-8 mb-4 tracking-normal border-b border-white/10 pb-2">{trimmed.replace('#### ', '')}</h4>;
+                        if (trimmed.startsWith('---')) return <hr key={i} className="border-white/5 my-14" />;
                         // Paragraphs with bold and link handling
                         // Apply drop cap to the very first paragraph
                         const isFirstParagraph = i === 1 || (i === 0 && !trimmed.startsWith('#'));
