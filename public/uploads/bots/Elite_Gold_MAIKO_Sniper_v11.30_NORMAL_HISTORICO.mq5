@@ -389,7 +389,7 @@ void CrearInterfazMaster() {
     CrearLabel("MAIKO_Hoy", x+10, y+125, "GANADO HOY: $0.00", clrSpringGreen, 14, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_Flot", x+10, y+160, "FLOTANTE: $0.00", clrWhite, 12, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_MetaTP", x+10, y+190, "ESTADO: BUSCANDO ENTRADA EN M1...", clrYellow, 10, CORNER_LEFT_UPPER); 
-    CrearLabel("MAIKO_Trial", x+10, y+215, "TRIAL: DIA 1 DE 30", clrYellow, 10, CORNER_LEFT_UPPER);
+    CrearLabel("MAIKO_TrialUI", x+10, y+215, "TRIAL: DIA 1 DE 30", clrYellow, 11, CORNER_LEFT_UPPER);
     CrearLabel("MAIKO_Spd", x+w-120, y+65, "SPD: 0.0", clrWhite, 8, CORNER_LEFT_UPPER);  
     
     CrearBoton("MAIKO_Foot", x, y+h-40, w, 40, "", ColorHeader, clrNONE, CORNER_LEFT_UPPER); 
@@ -404,8 +404,8 @@ void ActualizarInterfazMaster() {
     ObjectSetString(0, "MAIKO_Flot", OBJPROP_TEXT, StringFormat("FLOTANTE: $%.2f", flotante / multCent)); 
     ObjectSetString(0, "MAIKO_Spd", OBJPROP_TEXT, StringFormat("SPD: %.1f", spreadActual)); 
     int dOp = (int)((TimeCurrent() - trialStart) / 86400) + 1;
-    ObjectSetString(0, "MAIKO_Trial", OBJPROP_TEXT, trialExpirado ? "TRIAL EXPIRADO" : StringFormat("TRIAL: DIA %d DE %d", dOp, DiasDeTrial));
-    ObjectSetInteger(0, "MAIKO_Trial", OBJPROP_COLOR, trialExpirado ? clrRed : clrYellow);
+    ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, trialExpirado ? "TRIAL EXPIRADO" : StringFormat("TRIAL: DIA %d DE %d", dOp, DiasDeTrial));
+    ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, trialExpirado ? clrRed : clrYellow);
     ObjectSetInteger(0, "MAIKO_Flot", OBJPROP_COLOR, flotante >= 0 ? clrSpringGreen : clrRed); 
     ObjectSetString(0, "MAIKO_Vered", OBJPROP_TEXT, txtVeredicto); 
     ObjectSetString(0, "MAIKO_Voz", OBJPROP_TEXT, txtVoz); 
@@ -479,7 +479,7 @@ void ToggleHUD() {
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_YSIZE, hudMinimizado ? 35 : 280); 
     ObjectSetString(0, "MAIKO_BtnMin", OBJPROP_TEXT, hudMinimizado ? "+" : "_"); 
     long tf = hudMinimizado ? OBJ_NO_PERIODS : OBJ_ALL_PERIODS; 
-    string objs[] = {"MAIKO_Vered", "MAIKO_Hoy", "MAIKO_Flot", "MAIKO_Spd", "MAIKO_Foot", "MAIKO_Voz", "MAIKO_BtnP", "MAIKO_BtnC", "MAIKO_MetaTP", "MAIKO_Trial"}; 
+    string objs[] = {"MAIKO_Vered", "MAIKO_Hoy", "MAIKO_Flot", "MAIKO_Spd", "MAIKO_Foot", "MAIKO_Voz", "MAIKO_BtnP", "MAIKO_BtnC", "MAIKO_MetaTP", "MAIKO_TrialUI"}; 
     for(int i=0; i<10; i++) ObjectSetInteger(0, objs[i], OBJPROP_TIMEFRAMES, tf); 
     string tfs[]={"W1","D1","H4","H1","M15","M5","M1"}; 
     for(int i=0; i<7; i++) { 
