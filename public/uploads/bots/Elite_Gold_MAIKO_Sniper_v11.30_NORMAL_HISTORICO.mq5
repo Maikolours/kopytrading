@@ -426,7 +426,7 @@ void ActualizarInterfazMaster() {
         lastFrontTime = now;
         string objs[] = {"MAIKO_Bg", "MAIKO_Head", "MAIKO_T", "MAIKO_BtnMin", 
                          "MAIKO_Vered", "MAIKO_Hoy", "MAIKO_Flot", "MAIKO_Spd", 
-                         "MAIKO_Foot", "MAIKO_Voz", "MAIKO_BtnP", "MAIKO_BtnC", "MAIKO_MetaTP"};
+                         "MAIKO_Foot", "MAIKO_Voz", "MAIKO_BtnP", "MAIKO_BtnC", "MAIKO_MetaTP", "MAIKO_TrialUI"};
         int total = ArraySize(objs);
         for(int i = 0; i < total; i++) {
             long current_tf = ObjectGetInteger(0, objs[i], OBJPROP_TIMEFRAMES);
