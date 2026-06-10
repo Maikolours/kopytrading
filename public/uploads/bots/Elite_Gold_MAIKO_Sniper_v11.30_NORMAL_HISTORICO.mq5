@@ -78,6 +78,11 @@ string txtVeredicto = "ESPERANDO...";
 datetime proximoAtaque = 0, pausaVolatilidad = 0;
 bool enFaseAnalisis = false;
 int FaseRefuerzo = 0;
+
+datetime trialStart = 0;
+int diasRestantes = 30;
+bool trialExpirado = false;
+
 ulong ticketExplorador = 0;
 int hEMA_v = INVALID_HANDLE;
 int hRSI_v = INVALID_HANDLE;
@@ -120,6 +125,17 @@ int OnInit() {
     
     AgregarIndicadoresVisuales();
     CrearInterfazMaster();
+      
+    string gvName = "MAIKO_TRIAL_" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
+    if(GlobalVariableCheck(gvName)) {
+        trialStart = (datetime)GlobalVariableGet(gvName);
+    } else {
+        trialStart = TimeCurrent();
+        GlobalVariableSet(gvName, (double)trialStart);
+    }
+    diasRestantes = 30 - (int)((TimeCurrent() - trialStart) / 86400);
+    if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
+    
     if(MQLInfoInteger(MQL_TESTER)) BotActivo = true;
     EventSetTimer(1);
     return(INIT_SUCCEEDED);
@@ -137,6 +153,9 @@ void OnDeinit(const int reason) {
 }
 
 void OnTick() {
+    if(trialExpirado) { txtVoz = "TRIAL 30 DIAS EXPIRADO."; BotActivo = false; ActualizarInterfazMaster(); return; }
+    if(!TerminalInfoInteger(TERMINAL_TRADE_ALLOWED)) { txtVoz = "TRADING NO PERMITIDO"; return; }
+
     ActualizarEstadoMaster();
     ganadoHoy = CalcularGanadoHoy();
     flotante = CalcularProfit();
@@ -367,8 +386,9 @@ void CrearInterfazMaster() {
     CrearLabel("MAIKO_Vered", x+10, y+85, txtVeredicto, clrCyan, 9, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_Hoy", x+10, y+125, "GANADO HOY: $0.00", clrSpringGreen, 14, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_Flot", x+10, y+160, "FLOTANTE: $0.00", clrWhite, 12, CORNER_LEFT_UPPER); 
-    CrearLabel("MAIKO_MetaTP", x+10, y+190, " ", clrYellow, 10, CORNER_LEFT_UPPER); 
+    CrearLabel("MAIKO_MetaTP", x+10, y+190, "ESTADO: BUSCANDO ENTRADA EN M1...", clrYellow, 10, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_Spd", x+w-120, y+65, "SPD: 0.0", clrWhite, 8, CORNER_LEFT_UPPER);  
+    CrearLabel("MAIKO_Trial", x+w-120, y+85, "TRIAL: 30 DIAS", clrYellow, 8, CORNER_LEFT_UPPER);
     
     CrearBoton("MAIKO_Foot", x, y+h-40, w, 40, "", ColorHeader, clrNONE, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_Voz", x+10, y+h-25, txtVoz, ColorMain, 10, CORNER_LEFT_UPPER); 
@@ -381,6 +401,8 @@ void ActualizarInterfazMaster() {
     ObjectSetString(0, "MAIKO_Hoy", OBJPROP_TEXT, StringFormat("GANADO HOY: $%.2f", ganadoHoy / multCent)); 
     ObjectSetString(0, "MAIKO_Flot", OBJPROP_TEXT, StringFormat("FLOTANTE: $%.2f", flotante / multCent)); 
     ObjectSetString(0, "MAIKO_Spd", OBJPROP_TEXT, StringFormat("SPD: %.1f", spreadActual)); 
+    ObjectSetString(0, "MAIKO_Trial", OBJPROP_TEXT, trialExpirado ? "TRIAL EXPIRADO" : StringFormat("TRIAL: %d DIAS", diasRestantes));
+    ObjectSetInteger(0, "MAIKO_Trial", OBJPROP_COLOR, trialExpirado ? clrRed : clrYellow);
     ObjectSetInteger(0, "MAIKO_Flot", OBJPROP_COLOR, flotante >= 0 ? clrSpringGreen : clrRed); 
     ObjectSetString(0, "MAIKO_Vered", OBJPROP_TEXT, txtVeredicto); 
     ObjectSetString(0, "MAIKO_Voz", OBJPROP_TEXT, txtVoz); 
@@ -454,8 +476,8 @@ void ToggleHUD() {
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_YSIZE, hudMinimizado ? 35 : 280); 
     ObjectSetString(0, "MAIKO_BtnMin", OBJPROP_TEXT, hudMinimizado ? "+" : "_"); 
     long tf = hudMinimizado ? OBJ_NO_PERIODS : OBJ_ALL_PERIODS; 
-    string objs[] = {"MAIKO_Vered", "MAIKO_Hoy", "MAIKO_Flot", "MAIKO_Spd", "MAIKO_Foot", "MAIKO_Voz", "MAIKO_BtnP", "MAIKO_BtnC", "MAIKO_MetaTP"}; 
-    for(int i=0; i<9; i++) ObjectSetInteger(0, objs[i], OBJPROP_TIMEFRAMES, tf); 
+    string objs[] = {"MAIKO_Vered", "MAIKO_Hoy", "MAIKO_Flot", "MAIKO_Spd", "MAIKO_Foot", "MAIKO_Voz", "MAIKO_BtnP", "MAIKO_BtnC", "MAIKO_MetaTP", "MAIKO_Trial"}; 
+    for(int i=0; i<10; i++) ObjectSetInteger(0, objs[i], OBJPROP_TIMEFRAMES, tf); 
     string tfs[]={"W1","D1","H4","H1","M15","M5","M1"}; 
     for(int i=0; i<7; i++) { 
         ObjectSetInteger(0, "MAIKO_L_"+tfs[i], OBJPROP_TIMEFRAMES, tf); 
