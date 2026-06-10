@@ -367,7 +367,7 @@ void CrearInterfazMaster() {
     CrearLabel("MAIKO_Vered", x+10, y+85, txtVeredicto, clrCyan, 9, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_Hoy", x+10, y+125, "GANADO HOY: $0.00", clrSpringGreen, 14, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_Flot", x+10, y+160, "FLOTANTE: $0.00", clrWhite, 12, CORNER_LEFT_UPPER); 
-    CrearLabel("MAIKO_MetaTP", x+10, y+190, "", clrYellow, 10, CORNER_LEFT_UPPER); 
+    CrearLabel("MAIKO_MetaTP", x+10, y+190, " ", clrYellow, 10, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_Spd", x+w-120, y+65, "SPD: 0.0", clrWhite, 8, CORNER_LEFT_UPPER);  
     
     CrearBoton("MAIKO_Foot", x, y+h-40, w, 40, "", ColorHeader, clrNONE, CORNER_LEFT_UPPER); 
@@ -391,7 +391,7 @@ void ActualizarInterfazMaster() {
     if(metaTP > 0) {
         ObjectSetString(0, "MAIKO_MetaTP", OBJPROP_TEXT, StringFormat("ESCAPE TP: %.2f", metaTP));
     } else {
-        ObjectSetString(0, "MAIKO_MetaTP", OBJPROP_TEXT, "");
+        ObjectSetString(0, "MAIKO_MetaTP", OBJPROP_TEXT, "ESTADO: BUSCANDO ENTRADA EN M1...");
     }
     
     // Forzar el HUD al frente cambiando el timeframe periódicamente

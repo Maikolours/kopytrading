@@ -672,10 +672,10 @@ export function BotRemoteControl({
                     <div className="flex gap-2">
                         <button 
                             className="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600 hover:text-white transition-all"
-                            onClick={() => {
+                            onClick={async () => {
                                 if(confirm("✅ ¿ESTÁS SEGURO? Se cerrarán las operaciones y se APAGARÁ el bot para que no abra más.")) {
-                                    sendAction("CLOSE_ALL");
-                                    setTimeout(() => sendAction("ARM_BOT", "FALSE"), 500);
+                                    await sendAction("CLOSE_ALL");
+                                    await sendAction("ARM_BOT", "FALSE");
                                 }
                             }}
                         >
