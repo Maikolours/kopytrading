@@ -673,13 +673,14 @@ export function BotRemoteControl({
                         <button 
                             className="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600 hover:text-white transition-all"
                             onClick={() => {
-                                if(confirm("✅ ¿ESTÁS SEGURO? Se cobrarán y cerrarán las operaciones individuales de este bot.")) {
+                                if(confirm("✅ ¿ESTÁS SEGURO? Se cerrarán las operaciones y se APAGARÁ el bot para que no abra más.")) {
                                     sendAction("CLOSE_ALL");
+                                    setTimeout(() => sendAction("ARM_BOT", "FALSE"), 500);
                                 }
                             }}
                         >
                             <Coins size={14} />
-                            COBRAR Y CERRAR
+                            COBRAR Y APAGAR
                         </button>
                         
                         <button 
@@ -694,6 +695,19 @@ export function BotRemoteControl({
                             STOP ALL
                         </button>
                     </div>
+
+                    {/* NEW: ENCENDER BOT BUTTON */}
+                    <button 
+                        className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] bg-green-600/20 text-green-400 border border-green-500/30 hover:bg-green-600 hover:text-white transition-all"
+                        onClick={() => {
+                            if(confirm("▶️ ¿ESTÁS SEGURO? El bot se ENCENDERÁ y volverá a operar automáticamente.")) {
+                                sendAction("ARM_BOT", "TRUE");
+                            }
+                        }}
+                    >
+                        <Target size={14} />
+                        ENCENDER BOT (PLAY)
+                    </button>
                     
                     {statusMsg && (
                         <motion.div 
