@@ -12,6 +12,7 @@
 
 // --- CONFIGURACION ---
 input string MiLicencia = "cmn9hfal4000fvhbcr34kst5x"; // Licencia / ID de Vínculo
+input int DiasDeTrial = 30; // Días de prueba del bot
 const bool EsCuentaCent = false; // CUENTA NORMAL / GOLD / DEMO EN DOLARES (Hardcoded para evitar uso cruzado)
 
 // --- TELEMETRIA ---
@@ -133,7 +134,7 @@ int OnInit() {
         trialStart = TimeCurrent();
         GlobalVariableSet(gvName, (double)trialStart);
     }
-    diasRestantes = 30 - (int)((TimeCurrent() - trialStart) / 86400);
+    diasRestantes = DiasDeTrial - (int)((TimeCurrent() - trialStart) / 86400);
     if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
     
     if(MQLInfoInteger(MQL_TESTER)) BotActivo = true;
@@ -532,12 +533,14 @@ void EnviarTelemetria() {
     string json = StringFormat(
         "{\"purchaseId\":\"%s\",\"account\":\"%s\",\"balance\":%.2f,\"equity\":%.2f,"
         "\"pnl_today\":%.2f,\"status\":\"%s\",\"symbol\":\"%s\",\"narrative\":\"%s\","
-        "\"armed\":%s,\"isReal\":%s,\"version\":\"11.30\",\"positions\":%s}",
+        "\"armed\":%s,\"isReal\":%s,\"version\":\"11.30\",\"positions\":%s,"
+        "\"trialExpirado\":%s,\"diasRestantes\":%d}",
         MiLicencia, account, normBalance, normEquity,
         normGanadoHoy, status, _Symbol, narrative,
         BotActivo ? "true" : "false", 
         (AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_REAL) ? "true" : "false",
-        posJson
+        posJson,
+        trialExpirado ? "true" : "false", diasRestantes
     );
     
     char postData[];
