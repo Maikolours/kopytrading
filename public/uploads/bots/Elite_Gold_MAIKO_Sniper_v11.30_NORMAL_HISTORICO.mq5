@@ -389,7 +389,7 @@ void CrearInterfazMaster() {
     CrearLabel("MAIKO_Flot", x+10, y+160, "FLOTANTE: $0.00", clrWhite, 12, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_MetaTP", x+10, y+190, "ESTADO: BUSCANDO ENTRADA EN M1...", clrYellow, 10, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_Spd", x+w-120, y+65, "SPD: 0.0", clrWhite, 8, CORNER_LEFT_UPPER);  
-    CrearLabel("MAIKO_Trial", x+w-120, y+85, "TRIAL: 30 DIAS", clrYellow, 8, CORNER_LEFT_UPPER);
+    CrearLabel("MAIKO_Trial", x+w-110, y+170, "TRIAL: 30 DIAS", clrYellow, 9, CORNER_LEFT_UPPER);
     
     CrearBoton("MAIKO_Foot", x, y+h-40, w, 40, "", ColorHeader, clrNONE, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_Voz", x+10, y+h-25, txtVoz, ColorMain, 10, CORNER_LEFT_UPPER); 
