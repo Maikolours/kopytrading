@@ -47,7 +47,7 @@ export async function POST(req: Request) {
             if (command === "CLOSE_ALL") {
                 updatedJson.pendingCmd = "CLOSE_ALL";
             } else if (command === "ARM_BOT") {
-                updatedJson.armed = value === "TRUE" || value === "TOGGLE" ? !updatedJson.armed : value === "TRUE";
+                updatedJson.forceArmed = value === "TRUE" || value === "TOGGLE" ? !updatedJson.armed : value === "TRUE";
             }
 
             await prisma.botSettings.update({

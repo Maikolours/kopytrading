@@ -408,6 +408,12 @@ export async function POST(req: Request) {
                 fearOn: (body.fear !== undefined || body.fearOn !== undefined) ? (body.fear === true || body.fear === "true" || body.fearOn === true || body.fearOn === "true") : rawSettings.fearOn,
             };
 
+            // ACTUALIZACIÓN REMOTA PRIORITARIA: Si hay un forceArmed pendiente, lo aplicamos y lo borramos
+            if (rawSettings.forceArmed !== undefined) {
+                updatedSettings.armed = rawSettings.forceArmed;
+                delete updatedSettings.forceArmed;
+            }
+
             const newMemories = {
                 ...memories,
                 [memoryKey]: {
