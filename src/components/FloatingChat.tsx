@@ -17,7 +17,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["ametralladora", "xauusd", "oro", "gold"],
-        response: "🔥 **MAIKO SNIPER PRO GOLD (XAUUSD)** — El más popular\n\n• Temporalidad: **M15**\n• Estrategia: Scalping + Hedge Inteligente\n• Horario: 9h - 21h\n• Capital mínimo: 1.000$\n• Riesgo: Medio\n• Precio: Próximo Lanzamiento\n\n⚠️ El Oro es súper volátil. Usa siempre lotaje 0.01 por cada 1.000$.\n\n🎁 **Prueba nuestra versión Demo por 1$ durante 30 días** y luego podrás adquirir tu licencia válida para un año."
+        response: "🔥 **MAIKO SNIPER PRO GOLD (XAUUSD)** — El más popular\n\n• Temporalidad: **M5**\n• Estrategia: Scalping + Hedge Inteligente\n• Horario: 9h - 21h\n• Capital mínimo: 1.000$\n• Riesgo: Medio\n• Precio: Próximo Lanzamiento\n\n⚠️ El Oro es súper volátil. Usa siempre lotaje 0.01 por cada 1.000$.\n\n🎁 **Prueba nuestra versión Demo por 1$ durante 30 días** y luego podrás adquirir tu licencia válida para un año."
     },
     {
         keywords: ["euro", "precision", "eurusd", "eur"],
@@ -53,7 +53,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["gratis", "demo", "trial", "mes gratis", "free", "prueba"],
-        response: "⚡ **Demo del MAIKO PRO GOLD:**\n\nPuedes activar la demo del bot estrella **MAIKO PRO GOLD** durante **30 días** en una cuenta DEMO de MetaTrader 5 por solo **1$**.\n\nEl algoritmo opera en **M1** con estrategia de scalping institucional. Conectado a tu cuenta DEMO de tu broker, podrás observar cómo opera en tiempo real sin arriesgar dinero real.\n\nTras los 30 días, podrás adquirir tu licencia válida para un año. \n\n🔗 [Activar Demo](/bots/cmn9hf8yc0000vhbcq9hbxk0j)"
+        response: "⚡ **Demo del MAIKO PRO GOLD:**\n\nPuedes activar la demo del bot estrella **MAIKO PRO GOLD** durante **30 días** en una cuenta DEMO de MetaTrader 5 por solo **1$**.\n\nEl algoritmo opera en **M5** con estrategia de scalping institucional. Conectado a tu cuenta DEMO de tu broker, podrás observar cómo opera en tiempo real sin arriesgar dinero real.\n\nTras los 30 días, podrás adquirir tu licencia válida para un año. \n\n🔗 [Activar Demo](/bots/cmn9hf8yc0000vhbcq9hbxk0j)"
     },
     {
         keywords: ["pago", "comprar", "stripe", "paypal", "bizum", "cómo pago", "tarjeta", "pagar"],
@@ -64,7 +64,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
         response: "🔧 **Diagnóstico de Problemas Técnicos:**\n\n1. **'Invalid License / Cuenta no autorizada'**: Verifica que no haya espacios al poner tu Nº de cuenta en los Ajustes del bot.\n2. **'AutoTrading deshabilitado'**: Dale al icono de AutoTrading en MT5 (arriba al centro, debe tener play verde).\n3. **'No abre nada'**: Asegúrate que el mercado esté abierto y estás en la gráfica correcta (Oro, Euro..).\nParecen tonterías, pero suele ser la solución al 90%."
     },
     {
-        keywords: ["qué es kopytrade", "quiénes sois", "sobre vosotros", "la empresa", "kopytrade"],
+        keywords: ["qué es kopytrading", "quiénes sois", "sobre vosotros", "la empresa", "kopytrading"],
         response: "🏢 **Sobre nosotros KopyTrading:**\n\nEvitamos los sistemas piramidales, las mensualidades, las Martingalas destructivas y el marketing vende-húmos.\n\nSolo proporcionamos algoritmos matemáticos probados, que nosotros mismos operamos, directamente de las manos del desarrollador a la gráfica del trader. Trading puro, duro y aburrido (consistente)."
     },
     {
@@ -137,7 +137,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["cuál opera más", "quien opera más", "cual opera mas", "mas veces", "más operaciones", "mayor frecuencia", "opera mucho", "más rápido", "mas rapido", "el bot mas rapido", "el más rápido"],
-        response: "⚡ **¿Cuál es el bot más rápido en operar?**\n\nEl bot más rápido y activo es **La Ametralladora (XAUUSD)**. Su nombre no es casualidad; al operar en gráficos de M15 y especializarse en Scalping en un par tan volátil como el Oro, tenderá a buscar muchísimas micro-entradas durante su ventana horaria.\n\n*(Recuerda que mayor rapidez también implica mayor estrés operativo, usa siempre lotes mínimos de 0.01 si empiezas con este).* "
+        response: "⚡ **¿Cuál es el bot más rápido en operar?**\n\nEl bot más rápido y activo es **La Ametralladora (XAUUSD)**. Su nombre no es casualidad; al operar en gráficos de M5 y especializarse en Scalping en un par tan volátil como el Oro, tenderá a buscar muchísimas micro-entradas durante su ventana horaria.\n\n*(Recuerda que mayor rapidez también implica mayor estrés operativo, usa siempre lotes mínimos de 0.01 si empiezas con este).* "
     },
     {
         keywords: ["menos riesgo", "más seguro", "mas seguro", "menor riesgo", "conservador", "cual arriesga menos", "qué bot es más seguro"],
@@ -268,7 +268,7 @@ function speakText(text: string) {
         .replace(/MT4/gi, ' Meta Trader 4 ')
         .replace(/\bH1\b/gi, ' Hache 1 ')
         .replace(/\bH4\b/gi, ' Hache 4 ')
-        .replace(/\bM15\b/gi, ' Eme 15 ')
+        .replace(/\bM5\b/gi, ' Eme 5 ')
         .replace(/\bM30\b/gi, ' Eme 30 ')
         .replace(/\n+/g, '. ');
 

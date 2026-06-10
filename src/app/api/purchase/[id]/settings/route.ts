@@ -37,7 +37,8 @@ export async function GET(
             if (currentPurchase?.botProduct) {
                 const nameUpper = currentPurchase.botProduct.name.toUpperCase();
                 if (nameUpper.includes("CENT")) productNameKeyword = "CENT";
-                else if (nameUpper.includes("GOLD") || nameUpper.includes("DEMO")) productNameKeyword = "GOLD";
+                else if (nameUpper.includes("DEMO")) productNameKeyword = "DEMO";
+                else if (nameUpper.includes("GOLD")) productNameKeyword = "GOLD";
                 else if (nameUpper.includes("BTC")) productNameKeyword = "BTC";
                 
                 if (!botSymbolPrefix) {
@@ -52,7 +53,11 @@ export async function GET(
                         botProduct: {
                             AND: [
                                 botSymbolPrefix ? { instrument: { contains: botSymbolPrefix } } : {},
-                                productNameKeyword ? { name: { contains: productNameKeyword } } : {}
+                                productNameKeyword ? { 
+                                    name: productNameKeyword === "GOLD" 
+                                        ? { contains: "GOLD", not: { contains: "DEMO" } }
+                                        : { contains: productNameKeyword }
+                                } : {}
                             ]
                         }
                     },

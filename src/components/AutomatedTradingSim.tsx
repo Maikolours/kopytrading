@@ -16,7 +16,7 @@ export function AutomatedTradingSim() {
         setLogs([
             "[SYSTEM] KopyTrading AI Core v3.2 initialized.",
             "[NETWORK] Connected to MT5 Server. Latency: 12ms",
-            "[SCAN] Analyzing XAUUSD on M15 timeframe...",
+            "[SCAN] Analyzing XAUUSD on M5 timeframe...",
         ]);
 
         const interval = setInterval(() => {
@@ -113,7 +113,7 @@ export function AutomatedTradingSim() {
                             <h3 className="text-lg text-white font-bold tracking-tight">XAUUSD Live Action</h3>
                         </div>
                         <div className="flex gap-2">
-                            <span className="px-2 py-0.5 rounded bg-brand/20 text-brand-light border border-brand/30">M15</span>
+                            <span className="px-2 py-0.5 rounded bg-brand/20 text-brand-light border border-brand/30">M5</span>
                             <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-white/10">Algorithms: ON</span>
                         </div>
                     </div>

@@ -248,7 +248,13 @@ export function BotRemoteControl({
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
     };
 
-    const isActualOnline = botData?.isOnline || initialOnline;
+    const isActualOnline = useMemo(() => {
+        if (!botData) return initialOnline;
+        if (!botData.lastUpdate) return initialOnline;
+        const lastUpdateTime = new Date(botData.lastUpdate).getTime();
+        if (isNaN(lastUpdateTime)) return initialOnline;
+        return (Date.now() - lastUpdateTime) < 300000; // 5 minutos de ventana
+    }, [botData, initialOnline]);
 
     const TimeframeOption = ({ label, value, current, setter, keyName }: any) => (
         <button 
@@ -418,7 +424,7 @@ export function BotRemoteControl({
                                                 value={localSettings.max_reentries}
                                                 onChange={(e) => setLocalSettings({ ...localSettings, max_reentries: parseInt(e.target.value) || 1 })}
                                             >
-                                                {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                                                {[1, 2, 3].map((num) => (
                                                     <option key={num} value={num} className="bg-black text-white">
                                                         {num} niveles
                                                     </option>
@@ -427,61 +433,62 @@ export function BotRemoteControl({
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center justify-between p-2.5 rounded-lg bg-white/5 border border-white/5">
-                                        <div>
-                                            <p className="text-[9px] font-black uppercase text-white/80">OPERATIVA EN CASCADA</p>
-                                            <p className="text-[7px] text-white/40">Permitir re-entradas automáticas</p>
-                                        </div>
-                                        <button
-                                            onClick={() => setLocalSettings({ ...localSettings, casOn: !localSettings.casOn })}
-                                            className={`px-3 py-1.5 rounded text-[8px] font-black uppercase border transition-all ${
-                                                localSettings.casOn 
-                                                ? 'bg-success/20 border-success text-success' 
-                                                : 'bg-white/5 border-white/10 text-white/40'
-                                            }`}
-                                        >
-                                            {localSettings.casOn ? "ACTIVADO" : "DESACTIVADO"}
-                                        </button>
-                                    </div>
-                                    
-                                    <div className="flex flex-col gap-2 p-2.5 rounded-lg bg-orange-500/10 border border-orange-500/20">
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-1.5">
-                                                <ShieldAlert size={12} className="text-orange-400" />
-                                                <div>
-                                                    <p className="text-[9px] font-black uppercase text-orange-400">STOP LOSS POR EQUIDAD</p>
-                                                    <p className="text-[7px] text-orange-400/60">Cierra TODO si el drawdown supera el %</p>
-                                                </div>
-                                            </div>
-                                            <button
-                                                onClick={() => setLocalSettings({ ...localSettings, usar_sl_equidad: !localSettings.usar_sl_equidad })}
-                                                className={`px-3 py-1.5 rounded text-[8px] font-black uppercase border transition-all ${
-                                                    localSettings.usar_sl_equidad 
-                                                    ? 'bg-orange-500/20 border-orange-500 text-orange-400' 
-                                                    : 'bg-white/5 border-white/10 text-white/40'
-                                                }`}
-                                            >
-                                                {localSettings.usar_sl_equidad ? "ACTIVADO" : "DESACTIVADO"}
-                                            </button>
-                                        </div>
-                                        {localSettings.usar_sl_equidad && (
-                                            <div className="flex items-center gap-3 pt-2 border-t border-orange-500/10">
-                                                <span className="text-[8px] font-bold text-orange-400/80 uppercase">Drawdown Máx (%)</span>
-                                                <input
-                                                    type="number"
-                                                    step="0.5"
-                                                    min="1"
-                                                    max="99"
-                                                    className="flex-1 bg-black/40 border border-orange-500/30 text-orange-400 text-xs font-bold font-mono px-2 py-1 rounded focus:outline-none focus:border-orange-500"
-                                                    value={localSettings.dd_max}
-                                                    onChange={(e) => setLocalSettings({ ...localSettings, dd_max: parseFloat(e.target.value) || 20 })}
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
-
                                     {/* SI ES SAKURA / OWNER, RENDERIZAR CONFIGURACIÓN AVANZADA COMPLETA */}
                                     {isOwner && (
+                                        <div className="space-y-3">
+                                            <div className="flex items-center justify-between p-2.5 rounded-lg bg-white/5 border border-white/5">
+                                                <div>
+                                                    <p className="text-[9px] font-black uppercase text-white/80">OPERATIVA EN CASCADA</p>
+                                                    <p className="text-[7px] text-white/40">Permitir re-entradas automáticas</p>
+                                                </div>
+                                                <button
+                                                    onClick={() => setLocalSettings({ ...localSettings, casOn: !localSettings.casOn })}
+                                                    className={`px-3 py-1.5 rounded text-[8px] font-black uppercase border transition-all ${
+                                                        localSettings.casOn 
+                                                        ? 'bg-success/20 border-success text-success' 
+                                                        : 'bg-white/5 border-white/10 text-white/40'
+                                                    }`}
+                                                >
+                                                    {localSettings.casOn ? "ACTIVADO" : "DESACTIVADO"}
+                                                </button>
+                                            </div>
+                                            
+                                            <div className="flex flex-col gap-2 p-2.5 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center gap-1.5">
+                                                        <ShieldAlert size={12} className="text-orange-400" />
+                                                        <div>
+                                                            <p className="text-[9px] font-black uppercase text-orange-400">STOP LOSS POR EQUIDAD</p>
+                                                            <p className="text-[7px] text-orange-400/60">Cierra TODO si el drawdown supera el %</p>
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        onClick={() => setLocalSettings({ ...localSettings, usar_sl_equidad: !localSettings.usar_sl_equidad })}
+                                                        className={`px-3 py-1.5 rounded text-[8px] font-black uppercase border transition-all ${
+                                                            localSettings.usar_sl_equidad 
+                                                            ? 'bg-orange-500/20 border-orange-500 text-orange-400' 
+                                                            : 'bg-white/5 border-white/10 text-white/40'
+                                                        }`}
+                                                    >
+                                                        {localSettings.usar_sl_equidad ? "ACTIVADO" : "DESACTIVADO"}
+                                                    </button>
+                                                </div>
+                                                {localSettings.usar_sl_equidad && (
+                                                    <div className="flex items-center gap-3 pt-2 border-t border-orange-500/10">
+                                                        <span className="text-[8px] font-bold text-orange-400/80 uppercase">Drawdown Máx (%)</span>
+                                                        <input
+                                                            type="number"
+                                                            step="0.5"
+                                                            min="1"
+                                                            max="99"
+                                                            className="flex-1 bg-black/40 border border-orange-500/30 text-orange-400 text-xs font-bold font-mono px-2 py-1 rounded focus:outline-none focus:border-orange-500"
+                                                            value={localSettings.dd_max}
+                                                            onChange={(e) => setLocalSettings({ ...localSettings, dd_max: parseFloat(e.target.value) || 20 })}
+                                                        />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        
                                         <div className="space-y-3 pt-3 border-t border-white/5">
                                             <div className="flex items-center justify-between">
                                                 <span className="text-[8px] font-black uppercase text-purple-400 tracking-widest">
@@ -620,6 +627,7 @@ export function BotRemoteControl({
                                                 </button>
                                             </div>
                                         </div>
+                                        </div>
                                     )}
 
                                     {/* BANNER COMERCIAL ENCRIPCIÓN PARA CLIENTES NORMALES EN DEMO */}
@@ -659,19 +667,33 @@ export function BotRemoteControl({
 
 
 
-                {/* EMERGENCY STOP */}
-                <div className="p-4 sm:p-5 bg-black/60 border-t border-white/5">
-                    <button 
-                        className="w-full flex items-center justify-center gap-3 py-4 sm:py-5 rounded-xl text-xs font-black uppercase tracking-[0.2em] bg-red-600/20 text-red-500 border border-red-500/30 hover:bg-red-600 hover:text-white transition-all group"
-                        onClick={() => {
-                            if(confirm("🚨 ¿ESTÁS SEGURO? Se cerrarán TODAS las posiciones inmediatamente.")) {
-                                sendAction("CLOSE_ALL");
-                            }
-                        }}
-                    >
-                        <ShieldAlert size={18} className="group-hover:animate-bounce" />
-                        STOP & CLOSE ALL
-                    </button>
+                {/* EMERGENCY STOP & CLOSE */}
+                <div className="p-4 sm:p-5 bg-black/60 border-t border-white/5 space-y-3">
+                    <div className="flex gap-2">
+                        <button 
+                            className="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600 hover:text-white transition-all"
+                            onClick={() => {
+                                if(confirm("✅ ¿ESTÁS SEGURO? Se cobrarán y cerrarán las operaciones individuales de este bot.")) {
+                                    sendAction("CLOSE_ALL");
+                                }
+                            }}
+                        >
+                            <Coins size={14} />
+                            COBRAR Y CERRAR
+                        </button>
+                        
+                        <button 
+                            className="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] bg-red-600/20 text-red-500 border border-red-500/30 hover:bg-red-600 hover:text-white transition-all group"
+                            onClick={() => {
+                                if(confirm("🚨 ¿ESTÁS SEGURO? Se cerrarán TODAS las posiciones inmediatamente.")) {
+                                    sendAction("CLOSE_ALL");
+                                }
+                            }}
+                        >
+                            <ShieldAlert size={14} className="group-hover:animate-bounce" />
+                            STOP ALL
+                        </button>
+                    </div>
                     
                     {statusMsg && (
                         <motion.div 

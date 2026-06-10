@@ -189,7 +189,9 @@ export const ARTICLES = [
         readTime: "9 min",
         image: "/images/vps-setup.png"
     },
-    
+];
+
+export const ARTICLES_DATA = {
     "oro-supera-maximos": {
         title: "El Oro Supera Máximos Históricos: ¿Qué Está Impulsando el Rally?",
         category: "XAUUSD | Análisis",

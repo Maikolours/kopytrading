@@ -75,6 +75,9 @@ string labelPeriodo[] = {"HOY (NETO)", "ESTA SEMANA", "ESTE MES", "MAIKO PROFIT"
 int OnInit() {
     ObjectsDeleteAll(0, "MAIKO_");
     trade.SetExpertMagicNumber(ExpertMagic);
+    
+    // Auto-encender el bot si estamos en el Probador de Estrategias
+    if(MQLInfoInteger(MQL_TESTER)) BotActivo = true;
     hEMA_H1 = iMA(_Symbol, PERIOD_H1, PeriodoEMA, 0, MODE_EMA, PRICE_CLOSE);
     hEMA_M15 = iMA(_Symbol, PERIOD_M15, PeriodoEMA, 0, MODE_EMA, PRICE_CLOSE);
     hEMA_M5 = iMA(_Symbol, PERIOD_M5, PeriodoEMA, 0, MODE_EMA, PRICE_CLOSE);

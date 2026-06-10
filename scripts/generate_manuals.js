@@ -19,19 +19,19 @@ const goldMd = `
 
 ## 2. LA ESTRATEGIA: CÓMO FUNCIONA
 Utiliza una estrategia mixta de **Sniper Scalping** y **Recuperación Elástica (SOS)**:
-1. **Análisis de Tendencia:** Internamente escanea el mercado en temporalidades largas (H4, H1 y M15) para identificar si el día es alcista o bajista.
-2. **Entrada de Precisión:** Baja a la temporalidad de 1 Minuto (M1) para buscar divergencias y retrocesos usando RSI y ATR. Entra justo cuando el mercado está "sobre-estirado" en el corto plazo.
+1. **Análisis de Tendencia:** Internamente escanea el mercado en temporalidades largas (H4 y H1) para identificar si el día es alcista o bajista.
+2. **Entrada de Precisión:** Baja a la temporalidad de 5 Minutos (M5) para buscar divergencias y retrocesos usando RSI y ATR. Entra justo cuando el mercado está "sobre-estirado" en el corto plazo.
 3. **Gestión de Crisis (SOS / Cascada):** Si el precio se gira repentinamente en contra tras la entrada, el bot no asume la pérdida inmediatamente. En su lugar, activa el Modo SOS: despliega operaciones adicionales más abajo con un lotaje fríamente calculado (Martingala dinámica) para "promediar" el precio de entrada. En cuanto el Oro hace un pequeño retroceso (que siempre lo hace), el bot cierra toda la cesta de golpe en ganancia.
 
 ## 3. CONSEJOS DE TEMPORALIDAD
-- **Temporalidad (Timeframe) Obligatoria:** M1 (1 Minuto).
-- **Aviso:** Aunque lo pongas en M1, su "cerebro" está analizando H4 y M15 en segundo plano. Nunca lo pongas en H1 o H4, ya que las distancias matemáticas se romperían.
+- **Temporalidad (Timeframe) Obligatoria:** M5 (5 Minutos).
+- **Aviso:** Aunque lo pongas en M5, su "cerebro" está analizando H4 y H1 en segundo plano. Nunca lo pongas en H1 o H4 directamente, ya que las distancias matemáticas se romperían.
 
 ## 4. INSTRUCCIONES DE USO E INSTALACIÓN
 1. **Descarga:** Obtén el archivo \`.ex5\` desde tu dashboard de Kopytrading.
 2. **Ubicación:** Cópialo en tu MetaTrader 5, dentro de \`Archivo > Abrir Carpeta de Datos > MQL5 > Experts\`.
 3. **Permisos Web:** En MT5 ve a \`Herramientas > Opciones > Asesores Expertos\` y marca "Permitir WebRequest para las siguientes URL". Añade: \`https://www.kopytrading.com\`.
-4. **Gráfico:** Abre un gráfico de XAUUSD (Oro) y ponlo en M1. Arrastra el bot al gráfico.
+4. **Gráfico:** Abre un gráfico de XAUUSD (Oro) y ponlo en M5. Arrastra el bot al gráfico.
 5. **Autenticación:** En la ventana que aparece, pon tu **Email de Kopytrading** y la **Clave de Licencia (ID)** que te aparece en la web.
 6. **Ejecución:** Asegúrate de que el botón **"Algo Trading"** de arriba está en verde.
 
@@ -55,18 +55,18 @@ const centMd = `
 
 ## 2. LA ESTRATEGIA: CÓMO FUNCIONA
 Es exactamente el mismo "Motor de Inteligencia" que el MAIKO PRO GOLD, pero sus distancias matemáticas están reajustadas:
-1. **Entradas Sniper:** Analiza M1 para entrar en los retrocesos del mercado.
+1. **Entradas Sniper:** Analiza M5 para entrar en los retrocesos del mercado.
 2. **Red de Seguridad Ampliada:** Al tener decenas de miles de "centavos" de margen, su modo Cascada/SOS puede permitirse abrir posiciones con mucha más distancia entre ellas. En lugar de estresarse por un retroceso rápido, el bot teje una red amplia que atrapará el precio con total seguridad, incluso si la tendencia tarda semanas en darse la vuelta.
 
 ## 3. CONSEJOS DE TEMPORALIDAD
-- **Temporalidad (Timeframe) Obligatoria:** M1 (1 Minuto).
-- Al igual que el Gold, aunque la gráfica esté en M1, el bot realiza sus cálculos de tendencia mayor analizando H1 y M15 de forma invisible.
+- **Temporalidad (Timeframe) Obligatoria:** M5 (5 Minutos).
+- Al igual que el Gold, aunque la gráfica esté en M5, el bot realiza sus cálculos de tendencia mayor analizando H1 y H4 de forma invisible.
 
 ## 4. INSTRUCCIONES DE USO E INSTALACIÓN
 1. **Verificar Broker:** Asegúrate de que tu cuenta en el broker es tipo **CENT**, Micro o USC. Si instalas este bot en una cuenta Standard con $100, la quemarás.
 2. **Instalación:** Pega el archivo \`.ex5\` en \`MQL5 > Experts\` de tu MetaTrader 5.
 3. **WebRequests:** Añade \`https://www.kopytrading.com\` en las Opciones de Asesores Expertos.
-4. **Gráfico:** Abre el gráfico de Oro (frecuentemente llamado XAUUSDc, XAUUSD.c o GOLD.c en cuentas Cent). Ponlo en M1.
+4. **Gráfico:** Abre el gráfico de Oro (frecuentemente llamado XAUUSDc, XAUUSD.c o GOLD.c en cuentas Cent). Ponlo en M5.
 5. **Configuración:** Pon tu Email y tu Licencia (ID). Enciende el "Algo Trading".
 
 ## 5. RECOMENDACIONES VITALES

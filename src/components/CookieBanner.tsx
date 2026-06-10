@@ -6,17 +6,17 @@ export default function CookieBanner() {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        const accepted = localStorage.getItem("kopytrade_cookies_accepted");
+        const accepted = localStorage.getItem("kopytrading_cookies_accepted");
         if (!accepted) setVisible(true);
     }, []);
 
     function accept() {
-        localStorage.setItem("kopytrade_cookies_accepted", "true");
+        localStorage.setItem("kopytrading_cookies_accepted", "true");
         setVisible(false);
     }
 
     function reject() {
-        localStorage.setItem("kopytrade_cookies_accepted", "essential_only");
+        localStorage.setItem("kopytrading_cookies_accepted", "essential_only");
         setVisible(false);
     }
 

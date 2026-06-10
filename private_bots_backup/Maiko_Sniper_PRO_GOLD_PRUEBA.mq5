@@ -128,6 +128,10 @@ int OnInit() {
       MaxDrawdownPorcentaje = InpMaxDrawdownPorcentaje;
     ObjectsDeleteAll(0, "MAIKO_");
     trade.SetExpertMagicNumber(ExpertMagic);
+    
+    // Auto-encender el bot si estamos en el Probador de Estrategias
+    if(MQLInfoInteger(MQL_TESTER)) BotActivo = true;
+    
     equityPeak = AccountInfoDouble(ACCOUNT_EQUITY);
     hEMA_H4 = iMA(_Symbol, PERIOD_H4, 50, 0, MODE_EMA, PRICE_CLOSE);
     hEMA_H1 = iMA(_Symbol, PERIOD_H1, 50, 0, MODE_EMA, PRICE_CLOSE);
