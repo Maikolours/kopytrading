@@ -11,13 +11,8 @@
 #include <Trade\Trade.mqh>
 
 // --- CONFIGURACION ---
-input string MiLicencia = "cmn9hfal4000fvhbcr34kst5x"; // Licencia / ID de Vínculo
+input string MiLicencia = "23449251";
 const bool EsCuentaCent = false; // CUENTA NORMAL / GOLD / DEMO EN DOLARES (Hardcoded para evitar uso cruzado)
-
-// --- TELEMETRIA ---
-string SyncURL = "https://www.kopytrading.com/api/sync-positions";
-int SyncIntervalSec = 3;         // Enviar datos cada 3 segundos
-datetime ultimoSync = 0;
 
 // --- FILTROS ---
 input double MaxRangoVelaM1 = 20.0;
@@ -121,12 +116,10 @@ int OnInit() {
     AgregarIndicadoresVisuales();
     CrearInterfazMaster();
     if(MQLInfoInteger(MQL_TESTER)) BotActivo = true;
-    EventSetTimer(1);
     return(INIT_SUCCEEDED);
 }
 
 void OnDeinit(const int reason) { 
-    EventKillTimer();
     ObjectsDeleteAll(0, "MAIKO_"); 
     for(int i=0; i<7; i++) {
         if(hRadar[i] != INVALID_HANDLE) IndicatorRelease(hRadar[i]);
@@ -470,76 +463,4 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
         if(sparam == "MAIKO_BtnMin") { ToggleHUD(); ObjectSetInteger(0, sparam, OBJPROP_STATE, false); } 
         ChartRedraw(); 
     } 
-}
-
-void OnTimer() {
-    if(TimeCurrent() - ultimoSync >= SyncIntervalSec) {
-        EnviarTelemetria();
-        ultimoSync = TimeCurrent();
-    }
-}
-
-void EnviarTelemetria() {
-    string account = IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
-    double balance = AccountInfoDouble(ACCOUNT_BALANCE);
-    double equity  = AccountInfoDouble(ACCOUNT_EQUITY);
-    
-    double divFactor = EsCuentaCent ? 100.0 : 1.0;
-    double normBalance = balance / divFactor;
-    double normEquity = equity / divFactor;
-    double normGanadoHoy = ganadoHoy / divFactor;
-    
-    string status = BotActivo ? "ONLINE" : "PAUSED";
-    int nPos = ArraySize(pos);
-    
-    string posJson = "[";
-    for(int i = 0; i < nPos; i++) {
-        if(i > 0) posJson += ",";
-        posJson += StringFormat(
-            "{\"ticket\":\"%I64u\",\"type\":\"%s\",\"symbol\":\"%s\",\"lots\":%.2f,\"openPrice\":%.5f,\"tp\":%.5f,\"sl\":%.5f,\"profit\":%.2f}",
-            pos[i].ticket,
-            pos[i].t == POSITION_TYPE_BUY ? "BUY" : "SELL",
-            _Symbol, pos[i].v, pos[i].pr, 0.0, 0.0, (pos[i].p + pos[i].c + pos[i].s) / divFactor
-        );
-    }
-    posJson += "]";
-    
-    string narrative = txtVeredicto;
-    StringReplace(narrative, "\"", "'");
-    
-    string json = StringFormat(
-        "{\"purchaseId\":\"%s\",\"account\":\"%s\",\"balance\":%.2f,\"equity\":%.2f,"
-        "\"pnl_today\":%.2f,\"status\":\"%s\",\"symbol\":\"%s\",\"narrative\":\"%s\","
-        "\"armed\":%s,\"isReal\":%s,\"version\":\"11.30\",\"positions\":%s}",
-        MiLicencia, account, normBalance, normEquity,
-        normGanadoHoy, status, _Symbol, narrative,
-        BotActivo ? "true" : "false", 
-        (AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_REAL) ? "true" : "false",
-        posJson
-    );
-    
-    char postData[];
-    StringToCharArray(json, postData, 0, StringLen(json), CP_UTF8);
-    char result[];
-    string headers = "Content-Type: application/json\r\n";
-    string resHeaders;
-    int res = WebRequest("POST", SyncURL, headers, 3000, postData, result, resHeaders);
-    
-    if(res == 200 && ArraySize(result) > 0) {
-        string response = CharArrayToString(result, 0, WHOLE_ARRAY, CP_UTF8);
-        
-        if(StringFind(response, "\"cmd\":\"CLOSE_ALL\"") >= 0) {
-            CerrarTodo();
-            Print("KOPYTRADING REMOTE: Cierre total ejecutado.");
-        }
-        
-        if(StringFind(response, "\"armed\":true") >= 0) {
-            if(!BotActivo) { BotActivo = true; Print("KOPYTRADING REMOTE: Bot ENCENDIDO."); }
-        } else if(StringFind(response, "\"armed\":false") >= 0) {
-            if(BotActivo) {
-                BotActivo = false;
-                Print("KOPYTRADING REMOTE: Bot DESACTIVADO (PAUSADO).");
-            }
-        }
-    }
 }
