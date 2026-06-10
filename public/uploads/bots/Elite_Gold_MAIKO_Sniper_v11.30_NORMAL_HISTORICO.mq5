@@ -135,6 +135,7 @@ int OnInit() {
         GlobalVariableSet(gvName, (double)trialStart);
     }
     diasRestantes = DiasDeTrial - (int)((TimeCurrent() - trialStart) / 86400);
+    int diasOperando = (int)((TimeCurrent() - trialStart) / 86400) + 1;
     if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
     
     if(MQLInfoInteger(MQL_TESTER)) BotActivo = true;
@@ -388,8 +389,8 @@ void CrearInterfazMaster() {
     CrearLabel("MAIKO_Hoy", x+10, y+125, "GANADO HOY: $0.00", clrSpringGreen, 14, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_Flot", x+10, y+160, "FLOTANTE: $0.00", clrWhite, 12, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_MetaTP", x+10, y+190, "ESTADO: BUSCANDO ENTRADA EN M1...", clrYellow, 10, CORNER_LEFT_UPPER); 
+    CrearLabel("MAIKO_Trial", x+10, y+215, "TRIAL: DIA 1 DE 30", clrYellow, 10, CORNER_LEFT_UPPER);
     CrearLabel("MAIKO_Spd", x+w-120, y+65, "SPD: 0.0", clrWhite, 8, CORNER_LEFT_UPPER);  
-    CrearLabel("MAIKO_Trial", x+w-110, y+170, "TRIAL: 30 DIAS", clrYellow, 9, CORNER_LEFT_UPPER);
     
     CrearBoton("MAIKO_Foot", x, y+h-40, w, 40, "", ColorHeader, clrNONE, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_Voz", x+10, y+h-25, txtVoz, ColorMain, 10, CORNER_LEFT_UPPER); 
@@ -402,7 +403,8 @@ void ActualizarInterfazMaster() {
     ObjectSetString(0, "MAIKO_Hoy", OBJPROP_TEXT, StringFormat("GANADO HOY: $%.2f", ganadoHoy / multCent)); 
     ObjectSetString(0, "MAIKO_Flot", OBJPROP_TEXT, StringFormat("FLOTANTE: $%.2f", flotante / multCent)); 
     ObjectSetString(0, "MAIKO_Spd", OBJPROP_TEXT, StringFormat("SPD: %.1f", spreadActual)); 
-    ObjectSetString(0, "MAIKO_Trial", OBJPROP_TEXT, trialExpirado ? "TRIAL EXPIRADO" : StringFormat("TRIAL: %d DIAS", diasRestantes));
+    int dOp = (int)((TimeCurrent() - trialStart) / 86400) + 1;
+    ObjectSetString(0, "MAIKO_Trial", OBJPROP_TEXT, trialExpirado ? "TRIAL EXPIRADO" : StringFormat("TRIAL: DIA %d DE %d", dOp, DiasDeTrial));
     ObjectSetInteger(0, "MAIKO_Trial", OBJPROP_COLOR, trialExpirado ? clrRed : clrYellow);
     ObjectSetInteger(0, "MAIKO_Flot", OBJPROP_COLOR, flotante >= 0 ? clrSpringGreen : clrRed); 
     ObjectSetString(0, "MAIKO_Vered", OBJPROP_TEXT, txtVeredicto); 
