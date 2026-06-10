@@ -68,20 +68,14 @@ export const InteractiveVideoExperience = () => {
           <div className="lg:col-span-8">
             <div className="relative rounded-lg overflow-hidden border border-white/20 bg-black h-[130px] sm:h-[150px] shadow-2xl group pointer-events-auto">
               
-              {/* VÍDEO REAL DE FONDO */}
-              <div className={`absolute inset-0 transition-opacity duration-1000 ${step !== 'intro' ? 'opacity-40 grayscale-0' : 'opacity-10 grayscale'}`}>
-                {step !== 'intro' && (
-                   <iframe
-                   src="https://drive.google.com/file/d/13zwGUwrmkxOYEKrOd3TVYSwd8xqa9-be/preview?autoplay=1&mute=1"
-                   className="w-full h-full scale-[1.3] pointer-events-none"
-                   allow="autoplay"
-                 ></iframe>
-                )}
-                {step === 'intro' && (
-                  <div className="w-full h-full bg-gradient-to-br from-brand/10 to-transparent flex items-center justify-center">
-                    <span className="text-2xl filter blur-sm opacity-10">📈</span>
+              {/* SIMULADOR GRÁFICO DE FONDO */}
+              <div className={`absolute inset-0 transition-opacity duration-1000 ${step !== 'intro' ? 'opacity-40' : 'opacity-10'}`}>
+                <div className="w-full h-full bg-gradient-to-br from-brand/10 via-black to-accent/5 flex items-center justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                    <div className="w-[150%] h-[150%] border border-white/5 rounded-full animate-pulse" />
                   </div>
-                )}
+                  <span className="text-4xl filter blur-[1px] opacity-20 animate-bounce">📈</span>
+                </div>
               </div>
 
               {/* Botón Central - SUPER SIMPLE CSS */}
