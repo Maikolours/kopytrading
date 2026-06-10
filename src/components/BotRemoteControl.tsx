@@ -285,17 +285,17 @@ export function BotRemoteControl({
                                 <h4 className="text-[11px] font-black uppercase tracking-widest text-white leading-none">
                                     {botName || "MAIKO SNIPER PRO"}
                                 </h4>
-                                <p className="text-[8px] font-bold text-brand-light mt-1 tracking-tighter flex items-center gap-2">
-                                    <span>v{botData?.version || "13.92"} MAIKO ENGINE</span>
-                                    {botData?.diasRestantes !== undefined && (
-                                        <span className={`px-1.5 py-0.5 rounded border ${botData?.trialExpirado ? 'bg-red-900/40 text-red-400 border-red-500/50' : 'bg-yellow-900/40 text-yellow-400 border-yellow-500/50'}`}>
-                                            {botData?.trialExpirado ? "TRIAL EXPIRADO" : `TRIAL: ${botData?.diasRestantes} DÍAS`}
-                                        </span>
-                                    )}
+                                <p className="text-[8px] font-bold text-brand-light mt-1 tracking-tighter">
+                                    v{botData?.version || "13.92"} MAIKO ENGINE
                                 </p>
                             </div>
                         </div>
                         <div className="flex items-center gap-2">
+                             {botData?.diasRestantes !== undefined && (
+                                 <div className={`px-2 py-0.5 mr-2 rounded border text-[8px] font-bold tracking-widest uppercase ${botData?.trialExpirado ? 'bg-red-900/80 text-red-400 border-red-500' : 'bg-yellow-900/80 text-yellow-400 border-yellow-500'}`}>
+                                     {botData?.trialExpirado ? "TRIAL EXPIRADO" : `TRIAL: ${botData?.diasRestantes} DÍAS`}
+                                 </div>
+                             )}
                              <div className="flex flex-col items-end">
                                 <span className={`text-[7px] font-black tracking-widest ${isActualOnline ? 'text-success' : 'text-white/20'}`}>
                                     {isActualOnline ? 'ONLINE' : 'OFFLINE'}
