@@ -353,6 +353,8 @@ export async function POST(req: Request) {
             lkb: Number(body.lkb) || 4,
             trend: body.trend || "UNKNOWN",
             armed: body.armed === true || body.armed === "true",
+            trialExpirado: body.trialExpirado === true || body.trialExpirado === "true",
+            diasRestantes: Number(body.diasRestantes) || 0,
             p00: (body.p00 !== undefined && !isNaN(Number(body.p00))) ? Number(body.p00) : 0,
             p50: (body.p50 !== undefined && !isNaN(Number(body.p50))) ? Number(body.p50) : 0,
             p62: (body.p62 !== undefined && !isNaN(Number(body.p62))) ? Number(body.p62) : 0,
