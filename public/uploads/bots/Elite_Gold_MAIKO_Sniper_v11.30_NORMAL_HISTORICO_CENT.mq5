@@ -39,7 +39,7 @@ input double ProfitCosechaIndividual = 0.06; // Profit Cosecha Individual (0.06 
 input double ProfitNetoFlush = 0.25;        // Profit Neto Cesta (0.25 = 25 cents)
 input double ProfitBreakEven = 0.10;        // Profit Break Even SOS (0.10 = 10 cents)
 input double DistanciaRefuerzoPips = 15.0;  // Separacion entre SOS (Pips)
-input int LimitePosicionesSOS = 1;          // Maximo de posiciones SOS (Rescate)
+input int LimitePosicionesSOS = 2;          // Máximo de operaciones abiertas
 input double MaxLoteTotal = 0.06;           // Lote Maximo General
 input double MaxLoteIndividual = 0.04;      // Lote Maximo por Operacion
 input int HoraInicioOperativa = 9;          // Hora Inicio (Broker Time)
@@ -249,8 +249,8 @@ void EjecutarAtaqueScholar(string d) {
 }
 
 void GestionarRefuerzoInteligente() {
-    if(ArraySize(pos) > LimitePosicionesSOS) {
-        txtVeredicto = "MAXIMO SOS ALCANZADO";
+    if(ArraySize(pos) >= LimitePosicionesSOS) {
+        txtVeredicto = "MAXIMO OPERACIONES ALCANZADO";
         return;
     }
     int last = ArraySize(pos)-1;

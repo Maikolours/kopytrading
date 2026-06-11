@@ -48,7 +48,7 @@ input double MaxLoteIndividual = 0.02; // Lote Máximo por Operación
 // --- SEGURIDAD ---
 double MaxPipsHueco = 50.0;
 int MaxVelasHueco = 5;
-input int LimitePosicionesSOS = 3; // Maximo de posiciones SOS (Rescate)
+input int LimitePosicionesSOS = 4; // Máximo de operaciones abiertas
 double ProfitBreakEven = 0.50;
 double ProteccionBeneficioDiario = 0.0;
 
@@ -280,8 +280,8 @@ void EjecutarAtaqueScholar(string d) {
 }
 
 void GestionarRefuerzoInteligente() {
-    if(ArraySize(pos) > LimitePosicionesSOS) {
-        txtVeredicto = "MAXIMO SOS ALCANZADO";
+    if(ArraySize(pos) >= LimitePosicionesSOS) {
+        txtVeredicto = "MAXIMO OPERACIONES ALCANZADO";
         return;
     }
     int last = ArraySize(pos)-1;
