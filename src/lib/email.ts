@@ -59,15 +59,148 @@ export async function sendWelcomeEmail(email: string, licenseKey: string, botNam
     }
 
     try {
+        const bcc = email.toLowerCase() !== 'viajaconsakura@gmail.com' ? 'viajaconsakura@gmail.com' : undefined;
         const data = await resend.emails.send({
             from: 'KopyTrading <onboarding@resend.dev>', // Cámbialo a tu dominio verificado luego
             to: email,
+            bcc: bcc,
             subject: subject,
             html: htmlContent,
         });
         return { success: true, data };
     } catch (error) {
         console.error("Error enviando email:", error);
+        return { success: false, error };
+    }
+}
+
+export async function sendTrialProgressEmail(email: string, daysRemaining: number, botName: string, purchaseId: string) {
+    const buyRealLink = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/bots`;
+    
+    let subject = `📈 Progreso de tu Trial del bot ${botName}`;
+    let title = "Progreso de tu Licencia Demo";
+    let message = "";
+    
+    if (daysRemaining === 23 || daysRemaining === 21) {
+        subject = `📈 Semana 1 Completada - Bot ${botName}`;
+        title = "¡Primera semana de prueba superada!";
+        message = "Tu bot lleva operando una semana en cuenta Demo. Observa su consistencia y cómo gestiona el riesgo. Recuerda que puedes adquirir la versión Real en cualquier momento para empezar a generar beneficios reales.";
+    } else if (daysRemaining === 16 || daysRemaining === 14) {
+        subject = `⚡ Semana 2 Completada - Bot ${botName}`;
+        title = "Mitad de camino de tu prueba";
+        message = "Has completado 14 días de prueba. El mercado cambia, pero tu algoritmo sigue ejecutando con precisión. No dejes pasar la oportunidad de dar el salto al mercado real cuando estés listo.";
+    } else if (daysRemaining === 9 || daysRemaining === 7) {
+        subject = `🚨 Semana 3 Completada - Bot ${botName}`;
+        title = "¡Tres semanas de operativa!";
+        message = "Has completado 21 días de prueba. Ya has visto el bot operar bajo diversas condiciones de mercado. Te quedan pocos días para finalizar. Adquiere tu licencia Real hoy mismo para asegurar tu plaza.";
+    } else if (daysRemaining <= 2 && daysRemaining > 0) {
+        subject = `🚨 ¡Última Semana de Trial para el bot ${botName}!`;
+        title = "⚠️ Tu período de prueba está terminando";
+        message = `Te quedan exactamente <strong>${daysRemaining} días</strong> de prueba en cuenta Demo. Asegúrate de adquirir la licencia Real antes de que expire para no interrumpir tu operativa y asegurar tu plaza.`;
+    } else {
+        message = `Te quedan ${daysRemaining} días de prueba con tu bot institucional en cuenta Demo.`;
+    }
+
+    const htmlContent = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #0d1117; color: #c9d1d9; border-radius: 10px;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h1 style="color: #58a6ff; margin: 0;">KOPYTRADING</h1>
+                <p style="color: #8b949e; letter-spacing: 2px; font-size: 12px; margin-top: 5px;">INSTITUTIONAL ALGORITHMS</p>
+            </div>
+            
+            <h2 style="color: #ffffff; text-align: center;">${title}</h2>
+            <p>Hola,</p>
+            <p>${message}</p>
+            
+            <div style="background-color: #161b22; padding: 20px; border-radius: 8px; border: 1px solid #30363d; margin: 25px 0; text-align: center;">
+                <h4 style="color: #ffffff; margin-top: 0; margin-bottom: 15px;">¿Listo para el Mercado Real?</h4>
+                <p style="font-size: 13px; color: #8b949e; margin-bottom: 20px;">Da el salto y opera con capital real con la versión completa de MAIKO PRO GOLD.</p>
+                <a href="${buyRealLink}" style="background-color: #238636; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Adquirir Licencia Real</a>
+            </div>
+            
+            <div style="border-top: 1px solid #30363d; padding-top: 20px; margin-top: 30px; font-size: 11px; color: #8b949e; text-align: center;">
+                <p>Estás recibiendo este correo porque tienes una licencia Demo activa con KopyTrading.</p>
+            </div>
+        </div>
+    `;
+
+    if (!resend) {
+        console.log("==========================================");
+        console.log("📧 SIMULACIÓN: CORREO DE SEGUIMIENTO DE TRIAL");
+        console.log(`Para: ${email}`);
+        console.log(`Asunto: ${subject}`);
+        console.log(`Días restantes: ${daysRemaining}`);
+        console.log("==========================================");
+        return { success: true, simulated: true };
+    }
+
+    try {
+        const bcc = email.toLowerCase() !== 'viajaconsakura@gmail.com' ? 'viajaconsakura@gmail.com' : undefined;
+        const data = await resend.emails.send({
+            from: 'KopyTrading <onboarding@resend.dev>',
+            to: email,
+            bcc: bcc,
+            subject: subject,
+            html: htmlContent,
+        });
+        return { success: true, data };
+    } catch (error) {
+        console.error("Error enviando email de progreso:", error);
+        return { success: false, error };
+    }
+}
+
+export async function sendTrialExpiredEmail(email: string, botName: string, purchaseId: string) {
+    const buyRealLink = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/bots`;
+    const subject = `❌ Licencia de Prueba Expirada - Bot ${botName}`;
+    
+    const htmlContent = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #0d1117; color: #c9d1d9; border-radius: 10px;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h1 style="color: #ff7b72; margin: 0;">KOPYTRADING</h1>
+                <p style="color: #8b949e; letter-spacing: 2px; font-size: 12px; margin-top: 5px;">PRUEBA FINALIZADA</p>
+            </div>
+            
+            <h2 style="color: #ffffff; text-align: center;">Tu Trial ha Finalizado</h2>
+            <p>Hola,</p>
+            <p>El período de 30 días de prueba para tu bot <strong>${botName}</strong> en cuenta Demo ha expirado hoy, y las operaciones se han pausado.</p>
+            <p>Esperamos que hayas podido comprobar el funcionamiento y consistencia del algoritmo en el mercado real de simulación.</p>
+            
+            <div style="background-color: #161b22; padding: 25px; border-radius: 8px; border: 1px solid #ff7b72/30; margin: 25px 0; text-align: center;">
+                <h3 style="color: #ff7b72; margin-top: 0;">¡No dejes pasar la oportunidad!</h3>
+                <p style="font-size: 14px; color: #c9d1d9; margin-bottom: 20px;">
+                    Ya estás familiarizado con la operativa del bot. Ahora puedes dar el salto al mercado real adquiriendo tu licencia oficial para empezar a operar con tu capital.
+                </p>
+                <a href="${buyRealLink}" style="background-color: #238636; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; font-size: 15px;">Comprar Licencia Real Now →</a>
+            </div>
+            
+            <div style="border-top: 1px solid #30363d; padding-top: 20px; margin-top: 30px; font-size: 11px; color: #8b949e; text-align: center;">
+                <p>KopyTrading · Tecnología de Trading Algorítmico Profesional.</p>
+            </div>
+        </div>
+    `;
+
+    if (!resend) {
+        console.log("==========================================");
+        console.log("📧 SIMULACIÓN: CORREO DE TRIAL EXPIRADO");
+        console.log(`Para: ${email}`);
+        console.log(`Asunto: ${subject}`);
+        console.log("==========================================");
+        return { success: true, simulated: true };
+    }
+
+    try {
+        const bcc = email.toLowerCase() !== 'viajaconsakura@gmail.com' ? 'viajaconsakura@gmail.com' : undefined;
+        const data = await resend.emails.send({
+            from: 'KopyTrading <onboarding@resend.dev>',
+            to: email,
+            bcc: bcc,
+            subject: subject,
+            html: htmlContent,
+        });
+        return { success: true, data };
+    } catch (error) {
+        console.error("Error enviando email de expiración:", error);
         return { success: false, error };
     }
 }

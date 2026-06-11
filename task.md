@@ -1,0 +1,8 @@
+- [x] Implementar la función de envío de correos de expiración en `src/lib/email.ts` con copias a `viajaconsakura@gmail.com`.
+- [x] Implementar la lógica de verificación de días restantes y envío de correos semanales/finales en `src/app/api/sync-positions/route.ts`.
+- [x] Modificar los parámetros por defecto de la versión CENT (`NORMAL_HISTORICO_CENT.mq5`).
+- [x] Corregir la fórmula matemática del `ESCAPE TP` en el HUD de la versión CENT.
+- [x] Eliminar los elementos visuales y de configuración de Trial en el bot `NORMAL_HISTORICO.mq5`.
+- [x] Agregar el contador detallado de horas y minutos en la cuenta regresiva del Trial y el aviso en color naranja/rojo en `CLIENT_TRIAL.mq5`.
+- [x] Compilar y desplegar las 3 versiones de los bots.
+- [x] Realizar un build de validación de Next.js y subir los cambios al repositorio.

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { sendTrialProgressEmail, sendTrialExpiredEmail } from "@/lib/email";
 
 export async function POST(req: Request) {
     let body: any = null;
@@ -409,6 +410,37 @@ export async function POST(req: Request) {
                 giroOn: (body.giro !== undefined || body.giroOn !== undefined) ? (body.giro === true || body.giro === "true" || body.giroOn === true || body.giroOn === "true") : rawSettings.giroOn,
                 fearOn: (body.fear !== undefined || body.fearOn !== undefined) ? (body.fear === true || body.fear === "true" || body.fearOn === true || body.fearOn === "true") : rawSettings.fearOn,
             };
+
+            // LÓGICA DE EMAILS DE SEGUIMIENTO Y EXPIRACIÓN DEL TRIAL
+            const user = await prisma.user.findUnique({
+                where: { id: purchase.userId }
+            });
+            if (user && user.email) {
+                // 1. Email de finalización (trialExpirado = true)
+                if (telemetry.trialExpirado && !rawSettings.expireEmailSent) {
+                    await sendTrialExpiredEmail(user.email, purchase.botProduct.name, purchase.id);
+                    updatedSettings.expireEmailSent = true;
+                }
+                // 2. Emails de progreso semanal (semana 1: 23 o 21 días, semana 2: 16 o 14 días, semana 3: 9 o 7 días, semana 4: 2 días)
+                else if (!telemetry.trialExpirado && telemetry.diasRestantes > 0) {
+                    if (telemetry.diasRestantes <= 2 && !(rawSettings.warnEmail2Sent || rawSettings.expireEmailSent)) {
+                        await sendTrialProgressEmail(user.email, telemetry.diasRestantes, purchase.botProduct.name, purchase.id);
+                        updatedSettings.warnEmail2Sent = true;
+                    } else if (telemetry.diasRestantes <= 9 && telemetry.diasRestantes > 2 && !(rawSettings.warnEmail9Sent || rawSettings.warnEmail7Sent)) {
+                        await sendTrialProgressEmail(user.email, telemetry.diasRestantes, purchase.botProduct.name, purchase.id);
+                        updatedSettings.warnEmail9Sent = true;
+                        updatedSettings.warnEmail7Sent = true;
+                    } else if (telemetry.diasRestantes <= 16 && telemetry.diasRestantes > 9 && !(rawSettings.warnEmail16Sent || rawSettings.warnEmail14Sent)) {
+                        await sendTrialProgressEmail(user.email, telemetry.diasRestantes, purchase.botProduct.name, purchase.id);
+                        updatedSettings.warnEmail16Sent = true;
+                        updatedSettings.warnEmail14Sent = true;
+                    } else if (telemetry.diasRestantes <= 23 && telemetry.diasRestantes > 16 && !(rawSettings.warnEmail23Sent || rawSettings.warnEmail21Sent)) {
+                        await sendTrialProgressEmail(user.email, telemetry.diasRestantes, purchase.botProduct.name, purchase.id);
+                        updatedSettings.warnEmail23Sent = true;
+                        updatedSettings.warnEmail21Sent = true;
+                    }
+                }
+            }
 
             // ACTUALIZACIÓN REMOTA PRIORITARIA: Si hay un forceArmed pendiente, lo aplicamos y lo borramos
             if (rawSettings.forceArmed !== undefined) {

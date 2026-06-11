@@ -12,7 +12,7 @@
 
 // --- CONFIGURACION ---
 input string MiLicencia = "cmn9hfal4000fvhbcr34kst5x"; // Licencia / ID de Vínculo
-int DiasDeTrial = 30; // Días de prueba del bot (oculto al cliente)
+input int DiasDeTrial = 30; // Días de prueba del bot
 const bool EsCuentaCent = false; // CUENTA NORMAL / GOLD / DEMO EN DOLARES (Hardcoded para evitar uso cruzado)
 
 // --- TELEMETRIA ---
@@ -33,19 +33,22 @@ bool CheckM5 = true;
 
 input double LoteAtaque = 0.01; // Lotaje de Ataque
 input double TargetDiario = 500.00; // Objetivo de Beneficio Diario ($)
+input int HoraInicioOperativa = 9; // Hora Inicio (Broker Time)
+input int HoraFinOperativa = 19;   // Hora Fin (Broker Time)
+input bool OperarViernesNoche = false; // Operar Viernes Noche
 
 int RuedasAmetralladora = 1;
 double MultiplicadorRefuerzo = 3.0; // Cambiado a 3.0 para que el siguiente lote de rescate sea exactamente 0.02
 double ProfitNetoFlush = 5.0; // Reducido a 5.0 para salir más rápido de la cesta de operaciones
-double ProfitCosechaIndividual = 1.0; // Reducido a 1.0 para cobrar y cerrar operaciones individuales muy rápido
+input double ProfitCosechaIndividual = 1.0; // Profit Cosecha Individual ($)
 double DistanciaRefuerzoPips = 30.0;
-double MaxLoteTotal = 0.50; // Ajustado para cuenta Normal (originalmente 0.15 en Cent)
-double MaxLoteIndividual = 0.02;
+input double MaxLoteTotal = 0.50; // Lote Máximo General
+input double MaxLoteIndividual = 0.02; // Lote Máximo por Operación
 
 // --- SEGURIDAD ---
 double MaxPipsHueco = 50.0;
 int MaxVelasHueco = 5;
-int LimitePosicionesSOS = 16;
+input int LimitePosicionesSOS = 3; // Maximo de posiciones SOS (Rescate)
 double ProfitBreakEven = 0.50;
 double ProteccionBeneficioDiario = 0.0;
 
@@ -81,7 +84,6 @@ string txtVeredicto = "ESPERANDO...";
 datetime proximoAtaque = 0, pausaVolatilidad = 0;
 bool enFaseAnalisis = false;
 int FaseRefuerzo = 0;
-
 datetime trialStart = 0;
 int diasRestantes = 30;
 bool trialExpirado = false;
@@ -119,6 +121,8 @@ int OnInit() {
         Alert("MAIKO SNIPER: TRIAL SÓLO VÁLIDO PARA CUENTAS DEMO.");
         return INIT_FAILED;
     }
+    
+    // El límite se aplica en CheckTrial para evitar error de constante
         
     trade.SetExpertMagicNumber(ExpertMagic);
     trade.SetAsyncMode(true);
@@ -140,9 +144,11 @@ int OnInit() {
         trialStart = TimeCurrent();
         GlobalVariableSet(gvName, (double)trialStart);
     }
-    diasRestantes = DiasDeTrial - (int)((TimeCurrent() - trialStart) / 86400);
-    int diasOperando = (int)((TimeCurrent() - trialStart) / 86400) + 1;
-    if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
+      int maxDias = DiasDeTrial;
+      if(maxDias > 30) maxDias = 30;
+      diasRestantes = maxDias - (int)((TimeCurrent() - trialStart) / 86400);
+      int diasOperando = (int)((TimeCurrent() - trialStart) / 86400) + 1;
+      if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
     
     if(MQLInfoInteger(MQL_TESTER)) BotActivo = true;
     EventSetTimer(1);
@@ -161,6 +167,11 @@ void OnDeinit(const int reason) {
 }
 
 void OnTick() {
+    int maxDias = DiasDeTrial;
+    if(maxDias > 30) maxDias = 30;
+    diasRestantes = maxDias - (int)((TimeCurrent() - trialStart) / 86400);
+    if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
+
     if(trialExpirado) { txtVoz = "TRIAL 30 DIAS EXPIRADO."; BotActivo = false; ActualizarInterfazMaster(); return; }
     if(!TerminalInfoInteger(TERMINAL_TRADE_ALLOWED)) { txtVoz = "TRADING NO PERMITIDO"; return; }
 
@@ -190,6 +201,17 @@ void OnTick() {
     if(!BotActivo) return;
     if(ArraySize(pos) > 0) { GestionarRefuerzoInteligente(); return; }
     if(ArraySize(pos) == 0) {
+        MqlDateTime time;
+        TimeToStruct(TimeCurrent(), time);
+        bool enHorario = true;
+        if(time.hour < HoraInicioOperativa || time.hour >= HoraFinOperativa) enHorario = false;
+        if(time.day_of_week == 5 && time.hour >= 19 && !OperarViernesNoche) enHorario = false;
+        
+        if(!enHorario) {
+            txtVoz = "FUERA HORARIO: ESPERANDO";
+            return;
+        }
+
         if(!enFaseAnalisis) { enFaseAnalisis = true; proximoAtaque = TimeCurrent() + 60; txtVoz = "SCHOLAR: Buscando..."; }
         if(TimeCurrent() >= proximoAtaque && TimeCurrent() >= pausaVolatilidad) {
             string d = ""; if(ValidarEstructuraScholar(d)) EjecutarAtaqueScholar(d);
@@ -258,6 +280,10 @@ void EjecutarAtaqueScholar(string d) {
 }
 
 void GestionarRefuerzoInteligente() {
+    if(ArraySize(pos) > LimitePosicionesSOS) {
+        txtVeredicto = "MAXIMO SOS ALCANZADO";
+        return;
+    }
     int last = ArraySize(pos)-1;
     double distPips = MathAbs(SymbolInfoDouble(_Symbol, SYMBOL_BID) - pos[0].pr) / _Point / 10;
     
@@ -409,9 +435,23 @@ void ActualizarInterfazMaster() {
     ObjectSetString(0, "MAIKO_Hoy", OBJPROP_TEXT, StringFormat("GANADO HOY: $%.2f", ganadoHoy / multCent)); 
     ObjectSetString(0, "MAIKO_Flot", OBJPROP_TEXT, StringFormat("FLOTANTE: $%.2f", flotante / multCent)); 
     ObjectSetString(0, "MAIKO_Spd", OBJPROP_TEXT, StringFormat("SPD: %.1f", spreadActual)); 
-    int dOp = (int)((TimeCurrent() - trialStart) / 86400) + 1;
-    ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, trialExpirado ? "TRIAL EXPIRADO" : StringFormat("TRIAL: DIA %d DE %d", dOp, DiasDeTrial));
-    ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, trialExpirado ? clrRed : clrYellow);
+      
+      int elapsedSeconds = (int)(TimeCurrent() - trialStart);
+      int remainingSeconds = 86400 - (elapsedSeconds % 86400);
+      int remHours = remainingSeconds / 3600;
+      int remMinutes = (remainingSeconds % 3600) / 60;
+      int dOp = (int)((TimeCurrent() - trialStart) / 86400) + 1;
+      
+      if(trialExpirado) {
+          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "TRIAL EXPIRADO");
+          ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrRed);
+      } else if(diasRestantes <= 7) {
+          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("EXPIRA EN %d DIAS [%dh %dm] | ADQUIERE REAL", diasRestantes, remHours, remMinutes));
+          ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, C'255,69,0');
+      } else {
+          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("TRIAL: DIA %d [%dh %dm]", dOp, remHours, remMinutes));
+          ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrYellow);
+      }
     ObjectSetInteger(0, "MAIKO_Flot", OBJPROP_COLOR, flotante >= 0 ? clrSpringGreen : clrRed); 
     ObjectSetString(0, "MAIKO_Vered", OBJPROP_TEXT, txtVeredicto); 
     ObjectSetString(0, "MAIKO_Voz", OBJPROP_TEXT, txtVoz); 

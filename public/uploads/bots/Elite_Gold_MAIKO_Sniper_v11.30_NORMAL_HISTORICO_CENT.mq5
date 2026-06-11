@@ -10,62 +10,58 @@
 
 #include <Trade\Trade.mqh>
 
-// --- CONFIGURACION ---
-input string MiLicencia = "cmn9hfal4000fvhbcr34kst5x"; // Licencia / ID de Vínculo
-const bool EsCuentaCent = false; // CUENTA NORMAL / GOLD / DEMO EN DOLARES (Hardcoded para evitar uso cruzado)
+//// --- CONFIGURACION CLIENTE ---
+input string MiLicencia = "23449251";   // Licencia / ID de Vinculo
+const bool EsCuentaCent = true;
 
 // --- TELEMETRIA ---
 string SyncURL = "https://www.kopytrading.com/api/sync-positions";
-int SyncIntervalSec = 3;         // Enviar datos cada 3 segundos
+int SyncIntervalSec = 3;
 datetime ultimoSync = 0;
 
-// --- FILTROS ---
-input double MaxRangoVelaM1 = 20.0;
-input double MaxSpreadPips = 4.0;
-input double SensibilidadMechaReal = 3.0;
-input int MinutosPausaTrasSusto = 1;
+// --- FILTROS INTERNOS (no editables) ---
+double MaxRangoVelaM1 = 20.0;
+double MaxSpreadPips = 4.0;
+double SensibilidadMechaReal = 3.0;
+int MinutosPausaTrasSusto = 1;
+int PeriodoMediaFiltro = 50;
+bool CheckM15 = true;
+bool CheckM5 = true;
+int RuedasAmetralladora = 1;
+double MultiplicadorRefuerzo = 3.0;
+double MaxPipsHueco = 50.0;
+int MaxVelasHueco = 5;
 
-// --- TENDENCIA ---
-input int PeriodoMediaFiltro = 50;
-input bool CheckM15 = true;
-input bool CheckM5 = true;
-input double LoteAtaque = 0.01;
-input int RuedasAmetralladora = 1;
-input double MultiplicadorRefuerzo = 3.0; // Cambiado a 3.0 para que el siguiente lote de rescate sea exactamente 0.02
-input double ProfitNetoFlush = 5.0; // Reducido a 5.0 para salir más rápido de la cesta de operaciones
-input double ProfitCosechaIndividual = 1.0; // Reducido a 1.0 para cobrar y cerrar operaciones individuales muy rápido
-input double TargetDiario = 500.00;
-input int HoraInicioOperativa = 9; // Hora Inicio (Broker Time)
-input int HoraFinOperativa = 19;   // Hora Fin (Broker Time)
-input bool OperarViernesNoche = false; // Operar Viernes Noche
-input double DistanciaRefuerzoPips = 30.0;
-input double MaxLoteTotal = 0.50; // Ajustado para cuenta Normal (originalmente 0.15 en Cent)
-input double MaxLoteIndividual = 0.02;
-
-// --- SEGURIDAD ---
-input double MaxPipsHueco = 50.0;
-input int MaxVelasHueco = 5;
-input int LimitePosicionesSOS = 3; // Maximo de posiciones SOS (Rescate)
-input double ProfitBreakEven = 0.50;
-input double ProteccionBeneficioDiario = 0.0;
+// --- PARAMETROS CLIENTE ---
+input double LoteAtaque = 0.02;             // Lotaje de Ataque
+input double TargetDiario = 5.0;            // Objetivo Beneficio Diario (5.0 = $5)
+input double ProfitCosechaIndividual = 0.06; // Profit Cosecha Individual (0.06 = 6 cents)
+input double ProfitNetoFlush = 0.25;        // Profit Neto Cesta (0.25 = 25 cents)
+input double ProfitBreakEven = 0.10;        // Profit Break Even SOS (0.10 = 10 cents)
+input double DistanciaRefuerzoPips = 15.0;  // Separacion entre SOS (Pips)
+input int LimitePosicionesSOS = 1;          // Maximo de posiciones SOS (Rescate)
+input double MaxLoteTotal = 0.06;           // Lote Maximo General
+input double MaxLoteIndividual = 0.04;      // Lote Maximo por Operacion
+input int HoraInicioOperativa = 9;          // Hora Inicio (Broker Time)
+input int HoraFinOperativa = 19;            // Hora Fin (Broker Time)
+input bool OperarViernesNoche = false;      // Operar Viernes Noche
+input double ProteccionBeneficioDiario = 0.0; // Proteccion Beneficio Diario
 
 // --- HUD ---
-input string HUD_Branding = "MAIKO v11.30 | NORMAL HISTORICO";
+input string HUD_Branding = "MAIKO v11.30 | CENT EDITION";
 input color ColorMain = clrGold;
 input color ColorHeader = C'30,30,30';
 input color ColorBody = C'20,20,20';
 input int HUD_X = 15;
 input int PosY_HUD = 25;
-
-input bool ShowW1 = true;
-input bool ShowD1 = true;
-input bool ShowH4 = true;
-input bool ShowH1 = true;
-input bool ShowM15 = true;
-input bool ShowM5 = true;
-input bool ShowM1 = true;
-
-input string TradeComment = "MAIKO_NORMAL_HIST";
+bool ShowW1 = true;
+bool ShowD1 = true;
+bool ShowH4 = true;
+bool ShowH1 = true;
+bool ShowM15 = true;
+bool ShowM5 = true;
+bool ShowM1 = true;
+string TradeComment = "MAIKO_CENT";
 
 // Globales
 CTrade trade;
@@ -115,11 +111,13 @@ void AgregarIndicadoresVisuales() {
 }
 
 int OnInit() {
+        
     trade.SetExpertMagicNumber(ExpertMagic);
     trade.SetAsyncMode(true);
     hEMA_v = iMA(_Symbol, _Period, PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
     hRSI_v = iRSI(_Symbol, _Period, 14, PRICE_CLOSE);
     
+    // Inicializar handles de radar de forma estÃ¡tica para optimizar CPU
     for(int i=0; i<7; i++) {
         hRadar[i] = iMA(_Symbol, etfs[i], PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
     }
@@ -127,10 +125,6 @@ int OnInit() {
     AgregarIndicadoresVisuales();
     CrearInterfazMaster();
       
-    trialStart = 0;
-    diasRestantes = 9999;
-    trialExpirado = false;
-    
     if(MQLInfoInteger(MQL_TESTER)) BotActivo = true;
     EventSetTimer(1);
     return(INIT_SUCCEEDED);
@@ -148,7 +142,6 @@ void OnDeinit(const int reason) {
 }
 
 void OnTick() {
-    if(trialExpirado) { txtVoz = "TRIAL 30 DIAS EXPIRADO."; BotActivo = false; ActualizarInterfazMaster(); return; }
     if(!TerminalInfoInteger(TERMINAL_TRADE_ALLOWED)) { txtVoz = "TRADING NO PERMITIDO"; return; }
 
     ActualizarEstadoMaster();
@@ -263,7 +256,7 @@ void GestionarRefuerzoInteligente() {
     int last = ArraySize(pos)-1;
     double distPips = MathAbs(SymbolInfoDouble(_Symbol, SYMBOL_BID) - pos[0].pr) / _Point / 10;
     
-    // Actualizar HUD dinámicamente con detalles de la operación activa
+    // Actualizar HUD dinÃ¡micamente con detalles de la operaciÃ³n activa
     string dirStr = (pos[0].t == POSITION_TYPE_BUY) ? "COMPRA" : "VENTA";
     txtVoz = StringFormat("MAIKO: Vigilando %s activo...", dirStr);
     
@@ -292,7 +285,7 @@ void GestionarRefuerzoInteligente() {
     if(type == POSITION_TYPE_BUY) trade.Buy(volRefuerzo, _Symbol, 0, 0, 0, TradeComment + "_SOS"); 
     else trade.Sell(volRefuerzo, _Symbol, 0, 0, 0, TradeComment + "_SOS");
     ultimoAtaque = TimeCurrent();
-    txtVeredicto = "DISPARO SOS RESCATE EJECUTADO 🛡️⚡";
+    txtVeredicto = "DISPARO SOS RESCATE EJECUTADO ðŸ›¡ï¸âš¡";
 }
 
 void GestionarCosechaSniper() { 
@@ -375,7 +368,7 @@ double CalcularMetaEscapeTP() {
     
     double priceDiff = (targetActual - sumCommSwap) / (sumVol * contractSize);
     
-    double tp = (type == POSITION_TYPE_BUY) ? (avgPrice + priceDiff) : (avgPrice - priceDiff);
+    double tp = (type == POSITION_TYPE_BUY) ? (avgPrice + (priceDiff / multCent)) : (avgPrice - (priceDiff / multCent));
     return NormalizeDouble(tp, _Digits);
 }
 
@@ -426,7 +419,7 @@ void ActualizarInterfazMaster() {
         ObjectSetString(0, "MAIKO_MetaTP", OBJPROP_TEXT, "ESTADO: BUSCANDO ENTRADA EN M1...");
     }
     
-    // Forzar el HUD al frente cambiando el timeframe periódicamente
+    // Forzar el HUD al frente cambiando el timeframe periÃ³dicamente
     static datetime lastFrontTime = 0;
     datetime now = TimeLocal();
     if(now - lastFrontTime >= 2) {
@@ -577,3 +570,4 @@ void EnviarTelemetria() {
         }
     }
 }
+

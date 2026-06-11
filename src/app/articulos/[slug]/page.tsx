@@ -9,7 +9,7 @@ export const dynamicParams = true;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
-    const article = ARTICLES_DATA[slug];
+    const article = (ARTICLES_DATA as any)[slug];
 
     if (!article) return { title: "Artículo no encontrado" };
 
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ArticuloDetallePage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    const article = ARTICLES_DATA[slug];
+    const article = (ARTICLES_DATA as any)[slug];
     if (!article) notFound();
 
     const contentBlocks = article.content.split('\n\n');
@@ -62,7 +62,7 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                 <article className="glass-card border border-white/10 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-14 space-y-8 sm:space-y-12 shadow-2xl relative overflow-hidden bg-white/[0.01]">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand to-transparent opacity-80" />
                     
-                    {contentBlocks.map((block, i) => {
+                    {contentBlocks.map((block: string, i: number) => {
                         const trimmed = block.trim();
                         if (!trimmed) return null;
 
@@ -99,13 +99,13 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                                 contentToParse = lines.slice(1).join('\n');
                             }
                             
-                            const items = contentToParse.split('\n').filter(l => l.trim());
+                            const items = contentToParse.split('\n').filter((l: string) => l.trim());
                             const list = (
                                 <ul key={i + 'ul'} className="space-y-6 my-10 pl-2">
-                                    {items.map((item, li) => (
+                                    {items.map((item: string, li: number) => (
                                         <li key={li} className="text-slate-300 text-lg leading-relaxed flex items-start gap-5 group">
                                             <span className="mt-1 flex-shrink-0 w-8 h-8 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-xs font-black text-brand-light group-hover:bg-brand group-hover:text-white transition-all shadow-lg">{li + 1}</span>
-                                            <span className="pt-1 opacity-90 group-hover:opacity-100 transition-opacity" dangerouslySetInnerHTML={{ __html: item.replace(/^(\d+\.\s?|[-•✅❌]\s?)/, '').replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-black hover:text-brand-light transition-colors">$1</strong>') }} />
+                                            <span className="pt-1 opacity-90 group-hover:opacity-100 transition-opacity" dangerouslySetInnerHTML={{ __html: item.replace(/^(\d+\.\s?|[-•✅❌]\s?)/, '').replace(/\*\*([\s\S]*?)\*\*/g, '<strong class="text-white font-black hover:text-brand-light transition-colors">$1</strong>') }} />
                                         </li>
                                     ))}
                                 </ul>
@@ -114,16 +114,16 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                         }
                         // Tables
                         if (trimmed.includes('|')) {
-                            const rows = trimmed.split('\n').filter(r => r.includes('|') && !r.match(/^\|[-\s|]+\|$/));
+                            const rows = trimmed.split('\n').filter((r: string) => r.includes('|') && !r.match(/^\|[-\s|]+\|$/));
                             return (
                                 <div key={i} className="my-12 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.01] shadow-2xl group/table">
                                     <table className="w-full text-sm">
                                         <tbody>
-                                            {rows.map((row, ri) => (
+                                            {rows.map((row: string, ri: number) => (
                                                 <tr key={ri} className={ri === 0 ? 'bg-white/5 border-b border-white/10' : 'border-b border-white/[0.03] hover:bg-brand/[0.02] transition-colors'}>
-                                                    {row.split('|').filter(c => c.trim()).map((cell, ci) => (
+                                                    {row.split('|').filter((c: string) => c.trim()).map((cell: string, ci: number) => (
                                                         <td key={ci} className={`py-5 px-8 ${ri === 0 ? 'font-black text-brand-light text-[10px] uppercase tracking-[0.3em]' : 'text-slate-300'}`}>
-                                                            <span dangerouslySetInnerHTML={{ __html: cell.trim().replace(/\*\*(.*?)\*\*/gs, '<strong class="text-white font-bold">$1</strong>') }} />
+                                                            <span dangerouslySetInnerHTML={{ __html: cell.trim().replace(/\*\*([\s\S]*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>') }} />
                                                         </td>
                                                     ))}
                                                 </tr>
@@ -144,7 +144,7 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                         const isFirstParagraph = i === 1 || (i === 0 && !trimmed.startsWith('#'));
                         return <p key={i} className={`text-slate-300 text-[17px] sm:text-[19px] leading-[1.8] font-normal mb-10 opacity-90 hover:opacity-100 transition-opacity ${isFirstParagraph ? 'first-letter:text-6xl first-letter:font-black first-letter:text-brand first-letter:mr-3 first-letter:float-left first-letter:leading-[0.85]' : ''}`} dangerouslySetInnerHTML={{
                             __html: trimmed
-                                .replace(/\*\*(.*?)\*\*/gs, '<strong class="text-white font-bold">$1</strong>')
+                                .replace(/\*\*([\s\S]*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>')
                                 .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-brand-light hover:text-white font-bold underline decoration-brand/40 underline-offset-4 transition-all hover:decoration-white">$1</a>')
                         }} />;
                     })}
