@@ -45,7 +45,7 @@ input double MaxLoteIndividual = 0.02; // Lote Máximo por Operación
 // --- SEGURIDAD ---
 double MaxPipsHueco = 50.0;
 int MaxVelasHueco = 5;
-input int LimitePosicionesSOS = 4; // Máximo de operaciones abiertas
+input int LimitePosicionesSOS = 2; // Máximo de operaciones abiertas
 double ProfitBreakEven = 0.50;
 double ProteccionBeneficioDiario = 0.0;
 
