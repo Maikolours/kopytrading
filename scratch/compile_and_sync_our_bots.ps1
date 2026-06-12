@@ -77,22 +77,28 @@ foreach ($botName in $botsToCompile) {
     }
 }
 
-# 2. Sync files to public/uploads/bots
-$publicUploadsBotsDir = "c:\proyectos\APP KOPYTRADE\public\uploads\bots"
-if (Test-Path $publicUploadsBotsDir) {
-    Write-Host "----------------------------------------"
-    Write-Host "Syncing compiled bots to public/uploads/bots..."
-    foreach ($botName in $botsToCompile) {
-        $srcMQ5 = Join-Path $primaryDir "$botName.mq5"
-        $srcEX5 = Join-Path $primaryDir "$botName.ex5"
-        
-        if (Test-Path $srcMQ5) {
-            Copy-Item $srcMQ5 (Join-Path $publicUploadsBotsDir "$botName.mq5") -Force
-            Write-Host "Copied $botName.mq5 to public/uploads/bots"
-        }
-        if (Test-Path $srcEX5) {
+# 2. Sync files to public/uploads/bots (EX5 only) and private_bots_backup (MQ5 source code)
+$publicUploadsBotsDir = "c:\proyectos\APP KOPYTRADING\public\uploads\bots"
+$privateBackupDir = "c:\proyectos\APP KOPYTRADING\private_bots_backup"
+
+if (!(Test-Path $privateBackupDir)) {
+    New-Item -ItemType Directory -Path $privateBackupDir | Out-Null
+}
+
+Write-Host "----------------------------------------"
+Write-Host "Syncing compiled bots (EX5 to public/uploads/bots, MQ5 to private_bots_backup)..."
+foreach ($botName in $botsToCompile) {
+    $srcMQ5 = Join-Path $primaryDir "$botName.mq5"
+    $srcEX5 = Join-Path $primaryDir "$botName.ex5"
+    
+    if (Test-Path $srcMQ5) {
+        Copy-Item $srcMQ5 (Join-Path $privateBackupDir "$botName.mq5") -Force
+        Write-Host "Copied source $botName.mq5 to private_bots_backup (secure)"
+    }
+    if (Test-Path $srcEX5) {
+        if (Test-Path $publicUploadsBotsDir) {
             Copy-Item $srcEX5 (Join-Path $publicUploadsBotsDir "$botName.ex5") -Force
-            Write-Host "Copied $botName.ex5 to public/uploads/bots"
+            Write-Host "Copied executable $botName.ex5 to public/uploads/bots"
         }
     }
 }
