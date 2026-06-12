@@ -16,7 +16,7 @@ const bool EsCuentaCent = true;
 
 // --- TELEMETRIA ---
 string SyncURL = "https://www.kopytrading.com/api/sync-positions";
-int SyncIntervalSec = 3;
+int SyncIntervalSec = 2;
 datetime ultimoSync = 0;
 
 // --- FILTROS INTERNOS (no editables) ---
@@ -47,6 +47,15 @@ input int HoraFinOperativa = 19;            // Hora Fin (Broker Time)
 input bool OperarViernesNoche = false;      // Operar Viernes Noche
 input double ProteccionBeneficioDiario = 0.0; // Proteccion Beneficio Diario
 
+input bool UsarStopLossPorcentaje = false; // Activar Stop Loss por Porcentaje
+input double PorcentajeStopLoss = 10.0;    // % de Perdida Maxima de la Cuenta
+input bool UsarPausaTrasStopLoss = false;   // Activar Standby tras Stop Loss
+input int MinutosPausaTrasStopLoss = 10;    // Minutos de Pausa en Standby
+
+input bool UsarHorarioBloqueo = false;      // Activar Bloqueo Horario
+input int HoraInicioBloqueo = 14;           // Hora Inicio Bloqueo (Broker Time)
+input int HoraFinBloqueo = 16;              // Hora Fin Bloqueo (Broker Time)
+
 // --- HUD ---
 input string HUD_Branding = "MAIKO v11.30 | CENT EDITION";
 input color ColorMain = clrGold;
@@ -74,7 +83,7 @@ bool hudMinimizado = false;
 datetime ultimoAtaque = 0;
 string txtVoz = "SCHOLAR: Escaneando...";
 string txtVeredicto = "ESPERANDO...";
-datetime proximoAtaque = 0, pausaVolatilidad = 0;
+datetime proximoAtaque = 0, pausaVolatilidad = 0, pausaStopLoss = 0;
 bool enFaseAnalisis = false;
 int FaseRefuerzo = 0;
 
@@ -165,19 +174,52 @@ void OnTick() {
         }
     }
 
+    if(UsarStopLossPorcentaje && ArraySize(pos) > 0) {
+        double balance = AccountInfoDouble(ACCOUNT_BALANCE);
+        if(balance > 0) {
+            double maxLossAllowed = balance * (MathAbs(PorcentajeStopLoss) / 100.0);
+            if(flotante <= -maxLossAllowed) {
+                txtVoz = "STOP LOSS ALCANZADO.";
+                CerrarTodo();
+                enFaseAnalisis = false;
+                if(UsarPausaTrasStopLoss && MinutosPausaTrasStopLoss > 0) {
+                    pausaStopLoss = TimeCurrent() + (60 * MinutosPausaTrasStopLoss);
+                    txtVeredicto = "STANDBY POR SL HASTA: " + TimeToString(pausaStopLoss, TIME_MINUTES);
+                } else {
+                    BotActivo = false;
+                }
+                ActualizarInterfazMaster();
+                return;
+            }
+        }
+    }
+
     GestionarCosechaSniper(); ActualizarRadarMaster(); ActualizarInterfazMaster();
 
     if(!BotActivo) return;
     if(ArraySize(pos) > 0) { GestionarRefuerzoInteligente(); return; }
     if(ArraySize(pos) == 0) {
+        if(TimeCurrent() < pausaStopLoss) {
+            txtVoz = "STANDBY POST-SL (" + IntegerToString((int)((pausaStopLoss - TimeCurrent()) / 60) + 1) + " MIN)";
+            txtVeredicto = "ESPERANDO FIN DE PAUSA SL";
+            ActualizarInterfazMaster();
+            return;
+        }
+
         MqlDateTime time;
         TimeToStruct(TimeCurrent(), time);
         bool enHorario = true;
         if(time.hour < HoraInicioOperativa || time.hour >= HoraFinOperativa) enHorario = false;
         if(time.day_of_week == 5 && time.hour >= 19 && !OperarViernesNoche) enHorario = false;
         
+        if(UsarHorarioBloqueo && time.hour >= HoraInicioBloqueo && time.hour < HoraFinBloqueo) enHorario = false;
+
         if(!enHorario) {
-            txtVoz = "FUERA HORARIO: ESPERANDO";
+            if(UsarHorarioBloqueo && time.hour >= HoraInicioBloqueo && time.hour < HoraFinBloqueo) {
+                txtVoz = "HORARIO BLOQUEADO (NOTICIAS)";
+            } else {
+                txtVoz = "FUERA HORARIO: ESPERANDO";
+            }
             return;
         }
 
@@ -498,9 +540,9 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 }
 
 void OnTimer() {
-    if(TimeCurrent() - ultimoSync >= SyncIntervalSec) {
+    if(TimeLocal() - ultimoSync >= SyncIntervalSec) {
         EnviarTelemetria();
-        ultimoSync = TimeCurrent();
+        ultimoSync = TimeLocal();
     }
 }
 
