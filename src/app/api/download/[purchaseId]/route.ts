@@ -47,7 +47,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ purchase
 
     try {
         const filename = relativePath.split("/").pop();
-        const filePath = path.join(process.cwd(), "public", "uploads", filename as string);
+        const cleanPath = relativePath.startsWith("/") ? relativePath.substring(1) : relativePath;
+        const filePath = path.join(process.cwd(), "public", cleanPath);
         const fileBuffer = await readFile(filePath);
 
         const headers = new Headers();
