@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Card, CardHeader, CardContent, CardTitle, CardFooter } from "./ui/Card";
 import { Button } from "./ui/Button";
 import { BotRemoteControl } from "./BotRemoteControl";
@@ -87,6 +87,20 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
     const [copiedId, setCopiedId] = useState<string | null>(null);
     const [selectedBotIndices, setSelectedBotIndices] = useState<Record<string, number>>({});
 
+    // Cargar valores guardados en sessionStorage al montar para evitar reseteos por router.refresh()
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const savedCat = sessionStorage.getItem("dashboard_active_category");
+            if (savedCat && categories.includes(savedCat)) {
+                setActiveCategory(savedCat);
+            }
+            const savedPurchaseId = sessionStorage.getItem("dashboard_selected_purchase_id");
+            if (savedPurchaseId) {
+                setSelectedPurchaseId(savedPurchaseId);
+            }
+        }
+    }, [categories]);
+
     const handleCopy = (id: string) => {
         navigator.clipboard.writeText(id);
         setCopiedId(id);
@@ -99,6 +113,10 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
     const handleCategoryChange = (cat: string) => {
         setActiveCategory(cat);
         setSelectedPurchaseId(null);
+        if (typeof window !== "undefined") {
+            sessionStorage.setItem("dashboard_active_category", cat);
+            sessionStorage.removeItem("dashboard_selected_purchase_id");
+        }
     };
 
     // Memoizar la agrupación de bots individuales por ID de compra en lugar de agruparlos de forma agresiva
@@ -262,7 +280,12 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
 
                                                 {/* Botón de Entrada */}
                                                 <button
-                                                    onClick={() => setSelectedPurchaseId(p.id)}
+                                                    onClick={() => {
+                                                        setSelectedPurchaseId(p.id);
+                                                        if (typeof window !== "undefined") {
+                                                            sessionStorage.setItem("dashboard_selected_purchase_id", p.id);
+                                                        }
+                                                    }}
                                                     className="w-full mt-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest text-center text-black bg-white hover:bg-brand-light hover:text-white hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-all relative z-10 shrink-0"
                                                 >
                                                     Entrar al Dashboard ⚡
@@ -276,7 +299,12 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                             /* ================= DASHBOARD EXCLUSIVO DE UN SOLO BOT (NIVEL 2) ================= */
                             <div className="animate-in fade-in duration-500">
                                 <button 
-                                    onClick={() => setSelectedPurchaseId(null)}
+                                    onClick={() => {
+                                        setSelectedPurchaseId(null);
+                                        if (typeof window !== "undefined") {
+                                            sessionStorage.removeItem("dashboard_selected_purchase_id");
+                                        }
+                                    }}
                                     className="mb-6 flex items-center gap-2 px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest bg-white/5 border border-white/10 hover:bg-white/10 hover:border-brand-light/50 text-white transition-all shadow-lg"
                                 >
                                     ← Volver al panel de bots

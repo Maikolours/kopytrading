@@ -167,7 +167,7 @@ export async function POST(req: Request) {
                     // BTC bot -> Map specifically to MAIKO PRO BTC
                     matchedId = "cmn9hfaxg000lvhbcqidlvvfm";
                 } else if (botSymbol.includes("XAU") || botSymbol.includes("GOLD")) {
-                    const isDemoAccount = isReal === false || isReal === "false" || accountStr === "1028690";
+                    const isDemoAccount = (isReal === false || isReal === "false" || accountStr === "1028690" || accountStr === "11649344") && accountStr !== "27625151";
                     if (isDemoAccount) {
                         // Demo account -> Map specifically to MAIKO PRO GOLD DEMO
                         matchedId = "cmn9hfal4000fvhbcr34kst5x";
