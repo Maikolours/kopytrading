@@ -1,8 +1,9 @@
-- [x] Implementar la función de envío de correos de expiración en `src/lib/email.ts` con copias a `viajaconsakura@gmail.com`.
-- [x] Implementar la lógica de verificación de días restantes y envío de correos semanales/finales en `src/app/api/sync-positions/route.ts`.
-- [x] Modificar los parámetros por defecto de la versión CENT (`NORMAL_HISTORICO_CENT.mq5`).
-- [x] Corregir la fórmula matemática del `ESCAPE TP` en el HUD de la versión CENT.
-- [x] Eliminar los elementos visuales y de configuración de Trial en el bot `NORMAL_HISTORICO.mq5`.
-- [x] Agregar el contador detallado de horas y minutos en la cuenta regresiva del Trial y el aviso en color naranja/rojo en `CLIENT_TRIAL.mq5`.
-- [x] Compilar y desplegar las 3 versiones de los bots.
-- [x] Realizar un build de validación de Next.js y subir los cambios al repositorio.
+- [ ] Implementar notificaciones y alertas de actualización de bot
+    - [ ] Agregar `sendVersionUpdateEmail` en `src/lib/email.ts`
+    - [ ] Modificar `GET` y `PUT` en `src/app/api/admin/bots/route.ts`
+    - [ ] Implementar aviso de actualización en `src/components/BotCard.tsx`
+    - [ ] Implementar indicador dinámico en `src/components/DashboardContainer.tsx`
+    - [ ] Implementar formulario de actualización en `src/app/admin/page.tsx`
+- [ ] Compilar y verificar el build local (`npm run build`)
+- [ ] Probar el envío de correo de actualización y visualizar alertas en el Dashboard
+- [ ] Desplegar los cambios a producción en Vercel

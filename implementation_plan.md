@@ -1,52 +1,61 @@
-# Plan de Implementación: Ajuste de Bots Maiko y Notificaciones de Trial
+# Plan de Implementación: Alertas de Actualización y Notificaciones por Correo de Nueva Versión
 
-Este plan detalla los cambios técnicos realizados y planificados para los bots de trading Maiko (MQL5) y la plataforma de copytrading (Next.js backend) para cumplir con los requerimientos del usuario.
+Este plan describe la implementación de un sistema de alertas en el panel de control del cliente (Dashboard) cuando se detecte una discrepancia entre la versión del bot ejecutándose en MetaTrader 5 (telemetría) y la versión disponible en el servidor (Base de Datos). Además, se incorpora la funcionalidad para que el administrador envíe un correo electrónico a todos los licenciatarios activos informando sobre la nueva actualización al subir una versión.
 
-## Cambios Solicitados e Implementados
+## User Review Required
 
-### 1. Bot MQL5 CENT (`Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO_CENT.mq5`)
-* **Ajuste de Parámetros:**
-  - `ProfitCosechaIndividual` establecido por defecto a `0.06` (6 centavos).
-  - `ProfitNetoFlush` establecido por defecto a `0.25` (25 centavos).
-  - `LimitePosicionesSOS` establecido por defecto a `1` (lo que limita las posiciones abiertas simultáneamente a un máximo de 2: 1 de ataque + 1 de SOS).
-* **Corrección del Escape TP:**
-  - Corregido el error de conversión de unidades dividiendo el `priceDiff` (que viene en centavos) por `multCent` (100) antes de calcular el take profit final en USD: `avgPrice + (priceDiff / multCent)`.
-* **Visualización del HUD:**
-  - Se añade la etiqueta estática `LICENCIA: ACTIVA` en color amarillo para mantener consistencia visual y no mostrar ningún contador de trial.
+> [!IMPORTANT]
+> - Las alertas en el panel del cliente se basan en la comparación de `runningVersion` (enviado por telemetría del bot) o `lastDownloadedVersion` con `botProduct.version`.
+> - En el panel de administración se agregará un formulario para "Actualizar Versión de Bot" que permitirá subir la versión del producto en BD e incluirá un selector opcional para enviar una notificación automática por correo electrónico a todos los clientes que tengan licencias activas para ese bot.
+> - El correo utilizará la integración de **Resend** ya configurada en el sistema.
 
-### 2. Bot MQL5 NORMAL (`Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO.mq5`)
-* **Limpieza de Trial:**
-  - Eliminado el parámetro de entrada `DiasDeTrial`.
-  - Desactivado el chequeo del trial en `OnInit()`.
-  - Modificado el HUD para que muestre de forma fija: `LICENCIA: ACTIVA` en color amarillo.
+## Cambios Propuestos
 
-### 3. Bot MQL5 TRIAL (`Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_TRIAL.mq5`)
-* **Contador HUD con Cuenta Regresiva:**
-  - Modificado `OnTick()` para recalcular de forma dinámica el tiempo restante del ciclo diario de 24 horas y los días restantes de trial.
-  - El HUD ahora muestra: `TRIAL: DIA X [HHh MMm]` en color amarillo.
-* **Avisos de Expiración:**
-  - Cuando quedan 7 o menos días, el color cambia a naranja/rojo y el texto se actualiza dinámicamente a: `EXPIRA EN X DIAS [HHh MMm] | ADQUIERE REAL`.
-  - Cuando el trial expira, se muestra `TRIAL EXPIRADO` en color rojo y el bot apaga automáticamente la operativa.
+### Componente: Backend & Helper de Emails
 
-### 4. Automatización de Emails y Copia a Sakura
-* **Copia de seguridad a Sakura:**
-  - Todos los correos electrónicos de Kopytrading (`sendWelcomeEmail`, `sendTrialProgressEmail`, `sendTrialExpiredEmail`) incluyen automáticamente en el BCC a `viajaconsakura@gmail.com` para que el dueño reciba copia de todo y pueda auditarlos.
-* **Emails Semanales de Progreso:**
-  - Envío automático de emails de progreso a los usuarios registrados al completar cada semana de operativa:
-    - **Semana 1 Completada:** a los 23 días restantes (7 días transcurridos).
-    - **Semana 2 Completada:** a los 16 días restantes (14 días transcurridos).
-    - **Semana 3 Completada:** a los 9 días restantes (21 días transcurridos).
-    - **Semana 4 / Alerta Final:** a los 2 días restantes (28 días transcurridos).
-* **Email de Expiración:**
-  - Envío automático del correo recordando adquirir la versión Real en el momento exacto en que expira la demo (`diasRestantes <= 0` o `trialExpirado == true`).
+#### [MODIFY] [email.ts](file:///C:/proyectos/APP%20KOPYTRADING/src/lib/email.ts)
+- Añadir la función `sendVersionUpdateEmail(email, botName, newVersion, purchaseId)` para enviar el correo con un diseño de alta calidad (glassmorphism/estilo oscuro) alineado con la estética de KopyTrading.
+- Explicar las instrucciones para que el cliente actualice el archivo `.EX5` en su terminal de MetaTrader 5 sin alterar sus licencias.
+
+#### [MODIFY] [route.ts](file:///C:/proyectos/APP%20KOPYTRADING/src/app/api/admin/bots/route.ts)
+- Implementar el método `GET` para obtener el listado de todos los productos de bots y mostrarlos en el administrador.
+- Implementar el método `PUT` para actualizar la versión de un bot de forma dinámica y, si `sendEmails === true`, buscar todos los usuarios con compras válidas y enviarles el correo de actualización.
 
 ---
 
-## Estado del Plan y Siguientes Pasos
+### Componente: UI Panel de Control (Dashboard)
 
-1. **[HECHO]** Modificación del bot CENT con los parámetros por defecto de fábrica (0.06 individual, 0.25 colectivo, límite 1 SOS, escape TP corregido).
-2. **[HECHO]** Modificación del bot NORMAL para quitar todo rastro de Trial y mostrar `LICENCIA: ACTIVA` permanentemente en el HUD.
-3. **[HECHO]** Modificación del bot TRIAL para añadir la cuenta regresiva en formato `[HHh MMm]` y las alertas de última semana en color naranja/rojo.
-4. **[HECHO]** Compilación exitosa de todos los bots mediante MetaEditor64 y sincronización a los 3 terminales locales y a la carpeta de descargas de la web (`public/uploads/bots`).
-5. **[PENDIENTE]** Modificar `src/lib/email.ts` para estructurar la plantilla de los correos semanales (Semana 1, 2, 3, 4) y de expiración.
-6. **[PENDIENTE]** Modificar la lógica del endpoint de sincronización (`src/app/api/sync-positions/route.ts`) para despachar los emails de progreso semanales y de expiración usando flags guardados en los settings del bot para evitar envíos duplicados.
+#### [MODIFY] [BotCard.tsx](file:///C:/proyectos/APP%20KOPYTRADING/src/components/BotCard.tsx)
+- Recuperar la versión del bot de la telemetría almacenada en `purchase?.botSettings?.[0]?.settings` (`runningVersion`).
+- Compararla con `botProduct.version` (`latestVersion`).
+- Si `runningVersion` (o en su defecto `purchase.lastDownloadedVersion`) es menor o diferente a `latestVersion`, mostrar una alerta estética en color ámbar/dorado dentro del bloque de descargas invitando a descargar la versión `latestVersion`.
+
+#### [MODIFY] [DashboardContainer.tsx](file:///C:/proyectos/APP%20KOPYTRADING/src/components/DashboardContainer.tsx)
+- Agregar un indicador dinámico y parpadeante (Amber Badge: `ACTUALIZACIÓN vX.XX`) en la vista general (mini-tarjetas del catálogo) al lado del estado ONLINE/OFFLINE para alertar al cliente inmediatamente al ingresar al panel.
+
+---
+
+### Componente: UI Panel de Administración
+
+#### [MODIFY] [page.tsx](file:///C:/proyectos/APP%20KOPYTRADING/src/app/admin/page.tsx)
+- Cargar la lista de bots en el administrador a través de la API `GET /api/admin/bots`.
+- Añadir una nueva pestaña o sección llamada **"Actualizar Versión de Bot"** con un formulario intuitivo.
+- Campos del formulario:
+  - Bot a actualizar (Selector dinámico de bots activos).
+  - Nueva Versión (Texto, ej: `11.30`).
+  - Descripción de cambios/notas (Texto).
+  - Checkbox: "Enviar correo de notificación a todos los usuarios con licencia activa" (por defecto `true`).
+  - Botón: "Actualizar y Notificar".
+
+---
+
+## Plan de Verificación
+
+### Pruebas de Compilación y Servidor
+1. Ejecutar compilación local (`npm run build`) para verificar la ausencia de errores en TypeScript o Next.js.
+2. Comprobar que no hay warnings en las peticiones del dashboard.
+
+### Pruebas Manuales
+1. Cambiar temporalmente la versión de un bot en la base de datos (por ejemplo, el demo de Sakura) a una versión superior para forzar la aparición de la alerta de actualización.
+2. Confirmar visualmente la presencia de la alerta en la mini-tarjeta del dashboard y dentro de la pestaña de descargas del bot del cliente.
+3. Ejecutar el formulario de actualización de versión en el panel de administrador para el email `viajaconsakura@gmail.com` y comprobar en consola o Resend que se envíe el correo correspondiente con los datos exactos.

@@ -9,13 +9,24 @@ export default function AdminPage() {
     const { data: session, status } = useSession();
     const router = useRouter();
     
-    const [activeTab, setActiveTab] = useState<"metrics" | "publish">("metrics");
+    const [activeTab, setActiveTab] = useState<"metrics" | "publish" | "update">("metrics");
     const [metrics, setMetrics] = useState<any>(null);
     const [loadingMetrics, setLoadingMetrics] = useState(true);
     
     // Estados para el formulario de publicación
     const [loadingForm, setLoadingForm] = useState(false);
     const [message, setMessage] = useState("");
+
+    // Estados para el formulario de actualización de versión
+    const [bots, setBots] = useState<any[]>([]);
+    const [loadingBots, setLoadingBots] = useState(false);
+    const [updatingBotId, setUpdatingBotId] = useState("");
+    const [newVersion, setNewVersion] = useState("");
+    const [sendEmails, setSendEmails] = useState(true);
+    const [ex5Path, setEx5Path] = useState("");
+    const [pdfPath, setPdfPath] = useState("");
+    const [updateMessage, setUpdateMessage] = useState("");
+    const [updating, setUpdating] = useState(false);
 
     // Bloqueo y redirección de seguridad
     useEffect(() => {
@@ -26,12 +37,28 @@ export default function AdminPage() {
         }
     }, [status, session, router]);
 
-    // Cargar métricas del servidor
+    // Cargar métricas y bots del servidor
     useEffect(() => {
         if (session?.user && (session.user as any).role === "ADMIN") {
             fetchMetrics();
+            fetchBots();
         }
     }, [session]);
+
+    const fetchBots = async () => {
+        setLoadingBots(true);
+        try {
+            const res = await fetch("/api/admin/bots");
+            if (res.ok) {
+                const data = await res.json();
+                setBots(data.bots || []);
+            }
+        } catch (e) {
+            console.error("Error fetching bots:", e);
+        } finally {
+            setLoadingBots(false);
+        }
+    };
 
     const fetchMetrics = async () => {
         setLoadingMetrics(true);
@@ -76,6 +103,54 @@ export default function AdminPage() {
         }
     };
 
+    const handleBotChange = (botId: string) => {
+        setUpdatingBotId(botId);
+        const selectedBot = bots.find(b => b.id === botId);
+        if (selectedBot) {
+            setNewVersion(selectedBot.version || "");
+            setEx5Path(selectedBot.ex5FilePath || "");
+            setPdfPath(selectedBot.pdfFilePath || "");
+        } else {
+            setNewVersion("");
+            setEx5Path("");
+            setPdfPath("");
+        }
+    };
+
+    const handleUpdateVersion = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setUpdating(true);
+        setUpdateMessage("");
+        try {
+            const res = await fetch("/api/admin/bots", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    botProductId: updatingBotId,
+                    version: newVersion,
+                    sendEmails,
+                    ex5FilePath: ex5Path || undefined,
+                    pdfFilePath: pdfPath || undefined
+                })
+            });
+
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setUpdateMessage(`✅ Versión actualizada con éxito a v${newVersion}.` + (data.emailsSent > 0 ? ` Se enviaron ${data.emailsSent} correos electrónicos.` : ""));
+                fetchBots(); // Recargar bots
+                fetchMetrics(); // Recargar métricas
+            } else {
+                setUpdateMessage(`❌ Error: ${data.error || "No se pudo actualizar."}`);
+            }
+        } catch (err: any) {
+            setUpdateMessage(`❌ Error fatal: ${err.message}`);
+        } finally {
+            setUpdating(false);
+        }
+    };
+
     if (status === "loading" || !session || (session.user as any).role !== "ADMIN") {
         return (
             <div className="min-h-screen flex items-center justify-center bg-surface">
@@ -114,10 +189,16 @@ export default function AdminPage() {
                         >
                             🤖 Publicar Bot
                         </button>
+                        <button 
+                            onClick={() => setActiveTab("update")}
+                            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === "update" ? "bg-brand text-white shadow-md shadow-brand/20" : "text-text-muted hover:text-white"}`}
+                        >
+                            🔔 Actualizar Versión
+                        </button>
                     </div>
                 </div>
 
-                {activeTab === "metrics" ? (
+                {activeTab === "metrics" && (
                     <div className="space-y-8">
                         {/* Metrics Grid Cards */}
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -303,7 +384,9 @@ export default function AdminPage() {
                         </div>
 
                     </div>
-                ) : (
+                )}
+
+                {activeTab === "publish" && (
                     /* Existing Form to Publish Bots */
                     <div className="glass-card p-8 border border-white/10 rounded-2xl">
                         <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
@@ -362,6 +445,92 @@ export default function AdminPage() {
 
                             <Button type="submit" disabled={loadingForm} size="lg" className="w-full sm:w-auto">
                                 {loadingForm ? "Publicando en la BD..." : "Publicar Bot"}
+                            </Button>
+                        </form>
+                    </div>
+                )}
+
+                {activeTab === "update" && (
+                    <div className="glass-card p-8 border border-white/10 rounded-2xl">
+                        <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                            <span>🔔</span> Actualizar Versión de Bot y Notificar Clientes
+                        </h2>
+
+                        {updateMessage && (
+                            <div className="p-4 mb-6 rounded-lg bg-surface-light border border-white/10 text-white font-medium">
+                                {updateMessage}
+                            </div>
+                        )}
+
+                        <form onSubmit={handleUpdateVersion} className="space-y-6">
+                            <div className="grid sm:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-sm text-text-muted">Seleccionar Bot a Actualizar</label>
+                                    <select 
+                                        value={updatingBotId} 
+                                        onChange={(e) => handleBotChange(e.target.value)}
+                                        required 
+                                        className="w-full bg-surface/50 border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-brand transition-all"
+                                    >
+                                        <option value="">-- Selecciona un Bot --</option>
+                                        {bots.map((b) => (
+                                            <option key={b.id} value={b.id}>
+                                                {b.name} ({b.instrument}) - v{b.version}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm text-text-muted">Nueva Versión (ej: 11.30 o 5.84)</label>
+                                    <input 
+                                        type="text" 
+                                        value={newVersion} 
+                                        onChange={(e) => setNewVersion(e.target.value)}
+                                        required 
+                                        placeholder="v1.0"
+                                        className="w-full bg-surface/50 border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-brand transition-all" 
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid sm:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-sm text-text-muted">Ruta Archivo .EX5 (opcional)</label>
+                                    <input 
+                                        type="text" 
+                                        value={ex5Path} 
+                                        onChange={(e) => setEx5Path(e.target.value)}
+                                        placeholder="/uploads/..."
+                                        className="w-full bg-surface/50 border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-brand transition-all" 
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm text-text-muted">Ruta Manual .PDF (opcional)</label>
+                                    <input 
+                                        type="text" 
+                                        value={pdfPath} 
+                                        onChange={(e) => setPdfPath(e.target.value)}
+                                        placeholder="/uploads/..."
+                                        className="w-full bg-surface/50 border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-brand transition-all" 
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5">
+                                <input 
+                                    type="checkbox" 
+                                    id="sendEmailsCheckbox"
+                                    checked={sendEmails} 
+                                    onChange={(e) => setSendEmails(e.target.checked)}
+                                    className="w-4 h-4 rounded text-brand focus:ring-brand accent-brand bg-surface border-white/10" 
+                                />
+                                <label htmlFor="sendEmailsCheckbox" className="text-xs text-white/80 font-semibold cursor-pointer select-none">
+                                    Enviar correo automático de nueva actualización a todos los licenciatarios activos de este producto.
+                                </label>
+                            </div>
+
+                            <Button type="submit" disabled={updating || !updatingBotId} size="lg" className="w-full sm:w-auto">
+                                {updating ? "Actualizando..." : "Actualizar Versión y Notificar 🚀"}
                             </Button>
                         </form>
                     </div>

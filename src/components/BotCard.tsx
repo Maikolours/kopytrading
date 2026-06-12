@@ -55,7 +55,14 @@ export const BotCard = memo(function BotCard({
     let accountTypeColor = hasRealSync ? "bg-success/20 text-success border-success/40" : "bg-orange-500/20 text-orange-400 border-orange-500/40";
     
     const botSettings = purchase?.botSettings?.[0]?.settings;
-    const telemetryPnl = botSettings ? (typeof botSettings === 'string' ? JSON.parse(botSettings).pnl_today : botSettings.pnl_today) : null;
+    const parsedSettings = botSettings ? (typeof botSettings === 'string' ? JSON.parse(botSettings) : botSettings) : null;
+    const runningVersion = parsedSettings?.version;
+    const latestVersion = botProduct.version || "1.0";
+    const hasUpdate = runningVersion 
+        ? (runningVersion !== latestVersion) 
+        : (purchase?.lastDownloadedVersion ? (purchase.lastDownloadedVersion !== latestVersion) : false);
+
+    const telemetryPnl = parsedSettings ? parsedSettings.pnl_today : null;
     const dailyProfit = telemetryPnl !== null && telemetryPnl !== undefined 
         ? Number(telemetryPnl) 
         : (purchase?.pastTrades || []).reduce((acc: number, t: any) => acc + (Number(t.profit) || 0), 0);
@@ -213,16 +220,30 @@ export const BotCard = memo(function BotCard({
                             </div>
                             
                             {/* SECCIÓN DE DESCARGAS DE ARCHIVOS */}
-                            <div className={`p-4 rounded-xl bg-black/60 border ${theme?.border || 'border-brand/20'} shadow-xl space-y-3`}>
-                                <p className={`text-[8px] ${theme?.accent || 'text-brand-light'} uppercase tracking-widest font-black flex items-center gap-2`}>
-                                    📥 DESCARGAS INSTITUCIONALES
+                            <div className={`p-4 rounded-xl bg-black/60 border ${hasUpdate ? 'border-amber-500/50 shadow-[0_0_20px_rgba(245,158,11,0.15)]' : (theme?.border || 'border-brand/20')} shadow-xl space-y-3`}>
+                                <p className={`text-[8px] ${hasUpdate ? 'text-amber-400' : (theme?.accent || 'text-brand-light')} uppercase tracking-widest font-black flex items-center gap-2`}>
+                                    📥 DESCARGAS INSTITUCIONALES {hasUpdate && <span className="animate-pulse">⚠️ ¡ACTUALIZACIÓN DISPONIBLE!</span>}
                                 </p>
+                                {hasUpdate && (
+                                    <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] space-y-1">
+                                        <p className="font-black flex items-center gap-1.5 uppercase">
+                                            <span>⭐</span> NUEVA VERSIÓN v{latestVersion} LISTA
+                                        </p>
+                                        <p className="opacity-90 leading-relaxed font-semibold">
+                                            {runningVersion ? (
+                                                <>Tu EA en MetaTrader 5 está ejecutando la versión <b>{runningVersion}</b>. Descarga e instala esta actualización para habilitar las últimas optimizaciones y mejoras de seguridad.</>
+                                            ) : (
+                                                <>Hay una nueva actualización de este algoritmo disponible en el servidor. Recomendamos descargar el archivo .ex5 y reemplazarlo en tu terminal.</>
+                                            )}
+                                        </p>
+                                    </div>
+                                )}
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                     <a 
                                         href={`/api/download/${purchase.id}?type=ex5`}
-                                        className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-[9px] font-black uppercase tracking-wider text-center text-white bg-white/5 border border-white/10 hover:border-brand-light/50 hover:bg-brand/10 transition-all hover:scale-[1.02] active:scale-[0.98] duration-300"
+                                        className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-[9px] font-black uppercase tracking-wider text-center text-white bg-white/5 border border-white/10 hover:border-brand-light/50 hover:bg-brand/10 transition-all hover:scale-[1.02] active:scale-[0.98] duration-300 ${hasUpdate ? 'border-amber-500/40 hover:border-amber-400/80 bg-amber-500/5 hover:bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.1)]' : ''}`}
                                     >
-                                        🤖 DESCARGAR BOT (.EX5)
+                                        🤖 DESCARGAR BOT (.EX5) {hasUpdate && "✨"}
                                     </a>
                                     <a 
                                         href={`/api/download/${purchase.id}?type=pdf`}

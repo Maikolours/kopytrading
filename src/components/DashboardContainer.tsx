@@ -175,13 +175,22 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                                             daysRemaining = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
                                         }
 
+                                        // Cálculo de versión y actualizaciones
+                                        const botSettings = p.botSettings?.[0]?.settings;
+                                        const parsedSettings = botSettings ? (typeof botSettings === 'string' ? JSON.parse(botSettings) : botSettings) : null;
+                                        const runningVersion = parsedSettings?.version;
+                                        const latestVersion = botProduct.version || "1.0";
+                                        const hasUpdate = runningVersion 
+                                            ? (runningVersion !== latestVersion) 
+                                            : (p.lastDownloadedVersion ? (p.lastDownloadedVersion !== latestVersion) : false);
+
                                         return (
                                             <div 
                                                 key={p.id}
-                                                className={`group relative overflow-hidden rounded-[2rem] border ${botTheme.border} bg-surface/40 backdrop-blur-2xl p-6 transition-all duration-500 hover:scale-[1.02] hover:border-brand-light/50 hover:shadow-[0_15px_35px_rgba(168,85,247,0.15)] flex flex-col justify-between h-[260px]`}
+                                                className={`group relative overflow-hidden rounded-[2rem] border ${hasUpdate ? 'border-amber-500/50 shadow-[0_0_25px_rgba(245,158,11,0.1)]' : botTheme.border} bg-surface/40 backdrop-blur-2xl p-6 transition-all duration-500 hover:scale-[1.02] hover:border-brand-light/50 hover:shadow-[0_15px_35px_rgba(168,85,247,0.15)] flex flex-col justify-between h-[260px]`}
                                             >
                                                 {/* Glow de fondo decorativo */}
-                                                <div className={`absolute top-0 right-0 w-32 h-32 ${botTheme.glow} blur-[50px] -mr-10 -mt-10 rounded-full transition-all duration-700 opacity-30 group-hover:opacity-60`} />
+                                                <div className={`absolute top-0 right-0 w-32 h-32 ${hasUpdate ? 'bg-amber-500/20' : botTheme.glow} blur-[50px] -mr-10 -mt-10 rounded-full transition-all duration-700 opacity-30 group-hover:opacity-60`} />
                                                 
                                                 {/* Header de la Mini-Tarjeta */}
                                                 <div className="space-y-3 relative z-10">
@@ -189,11 +198,18 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                                                         <span className={`px-2 py-0.5 rounded-lg text-[8px] font-black border ${accountTypeColor} tracking-widest uppercase`}>
                                                             {accountTypeLabel}
                                                         </span>
-                                                        <div className="flex items-center gap-1.5 bg-black/40 px-2 py-0.5 rounded-lg border border-white/5">
-                                                            <div className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-success animate-pulse' : 'bg-white/20'}`} />
-                                                            <span className={`text-[7px] font-black tracking-widest uppercase ${isOnline ? 'text-success' : 'text-white/30'}`}>
-                                                                {isOnline ? 'ONLINE' : 'OFFLINE'}
-                                                            </span>
+                                                        <div className="flex items-center gap-1.5">
+                                                            {hasUpdate && (
+                                                                <span className="px-2 py-0.5 rounded-lg text-[8px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse uppercase tracking-widest">
+                                                                    ACTUALIZAR v{latestVersion} ⚠️
+                                                                </span>
+                                                            )}
+                                                            <div className="flex items-center gap-1.5 bg-black/40 px-2 py-0.5 rounded-lg border border-white/5">
+                                                                <div className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-success animate-pulse' : 'bg-white/20'}`} />
+                                                                <span className={`text-[7px] font-black tracking-widest uppercase ${isOnline ? 'text-success' : 'text-white/30'}`}>
+                                                                    {isOnline ? 'ONLINE' : 'OFFLINE'}
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     
