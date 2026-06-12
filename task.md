@@ -1,9 +1,14 @@
-- [ ] Implementar notificaciones y alertas de actualización de bot
-    - [ ] Agregar `sendVersionUpdateEmail` en `src/lib/email.ts`
-    - [ ] Modificar `GET` y `PUT` en `src/app/api/admin/bots/route.ts`
-    - [ ] Implementar aviso de actualización en `src/components/BotCard.tsx`
-    - [ ] Implementar indicador dinámico en `src/components/DashboardContainer.tsx`
-    - [ ] Implementar formulario de actualización en `src/app/admin/page.tsx`
-- [ ] Compilar y verificar el build local (`npm run build`)
-- [ ] Probar el envío de correo de actualización y visualizar alertas en el Dashboard
-- [ ] Desplegar los cambios a producción en Vercel
+- [x] Implementar notificaciones y alertas de actualización de bot
+    - [x] Agregar `sendVersionUpdateEmail` en `src/lib/email.ts`
+    - [x] Modificar `GET` y `PUT` en `src/app/api/admin/bots/route.ts`
+    - [x] Implementar aviso de actualización en `src/components/BotCard.tsx`
+    - [x] Implementar indicador dinámico en `src/components/DashboardContainer.tsx`
+    - [x] Implementar formulario de actualización en `src/app/admin/page.tsx`
+- [x] Compilar y verificar el build local (`npm run build`)
+- [x] Probar el envío de correo de actualización y visualizar alertas en el Dashboard
+- [x] Desplegar los cambios a producción en Vercel
+- [x] Corregir la mezcla de datos y balances en el catálogo del Dashboard
+- [x] Implementar selector de cuentas en `BotCard` para licencias compartidas
+- [x] Filtrar posiciones activas y telemetría por la cuenta seleccionada
+- [x] Optimizar la frecuencia de envío de telemetría a 2 segundos en el EA de MT5 y desacoplar de la dependencia del tick del broker utilizando `TimeLocal()`
+- [x] Evitar el reinicio del panel de control al refrescar la página mediante el almacenamiento de pestañas activas en `sessionStorage`
