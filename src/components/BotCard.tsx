@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useState, useEffect } from "react";
 import { Card, CardHeader, CardContent, CardTitle } from "./ui/Card";
 import { Button } from "./ui/Button";
 import { BotRemoteControl } from "./BotRemoteControl";
@@ -46,16 +46,25 @@ export const BotCard = memo(function BotCard({
     };
 
     const assetTheme = getBotTheme(botProduct.instrument);
-    const activeAcc = purchase?.activePositions?.[0];
-    const isCent = activeAcc?.isCent || botProduct.name.toUpperCase().includes("CENT") || baseName.toUpperCase().includes("CENT");
-    const currency = isCent ? "USC" : "$";
-    const hasRealSync = (purchase?.activePositions || []).some((pos: any) => pos.isReal);
-    
-    let accountTypeLabel = hasRealSync ? (isCent ? "CUENTA REAL (CENT)" : "CUENTA REAL (USD)") : "CUENTA DEMO";
-    let accountTypeColor = hasRealSync ? "bg-success/20 text-success border-success/40" : "bg-orange-500/20 text-orange-400 border-orange-500/40";
-    
-    const botSettings = purchase?.botSettings?.[0]?.settings;
+    // Obtener todas las cuentas únicas de botSettings y activePositions
+    const accounts = Array.from(new Set([
+        ...(purchase?.botSettings || []).map((s: any) => s.account),
+        ...(purchase?.activePositions || []).map((pos: any) => pos.account)
+    ])).filter(Boolean);
+
+    const [selectedAccount, setSelectedAccount] = useState(accounts[0] || "unknown");
+
+    // Sincronizar selectedAccount si cambian las variantes o la compra seleccionada
+    useEffect(() => {
+        if (accounts.length > 0 && !accounts.includes(selectedAccount)) {
+            setSelectedAccount(accounts[0]);
+        }
+    }, [purchase, accounts, selectedAccount]);
+
+    const activeSettingsRecord = purchase?.botSettings?.find((s: any) => s.account === selectedAccount) || purchase?.botSettings?.[0];
+    const botSettings = activeSettingsRecord?.settings;
     const parsedSettings = botSettings ? (typeof botSettings === 'string' ? JSON.parse(botSettings) : botSettings) : null;
+
     const runningVersion = parsedSettings?.version;
     const latestVersion = botProduct.version || "1.0";
     const hasUpdate = runningVersion 
@@ -67,12 +76,22 @@ export const BotCard = memo(function BotCard({
         ? Number(telemetryPnl) 
         : (purchase?.pastTrades || []).reduce((acc: number, t: any) => acc + (Number(t.profit) || 0), 0);
         
+    const isCent = selectedAccount === "23449251" || botProduct.name.toUpperCase().includes("CENT") || baseName.toUpperCase().includes("CENT");
+    const currency = isCent ? "USC" : "$";
+    
+    // Filtrar posiciones activas por la cuenta seleccionada
+    const activePositionsFiltered = (purchase?.activePositions || []).filter((pos: any) => pos.account === selectedAccount);
+    const hasRealSync = activePositionsFiltered.some((pos: any) => pos.isReal) || (selectedAccount && selectedAccount !== "1028690" && selectedAccount !== "11649344" && selectedAccount !== "unknown");
+    
+    let accountTypeLabel = hasRealSync ? (isCent ? "CUENTA REAL (CENT)" : "CUENTA REAL (USD)") : "CUENTA DEMO";
+    let accountTypeColor = hasRealSync ? "bg-success/20 text-success border-success/40" : "bg-orange-500/20 text-orange-400 border-orange-500/40";
+        
     const isGold = botProduct.name.toLowerCase().includes("gold") || botProduct.name.toLowerCase().includes("ametra");
     const botDisplayName = botProduct.name || theme?.label || baseName;
 
-    // Formateo seguro para balance y equidad
-    const balance = purchase?.balance !== null && purchase?.balance !== undefined ? Number(purchase.balance) : null;
-    const equity = purchase?.equity !== null && purchase?.equity !== undefined ? Number(purchase.equity) : null;
+    // Formateo seguro para balance y equidad de la cuenta seleccionada
+    const balance = parsedSettings?.balance !== undefined && parsedSettings?.balance !== null ? Number(parsedSettings.balance) : (purchase?.balance !== null && purchase?.balance !== undefined ? Number(purchase.balance) : null);
+    const equity = parsedSettings?.equity !== undefined && parsedSettings?.equity !== null ? Number(parsedSettings.equity) : (purchase?.equity !== null && purchase?.equity !== undefined ? Number(purchase.equity) : null);
     const isSyncing = !balance && purchase?.lastStatus === "CARGANDO...";
 
     return (
@@ -101,6 +120,22 @@ export const BotCard = memo(function BotCard({
                                 <span className="px-2.5 py-1 rounded-lg text-[9px] font-bold bg-white/5 border border-white/5 text-gray-500 tracking-widest uppercase">
                                     {botProduct.instrument}
                                 </span>
+                                {accounts.length > 1 && (
+                                    <div className="flex items-center gap-1.5 bg-black/40 px-2 py-0.5 rounded-lg border border-white/5 h-6">
+                                        <span className="text-[6px] font-black text-gray-500 uppercase tracking-wider">CUENTA:</span>
+                                        <select 
+                                            value={selectedAccount} 
+                                            onChange={(e) => setSelectedAccount(e.target.value)}
+                                            className="bg-transparent text-[8px] font-black text-brand-light outline-none border-none cursor-pointer uppercase font-mono py-0 pr-4"
+                                        >
+                                            {accounts.map(acc => (
+                                                <option key={acc} value={acc} className="bg-surface text-white font-mono">
+                                                    #{acc}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                )}
                             </div>
                             <CardTitle className="text-lg sm:text-2xl font-black text-white tracking-tighter uppercase">
                                 {botDisplayName}
@@ -143,7 +178,7 @@ export const BotCard = memo(function BotCard({
                                 purchaseId={purchase?.id || "unknown"} 
                                 botName={botDisplayName} 
                                 symbol={botProduct.instrument}
-                                account={purchase?.activePositions?.[0]?.account || "unknown"}
+                                account={selectedAccount}
                                 isOnline={purchase?.lastSync && (Math.abs(Date.now() - new Date(purchase.lastSync).getTime()) < 300000)}
                                 theme={theme}
                                 isReal={hasRealSync}
@@ -155,9 +190,9 @@ export const BotCard = memo(function BotCard({
                             <OperativoChart 
                                 symbol={botProduct.instrument || (isGold ? "XAUUSD" : "BTCUSDT")}
                                 purchaseId={purchase?.id || "unknown"}
-                                account={purchase?.activePositions?.[0]?.account || "unknown"}
+                                account={selectedAccount}
                                 theme={theme}
-                                activePositions={purchase?.activePositions || []}
+                                activePositions={activePositionsFiltered}
                             />
 
                             {/* TERMINAL DE POSICIONES EN VIVO */}
@@ -165,24 +200,24 @@ export const BotCard = memo(function BotCard({
                                 <div className="flex items-center justify-between pb-2 border-b border-white/5">
                                     <p className="text-[9px] text-brand-light uppercase tracking-widest font-black flex items-center gap-2">
                                         <span className="relative flex h-2 w-2">
-                                            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${(purchase?.activePositions || []).length > 0 ? 'bg-emerald-400' : 'bg-amber-400'}`}></span>
-                                            <span className={`relative inline-flex rounded-full h-2 w-2 ${(purchase?.activePositions || []).length > 0 ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
+                                            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${activePositionsFiltered.length > 0 ? 'bg-emerald-400' : 'bg-amber-400'}`}></span>
+                                            <span className={`relative inline-flex rounded-full h-2 w-2 ${activePositionsFiltered.length > 0 ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
                                         </span>
                                         TERMINAL DE OPERACIONES EN VIVO
                                     </p>
                                     <span className="text-[8px] font-bold text-white/30 font-mono">
-                                        {(purchase?.activePositions || []).length} POSICIONES
+                                        {activePositionsFiltered.length} POSICIONES
                                     </span>
                                 </div>
 
-                                {(purchase?.activePositions || []).length === 0 ? (
+                                {activePositionsFiltered.length === 0 ? (
                                     <div className="py-6 text-center text-white/40 space-y-1">
                                         <p className="text-[10px] font-black uppercase tracking-wider text-white/30">🟢 BUSCANDO ENTRADAS...</p>
                                         <p className="text-[8px] font-bold">Esperando que el bot inicie un ciclo en MetaTrader 5</p>
                                     </div>
                                 ) : (
                                     <div className="max-h-[220px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
-                                        {(purchase?.activePositions || []).map((pos: any, idx: number) => {
+                                        {activePositionsFiltered.map((pos: any, idx: number) => {
                                             const isBuy = String(pos.type).toUpperCase().includes("BUY");
                                             const profitVal = Number(pos.profit) || 0;
                                             return (

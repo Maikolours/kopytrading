@@ -184,6 +184,10 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                                             ? (runningVersion !== latestVersion) 
                                             : (p.lastDownloadedVersion ? (p.lastDownloadedVersion !== latestVersion) : false);
 
+                                        const displayBalance = parsedSettings?.balance !== undefined && parsedSettings?.balance !== null 
+                                            ? Number(parsedSettings.balance) 
+                                            : (p.balance && Number(p.balance) > 0 ? Number(p.balance) : null);
+
                                         return (
                                             <div 
                                                 key={p.id}
@@ -228,7 +232,7 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                                                     <div>
                                                         <p className="text-[7px] font-black uppercase tracking-widest text-white/25">Balance MT5</p>
                                                         <p className="text-lg font-black text-white font-mono leading-none mt-1">
-                                                            {p.balance && Number(p.balance) > 0 ? `${Number(p.balance).toFixed(2)} ${currency}` : <span className="text-xs text-white/40 font-normal">Sin Sincronizar</span>}
+                                                            {displayBalance !== null ? `${displayBalance.toFixed(2)} ${currency}` : <span className="text-xs text-white/40 font-normal">Sin Sincronizar</span>}
                                                         </p>
                                                     </div>
 
