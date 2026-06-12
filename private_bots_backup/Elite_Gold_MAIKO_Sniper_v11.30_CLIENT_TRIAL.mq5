@@ -11,7 +11,7 @@
 #include <Trade\Trade.mqh>
 
 // --- CONFIGURACION ---
-input string MiLicencia = "cmn9hfal4000fvhbcr34kst5x"; // Licencia / ID de Vínculo
+input string MiLicencia = ""; // Licencia / ID de Vínculo
 input int DiasDeTrial = 30; // Días de prueba del bot
 const bool EsCuentaCent = false; // CUENTA NORMAL / GOLD / DEMO EN DOLARES (Hardcoded para evitar uso cruzado)
 

@@ -11,7 +11,7 @@
 #include <Trade\Trade.mqh>
 
 //// --- CONFIGURACION CLIENTE ---
-input string MiLicencia = "23449251";   // Licencia / ID de Vinculo
+input string MiLicencia = "";   // Licencia / ID de Vinculo
 const bool EsCuentaCent = true;
 
 // --- TELEMETRIA ---
