@@ -61,7 +61,7 @@ input int HoraInicioBloqueo = 14;           // Hora Inicio Bloqueo (Broker Time)
 input int HoraFinBloqueo = 16;              // Hora Fin Bloqueo (Broker Time)
 
 // --- HUD ---
-input string HUD_Branding = "MAIKO v11.30 | NORMAL HISTORICO";
+string HUD_Branding = "MAIKO v11.30 | CLIENT TRIAL";
 input color ColorMain = clrGold;
 input color ColorHeader = C'30,30,30';
 input color ColorBody = C'20,20,20';
@@ -144,6 +144,7 @@ int OnInit() {
     
     AgregarIndicadoresVisuales();
     CrearInterfazMaster();
+    ChartSetInteger(0, CHART_FOREGROUND, false);
       
     string gvName = "MAIKO_TRIAL_" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
     if(GlobalVariableCheck(gvName)) {
@@ -506,39 +507,8 @@ void ActualizarInterfazMaster() {
         ObjectSetString(0, "MAIKO_MetaTP", OBJPROP_TEXT, "ESTADO: BUSCANDO ENTRADA EN M1...");
     }
     
-    // Forzar el HUD al frente cambiando el timeframe periódicamente
-    static datetime lastFrontTime = 0;
-    datetime now = TimeLocal();
-    if(now - lastFrontTime >= 2) {
-        lastFrontTime = now;
-        string objs[] = {"MAIKO_Bg", "MAIKO_Head", "MAIKO_T", "MAIKO_BtnMin", 
-                         "MAIKO_Vered", "MAIKO_Hoy", "MAIKO_Flot", "MAIKO_Spd", 
-                         "MAIKO_Foot", "MAIKO_Voz", "MAIKO_BtnP", "MAIKO_BtnC", "MAIKO_MetaTP", "MAIKO_TrialUI"};
-        int total = ArraySize(objs);
-        for(int i = 0; i < total; i++) {
-            long current_tf = ObjectGetInteger(0, objs[i], OBJPROP_TIMEFRAMES);
-            if(current_tf != OBJ_NO_PERIODS) {
-                ObjectSetInteger(0, objs[i], OBJPROP_TIMEFRAMES, OBJ_NO_PERIODS);
-                ObjectSetInteger(0, objs[i], OBJPROP_TIMEFRAMES, current_tf);
-            }
-        }
-        
-        string tfs[]={"W1","D1","H4","H1","M15","M5","M1"}; 
-        for(int i=0; i<7; i++) { 
-            string o1 = "MAIKO_L_"+tfs[i];
-            string o2 = "MAIKO_Radar_"+tfs[i];
-            long tf1 = ObjectGetInteger(0, o1, OBJPROP_TIMEFRAMES);
-            long tf2 = ObjectGetInteger(0, o2, OBJPROP_TIMEFRAMES);
-            if(tf1 != OBJ_NO_PERIODS) {
-                ObjectSetInteger(0, o1, OBJPROP_TIMEFRAMES, OBJ_NO_PERIODS);
-                ObjectSetInteger(0, o1, OBJPROP_TIMEFRAMES, tf1);
-            }
-            if(tf2 != OBJ_NO_PERIODS) {
-                ObjectSetInteger(0, o2, OBJPROP_TIMEFRAMES, OBJ_NO_PERIODS);
-                ObjectSetInteger(0, o2, OBJPROP_TIMEFRAMES, tf2);
-            }
-        }
-    }
+    // Se ha desactivado el bucle de forzado de timeframe para evitar fliqueos en pantalla,
+    // ya que ahora se utiliza CHART_FOREGROUND = false en OnInit() para mantener el HUD siempre delante de las velas de forma nativa.
     ChartRedraw(); 
 }
 
