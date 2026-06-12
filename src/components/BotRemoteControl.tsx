@@ -365,8 +365,8 @@ export function BotRemoteControl({
                     </div>
                 </div>
 
-                {/* SETTINGS TRIGGER BUTTON (Visible only for Owner, or clients on Demo accounts) */}
-                {(isOwner || !isReal) && (
+                {/* SETTINGS TRIGGER BUTTON (Visible only for Owner) */}
+                {isOwner && (
                     <div className="px-4 pb-4">
                         <button
                             onClick={() => setShowSettings(!showSettings)}
@@ -383,7 +383,7 @@ export function BotRemoteControl({
 
                 {/* SETTINGS DROPDOWN PANEL */}
                 <AnimatePresence>
-                    {showSettings && (isOwner || !isReal) && (
+                    {showSettings && isOwner && (
                         <motion.div
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
