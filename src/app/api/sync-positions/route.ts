@@ -148,10 +148,16 @@ export async function POST(req: Request) {
 
         if (!purchase) {
             // v13.5 MASTER BYPASS: Sakura Industrial Pass (Hyper-Permissive for Owner)
+            const sakuraPurchases = [
+                "cmn9hfal4000fvhbcr34kst5x", // Demo Gold
+                "cmn9hfapj000hvhbca86faz0c", // Real Gold
+                "cmn9hfatl000jvhbci6l3ephi", // Cent Gold
+                "cmn9hfaxg000lvhbcqidlvvfm"  // BTC Real
+            ];
             const isSakura = purchaseId === "viajaconsakura" || 
                            purchaseId.includes("viajaconsakura") || 
                            purchaseId === "elite_sniper_master" || 
-                           purchaseId.startsWith("cmn9h");
+                           sakuraPurchases.includes(purchaseId);
             
             if (isSakura) {
                 const targetKey = body.productKey || body.licenseKey || "SNIPER-ELITE";
@@ -264,6 +270,72 @@ export async function POST(req: Request) {
                 });
                 return NextResponse.json({ error: "License type mismatch (Crossover detected)" }, { status: 403 });
             }
+        }
+
+        // --- CONTROL MULTI-CUENTA / BLOQUEO DE LICENCIA A UN SOLO TERMINAL ---
+        const accountStr = account ? String(account).trim() : "unknown";
+        if (!isOwner) {
+            const activeSession = await prisma.licenseSession.findUnique({
+                where: { purchaseId: officialPurchaseId }
+            });
+            
+            if (activeSession && activeSession.account !== accountStr) {
+                // Comprobamos si la última actividad fue en los últimos 60 minutos
+                const oneHourAgo = new Date();
+                oneHourAgo.setHours(oneHourAgo.getHours() - 1);
+                
+                if (activeSession.lastActivity > oneHourAgo) {
+                    await prisma.requestLog.create({
+                        data: { 
+                            path: "/api/sync-positions", 
+                            method: "POST", 
+                            body: JSON.stringify(body), 
+                            error: `License conflict: ${officialPurchaseId} active on account ${activeSession.account}, reject account ${accountStr}` 
+                        }
+                    });
+                    // Retornar armed: false y enviar comando CLOSE_ALL en settings para desactivar el bot no autorizado
+                    return NextResponse.json({ 
+                        success: true, 
+                        settings: {
+                            net_cycle: 5.0,
+                            hedge_trigger: 3.0,
+                            lote_manual: 0.01,
+                            lote_rescate: 0.01,
+                            max_dd: 20.0,
+                            trailling_stop: 1.2,
+                            limit_dist: 500,
+                            timeframe: "M15",
+                            lkb: 4,
+                            colchon: 1000,
+                            b1_be: 0.8, b1_gar: 0.5, b1_tra: 1.2,
+                            b2_be: 0.8, b2_gar: 0.5, b2_tra: 1.0,
+                            gr_be: 1.0, gr_gar: 0.8, gr_tra: 1.5,
+                            casOn: false,
+                            autoRA: true,
+                            giroOn: false,
+                            armed: false,
+                            pendingCmd: "CLOSE_ALL"
+                        },
+                        cmd: "CLOSE_ALL"
+                    });
+                }
+            }
+            
+            // Actualizar/Crear la sesión de la licencia vinculándola a este número de cuenta de MT5
+            await prisma.licenseSession.upsert({
+                where: { purchaseId: officialPurchaseId },
+                update: { 
+                    account: accountStr, 
+                    lastActivity: new Date(), 
+                    isActive: true 
+                },
+                create: { 
+                    purchaseId: officialPurchaseId, 
+                    account: accountStr, 
+                    lastActivity: new Date(), 
+                    isActive: true 
+                }
+            });
         }
 
         // Actualizar latido de conexión y telemetría (Sincro Supreme v1.5)
