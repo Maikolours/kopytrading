@@ -82,3 +82,9 @@ Se ejecutó la verificación del compilador de TypeScript y la generación de p�
 
 ### Despliegue en Vercel
 Todos los cambios se han desplegado de forma exitosa en Vercel y se encuentran online en [kopytrading.com](https://www.kopytrading.com).
+
+### 5. Renombrado de Directorio y Corrección de Rutas
+* **Actualización del Directorio del Proyecto:**
+  - Se corrigió el archivo `patch_bots.js` y todos los scripts en la carpeta `scratch/` para que apunten al nuevo directorio `APP KOPYTRADING` en lugar de `APP KOPYTRADE`.
+  - Se recompilaron y sincronizaron con éxito los 4 bots MetaTrader 5 activos (`REAL`, `TRIAL`, `NORMAL` y `CENT`) utilizando el script de compilación y sincronización actualizado.
+  - Se validó el build de producción de Next.js (`npm run build`) de forma exitosa y se subieron los cambios a producción mediante `git push`.
