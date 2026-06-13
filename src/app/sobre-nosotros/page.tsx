@@ -30,7 +30,7 @@ export default function SobreNosotrosPage() {
                             KopyTrading nació de una historia muy común y real. A diferencia de otros proyectos, no pretendo venderte que tengo décadas de experiencia operando en Wall Street o gestionando fondos institucionales. Mi trayectoria viene de un sector completamente ajeno a las finanzas y el trading.
                         </p>
                         <p>
-                            Hace un par de años empecé a interesarme por los mercados financieros. Rápidamente me di cuenta de que aprender a hacer trading manual de forma consistente requiere un esfuerzo de estudio enorme, un análisis en profundidad diario de los gráficos y, sobre todo, una disciplina psicológica que pocas personas pueden mantener mientras trabajan en su día a día.
+                            Cuando decidí adentrarme en el mundo de los mercados financieros, rápidamente me di cuenta de que aprender a hacer trading manual de forma consistente requiere un esfuerzo de estudio enorme, un análisis en profundidad diario de los gráficos y, sobre todo, una disciplina psicológica que pocas personas pueden mantener mientras trabajan en su día a día.
                         </p>
                         <p>
                             Por ello, como persona autodidacta, decidí ponerme a diseñar mis propias herramientas y programar robots (bots) en MetaTrader 5. Mi meta era clara: crear un software bien elaborado y probado que hiciese el trabajo pesado de analizar y abrir operaciones de manera automatizada. Quería facilitar el acceso a la rentabilidad para personas que, como yo, carecen del tiempo diario o de los conocimientos avanzados de análisis de mercado pero buscan un ingreso extra apoyados en la tecnología.
