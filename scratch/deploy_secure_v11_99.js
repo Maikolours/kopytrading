@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const projectRoot = "c:\\proyectos\\APP KOPYTRADE";
+const projectRoot = "c:\\proyectos\\APP KOPYTRADING";
 const publicBotsDir = path.join(projectRoot, "public", "uploads", "bots");
 const privateBotsDir = path.join(projectRoot, "private_bots_backup");
 

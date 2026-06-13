@@ -1,6 +1,14 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import Link from "next/link";
 import { ARTICLES } from "@/lib/constants/articles";
+import { NewsletterForm } from "@/components/NewsletterForm";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Blog de Trading Algorítmico | KopyTrading",
+    description: "Explora guías institucionales, configuraciones de MetaTrader 5 y estrategias avanzadas de trading algorítmico y scalping.",
+    keywords: ["trading algorítmico", "bots mt5", "expert advisor", "oro xauusd", "copytrading", "estrategias forex"],
+};
 
 export default function ArticulosPage() {
     return (
@@ -61,10 +69,8 @@ export default function ArticulosPage() {
                     ))}
                 </div>
 
-                <div className="mt-16 text-center">
-                    <p className="text-text-muted text-sm border border-white/10 inline-block px-6 py-3 rounded-full glass-card">
-                        Suscríbete a nuestra newsletter para recibir nuevos artículos (Próximamente)
-                    </p>
+                <div className="mt-20">
+                    <NewsletterForm />
                 </div>
             </div>
         </div>

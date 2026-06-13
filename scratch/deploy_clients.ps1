@@ -2,7 +2,7 @@ $t1 = "C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8B
 $t2 = "C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\F762D69EEEA9B4430D7F17C82167C844\MQL5\Experts\BOTS MAIKO DEV\BOTS MAIKO"
 $editor1 = "C:\Program Files\MetaTrader 5\metaeditor64.exe"
 $editor2 = "C:\Program Files\MetaTrader\metaeditor64.exe"
-$repo = "c:\proyectos\APP KOPYTRADE\public\uploads\bots"
+$repo = "c:\proyectos\APP KOPYTRADING\public\uploads\bots"
 $clients = @("Maiko_Sniper_PRO_GOLD_CLIENT.mq5", "Maiko_Sniper_PRO_CENT_CLIENT.mq5", "Maiko_BTC_Weekend_CLIENT.mq5")
 
 foreach ($f in $clients) {

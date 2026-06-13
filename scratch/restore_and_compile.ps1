@@ -1,8 +1,8 @@
 # Script to restore slow PRUEBA bots, copy fast V11 bots, and compile all of them in both terminals
 
-$uploadsDir = "c:\proyectos\APP KOPYTRADE\private_bots_backup"
-$goldDev = "c:\proyectos\APP KOPYTRADE\public\uploads\bots\Maiko_Sniper_PRO_GOLD_DEV.mq5"
-$centDev = "c:\proyectos\APP KOPYTRADE\public\uploads\bots\Maiko_Sniper_PRO_CENT_DEV.mq5"
+$uploadsDir = "c:\proyectos\APP KOPYTRADING\private_bots_backup"
+$goldDev = "c:\proyectos\APP KOPYTRADING\public\uploads\bots\Maiko_Sniper_PRO_GOLD_DEV.mq5"
+$centDev = "c:\proyectos\APP KOPYTRADING\public\uploads\bots\Maiko_Sniper_PRO_CENT_DEV.mq5"
 $goldPrueba = Join-Path $uploadsDir "Maiko_Sniper_PRO_GOLD_PRUEBA.mq5"
 $centPrueba = Join-Path $uploadsDir "Maiko_Sniper_PRO_CENT_PRUEBA.mq5"
 $goldV11 = Join-Path $uploadsDir "Maiko_Sniper_PRO_GOLD_V11.mq5"

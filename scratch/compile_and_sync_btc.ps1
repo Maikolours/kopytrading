@@ -1,4 +1,4 @@
-$sourceDir = 'c:\proyectos\APP KOPYTRADE\public\uploads\bots'
+$sourceDir = 'c:\proyectos\APP KOPYTRADING\public\uploads\bots'
 $me = 'C:\Program Files\MetaTrader 5\MetaEditor64.exe'
 
 $terminals = @(

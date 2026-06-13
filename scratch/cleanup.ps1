@@ -3,7 +3,7 @@ $terminals = @(
     "C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\F762D69EEEA9B4430D7F17C82167C844\MQL5\Experts"
 )
 
-$repo = "c:\proyectos\APP KOPYTRADE\public\uploads\bots"
+$repo = "c:\proyectos\APP KOPYTRADING\public\uploads\bots"
 $valid_bots = @(
     "Maiko_Sniper_PRO_GOLD_DEV", "Maiko_Sniper_PRO_GOLD_CLIENT",
     "Maiko_Sniper_PRO_CENT_DEV", "Maiko_Sniper_PRO_CENT_CLIENT",

@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const uploadsDir = "c:\\proyectos\\APP KOPYTRADE\\public\\uploads\\bots";
+const uploadsDir = "c:\\proyectos\\APP KOPYTRADING\\public\\uploads\\bots";
 
 // List of all MQ5 files to patch
 const files = [

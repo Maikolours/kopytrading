@@ -1,5 +1,5 @@
 # 1. Rename files in the repository
-$repo_dir = "c:\proyectos\APP KOPYTRADE\public\uploads\bots"
+$repo_dir = "c:\proyectos\APP KOPYTRADING\public\uploads\bots"
 
 $old_gold = Join-Path $repo_dir "Elite_Gold_MAIKO_Sniper.mq5"
 $new_gold = Join-Path $repo_dir "Maiko_Sniper_PRO_GOLD.mq5"

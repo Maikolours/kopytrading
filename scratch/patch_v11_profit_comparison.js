@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const uploadsDir = "c:\\proyectos\\APP KOPYTRADE\\public\\uploads\\bots";
+const uploadsDir = "c:\\proyectos\\APP KOPYTRADING\\public\\uploads\\bots";
 const goldV11Path = path.join(uploadsDir, "Maiko_Sniper_PRO_GOLD_V11.mq5");
 const centV11Path = path.join(uploadsDir, "Maiko_Sniper_PRO_CENT_V11.mq5");
 

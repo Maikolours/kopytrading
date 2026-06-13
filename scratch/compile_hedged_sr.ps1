@@ -2,16 +2,16 @@
 
 $compilations = @(
     @{
-        Source = "c:\proyectos\APP KOPYTRADE\public\uploads\bots\Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR.mq5"
-        DestEX5 = "c:\proyectos\APP KOPYTRADE\public\uploads\bots\Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR.ex5"
+        Source = "c:\proyectos\APP KOPYTRADING\public\uploads\bots\Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR.mq5"
+        DestEX5 = "c:\proyectos\APP KOPYTRADING\public\uploads\bots\Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR.ex5"
         Targets = @(
             "C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Experts\BOTS MAIKO\Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR.mq5",
             "C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\F762D69EEEA9B4430D7F17C82167C844\MQL5\Experts\BOTS MAIKO\Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR.mq5"
         )
     },
     @{
-        Source = "c:\proyectos\APP KOPYTRADE\public\uploads\bots\Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR_CENT.mq5"
-        DestEX5 = "c:\proyectos\APP KOPYTRADE\public\uploads\bots\Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR_CENT.ex5"
+        Source = "c:\proyectos\APP KOPYTRADING\public\uploads\bots\Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR_CENT.mq5"
+        DestEX5 = "c:\proyectos\APP KOPYTRADING\public\uploads\bots\Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR_CENT.ex5"
         Targets = @(
             "C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\F762D69EEEA9B4430D7F17C82167C844\MQL5\Experts\BOTS MAIKO\Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR_CENT.mq5",
             "C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Experts\BOTS MAIKO\Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR_CENT.mq5"

@@ -1,10 +1,10 @@
 # Script to locate MetaEditor and compile both Gold and Cent PRUEBA bots to v11.30 in both terminals
 
-$sourceGold = "c:\proyectos\APP KOPYTRADE\public\uploads\bots\Maiko_Sniper_PRO_GOLD_PRUEBA.mq5"
-$sourceCent = "c:\proyectos\APP KOPYTRADE\public\uploads\bots\Maiko_Sniper_PRO_CENT_PRUEBA.mq5"
+$sourceGold = "c:\proyectos\APP KOPYTRADING\public\uploads\bots\Maiko_Sniper_PRO_GOLD_PRUEBA.mq5"
+$sourceCent = "c:\proyectos\APP KOPYTRADING\public\uploads\bots\Maiko_Sniper_PRO_CENT_PRUEBA.mq5"
 
-$destGoldEX5 = "c:\proyectos\APP KOPYTRADE\public\uploads\bots\Maiko_Sniper_PRO_GOLD_PRUEBA.ex5"
-$destCentEX5 = "c:\proyectos\APP KOPYTRADE\public\uploads\bots\Maiko_Sniper_PRO_CENT_PRUEBA.ex5"
+$destGoldEX5 = "c:\proyectos\APP KOPYTRADING\public\uploads\bots\Maiko_Sniper_PRO_GOLD_PRUEBA.ex5"
+$destCentEX5 = "c:\proyectos\APP KOPYTRADING\public\uploads\bots\Maiko_Sniper_PRO_CENT_PRUEBA.ex5"
 
 $targetMQLs = @(
     # Terminal 1 Gold and Cent

@@ -1,5 +1,12 @@
 import { Card, CardContent } from "@/components/ui/Card";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Cómo Funciona | KopyTrading",
+    description: "Aprende el proceso de adquisición, descarga e instalación de tu Expert Advisor en MetaTrader 5. Automatiza tu operativa en solo 3 pasos.",
+    keywords: ["cómo funciona bot", "instalar expert advisor", "descargar bot mt5", "trading automatizado"],
+};
 
 export default function ComoFuncionaPage() {
     return (

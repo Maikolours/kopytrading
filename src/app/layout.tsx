@@ -174,6 +174,8 @@ export default function RootLayout({
                       <li><Link href="/sobre-nosotros" className="hover:text-accent transition-colors">Sobre Nosotros</Link></li>
                       <li><Link href="/contacto" className="hover:text-accent transition-colors">Contacto</Link></li>
                       <li><Link href="/legal/privacidad" className="hover:text-accent transition-colors">Privacidad</Link></li>
+                      <li><Link href="/legal/terminos" className="hover:text-accent transition-colors">Términos y Condiciones</Link></li>
+                      <li><Link href="/legal/cookies" className="hover:text-accent transition-colors">Política de Cookies</Link></li>
                       <li><Link href="/legal/riesgo" className="hover:text-accent transition-colors font-bold text-danger/80">Aviso de Riesgo</Link></li>
                     </ul>
                   </div>

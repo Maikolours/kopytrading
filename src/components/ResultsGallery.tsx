@@ -16,21 +16,52 @@ interface VideoResult {
 
 const RESULTS_VIDEOS: VideoResult[] = [];
 
-const RESULTS_PHOTOS: any[] = [];
+const RESULTS_PHOTOS = [
+  {
+    id: "photo-1",
+    title: "Resultados en Cuenta Real Auditada",
+    url: "/images/results-march-27.png"
+  },
+  {
+    id: "photo-2",
+    title: "Configuración Avanzada Titan Shield",
+    url: "/images/titan-shield-setup.png"
+  },
+  {
+    id: "photo-3",
+    title: "Guía de Inicio Rápido en MetaTrader 5",
+    url: "/images/mt5-guide.png"
+  },
+  {
+    id: "photo-4",
+    title: "Consistencia en Cuenta Demo Maiko Gold",
+    url: "/images/maiko-gold-demo.png"
+  },
+  {
+    id: "photo-5",
+    title: "Entorno de Servidor VPS 24/7",
+    url: "/images/vps-setup.png"
+  },
+  {
+    id: "photo-6",
+    title: "Métricas de Cuenta Cent - Maiko Cent",
+    url: "/images/maiko-cent.png"
+  }
+];
 
 export function ResultsGallery() {
   const [activeVideo, setActiveVideo] = useState<VideoResult | null>(null);
 
   return (
-    <section className="py-12 md:py-24 relative overflow-hidden bg-black">
+    <section className="py-12 md:py-20 relative overflow-hidden bg-black">
       {/* Luces de fondo */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand/10 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-accent/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Sección de Vídeos */}
-        {RESULTS_VIDEOS.length > 0 ? (
+        {/* Sección de Vídeos - Solo se muestra si hay videos cargados */}
+        {RESULTS_VIDEOS.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {RESULTS_VIDEOS.map((video) => (
               <div 
@@ -78,42 +109,30 @@ export function ResultsGallery() {
               </div>
             ))}
           </div>
-        ) : (
-          <div className="flex justify-center mb-16">
-            <div className="border-2 border-dashed border-white/5 rounded-2xl p-8 flex flex-col items-center justify-center text-center bg-white/[0.02] hover:bg-white/[0.04] transition-colors cursor-pointer group max-w-md w-full">
-              <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <span className="text-3xl text-white/20">🎥</span>
-              </div>
-              <h4 className="text-white/40 font-bold mb-2">Próximos Videos de Operativa</h4>
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-brand/10 text-brand-light border border-brand/20 mb-2 animate-pulse">
-                Próximamente
-              </div>
-              <p className="text-text-muted/40 text-xs">Subiremos grabaciones semanales de nuestras pruebas en vivo y optimizaciones.</p>
-            </div>
-          </div>
         )}
 
         {/* Sección de Fotos/Capturas */}
-        <div className="mt-20">
+        <div>
           <div className="flex flex-col items-center mb-12">
             <h2 className="text-3xl font-bold text-white mb-4">Capturas de Resultados</h2>
             <div className="h-1 w-20 bg-brand rounded-full" />
           </div>
           
           {RESULTS_PHOTOS.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
               {RESULTS_PHOTOS.map((photo) => (
                 <div 
                   key={photo.id}
-                  className="aspect-square relative rounded-xl overflow-hidden border border-white/10 group cursor-zoom-in"
+                  className="aspect-video relative rounded-2xl overflow-hidden border border-white/10 bg-surface/30 backdrop-blur-md group cursor-pointer hover:border-brand/40 transition-all shadow-xl"
                 >
                   <img 
                     src={photo.url} 
                     alt={photo.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
-                    <p className="text-white text-xs font-bold">{photo.title}</p>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity flex flex-col justify-end p-4">
+                    <p className="text-white text-xs font-bold tracking-tight">{photo.title}</p>
+                    <span className="text-[10px] text-brand-light font-medium uppercase tracking-wider mt-1">✓ Verificado</span>
                   </div>
                 </div>
               ))}
@@ -125,10 +144,7 @@ export function ResultsGallery() {
                   <span className="text-3xl text-white/20">📸</span>
                 </div>
                 <h4 className="text-white/40 font-bold mb-2">Capturas de Operaciones</h4>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-brand/10 text-brand-light border border-brand/20 mb-2 animate-pulse">
-                  Próximamente
-                </div>
-                <p className="text-text-muted/40 text-xs">Subiremos capturas de pantalla de nuestras operaciones reales muy pronto.</p>
+                <p className="text-text-muted/40 text-xs">Las capturas se actualizarán automáticamente.</p>
               </div>
             </div>
           )}
@@ -138,3 +154,4 @@ export function ResultsGallery() {
     </section>
   );
 }
+

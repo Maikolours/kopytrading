@@ -4,6 +4,25 @@ import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/Button";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
+import { Metadata } from "next";
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+    const { id } = await params;
+    const bot = await prisma.botProduct.findUnique({
+        where: { id: id }
+    });
+    if (!bot) {
+        return {
+            title: "Bot No Encontrado | KopyTrading",
+            description: "El algoritmo solicitado no existe o no está disponible."
+        };
+    }
+    return {
+        title: `${bot.name} | Expert Advisor MT5`,
+        description: `${bot.description} Algoritmo optimizado para ${bot.instrument} utilizando estrategia de ${bot.strategyType}.`,
+        keywords: [bot.name, bot.instrument, bot.strategyType, "expert advisor mt5", "trading automático"],
+    };
+}
 
 const GOLD_DEMO_BOT_ID = "cmn9hf8yc0000vhbcq9hbxk0j";
 const GOLD_REAL_BOT_ID = "cmn9hf9440001vhbclffx9no6";

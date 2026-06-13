@@ -1,7 +1,7 @@
 # Script to locate MetaEditor and compile Maiko_BTC_Weekend_PRUEBA.mq5 in both terminals
 
-$sourceMQL = "c:\proyectos\APP KOPYTRADE\private_bots_backup\Maiko_BTC_Weekend_PRUEBA.mq5"
-$destEX5 = "c:\proyectos\APP KOPYTRADE\private_bots_backup\Maiko_BTC_Weekend_PRUEBA.ex5"
+$sourceMQL = "c:\proyectos\APP KOPYTRADING\private_bots_backup\Maiko_BTC_Weekend_PRUEBA.mq5"
+$destEX5 = "c:\proyectos\APP KOPYTRADING\private_bots_backup\Maiko_BTC_Weekend_PRUEBA.ex5"
 
 $targetMQLs = @(
     "C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Experts\BOTS MAIKO\Maiko_BTC_Weekend_PRUEBA.mq5",

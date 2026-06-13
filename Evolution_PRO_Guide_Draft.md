@@ -30,13 +30,16 @@ Una de las mayores ventajas de KopyTrading es la **sincronización en la nube**.
 
 ---
 
-## ⚠️ Recomendaciones Generales y Riesgo
+## ⚠️ Aviso de Riesgo y Limitación de Responsabilidad
 
-> **"El trading es una actividad de riesgo. Los bots no son infalibles."**
+> [!WARNING]
+> **El trading es una actividad de alto riesgo. Ningún bot es 100% infalible.**
+> - Aunque nuestras herramientas concretas han sido probadas a fondo y cuentan con estadísticas históricas de acierto por encima del 80%, debes recordar que los mercados financieros (y especialmente activos tan volátiles como el Oro XAUUSD) son dinámicos y pueden cambiar drásticamente.
+> - **KopyTrading proporciona exclusivamente software informático y herramientas de apoyo tecnológico. En ningún caso nos hacemos responsables de las decisiones de trading, de la operativa en real o de los resultados financieros finales obtenidos por cada cliente.** El control de la cuenta y su capital es responsabilidad única del usuario.
 
-1.  **Vigilancia:** Aunque el bot es automático, recomendamos revisarlo al menos 2-3 veces al día.
-2.  **Volatilidad Extrema:** En épocas de alta incertidumbre global (noticias de alto impacto, conflictos, datos de inflación), los mercados se vuelven impredecibles. Considera pausar el bot antes de noticias importantes de "3 estrellas".
-3.  **No sobre-operes:** Deja que la estadística del bot trabaje. Evita intervenir manualmente en las operaciones a menos que sea estrictamente necesario.
+1.  **Vigilancia:** Aunque el bot es automático, recomendamos supervisarlo periódicamente.
+2.  **Volatilidad Extrema:** En periodos de alta volatilidad macroeconómica (noticias de alto impacto, datos de tipos de interés, conflictos), los mercados se vuelven impredecibles. Considera pausar el bot en estos eventos.
+3.  **No sobre-operes:** Deja que la ventaja estadística del bot funcione a medio/largo plazo. Evita la intervención manual impulsiva.
 
 ---
 

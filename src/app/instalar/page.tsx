@@ -1,4 +1,11 @@
 import Link from 'next/link';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: "Instalar Aplicación Móvil | KopyTrading",
+    description: "Configura la aplicación PWA de KopyTrading en tu dispositivo móvil. Guía de instalación rápida para Safari en iPhone y Chrome en Android.",
+    keywords: ["instalar app trading", "kopytrading móvil", "instalar pwa iphone", "android chrome pwa"],
+};
 
 export default function InstalarAppPage() {
     return (

@@ -8,7 +8,7 @@ const terminals = [
 ];
 
 const basePath = "C:\\Users\\Usuario\\AppData\\Roaming\\MetaQuotes\\Terminal";
-const repoPath = "c:\\proyectos\\APP KOPYTRADE\\public\\uploads\\bots";
+const repoPath = "c:\\proyectos\\APP KOPYTRADING\\public\\uploads\\bots";
 
 const filesToRevert = [
     "Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO.mq5",

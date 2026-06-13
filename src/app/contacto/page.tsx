@@ -1,5 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Soporte y Contacto | KopyTrading",
+    description: "¿Tienes dudas sobre la instalación o el funcionamiento de nuestros Expert Advisors? Contacta con el canal oficial de soporte técnico de KopyTrading.",
+    keywords: ["contacto kopytrading", "soporte técnico bot", "ayuda metatrader 5", "email soporte"],
+};
 
 export default function ContactoPage() {
     return (

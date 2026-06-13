@@ -3,7 +3,7 @@ $terminals = @{
     "Cent" = "C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\F762D69EEEA9B4430D7F17C82167C844\MQL5\Experts"
 }
 
-$backupRoot = "c:\proyectos\APP KOPYTRADE\Backup_Bots_Antiguos"
+$backupRoot = "c:\proyectos\APP KOPYTRADING\Backup_Bots_Antiguos"
 if (-not (Test-Path $backupRoot)) {
     New-Item -ItemType Directory -Path $backupRoot | Out-Null
 }

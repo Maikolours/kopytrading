@@ -1,5 +1,12 @@
 import { Card, CardContent } from "@/components/ui/Card";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Sobre Nosotros | KopyTrading",
+    description: "Conoce la historia real detrás de KopyTrading. Creamos herramientas tecnológicas de automatización para facilitar el trading en MetaTrader 5.",
+    keywords: ["sobre nosotros", "trayectoria kopytrading", "bots de trading", "trading automático", "aprender trading"],
+};
 
 export default function SobreNosotrosPage() {
     return (
@@ -18,20 +25,23 @@ export default function SobreNosotrosPage() {
 
                 <div className="space-y-12 text-text-muted leading-relaxed">
                     <section className="space-y-6">
-                        <h2 className="text-2xl font-semibold text-white">Nuestra Historia: Del Trading Manual a la Automatización</h2>
+                        <h2 className="text-2xl font-semibold text-white">Nuestra Historia: Una necesidad de simplificación</h2>
                         <p>
-                            KopyTrading nació de una necesidad real. Como trader con años de experiencia operando los mercados de forma manual, entendí rápidamente que el eslabón más débil en cualquier estrategia es el factor emocional humano. El cansancio, el miedo al cierre de una operación y la falta de tiempo para monitorizar los mercados 24/5 son los mayores obstáculos para la rentabilidad constante.
+                            KopyTrading nació de una historia muy común y real. A diferencia de otros proyectos, no pretendo venderte que tengo décadas de experiencia operando en Wall Street o gestionando fondos institucionales. Mi trayectoria viene de un sector completamente ajeno a las finanzas y el trading.
                         </p>
                         <p>
-                            Tras un largo proceso de formación autodidacta y especialización en MQL5, decidí trasladar mis estrategias manuales más exitosas al código. Lo que comenzó como un proyecto personal para optimizar mi propia operativa y liberar tiempo, pronto empezó a llamar la atención de otros traders y conocidos tras observar su consistencia y precisión.
+                            Hace un par de años empecé a interesarme por los mercados financieros. Rápidamente me di cuenta de que aprender a hacer trading manual de forma consistente requiere un esfuerzo de estudio enorme, un análisis en profundidad diario de los gráficos y, sobre todo, una disciplina psicológica que pocas personas pueden mantener mientras trabajan en su día a día.
+                        </p>
+                        <p>
+                            Por ello, como persona autodidacta, decidí ponerme a diseñar mis propias herramientas y programar robots (bots) en MetaTrader 5. Mi meta era clara: crear un software bien elaborado y probado que hiciese el trabajo pesado de analizar y abrir operaciones de manera automatizada. Quería facilitar el acceso a la rentabilidad para personas que, como yo, carecen del tiempo diario o de los conocimientos avanzados de análisis de mercado pero buscan un ingreso extra apoyados en la tecnología.
                         </p>
                     </section>
 
                     <Card className="bg-surface-light/10 border-white/5 p-8">
                         <CardContent className="p-0">
-                            <h3 className="text-xl font-semibold text-white mb-4 italic">"El trading no debería ser una batalla contra tus emociones, sino una ejecución precisa de tu ventaja estadística."</h3>
-                            <p className="text-sm">
-                                Nuestra misión es democratizar el acceso a herramientas de trading institucional, permitiendo que cualquier persona pueda ejecutar algoritmos complejos sin necesidad de pasar horas frente a la pantalla.
+                            <h3 className="text-xl font-semibold text-white mb-4 italic">"El trading no tiene por qué ser una carrera imposible de dominar si dejas que la tecnología automatice la estrategia por ti."</h3>
+                            <p className="text-sm font-light">
+                                Nuestra misión es proveer herramientas y software que simplifiquen tu operativa diaria. Diseñamos algoritmos listos para que no tengas que pasar horas frente a la pantalla ni batallar contra las emociones.
                             </p>
                         </CardContent>
                     </Card>
@@ -42,29 +52,32 @@ export default function SobreNosotrosPage() {
                             <ul className="space-y-3 text-sm">
                                 <li className="flex items-start gap-3">
                                     <span className="text-brand">✓</span>
-                                    <span><strong>Transparencia:</strong> No vendemos promesas mágicas, vendemos software matemático riguroso.</span>
+                                    <span><strong>Acceso Simplificado:</strong> Facilitamos el acceso al trading para personas con conocimientos limitados o poco tiempo disponible.</span>
                                 </li>
                                 <li className="flex items-start gap-3">
                                     <span className="text-brand">✓</span>
-                                    <span><strong>Eficiencia:</strong> Gana tiempo libre mientras tu bot monitoriza cada vela del gráfico.</span>
+                                    <span><strong>Software Probado:</strong> Nuestros robots están testeados a fondo para ofrecer resultados estables y automatizados.</span>
                                 </li>
                                 <li className="flex items-start gap-3">
                                     <span className="text-brand">✓</span>
-                                    <span><strong>Soporte Directo:</strong> Trato directo de trader a trader, sin intermediarios.</span>
+                                    <span><strong>Transparencia Real:</strong> Sin falsas promesas. Compartimos la realidad del trading y de cada software.</span>
                                 </li>
                             </ul>
                         </div>
                         <div className="space-y-4">
-                            <h3 className="text-lg font-semibold text-white">Nuestra Filosofía de Riesgo</h3>
-                            <p className="text-sm">
-                                Sabemos que el trading algorítmico no es una ciencia exacta y que los mercados siempre conllevan riesgo. Por eso, todos nuestros productos están diseñados con un enfoque estricto en la preservación del capital, utilizando Stop Loss físicos y evitando estrategias peligrosas como las martingalas exponenciales.
+                            <h3 className="text-lg font-semibold text-white">Aviso de Riesgo y Responsabilidad</h3>
+                            <p className="text-sm font-light">
+                                Ningún bot de trading es 100% infalible. Aunque nuestras herramientas concretas cuentan con estadísticas verificadas y tasas de acierto que superan el 80% en pruebas históricas, el mercado financiero (especialmente en activos volátiles como el Oro o Cripto) es sumamente cambiante. 
+                            </p>
+                            <p className="text-sm font-semibold text-white">
+                                KopyTrading proporciona una herramienta de apoyo tecnológico. En ningún caso nos responsabilizamos de los resultados financieros finales de cada cliente o de las pérdidas de capital sufridas por operaciones de mercado.
                             </p>
                         </div>
                     </section>
 
                     <div className="pt-12 border-t border-white/10 text-center">
                         <Link href="/bots" className="inline-block px-8 py-4 rounded-2xl bg-brand text-white font-bold hover:bg-brand-light transition-all shadow-[0_0_30px_rgba(245,158,11,0.2)]">
-                            Explorar Nuestros Algoritmos →
+                            Ver Bots Disponibles →
                         </Link>
                     </div>
                 </div>

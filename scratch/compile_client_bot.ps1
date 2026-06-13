@@ -1,6 +1,6 @@
 # Script to compile and sync KOPYTRADING_XAUUSD_Evolution_Pro_v5_84.mq5 to all terminals
-$sourceMQ5 = "c:\proyectos\APP KOPYTRADE\public\uploads\KOPYTRADING_XAUUSD_Evolution_Pro_v5_84.mq5"
-$destEX5 = "c:\proyectos\APP KOPYTRADE\public\uploads\KOPYTRADING_XAUUSD_Evolution_Pro_v5_84.ex5"
+$sourceMQ5 = "c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADING_XAUUSD_Evolution_Pro_v5_84.mq5"
+$destEX5 = "c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADING_XAUUSD_Evolution_Pro_v5_84.ex5"
 
 $terminals = @(
     "BB8163656548A371304D87AABB7A68EB", # Demo
@@ -91,8 +91,8 @@ foreach ($term in $terminals) {
 Write-Host "----------------------------------------"
 # Cleaning up old KOPYTRADE files
 Write-Host "Cleaning up old KOPYTRADE_XAUUSD_Evolution_Pro_v5_84 files from public/uploads/"
-$oldMQ5 = "c:\proyectos\APP KOPYTRADE\public\uploads\KOPYTRADE_XAUUSD_Evolution_Pro_v5_84.mq5"
-$oldEX5 = "c:\proyectos\APP KOPYTRADE\public\uploads\KOPYTRADE_XAUUSD_Evolution_Pro_v5_84.ex5"
+$oldMQ5 = "c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_Evolution_Pro_v5_84.mq5"
+$oldEX5 = "c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_Evolution_Pro_v5_84.ex5"
 if (Test-Path $oldMQ5) { Remove-Item $oldMQ5 -Force; Write-Host "Deleted $oldMQ5" }
 if (Test-Path $oldEX5) { Remove-Item $oldEX5 -Force; Write-Host "Deleted $oldEX5" }
 
