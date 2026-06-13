@@ -10,10 +10,14 @@ export async function POST(req: Request) {
     try {
         const { purchaseId, command, value } = await req.json();
 
-        // Verificar que la compra pertenezca al usuario
-        const purchase = await prisma.purchase.findFirst({
-            where: { id: purchaseId, userId: (session.user as any).id }
-        });
+        const isOwner = session.user.email === "viajaconsakura@gmail.com" || session.user.email === "viajaconsakura";
+
+        // Verificar que la compra pertenezca al usuario (o que sea el administrador/Owner)
+        const purchase = isOwner
+            ? await prisma.purchase.findUnique({ where: { id: purchaseId } })
+            : await prisma.purchase.findFirst({
+                where: { id: purchaseId, userId: (session.user as any).id }
+            });
 
         if (!purchase) return new NextResponse("Forbidden", { status: 403 });
 
