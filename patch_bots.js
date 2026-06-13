@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const botsDir = 'c:\\proyectos\\APP KOPYTRADE\\public\\uploads\\bots';
+const botsDir = 'c:\\proyectos\\APP KOPYTRADING\\public\\uploads\\bots';
 const files = fs.readdirSync(botsDir).filter(f => f.endsWith('.mq5'));
 
 for (const file of files) {

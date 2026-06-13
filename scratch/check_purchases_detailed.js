@@ -2,48 +2,45 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-    console.log("=== COMPRAS DETALLADAS DE SAKURA ===");
-    
-    // Obtener el ID de usuario de viajaconsakura@gmail.com
-    const user = await prisma.user.findUnique({
-        where: { email: "viajaconsakura@gmail.com" }
-    });
-    
-    if (!user) {
-        console.error("Usuario no encontrado");
-        return;
+  console.log("=== INSPECCIÓN DETALLADA DE LICENCIAS SAKURA ===");
+  
+  const purchases = await prisma.purchase.findMany({
+    where: {
+      userId: { in: ['cmmb2z6ml000dvhhoj1s9zmnf', 'cmn9hfb10000mvhbc3zqbp1lq'] }
+    },
+    include: {
+      user: true,
+      botProduct: true,
+      activePositions: true,
+      botSettings: true
     }
-    
-    const purchases = await prisma.purchase.findMany({
-        where: { userId: user.id },
-        include: {
-            botProduct: true,
-            botSettings: true
+  });
+
+  purchases.forEach(p => {
+    console.log(`\nCompra ID: ${p.id}`);
+    console.log(`  Usuario: ${p.user.email} (ID: ${p.userId})`);
+    console.log(`  Bot: ${p.botProduct.name} (ID: ${p.botProductId})`);
+    console.log(`  Último Sinc: ${p.lastSync ? new Date(p.lastSync).toLocaleString('es-ES') : 'NUNCA'}`);
+    console.log(`  Balance / Equidad: $${p.balance} / $${p.equity}`);
+    console.log(`  Último Estado: ${p.lastStatus}`);
+    console.log(`  Posiciones Activas en DB: ${p.activePositions.length}`);
+    if (p.activePositions.length > 0) {
+      p.activePositions.forEach(pos => {
+        console.log(`    - Ticket: ${pos.ticket} | Lote: ${pos.lots} | Simb: ${pos.symbol} | Tipo: ${pos.type} | Profit: ${pos.profit} | Cuenta: ${pos.account}`);
+      });
+    }
+    console.log(`  Ajustes (BotSettings) en DB: ${p.botSettings.length}`);
+    if (p.botSettings.length > 0) {
+      p.botSettings.forEach(s => {
+        try {
+          const parsed = JSON.parse(s.settings);
+          console.log(`    - Cuenta: ${s.account} | Versión Bot: ${parsed.version} | PnL Hoy: ${parsed.pnl_today}`);
+        } catch (e) {
+          console.log(`    - Cuenta: ${s.account} | Error parsing settings`);
         }
-    });
-    
-    purchases.forEach(p => {
-        console.log(`\n--------------------------------------------`);
-        console.log(`Purchase ID: ${p.id}`);
-        console.log(`Bot Product Name: ${p.botProduct.name}`);
-        console.log(`Purchase Balance: ${p.balance}`);
-        console.log(`Purchase Equity: ${p.equity}`);
-        console.log(`Last Sync: ${p.lastSync}`);
-        console.log(`BotSettings Count: ${p.botSettings.length}`);
-        
-        p.botSettings.forEach(s => {
-            console.log(`  - Account: ${s.account}`);
-            console.log(`  - Settings sample: ${s.settings.substring(0, 150)}...`);
-            try {
-                const parsed = JSON.parse(s.settings);
-                console.log(`    * Parsed settings balance: ${parsed.balance}`);
-                console.log(`    * Parsed settings equity: ${parsed.equity}`);
-                console.log(`    * Parsed settings status: ${parsed.status}`);
-            } catch (err) {}
-        });
-    });
+      });
+    }
+  });
 }
 
-main()
-    .catch(console.error)
-    .finally(() => prisma.$disconnect());
+main().catch(console.error).finally(() => prisma.$disconnect());
