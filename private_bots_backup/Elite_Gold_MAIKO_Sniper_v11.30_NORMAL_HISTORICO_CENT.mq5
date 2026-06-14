@@ -151,7 +151,70 @@ void OnDeinit(const int reason) {
     ChartRedraw(); 
 }
 
+void ActualizarTextosEstado() {
+    if(trialExpirado) {
+        txtVoz = "TRIAL 30 DIAS EXPIRADO.";
+        txtVeredicto = "EXPIRADO";
+        return;
+    }
+
+    if(!BotActivo) {
+        txtVoz = "BOT APAGADO / PAUSADO";
+        txtVeredicto = "APAGADO";
+        return;
+    }
+
+    ActualizarEstadoMaster();
+    if(ArraySize(pos) > 0) {
+        string dirStr = (pos[0].t == POSITION_TYPE_BUY) ? "COMPRA" : "VENTA";
+        txtVoz = StringFormat("MAIKO: Vigilando %s activo...", dirStr);
+        return;
+    }
+
+    datetime serverTime = TimeTradeServer();
+    if(serverTime < pausaStopLoss) {
+        txtVoz = "STANDBY POST-SL (" + IntegerToString((int)((pausaStopLoss - serverTime) / 60) + 1) + " MIN)";
+        txtVeredicto = "STANDBY SL";
+        return;
+    }
+
+    MqlDateTime time;
+    TimeToStruct(serverTime, time);
+
+    // Validar fin de semana
+    bool esFinDeSemana = (time.day_of_week == 0 || time.day_of_week == 6);
+    // Validar viernes noche (después de las 19:00, salvo que se permita operar)
+    bool esViernesNoche = (time.day_of_week == 5 && time.hour >= 19 && !OperarViernesNoche);
+    
+    bool enHorario = true;
+    if(time.hour < HoraInicioOperativa || time.hour >= HoraFinOperativa) enHorario = false;
+    if(esFinDeSemana || esViernesNoche) enHorario = false;
+
+    bool enBloqueoNoticias = (UsarHorarioBloqueo && time.hour >= HoraInicioBloqueo && time.hour < HoraFinBloqueo);
+    if(enBloqueoNoticias) enHorario = false;
+
+    if(!enHorario) {
+        if(esFinDeSemana || esViernesNoche) {
+            txtVoz = "FUERA HORARIO: MERCADO CERRADO";
+            txtVeredicto = "ARMADO (FUERA DE HORARIO)";
+        } else if(enBloqueoNoticias) {
+            txtVoz = "HORARIO BLOQUEADO (NOTICIAS)";
+            txtVeredicto = "STANDBY NOTICIAS";
+        } else {
+            txtVoz = "FUERA HORARIO: ESPERANDO";
+            txtVeredicto = "ARMADO (FUERA DE HORARIO)";
+        }
+    } else {
+        if(!enFaseAnalisis) {
+            txtVoz = "SCHOLAR: Buscando...";
+            txtVeredicto = "ESPERANDO...";
+        }
+    }
+}
+
 void OnTick() {
+    ActualizarTextosEstado();
+    if(trialExpirado) { BotActivo = false; ActualizarInterfazMaster(); return; }
     if(!TerminalInfoInteger(TERMINAL_TRADE_ALLOWED)) { txtVoz = "TRADING NO PERMITIDO"; return; }
 
     ActualizarEstadoMaster();
@@ -184,7 +247,7 @@ void OnTick() {
                 CerrarTodo();
                 enFaseAnalisis = false;
                 if(UsarPausaTrasStopLoss && MinutosPausaTrasStopLoss > 0) {
-                    pausaStopLoss = TimeCurrent() + (60 * MinutosPausaTrasStopLoss);
+                    pausaStopLoss = TimeTradeServer() + (60 * MinutosPausaTrasStopLoss);
                     txtVeredicto = "STANDBY POR SL HASTA: " + TimeToString(pausaStopLoss, TIME_MINUTES);
                 } else {
                     BotActivo = false;
@@ -200,32 +263,22 @@ void OnTick() {
     if(!BotActivo) return;
     if(ArraySize(pos) > 0) { GestionarRefuerzoInteligente(); return; }
     if(ArraySize(pos) == 0) {
-        if(TimeCurrent() < pausaStopLoss) {
-            txtVoz = "STANDBY POST-SL (" + IntegerToString((int)((pausaStopLoss - TimeCurrent()) / 60) + 1) + " MIN)";
-            txtVeredicto = "ESPERANDO FIN DE PAUSA SL";
-            ActualizarInterfazMaster();
-            return;
-        }
+        datetime serverTime = TimeTradeServer();
+        if(serverTime < pausaStopLoss) return;
 
         MqlDateTime time;
-        TimeToStruct(TimeCurrent(), time);
+        TimeToStruct(serverTime, time);
         bool enHorario = true;
         if(time.hour < HoraInicioOperativa || time.hour >= HoraFinOperativa) enHorario = false;
         if(time.day_of_week == 5 && time.hour >= 19 && !OperarViernesNoche) enHorario = false;
+        if(time.day_of_week == 0 || time.day_of_week == 6) enHorario = false;
         
         if(UsarHorarioBloqueo && time.hour >= HoraInicioBloqueo && time.hour < HoraFinBloqueo) enHorario = false;
 
-        if(!enHorario) {
-            if(UsarHorarioBloqueo && time.hour >= HoraInicioBloqueo && time.hour < HoraFinBloqueo) {
-                txtVoz = "HORARIO BLOQUEADO (NOTICIAS)";
-            } else {
-                txtVoz = "FUERA HORARIO: ESPERANDO";
-            }
-            return;
-        }
+        if(!enHorario) return;
 
-        if(!enFaseAnalisis) { enFaseAnalisis = true; proximoAtaque = TimeCurrent() + 60; txtVoz = "SCHOLAR: Buscando..."; }
-        if(TimeCurrent() >= proximoAtaque && TimeCurrent() >= pausaVolatilidad) {
+        if(!enFaseAnalisis) { enFaseAnalisis = true; proximoAtaque = serverTime + 60; txtVoz = "SCHOLAR: Buscando..."; ActualizarInterfazMaster(); }
+        if(serverTime >= proximoAtaque && serverTime >= pausaVolatilidad) {
             string d = ""; if(ValidarEstructuraScholar(d)) EjecutarAtaqueScholar(d);
         }
     }
@@ -235,7 +288,7 @@ bool ValidarEstructuraScholar(string &decision) {
     if(spreadActual > MaxSpreadPips) { txtVeredicto = "SPD ALTO: " + DoubleToString(spreadActual,1); return false; }
     double rangoM1 = (iHigh(_Symbol, PERIOD_M1, 1) - iLow(_Symbol, PERIOD_M1, 1)) / _Point / 10;
     if(rangoM1 > MaxRangoVelaM1) {
-        txtVeredicto = "VOLATILIDAD ALTA (ESPERANDO)"; pausaVolatilidad = TimeCurrent() + (60 * MinutosPausaTrasSusto); return false;
+        txtVeredicto = "VOLATILIDAD ALTA (ESPERANDO)"; pausaVolatilidad = TimeTradeServer() + (60 * MinutosPausaTrasSusto); return false;
     }
     double body = MathAbs(iOpen(_Symbol, PERIOD_M1, 1) - iClose(_Symbol, PERIOD_M1, 1)) / _Point / 10;
     if(body < 0.5) { txtVeredicto = "MERCADO ESTANCADO (POCA LUZ)"; return false; }
@@ -280,14 +333,14 @@ bool ValidarEstructuraScholar(string &decision) {
 }
 
 void EjecutarAtaqueScholar(string d) {
-    if(TimeCurrent() - ultimoAtaque < 3) return;
+    if(TimeTradeServer() - ultimoAtaque < 3) return;
     if(volTotal + (LoteAtaque * RuedasAmetralladora) > MaxLoteTotal) return;
     for(int i=0; i<RuedasAmetralladora; i++) { 
         if(d == "BUY") trade.Buy(LoteAtaque,_Symbol,0,0,0,TradeComment); 
         else trade.Sell(LoteAtaque,_Symbol,0,0,0,TradeComment); 
         Sleep(100); 
     }
-    ultimoAtaque = TimeCurrent();
+    ultimoAtaque = TimeTradeServer();
     enFaseAnalisis = false;
 }
 
@@ -324,10 +377,10 @@ void GestionarRefuerzoInteligente() {
     if(volRefuerzo > MaxLoteIndividual) volRefuerzo = MaxLoteIndividual;
     if(volTotal + volRefuerzo > MaxLoteTotal) { txtVoz = "LIMITE LOTE ALCANZADO"; return; }
     
-    if(TimeCurrent() - ultimoAtaque < 3) return;
+    if(TimeTradeServer() - ultimoAtaque < 3) return;
     if(type == POSITION_TYPE_BUY) trade.Buy(volRefuerzo, _Symbol, 0, 0, 0, TradeComment + "_SOS"); 
     else trade.Sell(volRefuerzo, _Symbol, 0, 0, 0, TradeComment + "_SOS");
-    ultimoAtaque = TimeCurrent();
+    ultimoAtaque = TimeTradeServer();
     txtVeredicto = "DISPARO SOS RESCATE EJECUTADO ðŸ›¡ï¸âš¡";
 }
 
@@ -502,7 +555,11 @@ void ToggleHUD() {
 
 void OnChartEvent(const int id, const long &lparam, const double &dparam, const string &sparam) { 
     if(id == CHARTEVENT_OBJECT_CLICK) { 
-        if(sparam == "MAIKO_BtnP") BotActivo = !BotActivo; 
+        if(sparam == "MAIKO_BtnP") {
+            BotActivo = !BotActivo; 
+            ActualizarTextosEstado();
+            ActualizarInterfazMaster();
+        }
         if(sparam == "MAIKO_BtnC") { CerrarTodo(); enFaseAnalisis = false; } 
         if(sparam == "MAIKO_BtnMin") { ToggleHUD(); ObjectSetInteger(0, sparam, OBJPROP_STATE, false); } 
         ChartRedraw(); 

@@ -1,61 +1,47 @@
-# Plan de Implementación: Alertas de Actualización y Notificaciones por Correo de Nueva Versión
+# Plan de Implementación: Estado Visual del Bot en Fin de Semana y Expansión de KopyBot
 
-Este plan describe la implementación de un sistema de alertas en el panel de control del cliente (Dashboard) cuando se detecte una discrepancia entre la versión del bot ejecutándose en MetaTrader 5 (telemetría) y la versión disponible en el servidor (Base de Datos). Además, se incorpora la funcionalidad para que el administrador envíe un correo electrónico a todos los licenciatarios activos informando sobre la nueva actualización al subir una versión.
-
-## User Review Required
-
-> [!IMPORTANT]
-> - Las alertas en el panel del cliente se basan en la comparación de `runningVersion` (enviado por telemetría del bot) o `lastDownloadedVersion` con `botProduct.version`.
-> - En el panel de administración se agregará un formulario para "Actualizar Versión de Bot" que permitirá subir la versión del producto en BD e incluirá un selector opcional para enviar una notificación automática por correo electrónico a todos los clientes que tengan licencias activas para ese bot.
-> - El correo utilizará la integración de **Resend** ya configurada en el sistema.
+Este plan describe la solución para mejorar la experiencia de usuario y el feedback visual del bot en MetaTrader 5 cuando el mercado está cerrado (fines de semana o fuera de horario), y para enriquecer la base de datos de respuestas de nuestro asistente virtual (KopyBot) en la página web.
 
 ## Cambios Propuestos
 
-### Componente: Backend & Helper de Emails
+### Componente: Robots MetaTrader 5 (MQL5)
 
-#### [MODIFY] [email.ts](file:///C:/proyectos/APP%20KOPYTRADING/src/lib/email.ts)
-- Añadir la función `sendVersionUpdateEmail(email, botName, newVersion, purchaseId)` para enviar el correo con un diseño de alta calidad (glassmorphism/estilo oscuro) alineado con la estética de KopyTrading.
-- Explicar las instrucciones para que el cliente actualice el archivo `.EX5` en su terminal de MetaTrader 5 sin alterar sus licencias.
+Modificaremos los 4 archivos `.mq5` en la carpeta de origen del terminal MT5 principal:
+- [Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_TRIAL.mq5](file:///C:/Users/Usuario/AppData/Roaming/MetaQuotes/Terminal/BB8163656548A371304D87AABB7A68EB/MQL5/Experts/BOTS%20MAIKO/Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_TRIAL.mq5)
+- [Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_REAL.mq5](file:///C:/Users/Usuario/AppData/Roaming/MetaQuotes/Terminal/BB8163656548A371304D87AABB7A68EB/MQL5/Experts/BOTS%20MAIKO/Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_REAL.mq5)
+- [Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO.mq5](file:///C:/Users/Usuario/AppData/Roaming/MetaQuotes/Terminal/BB8163656548A371304D87AABB7A68EB/MQL5/Experts/BOTS%20MAIKO/Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO.mq5)
+- [Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO_CENT.mq5](file:///C:/Users/Usuario/AppData/Roaming/MetaQuotes/Terminal/BB8163656548A371304D87AABB7A68EB/MQL5/Experts/BOTS%20MAIKO/Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO_CENT.mq5)
 
-#### [MODIFY] [route.ts](file:///C:/proyectos/APP%20KOPYTRADING/src/app/api/admin/bots/route.ts)
-- Implementar el método `GET` para obtener el listado de todos los productos de bots y mostrarlos en el administrador.
-- Implementar el método `PUT` para actualizar la versión de un bot de forma dinámica y, si `sendEmails === true`, buscar todos los usuarios con compras válidas y enviarles el correo de actualización.
+#### Detalles de la Modificación
+1. **Creación de `ActualizarTextosEstado()`**:
+   Implementaremos esta función centralizada para recalcular las cadenas de texto del HUD según el estado del mercado (`TimeTradeServer()`):
+   - Si `BotActivo` es falso: `txtVoz = "BOT APAGADO / PAUSADO"`, `txtVeredicto = "APAGADO"`.
+   - Si hay posiciones abiertas: Mantener mensaje `"MAIKO: Vigilando COMPRA/VENTA activo..."`.
+   - Si está fuera de horario (fin de semana o noche): `txtVoz = "FUERA HORARIO: MERCADO CERRADO"` o `"FUERA HORARIO: ESPERANDO"`, `txtVeredicto = "ARMADO (FUERA DE HORARIO)"`.
+   - Si está dentro de horario operativo: Inicializar a `"SCHOLAR: Buscando..."` y `"ESPERANDO..."` (salvo que ya esté en análisis).
+
+2. **Llamada en Click de Objeto (`OnChartEvent`)**:
+   Cuando se pulse el botón de encendido (`MAIKO_BtnP`), se llamará inmediatamente a `ActualizarTextosEstado()` y a `ActualizarInterfazMaster()`. Esto pintará el HUD al instante (rojo "APAGAR" + Estado "ARMADO") sin requerir la llegada de un tick.
+
+3. **Optimización en `OnTick`**:
+   Llamar a `ActualizarTextosEstado()` al inicio para sincronizar y dibujar todo de inmediato. Ajustar la validación horaria de `OnTick` para evitar redundancias.
 
 ---
 
-### Componente: UI Panel de Control (Dashboard)
+### Componente: Chatbot de la Página Web (React / Next.js)
 
-#### [MODIFY] [BotCard.tsx](file:///C:/proyectos/APP%20KOPYTRADING/src/components/BotCard.tsx)
-- Recuperar la versión del bot de la telemetría almacenada en `purchase?.botSettings?.[0]?.settings` (`runningVersion`).
-- Compararla con `botProduct.version` (`latestVersion`).
-- Si `runningVersion` (o en su defecto `purchase.lastDownloadedVersion`) es menor o diferente a `latestVersion`, mostrar una alerta estética en color ámbar/dorado dentro del bloque de descargas invitando a descargar la versión `latestVersion`.
-
-#### [MODIFY] [DashboardContainer.tsx](file:///C:/proyectos/APP%20KOPYTRADING/src/components/DashboardContainer.tsx)
-- Agregar un indicador dinámico y parpadeante (Amber Badge: `ACTUALIZACIÓN vX.XX`) en la vista general (mini-tarjetas del catálogo) al lado del estado ONLINE/OFFLINE para alertar al cliente inmediatamente al ingresar al panel.
-
----
-
-### Componente: UI Panel de Administración
-
-#### [MODIFY] [page.tsx](file:///C:/proyectos/APP%20KOPYTRADING/src/app/admin/page.tsx)
-- Cargar la lista de bots en el administrador a través de la API `GET /api/admin/bots`.
-- Añadir una nueva pestaña o sección llamada **"Actualizar Versión de Bot"** con un formulario intuitivo.
-- Campos del formulario:
-  - Bot a actualizar (Selector dinámico de bots activos).
-  - Nueva Versión (Texto, ej: `11.30`).
-  - Descripción de cambios/notas (Texto).
-  - Checkbox: "Enviar correo de notificación a todos los usuarios con licencia activa" (por defecto `true`).
-  - Botón: "Actualizar y Notificar".
+#### [MODIFY] [FloatingChat.tsx](file:///C:/proyectos/APP%20KOPYTRADING/src/components/FloatingChat.tsx)
+- Añadir un nuevo bloque de respuesta bajo `BOT_RESPONSES` con palabras clave como `"dormir"`, `"irse a dormir"`, `"dejar encendido"`, `"se activa solo"`, `"fin de semana"`, etc.
+- La respuesta explicará claramente que si el botón está rojo ("APAGAR"), el bot está armado y operará solo en cuanto abra el mercado. Recordará también la importancia de usar un VPS si se va a dormir para evitar desconexiones.
+- Enriquecer otras preguntas comunes para dotar al bot de la máxima información útil para los clientes (VPS, licencias, real vs demo, apalancamiento, etc.).
 
 ---
 
 ## Plan de Verificación
 
-### Pruebas de Compilación y Servidor
-1. Ejecutar compilación local (`npm run build`) para verificar la ausencia de errores en TypeScript o Next.js.
-2. Comprobar que no hay warnings en las peticiones del dashboard.
+### Compilación de Bots y Sincronización
+- Ejecutar el script `scratch/compile_and_sync_our_bots.ps1` en PowerShell para compilar todos los bots modificados en MetaEditor y verificar que no hay errores de sintaxis en MQL5.
+- Confirmar que los archivos `.ex5` y `.mq5` se actualizan en el panel de descargas del sitio web (`public/uploads/bots/` y `private_bots_backup/`).
 
-### Pruebas Manuales
-1. Cambiar temporalmente la versión de un bot en la base de datos (por ejemplo, el demo de Sakura) a una versión superior para forzar la aparición de la alerta de actualización.
-2. Confirmar visualmente la presencia de la alerta en la mini-tarjeta del dashboard y dentro de la pestaña de descargas del bot del cliente.
-3. Ejecutar el formulario de actualización de versión en el panel de administrador para el email `viajaconsakura@gmail.com` y comprobar en consola o Resend que se envíe el correo correspondiente con los datos exactos.
+### Compilación Web
+- Ejecutar `npm run build` en la terminal local para asegurar que la actualización de `FloatingChat.tsx` compila perfectamente en Next.js.
