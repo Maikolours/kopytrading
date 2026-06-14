@@ -33,3 +33,16 @@ Utiliza una estrategia mixta de **Sniper Scalping** y **Recuperación Elástica 
 - **Intervención y Control Web:** A diferencia de otros bots "cerrados", con MAIKO PRO GOLD puedes operar perfectamente desde la web (apagarlo, encenderlo o usar el botón de pánico para cerrar operaciones). A pesar de ello, **se recomienda dejar operar al bot tranquilamente**. Solo debes intervenir en momentos puntuales donde consideres que hay un peligro extremo y no tengas disposición de arriesgar más.
 - **Vigilancia en Volatilidad y Noticias:** Aunque el bot tiene sistemas de seguridad, se recomienda vigilarlo en horas de mucha volatilidad o noticias extremas. Si ves algo fuera de lo normal en el mercado, valora apagar el bot desde la web hasta el día siguiente.
 - **Los Viernes y los Gaps:** El sistema deja de abrir operaciones nuevas los viernes a las 19:00 para dar tiempo a cerrar el ciclo. Se recomienda encarecidamente **cerrar las operaciones abiertas los viernes** antes del cierre del mercado. Si consideras que el mercado puede darse la vuelta el lunes o quieres evitar "gaps" de fin de semana que podrían quemar la cuenta, es preferible asumir una pérdida controlada (cerrando en negativo) el viernes a última hora, ya que por los cálculos de rentabilidad, el sistema puede asumir y recuperar esa pérdida la semana siguiente.
+
+## 6. PREGUNTAS FRECUENTES Y SOLUCIÓN DE PROBLEMAS (FAQ)
+
+### P: He arrastrado el bot y le he dado a "ENCENDER" pero no hace nada y no cambia de color.
+- **Mercado cerrado o sin ticks de precio**: Los botones y textos de la interfaz del bot (HUD) solo se actualizan cuando el broker envía un movimiento de precio (tick). Si el mercado está cerrado (fin de semana) o hay bajísima liquidez, al hacer clic el botón parecerá no hacer nada. En cuanto abra el mercado y entre el primer precio, el bot se encenderá visualmente y actualizará todo su estado.
+- **Algo Trading desactivado**: Asegúrate de que el botón general "Algo Trading" en la barra superior de MetaTrader 5 esté en **verde** y que hayas marcado la casilla "Permitir trading algorítmico" en las opciones comunes del bot al arrastrarlo.
+
+### P: En el estado inferior pone "FUERA HORARIO: ESPERANDO" o "HORARIO BLOQUEADO (NOTICIAS)".
+- El bot tiene horas operativas configuradas por defecto (de 09:00 a 19:00 hora del broker). Fuera de este rango, o durante periodos de noticias importantes (si tienes activado el bloqueo), el bot entrará en modo espera automática para proteger tu capital. Volverá a operar solo cuando se cumpla la hora programada.
+
+### P: He instalado la versión de prueba (Trial/Demo) en una cuenta Real y no funciona.
+- Las versiones de prueba están estrictamente limitadas por código para funcionar únicamente en cuentas de tipo **DEMO**. Si se intenta colocar en una cuenta Real, el bot lanzará una ventana de alerta y se retirará del gráfico de inmediato para evitar riesgos.
+

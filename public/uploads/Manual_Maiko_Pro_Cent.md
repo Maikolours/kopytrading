@@ -28,3 +28,16 @@ Es exactamente el mismo "Motor de Inteligencia" que el MAIKO PRO GOLD, pero sus 
 
 ## 5. RECOMENDACIONES VITALES
 - **Paciencia:** Al ver las ganancias en centavos, muchos usuarios se impacientan y suben los lotes. **No lo hagas**. El poder del bot CENT reside en sobrevivir a crisis mundiales del mercado sin estrés. Deja que el interés compuesto haga su magia mes a mes.
+
+## 6. PREGUNTAS FRECUENTES Y SOLUCIÓN DE PROBLEMAS (FAQ)
+
+### P: He arrastrado el bot y le he dado a "ENCENDER" pero no hace nada y no cambia de color.
+- **Mercado cerrado o sin ticks de precio**: Los botones y textos de la interfaz del bot (HUD) solo se actualizan cuando el broker envía un movimiento de precio (tick). Si el mercado está cerrado (fin de semana) o hay bajísima liquidez, al hacer clic el botón parecerá no hacer nada. En cuanto abra el mercado y entre el primer precio, el bot se encenderá visualmente y actualizará todo su estado.
+- **Algo Trading desactivado**: Asegúrate de que el botón general "Algo Trading" en la barra superior de MetaTrader 5 esté en **verde** y que hayas marcado la casilla "Permitir trading algorítmico" en las opciones comunes del bot al arrastrarlo.
+
+### P: En el estado inferior pone "FUERA HORARIO: ESPERANDO" o "HORARIO BLOQUEADO (NOTICIAS)".
+- El bot tiene horas operativas configuradas por defecto (de 09:00 a 19:00 hora del broker). Fuera de este rango, o durante periodos de noticias importantes (si tienes activado el bloqueo), el bot entrará en modo espera automática para proteger tu capital. Volverá a operar solo cuando se cumpla la hora programada.
+
+### P: He instalado la versión de prueba (Trial/Demo) en una cuenta Real y no funciona.
+- Las versiones de prueba están estrictamente limitadas por código para funcionar únicamente en cuentas de tipo **DEMO**. Si se intenta colocar en una cuenta Real, el bot lanzará una ventana de alerta y se retirará del gráfico de inmediato para evitar riesgos.
+
