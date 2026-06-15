@@ -24,6 +24,8 @@ input double MaxRangoVelaM1 = 20.0;
 input double MaxSpreadPips = 4.0;
 input double SensibilidadMechaReal = 3.0;
 input int MinutosPausaTrasSusto = 1;
+input double MaxRsiCompra = 70.0; // Evitar comprar por encima de 70 (sobrecompra)
+input double MinRsiVenta = 30.0;  // Evitar vender por debajo de 30 (sobreventa)
 
 // --- TENDENCIA ---
 input int PeriodoMediaFiltro = 50;
@@ -317,9 +319,17 @@ bool ValidarEstructuraScholar(string &decision) {
         return false;
     }
     
-    bool rsiOK = (porEncima ? (rsi[0] > 50) : (rsi[0] < 50));
+    bool rsiOK = (porEncima ? (rsi[0] > 50 && rsi[0] < MaxRsiCompra) : (rsi[0] < 50 && rsi[0] > MinRsiVenta));
     if(!rsiOK) {
-        txtVeredicto = StringFormat("P:%.2f EMA:%.2f RSI:%.1f | %s", precio, ema[0], rsi[0], (porEncima ? "RSI > 50 REQ" : "RSI < 50 REQ"));
+        string rsiReason = "";
+        if(porEncima) {
+            if(rsi[0] <= 50) rsiReason = "RSI > 50 REQ";
+            else if(rsi[0] >= MaxRsiCompra) rsiReason = StringFormat("RSI ALTO SOBRECOMPRA (>%.0f)", MaxRsiCompra);
+        } else {
+            if(rsi[0] >= 50) rsiReason = "RSI < 50 REQ";
+            else if(rsi[0] <= MinRsiVenta) rsiReason = StringFormat("RSI BAJO SOBREVENTA (<%.0f)", MinRsiVenta);
+        }
+        txtVeredicto = StringFormat("P:%.2f EMA:%.2f RSI:%.1f | %s", precio, ema[0], rsi[0], rsiReason);
         return false;
     }
 
