@@ -425,7 +425,30 @@ double CalcularGanadoHoy() {
     return total; 
 }
 
-void CerrarTodo() { for(int i=ArraySize(pos)-1; i>=0; i--) trade.PositionClose(pos[i].ticket); }
+void CerrarTodo() { 
+    int total = ArraySize(pos);
+    if(total == 0) return;
+    Print("KOPYTRADING: Iniciando cierre de ", total, " posiciones...");
+    for(int i=total-1; i>=0; i--) {
+        ulong ticket = pos[i].ticket;
+        if(PositionSelectByTicket(ticket)) {
+            int retries = 0;
+            bool closed = false;
+            while(retries < 5 && !closed) {
+                if(trade.PositionClose(ticket)) {
+                    closed = true;
+                    Print("KOPYTRADING: Posicion ", ticket, " cerrada correctamente.");
+                } else {
+                    retries++;
+                    int err = GetLastError();
+                    Print("KOPYTRADING: Error al cerrar posicion ", ticket, " (Intento ", retries, "/5). Codigo: ", err);
+                    Sleep(200); 
+                    ActualizarEstadoMaster();
+                }
+            }
+        }
+    }
+}
 
 void ActualizarRadarMaster() { 
     string tfs[]={"W1","D1","H4","H1","M15","M5","M1"}; 
