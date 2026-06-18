@@ -10,9 +10,9 @@ Para operar con **Evolution PRO** de forma segura y sacarle el máximo partido a
 
 ### 💰 El Capital Ideal y Adaptación a Cuentas CENT
 * **Para Cuenta Real Estándar:** Lo ideal es iniciar con un capital de **$1,000 USD** (o divisa equivalente). Este balance proporciona el margen necesario para que la cuadrícula y las coberturas dinámicas del bot respiren cómodamente en días de alta volatilidad.
-* **Para Cuenta CENT (Para capitales iniciales más bajos):** Si no dispones de $1,000 USD para una cuenta estándar, no te preocupes: puedes optar por una **Cuenta CENT** (centavos), donde la escala de dinero se multiplica por 100 en la plataforma de trading.
+* **Para Cuenta CENT (Para capitales iniciales más bajos):** Si no dispones de $1,000 USD para una cuenta estándar, puedes optar por una **Cuenta CENT** (centavos), donde la escala de dinero se multiplica por 100 en la plataforma de trading.
   * En una cuenta CENT, un depósito de **$100 USD** reales se visualiza como **10,000 centavos** de balance (lo cual ya te da 10 veces el margen ideal de la estrategia).
-  * **La recomendación ideal para operar con total tranquilidad en cuenta CENT es depositar entre $300 USD y $500 USD reales.** Esto se traduce en un balance operativo gigantesco de entre **30,000 y 50,000 centavos**, lo cual hace que tu cuenta sea extremadamente segura, robusta y resistente ante cualquier sacudida del mercado.
+  * **La recomendación ideal para operar con total tranquilidad en cuenta CENT es depositar entre $300 USD y $500 USD reales.** Esto se traduce en un balance operativo de entre **30,000 y 50,000 centavos**, haciendo que tu cuenta sea extremadamente segura, robusta y resistente ante cualquier sacudida del mercado.
 
 ### 🎁 El "Truco" de los Bonos de Depósito (Multiplica tu Capital)
 Puedes aprovechar los **bonos del 100% de depósito** que ofrecen los brokers para maximizar la seguridad de tu balance con un desembolso menor:
@@ -41,7 +41,8 @@ Una vez que enciendas el bot, **se recomienda no tocar las operaciones individua
 ### 🛡️ Uso del Stop Loss Diario Personalizado
 Si deseas limitar al máximo el riesgo y dormir con total tranquilidad, el bot incluye parámetros de protección de capital:
 * **Stop Loss Dinámico / Límite Diario:** Puedes configurar el bot para que detenga la operativa y asuma una pérdida máxima diaria si el mercado se mueve en contra de forma extrema. 
-* **Configuración recomendada:** Una pérdida diaria controlada de aproximadamente el **10% del balance** es un buen punto de partida para cuentas de bajo riesgo, aunque cada usuario es completamente libre de definir la cantidad máxima que está dispuesto a arriesgar diariamente según su perfil de trading.
+* **Configuración por defecto:** Por defecto, el Stop Loss dinámico viene configurado en el **10% del balance de la cuenta**.
+* **⚠️ Recomendación crucial sobre el Stop Loss:** No configures este límite a un porcentaje demasiado bajo (como un 2% o un 5%). Si lo haces, obligarás al bot a cerrar operaciones en pérdidas de manera prematura. El bot cuenta con análisis matemáticos avanzados y filtros de tendencia que le permiten gestionar y recuperar flotantes temporales. **En un 80% o 90% de los casos, el bot se recupera exitosamente por sí solo.** Por lo tanto, si la cuenta tiene el margen recomendado, es mejor permitir que el bot complete su ciclo en lugar de cortar la operativa por miedo.
 
 ---
 
@@ -53,12 +54,14 @@ El bot ha sido puesto a prueba durante movimientos extremadamente bruscos y ráp
 
 El bot se comportó de manera impecable y cerró con grandes beneficios. No obstante, es importante ser realistas: en ese movimiento el bot no tenía operaciones abiertas con alto volumen en los peores momentos, lo que facilitó una salida rápida y limpia. 
 
-### 📰 Noticias de Alto Impacto y Manipulación de Mercado
-Debes recordar siempre que **el mercado de divisas no es matemática pura**. En cualquier momento pueden surgir eventos inesperados o manipulaciones de mercado (especialmente durante noticias macroeconómicas importantes, como decisiones de tipos de interés, datos de empleo o comparecencias de la Fed). 
+---
 
-* Si hay operaciones abiertas y el mercado sufre una manipulación o un movimiento violento inesperado, las pérdidas flotantes pueden aumentar快速 de valor.
-* **Recomendación estrella:** Mantente siempre atento al calendario económico. Se recomienda **apagar el bot antes de noticias de alto impacto**.
-* Si el mercado entra en una fase de volatilidad extrema o manipulación evidente, **siempre es preferible pausar el bot e incluso cerrar de forma manual las operaciones abiertas asumiendo una pequeña pérdida**, antes de permitir que una manipulación barra la cuenta y provoque una pérdida mucho mayor. Proteger el capital es siempre la prioridad número uno.
+> [!IMPORTANT]
+> # 🚨 **¡ATENCIÓN CRÍTICA: CONTROL ABSOLUTO DE NOTICIAS!**
+> **El mercado financiero no es matemática pura y está sujeto a manipulaciones extremas o deslizamientos de spread durante noticias de alto impacto.** Por ello, debes seguir esta regla obligatoria:
+> * **Si NO tienes operaciones abiertas** y se aproxima una noticia macroeconómica importante (inflación IPC, desempleo NFP, tipos de interés de la Fed, etc.): **APAGA EL BOT INMEDIATAMENTE**.
+> * Deja que pase la noticia, observa hacia dónde se mueve el precio y cómo se estabiliza el mercado. Una vez que el mercado recupere su comportamiento normal, vuelve a encender el bot.
+> * Aunque el bot se comporta de manera excelente con noticias normales o de impacto medio, si una noticia extrema te pilla con operaciones abiertas, el precio puede moverse tan rápido que las operaciones queden colgadas. En esos casos de volatilidad descontrolada, **siempre es preferible pausar el bot e incluso cerrar manualmente operaciones en pequeñas pérdidas** para proteger tu capital de una pérdida mayor por manipulación.
 
 ---
 
@@ -68,7 +71,12 @@ El sistema v5.84 incluye mejoras exclusivas de inteligencia artificial y protecc
 
 1. **Meta Inteligente (Smart Take Profit):** El bot no utiliza un TP fijo estático. Ajusta dinámicamente el objetivo de ganancia en función de la volatilidad y la velocidad del precio para exprimir al máximo los movimientos a nuestro favor.
 2. **🏛️ Filtro de Techos y Suelos:** Este filtro analiza las últimas horas de mercado para identificar zonas de saturación (máximos y mínimos locales). Evita que el bot cometa el clásico error de comprar justo cuando el precio está en el techo o vender cuando está en el suelo, reduciendo drásticamente el drawdown.
-3. **📱 Control Total desde el Móvil:** Gracias a la sincronización en la nube de KopyTrading:
+3. **⏱️ Flexibilidad de Temporalidades (Timeframes):** El bot funciona y se adapta a varias temporalidades según las condiciones del mercado:
+   * **M15 (15 Minutos - Recomendado por defecto):** Ofrece el equilibrio ideal entre la frecuencia de las operaciones y la precisión en las entradas.
+   * **M5 (5 Minutos):** Aumenta la velocidad y la cantidad de operaciones (perfil más agresivo), pero ten en cuenta que el flotante puede subir más rápido.
+   * **H1 (1 Hora):** Recomendado para mercados altamente volátiles o para un estilo de trading muy conservador. Las operaciones son más espaciadas y seguras, reduciendo la exposición al ruido del mercado.
+4. **⏰ Horario Operativo por Defecto:** Viene programado para buscar entradas de **09:00 a 19:00 (de lunes a viernes)**, que son las horas de mayor liquidez. Puedes editar libremente este rango horario en los parámetros del bot para adaptarlo a tus preferencias.
+5. **📱 Control Total desde el Móvil:** Gracias a la sincronización en la nube de KopyTrading:
    * Puedes monitorear tus operaciones abiertas y ganancias diarias desde el móvil.
    * Cuentas con un **Botón de Pánico / Cierre** desde tu dashboard web para pausar el bot o cerrar todo en un solo clic si alguna vez te sientes incómodo con el mercado, sin necesidad de conectarte a tu VPS.
 
@@ -76,18 +84,36 @@ El sistema v5.84 incluye mejoras exclusivas de inteligencia artificial y protecc
 
 ## 🛠️ 4. Instrucciones de Instalación Paso a Paso
 
-1. **Descarga el bot:** Obtén el archivo ejecutable `.ex5` desde el área de clientes de tu panel de KopyTrading.
+1. **Descarga el bot:** Obtén el archivo ejecutable del bot (`.ex5`) que se te envía inicialmente por correo electrónico. Recuerda que también puedes descargarlo en cualquier momento, al igual que sus futuras actualizaciones, desde el panel de usuario en la web de KopyTrading.
+   * *Nota: Te recomendamos revisar periódicamente tu panel web. Liberamos actualizaciones regulares para optimizar la operativa y adaptarnos a los cambios del mercado en tu beneficio.*
 2. **Abre MetaTrader 5:** En tu PC o servidor VPS, abre MT5. Ve a **Archivo** > **Abrir Carpeta de Datos**.
 3. **Ubica la carpeta de Experts:** Navega a `MQL5` > `Experts` y pega el archivo descargable del bot allí.
 4. **Actualiza e Instala:** En la barra izquierda de MT5 (Navegador), haz clic derecho sobre "Asesores Expertos" y pulsa **Actualizar**.
-5. **Configura el Gráfico:** Abre el gráfico de **XAUUSD** (Oro) y configúralo en la temporalidad de **M15** (o M5 para perfiles más agresivos).
+5. **Configura el Gráfico:** Abre el gráfico de **XAUUSD** (Oro) y configúralo en la temporalidad deseada (**M15** por defecto).
 6. **Arrastra el bot:** Arrastra el Asesor Experto al gráfico del Oro.
-7. **IMPORTANTE - Activa tu Licencia:** En la pestaña de parámetros del bot, asegúrate de rellenar el campo **ID Vínculo** con tu código personal obtenido en tu panel web. Sin este ID, el bot no se conectará a la nube y no ejecutará operaciones.
+7. **IMPORTANTE - Activa tu Licencia:** En la pestaña de parámetros del bot, asegúrate de rellenar el campo **ID Vínculo** con tu código personal obtenido en tu panel web. **Este paso es una condición obligatoria e indispensable tanto para cuentas Reales como para cuentas DEMO.** Sin tu código de licencia, el bot no operará.
 8. **Activa el Autotrading:** Asegúrate de que el botón de **Algo Trading** (Trading Algorítmico) en la barra superior de MT5 esté de color verde (Activado).
 
 ---
 
-## ⚠️ 5. Aviso de Riesgo y Limitación de Responsabilidad
+## 🔍 5. Errores Comunes y Solución de Problemas
+
+### ❌ El bot está en el gráfico pero no abre operaciones y no carga el HUD
+* **Solución:** Asegúrate de haber completado el paso 7 de la instalación. Sin introducir tu **ID Vínculo** de licencia en los parámetros del bot, este se mantendrá desactivado por seguridad.
+
+### ❌ El bot da error de conexión al iniciar o no valida la licencia
+* **Explicación:** MetaTrader 5 requiere tu autorización expresa para conectarse a nuestro servidor web y validar tu ID de licencia.
+* **Solución (Paso Obligatorio de WebRequest):**
+  1. En la barra superior de MT5, ve a **Herramientas (Tools)** > **Opciones (Options)**.
+  2. Selecciona la pestaña **Asesores Expertos (Expert Advisors)**.
+  3. Marca la casilla **"Permitir WebRequest para las URLs listadas" (Allow WebRequest for listed URL)**.
+  4. Haz doble clic en el símbolo `+` verde de abajo y añade la URL oficial de la plataforma:
+     `https://kopytrading.com`
+  5. Haz clic en **Aceptar**. Reinicia tu MetaTrader 5 y el bot se conectará de inmediato.
+
+---
+
+## ⚠️ 6. Aviso de Riesgo y Limitación de Responsabilidad
 
 > [!WARNING]
 > **El trading en mercados financieros conlleva un alto riesgo de pérdida de capital.**
