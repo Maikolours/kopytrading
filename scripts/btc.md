@@ -1,16 +1,17 @@
-<div class="cover-container" style="--accent-color: #F7931A; --accent-bg: rgba(247, 147, 26, 0.08);">
-  <div class="logos-left">
-    <img class="logo-head" src="{{logoKopyTrading}}" alt="KopyTrading Logo" />
-  </div>
-  <div class="header-text">
-    <span class="badge-premium" style="--accent-color: #F7931A; --accent-bg: rgba(247, 147, 26, 0.15);">Institutional Crypto Engine</span>
-    <h1 class="main-title">MAIKO PRO BTC</h1>
-    <h2 class="sub-title">Guía de Inicio y Manual de Operación Oficial v5.84</h2>
-  </div>
-  <div class="logos-right">
-    <img class="logo-maiko" src="{{logoMaikoBtc}}" alt="Maiko BTC" title="Versión BTC" />
+<div class="cover-page" style="--accent-color: #F7931A; --accent-bg: rgba(247, 147, 26, 0.08);">
+  <div class="cover-content">
+    <img class="cover-logo-head" src="{{logoKopyTrading}}" alt="KopyTrading" />
+    <div>
+      <span class="cover-badge" style="--accent-color: #F7931A; --accent-bg: rgba(247, 147, 26, 0.15);">Institutional Crypto Engine</span>
+    </div>
+    <h1 class="cover-title">MAIKO PRO BTC</h1>
+    <h2 class="cover-subtitle">Guía de Inicio y Manual de Operación Oficial v5.84</h2>
+    <div class="cover-frame">
+      <img class="cover-logo-maiko" src="{{logoMaikoBtc}}" alt="Maiko BTC" />
+    </div>
   </div>
 </div>
+<div class="page-break"></div>
 
 ¡Felicidades por adquirir **MAIKO PRO BTC**! Este es un algoritmo de nivel institucional diseñado específicamente para domar la alta volatilidad del mercado de las Criptomonedas, con capacidad para operar de lunes a domingo.
 

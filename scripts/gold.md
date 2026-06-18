@@ -1,17 +1,17 @@
-<div class="cover-container" style="--accent-color: #D4AF37; --accent-bg: rgba(212, 175, 55, 0.08);">
-  <div class="logos-left">
-    <img class="logo-head" src="{{logoKopyTrading}}" alt="KopyTrading Logo" />
-  </div>
-  <div class="header-text">
-    <span class="badge-premium" style="--accent-color: #D4AF37; --accent-bg: rgba(212, 175, 55, 0.15);">Premium Algorithmic Suite</span>
-    <h1 class="main-title">MAIKO PRO GOLD</h1>
-    <h2 class="sub-title">Guía de Inicio y Manual de Operación Oficial v5.84</h2>
-  </div>
-  <div class="logos-right">
-    <img class="logo-maiko" src="{{logoMaikoGold}}" alt="Maiko Gold Real" title="Versión Real" />
-    <img class="logo-maiko" src="{{logoMaikoGoldDemo}}" alt="Maiko Gold Demo" title="Versión Demo" />
+<div class="cover-page" style="--accent-color: #D4AF37; --accent-bg: rgba(212, 175, 55, 0.08);">
+  <div class="cover-content">
+    <img class="cover-logo-head" src="{{logoKopyTrading}}" alt="KopyTrading" />
+    <div>
+      <span class="cover-badge" style="--accent-color: #D4AF37; --accent-bg: rgba(212, 175, 55, 0.15);">Premium Algorithmic Suite</span>
+    </div>
+    <h1 class="cover-title">MAIKO PRO GOLD</h1>
+    <h2 class="cover-subtitle">Guía de Inicio y Manual de Operación Oficial v5.84</h2>
+    <div class="cover-frame">
+      <img class="cover-logo-maiko" src="{{logoMaikoGold}}" alt="Maiko Gold" />
+    </div>
   </div>
 </div>
+<div class="page-break"></div>
 
 ¡Felicidades por adquirir **MAIKO PRO GOLD**! Estás a punto de operar con uno de los algoritmos de scalping más avanzados para el mercado del Oro (XAUUSD). Este manual ha sido redactado de tú a tú para explicarte las mejores prácticas y proteger tu capital en cuenta real.
 

@@ -22,6 +22,24 @@ function getBase64Image(filePath) {
 
 async function generateManuals() {
     const outDir = path.join(__dirname, '..', 'public', 'uploads');
+    const manualsDir = path.join(__dirname, '..', 'MANUALES');
+
+    // Ensure local MANUALES directory exists
+    if (!fs.existsSync(manualsDir)) {
+        fs.mkdirSync(manualsDir, { recursive: true });
+    }
+
+    // Clean up duplicate old manual file in the root if it exists
+    const rootDuplicate = path.join(__dirname, '..', 'Manual_Maiko_Pro_Gold.pdf');
+    if (fs.existsSync(rootDuplicate)) {
+        console.log("Cleaning up duplicate old manual file from root...");
+        try {
+            fs.unlinkSync(rootDuplicate);
+            console.log("Successfully removed old root manual.");
+        } catch (err) {
+            console.error("Error deleting old root manual:", err);
+        }
+    }
     
     // Load style and templates
     const styleCss = fs.readFileSync(path.join(__dirname, 'manual_style.css'), 'utf8');
@@ -49,7 +67,7 @@ async function generateManuals() {
         '{{logomaikogold}}': logoMaikoGold,
         '{{logomaikogolddemo}}': logoMaikoGoldDemo,
         '{{logomaikocent}}': logoMaikoCent,
-        '{{logomaiko}': logoMaikoBtc, // fallback just in case
+        '{{logomaiko}': logoMaikoBtc, // fallback
         '{{logomaikobtc}}': logoMaikoBtc
     };
 
@@ -86,7 +104,13 @@ async function generateManuals() {
                 margin: { top: '15mm', bottom: '15mm', left: '15mm', right: '15mm' }
             }
         });
-        console.log("PDFs generated.");
+        console.log("PDFs generated in public/uploads.");
+
+        // Copy compiled PDFs to local MANUALES folder
+        fs.copyFileSync(path.join(outDir, 'Manual_Maiko_Pro_Gold.pdf'), path.join(manualsDir, 'Manual_Maiko_Pro_Gold.pdf'));
+        fs.copyFileSync(path.join(outDir, 'Manual_Maiko_Pro_Cent.pdf'), path.join(manualsDir, 'Manual_Maiko_Pro_Cent.pdf'));
+        fs.copyFileSync(path.join(outDir, 'Manual_Maiko_Pro_BTC.pdf'), path.join(manualsDir, 'Manual_Maiko_Pro_BTC.pdf'));
+        console.log("PDFs successfully copied to MANUALES directory.");
     } catch (e) {
         console.error("Error generating PDFs:", e);
         process.exit(1);

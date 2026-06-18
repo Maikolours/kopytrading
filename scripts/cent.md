@@ -1,16 +1,17 @@
-<div class="cover-container" style="--accent-color: #10B981; --accent-bg: rgba(16, 185, 129, 0.08);">
-  <div class="logos-left">
-    <img class="logo-head" src="{{logoKopyTrading}}" alt="KopyTrading Logo" />
-  </div>
-  <div class="header-text">
-    <span class="badge-premium" style="--accent-color: #10B981; --accent-bg: rgba(16, 185, 129, 0.15);">Micro-Account Engine</span>
-    <h1 class="main-title">MAIKO PRO CENT</h1>
-    <h2 class="sub-title">Guía de Inicio y Manual de Operación Oficial v5.84</h2>
-  </div>
-  <div class="logos-right">
-    <img class="logo-maiko" src="{{logoMaikoCent}}" alt="Maiko Cent" title="Versión Cent" />
+<div class="cover-page" style="--accent-color: #10B981; --accent-bg: rgba(16, 185, 129, 0.08);">
+  <div class="cover-content">
+    <img class="cover-logo-head" src="{{logoKopyTrading}}" alt="KopyTrading" />
+    <div>
+      <span class="cover-badge" style="--accent-color: #10B981; --accent-bg: rgba(16, 185, 129, 0.15);">Micro-Account Engine</span>
+    </div>
+    <h1 class="cover-title">MAIKO PRO CENT</h1>
+    <h2 class="cover-subtitle">Guía de Inicio y Manual de Operación Oficial v5.84</h2>
+    <div class="cover-frame">
+      <img class="cover-logo-maiko" src="{{logoMaikoCent}}" alt="Maiko Cent" />
+    </div>
   </div>
 </div>
+<div class="page-break"></div>
 
 ¡Felicidades por adquirir **MAIKO PRO CENT**! Esta es la versión "Blindada" del motor Maiko. Al estar diseñado exclusivamente para operar en Cuentas CENT (donde la escala del dinero se multiplica por 100), es un bot extremadamente conservador en cuanto a riesgo real, ideal para un crecimiento constante del balance y uso del interés compuesto.
 
