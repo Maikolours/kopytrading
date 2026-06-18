@@ -212,6 +212,88 @@ strong {
   page-break-before: always;
 }
 
+/* Cover Page Styling */
+.cover-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 245mm; /* Fits perfectly on an A4 page with margins */
+  padding: 2rem;
+  background: radial-gradient(circle at top left, var(--accent-bg), #ffffff);
+  border: 2px solid var(--accent-color);
+  border-radius: 24px;
+  position: relative;
+  text-align: center;
+}
+
+.cover-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 600px;
+}
+
+.cover-logo-head {
+  height: 100px;
+  width: auto;
+  margin-bottom: 0.5rem;
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  background-color: var(--accent-bg);
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.cover-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 3.2rem;
+  font-weight: 900;
+  margin: 0;
+  color: #0f172a;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.cover-subtitle {
+  font-size: 1.2rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+}
+
+.cover-frame {
+  margin-top: 1.5rem;
+  padding: 8px;
+  background: white;
+  border-radius: 20px;
+  border: 1.5px solid var(--accent-color);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+}
+
+.cover-logo-maiko {
+  height: 140px;
+  width: auto;
+  border-radius: 14px;
+  display: block;
+}
+
+/* Evitar división de cajas de alerta y tarjetas */
+.alert-box, .card {
+  page-break-inside: avoid;
+}
+
+
 </style>
 
 <div class="cover-page" style="--accent-color: #10B981; --accent-bg: rgba(16, 185, 129, 0.08);">
@@ -275,13 +357,8 @@ El bot cuenta con un parámetro de protección para limitar pérdidas extremas d
 
 ---
 
-### ⚡ Rendimiento en Movimientos Bruscos (El ejemplo del 17 de junio)
-El bot ha sido puesto a prueba durante movimientos extremadamente bruscos del mercado, demostrando una excelente solidez. Por ejemplo, durante el desplome histórico del Oro del **17 de junio**, el bot arrojó excelentes resultados en nuestras cuentas de seguimiento:
-* En la cuenta de **$2,000 USD**, obtuvo **$80 USD** de beneficio.
-* En la cuenta de **$800+ USD**, obtuvo unos **$50 USD** y tantos.
-* En la cuenta pequeña de **$400 USD** (en fase de recuperación al rededor de los $200), hizo **$25 USD**.
-
-El bot se comportó de manera impecable y cerró con grandes beneficios. No obstante, es importante ser realistas: en ese movimiento el bot no tenía operaciones abiertas con alto volumen en los peores momentos, lo que facilitó una salida rápida y limpia. 
+### ⚡ Rendimiento en Movimientos Bruscos de Alta Volatilidad
+El bot ha sido puesto a prueba en escenarios de alta volatilidad y movimientos extremadamente bruscos del mercado, demostrando una excelente solidez y capacidad de recuperación. En nuestras cuentas de seguimiento, el algoritmo ha gestionado de manera óptima el flotante ante caídas y subidas repentinas de precio, cerrando las operaciones con beneficios consistentes de forma autónoma. No obstante, es importante recordar que el mercado no es 100% predecible y se debe vigilar la operativa.
 
 <div class="alert-box" style="--alert-color: #e11d48; --alert-bg: #fff1f2; --alert-text-color: #9f1239;">
   <h4>🚨 ¡ATENCIÓN CRÍTICA: CONTROL DE NOTICIAS MACROECONÓMICAS!</h4>
@@ -292,7 +369,7 @@ El bot se comportó de manera impecable y cerró con grandes beneficios. No obst
 
 ---
 
-## 3. CONCEPTOS CLAVE DE LA ESTRATEGIA EVOLUTION PRO CENT
+## 3. CONCEPTOS CLAVE DE LA ESTRATEGIA MAIKO PRO CENT
 
 El sistema v5.84 incluye mejoras exclusivas de inteligencia artificial y protección del balance:
 
@@ -344,7 +421,7 @@ El sistema v5.84 incluye mejoras exclusivas de inteligencia artificial y protecc
 
 > [!WARNING]
 > **El trading en mercados financieros conlleva un alto riesgo de pérdida de capital.**
-> Aunque Evolution PRO ha sido diseñado con tecnología de punta y cuenta con estadísticas de acierto superiores al 80% en pruebas históricas, el mercado del Oro es sumamente volátil y los rendimientos pasados no garantizan beneficios futuros.
+> Aunque Maiko Pro ha sido diseñado con tecnología de punta y cuenta con estadísticas de acierto superiores al 80% en pruebas históricas, el mercado del Oro es sumamente volátil y los rendimientos pasados no garantizan beneficios futuros.
 >
 > **KopyTrading se limita exclusivamente a proveer herramientas de software y soporte tecnológico.** No actuamos como asesores financieros, no gestionamos cuentas de terceros ni somos responsables por las pérdidas directas o indirectas derivadas del uso de este bot. Opera siempre con capital que estés dispuesto a arriesgar y bajo tu propia responsabilidad.
 

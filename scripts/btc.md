@@ -111,7 +111,7 @@ A diferencia de los pares de divisas tradicionales, el Bitcoin no respeta los ca
 
 > [!WARNING]
 > **El trading en mercados financieros conlleva un alto riesgo de pérdida de capital.**
-> Aunque Evolution PRO ha sido diseñado con tecnología de punta y cuenta con estadísticas de acierto superiores al 80% en pruebas históricas, el mercado del Oro es sumamente volátil y los rendimientos pasados no garantizan beneficios futuros.
+> Aunque Maiko Pro ha sido diseñado con tecnología de punta y cuenta con estadísticas de acierto superiores al 80% en pruebas históricas, el mercado del Oro es sumamente volátil y los rendimientos pasados no garantizan beneficios futuros.
 >
 > **KopyTrading se limita exclusivamente a proveer herramientas de software y soporte tecnológico.** No actuamos como asesores financieros, no gestionamos cuentas de terceros ni somos responsables por las pérdidas directas o indirectas derivadas del uso de este bot. Opera siempre con capital que estés dispuesto a arriesgar y bajo tu propia responsabilidad.
 

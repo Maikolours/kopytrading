@@ -212,6 +212,88 @@ strong {
   page-break-before: always;
 }
 
+/* Cover Page Styling */
+.cover-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 245mm; /* Fits perfectly on an A4 page with margins */
+  padding: 2rem;
+  background: radial-gradient(circle at top left, var(--accent-bg), #ffffff);
+  border: 2px solid var(--accent-color);
+  border-radius: 24px;
+  position: relative;
+  text-align: center;
+}
+
+.cover-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 600px;
+}
+
+.cover-logo-head {
+  height: 100px;
+  width: auto;
+  margin-bottom: 0.5rem;
+}
+
+.cover-badge {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  background-color: var(--accent-bg);
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.cover-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 3.2rem;
+  font-weight: 900;
+  margin: 0;
+  color: #0f172a;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.cover-subtitle {
+  font-size: 1.2rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+}
+
+.cover-frame {
+  margin-top: 1.5rem;
+  padding: 8px;
+  background: white;
+  border-radius: 20px;
+  border: 1.5px solid var(--accent-color);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+}
+
+.cover-logo-maiko {
+  height: 140px;
+  width: auto;
+  border-radius: 14px;
+  display: block;
+}
+
+/* Evitar división de cajas de alerta y tarjetas */
+.alert-box, .card {
+  page-break-inside: avoid;
+}
+
+
 </style>
 
 <div class="cover-page" style="--accent-color: #F7931A; --accent-bg: rgba(247, 147, 26, 0.08);">
@@ -327,7 +409,7 @@ A diferencia de los pares de divisas tradicionales, el Bitcoin no respeta los ca
 
 > [!WARNING]
 > **El trading en mercados financieros conlleva un alto riesgo de pérdida de capital.**
-> Aunque Evolution PRO ha sido diseñado con tecnología de punta y cuenta con estadísticas de acierto superiores al 80% en pruebas históricas, el mercado del Oro es sumamente volátil y los rendimientos pasados no garantizan beneficios futuros.
+> Aunque Maiko Pro ha sido diseñado con tecnología de punta y cuenta con estadísticas de acierto superiores al 80% en pruebas históricas, el mercado del Oro es sumamente volátil y los rendimientos pasados no garantizan beneficios futuros.
 >
 > **KopyTrading se limita exclusivamente a proveer herramientas de software y soporte tecnológico.** No actuamos como asesores financieros, no gestionamos cuentas de terceros ni somos responsables por las pérdidas directas o indirectas derivadas del uso de este bot. Opera siempre con capital que estés dispuesto a arriesgar y bajo tu propia responsabilidad.
 
