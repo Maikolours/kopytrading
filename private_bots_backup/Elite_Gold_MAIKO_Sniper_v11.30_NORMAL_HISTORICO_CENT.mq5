@@ -25,8 +25,8 @@ double MaxRangoVelaM1 = 20.0;
 double MaxSpreadPips = 4.0;
 double SensibilidadMechaReal = 3.0;
 int MinutosPausaTrasSusto = 1;
-double MaxRsiCompra = 70.0;
-double MinRsiVenta = 30.0;
+input double   MaxRsiCompra               = 70.0;        // 📈 RSI Máximo para Compras (Filtro Techos)
+input double   MinRsiVenta                = 30.0;        // 📉 RSI Mínimo para Ventas (Filtro Suelos)
 int PeriodoMediaFiltro = 50;
 bool CheckM15 = true;
 bool CheckM5 = true;
@@ -61,20 +61,20 @@ input ENUM_TIMEFRAMES  TimeframeConfirmacion      = PERIOD_M5;   // 📅 Tempora
 
 // --- OPERATIVA Y LOTES ---
 input group "━━━━━━ 📈 𝗖 𝗢 𝗡 𝗙 𝗜 𝗚 𝗨 𝗥 𝗔 𝗖 𝗜 𝗢 𝗡   𝗬   𝗟 𝗢 𝗧 𝗘 𝗦 ━━━━━━"
-input double   LoteAtaque                 = 0.02;        // 🚀 Volumen Entrada Inicial (Ataque)
-input double   MaxLoteTotal               = 0.06;        // 🚫 Lote Máximo Acumulado Permitido
-input double   MaxLoteIndividual          = 0.04;        // 🚫 Lote Máximo por Operación SOS
+input double   LoteAtaque                 = 0.10;        // 🚀 Volumen Entrada Inicial (Ataque)
+input double   MaxLoteTotal               = 5.00;        // 🚫 Lote Máximo Acumulado Permitido
+input double   MaxLoteIndividual          = 1.00;        // 🚫 Lote Máximo por Operación SOS
 input double   MultiplicadorRefuerzo      = 3.0;         // ✖️ Multiplicador Lote de Rescate (SOS)
 
 // --- DISTANCIAS Y CASCADA ---
 input group "━━━━━━ 📏 𝗗 𝗜 𝗦 𝗧 𝗔 𝗡 𝗖 𝗜 𝗔 𝗦   𝗬   𝗖 𝗔 𝗦 𝗖 𝗔 𝗗 𝗔 ━━━━━━"
-input double   DistanciaRefuerzoPips      = 15.0;        // 📏 Distancia Mínima para Abrir SOS (Pips)
+input double   DistanciaRefuerzoPips      = 30.0;        // 📏 Distancia Mínima para Abrir SOS (Pips)
 
 // --- COBRAR BENEFICIOS (TAKE PROFIT) ---
 input group "━━━━━━ 💰 𝗖 𝗢 𝗕 𝗥 𝗔 𝗥   𝗕 𝗘 𝗡 𝗘 𝗙 𝗜 𝗖 𝗜 𝗢 𝗦   ( 𝗧 𝗣 ) ━━━━━━"
-input double   ProfitNetoFlush            = 0.25;        // 💵 Beneficio Cierre Total Cesta ($)
-input double   ProfitCosechaIndividual    = 0.06;        // 💵 Beneficio Cierre SOS Individual ($)
-input double   TargetDiario               = 5.0;         // 🎯 Meta de Beneficio Diario ($)
+input double   ProfitNetoFlush            = 50.0;        // 💵 Beneficio Cierre Total Cesta ($)
+input double   ProfitCosechaIndividual    = 7.50;        // 💵 Beneficio Cierre SOS Individual ($)
+input double   TargetDiario               = 150.0;       // 🎯 Meta de Beneficio Diario ($)
 
 // --- HORARIOS OPERATIVOS ---
 input group "━━━━━━ ⏰ 𝗛 𝗢 𝗥 𝗔 𝗥 𝗜 𝗢 𝗦   𝗢 𝗣 𝗘 𝗥 𝗔 𝗧 𝗜 𝗩 𝗢 𝗦 ━━━━━━"
@@ -88,7 +88,7 @@ input int      HoraFinBloqueo             = 16;          // 🛑 Hora Fin Bloque
 // --- PROTECCIONES Y SEGURIDAD ---
 input group "━━━━━━ 🛡️ 𝗣 𝗥 𝗢 𝗧 𝗘 𝗖 𝗖 𝗜 𝗢 𝗡 𝗘 𝗦   𝗬   𝗦 𝗘 𝗚 𝗨 𝗥 𝗜 𝗗 𝗔 𝗗 ━━━━━━"
 input int      LimitePosicionesSOS        = 2;           // 🛡️ Límite Máximo Posiciones SOS
-input double   ProfitBreakEven            = 0.10;        // 🛡️ Beneficio Mínimo Break Even Cesta ($)
+input double   ProfitBreakEven            = 5.00;        // 🛡️ Beneficio Mínimo Break Even Cesta ($)
 input double   ProteccionBeneficioDiario  = 0.0;         // 🛡️ Proteger Beneficio Diario Acumulado ($)
 input bool     UsarStopLossPorcentaje     = false;       // 🚨 Activar Stop Loss por % Cuenta
 input double   PorcentajeStopLoss         = 10.0;        // 🚨 Porcentaje de Pérdida Máxima (%)

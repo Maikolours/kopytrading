@@ -25,8 +25,8 @@ double MaxRangoVelaM1 = 20.0;
 double MaxSpreadPips = 4.0;
 double SensibilidadMechaReal = 3.0;
 int MinutosPausaTrasSusto = 1;
-double MaxRsiCompra = 70.0;
-double MinRsiVenta = 30.0;
+input double   MaxRsiCompra               = 70.0;        // 📈 RSI Máximo para Compras (Filtro Techos)
+input double   MinRsiVenta                = 30.0;        // 📉 RSI Mínimo para Ventas (Filtro Suelos)
 
 // --- TENDENCIA Y LOTAJE ---
 int PeriodoMediaFiltro = 50;

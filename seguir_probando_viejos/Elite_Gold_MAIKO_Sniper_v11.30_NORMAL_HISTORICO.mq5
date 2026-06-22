@@ -24,6 +24,8 @@ input double MaxRangoVelaM1 = 20.0;
 input double MaxSpreadPips = 4.0;
 input double SensibilidadMechaReal = 3.0;
 input int MinutosPausaTrasSusto = 1;
+input double MaxRSI_Compra = 70.0;             // 📈 RSI Máximo para Compras
+input double MinRSI_Venta = 30.0;              // 📉 RSI Mínimo para Ventas
 
 // --- TENDENCIA ---
 input int PeriodoMediaFiltro = 50;
@@ -199,9 +201,10 @@ bool ValidarEstructuraScholar(string &decision) {
         return false;
     }
     
-    bool rsiOK = (porEncima ? (rsi[0] > 50) : (rsi[0] < 50));
+    bool rsiOK = (porEncima ? (rsi[0] > 50 && rsi[0] < MaxRSI_Compra) : (rsi[0] < 50 && rsi[0] > MinRSI_Venta));
     if(!rsiOK) {
-        txtVeredicto = StringFormat("P:%.2f EMA:%.2f RSI:%.1f | %s", precio, ema[0], rsi[0], (porEncima ? "RSI > 50 REQ" : "RSI < 50 REQ"));
+        txtVeredicto = StringFormat("P:%.2f EMA:%.2f RSI:%.1f | %s", precio, ema[0], rsi[0], 
+            (porEncima ? (rsi[0] >= MaxRSI_Compra ? "RSI EXCESIVO > 70" : "RSI > 50 REQ") : (rsi[0] <= MinRSI_Venta ? "RSI EXCESIVO < 30" : "RSI < 50 REQ")));
         return false;
     }
 
