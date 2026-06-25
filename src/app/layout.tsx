@@ -74,11 +74,12 @@ export default function RootLayout({
     <html lang="es" className="dark">
       <head>
         <meta name="google-adsense-account" content="ca-pub-7217883854605334" />
-        <script 
+        <Script 
           async 
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7217883854605334"
           crossOrigin="anonymous"
-        ></script>
+          strategy="afterInteractive"
+        />
         {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-QWJ1GK9417"
