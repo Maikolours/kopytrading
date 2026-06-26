@@ -23,6 +23,15 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
     // Helper para colores de bot (Interiorizado para evitar errores de Client Component)
     const getBotTheme = (name: string = "") => {
         const n = name.toUpperCase();
+        if (n.includes("DEMO"))
+            return {
+                border: 'border-purple-500/50',
+                accent: 'text-purple-400',
+                glow: 'bg-purple-900/50',
+                gradient: 'from-purple-900/40 via-purple-900/10 to-black',
+                badge: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+                label: 'MAIKO DEMO 🚀'
+            };
         if (n.includes("ORO") || n.includes("XAUUSD") || n.includes("AMETRA") || n.includes("EVOLUTION") || n.includes("GOLD"))
             return {
                 border: 'border-amber-500/50',

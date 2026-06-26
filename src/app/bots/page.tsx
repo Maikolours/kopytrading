@@ -73,9 +73,13 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
             image = "/images/maiko-btc.png";
             return { accent: "text-amber-400", badge: "from-amber-500 to-orange-600", glow: "bg-amber-500/10", image };
         }
+        if (bot.name === 'MAIKO UFVG DEMO') {
+            image = "/images/maiko-ufvg-demo.png";
+            return { accent: "text-purple-400", badge: "from-purple-500 to-violet-600", glow: "bg-purple-600/30", image };
+        }
         if (bot.id === GOLD_DEMO_ID) {
             image = "/images/maiko-gold-demo.png";
-            return { accent: "text-purple-400", badge: "from-purple-500 to-violet-600", glow: "bg-purple-500/10", image };
+            return { accent: "text-purple-400", badge: "from-purple-500 to-violet-600", glow: "bg-purple-600/30", image };
         }
         if (bot.instrument === 'EURUSD') {
             image = "/images/maiko-euro.png"; 
@@ -146,10 +150,12 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                     {bots.map((bot: any) => {
                         const colors = getBotAccent(bot);
                         const isUpcoming = bot.status === 'UPCOMING' || bot.status === 'MAINTENANCE';
-                        const isDemo = bot.id === GOLD_DEMO_ID;
+                        const isDemo = bot.name.includes('DEMO');
+
+                        const cardBg = isDemo ? 'bg-purple-900/20' : 'bg-white/[0.03]';
 
                         return (
-                             <Card key={bot.id} interactive className={`flex flex-col h-full transition-all duration-700 overflow-hidden group relative rounded-[2rem] border bg-white/[0.03] border-white/10 hover:border-brand-light/50 hover:shadow-[0_20px_50px_rgba(168,85,247,0.15)] shadow-[0_20px_60px_rgba(0,0,0,0.6)] ${isUpcoming ? 'opacity-60 hover:opacity-100' : 'opacity-100 shadow-[0_0_40px_rgba(168,85,247,0.2)] border-brand/40'}`}>
+                             <Card key={bot.id} interactive className={`flex flex-col h-full transition-all duration-700 overflow-hidden group relative rounded-[2rem] border ${cardBg} border-white/10 hover:border-brand-light/50 hover:shadow-[0_20px_50px_rgba(168,85,247,0.15)] shadow-[0_20px_60px_rgba(0,0,0,0.6)] ${isUpcoming ? 'opacity-60 hover:opacity-100' : 'opacity-100 shadow-[0_0_40px_rgba(168,85,247,0.2)] border-brand/40'}`}>
 
                                  {/* Upcoming overlay */}
                                  {isUpcoming && (
@@ -161,7 +167,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                  )}
 
                                 <CardHeader className="relative overflow-hidden pb-4 pt-10">
-                                    <div className={`absolute top-0 right-0 w-32 h-32 ${colors.glow} blur-3xl -mr-16 -mt-16 transition-opacity duration-700 group-hover:opacity-100 opacity-20`} />
+                                    <div className={`absolute top-0 right-0 w-32 h-32 ${colors.glow} blur-3xl -mr-16 -mt-16 transition-opacity duration-700 group-hover:opacity-100 ${isDemo ? 'opacity-40' : 'opacity-20'}`} />
                                     
                                     {/* Maiko Avatar */}
                                     <div className="absolute top-[-20px] right-[-20px] w-32 h-32 opacity-60 group-hover:opacity-100 transition-opacity duration-700 mix-blend-screen pointer-events-none z-0">

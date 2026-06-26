@@ -19,6 +19,20 @@ const BOTS_DATA = [
         price: "1€"
     },
     {
+        id: "ufvg-demo",
+        name: "MAIKO UFVG DEMO",
+        pair: "XAU/USD",
+        timeframe: "M5",
+        risk: "Medio",
+        minCapital: "N/A",
+        frequency: "Media (OR FVG)",
+        amortization: "Demo 30 Días",
+        features: [true, true, true, true, true],
+        image: "/images/maiko-ufvg-demo.png",
+        color: "from-purple-400 to-purple-600",
+        price: "1€"
+    },
+    {
         id: "ametralladora",
         name: "MAIKO PRO GOLD",
         pair: "XAU/USD",
