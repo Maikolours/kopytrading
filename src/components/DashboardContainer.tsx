@@ -69,25 +69,34 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
         };
     };
 
-    // Memoizar la agrupación por categoría
+    // Memoizar la agrupación por categoría (ACTIVOS vs INACTIVOS)
     const categoryGroups = useMemo(() => {
-        const groups: Record<string, any[]> = {};
+        const groups: Record<string, any[]> = {
+            "🟢 BOTS ACTIVOS": [],
+            "⚫ INACTIVOS / DESCARGAS": []
+        };
+        
         purchases.forEach(p => {
-            const name = (p.botProduct?.name || "").toUpperCase();
-            const instrument = (p.botProduct?.instrument || "").toUpperCase();
-            let key = "MAIKO SNIPER PRO 🎯";
+            // Un bot está online si ha sincronizado en los últimos 20 minutos (1200000 ms)
+            // o si tiene posiciones activas
+            const isOnline = (p.lastSync && (Math.abs(Date.now() - new Date(p.lastSync).getTime()) < 1200000)) || 
+                             (p.activePositions && p.activePositions.length > 0);
             
-            if (instrument.includes("BTC") || name.includes("BTC")) {
-                key = "MAIKO SNIPER PRO BTC ₿";
-            } else if (name.includes("CENT")) {
-                key = "MAIKO SNIPER PRO GOLD CENT ⚡";
-            } else if (instrument.includes("XAU") || name.includes("GOLD") || name.includes("ORO")) {
-                key = "MAIKO SNIPER PRO GOLD 🏆";
+            if (isOnline) {
+                groups["🟢 BOTS ACTIVOS"].push(p);
+            } else {
+                groups["⚫ INACTIVOS / DESCARGAS"].push(p);
             }
-            
-            if (!groups[key]) groups[key] = [];
-            groups[key].push(p);
         });
+        
+        // Si no hay inactivos, quitar la categoría para no estorbar
+        if (groups["⚫ INACTIVOS / DESCARGAS"].length === 0) {
+            delete groups["⚫ INACTIVOS / DESCARGAS"];
+        }
+        if (groups["🟢 BOTS ACTIVOS"].length === 0) {
+            delete groups["🟢 BOTS ACTIVOS"];
+        }
+        
         return groups;
     }, [purchases]);
 
