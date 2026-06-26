@@ -253,7 +253,7 @@ export function BotRemoteControl({
         if (!botData.lastUpdate) return initialOnline;
         const lastUpdateTime = new Date(botData.lastUpdate).getTime();
         if (isNaN(lastUpdateTime)) return initialOnline;
-        return (Date.now() - lastUpdateTime) < 300000; // 5 minutos de ventana
+        return (Date.now() - lastUpdateTime) < 1200000; // 20 minutos de ventana
     }, [botData, initialOnline]);
 
     const TimeframeOption = ({ label, value, current, setter, keyName }: any) => (
