@@ -116,6 +116,9 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                         <span className="text-[10px] text-text-muted font-bold uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full border border-white/5">
                                             Algorithmic Asset
                                         </span>
+                                        <span className="text-[10px] font-bold uppercase tracking-widest bg-success/10 text-success px-3 py-1 rounded-full border border-success/20 animate-pulse">
+                                            ✨ NUEVA VERSIÓN v11.31
+                                        </span>
                                         {isDemo && (
                                             <span className="text-[10px] font-bold uppercase tracking-widest bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20">
                                                 DEMO · 30 Días
