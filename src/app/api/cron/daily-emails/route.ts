@@ -84,6 +84,31 @@ export async function GET(req: Request) {
                 sentCount++;
             }
 
+            // DÍA 15: COMPARTIR BENEFICIOS
+            else if (daysSinceDownload === 15) {
+                await sendEmail(
+                    userEmail,
+                    `📈 ¡Muestra tus ganancias con ${botName}!`,
+                    `
+                    <div style="font-family: sans-serif; color: #333;">
+                        <h2>¡Hola ${userName}!</h2>
+                        <p>Llevas dos semanas operando con la licencia de prueba de <strong>${botName}</strong>. A estas alturas, ya deberías estar viendo operaciones cerradas y resultados en tu cuenta.</p>
+                        <p>¿Qué tal van esos profits? En KopyTrading nos encanta celebrar los éxitos de nuestra comunidad.</p>
+                        <p>Haz una captura de pantalla de los beneficios en tu MetaTrader 5 y mándanosla por Telegram. ¡Las mejores capturas las publicaremos en nuestro Muro de Beneficios de la web!</p>
+                        <div style="text-align: center; margin: 30px 0;">
+                            <a href="https://t.me/tu_usuario_de_telegram" style="background-color: #24A1DE; color: #fff; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; text-transform: uppercase;">
+                                Enviar Captura por Telegram
+                            </a>
+                        </div>
+                        <p>Si tienes alguna duda o tu bot aún no ha abierto operaciones, escríbenos también y lo revisaremos.</p>
+                        <br>
+                        <p>El equipo de KopyTrading</p>
+                    </div>
+                    `
+                );
+                sentCount++;
+            }
+
             // DÍA 25 (Aviso Caducidad)
             else if (daysUntilExpiry === 5 && daysSinceDownload >= 25) {
                 await sendEmail(

@@ -60,6 +60,7 @@ export function Navbar() {
                 {/* Desktop Nav - Only for LG+ (1024px+) */}
                 <nav className="hidden lg:flex items-center gap-6 ml-6">
                     <Link href="/bots" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/bots" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Marketplace</Link>
+                    <Link href="/resultados" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/resultados" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Resultados</Link>
                     <Link href="/activos" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/activos" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Activos</Link>
                     <Link href="/como-funciona" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/como-funciona" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Cómo Funciona</Link>
                     <Link href="/articulos" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/articulos" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Blog</Link>
@@ -118,7 +119,7 @@ export function Navbar() {
                 <div className="relative z-10 flex-1 flex flex-col pt-24 px-10 gap-5 items-center justify-center text-center">
                     <Link onClick={() => setIsMenuOpen(false)} href="/bots" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/bots" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Marketplace</Link>
                     <Link onClick={() => setIsMenuOpen(false)} href="/activos" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/activos" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Activos</Link>
-                    <Link onClick={() => setIsMenuOpen(false)} href="/activos#resultados" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/activos#resultados" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Resultados</Link>
+                    <Link onClick={() => setIsMenuOpen(false)} href="/resultados" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/resultados" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Resultados</Link>
                     <Link onClick={() => setIsMenuOpen(false)} href="/como-funciona" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/como-funciona" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Cómo Funciona</Link>
                     <Link onClick={() => setIsMenuOpen(false)} href="/articulos" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/articulos" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Blog</Link>
                     <Link onClick={() => setIsMenuOpen(false)} href="/faq" className={`text-xl font-black uppercase tracking-[0.2em] transition-colors ${pathname === "/faq" ? "text-brand-light" : "text-white/60 hover:text-white"}`}>Preguntas</Link>
