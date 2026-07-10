@@ -667,17 +667,204 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
         ChartRedraw(); 
     } 
 }
-
+double CalcularGanadoHoy() { 
+    double total = 0; HistorySelect(iTime(_Symbol, PERIOD_D1, 0), TimeCurrent()); 
+    for(int i=HistoryDealsTotal()-1; i>=0; i--) {
+        ulong t = HistoryDealGetTicket(i);
+        if(HistoryDealGetString(t, DEAL_SYMBOL) == _Symbol) {
+            total += (HistoryDealGetDouble(t, DEAL_PROFIT) + HistoryDealGetDouble(t, DEAL_COMMISSION) + HistoryDealGetDouble(t, DEAL_SWAP));
+        }
+    }
+    return total; 
+}
+
+void CerrarTodo() { 
+    int total = ArraySize(pos);
+    if(total == 0) return;
+    Print("KOPYTRADING: Iniciando cierre de ", total, " posiciones...");
+    for(int i=total-1; i>=0; i--) {
+        ulong ticket = pos[i].ticket;
+        if(PositionSelectByTicket(ticket)) {
+            int retries = 0;
+            bool closed = false;
+            while(retries < 5 && !closed) {
+                if(trade.PositionClose(ticket)) {
+                    closed = true;
+                    Print("KOPYTRADING: Posicion ", ticket, " cerrada correctamente.");
+                } else {
+                    retries++;
+                    int err = GetLastError();
+                    Print("KOPYTRADING: Error al cerrar posicion ", ticket, " (Intento ", retries, "/5). Codigo: ", err);
+                    Sleep(200); 
+                    ActualizarEstadoMaster();
+                }
+            }
+        }
+    }
+}
+
+void ActualizarRadarMaster() { 
+    string tfs[]={"W1","D1","H4","H1","M15","M5","M1"}; 
+    double pr = SymbolInfoDouble(_Symbol, SYMBOL_BID);
+    for(int i=0; i<7; i++) { 
+        double buf[1]; color col = clrGray; 
+        if(CopyBuffer(hRadar[i], 0, 0, 1, buf) > 0) {
+            col = (pr > buf[0]) ? clrSpringGreen : clrRed;
+        }
+        ObjectSetInteger(0, "MAIKO_Radar_"+tfs[i], OBJPROP_COLOR, col); 
+    } 
+}
+
+void ActualizarEstadoMaster() { 
+    ArrayResize(pos, 0); volTotal = 0; 
+    for(int i=PositionsTotal()-1; i>=0; i--) {
+        if(PositionSelectByTicket(PositionGetTicket(i)) && PositionGetString(POSITION_SYMBOL) == _Symbol && PositionGetInteger(POSITION_MAGIC) == ExpertMagic) { 
+            int idx = ArraySize(pos); ArrayResize(pos, idx+1); 
+            pos[idx].ticket = PositionGetTicket(i); 
+            pos[idx].p = PositionGetDouble(POSITION_PROFIT); 
+            pos[idx].c = PositionGetDouble(POSITION_COMMISSION); 
+            pos[idx].s = PositionGetDouble(POSITION_SWAP); 
+            pos[idx].t = (int)PositionGetInteger(POSITION_TYPE); 
+            pos[idx].v = PositionGetDouble(POSITION_VOLUME); 
+            pos[idx].time = (datetime)PositionGetInteger(POSITION_TIME); 
+            pos[idx].pr = PositionGetDouble(POSITION_PRICE_OPEN); 
+            volTotal += pos[idx].v; 
+        } 
+    } 
+}
+
+double CalcularMetaEscapeTP() {
+    int totalPos = ArraySize(pos);
+    if(totalPos == 0) return 0;
+    
+    double sumVol = 0;
+    double sumPriceVol = 0;
+    double sumCommSwap = 0;
+    int type = pos[0].t;
+    
+    for(int i = 0; i < totalPos; i++) {
+        sumVol += pos[i].v;
+        sumPriceVol += pos[i].pr * pos[i].v;
+        sumCommSwap += pos[i].c + pos[i].s;
+    }
+    
+    if(sumVol <= 0) return 0;
+    
+    double avgPrice = sumPriceVol / sumVol;
+    double contractSize = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_CONTRACT_SIZE);
+    if(contractSize <= 0) contractSize = 100.0;
+    
+    double multCent = EsCuentaCent ? 100.0 : 1.0;
+    double targetActual = (totalPos >= LimitePosicionesSOS) ? (ProfitBreakEven * multCent) : (ProfitNetoFlush * multCent);
+    
+    double priceDiff = (targetActual - sumCommSwap) / (sumVol * contractSize);
+    
+    double tp = (type == POSITION_TYPE_BUY) ? (avgPrice + priceDiff) : (avgPrice - priceDiff);
+    return NormalizeDouble(tp, _Digits);
+}
+
+void CrearInterfazMaster() { 
+    int x = HUD_X, y = PosY_HUD, w = 400, h = 280; 
+    CrearBoton("MAIKO_Bg", x, y, w, h, "", ColorBody, clrNONE, CORNER_LEFT_UPPER); 
+    CrearBoton("MAIKO_Head", x, y, w, 35, "", ColorHeader, clrNONE, CORNER_LEFT_UPPER); 
+    CrearLabel("MAIKO_T", x+10, y+10, HUD_Branding, ColorMain, 11, CORNER_LEFT_UPPER); 
+    CrearBoton("MAIKO_BtnMin", x+w-30, y+7, 22, 22, "_", ColorBody, clrWhite, CORNER_LEFT_UPPER); 
+    
+    string tfs[]={"W1","D1","H4","H1","M15","M5","M1"}; 
+    for(int i=0; i<7; i++) { 
+        int px = x + 10 + (i * 55); 
+        CrearLabel("MAIKO_L_"+tfs[i], px, y+45, tfs[i]+":", clrWhite, 8, CORNER_LEFT_UPPER); 
+        CrearLabel("MAIKO_Radar_"+tfs[i], px+25, y+45, "o", clrGray, 10, CORNER_LEFT_UPPER); 
+    } 
+    
+    CrearLabel("MAIKO_Vered", x+10, y+85, txtVeredicto, clrCyan, 9, CORNER_LEFT_UPPER); 
+    CrearLabel("MAIKO_Hoy", x+10, y+125, "GANADO HOY: $0.00", clrSpringGreen, 14, CORNER_LEFT_UPPER); 
+    CrearLabel("MAIKO_Flot", x+10, y+160, "FLOTANTE: $0.00", clrWhite, 12, CORNER_LEFT_UPPER); 
+    CrearLabel("MAIKO_MetaTP", x+10, y+190, "ESTADO: BUSCANDO ENTRADA EN M1...", clrYellow, 10, CORNER_LEFT_UPPER); 
+    CrearLabel("MAIKO_TrialUI", x+10, y+215, "LICENCIA: ACTIVA", clrYellow, 11, CORNER_LEFT_UPPER);
+    CrearLabel("MAIKO_Spd", x+w-120, y+65, "SPD: 0.0", clrWhite, 8, CORNER_LEFT_UPPER);  
+    
+    CrearBoton("MAIKO_Foot", x, y+h-40, w, 40, "", ColorHeader, clrNONE, CORNER_LEFT_UPPER); 
+    CrearLabel("MAIKO_Voz", x+10, y+h-25, txtVoz, ColorMain, 10, CORNER_LEFT_UPPER); 
+    CrearBoton("MAIKO_BtnP", x+w-120, y+110, 110, 50, "ENCENDER", clrDarkGreen, clrWhite, CORNER_LEFT_UPPER); 
+    CrearBoton("MAIKO_BtnC", x+w-120, y+175, 110, 35, "CERRAR", clrDarkRed, clrWhite, CORNER_LEFT_UPPER); 
+}
+
+void ActualizarInterfazMaster() { 
+    double multCent = EsCuentaCent ? 100.0 : 1.0; 
+    ObjectSetString(0, "MAIKO_Hoy", OBJPROP_TEXT, StringFormat("GANADO HOY: $%.2f", ganadoHoy / multCent)); 
+    ObjectSetString(0, "MAIKO_Flot", OBJPROP_TEXT, StringFormat("FLOTANTE: $%.2f", flotante / multCent)); 
+    ObjectSetString(0, "MAIKO_Spd", OBJPROP_TEXT, StringFormat("SPD: %.1f", spreadActual)); 
+      
+      ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "LICENCIA: ACTIVA");
+    ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, trialExpirado ? clrRed : clrYellow);
+    ObjectSetInteger(0, "MAIKO_Flot", OBJPROP_COLOR, flotante >= 0 ? clrSpringGreen : clrRed); 
+    ObjectSetString(0, "MAIKO_Vered", OBJPROP_TEXT, txtVeredicto); 
+    ObjectSetString(0, "MAIKO_Voz", OBJPROP_TEXT, txtVoz); 
+    ObjectSetString(0, "MAIKO_BtnP", OBJPROP_TEXT, BotActivo ? "APAGAR" : "ENCENDER"); 
+    ObjectSetInteger(0, "MAIKO_BtnP", OBJPROP_BGCOLOR, BotActivo ? clrMaroon : clrDarkGreen); 
+    
+    double metaTP = CalcularMetaEscapeTP();
+    if(metaTP > 0) {
+        ObjectSetString(0, "MAIKO_MetaTP", OBJPROP_TEXT, StringFormat("ESCAPE TP: %.2f", metaTP));
+    } else {
+        ObjectSetString(0, "MAIKO_MetaTP", OBJPROP_TEXT, "ESTADO: BUSCANDO ENTRADA EN M1...");
+    }
+    
+    // Se ha desactivado el bucle de forzado de timeframe para evitar fliqueos en pantalla,
+    // ya que ahora se utiliza CHART_FOREGROUND = false en OnInit() para mantener el HUD siempre delante de las velas de forma nativa.
+    ChartRedraw(); 
+}
+
+void CrearBoton(string n, int x, int y, int w, int h, string t, color bg, color fg, ENUM_BASE_CORNER c) { 
+    ObjectCreate(0, n, OBJ_BUTTON, 0, 0, 0); 
+    ObjectSetInteger(0, n, OBJPROP_CORNER, c); 
+    ObjectSetInteger(0, n, OBJPROP_XDISTANCE, x); ObjectSetInteger(0, n, OBJPROP_YDISTANCE, y); 
+    ObjectSetInteger(0, n, OBJPROP_XSIZE, w); ObjectSetInteger(0, n, OBJPROP_YSIZE, h); 
+    ObjectSetInteger(0, n, OBJPROP_BGCOLOR, bg); ObjectSetInteger(0, n, OBJPROP_COLOR, fg); 
+    ObjectSetString(0, n, OBJPROP_TEXT, t); ObjectSetInteger(0, n, OBJPROP_SELECTABLE, false); 
+    ObjectSetInteger(0, n, OBJPROP_BACK, false); ObjectSetInteger(0, n, OBJPROP_ZORDER, 100); 
+}
+
+void CrearLabel(string n, int x, int y, string t, color col, int s, ENUM_BASE_CORNER c) { 
+    ObjectCreate(0, n, OBJ_LABEL, 0, 0, 0); 
+    ObjectSetInteger(0, n, OBJPROP_CORNER, c); 
+    ObjectSetInteger(0, n, OBJPROP_XDISTANCE, x); ObjectSetInteger(0, n, OBJPROP_YDISTANCE, y); 
+    ObjectSetString(0, n, OBJPROP_TEXT, t); ObjectSetInteger(0, n, OBJPROP_COLOR, col); 
+    ObjectSetInteger(0, n, OBJPROP_FONTSIZE, s); ObjectSetInteger(0, n, OBJPROP_BACK, false); 
+    ObjectSetInteger(0, n, OBJPROP_ZORDER, 101); 
+}
+
+void ToggleHUD() { 
+    hudMinimizado = !hudMinimizado; 
+    ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_YSIZE, hudMinimizado ? 35 : 280); 
+    ObjectSetString(0, "MAIKO_BtnMin", OBJPROP_TEXT, hudMinimizado ? "+" : "_"); 
+    long tf = hudMinimizado ? OBJ_NO_PERIODS : OBJ_ALL_PERIODS; 
+    string objs[] = {"MAIKO_Vered", "MAIKO_Hoy", "MAIKO_Flot", "MAIKO_Spd", "MAIKO_Foot", "MAIKO_Voz", "MAIKO_BtnP", "MAIKO_BtnC", "MAIKO_MetaTP", "MAIKO_TrialUI"}; 
+    for(int i=0; i<10; i++) ObjectSetInteger(0, objs[i], OBJPROP_TIMEFRAMES, tf); 
+    string tfs[]={"W1","D1","H4","H1","M15","M5","M1"}; 
+    for(int i=0; i<7; i++) { 
+        ObjectSetInteger(0, "MAIKO_L_"+tfs[i], OBJPROP_TIMEFRAMES, tf); 
+        ObjectSetInteger(0, "MAIKO_Radar_"+tfs[i], OBJPROP_TIMEFRAMES, tf); 
+    } 
+}
+
+void OnChartEvent(const int id, const long &lparam, const double &dparam, const string &sparam) { 
+    if(id == CHARTEVENT_OBJECT_CLICK) { 
+        if(sparam == "MAIKO_BtnP") {
+            BotActivo = !BotActivo; 
+            ActualizarTextosEstado();
+            ActualizarInterfazMaster();
+        }
+        if(sparam == "MAIKO_BtnC") { CerrarTodo(); enFaseAnalisis = false; } 
+        if(sparam == "MAIKO_BtnMin") { ToggleHUD(); ObjectSetInteger(0, sparam, OBJPROP_STATE, false); } 
+        ChartRedraw(); 
+    } 
+}
+
 void OnTimer() {
     ChartSetInteger(0, CHART_FOREGROUND, false);
     ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
-    ActualizarEstadoMaster();
-    int interval = (ArraySize(pos) > 0) ? 15 : 60;
-    if(TimeLocal() - ultimoSync >= interval) {
-        EnviarTelemetria();
-        ultimoSync = TimeLocal();
-    }
-}
 
 void EnviarTelemetria() {
     string account = IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
