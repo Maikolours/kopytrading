@@ -59,7 +59,7 @@ export async function GET(req: Request) {
                 sentCount++;
             }
 
-            // DÍA 7: RESEÑA
+            // DÍA 7: RESEÑA Y BENEFICIOS
             else if (daysSinceDownload === 7) {
                 await sendEmail(
                     userEmail,
@@ -68,14 +68,14 @@ export async function GET(req: Request) {
                     <div style="font-family: sans-serif; color: #333;">
                         <h2>¡Hola de nuevo ${userName}!</h2>
                         <p>Llevas ya una semana probando la tecnología institucional de <strong>${botName}</strong> en tu cuenta.</p>
-                        <p>¿Qué te está pareciendo? Nos ayudaría muchísimo saber tu opinión real para seguir mejorando nuestros algoritmos.</p>
-                        <p>Te invitamos a dejar una reseña (tardarás menos de 1 minuto):</p>
+                        <p>A estas alturas ya deberías haber cerrado operaciones en positivo. <strong>¡Nos encantaría que nos compartieras tus beneficios!</strong> Puedes enviarnos una captura de pantalla a nuestro Telegram y te añadiremos al Muro de Beneficios.</p>
+                        <p>También nos ayudaría muchísimo saber tu opinión real para seguir mejorando nuestros algoritmos. Te invitamos a dejar una reseña (tardarás menos de 1 minuto):</p>
                         <div style="text-align: center; margin: 30px 0;">
                             <a href="https://kopytrading.com/bots/${purchase.botProductId}" style="background-color: #000; color: #fff; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; text-transform: uppercase;">
                                 Dejar una Reseña
                             </a>
                         </div>
-                        <p>¡Gracias por tu apoyo!</p>
+                        <p>¡Gracias por tu apoyo y a seguir sumando pips!</p>
                         <br>
                         <p>El equipo de KopyTrading</p>
                     </div>
@@ -119,7 +119,8 @@ export async function GET(req: Request) {
                         <h2>¡Atención ${userName}!</h2>
                         <p>Te escribimos para avisarte de que tu licencia de prueba gratuita de <strong>${botName}</strong> caduca en exactamente 5 días.</p>
                         <p>Aprovecha estos últimos días para seguir viendo los resultados en tu cuenta.</p>
-                        <p>Si deseas seguir operando y llevar tus ganancias al siguiente nivel, puedes adquirir la licencia ilimitada en nuestra plataforma.</p>
+                        <p><strong>Nos encantaría que compartieras con nosotros tus beneficios finales de la prueba</strong>. ¡Mándanos tu captura de MetaTrader 5 por Telegram!</p>
+                        <p>Si deseas seguir operando y llevar tus ganancias al siguiente nivel de forma ininterrumpida, puedes adquirir la licencia ilimitada en nuestra plataforma.</p>
                         <div style="text-align: center; margin: 30px 0;">
                             <a href="https://kopytrading.com/bots" style="background-color: #ff9900; color: #000; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; text-transform: uppercase;">
                                 Ver Licencias Ilimitadas
