@@ -1,4 +1,4 @@
-//+------------------------------------------------------------------+
+﻿//+------------------------------------------------------------------+
 //|            ELITE GOLD MAIKO SNIPER v11.30 | NORMAL HISTORICO     |
 //|       "INSTITUTIONAL EDITION" | FIX FINAL SIN PUNTOS            |
 //+------------------------------------------------------------------+
@@ -77,7 +77,7 @@ input int      MaxVelasHueco              = 5;           // ⏳ Velas sin Giro p
 input group "━━━━━━ 💰 𝗖 𝗢 𝗕 𝗥 𝗔 𝗥   𝗕 𝗘 𝗡 𝗘 𝗙 𝗜 𝗖 𝗜 𝗢 𝗦   ( 𝗧 𝗣 ) ━━━━━━"
 input double   ProfitNetoFlush            = 5.0;         // 💵 Beneficio Cierre Total Cesta ($)
 input double   ProfitCosechaIndividual    = 0.75;        // 💵 Beneficio Cierre SOS Individual ($)
-input double   TargetDiario               = 50.0;        // 🎯 Meta de Beneficio Diario ($)
+input double   TargetDiario               = 25.0;        // 🎯 Meta de Beneficio Diario ($)
 
 // --- HORARIOS OPERATIVOS ---
 input group "━━━━━━ ⏰ 𝗛 𝗢 𝗥 𝗔 𝗥 𝗜 𝗢 𝗦   𝗢 𝗣 𝗘 𝗥 𝗔 𝗧 𝗜 𝗩 𝗢 𝗦 ━━━━━━"
