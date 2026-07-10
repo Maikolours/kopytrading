@@ -36,8 +36,8 @@ export default function ContactoPage() {
                                 Escríbenos directamente para consultas técnicas, licencias o problemas de instalación:
                             </p>
                             <div className="bg-black/40 border border-brand/20 p-4 rounded-xl text-center">
-                                <a href="mailto:kopytrading@gmail.com" className="text-brand-light font-bold text-lg hover:underline transition-all">
-                                    kopytrading@gmail.com
+                                <a href="mailto:info@kopytrading.com" className="text-brand-light font-bold text-lg hover:underline transition-all">
+                                    info@kopytrading.com
                                 </a>
                             </div>
                             <p className="text-[10px] text-text-muted/60 bg-white/5 p-3 rounded-lg border border-white/5">

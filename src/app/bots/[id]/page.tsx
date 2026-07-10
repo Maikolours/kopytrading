@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { Metadata } from "next";
+import { ReviewSection } from "@/components/reviews/ReviewSection";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params;
@@ -255,6 +256,10 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             
                             <p className="text-center text-[10px] text-text-muted uppercase tracking-[0.3em] mt-10 opacity-30">Los archivos se desbloquean automáticamente tras la adquisición de la licencia</p>
                         </div>
+                        
+                        {/* REVIEWS SECTION */}
+                        <ReviewSection botProductId={bot.id} />
+                        
                     </div>
 
                     {/* Sidebar Purchase Card */}

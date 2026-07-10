@@ -174,6 +174,7 @@ export default function RootLayout({
                     <ul className="space-y-2 text-xs text-text-muted">
                       <li><Link href="/sobre-nosotros" className="hover:text-accent transition-colors">Sobre Nosotros</Link></li>
                       <li><Link href="/contacto" className="hover:text-accent transition-colors">Contacto</Link></li>
+                      <li><Link href="https://www.facebook.com/profile.php?id=61591397057399" target="_blank" className="hover:text-accent transition-colors">Síguenos en Facebook</Link></li>
                       <li><Link href="/legal/privacidad" className="hover:text-accent transition-colors">Privacidad</Link></li>
                       <li><Link href="/legal/terminos" className="hover:text-accent transition-colors">Términos y Condiciones</Link></li>
                       <li><Link href="/legal/cookies" className="hover:text-accent transition-colors">Política de Cookies</Link></li>

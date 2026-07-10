@@ -61,7 +61,7 @@ export async function sendWelcomeEmail(email: string, licenseKey: string, botNam
     try {
         const bcc = email.toLowerCase() !== 'viajaconsakura@gmail.com' ? 'viajaconsakura@gmail.com' : undefined;
         const data = await resend.emails.send({
-            from: 'KopyTrading <onboarding@resend.dev>', // Cámbialo a tu dominio verificado luego
+            from: 'KopyTrading <info@kopytrading.com>', // Cámbialo a tu dominio verificado luego
             to: email,
             bcc: bcc,
             subject: subject,
@@ -137,7 +137,7 @@ export async function sendTrialProgressEmail(email: string, daysRemaining: numbe
     try {
         const bcc = email.toLowerCase() !== 'viajaconsakura@gmail.com' ? 'viajaconsakura@gmail.com' : undefined;
         const data = await resend.emails.send({
-            from: 'KopyTrading <onboarding@resend.dev>',
+            from: 'KopyTrading <info@kopytrading.com>',
             to: email,
             bcc: bcc,
             subject: subject,
@@ -192,7 +192,7 @@ export async function sendTrialExpiredEmail(email: string, botName: string, purc
     try {
         const bcc = email.toLowerCase() !== 'viajaconsakura@gmail.com' ? 'viajaconsakura@gmail.com' : undefined;
         const data = await resend.emails.send({
-            from: 'KopyTrading <onboarding@resend.dev>',
+            from: 'KopyTrading <info@kopytrading.com>',
             to: email,
             bcc: bcc,
             subject: subject,
@@ -261,7 +261,7 @@ export async function sendVersionUpdateEmail(email: string, botName: string, new
     try {
         const bcc = email.toLowerCase() !== 'viajaconsakura@gmail.com' ? 'viajaconsakura@gmail.com' : undefined;
         const data = await resend.emails.send({
-            from: 'KopyTrading <onboarding@resend.dev>',
+            from: 'KopyTrading <info@kopytrading.com>',
             to: email,
             bcc: bcc,
             subject: subject,

@@ -1,10 +1,10 @@
 //+------------------------------------------------------------------+
 //|                                     Maiko_Opening_Range_FVG.mq5 |
-//|                                  Copyright 2026, KOPYTRADE       |
-//|                                       https://www.kopytrade.com |
+//|                                  Copyright 2026, KOPYTRADING       |
+//|                                       https://www.kopytrading.com |
 //+------------------------------------------------------------------+
-#property copyright "KOPYTRADE"
-#property link      "https://www.kopytrade.com"
+#property copyright "KOPYTRADING"
+#property link      "https://www.kopytrading.com"
 #property version   "1.00"
 #property description "Bot para MT5 que opera rupturas del rango de 5M de NY con confirmacion de FVG en 1M."
 #property strict
@@ -25,7 +25,7 @@ input group "=== 📈 CONFIGURACION DE TRADING ==="
 input double   LoteInicial          = 0.01;      // Volumen de la posicion
 input double   RiskRewardRatio      = 2.0;       // Ratio Riesgo:Beneficio para el Take Profit (1:2 por defecto)
 input double   MaxSpreadPips        = 5.0;       // Spread maximo permitido en pips para evitar deslizamiento
-input long     MagicNumber          = 990011;    // ID unico del bot para sus operaciones
+input long     MagicNumber          = 990012;    // ID unico del bot para sus operaciones
 
 //--- Variables globales de control de estado
 CTrade   trade;

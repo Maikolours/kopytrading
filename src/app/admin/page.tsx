@@ -529,9 +529,25 @@ export default function AdminPage() {
                                 </label>
                             </div>
 
-                            <Button type="submit" disabled={updating || !updatingBotId} size="lg" className="w-full sm:w-auto">
-                                {updating ? "Actualizando..." : "Actualizar Versión y Notificar 🚀"}
-                            </Button>
+                            {(() => {
+                                const selectedBot = bots.find(b => b.id === updatingBotId);
+                                const isSameVersion = selectedBot && selectedBot.version === newVersion && newVersion !== "";
+                                
+                                return (
+                                    <Button 
+                                        type="submit" 
+                                        disabled={updating || !updatingBotId} 
+                                        size="lg" 
+                                        className={`w-full sm:w-auto transition-all ${isSameVersion ? "bg-surface-light border-white/20 text-white/50 hover:bg-surface-light hover:text-white" : ""}`}
+                                    >
+                                        {updating 
+                                            ? "Actualizando..." 
+                                            : isSameVersion 
+                                                ? "✅ Ya Actualizado (Volver a Notificar)" 
+                                                : `Actualizar a v${newVersion || "..."} y Notificar 🚀`}
+                                    </Button>
+                                );
+                            })()}
                         </form>
                     </div>
                 )}

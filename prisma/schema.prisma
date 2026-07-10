@@ -18,6 +18,7 @@ model User {
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
   purchases     Purchase[]
+  reviews       Review[]
 }
 
 model BotProduct {
@@ -41,6 +42,7 @@ model BotProduct {
   status          String     @default("ACTIVE")
   originalPrice   Float?
   purchases       Purchase[]
+  reviews         Review[]
 }
 
 model Purchase {
@@ -161,3 +163,18 @@ model BotSettings {
   @@unique([purchaseId, account])
   @@index([purchaseId])
 }
+
+model Review {
+  id           String     @id @default(cuid())
+  rating       Int
+  comment      String     @db.Text
+  userId       String
+  botProductId String
+  createdAt    DateTime   @default(now())
+  user         User       @relation(fields: [userId], references: [id])
+  botProduct   BotProduct @relation(fields: [botProductId], references: [id])
+
+  @@index([userId])
+  @@index([botProductId])
+}
+

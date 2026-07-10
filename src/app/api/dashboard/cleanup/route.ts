@@ -10,16 +10,22 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Missing purchaseId" }, { status: 400 });
         }
 
-        // Borrar todas las posiciones en vivo y el historial de esta compra
+        // Borrar todas las posiciones en vivo, historial y configuraciones cacheadas de esta compra
         await prisma.$transaction([
             prisma.livePosition.deleteMany({ where: { purchaseId } }),
-            prisma.tradeHistory.deleteMany({ where: { purchaseId } })
+            prisma.tradeHistory.deleteMany({ where: { purchaseId } }),
+            prisma.botSettings.deleteMany({ where: { purchaseId } })
         ]);
 
         // Opcional: Podríamos marcar el lastSync como null para indicar que está "limpio"
+        // Además, reiniciamos el balance y equity para que no queden valores fantasma
         await prisma.purchase.update({
             where: { id: purchaseId },
-            data: { lastSync: null }
+            data: { 
+                lastSync: null,
+                balance: 0,
+                equity: 0
+            }
         });
 
         // Asegurar que la cache de Next.js se invalide

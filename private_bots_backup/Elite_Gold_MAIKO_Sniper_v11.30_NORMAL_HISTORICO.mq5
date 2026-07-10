@@ -63,7 +63,7 @@ input bool     CheckM5                    = true;        // 📅 Confirmación T
 input group "━━━━━━ 📈 𝗖 𝗢 𝗡 𝗙 𝗜 𝗚 𝗨 𝗥 𝗔 𝗖 𝗜 𝗢 𝗡   𝗬   𝗟 𝗢 𝗧 𝗘 𝗦 ━━━━━━"
 input double   LoteAtaque                 = 0.01;        // 🚀 Volumen Entrada Inicial (Ataque)
 input int      RuedasAmetralladora        = 1;           // 🔫 Operaciones Iniciales en Cesta (Ruedas)
-input double   MultiplicadorRefuerzo      = 3.0;         // ✖️ Multiplicador Lote de Rescate (SOS)
+input double   MultiplicadorRefuerzo      = 1.5;         // ✖️ Multiplicador Lote de Rescate (SOS)
 input double   MaxLoteTotal               = 0.50;        // 🚫 Lote Máximo Acumulado Permitido
 input double   MaxLoteIndividual          = 0.02;        // 🚫 Volumen Máximo por Operación SOS
 
@@ -77,7 +77,7 @@ input int      MaxVelasHueco              = 5;           // ⏳ Velas sin Giro p
 input group "━━━━━━ 💰 𝗖 𝗢 𝗕 𝗥 𝗔 𝗥   𝗕 𝗘 𝗡 𝗘 𝗙 𝗜 𝗖 𝗜 𝗢 𝗦   ( 𝗧 𝗣 ) ━━━━━━"
 input double   ProfitNetoFlush            = 5.0;         // 💵 Beneficio Cierre Total Cesta ($)
 input double   ProfitCosechaIndividual    = 0.75;        // 💵 Beneficio Cierre SOS Individual ($)
-input double   TargetDiario               = 500.0;       // 🎯 Meta de Beneficio Diario ($)
+input double   TargetDiario               = 50.0;        // 🎯 Meta de Beneficio Diario ($)
 
 // --- HORARIOS OPERATIVOS ---
 input group "━━━━━━ ⏰ 𝗛 𝗢 𝗥 𝗔 𝗥 𝗜 𝗢 𝗦   𝗢 𝗣 𝗘 𝗥 𝗔 𝗧 𝗜 𝗩 𝗢 𝗦 ━━━━━━"

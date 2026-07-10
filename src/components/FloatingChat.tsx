@@ -173,7 +173,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["soporte", "contacto", "ayuda", "telegram", "correo", "email", "hablar con alguien", "humano", "escribir", "redes", "chat", "escribir a soporte"],
-        response: "📞 **Contacto con Soporte Humano:**\n\nSi necesitas asistencia personalizada para configurar tu VPS o tienes preguntas sobre tu licencia:\n\n💬 **Telegram**: [@KopyTradingSoporte](https://t.me/KopyTradingSoporte)\n📧 **Email**: soporte@kopytrading.com\n\n¡Te responderemos a la mayor brevedad de lunes a viernes en horario de mercado!"
+        response: "🤖 **Contacto con Soporte Humano:**\n\nSi necesitas asistencia personalizada para configurar tu VPS o tienes preguntas sobre tu licencia:\n\n📱 **Telegram**: [@KopyTradingSoporte](https://t.me/KopyTradingSoporte)\n📧 **Email**: info@kopytrading.com\n\n¡Te responderemos a la mayor brevedad de lunes a viernes en horario de mercado!"
     },
     {
         keywords: ["deslizamiento", "slippage", "recorrer", "spread", "comisión", "comision", "swap", "swaps", "spreads"],
