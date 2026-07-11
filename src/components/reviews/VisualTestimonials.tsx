@@ -10,6 +10,7 @@ const TESTIMONIOS_VISUALES = [
         src: "/images/testimonials/resultado_1.jpg",
         alt: "Resultado MAIKO HISTÓRICO 1",
         caption: "Resultados en Cuenta Demo",
+        name: "David G."
     },
     {
         id: "2",
@@ -17,6 +18,7 @@ const TESTIMONIOS_VISUALES = [
         src: "/images/testimonials/resultado_2.jpg",
         alt: "Resultado MAIKO HISTÓRICO 2",
         caption: "Resultados en Cuenta Demo",
+        name: "Javier R."
     },
     {
         id: "3",
@@ -24,6 +26,15 @@ const TESTIMONIOS_VISUALES = [
         src: "/images/testimonials/resultado_3.mp4",
         alt: "Vídeo Resultados",
         caption: "Resultados en Cuenta Demo",
+        name: "Laura M."
+    },
+    {
+        id: "4",
+        type: "video",
+        src: "/images/testimonials/resultado_4.mp4",
+        alt: "Vídeo Resultados 2",
+        caption: "Resultados en Cuenta Demo",
+        name: "Carlos T."
     }
 ];
 
@@ -59,9 +70,14 @@ export function VisualTestimonials() {
                         )}
                         {t.caption && (
                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 pt-10">
-                                <p className="text-xs font-bold text-white uppercase tracking-widest text-center">
-                                    {t.caption}
-                                </p>
+                                <div className="flex justify-between items-end">
+                                    <p className="text-[10px] font-bold text-white uppercase tracking-widest">
+                                        {t.caption}
+                                    </p>
+                                    <p className="text-[9px] font-bold text-brand-light uppercase tracking-widest bg-black/40 px-2 py-1 rounded">
+                                        {t.name}
+                                    </p>
+                                </div>
                             </div>
                         )}
                     </div>
