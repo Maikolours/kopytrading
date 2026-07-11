@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { Metadata } from "next";
 import { ReviewSection } from "@/components/reviews/ReviewSection";
+import { VisualTestimonials } from "@/components/reviews/VisualTestimonials";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params;
@@ -262,6 +263,9 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                         
                         {/* REVIEWS SECTION */}
                         <ReviewSection botProductId={bot.id} />
+                        
+                        {/* VISUAL TESTIMONIALS SECTION */}
+                        <VisualTestimonials />
                         
                     </div>
 
