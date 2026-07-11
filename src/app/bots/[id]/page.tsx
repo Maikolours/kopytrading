@@ -54,8 +54,8 @@ const formatBotName = (name: string, instrument: string, isTitle: boolean = fals
     });
 
     return (
-        <span className="inline-flex items-center gap-x-3 flex-wrap">
-            <span>{highlightedName}</span>
+        <span className="block break-words">
+            {highlightedName}
         </span>
     );
 };
@@ -126,7 +126,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                             </span>
                                         )}
                                     </div>
-                                    <h1 className="text-5xl sm:text-6xl font-black text-white tracking-tighter uppercase italic leading-[0.9]">
+                                    <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tighter uppercase italic leading-[0.9]">
                                         {formatBotName(bot.name, bot.instrument, true)}
                                     </h1>
                                 </div>

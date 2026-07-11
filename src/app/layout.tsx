@@ -121,7 +121,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`${outfit.className} min-h-screen bg-black text-slate-50 antialiased selection:bg-brand/30 selection:text-white`}>
+      <body className={`${outfit.className} min-h-screen bg-black text-slate-50 antialiased selection:bg-brand/30 selection:text-white overflow-x-hidden`}>
 
         {isMaintenance ? (
           <MaintenanceMode />
