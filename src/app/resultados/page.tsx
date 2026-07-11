@@ -34,20 +34,24 @@ export default function ResultadosPage() {
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {/* Placeholder Grid */}
-                    {[1, 2, 3, 4, 5, 6].map((i) => (
-                        <div key={i} className="glass-card p-4 border border-white/10 relative overflow-hidden group hover:border-success/30 transition-all">
+                    {[
+                        { id: 1, src: "/images/testimonials/resultado_1.jpg", label: "MAIKO Histórico", type: "Demo" },
+                        { id: 2, src: "/images/testimonials/resultado_2.jpg", label: "Consistencia", type: "Demo" }
+                    ].map((item) => (
+                        <div key={item.id} className="glass-card p-4 border border-white/10 relative overflow-hidden group hover:border-success/30 transition-all">
                             <div className="absolute top-0 right-0 p-4 z-20">
                                 <span className="bg-success text-black text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg shadow-success/20">
                                     Verificado
                                 </span>
                             </div>
                             
-                            <div className="aspect-[4/3] bg-black/50 rounded-xl mb-4 relative overflow-hidden border border-white/5 flex flex-col items-center justify-center">
-                                {/* Cuando Sakura tenga imágenes reales, usaremos la etiqueta <Image src="..." /> */}
-                                <div className="text-success text-5xl mb-2">📈</div>
-                                <div className="text-white font-black text-2xl italic tracking-tighter">+ $ 34{i}.50</div>
-                                <div className="text-[10px] text-text-muted uppercase tracking-widest mt-2">Beneficio Semanal</div>
+                            <div className="aspect-[4/3] bg-black/50 rounded-xl mb-4 relative overflow-hidden border border-white/5">
+                                <Image 
+                                    src={item.src} 
+                                    alt="Resultado" 
+                                    fill 
+                                    className="object-contain group-hover:scale-105 transition-transform duration-500" 
+                                />
                             </div>
 
                             <div className="flex items-center justify-between px-2">
@@ -57,7 +61,7 @@ export default function ResultadosPage() {
                                     </div>
                                     <span className="text-xs text-text-muted font-medium">Trader Anónimo</span>
                                 </div>
-                                <span className="text-[10px] text-text-muted/50 uppercase tracking-widest">Maiko Gold Demo</span>
+                                <span className="text-[10px] text-text-muted/50 uppercase tracking-widest">{item.label} ({item.type})</span>
                             </div>
                         </div>
                     ))}
