@@ -17,6 +17,13 @@ const TESTIMONIOS_VISUALES = [
         src: "/images/testimonials/resultado_2.jpg",
         alt: "Resultado MAIKO HISTÓRICO 2",
         caption: "Resultados en Cuenta Demo",
+    },
+    {
+        id: "3",
+        type: "video",
+        src: "/images/testimonials/resultado_3.mp4",
+        alt: "Vídeo Resultados",
+        caption: "Resultados en Cuenta Demo",
     }
 ];
 

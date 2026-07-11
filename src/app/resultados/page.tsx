@@ -36,7 +36,8 @@ export default function ResultadosPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {[
                         { id: 1, src: "/images/testimonials/resultado_1.jpg", label: "MAIKO Histórico", type: "Demo" },
-                        { id: 2, src: "/images/testimonials/resultado_2.jpg", label: "Consistencia", type: "Demo" }
+                        { id: 2, src: "/images/testimonials/resultado_2.jpg", label: "Consistencia", type: "Demo" },
+                        { id: 3, src: "/images/testimonials/resultado_3.mp4", label: "Operativa Diaria", type: "Demo" }
                     ].map((item) => (
                         <div key={item.id} className="glass-card p-4 border border-white/10 relative overflow-hidden group hover:border-success/30 transition-all">
                             <div className="absolute top-0 right-0 p-4 z-20">
