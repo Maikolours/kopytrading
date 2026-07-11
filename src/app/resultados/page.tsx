@@ -45,13 +45,24 @@ export default function ResultadosPage() {
                                 </span>
                             </div>
                             
-                            <div className="aspect-[4/3] bg-black/50 rounded-xl mb-4 relative overflow-hidden border border-white/5">
-                                <Image 
-                                    src={item.src} 
-                                    alt="Resultado" 
-                                    fill 
-                                    className="object-contain group-hover:scale-105 transition-transform duration-500" 
-                                />
+                            <div className="aspect-[4/3] bg-black/50 rounded-xl mb-4 relative overflow-hidden border border-white/5 flex items-center justify-center">
+                                {item.src.endsWith('.mp4') || item.src.endsWith('.webm') ? (
+                                    <video 
+                                        src={item.src}
+                                        autoPlay
+                                        loop
+                                        muted
+                                        playsInline
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    />
+                                ) : (
+                                    <Image 
+                                        src={item.src} 
+                                        alt="Resultado" 
+                                        fill 
+                                        className="object-contain group-hover:scale-105 transition-transform duration-500" 
+                                    />
+                                )}
                             </div>
 
                             <div className="flex items-center justify-between px-2">
