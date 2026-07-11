@@ -68,7 +68,7 @@ export default function ResultadosPage() {
                     <p className="text-text-muted mb-8">
                         Si estás obteniendo beneficios con nuestros algoritmos, envíanos una captura de pantalla de tu MetaTrader 5 a nuestro Telegram oficial.
                     </p>
-                    <a href="https://t.me/tu_usuario_de_telegram" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#24A1DE] hover:bg-[#1a85b9] text-white font-bold py-4 px-8 rounded-full uppercase tracking-widest text-xs transition-colors shadow-lg shadow-[#24A1DE]/20">
+                    <a href="https://t.me/Kpytrading" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#24A1DE] hover:bg-[#1a85b9] text-white font-bold py-4 px-8 rounded-full uppercase tracking-widest text-xs transition-colors shadow-lg shadow-[#24A1DE]/20">
                         Enviar Captura por Telegram
                     </a>
                 </div>
