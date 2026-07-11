@@ -210,10 +210,29 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     {
         keywords: ["ajustes", "parametros", "parámetros", "cambiar lotaje", "riesgo", "configuracion", "configuración"],
         response: "🛠️ **Personalización (Inputs):**\n\nAl arrastrar el bot, verás una pestaña de **'Parámetros de Entrada'**. Aquí puedes:\n• Ajustar el **Lotaje** (recomendamos 0.01).\n• Activar/Desactivar el **Auto-Hedge**.\n• Cambiar el **Daily Stop Loss**.\n\nVienen optimizados por defecto, pero tú tienes el control final."
+    {
+        keywords: ["profit factor", "ratio de ganancia", "factor de beneficio", "ganancia esperada", "rendimiento"],
+        response: "📊 **¿Qué es el Profit Factor?**\n\nEl Profit Factor es la relación entre las ganancias brutas y las pérdidas brutas. Un Profit Factor superior a 1.0 significa que el sistema es rentable. Nuestros algoritmos, como el MAIKO PRO GOLD, buscan mantener un Profit Factor histórico por encima de 2.0 (por cada dólar perdido, se ganan dos dólares) en condiciones óptimas."
+    },
+    {
+        keywords: ["dd", "máximo retroceso", "max drawdown", "retroceso máximo"],
+        response: "📉 **Gestión de Drawdown (DD):**\n\nEl Drawdown es el retroceso máximo del saldo de tu cuenta desde un pico máximo. Es normal en el trading. Nuestros bots están diseñados con un 'Hard Stop Loss' de protección. Recomendamos un lote de 0.01 por cada 1.000$ para mantener un Drawdown histórico controlado y conservador."
+    },
+    {
+        keywords: ["slippage", "deslizamiento", "latencia", "retraso", "ping"],
+        response: "⚡ **Slippage y Latencia:**\n\nEl 'Slippage' ocurre cuando el precio se mueve entre el momento que el bot lanza la orden y el broker la ejecuta. Por eso es CRÍTICO usar un VPS (para latencia de 1-5ms) y cuentas RAW/ECN en tu broker, reduciendo drásticamente el deslizamiento y mejorando tus resultados."
+    },
+    {
+        keywords: ["stop loss", "sl", "parar pérdidas", "protección", "riesgo máximo"],
+        response: "🛑 **Uso de Stop Loss (SL):**\n\nTodos nuestros bots utilizan Stop Loss. Dependiendo de la estrategia (como el Hedge Inteligente en el Oro), el SL puede ser dinámico o basado en un % del balance de la cuenta para garantizar que NUNCA quemes tu cuenta por un movimiento negro del mercado."
+    },
+    {
+        keywords: ["take profit", "tp", "recoger beneficios", "cerrar ganancia"],
+        response: "🎯 **Toma de Beneficios (Take Profit):**\n\nNuestros algoritmos calculan el Take Profit de forma dinámica basándose en la volatilidad actual (ATR) y niveles institucionales. Además, utilizamos Trailing Stop para perseguir el precio y maximizar las ganancias si el mercado corre a nuestro favor."
     }
 ];
 
-const DEFAULT_RESPONSE = "Hmm, no tengo esa respuesta exacta en mi memoria 🤖. He aprendido mucho sobre **instalación, brokers, gestión de riesgo, VPS y el estado del bot (fin de semana/dormir)**.\n\nIntenta preguntarme algo más específico de estos temas, o escribe **'soporte'** para hablar directamente con una persona de nuestro equipo.";
+const DEFAULT_RESPONSE = "Hmm, no tengo esa respuesta exacta en mi memoria 🤖. He aprendido mucho sobre **instalación, brokers, gestión de riesgo, parámetros técnicos (Stop Loss, Drawdown, Profit Factor), VPS y horarios**.\n\nPuedes escribirme tu pregunta, o usar el micrófono 🎤. Si prefieres hablar con un humano, escribe **'soporte'**.";
 
 function getBotResponse(input: string): string {
     const lower = input.toLowerCase()
@@ -350,12 +369,12 @@ function speakText(text: string) {
 export default function FloatingChat() {
     const [open, setOpen] = useState(false);
     const [input, setInput] = useState("");
-    const [voiceEnabled, setVoiceEnabled] = useState(true);
+    const [voiceEnabled, setVoiceEnabled] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
         {
             from: "bot",
-            text: "¡Hola! Soy KopyBot 🤖, el asistente experto de KopyTrading. ¿En qué puedo ayudarte hoy? Pregúntame sobre bots, trading, instalación o brokers.",
+            text: "¡Hola! Soy el asistente avanzado de KopyTrading. ⚡\n\nPuedes **escribirme** usando la caja de texto de abajo, o usar el **micrófono** 🎤 para hablarme.\n\nSi quieres que te lea las respuestas en voz alta, dale al botón del altavoz 🔇 de arriba.\n\n¿En qué te ayudo hoy?",
             time: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
         }
     ]);
@@ -431,10 +450,14 @@ export default function FloatingChat() {
             {/* Botón flotante */}
             <button
                 onClick={() => setOpen(!open)}
-                className="fixed bottom-6 right-6 z-[999] w-14 h-14 rounded-full bg-gradient-to-br from-brand-light to-brand shadow-[0_0_30px_rgba(139,92,246,0.6)] flex items-center justify-center text-2xl hover:scale-110 transition-transform animate-pulse-glow"
+                className="fixed bottom-6 right-6 z-[999] w-14 h-14 rounded-full bg-gradient-to-br from-brand-light to-brand shadow-[0_0_30px_rgba(139,92,246,0.6)] flex items-center justify-center hover:scale-110 transition-transform animate-pulse-glow"
                 title="Chat con KopyBot"
             >
-                {open ? "✕" : "🤖"}
+                {open ? (
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                ) : (
+                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>
+                )}
             </button>
 
             {/* Panel del chat */}
@@ -498,10 +521,10 @@ export default function FloatingChat() {
                     </div>
 
                     {/* Input */}
-                    <div className="p-3 border-t border-white/10 flex gap-2 flex-shrink-0 bg-bg-dark/90 items-end">
+                    <div className="p-3 sm:p-4 border-t border-white/10 flex gap-2 flex-shrink-0 bg-bg-dark/95 items-end">
                         <button
                             onClick={toggleListen}
-                            className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-colors mb-1 ${isListening ? "bg-red-500 text-white animate-pulse" : "bg-surface-light hover:bg-white/10 text-white/70"}`}
+                            className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center flex-shrink-0 transition-colors mb-0.5 shadow-inner border border-white/5 ${isListening ? "bg-red-500 text-white animate-pulse" : "bg-white/5 hover:bg-white/10 text-white"}`}
                             title={isListening ? "Escuchando..." : "Hablar por micrófono"}
                         >
                             🎤
@@ -515,13 +538,13 @@ export default function FloatingChat() {
                                     sendMessage();
                                 }
                             }}
-                            placeholder={isListening ? "Escuchando..." : "Escribe tu pregunta..."}
-                            className="flex-1 bg-surface-light border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-text-muted outline-none focus:border-brand/60 transition-colors resize-none overflow-y-auto min-h-[36px] max-h-[80px]"
+                            placeholder={isListening ? "Escuchando tu voz..." : "✍️ Escribe tu mensaje aquí..."}
+                            className="flex-1 bg-black/50 border border-white/20 rounded-xl px-4 py-3 text-sm text-white placeholder-text-muted outline-none focus:border-brand-light focus:bg-black transition-all resize-none overflow-y-auto min-h-[44px] max-h-[100px] shadow-inner"
                             rows={input.length > 35 ? 3 : (input.length > 15 ? 2 : 1)}
                         />
                         <button
                             onClick={sendMessage}
-                            className="w-9 h-9 flex-shrink-0 rounded-xl bg-brand flex items-center justify-center text-white hover:bg-brand-light transition-colors text-sm mb-1"
+                            className={`w-10 h-10 sm:w-11 sm:h-11 flex-shrink-0 rounded-xl flex items-center justify-center transition-all text-lg mb-0.5 shadow-lg ${input.trim() ? 'bg-brand text-white hover:bg-brand-light scale-100' : 'bg-white/5 text-white/30 scale-95 cursor-default'}`}
                         >➤</button>
                     </div>
                 </div>
