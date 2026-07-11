@@ -30,7 +30,7 @@ const BOTS_DATA = [
         features: [true, true, true, true, true],
         image: "/images/maiko-ufvg-demo.png",
         color: "from-purple-400 to-purple-600",
-        price: "1€"
+        price: "Próximamente"
     },
     {
         id: "ametralladora",
