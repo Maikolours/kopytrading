@@ -82,7 +82,7 @@ export function ReviewSection({ botProductId }: ReviewSectionProps) {
     }
 
     return (
-        <div className="glass-card p-10 border border-white/10 mt-12">
+        <div className="glass-card p-6 sm:p-10 border border-white/10 mt-12 w-full max-w-full">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10">
                 <div>
                     <h3 className="text-2xl font-black text-white uppercase italic flex items-center gap-4">

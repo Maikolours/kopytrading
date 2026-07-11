@@ -42,7 +42,7 @@ export function VisualTestimonials() {
     if (TESTIMONIOS_VISUALES.length === 0) return null;
 
     return (
-        <div className="glass-card p-10 border border-white/10 mt-6">
+        <div className="glass-card p-6 sm:p-10 border border-white/10 mt-12 w-full max-w-full">
             <h3 className="text-2xl font-black text-white uppercase italic flex items-center gap-4 mb-8">
                 <span className="text-brand-light">📸</span>
                 Resultados y Casos de Éxito

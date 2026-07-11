@@ -104,13 +104,13 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
 
                 <div className="grid lg:grid-cols-12 gap-12">
                     {/* Main Content */}
-                    <div className="lg:col-span-8 space-y-8">
-                        <div className="glass-card p-8 sm:p-12 border border-white/10 relative overflow-hidden group">
+                    <div className="lg:col-span-8 space-y-8 w-full max-w-full">
+                        <div className="glass-card p-6 sm:p-12 border border-white/10 relative overflow-hidden group">
                             <div className={`absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-transparent via-${bot.instrument === 'XAUUSD' ? 'purple-500' : bot.instrument === 'BTCUSD' ? 'amber-500' : 'brand'}/50 to-transparent`} />
                             
                             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
-                                <div>
-                                    <div className="flex items-center gap-3 mb-4">
+                                <div className="max-w-full">
+                                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4">
                                         <span className={`px-4 py-1 rounded-full text-[10px] font-black tracking-[0.2em] border uppercase ${colors.badge}`}>
                                             {bot.instrument}
                                         </span>
@@ -141,7 +141,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                     <span>Tesis de Inversión</span>
                                     <div className="flex-1 h-[1px] bg-white/5"></div>
                                 </h3>
-                                <p className="text-lg text-text-muted leading-relaxed font-light whitespace-pre-wrap drop-shadow-sm">
+                                <p className="text-base sm:text-lg text-text-muted leading-relaxed font-light whitespace-pre-wrap break-words drop-shadow-sm">
                                     {bot.description}
                                 </p>
                                 
@@ -168,14 +168,14 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             </div>
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <div className="glass-card p-8 border border-white/5 space-y-6">
-                                <h3 className="text-xs font-black text-white uppercase tracking-[0.3em] flex items-center gap-3">
-                                    <span className={`w-2 h-2 rounded-full ${bot.riskLevel === 'Low' ? 'bg-success' : 'bg-amber-500'}`}></span>
+                        <div className="grid md:grid-cols-2 gap-8 w-full max-w-full">
+                            <div className="glass-card p-6 sm:p-8 border border-white/5 space-y-6">
+                                <h3 className="text-xs font-black text-white uppercase tracking-[0.3em] flex items-center gap-3 flex-wrap">
+                                    <span className={`w-2 h-2 rounded-full flex-shrink-0 ${bot.riskLevel === 'Low' ? 'bg-success' : 'bg-amber-500'}`}></span>
                                     Especificaciones Técnicas
                                 </h3>
 
-                                <div className="grid grid-cols-2 gap-8">
+                                <div className="grid grid-cols-2 gap-4 sm:gap-8">
                                     <div className="space-y-1">
                                         <p className="text-[10px] text-text-muted uppercase tracking-widest">Timeframes</p>
                                         <p className="text-xl font-black text-white italic">{bot.timeframes || 'M1'}</p>
@@ -195,13 +195,13 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                 </div>
                             </div>
 
-                            <div className="glass-card p-8 border border-white/5 relative overflow-hidden">
-                                <div className="flex items-center justify-between mb-8">
-                                    <h4 className="text-[10px] font-black text-white uppercase tracking-[0.3em]">Rendimiento Histórico</h4>
-                                    <span className="text-[9px] bg-success/10 text-success px-3 py-1 rounded-full border border-success/20 font-black uppercase tracking-widest">Auditado</span>
+                            <div className="glass-card p-6 sm:p-8 border border-white/5 relative overflow-hidden">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+                                    <h4 className="text-[10px] font-black text-white uppercase tracking-[0.3em] break-words">Rendimiento Histórico</h4>
+                                    <span className="text-[9px] bg-success/10 text-success px-3 py-1 rounded-full border border-success/20 font-black uppercase tracking-widest self-start sm:self-auto">Auditado</span>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-6 relative z-10">
+                                <div className="grid grid-cols-2 gap-4 sm:gap-6 relative z-10">
                                     <div className="bg-white/[0.02] p-4 rounded-2xl border border-white/5">
                                         <p className="text-[9px] text-text-muted mb-1 uppercase tracking-widest font-black">Profit Factor</p>
                                         <p className="text-3xl font-black text-success italic">2.14</p>
@@ -220,7 +220,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             </div>
                         </div>
 
-                        <div className="glass-card p-10 border border-white/10">
+                        <div className="glass-card p-6 sm:p-10 border border-white/10 w-full max-w-full">
                             <h5 className="text-2xl font-black text-white mb-8 uppercase italic flex items-center gap-4">
                                 <span className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center text-xl shadow-inner border border-white/10 italic">#</span>
                                 Recursos del Algoritmo
@@ -270,8 +270,8 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                     </div>
 
                     {/* Sidebar Purchase Card */}
-                    <div className="lg:col-span-4">
-                        <div className={`sticky top-28 glass-card p-10 border-white/10 border shadow-2xl ${colors.shadow} relative overflow-hidden group/side`}>
+                    <div className="lg:col-span-4 w-full max-w-full">
+                        <div className={`sticky top-28 glass-card p-6 sm:p-10 border-white/10 border shadow-2xl ${colors.shadow} relative overflow-hidden group/side`}>
                             {/* Decorative Glow */}
                             <div className={`absolute -top-24 -right-24 w-48 h-48 ${colors.glow} blur-[80px] rounded-full group-hover/side:opacity-100 opacity-50 transition-opacity`} />
                             
@@ -281,12 +281,12 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                     // Gold Demo: mostrar precio de 1€ con badge de 30 días
                                     <>
                                         <p className="text-[10px] text-text-muted mb-4 uppercase tracking-[0.4em] font-black">Licencia Demo (30 Días)</p>
-                                        <div className="text-7xl font-black text-white tracking-tighter leading-none italic mb-4">
+                                        <div className="text-5xl sm:text-7xl font-black text-white tracking-tighter leading-none italic mb-4 break-all">
                                             {bot.price.toFixed(0)}
-                                            <span className="text-3xl text-amber-400 ml-1">€</span>
-                                            <span className="text-lg text-text-muted ml-1 italic">.00</span>
+                                            <span className="text-2xl sm:text-3xl text-amber-400 ml-1">€</span>
+                                            <span className="text-base sm:text-lg text-text-muted ml-1 italic">.00</span>
                                         </div>
-                                        <div className="inline-flex items-center gap-2 bg-amber-500/10 text-amber-400 text-[10px] font-black px-4 py-1.5 rounded-full border border-amber-500/20 uppercase tracking-widest">
+                                        <div className="inline-flex items-center gap-2 bg-amber-500/10 text-amber-400 text-[10px] font-black px-4 py-1.5 rounded-full border border-amber-500/20 uppercase tracking-widest flex-wrap justify-center">
                                             ⏱ 30 Días Acceso Demo
                                         </div>
                                     </>
