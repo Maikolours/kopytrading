@@ -95,16 +95,16 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
             <div className={`absolute top-0 right-0 w-[600px] h-[600px] ${colors.glow} blur-[120px] rounded-full pointer-events-none -mr-40 -mt-20 opacity-40`} />
             <div className={`absolute bottom-0 left-0 w-[400px] h-[400px] ${colors.glow} blur-[100px] rounded-full pointer-events-none -ml-20 -mb-20 opacity-20`} />
 
-            <div className="max-w-7xl mx-auto relative z-10">
-                <div className="mb-10">
+            <div className="max-w-7xl mx-auto relative z-10 w-full overflow-hidden">
+                <div className="mb-10 pl-1">
                     <Link href="/bots" className="text-text-muted hover:text-white transition-all text-xs flex items-center gap-2 uppercase tracking-widest font-black">
                         <span className="text-lg">←</span> Volver al Marketplace
                     </Link>
                 </div>
 
-                <div className="grid lg:grid-cols-12 gap-12">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 w-full">
                     {/* Main Content */}
-                    <div className="lg:col-span-8 space-y-8 w-full max-w-full">
+                    <div className="lg:col-span-8 space-y-8 min-w-0 w-full">
                         <div className="glass-card p-6 sm:p-12 border border-white/10 relative overflow-hidden group">
                             <div className={`absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-transparent via-${bot.instrument === 'XAUUSD' ? 'purple-500' : bot.instrument === 'BTCUSD' ? 'amber-500' : 'brand'}/50 to-transparent`} />
                             
@@ -137,7 +137,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             </div>
 
                             <div className="prose prose-invert max-w-none relative mt-8">
-                                <h3 className="text-sm font-black text-text-muted uppercase tracking-[0.3em] mb-6 flex items-center gap-4">
+                                <h3 className="text-xs font-black text-white uppercase tracking-[0.2em] sm:tracking-[0.3em] flex items-center gap-3">
                                     <span>Tesis de Inversión</span>
                                     <div className="flex-1 h-[1px] bg-white/5"></div>
                                 </h3>
@@ -169,8 +169,8 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-8 w-full max-w-full">
-                            <div className="glass-card p-6 sm:p-8 border border-white/5 space-y-6">
-                                <h3 className="text-xs font-black text-white uppercase tracking-[0.3em] flex items-center gap-3 flex-wrap">
+                            <div className="glass-card p-6 sm:p-8 border border-white/5 space-y-6 w-full overflow-hidden">
+                                <h3 className="text-[10px] sm:text-xs font-black text-white uppercase tracking-[0.2em] sm:tracking-[0.3em] flex items-center gap-3 flex-wrap">
                                     <span className={`w-2 h-2 rounded-full flex-shrink-0 ${bot.riskLevel === 'Low' ? 'bg-success' : 'bg-amber-500'}`}></span>
                                     Especificaciones Técnicas
                                 </h3>
@@ -195,9 +195,9 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                 </div>
                             </div>
 
-                            <div className="glass-card p-6 sm:p-8 border border-white/5 relative overflow-hidden">
+                            <div className="glass-card p-6 sm:p-8 border border-white/5 relative overflow-hidden w-full">
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
-                                    <h4 className="text-[10px] font-black text-white uppercase tracking-[0.3em] break-words">Rendimiento Histórico</h4>
+                                    <h4 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.2em] sm:tracking-[0.3em] break-words">Rendimiento Histórico</h4>
                                     <span className="text-[9px] bg-success/10 text-success px-3 py-1 rounded-full border border-success/20 font-black uppercase tracking-widest self-start sm:self-auto">Auditado</span>
                                 </div>
 
@@ -220,8 +220,8 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             </div>
                         </div>
 
-                        <div className="glass-card p-6 sm:p-10 border border-white/10 w-full max-w-full">
-                            <h5 className="text-2xl font-black text-white mb-8 uppercase italic flex items-center gap-4">
+                        <div className="glass-card p-6 sm:p-10 border border-white/10 w-full overflow-hidden">
+                            <h5 className="text-xl sm:text-2xl font-black text-white mb-8 uppercase italic flex items-center gap-4">
                                 <span className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center text-xl shadow-inner border border-white/10 italic">#</span>
                                 Recursos del Algoritmo
                             </h5>
@@ -270,8 +270,8 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                     </div>
 
                     {/* Sidebar Purchase Card */}
-                    <div className="lg:col-span-4 w-full max-w-full">
-                        <div className={`sticky top-28 glass-card p-6 sm:p-10 border-white/10 border shadow-2xl ${colors.shadow} relative overflow-hidden group/side`}>
+                    <div className="lg:col-span-4 min-w-0 w-full">
+                        <div className={`sticky top-28 glass-card p-6 sm:p-10 border-white/10 border shadow-2xl ${colors.shadow} relative overflow-hidden group/side w-full`}>
                             {/* Decorative Glow */}
                             <div className={`absolute -top-24 -right-24 w-48 h-48 ${colors.glow} blur-[80px] rounded-full group-hover/side:opacity-100 opacity-50 transition-opacity`} />
                             
