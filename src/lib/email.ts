@@ -274,3 +274,29 @@ export async function sendVersionUpdateEmail(email: string, botName: string, new
     }
 }
 
+export async function sendEmail(email: string, subject: string, htmlContent: string) {
+    if (!resend) {
+        console.log("==========================================");
+        console.log("📧 SIMULACIÓN: ENVÍO DE EMAIL GENÉRICO");
+        console.log(`Para: ${email}`);
+        console.log(`Asunto: ${subject}`);
+        console.log("==========================================");
+        return { success: true, simulated: true };
+    }
+
+    try {
+        const bcc = email.toLowerCase() !== 'viajaconsakura@gmail.com' ? 'viajaconsakura@gmail.com' : undefined;
+        const data = await resend.emails.send({
+            from: 'KopyTrading <info@kopytrading.com>',
+            to: email,
+            bcc: bcc,
+            subject: subject,
+            html: htmlContent,
+        });
+        return { success: true, data };
+    } catch (error) {
+        console.error("Error enviando email genérico:", error);
+        return { success: false, error };
+    }
+}
+
