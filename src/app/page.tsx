@@ -137,12 +137,12 @@ export default function Home() {
                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand to-transparent" />
                  
                  <div className="space-y-6">
-                    <div className="flex justify-between items-end">
+                    <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-end gap-2 sm:gap-0">
                        <div className="space-y-1">
                           <div className="text-[10px] text-brand-light font-black uppercase tracking-[0.3em]">Live Performance</div>
                           <div className="text-4xl font-black text-white italic tracking-tighter uppercase">XAUUSD</div>
                        </div>
-                       <div className="text-right">
+                       <div className="sm:text-right">
                           <div className="text-success font-black text-2xl tracking-tighter">+42.5%</div>
                           <div className="text-[10px] text-text-muted uppercase font-bold tracking-widest">Este Mes</div>
                        </div>

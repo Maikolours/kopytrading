@@ -133,9 +133,9 @@ export default function RootLayout({
             </main>
             <footer className="border-t border-white/5 pt-16 pb-12 px-4 sm:px-6 lg:px-8 bg-black main-wrapper">
               <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
                   {/* Columna 1: Marca y Logo */}
-                  <div className="col-span-2 md:col-span-1 space-y-6">
+                  <div className="col-span-1 sm:col-span-2 lg:col-span-1 space-y-6">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10 p-0.5 bg-black">
                         <img src="/logo-kopytrading.png" alt="Logo" className="w-full h-full object-cover rounded-[0.5rem]" />
