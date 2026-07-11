@@ -19,33 +19,13 @@ const RESULTS_VIDEOS: VideoResult[] = [];
 const RESULTS_PHOTOS = [
   {
     id: "photo-1",
-    title: "Resultados en Cuenta Real Auditada",
-    url: "/images/results-march-27.png"
+    title: "Resultados en Cuenta Demo - MAIKO Histórico",
+    url: "/images/testimonials/resultado_1.jpg"
   },
   {
     id: "photo-2",
-    title: "Configuración Avanzada Titan Shield",
-    url: "/images/titan-shield-setup.png"
-  },
-  {
-    id: "photo-3",
-    title: "Guía de Inicio Rápido en MetaTrader 5",
-    url: "/images/mt5-guide.png"
-  },
-  {
-    id: "photo-4",
-    title: "Consistencia en Cuenta Demo Maiko Gold",
-    url: "/images/maiko-gold-demo.png"
-  },
-  {
-    id: "photo-5",
-    title: "Entorno de Servidor VPS 24/7",
-    url: "/images/vps-setup.png"
-  },
-  {
-    id: "photo-6",
-    title: "Métricas de Cuenta Cent - Maiko Cent",
-    url: "/images/maiko-cent.png"
+    title: "Resultados en Cuenta Demo - Consistencia",
+    url: "/images/testimonials/resultado_2.jpg"
   }
 ];
 
@@ -114,8 +94,17 @@ export function ResultsGallery() {
         {/* Sección de Fotos/Capturas */}
         <div>
           <div className="flex flex-col items-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Capturas de Resultados</h2>
-            <div className="h-1 w-20 bg-brand rounded-full" />
+            <h2 className="text-3xl font-bold text-white mb-4">Capturas de Resultados (Demo)</h2>
+            <div className="h-1 w-20 bg-brand rounded-full mb-8" />
+            
+            <a 
+              href="https://t.me/Kpytrading" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-[#24A1DE] hover:bg-[#1d82b5] text-white px-6 py-3 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors flex items-center gap-2"
+            >
+              <span>✈️</span> ¿Quieres aparecer en el muro? Envía tu captura por Telegram
+            </a>
           </div>
           
           {RESULTS_PHOTOS.length > 0 ? (
