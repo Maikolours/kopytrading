@@ -229,6 +229,22 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     {
         keywords: ["take profit", "tp", "recoger beneficios", "cerrar ganancia"],
         response: "🎯 **Toma de Beneficios (Take Profit):**\n\nNuestros algoritmos calculan el Take Profit de forma dinámica basándose en la volatilidad actual (ATR) y niveles institucionales. Además, utilizamos Trailing Stop para perseguir el precio y maximizar las ganancias si el mercado corre a nuestro favor."
+    },
+    {
+        keywords: ["inteligencia artificial", "ia", "ai", "machine learning"],
+        response: "🧠 **¿Usan Inteligencia Artificial?**\n\nNo utilizamos Inteligencia Artificial generativa o predictiva. Nuestros bots son 100% algorítmicos y matemáticos (MQL5 puro). Utilizan fórmulas precisas, acción del precio y cruce de indicadores institucionales probados durante años. Preferimos la precisión y consistencia de las matemáticas sobre lo impredecible de la IA actual."
+    },
+    {
+        keywords: ["como se si esta funcionando", "saber si funciona", "como compruebo", "como saber si esta encendido"],
+        response: "✅ **¿Cómo sé si el bot está funcionando?**\n\nPara estar 100% seguro, comprueba 3 cosas:\n1. El botón de AutoTrading (o Algo Trading) arriba en el menú de MT5 debe tener el símbolo de Play verde (▶️).\n2. En el gráfico, el HUD de KopyTrading debe mostrar el botón principal en rojo ('APAGAR'), lo que significa que está armado.\n3. Arriba a la derecha del gráfico deberías ver un icono de un gorrito azul de graduado. Si se ve gris o rojo, el autotrading global está apagado."
+    },
+    {
+        keywords: ["hay que configurarlo", "que configuracion le pongo", "parametros ideales", "que ajustes pongo", "tengo que ajustar"],
+        response: "⚙️ **¿Tengo que configurar parámetros difíciles?**\n\n¡No! Los bots vienen configurados y optimizados 'Plug & Play' (listos para usar). Los valores internos ya están ajustados a la perfección. Tú solo tienes que arrastrarlo a la gráfica, meter tu número de licencia y poner tu Lotaje inicial (recomendamos siempre empezar con 0.01 por cada 1.000$)."
+    },
+    {
+        keywords: ["en que grafica lo pongo", "que temporalidad", "timeframe", "en que par", "en que activo"],
+        response: "📊 **Temporalidad y Gráfica para cada Bot:**\n\nCada algoritmo solo funciona en su hábitat:\n• **La Ametralladora**: Gráfica de ORO (XAUUSD) en temporalidad **M5**.\n• **Euro Precision**: Gráfica de EURUSD en temporalidad **H1**.\n• **Yen Ninja**: Gráfica de USDJPY en temporalidad **M30**.\n• **BTC Storm**: Gráfica de BTCUSD en temporalidad **H4** o **M30**."
     }
 ];
 
@@ -462,7 +478,7 @@ export default function FloatingChat() {
 
             {/* Panel del chat */}
             {open && (
-                <div className="fixed bottom-20 sm:bottom-24 left-4 right-4 sm:left-auto sm:right-6 z-[998] sm:w-[350px] glass-card border border-brand/30 rounded-2xl shadow-[0_0_50px_rgba(139,92,246,0.3)] flex flex-col overflow-hidden" style={{ height: '440px', maxHeight: '70vh' }}>
+                <div className="fixed bottom-20 sm:bottom-24 left-4 right-4 sm:left-auto sm:right-6 z-[998] sm:w-[350px] glass-card border border-brand/30 rounded-2xl shadow-[0_0_50px_rgba(139,92,246,0.3)] flex flex-col overflow-hidden" style={{ height: '440px', maxHeight: 'calc(100svh - 100px)' }}>
                     {/* Header */}
                     <div className="bg-gradient-to-r from-brand-dark to-brand p-4 flex items-center justify-between gap-3 flex-shrink-0">
                         <div className="flex items-center gap-3 min-w-0">
@@ -490,7 +506,7 @@ export default function FloatingChat() {
                     </div>
 
                     {/* Mensajes */}
-                    <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-bg-dark/80">
+                    <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3 bg-bg-dark/80">
                         {messages.map((msg, i) => (
                             <div key={i} className={`flex ${msg.from === "user" ? "justify-end" : "justify-start"}`}>
                                 {msg.from === "bot" && (
