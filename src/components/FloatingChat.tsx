@@ -479,7 +479,7 @@ export default function FloatingChat() {
 
             {/* Panel del chat */}
             {open && (
-                <div className="fixed bottom-20 sm:bottom-24 left-4 right-4 sm:left-auto sm:right-6 z-[9999] sm:w-[350px] glass-card border border-brand/30 rounded-2xl shadow-[0_0_50px_rgba(139,92,246,0.3)] flex flex-col overflow-hidden" style={{ height: '440px', maxHeight: '80vh' }}>
+                <div className="!fixed bottom-20 sm:bottom-24 left-4 right-4 sm:left-auto sm:right-6 z-[9999] sm:w-[350px] glass-card border border-brand/30 rounded-2xl shadow-[0_0_50px_rgba(139,92,246,0.3)] flex flex-col overflow-hidden" style={{ height: '440px', maxHeight: '80vh' }}>
                     {/* Header */}
                     <div className="bg-gradient-to-r from-brand-dark to-brand p-4 flex items-center justify-between gap-3 flex-shrink-0">
                         <div className="flex items-center gap-3 min-w-0">
