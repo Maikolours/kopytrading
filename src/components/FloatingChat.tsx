@@ -210,6 +210,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     {
         keywords: ["ajustes", "parametros", "parámetros", "cambiar lotaje", "riesgo", "configuracion", "configuración"],
         response: "🛠️ **Personalización (Inputs):**\n\nAl arrastrar el bot, verás una pestaña de **'Parámetros de Entrada'**. Aquí puedes:\n• Ajustar el **Lotaje** (recomendamos 0.01).\n• Activar/Desactivar el **Auto-Hedge**.\n• Cambiar el **Daily Stop Loss**.\n\nVienen optimizados por defecto, pero tú tienes el control final."
+    },
     {
         keywords: ["profit factor", "ratio de ganancia", "factor de beneficio", "ganancia esperada", "rendimiento"],
         response: "📊 **¿Qué es el Profit Factor?**\n\nEl Profit Factor es la relación entre las ganancias brutas y las pérdidas brutas. Un Profit Factor superior a 1.0 significa que el sistema es rentable. Nuestros algoritmos, como el MAIKO PRO GOLD, buscan mantener un Profit Factor histórico por encima de 2.0 (por cada dólar perdido, se ganan dos dólares) en condiciones óptimas."
