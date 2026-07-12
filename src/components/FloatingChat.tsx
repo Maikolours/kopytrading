@@ -246,10 +246,26 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     {
         keywords: ["en que grafica lo pongo", "que temporalidad", "timeframe", "en que par", "en que activo"],
         response: "📊 **Temporalidad y Gráfica para cada Bot:**\n\nCada algoritmo solo funciona en su hábitat:\n• **La Ametralladora**: Gráfica de ORO (XAUUSD) en temporalidad **M5**.\n• **Euro Precision**: Gráfica de EURUSD en temporalidad **H1**.\n• **Yen Ninja**: Gráfica de USDJPY en temporalidad **M30**.\n• **BTC Storm**: Gráfica de BTCUSD en temporalidad **H4** o **M30**."
+    },
+    {
+        keywords: ["es facil de usar", "es fácil de usar", "soy novato", "soy principiante", "no tengo experiencia", "es complicado", "no se de trading", "no sé de trading"],
+        response: "👶 **¿Es fácil de usar si soy principiante?**\n\n¡Completamente! Hemos diseñado KopyTrading para que cualquier persona pueda usarlo sin conocimientos previos. Te entregamos el bot 100% optimizado y listo para funcionar (Plug & Play). Solo tienes que arrastrarlo a tu gráfica, introducir tu licencia y ajustar tu lotaje."
+    },
+    {
+        keywords: ["me devuelven el dinero", "devolucion", "devolución", "reembolso", "garantia", "garantía", "si no me gusta", "que pasa si pierdo", "recuperar el dinero"],
+        response: "🛡️ **Garantía y Devoluciones:**\n\nAl tratarse de un producto de software digital (descargable) y propiedad intelectual que recibes inmediatamente, no ofrecemos reembolsos una vez el sistema ha sido activado.\nSin embargo, para que estés 100% tranquilo, ofrecemos **licencias DEMO de 30 días** por solo 1$ en todos nuestros sistemas. Así puedes probarlos a fondo sin ningún riesgo."
+    },
+    {
+        keywords: ["para siempre", "cuanto dura", "cuánto dura", "es de pago unico", "pago único", "suscripción", "suscripcion", "pagar cada mes", "mensualidad", "licencia vitalicia", "renovar", "caduca"],
+        response: "♾️ **¿La licencia es para siempre? ¿Hay pagos mensuales?**\n\n¡Sí! Las licencias completas (versión PRO) de nuestros bots son de **Pago Único y Vitalicias**. No hay suscripciones mensuales ni cuotas ocultas. Lo compras una vez y te lo quedas para siempre. La única versión que caduca son las licencias Trial (de prueba), que duran 30 días."
+    },
+    {
+        keywords: ["como lo instalo", "cómo lo instalo", "como se instala", "tutorial de instalacion", "pasos para instalar", "guia de instalacion", "como instalarlo"],
+        response: "💻 **¿Cómo instalo el bot en mi MetaTrader?**\n\nTenemos una **Guía de Instalación Paso a Paso** donde te explicamos todo. Está en la sección 'Guía de Instalación' (menú superior). En resumen:\n1. Lo descargas de tu panel.\n2. En MT5 vas a Archivo > Abrir carpeta de datos > MQL5 > Experts y lo pegas ahí.\n3. Recargas los Asesores Expertos, lo arrastras a la gráfica y permites el Algo Trading."
     }
 ];
 
-const DEFAULT_RESPONSE = "Hmm, no tengo esa respuesta exacta en mi memoria 🤖. He aprendido mucho sobre **instalación, brokers, gestión de riesgo, parámetros técnicos (Stop Loss, Drawdown, Profit Factor), VPS y horarios**.\n\nPuedes escribirme tu pregunta, o usar el micrófono 🎤. Si prefieres hablar con un humano, escribe **'soporte'**.";
+const DEFAULT_RESPONSE = "Hmm, parece que mi respuesta no encaja exactamente con lo que preguntas 🤖. He aprendido mucho sobre:\n\n• **Instalación y Descargas**\n• **Tipos de Licencias (Vitalicias / Trial)**\n• **Gestión de Riesgo y Parámetros Técnicos**\n• **Uso de VPS y Horarios de Trading**\n\nIntenta hacer tu pregunta usando palabras clave o, si prefieres hablar con un humano, escribe **'soporte'**.";
 
 function getBotResponse(input: string): string {
     const lower = input.toLowerCase()
