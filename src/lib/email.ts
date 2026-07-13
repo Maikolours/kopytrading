@@ -42,6 +42,7 @@ export async function sendWelcomeEmail(email: string, licenseKey: string, botNam
             <div style="border-top: 1px solid #30363d; padding-top: 20px; margin-top: 30px; font-size: 12px; color: #8b949e;">
                 <p>Se ha creado una cuenta automáticamente en nuestra web para que gestiones tus licencias.</p>
                 <p>Puedes <a href="${passwordResetLink}" style="color: #58a6ff;">crear tu propia contraseña aquí</a>.</p>
+                <p style="font-size: 10px; color: #484f58; margin-top: 15px;">Si ya no deseas recibir este tipo de correos comerciales o actualizaciones, puedes <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://www.kopytrading.com'}/unsubscribe?email=${email}" style="color: #58a6ff; text-decoration: underline;">darte de baja aquí</a>.</p>
             </div>
         </div>
     `;
@@ -120,6 +121,7 @@ export async function sendTrialProgressEmail(email: string, daysRemaining: numbe
             
             <div style="border-top: 1px solid #30363d; padding-top: 20px; margin-top: 30px; font-size: 11px; color: #8b949e; text-align: center;">
                 <p>Estás recibiendo este correo porque tienes una licencia Demo activa con KopyTrading.</p>
+                <p style="font-size: 10px; color: #484f58; margin-top: 10px;">Si no deseas recibir más avisos sobre tu trial, puedes <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://www.kopytrading.com'}/unsubscribe?email=${email}" style="color: #58a6ff; text-decoration: underline;">darte de baja aquí</a>.</p>
             </div>
         </div>
     `;
@@ -176,6 +178,7 @@ export async function sendTrialExpiredEmail(email: string, botName: string, purc
             
             <div style="border-top: 1px solid #30363d; padding-top: 20px; margin-top: 30px; font-size: 11px; color: #8b949e; text-align: center;">
                 <p>KopyTrading · Tecnología de Trading Algorítmico Profesional.</p>
+                <p style="font-size: 10px; color: #484f58; margin-top: 10px;">Si no deseas recibir más correos, puedes <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://www.kopytrading.com'}/unsubscribe?email=${email}" style="color: #58a6ff; text-decoration: underline;">darte de baja aquí</a>.</p>
             </div>
         </div>
     `;
@@ -244,6 +247,7 @@ export async function sendVersionUpdateEmail(email: string, botName: string, new
             <div style="border-top: 1px solid #30363d; padding-top: 20px; margin-top: 35px; font-size: 11px; color: #8b949e; text-align: center; line-height: 1.4;">
                 <p>KopyTrading · Tecnología de Trading Algorítmico Profesional.</p>
                 <p style="font-size: 10px; color: #484f58; margin-top: 5px;">Este es un correo automático de actualización del sistema. Por favor no respondas a este mensaje.</p>
+                <p style="font-size: 10px; color: #484f58; margin-top: 5px;">Si no deseas recibir avisos de actualización, puedes <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://www.kopytrading.com'}/unsubscribe?email=${email}" style="color: #58a6ff; text-decoration: underline;">darte de baja aquí</a>.</p>
             </div>
         </div>
     `;
