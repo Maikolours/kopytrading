@@ -425,3 +425,14 @@ El sistema v5.84 incluye mejoras exclusivas de inteligencia artificial y protecc
 
 ---
 *Desarrollado con ❤️ por el equipo de KopyTrading. ¡Que tengas una excelente y disciplinada sesión de trading!*
+---
+
+## 7. HISTORIAL DE ACTUALIZACIONES (CHANGELOG)
+
+**v11.32 (Versión Actual)**
+- **Ajuste de latencia de telemetría:** Optimización de la frecuencia de envío de datos del bot al panel de control (de 60s a 3600s en estado inactivo) para mejorar la eficiencia del servidor y reducir el consumo de recursos de VPS.
+
+**v11.31**
+- **Stop Loss con función Standby:** El bot ahora espera automáticamente 10 minutos (ajustable) tras tocar un Stop Loss antes de volver a buscar operaciones, evitando rachas de pérdidas en alta volatilidad.
+- **Bloqueo de Horas Críticas:** Implementación de filtro horario mejorado para evitar operar durante noticias de altísimo impacto.
+
