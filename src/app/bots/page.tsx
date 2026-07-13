@@ -166,6 +166,14 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                      </div>
                                  )}
 
+                                 {/* Ribbon Lanzamiento */}
+                                 {!isDemo && bot.id === GOLD_REAL_ID && (
+                                     <div className="absolute top-7 -left-12 -rotate-45 w-48 text-center bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 text-black py-1 shadow-[0_0_20px_rgba(245,158,11,0.4)] z-30 flex flex-col leading-tight border-y border-yellow-200">
+                                         <span className="text-[11px] font-black tracking-widest uppercase mt-0.5">Lanzamiento</span>
+                                         <span className="text-[9px] font-black tracking-[0.2em] uppercase mb-0.5 opacity-90">SEPT 2026</span>
+                                     </div>
+                                 )}
+
                                 <CardHeader className="relative overflow-hidden pb-4 pt-10">
                                     <div className={`absolute top-0 right-0 w-32 h-32 ${colors.glow} blur-3xl -mr-16 -mt-16 transition-opacity duration-700 group-hover:opacity-100 ${isDemo ? 'opacity-40' : 'opacity-20'}`} />
                                     
@@ -178,13 +186,9 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                         <div className="flex flex-col gap-2 min-w-0 pr-2">
                                             {/* Promoción MAIKO PRO GOLD REAL */}
                                             {!isDemo && bot.id === GOLD_REAL_ID && (
-                                                <div className="flex flex-col gap-1 items-start">
-                                                    <span className="bg-amber-500/20 border border-amber-500/50 text-amber-400 text-[7px] font-black px-2 py-0.5 rounded-sm tracking-widest uppercase shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-                                                        🔥 LANZAMIENTO SEPT 2026
-                                                    </span>
-                                                    <span className="bg-gradient-to-r from-brand to-purple-600 text-white text-[7px] font-black px-2 py-0.5 rounded-sm tracking-widest uppercase shadow-[0_0_10px_rgba(168,85,247,0.4)]">
+                                                <div className="flex flex-col gap-1 items-start mb-1">
+                                                    <span className="bg-gradient-to-r from-brand to-purple-600 text-white text-[8px] font-black px-2.5 py-1 rounded-md tracking-widest uppercase shadow-[0_0_10px_rgba(168,85,247,0.4)] border border-brand-light/30">
                                                         🎁 50 PRIMERAS: VITALICIO
-                                                        🔥 EDICIÓN FUNDADORES
                                                     </span>
                                                 </div>
                                             )}
