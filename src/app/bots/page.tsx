@@ -175,10 +175,24 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                     </div>
 
                                     <div className="flex justify-between items-start mb-3 relative z-10">
-                                        {/* Nombre del bot — con min-w-0 para que truncate funcione */}
-                                        <CardTitle className="text-xl font-black italic tracking-tighter uppercase transition-all duration-500 text-white group-hover:text-brand-light min-w-0 pr-2 leading-tight">
+                                        <div className="flex flex-col gap-2 min-w-0 pr-2">
+                                            {/* Promoción MAIKO PRO GOLD REAL */}
+                                            {!isDemo && bot.id === GOLD_REAL_ID && (
+                                                <div className="flex flex-col gap-1 items-start">
+                                                    <span className="bg-amber-500/20 border border-amber-500/50 text-amber-400 text-[7px] font-black px-2 py-0.5 rounded-sm tracking-widest uppercase shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                                                        🔥 LANZAMIENTO SEPT 2026
+                                                    </span>
+                                                    <span className="bg-gradient-to-r from-brand to-purple-600 text-white text-[7px] font-black px-2 py-0.5 rounded-sm tracking-widest uppercase shadow-[0_0_10px_rgba(168,85,247,0.4)]">
+                                                        🎁 50 PRIMERAS: VITALICIO
+                                                        🔥 EDICIÓN FUNDADORES
+                                                    </span>
+                                                </div>
+                                            )}
+                                            {/* Nombre del bot */}
+                                            <CardTitle className="text-xl font-black italic tracking-tighter uppercase transition-all duration-500 text-white group-hover:text-brand-light leading-tight">
                                             {formatBotName(bot.name, bot.instrument)}
-                                        </CardTitle>
+                                            </CardTitle>
+                                        </div>
                                         <div className="flex flex-col items-end gap-1.5 shrink-0">
                                             <span className={`bg-gradient-to-br ${colors.badge} text-white px-2.5 py-1 rounded-full text-[9px] font-black tracking-widest shadow-lg uppercase whitespace-nowrap`}>
                                                 {bot.instrument}

@@ -354,11 +354,21 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                         {/* Botón de Demo → Solo para Oro Real y BTC */}
                                         {bot.id === GOLD_REAL_BOT_ID && !demoIsUpcoming ? (
                                             /* Oro Real → Ofrece el Gold Demo por 1€ */
-                                            <Link href="/checkout/cmn9hf8yc0000vhbcq9hbxk0j" className="block mt-2">
-                                                <Button size="lg" variant="outline" fullWidth className="py-7 border-brand-light/30 hover:border-brand-light text-brand-light font-black uppercase tracking-widest text-[10px] hover:bg-brand/10 h-10 shadow-lg shadow-brand/10">
-                                                    🎁 Activar Demo · 1€ (30 Días)
-                                                </Button>
-                                            </Link>
+                                            <>
+                                                <Link href="/checkout/cmn9hf8yc0000vhbcq9hbxk0j" className="block mt-2">
+                                                    <Button size="lg" variant="outline" fullWidth className="py-7 border-brand-light/30 hover:border-brand-light text-brand-light font-black uppercase tracking-widest text-[10px] hover:bg-brand/10 h-10 shadow-lg shadow-brand/10">
+                                                        🎁 Activar Demo · 1€ (30 Días)
+                                                    </Button>
+                                                </Link>
+                                                <div className="mt-4 p-4 rounded-xl bg-gradient-to-br from-brand/10 to-purple-900/20 border border-brand/20">
+                                                    <p className="text-[9px] text-brand-light uppercase tracking-widest font-black mb-1 flex items-center gap-1">
+                                                        <span>🔥</span> Promoción Fundadores
+                                                    </p>
+                                                    <p className="text-[10px] text-white/60 leading-relaxed italic">
+                                                        *Las primeras 50 personas que adquieran la licencia en el lanzamiento oficial (Septiembre 2026) obtendrán un superdescuento y la licencia será de por vida (Vitalicia). A partir de la descarga 51, el acceso requerirá suscripción anual.
+                                                    </p>
+                                                </div>
+                                            </>
                                         ) : bot.id === BTC_REAL_BOT_ID ? (
                                             /* BTC Real → Demo próximamente */
                                             <div className="mt-2">

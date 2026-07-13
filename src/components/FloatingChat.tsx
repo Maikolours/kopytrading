@@ -33,7 +33,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["precio", "cuánto cuesta", "cuanto cuesta", "costo", "coste", "todos", "comparar", "comprar", "pagar", "compras", "licencia anual", "pago"],
-        response: "💰 **Precios de las Licencias:**\n\nActualmente todos nuestros bots están en fase de lanzamiento y el precio definitivo está por determinar.\n\n⚡ **Lo único disponible ahora mismo** es la versión demo del bot estrella **MAIKO PRO GOLD**, que puedes activar durante **30 días por solo 1$** en una cuenta DEMO de MetaTrader 5.\n\nTras el período de demo, podrás adquirir tu licencia válida para un año. Visita la sección de [Bots](/bots) para más información."
+        response: "💰 **Precios de las Licencias:**\n\nActualmente todos nuestros bots están en fase de lanzamiento y el precio definitivo está por determinar.\n\n⚡ **Lo único disponible ahora mismo** es la versión demo del bot estrella **MAIKO PRO GOLD**, que puedes activar durante **30 días por solo 1$** en una cuenta DEMO de MetaTrader 5.\n\nEl tipo de licencia final dependerá del bot. ¡Atención! En septiembre de 2026 lanzaremos el MAIKO PRO GOLD y **las primeras 50 descargas tendrán licencia VITALICIA con superdescuento**. Después pasará a licencia anual. Visita la sección de [Bots](/bots) para más información."
     },
     {
         keywords: ["vps", "servidor", "cloud", "siempre encendido", "apago el ordenador", "se apaga", "nube", "contabo", "hosting", "computadora", "vps servidor"],
@@ -53,7 +53,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["gratis", "demo", "trial", "mes gratis", "free", "prueba", "30 dias", "30 días", "trial 30"],
-        response: "⚡ **Demo del MAIKO PRO GOLD:**\n\nPuedes activar la demo del bot estrella **MAIKO PRO GOLD** durante **30 días** en una cuenta DEMO de MetaTrader 5 por solo **1$**.\n\nEl algoritmo opera en **M5** con estrategia de scalping institucional. Conectado a tu cuenta DEMO de tu broker, podrás observar cómo opera en tiempo real sin arriesgar dinero real.\n\nTras los 30 días, podrás adquirir tu licencia válida para un año. \n\n🔗 [Activar Demo](/bots/cmn9hf8yc0000vhbcq9hbxk0j)"
+        response: "⚡ **Demo del MAIKO PRO GOLD:**\n\nPuedes activar la demo del bot estrella **MAIKO PRO GOLD** durante **30 días** en una cuenta DEMO de MetaTrader 5 por solo **1$**.\n\nEl algoritmo opera en **M5** con estrategia de scalping institucional. Conectado a tu cuenta DEMO de tu broker, podrás observar cómo opera en tiempo real sin arriesgar dinero real.\n\nTras los 30 días, podrás adquirir tu licencia. Recuerda que si estás entre los 50 primeros (lanzamiento Sept 2026), ¡tu licencia será de POR VIDA!\n\n🔗 [Activar Demo](/bots/cmn9hf8yc0000vhbcq9hbxk0j)"
     },
     {
         keywords: ["stripe", "paypal", "bizum", "cómo pago", "tarjeta", "pagar", "metodos de pago", "métodos de pago"],
@@ -257,7 +257,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     },
     {
         keywords: ["para siempre", "cuanto dura", "cuánto dura", "es de pago unico", "pago único", "suscripción", "suscripcion", "pagar cada mes", "mensualidad", "licencia vitalicia", "renovar", "caduca"],
-        response: "♾️ **¿La licencia es para siempre? ¿Hay pagos mensuales?**\n\n¡Sí! Las licencias completas (versión PRO) de nuestros bots son de **Pago Único y Vitalicias**. No hay suscripciones mensuales ni cuotas ocultas. Lo compras una vez y te lo quedas para siempre. La única versión que caduca son las licencias Trial (de prueba), que duran 30 días."
+        response: "♾️ **¿La licencia es para siempre? ¿Hay pagos mensuales?**\n\nEl tipo de licencia depende del bot que elijas. Algunos de nuestros algoritmos son de pago único y vitalicios, mientras que otros operan bajo licencia de validez anual para garantizar actualizaciones continuas.\n\n🚀 **Lanzamiento MAIKO PRO GOLD (Septiembre 2026):** Tenemos una promoción muy especial. Las **primeras 50 descargas** tendrán un superdescuento y la licencia será **VITALICIA (de por vida)**. A partir de la descarga 51, el bot pasará a su precio normal y su licencia será anual (tasa de renovación requerida)."
     },
     {
         keywords: ["como lo instalo", "cómo lo instalo", "como se instala", "tutorial de instalacion", "pasos para instalar", "guia de instalacion", "como instalarlo"],
@@ -265,7 +265,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     }
 ];
 
-const DEFAULT_RESPONSE = "Hmm, parece que mi respuesta no encaja exactamente con lo que preguntas 🤖. He aprendido mucho sobre:\n\n• **Instalación y Descargas**\n• **Tipos de Licencias (Vitalicias / Trial)**\n• **Gestión de Riesgo y Parámetros Técnicos**\n• **Uso de VPS y Horarios de Trading**\n\nIntenta hacer tu pregunta usando palabras clave o, si prefieres hablar con un humano, escribe **'soporte'**.";
+const DEFAULT_RESPONSE = "Hmm, parece que mi respuesta no encaja exactamente con lo que preguntas 🤖. He aprendido mucho sobre:\n\n• **Instalación y Descargas**\n• **Tipos de Licencias (Vitalicias / Anuales / Trial)**\n• **Gestión de Riesgo y Parámetros Técnicos**\n• **Uso de VPS y Horarios de Trading**\n\nIntenta hacer tu pregunta usando palabras clave o, si prefieres hablar con un humano, escribe **'soporte'**.";
 
 function getBotResponse(input: string): string {
     const lower = input.toLowerCase()
