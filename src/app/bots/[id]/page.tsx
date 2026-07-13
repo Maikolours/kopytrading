@@ -118,7 +118,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                             Algorithmic Asset
                                         </span>
                                         <span className="text-[10px] font-bold uppercase tracking-widest bg-success/10 text-success px-3 py-1 rounded-full border border-success/20 animate-pulse">
-                                            ✨ NUEVA VERSIÓN v11.31
+                                            ✨ NUEVA VERSIÓN v11.32
                                         </span>
                                         {isDemo && (
                                             <span className="text-[10px] font-bold uppercase tracking-widest bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20">
@@ -221,10 +221,20 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                         </div>
 
                         <div className="glass-card p-6 sm:p-10 border border-white/10 w-full overflow-hidden">
-                            <h5 className="text-xl sm:text-2xl font-black text-white mb-8 uppercase italic flex items-center gap-4">
+                            <h5 className="text-xl sm:text-2xl font-black text-white mb-6 uppercase italic flex items-center gap-4">
                                 <span className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center text-xl shadow-inner border border-white/10 italic">#</span>
                                 Recursos del Algoritmo
                             </h5>
+                            
+                            <div className="mb-8 bg-brand/5 border border-brand/20 p-4 rounded-xl flex gap-4 items-start">
+                                <div className="text-brand text-xl mt-0.5">🔄</div>
+                                <div>
+                                    <h6 className="text-sm font-bold text-white mb-1 uppercase tracking-wider">Políticas de Actualización (Fase de Optimización)</h6>
+                                    <p className="text-xs text-text-muted leading-relaxed">
+                                        Actualmente nos encontramos en un proceso de mejora continua. Dado que estamos ajustando parámetros para que el algoritmo salga de fábrica en su estado más óptimo, <strong>es posible que recibas diferentes actualizaciones frecuentemente</strong>. Es muy recomendable estar atento al correo y <strong className="text-white">descargar siempre la última versión</strong> que te notifiquemos. Llegará un punto de madurez donde las actualizaciones serán escasas, pero en esta etapa son vitales.
+                                    </p>
+                                </div>
+                            </div>
                             
                             <div className="grid sm:grid-cols-2 gap-6">
                                 <div className="glass-card bg-white/[0.02] p-6 border border-white/5 hover:border-white/20 transition-all group/dl relative overflow-hidden">

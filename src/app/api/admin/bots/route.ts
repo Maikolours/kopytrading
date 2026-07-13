@@ -74,7 +74,7 @@ export async function PUT(req: Request) {
 
     try {
         const body = await req.json();
-        const { botProductId, version, sendEmails, ex5FilePath, pdfFilePath } = body;
+        const { botProductId, version, sendEmails, changelog, isUrgent, ex5FilePath, pdfFilePath } = body;
 
         if (!botProductId || !version) {
             return NextResponse.json({ success: false, error: "Faltan parámetros requeridos (botProductId, version)" }, { status: 400 });
@@ -123,7 +123,7 @@ export async function PUT(req: Request) {
             // Enviar correos secuencialmente
             for (const [_, userInfo] of uniqueUsers.entries()) {
                 try {
-                    await sendVersionUpdateEmail(userInfo.email, bot.name, version, userInfo.purchaseId);
+                    await sendVersionUpdateEmail(userInfo.email, bot.name, version, userInfo.purchaseId, changelog, isUrgent);
                     emailsSent++;
                 } catch (emailErr: any) {
                     console.error(`Error enviando correo de actualización a ${userInfo.email}:`, emailErr);

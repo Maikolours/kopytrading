@@ -23,6 +23,8 @@ export default function AdminPage() {
     const [updatingBotId, setUpdatingBotId] = useState("");
     const [newVersion, setNewVersion] = useState("");
     const [sendEmails, setSendEmails] = useState(true);
+    const [changelog, setChangelog] = useState("");
+    const [isUrgent, setIsUrgent] = useState(false);
     const [ex5Path, setEx5Path] = useState("");
     const [pdfPath, setPdfPath] = useState("");
     const [updateMessage, setUpdateMessage] = useState("");
@@ -110,10 +112,14 @@ export default function AdminPage() {
             setNewVersion(selectedBot.version || "");
             setEx5Path(selectedBot.ex5FilePath || "");
             setPdfPath(selectedBot.pdfFilePath || "");
+            setChangelog("");
+            setIsUrgent(false);
         } else {
             setNewVersion("");
             setEx5Path("");
             setPdfPath("");
+            setChangelog("");
+            setIsUrgent(false);
         }
     };
 
@@ -131,6 +137,8 @@ export default function AdminPage() {
                     botProductId: updatingBotId,
                     version: newVersion,
                     sendEmails,
+                    changelog,
+                    isUrgent,
                     ex5FilePath: ex5Path || undefined,
                     pdfFilePath: pdfPath || undefined
                 })
@@ -514,6 +522,30 @@ export default function AdminPage() {
                                         className="w-full bg-surface/50 border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-brand transition-all" 
                                     />
                                 </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-sm text-text-muted">Notas de la Actualización (Changelog) - Visible en el correo</label>
+                                <textarea 
+                                    value={changelog}
+                                    onChange={(e) => setChangelog(e.target.value)}
+                                    placeholder="Novedades de esta versión..."
+                                    rows={3}
+                                    className="w-full bg-surface/50 border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-brand transition-all"
+                                />
+                            </div>
+
+                            <div className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5">
+                                <input 
+                                    type="checkbox" 
+                                    id="isUrgentCheckbox"
+                                    checked={isUrgent} 
+                                    onChange={(e) => setIsUrgent(e.target.checked)}
+                                    className="w-4 h-4 rounded text-brand focus:ring-brand accent-amber-500 bg-surface border-white/10" 
+                                />
+                                <label htmlFor="isUrgentCheckbox" className="text-xs text-white/80 font-semibold cursor-pointer select-none text-amber-400">
+                                    ⚠️ Marcar como actualización URGENTE/CRÍTICA.
+                                </label>
                             </div>
 
                             <div className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5">

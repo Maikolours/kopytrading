@@ -208,10 +208,11 @@ export async function sendTrialExpiredEmail(email: string, botName: string, purc
     }
 }
 
-export async function sendVersionUpdateEmail(email: string, botName: string, newVersion: string, purchaseId: string) {
+export async function sendVersionUpdateEmail(email: string, botName: string, newVersion: string, purchaseId: string, changelog?: string, isUrgent?: boolean) {
     const downloadLink = `${process.env.NEXT_PUBLIC_APP_URL || 'https://www.kopytrading.com'}/dashboard`;
     
-    const subject = `🔔 Nueva actualización disponible: ${botName} v${newVersion}`;
+    const subjectPrefix = isUrgent ? "🚨 URGENTE:" : "🔔";
+    const subject = `${subjectPrefix} Nueva actualización disponible: ${botName} v${newVersion}`;
     
     const htmlContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #0d1117; color: #c9d1d9; border-radius: 10px; border: 1px solid #30363d;">
@@ -224,11 +225,23 @@ export async function sendVersionUpdateEmail(email: string, botName: string, new
             <p style="line-height: 1.6; font-size: 14px;">Hola,</p>
             <p style="line-height: 1.6; font-size: 14px;">Queremos informarte que se ha publicado una nueva versión optimizada para tu bot <strong>${botName}</strong>.</p>
             
+            
+            ${isUrgent ? `
+            <div style="background-color: #ff7b721a; padding: 15px; border-left: 4px solid #ff7b72; border-radius: 4px; margin: 20px 0;">
+                <p style="color: #ff7b72; margin: 0; font-weight: bold; font-size: 14px;">⚠️ ACTUALIZACIÓN URGENTE: Es de vital importancia que descargues e instales esta versión lo antes posible para garantizar la correcta operativa de tu bot.</p>
+            </div>
+            ` : ''}
+            
             <div style="background-color: #161b22; padding: 20px; border-radius: 12px; border: 1px solid #30363d; margin: 25px 0;">
                 <h3 style="color: #58a6ff; margin-top: 0; font-size: 15px; font-weight: bold;">Detalles de la versión v${newVersion}</h3>
                 <p style="margin: 6px 0; font-size: 13px;"><strong>Bot:</strong> ${botName}</p>
                 <p style="margin: 6px 0; font-size: 13px;"><strong>Nueva Versión:</strong> <span style="font-family: monospace; background: #000; padding: 3px 8px; border-radius: 4px; color: #58a6ff; font-weight: bold;">v${newVersion}</span></p>
-                <p style="margin: 12px 0 0 0; font-size: 12px; color: #8b949e; line-height: 1.5;">Esta versión incluye los nuevos parámetros de Stop Loss con función Standby (espera de 10 min tras pérdida) y Bloqueo de Horas Críticas (para evitar noticias de alta volatilidad).</p>
+                ${changelog ? `
+                <div style="margin: 15px 0 0 0; padding-top: 15px; border-top: 1px solid #30363d;">
+                    <h4 style="color: #c9d1d9; margin-top: 0; font-size: 13px;">Novedades (Changelog):</h4>
+                    <p style="font-size: 13px; color: #8b949e; line-height: 1.5; white-space: pre-wrap;">${changelog}</p>
+                </div>
+                ` : ''}
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
