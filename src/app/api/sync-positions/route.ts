@@ -556,10 +556,11 @@ export async function POST(req: Request) {
             console.error("Error syncing settings/telemetry:", sErr);
         }
 
+        const parsedSettings = currentSettings ? (typeof currentSettings.settings === 'string' ? JSON.parse(currentSettings.settings) : currentSettings.settings) : DEFAULT_SETTINGS;
         return NextResponse.json({ 
             success: true, 
-            settings: currentSettings ? (typeof currentSettings.settings === 'string' ? JSON.parse(currentSettings.settings) : currentSettings.settings) : DEFAULT_SETTINGS,
-            cmd: (currentSettings?.settings as any)?.pendingCmd || "NONE"
+            settings: parsedSettings,
+            cmd: parsedSettings.pendingCmd || "NONE"
         });
     } catch (err: any) {
         console.error("Sync Positions Error:", err);

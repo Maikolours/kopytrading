@@ -67,7 +67,7 @@ export async function GET(req: Request) {
         const activeSessions = licenseSessions.map(session => ({
             id: session.id,
             account: session.account,
-            lastActivity: session.lastActivity,
+            lastActivity: session.purchase?.lastSync || session.lastActivity,
             isActive: session.isActive,
             userEmail: session.purchase?.user?.email || "unknown",
             userName: session.purchase?.user?.name || "unknown",
