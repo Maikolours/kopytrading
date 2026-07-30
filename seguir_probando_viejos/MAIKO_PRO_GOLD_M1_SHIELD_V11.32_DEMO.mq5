@@ -37,7 +37,7 @@ input double   MaxSpreadPips              = 5.0;         // 📏 Spread Máximo 
 input double   SensibilidadMechaReal      = 3.0;         // 📏 Sensibilidad Mecha vs Cuerpo
 input int      MinutosPausaTrasSusto      = 1;           // ⏳ Minutos de Pausa tras Volatilidad
 input double   MaxRsiCompra               = 60.0;        // 📊 RSI Máximo para Compras (Filtro Techos)
-input double   MinRsiVenta                = 40.0;        // 📊 RSI Mínimo para Ventas (Filtro Suelos)
+input double   MinRsiVenta                = 35.0;        // 📊 RSI Mínimo para Ventas (Filtro Suelos)
 
 // --- TENDENCIA Y LOTAJE ---
 input bool     UsarFiltroM1_RSI           = true;        // 🛡️ Activar Escudo M1 (RSI Extremo)
@@ -64,12 +64,12 @@ input group "------- 🌑 FILTROS DE RUIDO Y MERCADO -------"
 input bool             UsarFiltroTechosSuelos     = true;        // 🏛️ Activar Filtro Techos y Suelos M15 (S/R)
 input ENUM_TIMEFRAMES  TimeframeTechosSuelos      = PERIOD_M15;  // 📅 Temporalidad para Techos/Suelos M15
 input int              PeriodoTechosSuelos        = 192;         // 🗓️ Período de Velas M15 a Analizar
-input double           DistanciaTechoSueloPips    = 30.0;        // 🛡️ Distancia Mínima M15 para Bloquear (Pips)
+input double           DistanciaTechoSueloPips    = 50.0;        // 🛡️ Distancia Mínima M15 para Bloquear (Pips)
 
 // --- FILTROS ADICIONALES MULTI-TEMPORALIDAD (H1 y H4) ---
 input bool             UsarFiltroTechosSuelosH1   = true;        // 🛡️ Activar Filtro S/R en H1
 input int              PeriodoTechosSuelosH1      = 48;          // 🔢 Período H1 a Analizar (Velas)
-input double           DistanciaTechoSueloPipsH1  = 50.0;        // 🛡️ Distancia Mínima H1 (Pips)
+input double           DistanciaTechoSueloPipsH1  = 60.0;        // 🛡️ Distancia Mínima H1 (Pips)
 
 input bool             UsarFiltroTechosSuelosH4   = true;        // 🛡️ Activar Filtro S/R en H4
 input int              PeriodoTechosSuelosH4      = 30;          // 🔢 Período H4 a Analizar (Velas)
@@ -100,7 +100,7 @@ input double   ProfitBreakEven            = 0.50;        // 🛡️ Beneficio M�
 
 // --- HORARIOS OPERATIVOS ---
 input group "------- 📈 CONFIGURACION Y LOTES -------"
-input int      HoraInicioOperativa        = 1;           // ⏰ Hora de Inicio Operaciones (Broker)
+input int      HoraInicioOperativa        = 1;           // 🕒 Hora de Inicio Operaciones (Broker)
 input int      HoraFinOperativa           = 23;          // ⏰ Hora de Cierre Operaciones (Broker)
 input bool     OperarViernesNoche         = false;       // 🌃 Permitir Operaciones Viernes Noche
 input bool     UsarHorarioBloqueo         = false;       // 📰 Evitar Noticias (Bloqueo Horario)
