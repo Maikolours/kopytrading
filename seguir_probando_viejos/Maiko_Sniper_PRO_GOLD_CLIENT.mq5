@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------+
-//|                ELITE GOLD MAIKO SNIPER | EDITION DEMO           |
+//|                ELITE GOLD MAIKO SNIPER | EDITION NORMAL           |
 //|      "DYNAMIC SOS PROGRESSION" | VERSION 13.92                |
 //+------------------------------------------------------------------+
 #property copyright "Elite Gold MAIKO Sniper"
@@ -63,8 +63,8 @@ bool UsarFiltroSR = true;
 double MargenZonaPips = 2.0;    
 double MinDistanciaEMAPips = 1.0; 
 bool EsperarGiroM1_SOS = true;    // Espera vela cerrada M1 para abrir SOS (false = al toque)
-double MaxRSI_Compra = 70.0;   
-double MinRSI_Venta = 30.0;    
+double MaxRSI_Compra = 68.0;   
+double MinRSI_Venta = 32.0;    
 double MaxSpreadPips = 3.5; 
 double MinCuerpoVelaPips = 3.0; 
 
@@ -178,7 +178,7 @@ void OnTimer() {
         if(winRSI == -1) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hRSI);
         if(winMACD == -1) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hMACD);
         if(winADX == -1) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hADX_Chart);
-        // EMA en grÃ¡fico principal (solo si no estÃ¡ ya)
+        // EMA en gráfico principal (solo si no está ya)
         int numInd = ChartIndicatorsTotal(0, 0);
         bool emaYaExiste = false;
         for(int i=0; i<numInd; i++) {
@@ -329,7 +329,7 @@ void DibujarProyeccionSOS(double p) {
         ObjectSetInteger(0, "MAIKO_SOS_Line", OBJPROP_STYLE, STYLE_DASHDOT);
         ObjectSetInteger(0, "MAIKO_SOS_Line", OBJPROP_COLOR, clrOrange);
         ObjectSetInteger(0, "MAIKO_SOS_Line", OBJPROP_WIDTH, 2);
-        ObjectSetInteger(0, "MAIKO_SOS_Line", OBJPROP_BACK, true); // DetrÃ¡s del HUD
+        ObjectSetInteger(0, "MAIKO_SOS_Line", OBJPROP_BACK, true); // Detrás del HUD
         ObjectSetString(0, "MAIKO_SOS_Line", OBJPROP_TOOLTIP, "ZONA DE DISPARO SOS MAIKO");
     } else {
         ObjectSetDouble(0, "MAIKO_SOS_Line", OBJPROP_PRICE, p);
@@ -343,7 +343,7 @@ void DibujarLineaMetaEscape(double precio) {
         ObjectSetInteger(0, "MAIKO_TP_Line", OBJPROP_STYLE, STYLE_DASH);
         ObjectSetInteger(0, "MAIKO_TP_Line", OBJPROP_COLOR, clrSpringGreen);
         ObjectSetInteger(0, "MAIKO_TP_Line", OBJPROP_WIDTH, 2);
-        ObjectSetInteger(0, "MAIKO_TP_Line", OBJPROP_BACK, true); // DetrÃ¡s del HUD
+        ObjectSetInteger(0, "MAIKO_TP_Line", OBJPROP_BACK, true); // Detrás del HUD
         ObjectSetString(0, "MAIKO_TP_Line", OBJPROP_TOOLTIP, "META ESCAPE TP - MAIKO");
     } else {
         ObjectSetDouble(0, "MAIKO_TP_Line", OBJPROP_PRICE, precio);
@@ -370,7 +370,7 @@ void OnTick() {
         }
     }
     
-    // CHEQUEO LÃ MITE DIARIO (Cerrado + Flotante) - Usamos HOY (0) siempre para evitar falsos cierres al cambiar de vista
+    // CHEQUEO LÍMITE DIARIO (Cerrado + Flotante) - Usamos HOY (0) siempre para evitar falsos cierres al cambiar de vista
     double ganadoHoyReal = CalcularGanadoUltraPreciso(0);
     if((ganadoHoyReal + flotante) >= LimiteDiario) {
         if(ArraySize(pos) > 0) {
@@ -378,8 +378,8 @@ void OnTick() {
             ultimaCestaCerrada = TimeCurrent();
         }
         BotActivo = false;
-        txtVeredicto = "LÃMITE DIARIO ALCANZADO ðŸ›‘";
-        txtVoz = "PAUSADO POR LÃMITE DIARIO.";
+        txtVeredicto = "LÍMITE DIARIO ALCANZADO 🛑";
+        txtVoz = "PAUSADO POR LÍMITE DIARIO.";
     }
 
     spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10;
@@ -409,8 +409,8 @@ void OnTick() {
     if(bid > emaH4[0]) ok++; if(bid > emaH1[0]) ok++; 
     if(bid > emaM15[0]) ok++; if(bid > emaM5[0]) ok++;
     string sentiment;
-    if(ok >= 3) sentiment = StringFormat("ALCISTA (%d/4 â†‘)", ok);
-    else if(ok <= 1) sentiment = StringFormat("BAJISTA (%d/4 â†‘ alcistas)", ok);
+    if(ok >= 3) sentiment = StringFormat("ALCISTA (%d/4 ↑)", ok);
+    else if(ok <= 1) sentiment = StringFormat("BAJISTA (%d/4 ↑ alcistas)", ok);
     else sentiment = StringFormat("MIXTO (%d/4)", ok);
     txtConsolidado = StringFormat("SENTIMIENTO: %s", sentiment);
     
@@ -434,7 +434,7 @@ void OnTick() {
 
     double profitTarget = (CUENTA_REAL_CENT ? 75.0 : ProfitNetoUSD);
     
-    // LÃ“GICA DE EMERGENCIA INTELIGENTE
+    // LÓGICA DE EMERGENCIA INTELIGENTE
     bool emergenciaActiva = false;
     if(UsarEmergenciaAuto && ArraySize(pos) >= 3) {
         bool giroEMAs = false;
@@ -447,7 +447,7 @@ void OnTick() {
             rsiConfirma = (rsiActual < 45.0);
         }
         
-        // Si hay peligro de giro, ya ganamos hoy y el balance del dÃ­a sumando el flotante sigue siendo positivo
+        // Si hay peligro de giro, ya ganamos hoy y el balance del día sumando el flotante sigue siendo positivo
         if(giroEMAs && rsiConfirma && ganadoPeriodo > 0 && (ganadoPeriodo + flotante) >= ProfitEmergenciaUSD) {
             emergenciaActiva = true;
         }
@@ -455,11 +455,11 @@ void OnTick() {
 
     if(ArraySize(pos) > 0) { 
         double targetActual = (emergenciaActiva) ? (ProfitEmergenciaUSD - ganadoPeriodo) : profitTarget;
-        // Si estamos en emergencia, el flotante objetivo es el que asegura terminar el dÃ­a con ProfitEmergenciaUSD
+        // Si estamos en emergencia, el flotante objetivo es el que asegura terminar el día con ProfitEmergenciaUSD
         if(flotante >= targetActual) {
             CerrarTodo(); 
             ultimaCestaCerrada = TimeCurrent(); 
-            if(emergenciaActiva) txtVeredicto = "SALIDA EMERGENCIA OK ðŸ‘";
+            if(emergenciaActiva) txtVeredicto = "SALIDA EMERGENCIA OK 👍";
             return; 
         }
     }
@@ -545,8 +545,8 @@ void OnTick() {
         }
         
         // FILTROS INSTITUCIONALES HUGO
-        if(UsarFiltroSpreadDelta && MathAbs(spreadDelta) >= MaxSpreadDeltaPips) { txtVeredicto = "SPREAD SPIKE DETECTED ðŸ›‘"; return; }
-        if(UsarFiltroADX && adxActual < ADX_MinLevel) { txtVeredicto = "MERCADO LATERAL ADX âŒ"; return; }
+        if(UsarFiltroSpreadDelta && MathAbs(spreadDelta) >= MaxSpreadDeltaPips) { txtVeredicto = "SPREAD SPIKE DETECTED 🛑"; return; }
+        if(UsarFiltroADX && adxActual < ADX_MinLevel) { txtVeredicto = "MERCADO LATERAL ADX ⚠️"; return; }
         
         int pM5 = AnalizarPatronPriceAction(PERIOD_M5, 1);
         int pM1 = AnalizarPatronPriceAction(PERIOD_M1, 1);
@@ -582,7 +582,7 @@ void GestionarModoCascada(int direccion, double emaM1) {
         if(pos[0].t == POSITION_TYPE_BUY) trade.Buy(lotCascada, _Symbol, 0, 0, 0, TradeComment + "_CASCADA");
         else trade.Sell(lotCascada, _Symbol, 0, 0, 0, TradeComment + "_CASCADA");
         ultimoCascada = TimeCurrent();
-        txtVeredicto = "CASCADA AGRESIVA ðŸ”¥";
+        txtVeredicto = "CASCADA AGRESIVA 🔥";
     }
 }
 
@@ -614,7 +614,7 @@ void GestionarRefuerzoInteligente(double distSOS, double prExtrema, double distC
             if(pos[0].t == POSITION_TYPE_BUY) trade.Buy(volRef, _Symbol, 0, 0, 0, TradeComment + "_SOS");
             else trade.Sell(volRef, _Symbol, 0, 0, 0, TradeComment + "_SOS");
             ultimoSOS = TimeCurrent();
-            txtVeredicto = "RESCATE AL TOQUE ðŸ›¡ï¸âš¡";
+            txtVeredicto = "RESCATE AL TOQUE 🛡️⚡";
         }
         return;
     }
@@ -630,7 +630,7 @@ void GestionarRefuerzoInteligente(double distSOS, double prExtrema, double distC
             if(pos[0].t == POSITION_TYPE_BUY) trade.Buy(volRef, _Symbol, 0, 0, 0, TradeComment + "_SOS");
             else trade.Sell(volRef, _Symbol, 0, 0, 0, TradeComment + "_SOS");
             ultimoSOS = TimeCurrent();
-            txtVeredicto = "RESCATE DINAMICO ðŸ›¡ï¸âš¡";
+            txtVeredicto = "RESCATE DINAMICO 🛡️⚡";
         }
     } else txtVeredicto = "ESPERANDO GIRO REAL M1";
 }
@@ -654,7 +654,7 @@ void GestionarCosechaSniper() {
             double targetScalp = (pos[idxBest].v <= LotajeMinimo + 0.001) ? ProfitScalpMinLote : ProfitScalpIndividual;
             if(maxProfit >= targetScalp) {
                 trade.PositionClose(pos[idxBest].ticket);
-                txtVeredicto = "SCALP INDIVIDUAL OK ðŸŽ¯";
+                txtVeredicto = "SCALP INDIVIDUAL OK 🎯";
                 return;
             }
         }
@@ -769,8 +769,8 @@ void ActualizarInterfazMaster() {
     if(metaEscapeTP > 0) ObjectSetString(0, "MAIKO_TP", OBJPROP_TEXT, StringFormat("META ESCAPE TP: %.2f", metaEscapeTP));
     else ObjectSetString(0, "MAIKO_TP", OBJPROP_TEXT, " ");  
     
-    // TelemetrÃ­a Visual de Filtros Hugo
-    string adxState = (adxActual >= ADX_MinLevel) ? "FUERTE âœ…" : "LATERAL âŒ";
+    // Telemetría Visual de Filtros Hugo
+    string adxState = (adxActual >= ADX_MinLevel) ? "FUERTE ✅" : "LATERAL ⚠️";
     ObjectSetString(0, "MAIKO_ADX", OBJPROP_TEXT, StringFormat("ADX TREND (H1): %.1f (%s)", adxActual, adxState));
     
     double currentEquity = AccountInfoDouble(ACCOUNT_EQUITY);
@@ -811,7 +811,7 @@ void CrearLabel(string n, int x, int y, string t, color col, int s, int z) {
 
 void OnChartEvent(const int id, const long &lparam, const double &dparam, const string &sparam) { 
     if(id == CHARTEVENT_OBJECT_CLICK) { 
-        // Reset estado del botÃ³n pulsado (MT5 lo deja en 'pressed' si no lo reseteamos)
+        // Reset estado del botón pulsado (MT5 lo deja en 'pressed' si no lo reseteamos)
         ObjectSetInteger(0, sparam, OBJPROP_STATE, false);
         
         if(sparam == "MAIKO_BtnP") { 

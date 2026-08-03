@@ -427,7 +427,20 @@ El sistema v5.84 incluye mejoras exclusivas de inteligencia artificial y protecc
 *Desarrollado con ❤️ por el equipo de KopyTrading. ¡Que tengas una excelente y disciplinada sesión de trading!*
 ---
 
-## 7. HISTORIAL DE ACTUALIZACIONES (CHANGELOG)
+## 7. PREGUNTAS FRECUENTES (FAQ)
+
+### ❓ ¿Por qué mi bot dice "FUERA HORARIO" y otro igual dice "BUSCANDO ENTRADA"?
+* **Solución:** Revisa con `F7` que los parámetros `Hora Inicio` y `Hora Fin` sean los mismos en ambos gráficos. Además, recuerda que el bot lee el reloj del servidor del broker (Observación del Mercado), no el de tu país. Si tienes dos brokers distintos (ej. VTMarkets y Vantage) con zonas horarias diferentes, deberás ajustar las horas de inicio para compensarlo.
+
+### ❓ Hice un backtest y la línea azul de balance se quedó plana durante meses. ¿Qué pasa?
+* **Solución:** Eso significa que el probador de estrategias (Backtest) se congeló o atascó y no pudo cerrar ninguna operación. Ve a la pestaña **Diario** del probador: casi seguro verás errores rojos como "cannot load indicator" o de falta de historial. A veces basta con reiniciar el probador, limpiar el historial o sencillamente reiniciar MetaTrader para que descargue los datos que le faltan.
+
+### ❓ ¿Es obligatorio dejar el ordenador encendido siempre o usar un VPS?
+* **Solución:** **SÍ, es obligatorio.** Si tu PC personal se apaga, entra en suspensión, pierde el wifi o se reinicia por una actualización, MetaTrader se cerrará y tu bot se desconectará, dejando tus operaciones flotando a su suerte. Recomendamos encarecidamente contratar un **VPS (Servidor Virtual)** económico (5€ al mes). De esta manera, tendrás un Windows encendido 24/7 en la nube y dormirás tranquilo sabiendo que tu bot nunca se apaga.
+
+---
+
+## 8. HISTORIAL DE ACTUALIZACIONES (CHANGELOG)
 
 **v11.32 (Versión Actual)**
 - **Ajuste de latencia de telemetría:** Optimización de la frecuencia de envío de datos del bot al panel de control (de 60s a 3600s en estado inactivo) para mejorar la eficiencia del servidor y reducir el consumo de recursos de VPS.

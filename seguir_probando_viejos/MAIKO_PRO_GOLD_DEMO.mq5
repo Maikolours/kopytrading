@@ -1,8 +1,8 @@
 //+------------------------------------------------------------------+
 
-//|            MAIKO PRO GOLD M1 SHIELD DEMO v11.32                  |
+//|            ELITE GOLD MAIKO SNIPER v11.32 | NORMAL HISTORICO     |
 
-//|               "INSTITUTIONAL EDITION"                            |
+//|       "INSTITUTIONAL EDITION" | FIX FINAL SIN PUNTOS            |
 
 //+------------------------------------------------------------------+
 
@@ -10,7 +10,7 @@
 
 //+------------------------------------------------------------------+
 
-#property copyright "MAIKO PRO GOLD SHIELD DEMO"
+#property copyright "Elite Gold MAIKO Sniper"
 
 #property version   "11.32"
 
@@ -21,133 +21,124 @@
 #include <Trade\Trade.mqh>
 
 // --- CONFIGURACION ---
-input group "------- 🔑 LICENCIA DE CONEXION -------"
+input group "━━━━━━ 🔑 𝗟 𝗜 𝗖 𝗘 𝗡 𝗖 𝗜 𝗔   𝗗 𝗘   𝗖 𝗢 𝗡 𝗘 𝗫 𝗜 𝗢 𝗡 ━━━━━━"
 input string   MiLicencia                 = "";          // 🔑 Clave de Licencia o Correo Usuario
 input int      DiasDeTrial                = 30;          // ⏳ Días de Prueba (Solo Trial)
-const bool     EsCuentaCent               = false;       // CUENTA NORMAL / GOLD / DEMO EN DOLARES (Hardcoded para evitar uso cruzado)
+const bool     EsCuentaCent               = false;       // Cuenta en Centavos (Hardcoded para seguridad)
 
 // --- TELEMETRIA ---
 string SyncURL = "https://www.kopytrading.com/api/sync-positions";
 int SyncIntervalSec = 2;
 datetime ultimoSync = 0;
 
-// --- FILTROS ---
-input double   MaxRangoVelaM1             = 40.0;        // 📏 Rango Máximo Vela M1 (Puntos GOLD)
-input double   MaxSpreadPips              = 5.0;         // 📏 Spread Máximo Permitido (Puntos GOLD)
-input double   SensibilidadMechaReal      = 3.0;         // 📏 Sensibilidad Mecha vs Cuerpo
-input int      MinutosPausaTrasSusto      = 1;           // ⏳ Minutos de Pausa tras Volatilidad
+// --- FILTROS DE RUIDO Y MERCADO ---
+input group "━━━━━━ 🛡️ 𝗙 𝗜 𝗟 𝗧 𝗥 𝗢 𝗦   𝗗 𝗘   𝗥 𝗨 𝗜 𝗗 𝗢   𝗬   𝗠 𝗘 𝗥 𝗖 𝗔 𝗗 𝗢 ━━━━━━"
+input double   MaxRangoVelaM1             = 20.0;        // ⚡ Rango Máximo Vela M1 (Pips)
+input double   MaxSpreadPips              = 4.0;         // 📊 Spread Máximo Permitido (Pips)
+input double   SensibilidadMechaReal      = 3.0;         // ⚖️ Sensibilidad Rechazo de Mechas
+input int      MinutosPausaTrasSusto      = 1;           // ⏱️ Minutos Pausa tras Vela Extrema
 input double   MaxRsiCompra               = 60.0;        // 📊 RSI Máximo para Compras (Filtro Techos)
-input double   MinRsiVenta                = 35.0;        // 📊 RSI Mínimo para Ventas (Filtro Suelos)
-
-// --- TENDENCIA Y LOTAJE ---
-input bool     UsarFiltroM1_RSI           = true;        // 🛡️ Activar Escudo M1 (RSI Extremo)
-input double   RsiExigidoCompraM1         = 70.0;        // 🟢 M1 RSI Máximo Permitido (COMPRA)
-input double   RsiExigidoVentaM1          = 30.0;        // 🔴 M1 RSI Mínimo Permitido (VENTA)
-input double   DistanciaCascadaPips       = 25.0;        // 🌊 Distancia disparo Cascada M1 (Pips)
-input group "------- ⏱️ FILTROS MULTI-TEMPORALIDAD -------"
-input bool ConfirmarTendenciaM15 = false;   // 📉 Confirmar Tendencia Secundaria (M15)
-input bool ConfirmarTendenciaM5  = false;   // 📉 Confirmar Tendencia Micro (M5)
-
-int PeriodoMediaFiltro = 50;
-
-int RuedasAmetralladora = 1;
-
-
-
-double MaxPipsHueco = 50.0;
-int MaxVelasHueco = 5;
-
-double ProteccionBeneficioDiario = 0.0;
+input double   MinRsiVenta                = 40.0;        // 📊 RSI Mínimo para Ventas (Filtro Suelos)
 
 // --- FILTRO DE TECHOS Y SUELOS (SOPORTES Y RESISTENCIAS) ---
-input group "------- 🌑 FILTROS DE RUIDO Y MERCADO -------"
+input group "━━━━━━ 🏛️ 𝗙 𝗜 𝗟 𝗧 𝗥 𝗢   𝗗 𝗘   𝗧 𝗘 𝗖 𝗛 𝗢 𝗦   𝗬   𝗦 𝗨 𝗘 𝗟 𝗢 𝗦 ━━━━━━"
 input bool             UsarFiltroTechosSuelos     = true;        // 🏛️ Activar Filtro Techos y Suelos M15 (S/R)
 input ENUM_TIMEFRAMES  TimeframeTechosSuelos      = PERIOD_M15;  // 📅 Temporalidad para Techos/Suelos M15
-input int              PeriodoTechosSuelos        = 192;         // 🗓️ Período de Velas M15 a Analizar
-input double           DistanciaTechoSueloPips    = 50.0;        // 🛡️ Distancia Mínima M15 para Bloquear (Pips)
+input int              PeriodoTechosSuelos        = 24;          // 🔢 Período de Velas M15 a Analizar
+input double           DistanciaTechoSueloPips    = 30.0;        // 📏 Distancia Mínima M15 para Bloquear (Pips)
 
 // --- FILTROS ADICIONALES MULTI-TEMPORALIDAD (H1 y H4) ---
-input bool             UsarFiltroTechosSuelosH1   = true;        // 🛡️ Activar Filtro S/R en H1
-input int              PeriodoTechosSuelosH1      = 48;          // 🔢 Período H1 a Analizar (Velas)
-input double           DistanciaTechoSueloPipsH1  = 60.0;        // 🛡️ Distancia Mínima H1 (Pips)
+input bool             UsarFiltroTechosSuelosH1   = true;        // 📊 Activar Filtro S/R en H1
+input int              PeriodoTechosSuelosH1      = 24;          // 📅 Período H1 a Analizar (Velas)
+input double           DistanciaTechoSueloPipsH1  = 50.0;        // 📏 Distancia Mínima H1 (Pips)
 
-input bool             UsarFiltroTechosSuelosH4   = true;        // 🛡️ Activar Filtro S/R en H4
-input int              PeriodoTechosSuelosH4      = 30;          // 🔢 Período H4 a Analizar (Velas)
-input double           DistanciaTechoSueloPipsH4  = 120.0;       // 📏 Distancia Mínima H4 (Pips)
-
-input bool             UsarFiltroTechosSuelosD1   = true;        // 🛡️ Activar Filtro S/R en D1
-input int              PeriodoTechosSuelosD1      = 20;          // 🔢 Período D1 a Analizar (Velas)
-input double           DistanciaTechoSueloPipsD1  = 200.0;       // 📏 Distancia Mínima D1 (Pips)
-
-input bool             UsarFiltroTechosSuelosW1   = true;        // 🛡️ Activar Filtro S/R en W1
-input int              PeriodoTechosSuelosW1      = 10;          // 🔢 Período W1 a Analizar (Velas)
-input double           DistanciaTechoSueloPipsW1  = 350.0;       // 📏 Distancia Mínima W1 (Pips)
+input bool             UsarFiltroTechosSuelosH4   = true;        // 📊 Activar Filtro S/R en H4
+input int              PeriodoTechosSuelosH4      = 24;          // 📅 Período H4 a Analizar (Velas)
+input double           DistanciaTechoSueloPipsH4  = 80.0;        // 📏 Distancia Mínima H4 (Pips)
 
 // --- FILTRO DE AGOTAMIENTO DE VELAS (RECHAZO DE MECHA M15) ---
-input bool             UsarFiltroAgotamientoM15   = true;        // 🛑 Activar Filtro Agotamiento M15
-input double           MinPorcentajeMechaM15      = 40.0;        // 🌡️ % Mínimo Mecha Reversa (40.0 = 40%)
+input bool             UsarFiltroAgotamientoM15   = true;        // 🕯️ Activar Filtro Agotamiento M15
+input double           MinPorcentajeMechaM15      = 40.0;        // 🕯️ % Mínimo Mecha Reversa (40.0 = 40%)
 
 // --- CONFIRMACION DE RUPTURA ---
-input bool             UsarConfirmacionRuptura    = true;        // ✅ Confirmar Ruptura de S/R con Vela Cerrada
-input ENUM_TIMEFRAMES  TimeframeConfirmacion      = PERIOD_M15;  // 📅 Temporalidad de Confirmación (M5/M15)
+input bool             UsarConfirmacionRuptura    = true;        // 📈 Confirmar Ruptura de S/R con Vela Cerrada
+input ENUM_TIMEFRAMES  TimeframeConfirmacion      = PERIOD_M5;   // 📅 Temporalidad de Confirmación (M5/M15)
+
+// --- TENDENCIA Y DIRECCION ---
+input group "━━━━━━ 📉 𝗧 𝗘 𝗡 𝗗 𝗘 𝗡 𝗖 𝗜 𝗔   𝗬   𝗗 𝗜 𝗥 𝗘 𝗖 𝗖 𝗜 𝗢 𝗡 ━━━━━━"
+input int      PeriodoMediaFiltro         = 50;          // 🔗 Período EMA Tendencia (Filtro)
+input bool     CheckM15                   = true;        // 📅 Confirmación Tendencia M15 (Sincronía)
+input bool     CheckM5                    = true;        // 📅 Confirmación Tendencia M5 (Sincronía)
 
 // --- OPERATIVA Y LOTES ---
-input group "------- 🏛️ FILTRO DE TECHOS Y SUELOS -------"
+input group "━━━━━━ 📈 𝗖 𝗢 𝗡 𝗙 𝗜 𝗚 𝗨 𝗥 𝗔 𝗖 𝗜 𝗢 𝗡   𝗬   𝗟 𝗢 𝗧 𝗘 𝗦 ━━━━━━"
 input double   LoteAtaque                 = 0.01;        // 🚀 Volumen Entrada Inicial (Ataque)
+input int      RuedasAmetralladora        = 1;           // 🔫 Operaciones Iniciales en Cesta (Ruedas)
 input double   MultiplicadorRefuerzo      = 1.5;         // ✖️ Multiplicador Lote de Rescate (SOS)
-input double   DistanciaRefuerzoPips      = 30.0;        // 📏 Distancia Mínima para Abrir SOS (Pips)
 input double   MaxLoteTotal               = 0.50;        // 🚫 Lote Máximo Acumulado Permitido
 input double   MaxLoteIndividual          = 0.02;        // 🚫 Volumen Máximo por Operación SOS
 
+// --- DISTANCIAS Y CASCADA ---
+input group "━━━━━━ 📏 𝗗 𝗜 𝗦 𝗧 𝗔 𝗡 𝗖 𝗜 𝗔 𝗦   𝗬   𝗖 𝗔 𝗦 𝗖 𝗔 𝗗 𝗔 ━━━━━━"
+input double   DistanciaRefuerzoPips      = 30.0;        // 📏 Distancia Mínima para Abrir SOS (Pips)
+input double   MaxPipsHueco               = 50.0;        // 🕳️ Pips de Vacío para Forzar SOS
+input int      MaxVelasHueco              = 5;           // ⏳ Velas sin Giro para Forzar SOS
+
 // --- COBRAR BENEFICIOS (TAKE PROFIT) ---
-input group "------- 📉 TENDENCIA Y DIRECCION -------"
-input double   ProfitCosechaIndividual    = 2.0;         // 💵 Beneficio Cierre SOS Individual ($)
-input double   TargetDiario               = 100.0;       // 🎯 Meta de Beneficio Diario ($)
+input group "━━━━━━ 💰 𝗖 𝗢 𝗕 𝗥 𝗔 𝗥   𝗕 𝗘 𝗡 𝗘 𝗙 𝗜 𝗖 𝗜 𝗢 𝗦   ( 𝗧 𝗣 ) ━━━━━━"
 input double   ProfitNetoFlush            = 5.0;         // 💵 Beneficio Cierre Total Cesta ($)
-input double   ProfitBreakEven            = 0.50;        // 🛡️ Beneficio Mínimo Break Even Cesta ($)
+input double   ProfitCosechaIndividual    = 0.75;        // 💵 Beneficio Cierre SOS Individual ($)
+input double   TargetDiario               = 25.0;        // 🎯 Meta de Beneficio Diario ($)
 
 // --- HORARIOS OPERATIVOS ---
-input group "------- 📈 CONFIGURACION Y LOTES -------"
-input int      HoraInicioOperativa        = 1;           // 🕒 Hora de Inicio Operaciones (Broker)
-input int      HoraFinOperativa           = 23;          // ⏰ Hora de Cierre Operaciones (Broker)
+input group "━━━━━━ ⏰ 𝗛 𝗢 𝗥 𝗔 𝗥 𝗜 𝗢 𝗦   𝗢 𝗣 𝗘 𝗥 𝗔 𝗧 𝗜 𝗩 𝗢 𝗦 ━━━━━━"
+input int      HoraInicioOperativa        = 9;           // 🔔 Hora de Inicio Operaciones (Broker)
+input int      HoraFinOperativa           = 19;          // 🔕 Hora de Cierre Operaciones (Broker)
 input bool     OperarViernesNoche         = false;       // 🌃 Permitir Operaciones Viernes Noche
-input bool     UsarHorarioBloqueo         = false;       // 📰 Evitar Noticias (Bloqueo Horario)
-input int      HoraInicioBloqueo          = 14;          // ⏰ Hora Inicio Bloqueo Noticias
-input int      HoraFinBloqueo             = 16;          // ⏰ Hora Fin Bloqueo Noticias
+input bool     UsarHorarioBloqueo         = false;       // 🛑 Evitar Noticias (Bloqueo Horario)
+input int      HoraInicioBloqueo          = 14;          // 🛑 Hora Inicio Bloqueo Noticias
+input int      HoraFinBloqueo             = 16;          // 🛑 Hora Fin Bloqueo Noticias
 
 // --- PROTECCIONES Y SEGURIDAD ---
-input group "------- 📏 DISTANCIAS Y CASCADA -------"
-input int      LimitePosicionesSOS        = 2;           // 📉 Límite Máximo Posiciones SOS
-input bool     UsarStopLossPorcentaje     = false;       // 🛡️ Activar Stop Loss por % Cuenta
-input double   PorcentajeStopLoss         = 10.0;        // 📉 Porcentaje de Pérdida Máxima...
-input bool     UsarPausaTrasStopLoss      = false;       // ⏸️ Pausar Bot tras un Stop Loss
+input group "━━━━━━ 🛡️ 𝗣 𝗥 𝗢 𝗧 𝗘 𝗖 𝗖 𝗜 𝗢 𝗡 𝗘 𝗦   𝗬   𝗦 𝗘 𝗚 𝗨 𝗥 𝗜 𝗗 𝗔 𝗗 ━━━━━━"
+input int      LimitePosicionesSOS        = 2;           // 🛡️ Límite Máximo Posiciones SOS
+input double   ProfitBreakEven            = 0.50;        // 🛡️ Beneficio Mínimo Break Even Cesta ($)
+input double   ProteccionBeneficioDiario  = 0.0;         // 🛡️ Proteger Beneficio Diario Acumulado ($)
+input bool     UsarStopLossPorcentaje     = false;       // 🚨 Activar Stop Loss por % Cuenta
+input double   PorcentajeStopLoss         = 10.0;        // 🚨 Porcentaje de Pérdida Máxima (%)
+input bool     UsarPausaTrasStopLoss      = false;       // ⏳ Pausar Bot tras un Stop Loss
 input int      MinutosPausaTrasStopLoss   = 10;          // ⏳ Minutos de Pausa tras Stop Loss
 
-// --- HUD ---
-input group "------- 💰 COBRAR BENEFICIOS (TP) -------"
-string         HUD_Branding               = "MAIKO PRO SHIELD DEMO";
+// --- HORARIO BLOQUEO INTERNO ---
+input bool     UsarHorarioBloqueo_Interno = false;
+input int      HoraInicioBloqueo_Interno  = 14;
+input int      HoraFinBloqueo_Interno     = 16;
+
+// --- INTERFAZ GRAFICA (HUD) ---
+input group "━━━━━━ 🎨 𝗜 𝗡 𝗧 𝗘 𝗥 𝗙 𝗔 𝗭   𝗚 𝗥 𝗔 𝗙 𝗜 𝗖 𝗔   ( 𝗛 𝗨 𝗗 ) ━━━━━━"
+string         HUD_Branding               = "MAIKO v11.32 | NORMAL HISTORICO";
 input color    ColorMain                  = clrGold;     // 🎨 Color Principal HUD (Acento)
 input color    ColorHeader                = C'30,30,30'; // 🎨 Color Encabezado Panel HUD
 input color    ColorBody                  = C'20,20,20'; // 🎨 Color Cuerpo Panel HUD
-input int      HUD_X                      = 15;          // 📐 Posición X en Pantalla (Pixeles)
-input int      PosY_HUD                   = 25;          // 📐 Posición Y en Pantalla (Pixeles)
-bool           ShowW1                     = true;
-bool           ShowD1                     = true;
-bool           ShowH4                     = true;
-bool           ShowH1                     = true;
-bool           ShowM15                    = true;
-bool           ShowM5                     = true;
-bool           ShowM1                     = true;
+input int      HUD_X                      = 15;          // 📍 Posición X en Pantalla (Pixeles)
+input int      PosY_HUD                   = 25;          // 📍 Posición Y en Pantalla (Pixeles)
+input bool     ShowW1                     = true;        // 📅 Mostrar Tendencia W1
+input bool     ShowD1                     = true;        // 📅 Mostrar Tendencia D1
+input bool     ShowH4                     = true;        // 📅 Mostrar Tendencia H4
+input bool     ShowH1                     = true;        // 📅 Mostrar Tendencia H1
+input bool     ShowM15                    = true;        // 📅 Mostrar Tendencia M15
+input bool     ShowM5                     = true;        // 📅 Mostrar Tendencia M5
+input bool     ShowM1                     = true;        // 📅 Mostrar Tendencia M1
 
-// --- COMENTARIOS ---
-input group "------- ⏰ HORARIOS OPERATIVOS -------"
-input string   TradeComment               = "MAIKO_SHIELD_DEMO";        // 🏷️ Comentario para Órdenes (Trade Comment)
+// --- COMENTARIOS DE OPERACIONES ---
+input group "━━━━━━ 📝 𝗖 𝗢 𝗠 𝗘 𝗡 𝗧 𝗔 𝗥 𝗜 𝗢 𝗦   𝗗 𝗘   𝗧 𝗥 𝗔 𝗗 𝗜 𝗡 𝗚 ━━━━━━"
+input string   TradeComment               = "MAIKO_NORMAL_HIST"; // 📝 Comentario para Órdenes (Trade Comment)
 
 // Globales
 
 CTrade trade;
 
-const int ExpertMagic = 111333;
+const int ExpertMagic = 111222;
 
 struct PosInfo { ulong ticket; double p; double c; double s; int t; double v; datetime time; double pr; };
 
@@ -182,11 +173,8 @@ bool trialExpirado = false;
 ulong ticketExplorador = 0;
 
 int hEMA_v = INVALID_HANDLE;
-int hEMA_M1 = INVALID_HANDLE;
-int hEMA_M1_9 = INVALID_HANDLE;
 
 int hRSI_v = INVALID_HANDLE;
-int hRSI_M1 = INVALID_HANDLE;
 
 int hRadar[7];
 
@@ -240,35 +228,27 @@ void AgregarIndicadoresVisuales() {
 
 int OnInit() {
 
-    if(AccountInfoInteger(ACCOUNT_TRADE_MODE) != ACCOUNT_TRADE_MODE_DEMO) {
-        Alert("MAIKO SHIELD DEMO: ESTE BOT SOLO FUNCIONA EN CUENTAS DEMO.");
+    if(AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_REAL) {
+
+        Alert("MAIKO SNIPER: TRIAL SÓLO VÁLIDO PARA CUENTAS DEMO.");
+
         return INIT_FAILED;
+
     }
+
     
-    // Inicializar Contador de Trial
-    string gvName = "MAIKO_TRIAL_START_" + MiLicencia;
-    if(GlobalVariableCheck(gvName)) {
-        trialStart = (datetime)GlobalVariableGet(gvName);
-    } else {
-        trialStart = TimeCurrent();
-        GlobalVariableSet(gvName, (double)trialStart);
-    }
-    
-    int maxDias = DiasDeTrial;
-    if(maxDias > 30) maxDias = 30;
-    diasRestantes = maxDias - (int)((TimeCurrent() - trialStart) / 86400);
-    if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
+
+    // El límite se aplica en CheckTrial para evitar error de constante
+
+        
 
     trade.SetExpertMagicNumber(ExpertMagic);
 
     trade.SetAsyncMode(true);
 
     hEMA_v = iMA(_Symbol, _Period, PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
-    hEMA_M1 = iMA(_Symbol, PERIOD_M1, 50, 0, MODE_EMA, PRICE_CLOSE);
-    hEMA_M1_9 = iMA(_Symbol, PERIOD_M1, 9, 0, MODE_EMA, PRICE_CLOSE);
 
     hRSI_v = iRSI(_Symbol, _Period, 14, PRICE_CLOSE);
-    hRSI_M1 = iRSI(_Symbol, PERIOD_M1, 14, PRICE_CLOSE);
 
     
 
@@ -286,13 +266,33 @@ int OnInit() {
 
     CrearInterfazMaster();
 
-    ChartSetInteger(0, CHART_FOREGROUND, false); ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, true);
+    ChartSetInteger(0, CHART_FOREGROUND, false); ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
 
       
 
-    trialExpirado = false;
+    string gvName = "MAIKO_TRIAL_" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
 
-    BotActivo = true;
+    if(GlobalVariableCheck(gvName)) {
+
+        trialStart = (datetime)GlobalVariableGet(gvName);
+
+    } else {
+
+        trialStart = TimeCurrent();
+
+        GlobalVariableSet(gvName, (double)trialStart);
+
+    }
+
+      int maxDias = DiasDeTrial;
+
+      if(maxDias > 30) maxDias = 30;
+
+      diasRestantes = maxDias - (int)((TimeCurrent() - trialStart) / 86400);
+
+      int diasOperando = (int)((TimeCurrent() - trialStart) / 86400) + 1;
+
+      if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
 
     
 
@@ -319,11 +319,8 @@ void OnDeinit(const int reason) {
     }
 
     if(hEMA_v != INVALID_HANDLE) IndicatorRelease(hEMA_v);
-    if(hEMA_M1 != INVALID_HANDLE) IndicatorRelease(hEMA_M1);
-    if(hEMA_M1_9 != INVALID_HANDLE) IndicatorRelease(hEMA_M1_9);
 
     if(hRSI_v != INVALID_HANDLE) IndicatorRelease(hRSI_v);
-    if(hRSI_M1 != INVALID_HANDLE) IndicatorRelease(hRSI_M1);
 
     ChartRedraw(); 
 
@@ -334,12 +331,18 @@ void OnDeinit(const int reason) {
 void ActualizarTextosEstado() {
 
     int maxDias = DiasDeTrial;
+
     if(maxDias > 30) maxDias = 30;
+
     diasRestantes = maxDias - (int)((TimeTradeServer() - trialStart) / 86400);
+
     if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
 
+
+
     if(trialExpirado) {
-        txtVoz = "TRIAL EXPIRADO.";
+
+        txtVoz = "TRIAL 30 DIAS EXPIRADO.";
 
         txtVeredicto = "EXPIRADO";
 
@@ -401,7 +404,7 @@ void ActualizarTextosEstado() {
 
     // Validar viernes noche (después de las 19:00, salvo que se permita operar)
 
-    bool esViernesNoche = (time.day_of_week == 5 && time.hour >= HoraFinOperativa && !OperarViernesNoche);
+    bool esViernesNoche = (time.day_of_week == 5 && time.hour >= 19 && !OperarViernesNoche);
 
     
 
@@ -563,33 +566,7 @@ void OnTick() {
 
     if(!BotActivo) return;
 
-    if(ArraySize(pos) > 0) {
-        GestionarRefuerzoInteligente();
-        // CASCADA SOS M1
-        if(TimeTradeServer() - ultimoAtaque > 5 && volTotal < MaxLoteTotal) {
-            double emaM1[1];
-            if(CopyBuffer(hEMA_M1, 0, 1, 1, emaM1) > 0) {
-                double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
-                double ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
-                int last = ArraySize(pos)-1;
-                if(pos[last].pr <= 0.0) return; // FIX: Prevent race condition if price isn't synced yet
-                double distProfit = (pos[last].t == POSITION_TYPE_BUY ? bid - pos[last].pr : pos[last].pr - ask) / _Point / 10;
-                if(distProfit >= DistanciaCascadaPips) {
-                    bool emaOK = (pos[0].t == POSITION_TYPE_BUY && bid > emaM1[0]) || (pos[0].t == POSITION_TYPE_SELL && bid < emaM1[0]);
-                    if(emaOK) {
-                        double volRefuerzo = NormalizeDouble(volTotal * (MultiplicadorRefuerzo - 1.0), 2);
-                        if(volRefuerzo < 0.01) volRefuerzo = 0.01;
-                        if(volRefuerzo > MaxLoteIndividual) volRefuerzo = MaxLoteIndividual;
-                        if(pos[0].t == POSITION_TYPE_BUY) trade.Buy(volRefuerzo, _Symbol, 0, 0, 0, TradeComment + "_CASCADA");
-                        else trade.Sell(volRefuerzo, _Symbol, 0, 0, 0, TradeComment + "_CASCADA");
-                        ultimoAtaque = TimeTradeServer();
-                        txtVeredicto = "CASCADA EJECUTADA";
-                    }
-                }
-            }
-        }
-        return;
-    }
+    if(ArraySize(pos) > 0) { GestionarRefuerzoInteligente(); return; }
 
     if(ArraySize(pos) == 0) {
 
@@ -607,7 +584,7 @@ void OnTick() {
 
         if(time.hour < HoraInicioOperativa || time.hour >= HoraFinOperativa) enHorario = false;
 
-        if(time.day_of_week == 5 && time.hour >= HoraFinOperativa && !OperarViernesNoche) enHorario = false;
+        if(time.day_of_week == 5 && time.hour >= 19 && !OperarViernesNoche) enHorario = false;
 
         if(time.day_of_week == 0 || time.day_of_week == 6) enHorario = false;
 
@@ -725,8 +702,9 @@ bool ValidarEstructuraScholar(string &decision) {
 
     double c5 = iClose(_Symbol, PERIOD_M5, 1), o5 = iOpen(_Symbol, PERIOD_M5, 1);
 
-    bool m15_ok = !ConfirmarTendenciaM15 || (porEncima ? c15 > o15 : c15 < o15);
-    bool m5_ok = !ConfirmarTendenciaM5 || (porEncima ? c5 > o5 : c5 < o5);
+    bool m15_ok = !CheckM15 || (porEncima ? c15 > o15 : c15 < o15);
+
+    bool m5_ok = !CheckM5 || (porEncima ? c5 > o5 : c5 < o5);
 
     
 
@@ -741,20 +719,8 @@ bool ValidarEstructuraScholar(string &decision) {
     
     
     
-    if(UsarFiltroM1_RSI) {
-        double rsiM1[1];
-        if(CopyBuffer(hRSI_M1, 0, 1, 1, rsiM1) > 0) {
-            if(decision == "BUY" && rsiM1[0] >= RsiExigidoCompraM1) {
-                txtVeredicto = StringFormat("ESPERANDO RETROCESO M1 (RSI=%.1f >= %.1f)", rsiM1[0], RsiExigidoCompraM1);
-                return false;
-            }
-            if(decision == "SELL" && rsiM1[0] <= RsiExigidoVentaM1) {
-                txtVeredicto = StringFormat("ESPERANDO PICO M1 (RSI=%.1f <= %.1f)", rsiM1[0], RsiExigidoVentaM1);
-                return false;
-            }
-        }
-    }
-
+    
+    
     if(!ValidarTechosSuelos(decision)) return false;
     txtVeredicto = "ESTRUCTURA CONFIRMADA";
 
@@ -822,7 +788,7 @@ void GestionarRefuerzoInteligente() {
 
     
 
-    bool forzar = (distPips >= MaxPipsHueco);
+    bool forzar = (distPips >= MaxPipsHueco) || (iBarShift(_Symbol, PERIOD_M1, pos[0].time) >= MaxVelasHueco);
 
     bool velaGiro = (pos[0].t == POSITION_TYPE_BUY) ? 
 
@@ -898,8 +864,10 @@ double CalcularGanadoHoy() {
 
         ulong t = HistoryDealGetTicket(i);
 
-        if(HistoryDealGetString(t, DEAL_SYMBOL) == _Symbol && HistoryDealGetInteger(t, DEAL_MAGIC) == ExpertMagic) {
+        if(HistoryDealGetString(t, DEAL_SYMBOL) == _Symbol) {
+
             total += (HistoryDealGetDouble(t, DEAL_PROFIT) + HistoryDealGetDouble(t, DEAL_COMMISSION) + HistoryDealGetDouble(t, DEAL_SWAP));
+
         }
 
     }
@@ -1116,7 +1084,7 @@ void CrearInterfazMaster() {
 
     CrearLabel("MAIKO_MetaTP", x+10, y+190, "ESTADO: BUSCANDO ENTRADA EN M1...", clrYellow, 10, CORNER_LEFT_UPPER); 
 
-    CrearLabel("MAIKO_TrialUI", x+10, y+215, "LICENCIA: ACTIVA", clrYellow, 11, CORNER_LEFT_UPPER);
+    CrearLabel("MAIKO_TrialUI", x+10, y+215, "TRIAL: DIA 1 DE 30", clrYellow, 11, CORNER_LEFT_UPPER);
 
     CrearLabel("MAIKO_Spd", x+w-120, y+65, "SPD: 0.0", clrWhite, 8, CORNER_LEFT_UPPER);  
 
@@ -1144,24 +1112,38 @@ void ActualizarInterfazMaster() {
 
     ObjectSetString(0, "MAIKO_Spd", OBJPROP_TEXT, StringFormat("SPD: %.1f", spreadActual)); 
 
-      int remHours = 0;
-      int remMinutes = 0;
-      if(diasRestantes > 0) {
-          int secs = (int)(86400 - ((TimeCurrent() - trialStart) % 86400));
-          remHours = secs / 3600;
-          remMinutes = (secs % 3600) / 60;
-      }
-      int dOp = (int)((TimeCurrent() - trialStart) / 86400) + 1;
       
+
+      int elapsedSeconds = (int)(TimeCurrent() - trialStart);
+
+      int remainingSeconds = 86400 - (elapsedSeconds % 86400);
+
+      int remHours = remainingSeconds / 3600;
+
+      int remMinutes = (remainingSeconds % 3600) / 60;
+
+      int dOp = (int)((TimeCurrent() - trialStart) / 86400) + 1;
+
+      
+
       if(trialExpirado) {
+
           ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "TRIAL EXPIRADO");
+
           ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrRed);
+
       } else if(diasRestantes <= 7) {
+
           ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("EXPIRA EN %d DIAS [%dh %dm] | ADQUIERE REAL", diasRestantes, remHours, remMinutes));
+
           ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, C'255,69,0');
+
       } else {
+
           ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("TRIAL: DIA %d [%dh %dm]", dOp, remHours, remMinutes));
+
           ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrYellow);
+
       }
 
     ObjectSetInteger(0, "MAIKO_Flot", OBJPROP_COLOR, flotante >= 0 ? clrSpringGreen : clrRed); 
@@ -1294,10 +1276,10 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 
 void OnTimer() {
     ChartSetInteger(0, CHART_FOREGROUND, false);
-    ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, true);
+    ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
     ActualizarEstadoMaster();
 
-    int interval = (ArraySize(pos) > 0) ? 15 : 60;
+    int interval = (ArraySize(pos) > 0) ? 15 : 3600;
 
     if(TimeLocal() - ultimoSync >= interval) {
 
@@ -1373,7 +1355,7 @@ void EnviarTelemetria() {
 
         "\"pnl_today\":%.2f,\"status\":\"%s\",\"symbol\":\"%s\",\"narrative\":\"%s\","
 
-        "\"armed\":%s,\"isReal\":%s,\"version\":\"11.31\",\"positions\":%s,"
+        "\"armed\":%s,\"isReal\":%s,\"version\":\"11.32\",\"positions\":%s,"
 
         "\"trialExpirado\":%s,\"diasRestantes\":%d}",
 
@@ -1583,96 +1565,6 @@ bool ValidarTechosSuelos(string decision) {
         }
     }
 
-    // --- 3.5. Filtro D1 ---
-    if(UsarFiltroTechosSuelosD1) {
-        int highest_idx = iHighest(_Symbol, PERIOD_D1, MODE_HIGH, PeriodoTechosSuelosD1, start_bar);
-        int lowest_idx = iLowest(_Symbol, PERIOD_D1, MODE_LOW, PeriodoTechosSuelosD1, start_bar);
-        if(highest_idx >= 0 && lowest_idx >= 0) {
-            double highest_high = iHigh(_Symbol, PERIOD_D1, highest_idx);
-            double lowest_low = iLow(_Symbol, PERIOD_D1, lowest_idx);
-            
-            if(decision == "BUY") {
-                double dist_to_ceiling = (highest_high - current_price) / point_pips;
-                if(dist_to_ceiling > 0) {
-                    if(dist_to_ceiling <= DistanciaTechoSueloPipsD1) {
-                        txtVeredicto = StringFormat("TECHO D1 CERCANO (%.1f pips)", dist_to_ceiling);
-                        return false;
-                    }
-                } else {
-                    if(UsarConfirmacionRuptura) {
-                        double closeVal = iClose(_Symbol, TimeframeConfirmacion, 1);
-                        if(closeVal <= highest_high) {
-                            txtVeredicto = "ESPERANDO CONFIRMACION RUPTURA TECHO D1";
-                            return false;
-                        }
-                    }
-                }
-            }
-            else if(decision == "SELL") {
-                double dist_to_floor = (current_price - lowest_low) / point_pips;
-                if(dist_to_floor > 0) {
-                    if(dist_to_floor <= DistanciaTechoSueloPipsD1) {
-                        txtVeredicto = StringFormat("SUELO D1 CERCANO (%.1f pips)", dist_to_floor);
-                        return false;
-                    }
-                } else {
-                    if(UsarConfirmacionRuptura) {
-                        double closeVal = iClose(_Symbol, TimeframeConfirmacion, 1);
-                        if(closeVal >= lowest_low) {
-                            txtVeredicto = "ESPERANDO CONFIRMACION RUPTURA SUELO D1";
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // --- 3.6. Filtro W1 ---
-    if(UsarFiltroTechosSuelosW1) {
-        int highest_idx = iHighest(_Symbol, PERIOD_W1, MODE_HIGH, PeriodoTechosSuelosW1, start_bar);
-        int lowest_idx = iLowest(_Symbol, PERIOD_W1, MODE_LOW, PeriodoTechosSuelosW1, start_bar);
-        if(highest_idx >= 0 && lowest_idx >= 0) {
-            double highest_high = iHigh(_Symbol, PERIOD_W1, highest_idx);
-            double lowest_low = iLow(_Symbol, PERIOD_W1, lowest_idx);
-            
-            if(decision == "BUY") {
-                double dist_to_ceiling = (highest_high - current_price) / point_pips;
-                if(dist_to_ceiling > 0) {
-                    if(dist_to_ceiling <= DistanciaTechoSueloPipsW1) {
-                        txtVeredicto = StringFormat("TECHO W1 CERCANO (%.1f pips)", dist_to_ceiling);
-                        return false;
-                    }
-                } else {
-                    if(UsarConfirmacionRuptura) {
-                        double closeVal = iClose(_Symbol, TimeframeConfirmacion, 1);
-                        if(closeVal <= highest_high) {
-                            txtVeredicto = "ESPERANDO CONFIRMACION RUPTURA TECHO W1";
-                            return false;
-                        }
-                    }
-                }
-            }
-            else if(decision == "SELL") {
-                double dist_to_floor = (current_price - lowest_low) / point_pips;
-                if(dist_to_floor > 0) {
-                    if(dist_to_floor <= DistanciaTechoSueloPipsW1) {
-                        txtVeredicto = StringFormat("SUELO W1 CERCANO (%.1f pips)", dist_to_floor);
-                        return false;
-                    }
-                } else {
-                    if(UsarConfirmacionRuptura) {
-                        double closeVal = iClose(_Symbol, TimeframeConfirmacion, 1);
-                        if(closeVal >= lowest_low) {
-                            txtVeredicto = "ESPERANDO CONFIRMACION RUPTURA SUELO W1";
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     // --- 4. Filtro de Agotamiento de Velas (Rechazo de Mecha M15) ---
     if(UsarFiltroAgotamientoM15) {
         double open15 = iOpen(_Symbol, PERIOD_M15, 1);
@@ -1703,4 +1595,3 @@ bool ValidarTechosSuelos(string decision) {
 
     return true;
 }
-

@@ -63,8 +63,8 @@ input bool UsarFiltroSR = true;
 input double MargenZonaPips = 5.0;    
 input double MinDistanciaEMAPips = 1.0; 
 input bool EsperarGiroM1_SOS = true;    // Espera vela cerrada M1 para abrir SOS (false = al toque)
-input double MaxRSI_Compra = 70.0;   
-input double MinRSI_Venta = 30.0;    
+input double MaxRSI_Compra = 68.0;   
+input double MinRSI_Venta = 32.0;    
 input double MaxSpreadPips = 3.5; 
 input double MinCuerpoVelaPips = 3.0; 
 

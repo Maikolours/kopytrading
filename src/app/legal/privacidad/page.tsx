@@ -12,7 +12,7 @@ export default function PrivacidadPage() {
 
                     <section>
                         <h2 className="text-white font-semibold text-base mb-2">1. Responsable del Tratamiento</h2>
-                        <p>KopyTrading gestiona este sitio web. Para cualquier consulta relacionada con el tratamiento de tus datos personales, puedes contactarnos a través de los canales oficiales habilitados en la plataforma.</p>
+                        <p>KopyTrading gestiona este sitio web. Para cualquier consulta relacionada con el tratamiento de tus datos personales, puedes contactarnos a través del correo oficial: <strong>info@kopytrading.com</strong>.</p>
                     </section>
 
                     <section>
@@ -50,7 +50,7 @@ export default function PrivacidadPage() {
                             <li><strong className="text-white">Supresión:</strong> Solicitar la eliminación de tus datos</li>
                             <li><strong className="text-white">Portabilidad:</strong> Recibir tus datos en formato legible</li>
                         </ul>
-                        <p className="mt-2">Para ejercer tus derechos, puedes contactarnos a través de los canales oficiales habilitados en la plataforma.</p>
+                        <p className="mt-2">Para ejercer tus derechos, puedes contactarnos a través del correo oficial: <strong>info@kopytrading.com</strong>.</p>
                     </section>
 
                     <section>

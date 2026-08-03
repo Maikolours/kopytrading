@@ -4,8 +4,8 @@ import { Resend } from 'resend';
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 export async function sendWelcomeEmail(email: string, licenseKey: string, botName: string, purchaseId: string) {
-    const downloadLink = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/download?p=${purchaseId}`;
-    const passwordResetLink = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/auth/reset-password`;
+    const downloadLink = `${process.env.NEXT_PUBLIC_APP_URL || 'https://www.kopytrading.com'}/download?p=${purchaseId}`;
+    const passwordResetLink = `${process.env.NEXT_PUBLIC_APP_URL || 'https://www.kopytrading.com'}/auth/reset-password`;
     
     const subject = `🚀 Tu Bot Institucional: ${botName} está listo`;
     
@@ -76,7 +76,7 @@ export async function sendWelcomeEmail(email: string, licenseKey: string, botNam
 }
 
 export async function sendTrialProgressEmail(email: string, daysRemaining: number, botName: string, purchaseId: string) {
-    const buyRealLink = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/bots`;
+    const buyRealLink = `${process.env.NEXT_PUBLIC_APP_URL || 'https://www.kopytrading.com'}/bots`;
     
     let subject = `📈 Progreso de tu Trial del bot ${botName}`;
     let title = "Progreso de tu Licencia Demo";
@@ -153,7 +153,7 @@ export async function sendTrialProgressEmail(email: string, daysRemaining: numbe
 }
 
 export async function sendTrialExpiredEmail(email: string, botName: string, purchaseId: string) {
-    const buyRealLink = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/bots`;
+    const buyRealLink = `${process.env.NEXT_PUBLIC_APP_URL || 'https://www.kopytrading.com'}/bots`;
     const subject = `❌ Licencia de Prueba Expirada - Bot ${botName}`;
     
     const htmlContent = `
@@ -316,4 +316,5 @@ export async function sendEmail(email: string, subject: string, htmlContent: str
         return { success: false, error };
     }
 }
+
 

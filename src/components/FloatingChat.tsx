@@ -262,6 +262,18 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     {
         keywords: ["como lo instalo", "cómo lo instalo", "como se instala", "tutorial de instalacion", "pasos para instalar", "guia de instalacion", "como instalarlo"],
         response: "💻 **¿Cómo instalo el bot en mi MetaTrader?**\n\nTenemos una **Guía de Instalación Paso a Paso** donde te explicamos todo. Está en la sección 'Guía de Instalación' (menú superior). En resumen:\n1. Lo descargas de tu panel.\n2. En MT5 vas a Archivo > Abrir carpeta de datos > MQL5 > Experts y lo pegas ahí.\n3. Recargas los Asesores Expertos, lo arrastras a la gráfica y permites el Algo Trading."
+    },
+    {
+        keywords: ["fuera de horario", "diferente hora", "hora del broker", "buscando entrada", "reloj", "distinta hora"],
+        response: "⏰ **¿Por qué el bot dice FUERA HORARIO en una cuenta y BUSCANDO ENTRADA en otra?**\n\nSi usas distintos brokers o versiones del bot, puede ocurrir esto. Hay dos razones principales:\n1. **Parámetros de Hora:** Revisa con `F7` que la 'Hora de Inicio' y 'Hora de Fin' sean iguales en ambos gráficos.\n2. **Hora del Servidor (Broker):** El bot no usa la hora de tu país, usa la hora del servidor del broker (reloj de 'Observación del Mercado'). Si los brokers tienen distinto huso horario, deberás ajustar las horas de inicio para compensarlo."
+    },
+    {
+        keywords: ["congelado", "no cierra", "linea azul plana", "línea azul plana", "probador", "backtest atascado", "no avanza", "grafico plano", "diario", "error indicador"],
+        response: "🧊 **¿El probador de estrategias (Backtest) se ha quedado atascado o la línea azul está plana?**\n\nSi al hacer un backtest ves que el bot no cierra operaciones (la línea de balance azul es plana durante meses) o se congela, suele ser porque MetaTrader no puede descargar el historial completo de precios o indicadores. Ve a la pestaña **Diario** del probador: si ves errores rojos de 'cannot load indicator' o fallos de lectura, ese es el motivo. Asegúrate de tener los datos descargados o reinicia la prueba."
+    },
+    {
+        keywords: ["vps", "apagar el ordenador", "se apaga el pc", "suspender", "siempre encendido", "servidor", "vps recomendado", "desconecta"],
+        response: "🖥️ **¿Es obligatorio tener el PC siempre encendido o usar un VPS?**\n\n**SÍ.** Si apagas tu PC personal, cierras MetaTrader o se va el internet, el bot se desconectará y dejará tus operaciones flotando a su suerte. Para evitar sustos (como no poder cerrar a tiempo) te recomendamos encarecidamente contratar un **VPS (Servidor Virtual)** económico. Así tu bot estará encendido 24/7 sin que tú tengas que tener tu ordenador físico encendido."
     }
 ];
 

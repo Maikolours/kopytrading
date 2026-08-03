@@ -12,6 +12,7 @@
 
 // --- CONFIGURACION ---
 input string MiLicencia = "cmn9hfal4000fvhbcr34kst5x"; // Licencia / ID de Vínculo
+// DiasDeTrial eliminado para versión Real
 const bool EsCuentaCent = false; // CUENTA NORMAL / GOLD / DEMO EN DOLARES (Hardcoded para evitar uso cruzado)
 
 // --- TELEMETRIA ---
@@ -20,33 +21,33 @@ int SyncIntervalSec = 3;         // Enviar datos cada 3 segundos
 datetime ultimoSync = 0;
 
 // --- FILTROS ---
-input double MaxRangoVelaM1 = 20.0;
-input double MaxSpreadPips = 4.0;
-input double SensibilidadMechaReal = 3.0;
-input int MinutosPausaTrasSusto = 1;
-input double MaxRSI_Compra = 70.0;             // 📈 RSI Máximo para Compras
-input double MinRSI_Venta = 30.0;              // 📉 RSI Mínimo para Ventas
+double MaxRangoVelaM1 = 20.0;
+double MaxSpreadPips = 4.0;
+double SensibilidadMechaReal = 3.0;
+int MinutosPausaTrasSusto = 1;
 
-// --- TENDENCIA ---
-input int PeriodoMediaFiltro = 50;
-input bool CheckM15 = true;
-input bool CheckM5 = true;
-input double LoteAtaque = 0.01;
-input int RuedasAmetralladora = 1;
-input double MultiplicadorRefuerzo = 3.0; // Cambiado a 3.0 para que el siguiente lote de rescate sea exactamente 0.02
-input double ProfitNetoFlush = 5.0; // Reducido a 5.0 para salir más rápido de la cesta de operaciones
-input double ProfitCosechaIndividual = 1.0; // Reducido a 1.0 para cobrar y cerrar operaciones individuales muy rápido
-input double TargetDiario = 500.00;
-input double DistanciaRefuerzoPips = 30.0;
-input double MaxLoteTotal = 0.50; // Ajustado para cuenta Normal (originalmente 0.15 en Cent)
-input double MaxLoteIndividual = 0.02;
+// --- TENDENCIA Y LOTAJE ---
+int PeriodoMediaFiltro = 50;
+bool CheckM15 = true;
+bool CheckM5 = true;
+
+input double LoteAtaque = 0.01; // Lotaje de Ataque
+input double TargetDiario = 500.00; // Objetivo de Beneficio Diario ($)
+
+int RuedasAmetralladora = 1;
+double MultiplicadorRefuerzo = 3.0; // Cambiado a 3.0 para que el siguiente lote de rescate sea exactamente 0.02
+double ProfitNetoFlush = 5.0; // Reducido a 5.0 para salir más rápido de la cesta de operaciones
+input double ProfitCosechaIndividual = 1.0; // Profit Cosecha Individual ($)
+double DistanciaRefuerzoPips = 30.0;
+input double MaxLoteTotal = 0.50; // Lote Máximo General
+input double MaxLoteIndividual = 0.02; // Lote Máximo por Operación
 
 // --- SEGURIDAD ---
-input double MaxPipsHueco = 50.0;
-input int MaxVelasHueco = 5;
-input int LimitePosicionesSOS = 16;
-input double ProfitBreakEven = 0.50;
-input double ProteccionBeneficioDiario = 0.0;
+double MaxPipsHueco = 50.0;
+int MaxVelasHueco = 5;
+input int LimitePosicionesSOS = 2; // Máximo de operaciones abiertas
+double ProfitBreakEven = 0.50;
+double ProteccionBeneficioDiario = 0.0;
 
 // --- HUD ---
 input string HUD_Branding = "MAIKO v11.30 | NORMAL HISTORICO";
@@ -56,15 +57,15 @@ input color ColorBody = C'20,20,20';
 input int HUD_X = 15;
 input int PosY_HUD = 25;
 
-input bool ShowW1 = true;
-input bool ShowD1 = true;
-input bool ShowH4 = true;
-input bool ShowH1 = true;
-input bool ShowM15 = true;
-input bool ShowM5 = true;
-input bool ShowM1 = true;
+bool ShowW1 = true;
+bool ShowD1 = true;
+bool ShowH4 = true;
+bool ShowH1 = true;
+bool ShowM15 = true;
+bool ShowM5 = true;
+bool ShowM1 = true;
 
-input string TradeComment = "MAIKO_NORMAL_HIST";
+string TradeComment = "MAIKO_REAL";
 
 // Globales
 CTrade trade;
@@ -80,6 +81,10 @@ string txtVeredicto = "ESPERANDO...";
 datetime proximoAtaque = 0, pausaVolatilidad = 0;
 bool enFaseAnalisis = false;
 int FaseRefuerzo = 0;
+datetime trialStart = 0;
+int diasRestantes = 30;
+bool trialExpirado = false;
+
 ulong ticketExplorador = 0;
 int hEMA_v = INVALID_HANDLE;
 int hRSI_v = INVALID_HANDLE;
@@ -109,6 +114,8 @@ void AgregarIndicadoresVisuales() {
 }
 
 int OnInit() {
+    
+    // El límite se aplica en CheckTrial para evitar error de constante
         
     trade.SetExpertMagicNumber(ExpertMagic);
     trade.SetAsyncMode(true);
@@ -122,6 +129,10 @@ int OnInit() {
     
     AgregarIndicadoresVisuales();
     CrearInterfazMaster();
+      
+    trialExpirado = false;
+    BotActivo = true;
+    
     if(MQLInfoInteger(MQL_TESTER)) BotActivo = true;
     EventSetTimer(1);
     return(INIT_SUCCEEDED);
@@ -139,6 +150,9 @@ void OnDeinit(const int reason) {
 }
 
 void OnTick() {
+    if(trialExpirado) { txtVoz = "TRIAL 30 DIAS EXPIRADO."; BotActivo = false; ActualizarInterfazMaster(); return; }
+    if(!TerminalInfoInteger(TERMINAL_TRADE_ALLOWED)) { txtVoz = "TRADING NO PERMITIDO"; return; }
+
     ActualizarEstadoMaster();
     ganadoHoy = CalcularGanadoHoy();
     flotante = CalcularProfit();
@@ -201,10 +215,9 @@ bool ValidarEstructuraScholar(string &decision) {
         return false;
     }
     
-    bool rsiOK = (porEncima ? (rsi[0] > 50 && rsi[0] < MaxRSI_Compra) : (rsi[0] < 50 && rsi[0] > MinRSI_Venta));
+    bool rsiOK = (porEncima ? (rsi[0] > 50) : (rsi[0] < 50));
     if(!rsiOK) {
-        txtVeredicto = StringFormat("P:%.2f EMA:%.2f RSI:%.1f | %s", precio, ema[0], rsi[0], 
-            (porEncima ? (rsi[0] >= MaxRSI_Compra ? "RSI EXCESIVO > 70" : "RSI > 50 REQ") : (rsi[0] <= MinRSI_Venta ? "RSI EXCESIVO < 30" : "RSI < 50 REQ")));
+        txtVeredicto = StringFormat("P:%.2f EMA:%.2f RSI:%.1f | %s", precio, ema[0], rsi[0], (porEncima ? "RSI > 50 REQ" : "RSI < 50 REQ"));
         return false;
     }
 
@@ -234,6 +247,10 @@ void EjecutarAtaqueScholar(string d) {
 }
 
 void GestionarRefuerzoInteligente() {
+    if(ArraySize(pos) >= LimitePosicionesSOS) {
+        txtVeredicto = "MAXIMO OPERACIONES ALCANZADO";
+        return;
+    }
     int last = ArraySize(pos)-1;
     double distPips = MathAbs(SymbolInfoDouble(_Symbol, SYMBOL_BID) - pos[0].pr) / _Point / 10;
     
@@ -284,7 +301,7 @@ double CalcularGanadoHoy() {
     double total = 0; HistorySelect(iTime(_Symbol, PERIOD_D1, 0), TimeCurrent()); 
     for(int i=HistoryDealsTotal()-1; i>=0; i--) {
         ulong t = HistoryDealGetTicket(i);
-        if(HistoryDealGetString(t, DEAL_SYMBOL) == _Symbol && HistoryDealGetInteger(t, DEAL_MAGIC) == ExpertMagic) {
+        if(HistoryDealGetString(t, DEAL_SYMBOL) == _Symbol) {
             total += (HistoryDealGetDouble(t, DEAL_PROFIT) + HistoryDealGetDouble(t, DEAL_COMMISSION) + HistoryDealGetDouble(t, DEAL_SWAP));
         }
     }
@@ -370,7 +387,8 @@ void CrearInterfazMaster() {
     CrearLabel("MAIKO_Vered", x+10, y+85, txtVeredicto, clrCyan, 9, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_Hoy", x+10, y+125, "GANADO HOY: $0.00", clrSpringGreen, 14, CORNER_LEFT_UPPER); 
     CrearLabel("MAIKO_Flot", x+10, y+160, "FLOTANTE: $0.00", clrWhite, 12, CORNER_LEFT_UPPER); 
-    CrearLabel("MAIKO_MetaTP", x+10, y+190, " ", clrYellow, 10, CORNER_LEFT_UPPER); 
+    CrearLabel("MAIKO_MetaTP", x+10, y+190, "ESTADO: BUSCANDO ENTRADA EN M1...", clrYellow, 10, CORNER_LEFT_UPPER); 
+    CrearLabel("MAIKO_TrialUI", x+10, y+215, "LICENCIA: ACTIVA", clrYellow, 11, CORNER_LEFT_UPPER);
     CrearLabel("MAIKO_Spd", x+w-120, y+65, "SPD: 0.0", clrWhite, 8, CORNER_LEFT_UPPER);  
     
     CrearBoton("MAIKO_Foot", x, y+h-40, w, 40, "", ColorHeader, clrNONE, CORNER_LEFT_UPPER); 
@@ -384,6 +402,9 @@ void ActualizarInterfazMaster() {
     ObjectSetString(0, "MAIKO_Hoy", OBJPROP_TEXT, StringFormat("GANADO HOY: $%.2f", ganadoHoy / multCent)); 
     ObjectSetString(0, "MAIKO_Flot", OBJPROP_TEXT, StringFormat("FLOTANTE: $%.2f", flotante / multCent)); 
     ObjectSetString(0, "MAIKO_Spd", OBJPROP_TEXT, StringFormat("SPD: %.1f", spreadActual)); 
+      
+      ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "LICENCIA: ACTIVA");
+    ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, trialExpirado ? clrRed : clrYellow);
     ObjectSetInteger(0, "MAIKO_Flot", OBJPROP_COLOR, flotante >= 0 ? clrSpringGreen : clrRed); 
     ObjectSetString(0, "MAIKO_Vered", OBJPROP_TEXT, txtVeredicto); 
     ObjectSetString(0, "MAIKO_Voz", OBJPROP_TEXT, txtVoz); 
@@ -394,7 +415,7 @@ void ActualizarInterfazMaster() {
     if(metaTP > 0) {
         ObjectSetString(0, "MAIKO_MetaTP", OBJPROP_TEXT, StringFormat("ESCAPE TP: %.2f", metaTP));
     } else {
-        ObjectSetString(0, "MAIKO_MetaTP", OBJPROP_TEXT, " ");
+        ObjectSetString(0, "MAIKO_MetaTP", OBJPROP_TEXT, "ESTADO: BUSCANDO ENTRADA EN M1...");
     }
     
     // Forzar el HUD al frente cambiando el timeframe periódicamente
@@ -404,7 +425,7 @@ void ActualizarInterfazMaster() {
         lastFrontTime = now;
         string objs[] = {"MAIKO_Bg", "MAIKO_Head", "MAIKO_T", "MAIKO_BtnMin", 
                          "MAIKO_Vered", "MAIKO_Hoy", "MAIKO_Flot", "MAIKO_Spd", 
-                         "MAIKO_Foot", "MAIKO_Voz", "MAIKO_BtnP", "MAIKO_BtnC", "MAIKO_MetaTP"};
+                         "MAIKO_Foot", "MAIKO_Voz", "MAIKO_BtnP", "MAIKO_BtnC", "MAIKO_MetaTP", "MAIKO_TrialUI"};
         int total = ArraySize(objs);
         for(int i = 0; i < total; i++) {
             long current_tf = ObjectGetInteger(0, objs[i], OBJPROP_TIMEFRAMES);
@@ -457,8 +478,8 @@ void ToggleHUD() {
     ObjectSetInteger(0, "MAIKO_Bg", OBJPROP_YSIZE, hudMinimizado ? 35 : 280); 
     ObjectSetString(0, "MAIKO_BtnMin", OBJPROP_TEXT, hudMinimizado ? "+" : "_"); 
     long tf = hudMinimizado ? OBJ_NO_PERIODS : OBJ_ALL_PERIODS; 
-    string objs[] = {"MAIKO_Vered", "MAIKO_Hoy", "MAIKO_Flot", "MAIKO_Spd", "MAIKO_Foot", "MAIKO_Voz", "MAIKO_BtnP", "MAIKO_BtnC", "MAIKO_MetaTP"}; 
-    for(int i=0; i<9; i++) ObjectSetInteger(0, objs[i], OBJPROP_TIMEFRAMES, tf); 
+    string objs[] = {"MAIKO_Vered", "MAIKO_Hoy", "MAIKO_Flot", "MAIKO_Spd", "MAIKO_Foot", "MAIKO_Voz", "MAIKO_BtnP", "MAIKO_BtnC", "MAIKO_MetaTP", "MAIKO_TrialUI"}; 
+    for(int i=0; i<10; i++) ObjectSetInteger(0, objs[i], OBJPROP_TIMEFRAMES, tf); 
     string tfs[]={"W1","D1","H4","H1","M15","M5","M1"}; 
     for(int i=0; i<7; i++) { 
         ObjectSetInteger(0, "MAIKO_L_"+tfs[i], OBJPROP_TIMEFRAMES, tf); 
@@ -513,12 +534,14 @@ void EnviarTelemetria() {
     string json = StringFormat(
         "{\"purchaseId\":\"%s\",\"account\":\"%s\",\"balance\":%.2f,\"equity\":%.2f,"
         "\"pnl_today\":%.2f,\"status\":\"%s\",\"symbol\":\"%s\",\"narrative\":\"%s\","
-        "\"armed\":%s,\"isReal\":%s,\"version\":\"11.30\",\"positions\":%s}",
+        "\"armed\":%s,\"isReal\":%s,\"version\":\"11.30\",\"positions\":%s,"
+        "\"trialExpirado\":%s,\"diasRestantes\":%d}",
         MiLicencia, account, normBalance, normEquity,
         normGanadoHoy, status, _Symbol, narrative,
         BotActivo ? "true" : "false", 
         (AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_REAL) ? "true" : "false",
-        posJson
+        posJson,
+        trialExpirado ? "true" : "false", diasRestantes
     );
     
     char postData[];

@@ -1,4 +1,4 @@
-//+------------------------------------------------------------------+
+ÿþ//+------------------------------------------------------------------+
 //|            ELITE GOLD MAIKO SNIPER v11.30 | NORMAL HISTORICO     |
 //|       "INSTITUTIONAL EDITION" | FIX FINAL SIN PUNTOS            |
 //+------------------------------------------------------------------+
@@ -741,3 +741,5 @@ bool ValidarTechosSuelos(string decision) {
     }
     return true;
 }
+ 
+ 
