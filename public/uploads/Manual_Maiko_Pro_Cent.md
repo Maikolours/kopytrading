@@ -348,55 +348,58 @@ El bot ha sido intensivamente testeado con excelentes resultados en dos brokers 
 El trading algorítmico es una actividad de precisión matemática. Para obtener beneficios consistentes:
 
 ### 🚫 No Intervenir en la Operativa del Bot
-Una vez que enciendas el bot, **se recomienda no tocar las operaciones individuales ni modificarlas manualmente**. El sistema calcula distancias y tamaños de lote de forma exacta. Si cierras o modificas operaciones a mano, romperás la matemática de la estrategia y puedes provocar pérdidas flotantes innecesarias. Deja trabajar al sistema.
+Una vez que enciendas el bot, **se recomienda no tocar las operaciones individuales ni cerrarlas por separado manualmente**. El sistema calcula distancias y tamaños de lote de forma exacta para salir en beneficio conjunto.
+* **💡 Regla de Oro si quieres intervenir a mano:** Si alguna vez quieres parar o cerrar todo, pulsa **primero el botón `APAGAR` en la pantalla del gráfico** (o en tu dashboard web) y luego cierra lo que desees. Así evitarás que el bot vuelva a abrir nuevas órdenes inmediatamente.
 
-### 🛡️ Uso del Stop Loss Diario Personalizado
-El bot cuenta con un parámetro de protección para limitar pérdidas extremas de forma dinámica:
-* **Stop Loss Diario:** Viene configurado por defecto en el **10% del balance de la cuenta**.
-* **⚠️ Recomendación muy importante:** No configures este límite a un porcentaje muy bajo (como un 2% o un 5%). Si lo haces, el bot cerrará operaciones en pérdidas ante retrocesos normales que luego se habrían recuperado solos. **En un 80% o 90% de los casos, la estrategia del bot recupera el flotante de manera autónoma** si se le da el margen adecuado.
+### 🔄 Parámetros de Fábrica y el Botón "Reiniciar" (Reset)
+Todos los parámetros que vienen por defecto en el bot han sido rigurosamente testeados y optimizados para ofrecer la máxima rentabilidad con el menor riesgo posible.
+* **Consejo de Oro:** Si en algún momento modificas algún parámetro por curiosidad o error y quieres volver a la configuración perfecta original, simplemente pulsa la tecla **`F7`** en tu teclado y haz clic en el botón **`Reiniciar` (Reset)** abajo a la derecha. ¡Todos los valores de fábrica se restaurarán al instante!
 
----
-
-### ⚡ Rendimiento en Movimientos Bruscos de Alta Volatilidad
-El bot ha sido puesto a prueba en escenarios de alta volatilidad y movimientos extremadamente bruscos del mercado, demostrando una excelente solidez y capacidad de recuperación. En nuestras cuentas de seguimiento, el algoritmo ha gestionado de manera óptima el flotante ante caídas y subidas repentinas de precio, cerrando las operaciones con beneficios consistentes de forma autónoma. No obstante, es importante recordar que el mercado no es 100% predecible y se debe vigilar la operativa.
+### 🛡️ Escudo de Seguridad por Dinero (300 Centavos = $3.00 USD)
+El bot cuenta con un seguro de corte automático de flotante:
+* Si ocurre un evento de mercado extremo o un cisne negro, el bot cortará las operaciones al alcanzar el límite configurado de **300 centavos** y entrará en **modo de enfriamiento de 30 minutos** para proteger el 95% restante de tu cuenta.
 
 <div class="alert-box" style="--alert-color: #e11d48; --alert-bg: #fff1f2; --alert-text-color: #9f1239;">
-  <h4>🚨 ¡ATENCIÓN CRÍTICA: CONTROL DE NOTICIAS MACROECONÓMICAS!</h4>
-  <p>El mercado no es matemática pura y está sujeto a manipulaciones extremas o deslizamientos de spread durante noticias de alto impacto (IPC, desempleo NFP, tipos de interés de la Fed, etc.).<br>
-  <strong>Si NO tienes operaciones abiertas</strong> y se aproxima una noticia importante: <strong>APAGA EL BOT INMEDIATAMENTE</strong>. Deja que pase el evento, observa cómo se estabiliza el mercado y vuelve a encender el bot una vez que regrese la normalidad.<br>
-  Si la noticia extrema te pilla con operaciones abiertas, el precio puede moverse tan rápido que las operaciones queden colgadas. En esos casos, <strong>siempre es preferible pausar el bot e incluso cerrar manualmente operaciones en pequeñas pérdidas</strong> para proteger tu capital de una pérdida mayor por manipulación.</p>
+  <h4>🚨 ¡CONTROL DE NOTICIAS MACROECONÓMICAS!</h4>
+  <p>Durante noticias de altísimo impacto (NFP, IPC de EE.UU., tipos de interés de la Fed):<br>
+  <strong>Si NO tienes operaciones abiertas</strong>: Pulsa <strong>APAGAR</strong> en el HUD o desde tu móvil en la web. Deja pasar el evento y vuelve a encenderlo cuando el mercado recupere la calma.<br>
+  Si te pilla con operaciones abiertas, el bot cuenta con filtros multi-temporalidad para no comprar en techos ni vender en suelos.</p>
 </div>
 
 ---
 
-## 3. CONCEPTOS CLAVE DE LA ESTRATEGIA MAIKO PRO CENT
+## 3. ¿CÓMO OPERA EL BOT MAIKO PRO CENT? (CONCEPTOS Y QUÉ ESPERAR)
 
-El sistema v5.84 incluye mejoras exclusivas de inteligencia artificial y protección del balance:
+Maiko Pro Cent es el algoritmo de **Scalping Dinámico de Alta Precisión** adaptado al micro-lotaje de cuentas Cent:
 
-1. **Meta Inteligente (Smart Take Profit):** El bot no utiliza un TP fijo estático. Ajusta dinámicamente el objetivo de ganancia en función de la volatilidad y la velocidad del precio para exprimir al máximo los movimientos a nuestro favor.
-2. **🏛️ Filtro de Techos y Suelos:** Este filtro analiza las últimas horas de mercado para identificar zonas de saturación (soportes y resistencias locales). Evita que el bot compre en máximos (techos) o venda en mínimos (suelos), reduciendo drásticamente el drawdown.
-3. **⏱️ Flexibilidad de Temporalidades (Timeframes):** 
-   * **M15 (15 Minutos - Recomendado por defecto):** Ofrece el equilibrio ideal entre la frecuencia de las operaciones y la precisión en las entradas.
-   * **M5 (5 Minutos):** Aumenta la velocidad y la cantidad de operaciones (perfil más agresivo), pero ten en cuenta que el flotante puede subir más rápido.
-   * **H1 (1 Hora):** Recomendado para mercados altamente volátiles o para un estilo de trading muy conservador. Las operaciones son más espaciadas y seguras, reduciendo la exposición al ruido del mercado.
-4. **⏰ Horario Operativo por Defecto:** Viene programado para buscar entradas de **09:00 a 19:00 (de lunes a viernes)**, que son las horas de mayor liquidez. Puedes editar libremente este rango horario en los parámetros del bot para adaptarlo a tus preferencias.
-5. **📱 Control Total desde el Móvil:** Gracias a la sincronización en la nube de KopyTrading:
-   * Puedes monitorear tus operaciones abiertas y ganancias diarias desde el móvil.
-   * Cuentas con un **Botón de Pánico / Cierre** desde tu dashboard web para pausar el bot o cerrar todo en un solo clic si alguna vez te sientes incómodo con el mercado, sin necesidad de conectarte a tu VPS.
+1. **⏰ Horario de Operación (09:00 a 21:00 hora del broker):** El bot opera exclusivamente durante las horas de mayor liquidez global. Fuera de ese horario, los fines de semana y los viernes por la noche se pone automáticamente en modo reposo (`FUERA HORARIO`).
+2. **📈 Análisis Inteligente Multi-Temporalidad:** 
+   * Antes de abrir cada operación, analiza las tendencias en **M15, H1, H4, D1 y W1**.
+   * **Filtro de Tendencia M15:** Si las velas de M15 se giran en contra, el bot **tiene terminantemente prohibido meter compras contra la corriente**.
+   * **Filtro de Techos y Suelos:** Evita comprar en máximos o vender en mínimos locales, buscando siempre entradas limpias con rebotes seguros.
+3. **⚡ Rescate Inteligente SOS (Espaciado de 50 pips):**
+   * Si una operación sufre un retroceso, el bot espera con paciencia **50 pips de distancia** y confirmación de velas de giro para promediar a un precio ventajoso y salir de la cesta rápidamente en beneficios.
+4. **📱 Control Remoto Total desde el Móvil / Tablet:**
+   * Al introducir tu **ID Vínculo / Clave de Licencia** en los parámetros (`F7`), tu MetaTrader se conecta en tiempo real con tu panel en **`kopytrading.com/dashboard`**.
+   * Podrás ver el saldo, las ganancias de hoy y las operaciones abiertas desde tu móvil en la calle, y si lo deseas, podrás **pausar el bot o cerrar todo de emergencia** con un solo toque de dedo.
 
 ---
 
 ## 4. INSTRUCCIONES DE INSTALACIÓN PASO A PASO
 
-1. **Descarga el bot:** Obtén el archivo ejecutable del bot (`*.ex5`) desde tu panel de usuario de KopyTrading.
-   * *Nota: Te recomendamos revisar periódicamente tu panel web. Liberamos actualizaciones regulares para optimizar la operativa y adaptarnos a los cambios del mercado en tu beneficio.*
-2. **Abre MetaTrader 5:** En tu PC o servidor VPS, abre MT5. Ve a **Archivo** > **Abrir Carpeta de Datos**.
-3. **Ubica la carpeta de Experts:** Navega a `MQL5` > `Experts` y pega el archivo descargable del bot allí.
-4. **Actualiza e Instala:** En la barra izquierda de MT5 (Navegador), haz clic derecho sobre "Asesores Expertos" y pulsa **Actualizar**.
-5. **Configura el Gráfico:** Abre el gráfico de **XAUUSDc** o **GOLD.c** (el correspondiente a cuentas Cent) y configúralo en la temporalidad deseada (`M15` por defecto).
-6. **Arrastra el bot:** Arrastra el Asesor Experto al gráfico del Oro.
-7. **IMPORTANTE - Activa tu Licencia:** En la pestaña de parámetros del bot, asegúrate de rellenar el campo **ID Vínculo** con tu código personal obtenido en tu panel web. **Este paso es una condición obligatoria e indispensable tanto para cuentas Reales como para cuentas DEMO.** Sin tu código de licencia, el bot no operará.
-8. **Activa el Autotrading:** Asegúrate de que el botón de **Algo Trading** (Trading Algorítmico) en la barra superior de MT5 esté de color verde (Activado).
+1. **Descarga el bot:** Obtén el archivo ejecutable (`.ex5`) desde tu panel de usuario en la web de KopyTrading.
+2. **Abre MetaTrader 5:** En tu ordenador o servidor VPS, ve a **Archivo** > **Abrir Carpeta de Datos**.
+3. **Pega el archivo:** Ve a `MQL5` > `Experts` y pega allí el archivo `.ex5`.
+4. **Actualiza:** En la ventana izquierda de MT5 (*Navegador*), haz clic derecho en *Asesores Expertos* y pulsa **Actualizar**.
+5. **Configura el Gráfico:** Abre el gráfico de **XAUUSD-STDc** o **XAUUSDc** (Oro Cent) y ponlo en temporalidad **M15**.
+6. **Arrastra el bot:** Arrastra el Asesor Experto al gráfico del Oro Cent.
+7. **🔑 Introduce tu Clave de Licencia (ID Vínculo):** En la pestaña de parámetros del bot (`F7`), escribe tu clave o ID Vínculo en el campo `MiLicencia`. *(Esto activa el bot y lo conecta a tu móvil para control remoto).*
+8. **Permite WebRequest (Imprescindible para el control móvil):**
+   * Ve a **Herramientas** > **Opciones** > pestaña **Asesores Expertos**.
+   * Marca **"Permitir WebRequest para las URLs listadas"** y añade:
+     `https://kopytrading.com`
+     `https://www.kopytrading.com`
+9. **Activa Algo Trading:** Asegúrate de que el botón **Algo Trading** superior esté en verde. ¡Y listo!
 
 ---
 
