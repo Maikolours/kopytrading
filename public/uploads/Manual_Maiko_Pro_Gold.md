@@ -442,10 +442,14 @@ El sistema v5.84 incluye mejoras exclusivas de inteligencia artificial y protecc
 
 ## 8. HISTORIAL DE ACTUALIZACIONES (CHANGELOG)
 
-**v11.32 (Versión Actual)**
-- **Ajuste de latencia de telemetría:** Optimización de la frecuencia de envío de datos del bot al panel de control (de 60s a 3600s en estado inactivo) para mejorar la eficiencia del servidor y reducir el consumo de recursos de VPS.
+**v11.32 (Versión Oficial Actualizada)**
+- **🛡️ Filtro Estricto de Tendencia M15 (`ConfirmarTendenciaM15 = true`):** Bloqueo automático de entradas en contra de la tendencia mayor de M15 para evitar quedar atrapado en caídas bruscas.
+- **⚡ Rescate SOS Espaciado a 50 pips:** Mayor margen de rebote para promediar entradas con excelente ratio de beneficio sin sobrecargar lotaje.
+- **🚫 Bloqueo de Cascada de Riesgo:** Desactivada la apertura de órdenes inmediatas consecutivas para garantizar trades limpios.
+- **💵 Stop Loss de Emergencia por Dinero ($100 USD / 300 Centavos):** Escudo de capital que limita el riesgo máximo global en caso de movimientos extremos o cisnes negros.
+- **⏰ Horario Blindado (09:00 a 21:00) y Cierre de Viernes Noche:** Protección total ante gaps de fin de semana y períodos de baja liquidez.
 
 **v11.31**
-- **Stop Loss con función Standby:** El bot ahora espera automáticamente 10 minutos (ajustable) tras tocar un Stop Loss antes de volver a buscar operaciones, evitando rachas de pérdidas en alta volatilidad.
+- **Stop Loss con función Standby:** El bot ahora espera automáticamente 30 minutos tras tocar un Stop Loss antes de volver a buscar operaciones, evitando rachas de pérdidas en alta volatilidad.
 - **Bloqueo de Horas Críticas:** Implementación de filtro horario mejorado para evitar operar durante noticias de altísimo impacto.
 

@@ -417,13 +417,14 @@ El sistema v5.84 incluye mejoras exclusivas de inteligencia artificial y protecc
 
 ---
 
-## 6. AVISO DE RIESGO Y LIMITACIÓN DE RESPONSABILIDAD
+## 7. HISTORIAL DE ACTUALIZACIONES (CHANGELOG)
 
-> [!WARNING]
-> **El trading en mercados financieros conlleva un alto riesgo de pérdida de capital.**
-> Aunque Maiko Pro ha sido diseñado con tecnología de punta y cuenta con estadísticas de acierto superiores al 80% en pruebas históricas, el mercado del Oro es sumamente volátil y los rendimientos pasados no garantizan beneficios futuros.
->
-> **KopyTrading se limita exclusivamente a proveer herramientas de software y soporte tecnológico.** No actuamos como asesores financieros, no gestionamos cuentas de terceros ni somos responsables por las pérdidas directas o indirectas derivadas del uso de este bot. Opera siempre con capital que estés dispuesto a arriesgar y bajo tu propia responsabilidad.
+**v11.32 (Versión Oficial Cent Actualizada)**
+- **🛡️ Filtro de Tendencia M15 Activo (`ConfirmarTendenciaM15 = true`):** Protección contra caídas prolongadas.
+- **⚡ Rescate SOS Espaciado a 50 pips:** Permite que las órdenes de refuerzo entren con máximo descuento.
+- **🚫 Bloqueo de Cascada Innecesaria:** Cada orden corre hacia su ganancia de 25 centavos ($0.25 USD).
+- **💵 Stop Loss por Dinero (300 Centavos = $3.00 USD):** Protección máxima contra caídas anómalas.
+- **⏰ Horario Operativo (09:00 a 21:00) y Cierre de Viernes Noche:** Seguridad en aperturas semanales.
 
 ---
 *Desarrollado con ❤️ por el equipo de KopyTrading. ¡Que tengas una excelente y disciplinada sesión de trading!*
