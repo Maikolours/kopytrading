@@ -249,8 +249,8 @@ int OnInit() {
         return INIT_FAILED;
     }
     
-    // Inicializar Contador de Trial por cuenta MT5
-    string gvName = "MAIKO_TRIAL_START_" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
+    // Inicializar Contador de Trial por cuenta MT5 (Reiniciado a Día 1 para v11.32)
+    string gvName = "MAIKO_SHIELD_V1132_TRIAL_" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
     if(GlobalVariableCheck(gvName)) {
         trialStart = (datetime)GlobalVariableGet(gvName);
     } else {
