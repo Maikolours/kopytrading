@@ -233,15 +233,23 @@ void AgregarIndicadoresVisuales() {
 
 
 int OnInit() {
-
+    bool isDemoAccount = (AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_DEMO);
     
-
-    // El límite se aplica en CheckTrial para evitar error de constante
-
-        
+    // Si está en cuenta Real o Cent, es OBLIGATORIO tener clave de licencia
+    if(!isDemoAccount && !MQLInfoInteger(MQL_TESTER)) {
+        string lic = MiLicencia;
+        StringTrimLeft(lic);
+        StringTrimRight(lic);
+        if(lic == "") {
+            Alert("MAIKO PRO CENT: Para operar en cuenta REAL o CENT es OBLIGATORIO introducir tu Clave de Licencia o ID Vínculo en los parámetros (F7).");
+            BotActivo = false;
+            txtVoz = "LICENCIA REQUERIDA (F7)";
+            txtVeredicto = "SIN LICENCIA";
+            return(INIT_FAILED);
+        }
+    }
 
     trade.SetExpertMagicNumber(ExpertMagic);
-
     trade.SetAsyncMode(true);
 
     hEMA_v = iMA(_Symbol, _Period, PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
@@ -251,38 +259,22 @@ int OnInit() {
     hRSI_v = iRSI(_Symbol, _Period, 14, PRICE_CLOSE);
     hRSI_M1 = iRSI(_Symbol, PERIOD_M1, 14, PRICE_CLOSE);
 
-    
-
     // Inicializar handles de radar de forma estática para optimizar CPU
-
     for(int i=0; i<7; i++) {
-
         hRadar[i] = iMA(_Symbol, etfs[i], PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
-
     }
 
-    
-
     AgregarIndicadoresVisuales();
-
     CrearInterfazMaster();
-
-    ChartSetInteger(0, CHART_FOREGROUND, false); ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, true);
-
-      
+    ChartSetInteger(0, CHART_FOREGROUND, false); 
+    ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, true);
 
     trialExpirado = false;
-
     BotActivo = true;
 
-    
-
     if(MQLInfoInteger(MQL_TESTER)) BotActivo = true;
-
     EventSetTimer(1);
-
     return(INIT_SUCCEEDED);
-
 }
 
 

@@ -249,8 +249,8 @@ int OnInit() {
         return INIT_FAILED;
     }
     
-    // Inicializar Contador de Trial
-    string gvName = "MAIKO_TRIAL_START_" + MiLicencia;
+    // Inicializar Contador de Trial por cuenta MT5
+    string gvName = "MAIKO_TRIAL_START_" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
     if(GlobalVariableCheck(gvName)) {
         trialStart = (datetime)GlobalVariableGet(gvName);
     } else {
@@ -261,10 +261,14 @@ int OnInit() {
     int maxDias = DiasDeTrial;
     if(maxDias > 30) maxDias = 30;
     diasRestantes = maxDias - (int)((TimeCurrent() - trialStart) / 86400);
-    if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
+    if(diasRestantes <= 0) { 
+        trialExpirado = true; 
+        BotActivo = false;
+        Alert("MAIKO SHIELD DEMO: Tu período de prueba de 30 días ha expirado en esta cuenta.");
+        return(INIT_FAILED);
+    }
 
     trade.SetExpertMagicNumber(ExpertMagic);
-
     trade.SetAsyncMode(true);
 
     hEMA_v = iMA(_Symbol, _Period, PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
@@ -274,36 +278,21 @@ int OnInit() {
     hRSI_v = iRSI(_Symbol, _Period, 14, PRICE_CLOSE);
     hRSI_M1 = iRSI(_Symbol, PERIOD_M1, 14, PRICE_CLOSE);
 
-    
-
     // Inicializar handles de radar de forma estática para optimizar CPU
-
     for(int i=0; i<7; i++) {
-
         hRadar[i] = iMA(_Symbol, etfs[i], PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
-
     }
 
-    
-
     AgregarIndicadoresVisuales();
-
     CrearInterfazMaster();
-
-    ChartSetInteger(0, CHART_FOREGROUND, false); ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
-
-      
+    ChartSetInteger(0, CHART_FOREGROUND, false); 
+    ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
 
     trialExpirado = false;
-
     BotActivo = true;
 
-    
-
     if(MQLInfoInteger(MQL_TESTER)) BotActivo = true;
-
     EventSetTimer(1);
-
     return(INIT_SUCCEEDED);
 
 }
