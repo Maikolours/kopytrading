@@ -55,31 +55,33 @@ export default function Home() {
         <section className="px-4 mt-8">
           <div className="max-w-5xl mx-auto">
             <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-brand to-accent rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative bg-black/80 border border-brand/30 rounded-2xl p-6 sm:p-8 backdrop-blur-xl flex flex-col md:flex-row items-center gap-6 overflow-hidden">
+              <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 via-brand to-purple-600 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative bg-black/90 border border-amber-500/40 rounded-2xl p-6 sm:p-8 backdrop-blur-xl flex flex-col md:flex-row items-center gap-6 overflow-hidden shadow-2xl">
                 <div className="absolute top-0 right-0 p-4 opacity-10">
                   <span className="text-8xl select-none">🔥</span>
                 </div>
                 
-                <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-brand/20 flex items-center justify-center text-3xl animate-pulse">
-                  🚀
+                <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500/30 to-purple-600/30 border border-amber-500/40 flex items-center justify-center text-3xl animate-pulse">
+                  🎁
                 </div>
                 
                 <div className="flex-1 text-center md:text-left z-10">
-                  <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-2">
-                    ¡PRÓXIMO LANZAMIENTO: LA NUEVA SERIE MAIKO!
+                  <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest mb-2">
+                    ⚡ PRE-VENTA EXCLUSIVA SEPTIEMBRE
+                  </div>
+                  <h3 className="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tighter mb-2">
+                    ¡OFERTA DE LANZAMIENTO: <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500">50% DESCUENTO</span>!
                   </h3>
-                  <p className="text-text-muted leading-relaxed max-w-2xl">
-                    Estamos preparando el lanzamiento de la serie <span className="text-brand-light font-bold">MAIKO PRO</span>. 
-                    <strong className="text-white"> Muy pronto podrás conseguirlos con un 25% de DESCUENTO </strong> 
-                    y disfrutar del nuevo sistema de control desde el <span className="text-success font-bold">MÓVIL</span>.
+                  <p className="text-text-muted leading-relaxed max-w-2xl text-sm">
+                    Consigue tu bot <span className="text-amber-400 font-bold">MAIKO PRO GOLD (REAL)</span> o <span className="text-slate-300 font-bold">MAIKO CENT</span> por solo <strong className="text-white text-base">100€</strong> <span className="line-through text-white/40 text-xs">(Antes 200€)</span>. 
+                    <span className="text-amber-300 font-bold"> ¡Solo para los primeros 50 compradores este mes de Septiembre!</span>
                   </p>
                 </div>
                 
-                <div className="flex-shrink-0">
+                <div className="flex-shrink-0 z-10 w-full md:w-auto">
                   <Link href="/bots">
-                    <Button variant="outline" className="border-brand-light text-brand-light hover:bg-brand/10 px-8 py-6 h-auto font-black uppercase tracking-widest text-xs shadow-lg">
-                      Ver Catálogo →
+                    <Button variant="accent" className="w-full md:w-auto bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black px-8 py-6 h-auto font-black uppercase tracking-widest text-xs shadow-xl shadow-amber-500/20 border-none">
+                      Ver Ofertas 100€ →
                     </Button>
                   </Link>
                 </div>

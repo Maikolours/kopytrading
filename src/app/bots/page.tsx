@@ -271,6 +271,28 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                                 </Button>
                                             </Link>
                                         </>
+                                    ) : bot.status === 'ACTIVE' ? (
+                                        /* Bot Comercial Activo (REAL o CENT): Oferta de Septiembre 100€ (Tachado 200€) */
+                                        <>
+                                            <div className="text-center">
+                                                <div className="flex items-baseline justify-center gap-2 mb-0.5">
+                                                    <span className="text-sm font-bold line-through text-white/40">
+                                                        {bot.originalPrice ? `${bot.originalPrice}€` : '200€'}
+                                                    </span>
+                                                    <span className="text-3xl font-black tracking-tighter italic text-amber-400">
+                                                        {bot.price}€
+                                                    </span>
+                                                </div>
+                                                <div className="inline-flex items-center gap-1 text-[7px] bg-amber-500/20 text-amber-300 font-black tracking-[0.15em] px-2 py-0.5 rounded-full uppercase border border-amber-500/30">
+                                                    🔥 SEPTIEMBRE: -50% DESCUENTO
+                                                </div>
+                                            </div>
+                                            <Link href={`/bots/${bot.id}`} className="w-full">
+                                                <Button size="sm" className="w-full font-black uppercase tracking-[0.12em] text-[9px] h-10 shadow-xl transition-all duration-500 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black hover:scale-105 active:scale-95 border-none">
+                                                    Comprar Oferta 100€ →
+                                                </Button>
+                                            </Link>
+                                        </>
                                     ) : (
                                         /* Comerciales o Demos Desconectadas: solo botón centrado */
                                         <Link href={`/bots/${bot.id}`} className="w-full">

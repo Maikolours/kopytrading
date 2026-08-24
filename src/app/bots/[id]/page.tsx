@@ -300,6 +300,23 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                             ⏱ 30 Días Acceso Demo
                                         </div>
                                     </>
+                                ) : bot.status === 'ACTIVE' ? (
+                                    // Bots comerciales activos: 100€ (Tachado 200€) con Promoción de Septiembre
+                                    <>
+                                        <p className="text-[10px] text-amber-400 mb-2 uppercase tracking-[0.3em] font-black">🔥 Oferta de Lanzamiento Septiembre</p>
+                                        <div className="flex items-baseline justify-center gap-3 mb-3">
+                                            <span className="text-2xl font-bold line-through text-white/40">
+                                                {bot.originalPrice ? `${bot.originalPrice.toFixed(0)}€` : '200€'}
+                                            </span>
+                                            <div className="text-5xl sm:text-7xl font-black text-amber-400 tracking-tighter leading-none italic break-all">
+                                                {bot.price.toFixed(0)}
+                                                <span className="text-2xl sm:text-3xl text-amber-300 ml-1">€</span>
+                                            </div>
+                                        </div>
+                                        <div className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-300 text-[10px] font-black px-4 py-1.5 rounded-full border border-amber-500/30 uppercase tracking-widest flex-wrap justify-center shadow-lg">
+                                            ⚡ 50% DESCUENTO · 50 PRIMERAS UNIDADES
+                                        </div>
+                                    </>
                                 ) : (
                                     // Bots comerciales: precio oculto elegante
                                     <>
@@ -321,14 +338,14 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                     '✓ Soporte Técnico Directo',
                                     '✓ Válido por 30 Días',
                                 ] : [
-                                    'Compilación Nativa .ex5',
-                                    'Soporte Técnico Directo',
-                                    'Dashboard Connectivity',
-                                    'Licencia Vinculada a Cuenta',
-                                    'Actualizaciones Disponibles',
+                                    '✓ Compilación Nativa .ex5',
+                                    '✓ Soporte Técnico Directo',
+                                    '✓ Dashboard Connectivity',
+                                    '✓ Licencia Vinculada a Cuenta',
+                                    '✓ Actualizaciones Gratuitas Incluidas',
                                 ]).map((item, i) => (
                                     <div key={i} className="flex items-center gap-4 text-sm text-text-muted group/item">
-                                        <div className={`w-1.5 h-1.5 rounded-full ${isDemo ? 'bg-amber-400/60' : 'bg-white/20'} group-hover/item:bg-brand-light transition-colors`}></div>
+                                        <div className={`w-1.5 h-1.5 rounded-full ${isDemo || bot.status === 'ACTIVE' ? 'bg-amber-400/60' : 'bg-white/20'} group-hover/item:bg-brand-light transition-colors`}></div>
                                         <span className="font-medium group-hover/item:text-white transition-colors">{item}</span>
                                     </div>
                                 ))}
@@ -343,8 +360,15 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                             Activar Demo · 1.00 EUR
                                         </Button>
                                     </Link>
+                                ) : bot.status === 'ACTIVE' ? (
+                                    /* Bot Comercial Activo (REAL o CENT) -> Checkout habilitado 100€ */
+                                    <Link href={`/checkout/${bot.id}`} className="block">
+                                        <Button size="lg" fullWidth className="text-base py-8 shadow-2xl uppercase tracking-widest font-black italic transition-all hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black border-none">
+                                            Adquirir Licencia · 100.00 EUR →
+                                        </Button>
+                                    </Link>
                                 ) : (
-                                    /* Bots comerciales o Demo Desconectada */
+                                    /* Bots comerciales en Mantenimiento / Prelanzamiento */
                                     <div className="space-y-4">
                                         {/* Botón principal: siempre deshabilitado para prelanzamiento o demo desconectada */}
                                         <div className="space-y-2">

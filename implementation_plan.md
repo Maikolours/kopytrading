@@ -1,47 +1,25 @@
-# Plan de ImplementaciÃ³n: Estado Visual del Bot en Fin de Semana y ExpansiÃ³n de KopyBot
+# Cerebro V13: Cableado de Indicadores y Reparación UI
 
-Este plan describe la soluciÃ³n para mejorar la experiencia de usuario y el feedback visual del bot en MetaTrader 5 cuando el mercado estÃ¡ cerrado (fines de semana o fuera de horario), y para enriquecer la base de datos de respuestas de nuestro asistente virtual (KopyBot) en la pÃ¡gina web.
+## User Review Required
 
-## Cambios Propuestos
+> [!IMPORTANT]
+> Vamos a transformar los "adornos visuales" (ADX, MACD) en el verdadero motor de decisiones del bot. Además, he detectado y repararé el bug visual que hace que el Radar de M1 se quede atascado en rojo. Revisa la propuesta.
 
-### Componente: Robots MetaTrader 5 (MQL5)
+## Proposed Changes
 
-Modificaremos los 4 archivos `.mq5` en la carpeta de origen del terminal MT5 principal:
-- [Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_TRIAL.mq5](file:///C:/Users/Usuario/AppData/Roaming/MetaQuotes/Terminal/BB8163656548A371304D87AABB7A68EB/MQL5/Experts/BOTS%20MAIKO/Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_TRIAL.mq5)
-- [Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_REAL.mq5](file:///C:/Users/Usuario/AppData/Roaming/MetaQuotes/Terminal/BB8163656548A371304D87AABB7A68EB/MQL5/Experts/BOTS%20MAIKO/Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_REAL.mq5)
-- [Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO.mq5](file:///C:/Users/Usuario/AppData/Roaming/MetaQuotes/Terminal/BB8163656548A371304D87AABB7A68EB/MQL5/Experts/BOTS%20MAIKO/Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO.mq5)
-- [Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO_CENT.mq5](file:///C:/Users/Usuario/AppData/Roaming/MetaQuotes/Terminal/BB8163656548A371304D87AABB7A68EB/MQL5/Experts/BOTS%20MAIKO/Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO_CENT.mq5)
+### 1. Enchufar el ADX (El Detector de Laterales)
+Actualmente el ADX es solo un dibujo. En el V13, su valor matemático formará parte del código:
+- Si **ADX > 25** (Tendencia fuerte): El bot usará las medias móviles de M15 y M5 para surfear la ola hasta chocar con H4.
+- Si **ADX < 25** (Lateral): El bot ignorará las medias y comprará en los Suelos de H4 y venderá en los Techos de H4, usando las Bandas de Bollinger y el RSI para entrar (Modo Ping-Pong).
 
-#### Detalles de la ModificaciÃ³n
-1. **CreaciÃ³n de `ActualizarTextosEstado()`**:
-   Implementaremos esta funciÃ³n centralizada para recalcular las cadenas de texto del HUD segÃºn el estado del mercado (`TimeTradeServer()`):
-   - Si `BotActivo` es falso: `txtVoz = "BOT APAGADO / PAUSADO"`, `txtVeredicto = "APAGADO"`.
-   - Si hay posiciones abiertas: Mantener mensaje `"MAIKO: Vigilando COMPRA/VENTA activo..."`.
-   - Si estÃ¡ fuera de horario (fin de semana o noche): `txtVoz = "FUERA HORARIO: MERCADO CERRADO"` o `"FUERA HORARIO: ESPERANDO"`, `txtVeredicto = "ARMADO (FUERA DE HORARIO)"`.
-   - Si estÃ¡ dentro de horario operativo: Inicializar a `"SCHOLAR: Buscando..."` y `"ESPERANDO..."` (salvo que ya estÃ© en anÃ¡lisis).
+### 2. Enchufar el MACD (El Filtro de Falsos Techos)
+En la foto que me has pasado, el bot compró en el techo. Si hubiera estado enchufado al MACD, habría visto que las barras rojas del MACD estaban cruzando hacia abajo (pérdida de fuerza alcista) y se habría negado a comprar. En el V13, añadiremos el cruce del MACD como requisito para entrar a favor de la tendencia.
 
-2. **Llamada en Click de Objeto (`OnChartEvent`)**:
-   Cuando se pulse el botÃ³n de encendido (`MAIKO_BtnP`), se llamarÃ¡ inmediatamente a `ActualizarTextosEstado()` y a `ActualizarInterfazMaster()`. Esto pintarÃ¡ el HUD al instante (rojo "APAGAR" + Estado "ARMADO") sin requerir la llegada de un tick.
+### 3. Reparación del Radar M1 (Bug Visual)
+Tienes un ojo clínico. He revisado el código y el motivo por el que M1 lleva todo el día en ROJO es un bug de sincronización del servidor Demo de MetaQuotes. Al cambiar de temporalidad a M15, el bot "pierde" la conexión con la media de M1 que tiene calculada internamente y se queda congelada en el último valor (que resultó ser rojo). 
+- **Solución V13:** Reprogramaré la función ActualizarRadarMaster() para que fuerce la descarga del historial de M1 en cada tick, garantizando que el color sea real y en directo, independientemente de la gráfica que estés mirando.
 
-3. **OptimizaciÃ³n en `OnTick`**:
-   Llamar a `ActualizarTextosEstado()` al inicio para sincronizar y dibujar todo de inmediato. Ajustar la validaciÃ³n horaria de `OnTick` para evitar redundancias.
+## Open Questions
 
----
-
-### Componente: Chatbot de la PÃ¡gina Web (React / Next.js)
-
-#### [MODIFY] [FloatingChat.tsx](file:///C:/proyectos/APP%20KOPYTRADING/src/components/FloatingChat.tsx)
-- AÃ±adir un nuevo bloque de respuesta bajo `BOT_RESPONSES` con palabras clave como `"dormir"`, `"irse a dormir"`, `"dejar encendido"`, `"se activa solo"`, `"fin de semana"`, etc.
-- La respuesta explicarÃ¡ claramente que si el botÃ³n estÃ¡ rojo ("APAGAR"), el bot estÃ¡ armado y operarÃ¡ solo en cuanto abra el mercado. RecordarÃ¡ tambiÃ©n la importancia de usar un VPS si se va a dormir para evitar desconexiones.
-- Enriquecer otras preguntas comunes para dotar al bot de la mÃ¡xima informaciÃ³n Ãºtil para los clientes (VPS, licencias, real vs demo, apalancamiento, etc.).
-
----
-
-## Plan de VerificaciÃ³n
-
-### CompilaciÃ³n de Bots y SincronizaciÃ³n
-- Ejecutar el script `scratch/compile_and_sync_our_bots.ps1` en PowerShell para compilar todos los bots modificados en MetaEditor y verificar que no hay errores de sintaxis en MQL5.
-- Confirmar que los archivos `.ex5` y `.mq5` se actualizan en el panel de descargas del sitio web (`public/uploads/bots/` y `private_bots_backup/`).
-
-### CompilaciÃ³n Web
-- Ejecutar `npm run build` en la terminal local para asegurar que la actualizaciÃ³n de `FloatingChat.tsx` compila perfectamente en Next.js.
+> [!TIP]
+> Al enchufar el MACD y el ADX, el bot será extremadamente preciso. Entrará mucho menos, pero cuando entre, será porque el mercado tiene volumen, tendencia y fuerza real. ¿Estás lista para que empiece a programar esta bestia en el V13?
