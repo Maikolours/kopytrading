@@ -5,275 +5,186 @@ import { useState, useRef, useEffect } from "react";
 const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     {
         keywords: ["hola", "hello", "buenas", "hey", "qué tal", "que tal", "saludos"],
-        response: "¡Hola! Soy KopyBot 🤖, el asistente experto de KopyTrading. Puedo ayudarte con consultas técnicas, MetaTrader 5, nuestros bots, brokers y gestión de riesgo. ¿En qué te puedo ayudar?"
+        response: `¡Hola! Soy KopyBot 🤖, el asistente experto de KopyTrading. Puedo ayudarte con consultas técnicas sobre nuestros algoritmos **MAIKO PRO GOLD**, **MAIKO CENT**, **MAIKO DEMO**, MetaTrader 5, VPS, brokers y gestión de riesgo. ¿En qué te puedo ayudar?`
     },
     {
         keywords: ["recomiendas", "recomienda", "empezar", "primer bot", "cuál compro", "cual compro", "para principiante", "soy nuevo", "nunca he", "novato", "recomendación", "mejor para"],
-        response: "🏆 **Para principiantes, te recomiendo El Euro Precision Flow (EURUSD)** por estas razones:\n\n✅ Riesgo BAJO (el más seguro de los 4)\n✅ Capital mínimo 500$ (el más accesible)\n✅ Opera en H1 — señales claras, sin mucho ruido\n✅ El Euro es el par más líquido y estabilizado del mundo\n\n⚡ Si quieres más acción y tienes 1.000$, **La Ametralladora (XAUUSD)** es apasionante, pero tiene más riesgo.\n\n❌ **Evita BTC Storm Rider** si eres principiante — el Bitcoin es altamente volátil."
+        response: `🏆 **Nuestra recomendación según tu perfil:**
+
+1. **Si quieres empezar con poco capital ($50 - $100)**: Te recomendamos **MAIKO SNIPER PRO GOLD CENT** ⚡. Opera en cuentas CENT de MetaTrader 5 con un riesgo extremadamente controlado y accesible.
+
+2. **Si quieres probar gratis sin arriesgar dinero**: Activa **MAIKO SNIPER PRO GOLD DEMO** 💜 por solo 1€ durante 30 días en cuenta DEMO de MT5.
+
+3. **Si vas a operar con cuenta Real estándar ($500 - $1.000)**: **MAIKO SNIPER PRO GOLD (REAL)** 🏆 es nuestro algoritmo estrella para XAUUSD en M5.
+
+🔥 *¡Aprovecha la Oferta de Lanzamiento de Septiembre con 50% de DESCUENTO (100€ en vez de 200€)!*`
     },
     {
         keywords: ["cuándo abre", "cuando abre", "no opera", "operacion", "operación", "señal", "esperar", "cuánto tiempo", "cuanto tiempo", "no hace nada", "no abre nada", "lleva dias", "lleva días", "no mete", "cero operaciones", "ninguna operacion", "esperando"],
-        response: "⏳ **¿Por qué el bot no abre operaciones?**\n\nEs 100% normal. Nuestros bots usan algoritmos muy estrictos. No operan al azar; analizan múltiples temporalidades y filtros (cruce de medias, RSI, mechas de rechazo, spread y volatilidad) antes de abrir una operación.\n\n• **Euro Precision (H1)**: Puede pasar de 3 a 5 días sin abrir operaciones si no hay tendencia clara.\n• **Yen Ninja (M30)**: Solo opera en horario nocturno (0h a 8h broker).\n• **La Ametralladora (M5)**: Es el más rápido, pero si el spread del Oro es alto o hay noticias, se detendrá.\n\nTen paciencia, el bot está protegiendo tu capital."
+        response: `⏳ **¿Por qué el bot no abre operaciones en este momento?**
+
+Es 100% normal y correcto. Nuestros algoritmos MAIKO utilizan filtros muy estrictos (cruce institucional, mechas de rechazo, spread y control de volatilidad) antes de ejecutar:
+
+• **Horario de Operativa**: El bot opera principalmente entre las **09:00 y las 19:00 (hora del broker)**. Fuera de ese horario pone 'FUERA HORARIO: ESPERANDO' para protegerte de la baja liquidez.
+• **Spread Alto**: Si el spread en el Oro sube por encima de lo permitido (o durante noticias de alto impacto), el bot esperará a que el mercado se calme.
+
+Ten paciencia, el algoritmo está protegiendo tu capital.`
     },
     {
-        keywords: ["ametralladora", "xauusd", "oro", "gold"],
-        response: "🔥 **MAIKO SNIPER PRO GOLD (XAUUSD)** — El más popular\n\n• Temporalidad: **M5**\n• Estrategia: Scalping + Hedge Inteligente\n• Horario: 9h - 21h\n• Capital mínimo: 1.000$\n• Riesgo: Medio\n• Precio: Próximo Lanzamiento\n\n⚠️ El Oro es súper volátil. Usa siempre lotaje 0.01 por cada 1.000$.\n\n🎁 **Prueba nuestra versión Demo por 1$ durante 30 días** y luego podrás adquirir tu licencia válida para un año."
+        keywords: ["ametralladora", "xauusd", "oro", "gold", "maiko gold", "pro gold"],
+        response: `🏆 **MAIKO SNIPER PRO GOLD (XAUUSD)** — El algoritmo estrella
+
+• Temporalidad: **M5** (Gráfico del Oro)
+• Estrategia: Scalping de alta frecuencia + Hedge Inteligente
+• Horario: 09h - 19h (hora broker)
+• Capital mínimo sugerido: $500 - $1.000 (0.01 lotes por cada 1.000$)
+• Riesgo: Controlado con Stop Loss de Equidad
+
+🔥 **Oferta Especial de Septiembre:** Adquiérelo por **100€** (50% de descuento sobre el precio regular de 200€) para las primeras 50 licencias.
+
+🎁 **¿Quieres probarlo primero?** Activa la versión Demo por 1€ durante 30 días.`
     },
     {
-        keywords: ["euro", "precision", "eurusd", "eur"],
-        response: "🎯 **Euro Precision Flow (EURUSD)** — El más seguro\n\n• Temporalidad: **H1**\n• Estrategia: Cruce de EMA 21/50 + Filtro RSI\n• Horario: 8h - 20h\n• Capital mínimo: 500$\n• Riesgo: BAJO ✅\n• Precio: Próximo Lanzamiento\n\n💡 Puede tardar días en abrir porque espera la alineación perfecta del cruce institucional (H1)."
-    },
-    {
-        keywords: ["yen", "usdjpy", "ninja", "jpy", "asia", "asiática", "asiatica"],
-        response: "🥷 **Yen Ninja Ghost (USDJPY)** — Operativa nocturna\n\n• Temporalidad: **M30**\n• Estrategia: Rebote Bollingers + RSI\n• Horario: 0h - 8h (noche europea)\n• Capital mínimo: 500$\n• Riesgo: Medio\n• Precio: Próximo Lanzamiento\n\n🌙 Perfecto para aprovechar los rangos aburridos de la sesión asiática."
+        keywords: ["cent", "micro", "bajo capital", "50$", "100$", "cuenta cent", "cuentas cent"],
+        response: `⚡ **MAIKO SNIPER PRO GOLD CENT** — Ideal para bajos capitales
+
+• Diseñado específicamente para cuentas **Micro / CENT** en MetaTrader 5.
+• Te permite operar con **$50 a $100 reales**, ya que en la cuenta CENT $100 equivalen a 10.000 centavos.
+• Mantiene exactamente la misma lógica matemática del bot estrella MAIKO GOLD pero adaptado a la precisión de micro-lotes.
+
+🔥 **Precio Promocional Septiembre:** **100€** (Antes 200€) con licencia vinculada a tu cuenta.`
     },
     {
         keywords: ["bitcoin", "btc", "crypto", "cripto", "storm"],
-        response: "⚡ **MAIKO SNIPER PRO BTC (BTCUSD)** — Solo para verdaderos expertos\n\n• Temporalidad: **H4 o M30 según set**\n• Estrategia: Breakout/Tendencia Fuerte\n• Horario: 24/7\n• Capital mínimo: 2.000$\n• Riesgo: ALTO ⚠️\n• Precio: Próximo Lanzamiento\n\nDiseñado para capturar la enorme inercia y volatilidad de la criptomoneda madre."
+        response: `₿ **MAIKO SNIPER PRO BTC (BTCUSD)** — Volatilidad Cripto
+
+• Temporalidad: **M30 / H1**
+• Estrategia: Breakout & Inercia de volatilidad en Bitcoin
+• Capital mínimo: $1.500 - $2.000
+• Riesgo: Medio-Alto (debido a la gran volatilidad del Bitcoin)
+
+Ideal para diversificar tu portafolio junto con el bot de Oro.`
     },
     {
-        keywords: ["precio", "cuánto cuesta", "cuanto cuesta", "costo", "coste", "todos", "comparar", "comprar", "pagar", "compras", "licencia anual", "pago"],
-        response: "💰 **Precios de las Licencias:**\n\nActualmente todos nuestros bots están en fase de lanzamiento y el precio definitivo está por determinar.\n\n⚡ **Lo único disponible ahora mismo** es la versión demo del bot estrella **MAIKO PRO GOLD**, que puedes activar durante **30 días por solo 1$** en una cuenta DEMO de MetaTrader 5.\n\nEl tipo de licencia final dependerá del bot. ¡Atención! En septiembre de 2026 lanzaremos el MAIKO PRO GOLD y **las primeras 50 descargas tendrán licencia VITALICIA con superdescuento**. Después pasará a licencia anual. Visita la sección de [Bots](/bots) para más información."
+        keywords: ["precio", "cuánto cuesta", "cuanto cuesta", "costo", "coste", "oferta", "descuento", "septiembre", "comprar", "pagar", "licencia", "pago"],
+        response: `💰 **Precios y Oferta Especial de Lanzamiento:**
+
+🔥 **OFERTA DE SEPTIEMBRE (50% DE DESCUENTO):**
+• **MAIKO SNIPER PRO GOLD (REAL)**: **100€** *(Precio regular 200€)*
+• **MAIKO SNIPER PRO GOLD CENT**: **100€** *(Precio regular 200€)*
+
+💜 **VERSIÓN DEMO:**
+• **MAIKO PRO GOLD DEMO**: **1€** por **30 días de prueba** en cuenta DEMO de MT5.
+
+Las licencias incluyen soporte técnico, guías PDF y **todas las actualizaciones futuras 100% gratuitas** desde tu panel.`
     },
     {
         keywords: ["vps", "servidor", "cloud", "siempre encendido", "apago el ordenador", "se apaga", "nube", "contabo", "hosting", "computadora", "vps servidor"],
-        response: "🖥️ **¿Es obligatorio el VPS (Servidor en la Nube)?**\n\n**SÍ, en el 99% de los casos.** Si tu ordenador de casa se suspende, se apaga, Windows se actualiza o la línea de internet se cae, MetaTrader 5 se cerrará. Si MT5 se cierra, el bot se desconecta de la bolsa y dejará de gestionar tus órdenes abiertas, lo cual es muy peligroso.\n\n👉 **Recomendamos Contabo (plan VPS S)** por unos 5-6€ al mes. Es un servidor encendido 24h/7d sin molestarte, donde instalas Windows Server, metes MT5 y dejas el bot funcionando de forma segura."
+        response: `🖥️ **¿Es obligatorio el VPS (Servidor en la Nube)?**
+
+**SÍ, es altamente recomendable.** Si tu PC personal se suspende, se apaga o pierde internet, MetaTrader 5 se cerrará y el bot no podrá gestionar las posiciones abiertas.
+
+👉 **Recomendamos Contabo (plan VPS S)** o cualquier VPS Windows por unos 5-6€ al mes. Deja tu MT5 encendido 24/7 de forma 100% segura.`
     },
     {
         keywords: ["broker", "vantage", "vtmarkets", "pepperstone", "ic markets", "dónde", "donde", "qué broker", "que broker", "mt5 broker", "brokers"],
-        response: "🏦 **Brokers 100% Compatibles con KopyTrading:**\n\n• **Vantage Markets**: Gran broker ECN, sin limites en XAU.\n• **Pepperstone**: Extrema liquidez, ideal para bots (Regulado EU/US/AU).\n• **IC Markets**: Favorito mundial por latencia hiperbaja.\n• **VT Markets**: Muy buena ejecución de pares Forex.\n\n(Recomendamos usar tipos de cuenta 'RAW' o 'PRO' para tener spreads desde 0.0 pips y minimizar comisiones)."
+        response: `🏦 **Brokers 100% Compatibles con KopyTrading:**
+
+• **Vantage Markets**: Excelente ejecución ECN para Oro y Cuentas CENT.
+• **VT Markets**: Muy recomendado para cuentas CENT y estándar.
+• **Pepperstone**: Latencia hiperbaja y regulación oficial.
+• **IC Markets**: Ideal para cuentas ECN/RAW.
+
+(Recomendamos usar tipos de cuenta 'RAW', 'PRO' o 'CENT' para tener spreads bajos y la mejor ejecución).`
     },
     {
         keywords: ["licencia", "clave", "número de cuenta", "cuenta mt5", "cómo activar", "autorizada", "identidad", "autorizar", "vinculo", "vincular", "mi cuenta", "numero de cuenta"],
-        response: "🔐 **Sistema de Protección y Licencias:**\n\nEl archivo del bot está encriptado y se vincula a tu número de Cuenta particular de MetaTrader 5. Solo debes escribir este número exacto en las propiedades del bot, sección **'MiLicencia'** o **'Cuenta'**.\n\n👉 De esta manera, tu bot queda blindado. Al arrastrarlo al gráfico de MetaTrader, el sistema validará tu licencia en nuestra Base de Datos en tiempo real y se autorizará automáticamente."
+        response: `🔐 **Sistema de Activación de Licencias:**
+
+El bot está encriptado y se vincula directamente a tu número de Cuenta MetaTrader 5.
+
+1. Al comprar o activar la demo, introduce tu Nº de Cuenta MT5 en tu panel de usuario.
+2. En MT5, al arrastrar el bot al gráfico, pon tu número en el parámetro **'MiLicencia'**.
+3. El algoritmo conectará con nuestra API en tiempo real y mostrará **'LICENCIA: ACTIVA'** en el HUD.`
     },
     {
         keywords: ["instalar", "instalación", "instalacion", "instala", "instalo", "mt5", "metatrader", "cómo lo instalo", "archivos", "mq5", "ex5", "instalar el bot", "como se usa"],
-        response: "📋 **Puesta a punto (MetaTrader 5):**\n\n1. En MT5: Archivo → Abrir carpeta de datos.\n2. Ve a MQL5 → Experts y pega ahí el archivo `.ex5` descargado.\n3. Asegúrate de activar el botón **'Algo Trading'** en la parte superior de MT5 (debe tener play verde).\n4. Abre el gráfico del par correspondiente (ej: XAUUSD en temporalidad M5 para el bot de Oro).\n5. Arrastra el bot desde el navegador al gráfico, pon tu código de vínculo en el parámetro 'MiLicencia', marca 'Permitir trading algorítmico' en la pestaña Común y pulsa Aceptar.\n\n¡Listo! El HUD del bot aparecerá en tu gráfico."
+        response: `📋 **Pasos de Instalación en MetaTrader 5:**
+
+1. En MT5: Menú **Archivo** → **Abrir carpeta de datos**.
+2. Entra en \`MQL5\` → \`Experts\` y pega allí el archivo \`.ex5\` descargado.
+3. Activa el botón **'Algo Trading'** en la barra superior de MT5 (icono con Play verde ▶️).
+4. Abre el gráfico de **XAUUSD en M5**.
+5. Arrastra el bot al gráfico, introduce tu número de cuenta en 'MiLicencia' y pulsa Aceptar.
+
+¡El panel de control (HUD) de MAIKO aparecerá en tu pantalla!`
     },
     {
         keywords: ["gratis", "demo", "trial", "mes gratis", "free", "prueba", "30 dias", "30 días", "trial 30"],
-        response: "⚡ **Demo del MAIKO PRO GOLD:**\n\nPuedes activar la demo del bot estrella **MAIKO PRO GOLD** durante **30 días** en una cuenta DEMO de MetaTrader 5 por solo **1$**.\n\nEl algoritmo opera en **M5** con estrategia de scalping institucional. Conectado a tu cuenta DEMO de tu broker, podrás observar cómo opera en tiempo real sin arriesgar dinero real.\n\nTras los 30 días, podrás adquirir tu licencia. Recuerda que si estás entre los 50 primeros (lanzamiento Sept 2026), ¡tu licencia será de POR VIDA!\n\n🔗 [Activar Demo](/bots/cmn9hf8yc0000vhbcq9hbxk0j)"
+        response: `💜 **Prueba MAIKO PRO GOLD DEMO por 30 Días:**
+
+Puedo probar la versión de prueba durante **30 días por solo 1€** en cualquier cuenta DEMO de MetaTrader 5.
+
+Es 100% idéntica en precisión al algoritmo real. Podrás comprobar su rendimiento sin arriesgar capital real.
+
+🔗 [Activar Demo en el Catálogo](/bots)`
     },
     {
         keywords: ["stripe", "paypal", "bizum", "cómo pago", "tarjeta", "pagar", "metodos de pago", "métodos de pago"],
-        response: "💳 **Métodos de Pago:**\n\nAceptamos pagos seguros mediante tarjeta de crédito/débito a través de **Stripe** y pagos con **PayPal Express**. Nuestras licencias son de suscripción anual, sin costes ocultos ni comisiones sobre tus ganancias."
+        response: `💳 **Métodos de Pago Seguros:**
+
+Aceptamos pagos mediante **PayPal Express** y tarjeta de crédito/débito a través de **Stripe**. Recibirás el acceso a la descarga del bot y el PDF inmediatamente tras la compra.`
     },
     {
         keywords: ["no funciona", "error", "problema", "ayuda", "bug", "fallo", "cuenta no autorizada", "no se abre", "invalido", "invalid license"],
-        response: "🔧 **Diagnóstico de Problemas Técnicos:**\n\n1. **'Invalid License / Cuenta no autorizada'**: Verifica que no haya espacios al poner tu Nº de cuenta en los Ajustes del bot.\n2. **'AutoTrading deshabilitado'**: Dale al icono de AutoTrading en MT5 (arriba al centro, debe tener play verde).\n3. **'No abre nada'**: Asegúrate que el mercado esté abierto y estás en la gráfica correcta (Oro, Euro..).\nParecen tonterías, pero suele ser la solución al 90%."
+        response: `🔧 **Solución a Problemas Frecuentes:**
+
+1. **'Cuenta No Autorizada / Licencia Inválida'**: Revisa que tu número de cuenta MT5 coincida exactamente en el Dashboard y en el parámetro 'MiLicencia' (sin espacios).
+2. **'AlgoTrading Deshabilitado'**: Haz clic en el botón 'Algo Trading' arriba en MT5 (debe mostrar un cuadrado rojo/verde activo).
+3. **'No abre operaciones'**: Verifica si estás en horario operativo (09:00 a 19:00 broker) y que el mercado del Oro esté abierto.`
     },
     {
         keywords: ["qué es kopytrading", "quiénes sois", "sobre vosotros", "la empresa", "kopytrading", "quienes somos"],
-        response: "🏢 **Sobre nosotros KopyTrading:**\n\nEvitamos los sistemas piramidales, las mensualidades, las Martingalas destructivas y el marketing vende-húmos.\n\nSolo proporcionamos algoritmos matemáticos probados, que nosotros mismos operamos, directamente de las manos del desarrollador a la gráfica del trader. Trading puro, duro y aburrido (consistente)."
+        response: `🏢 **Sobre KopyTrading:**
+
+Desarrollamos algoritmos institucionales de trading cuantitativo para MetaTrader 5. Sin esquemas piramidales ni marketing engañoso. Software probado, transparente y enfocado en la preservación del capital.`
     },
     {
         keywords: ["break even", "breakeven", "empate", "proteger"],
-        response: "🛡️ **Sistema Break Even (BE):**\n\nNuestra regla de oro. Si la operación va ganando X dólares, el Bot bloquea la posición y mueve el Stop Loss exactamente a tu punto de entrada.\n\n✅ Desde ese instante el saldo de esa operación NUNCA pasará a ser negativo. Estarás matemáticamente blindado ante cualquier retroceso."
+        response: `🛡️ **Protección Break Even (BE):**
+
+Cuando una operación alcanza el objetivo de ganancia parcial, el bot mueve automáticamente el Stop Loss al punto exacto de entrada.
+
+Desde ese momento, la operación es **100% libre de riesgo** y no podrá cerrar en pérdidas aunque el precio se gire violentamente.`
     },
     {
-        keywords: ["trailing stop", "trailing", "perseguir", "asegurar", "trail"],
-        response: "📉 **Trailing Stop Dinámico:**\n\nNo dejamos el Stop Loss fijo abajo mientras el precio sube al infinito.\nEl algoritmo lo arrastra dinámicamente varios pips por detrás del precio actual. Si se gira agresivamente el mercado, la operación se cortará de golpe con toda la caja en verde que haya acumulado durante el trayecto."
-    },
-    {
-        keywords: ["apalancamiento", "leverage", "margen", "apalancado"],
-        response: "⚖️ **Guía de Apalancamiento:**\n\nTe recomendamos seleccionar apalancamiento 1:100 o 1:200 en tu Broker.\nOjo: Apalancamiento NO es riesgo extra si usas nuestro Stop Loss y los lotes (0.01) correctamente.\nEl apalancamiento solo sirve para que el broker no retenga el 80% de tus fondos de Free Margin cada vez que el Bot accione."
-    },
-    {
-        keywords: ["lote", "lotaje", "tamaño", "volumen", "0.01", "gestion de riesgo", "gestión de riesgo"],
-        response: "📏 **Control del Gran Lotaje Matemático:**\n\nNunca subestimes un mal dimensionamiento.\nInicia siempre operando con volumen **0.01 Lotes** por cada 500$-1000$ que tengas fondeados en la gráfica. Ese es el único colchón que evitará la quema bajo Drawdowns extremos."
-    },
-    {
-        keywords: ["mac", "apple", "macbook", "macos", "ipad"],
-        response: "🍎 **MetaTrader en Ecosistema MAC**\n\nMT5 está nativamente programado para Windows. No obstante:\nOpción A: Usa la capa Parallels Desktop/CrossOver.\nOpción B (Nuestra Favorita): Contrátate un VPS Windows y usa Microsoft Remote Desktop. Verás a la perfección tu Windows con el bot desde tu Mac impecablemente fluido."
-    },
-    {
-        keywords: ["fondeo", "prop firm", "ftmo", "evaluación", "funding", "darwinex", "pass", "cuenta fondeada"],
-        response: "🏆 **Apto para Firmas de Fondeo (Prop Firms):**\n\nAbsolutamente. Todos los Bots usan Stop Loss estrictos sin promedios Martingala. Cumplirás perfectamente los mandatos del 'Daily Maximum Loss Drawdown' requeridos para superar los Exámenes y Challenges de FTMO o MyForexFunds."
-    },
-    {
-        keywords: ["martingala", "martingale", "grid", "cuadricula", "promediar", "martingalas"],
-        response: "⚠️ **Cero exposición infinita (No Martingalas suicidas):**\n\nTodos nuestros bots rechazan la clásica Martingala exponencial.\nAlgunos usan Hedge escalonado minúsculo, pero todos (sin excepción) cortan con un Stop Loss Duro general de Equity. Cuando nos equivocamos, nos equivocamos, perdemos el 1-2% del account y a seguir. Sobrevivimos."
-    },
-    {
-        keywords: ["drawdown", "retroceso", "flotante", "negativo", "baja la cuenta", "flotante negativo"],
-        response: "📉 **El inevitable Drawdown (DD):**\n\nTodo algoritmo tendrá DD. Es el flotante negativo aguantado temporalmente. Nuestros perfiles arrojan Drawdowns calculados entre un 5% y 20% histórico anual (teniendo muy buena protección institucional)."
-    },
-    {
-        keywords: ["noticias", "news", "nfp", "ipc", "cpi", "powell", "noticia", "bloqueo noticias"],
-        response: "📰 **Impacto de las Noticias Macro:**\n\nNivel rojo (Powell, NFP). En estas franjas el spread del oro o del euro puede triplicarse y saltarse tus defensas.\nRecomendación de oro: Pulsa off al Bot 60 mins antes y préndelo 60 mins después de la intervención fundamental."
-    },
-    {
-        keywords: ["mt4", "metatrader 4", "mq4"],
-        response: "⚙️ **¿Por qué no funciona en MT4?**\n\nKopyTrading desarrolla nativamente al 100% en `MQL5` para MetaTrader 5 porque es el futuro estándar de las instituciones y su Tester genético multithread está a años luz de las herramientas arcaicas de MT4."
-    },
-    {
-        keywords: ["movil", "móvil", "android", "iphone", "celular", "app", "aplicacion movil"],
-        response: "📱 **Acceso vía Smartphones (Móvil):**\n\nNo puedes inyectar un robot en la App Móvil de MetaTrader (MetaQuotes lo bloquea por arquitectura). Usa tu PC o tu VPS para alojar el `Bot.ex5`.\nEso sí, luego podrás vincular la App móvil de MT5 a tu cuenta de broker y ver a tiempo real, desde tu sofá, todas las operaciones que abra y cierre el bot de forma automática."
-    },
-    {
-        keywords: ["rentabilidad", "ganancia", "cuanto gano", "porcentaje", "mensual", "roi", "cuanto da", "ganancias"],
-        response: "💵 **Proyecciones de Rentabilidad:**\n\nCálculos empíricos y moderados nos arrojan entre un **2% a 5%** de beneficio neto mensual empleando perfiles de riesgo conservadores. \nCualquiera que te garantice un +30% mensual sistemático es porque expone la cuenta al +100% de quebrar (un fraude estadístico)."
-    },
-    {
-        keywords: ["interés", "interes compuesto", "compound", "crecimiento"],
-        response: "📈 **La Magia del Compound (Interés Compuesto):**\n\nEmpieza con 1.000$ a Lote 0.01. Pasados unos meses, con tu cuenta en $2.000 (entre ingresos y bots), asciende el Lotaje a 0.02 respetando el escalón. Expones lo mismo visualmente, pero la gráfica nominal ascenderá en curva geométrica maravillosa."
-    },
-    {
-        keywords: ["manual", "cerrar", "yo mismo", "intervenir", "manipular"],
-        response: "✋ **Tú Eres el Dueño de las Posiciones:**\n\nSi el robot metió una orden, y vas ganando un buen pico que necesitas o que ves incierto a la luz de las velas macro: TÚ le das a la X. No afectará a la API, simplemente el bot cerrará el monitor actual y reanudará escaneo al tick siguiente."
-    },
-    {
-        keywords: ["internet", "corte", "se va la luz", "wifi", "desconexión"],
-        response: "🔌 **La Vitalidad de la Conexión Ininterrumpida:**\n\nSi el terminal pierde red, el algoritmo de gestión (Break Evens / Trails) desaparece con él. Dejarás la posición a su suerte desprotegida.\nVuelvo al refrán institucional: \"Un VPS vale 5€ y te ahorra años de salud cardiovascular\"."
-    },
-    {
-        keywords: ["devolucion", "reembolso", "garantia", "devolver", "return"],
-        response: "↩️ **Política de Devolución:**\n\nEntregamos código compilado EX5 listo para rodar. Dado su formato de producto digital sin desvinculación comprobable, no realizamos reembolsos de compras. Te sugerimos exprimir al máximo los 30 días de prueba gratuita en Demo para estar seguro antes de comprar."
+        keywords: ["ajustes", "parametros", "parámetros", "cambiar lotaje", "riesgo", "configuracion", "configuración", "ocultos"],
+        response: `🛠️ **Parámetros y Blindaje de Seguridad:**
+
+Por tu seguridad y para proteger la propiedad intelectual de la estrategia, los parámetros técnicos internos (distancias SOS, martingalas y flushes) vienen **100% optimizados de fábrica y blindados**.
+
+Tú puedes ajustar cómodamente desde la ventana \`F7\`:
+• **Meta de Beneficio Diario ($)**
+• **Horario de Operativa**
+• **Protector de Pérdida ($ / %)**
+• **Lotaje Inicial** (recomendamos 0.01 por cada 1.000$ o 100$ cent)`
     },
     {
         keywords: ["actualización", "update", "versión nueva", "version", "upgrade", "descargar version"],
-        response: "🔄 **Mantenimiento y Actualizaciones:**\n\nNuestras actualizaciones son 100% gratuitas. En cuanto publiquemos una mejora o nueva versión de un bot que has adquirido, podrás descargarla de forma gratuita directamente desde tu área de cliente (Dashboard) para siempre."
-    },
-    {
-        keywords: ["cuál opera más", "quien opera más", "cual opera mas", "mas veces", "más operaciones", "mayor frecuencia", "opera mucho", "más rápido", "mas rapido", "el bot mas rapido", "el más rápido", "operaciones al dia"],
-        response: "⚡ **¿Cuál es el bot más rápido en operar?**\n\nEl bot más rápido y activo es **La Ametralladora (XAUUSD)**. Su nombre no es casualidad; al operar en gráficos de M5 y especializarse en Scalping en un par tan volátil como el Oro, tenderá a buscar muchas micro-entradas al día (entre 2 y 5 operaciones).\n\n*(Recuerda usar siempre lotes mínimos de 0.01 si empiezas con este bot).* "
-    },
-    {
-        keywords: ["menos riesgo", "más seguro", "mas seguro", "menor riesgo", "conservador", "cual arriesga menos", "qué bot es más seguro", "el mas seguro"],
-        response: "🛡️ **¿Cuál es el bot con menor riesgo?**\n\nEl más seguro y conservador es el **Euro Precision Flow (EURUSD)**. \n\nOpera en temporalidad de H1 (1 hora) y sobre el par Euro-Dólar, que es el más líquido y estable del mundo. Tarda más tiempo en encontrar oportunidades y abrir operaciones, pero sus entradas están extremadamente filtradas y seguras."
-    },
-    {
-        keywords: ["cuántas operaciones hace", "cuantas operaciones hace", "frecuencia de cada", "qué frecuencia", "cuánto tarda cada", "frecuencia operaciones"],
-        response: "⏱️ **Frecuencia de Operaciones de nuestros Bots:**\n\n• **La Ametralladora (XAUUSD):** 2 a 5 operaciones al día (Scalping rápido).\n• **Yen Ninja Ghost (USDJPY):** 3 a 8 operaciones por *semana* (solo nocturno de 0h a 8h).\n• **Euro Precision Flow (EURUSD):** 1 a 3 operaciones por *semana* (alta precisión H1).\n• **BTC Storm Rider (BTCUSD):** Puede pasar semanas sin operar hasta capturar un gran breakout de Bitcoin."
-    },
-    {
-        keywords: ["ganar más dinero", "que más dinero", "que mas dinero", "gana más", "gana mas", "más beneficios", "mas beneficios", "más rentable", "mas rentable", "el que más gana", "mayor beneficio", "mejor rendimiento"],
-        response: "💸 **¿Con cuál bot se gana más dinero?**\n\nPor volatilidad e inercia de precios, **La Ametralladora (Oro)** y **BTC Storm Rider (Bitcoin)** son los que mayor potencial de ganancias rápidas ofrecen. \n\n⚠️ SIN EMBARGO: Mayor ganancia siempre implica mayor riesgo y fluctuaciones temporales de la cuenta (Drawdown). No busques solo la ganancia; busca la consistencia combinando varios perfiles."
-    },
-    {
-        keywords: ["capital asegurado", "asegurado el capital", "seguro de perdida", "pierdo mi dinero", "perderlo todo", "garantizado", "riesgo cero", "riesgo 0", "capital protegido", "mi dinero está seguro", "esta asegurado", "garantizar ganancias"],
-        response: "🛑 **Aviso de Riesgo Importante:**\n\n**NO, el capital NO está asegurado bajo ningún concepto.**\nEl trading financiero, sea algorítmico o manual, implica un riesgo real de pérdida. Quien te ofrezca rentabilidades garantizadas o riesgo cero en la bolsa, te está intentando estafar.\n\nNuestros bots usan defensas avanzadas como *Stop Loss* general de balance y blindaje *Break Even* para proteger tu cuenta y evitar catástrofes, pero arriesgas dinero real. Invierte solo capital que te puedas permitir perder sin afectar tu vida diaria."
-    },
-    {
-        keywords: ["cara triste", "sombrero gris", "no cambia de color", "no cambia color", "no hace nada al pulsar", "el bot no responde", "boton encender", "botón encender", "no se enciende", "no enciende", "no activa"],
-        response: "🤖 **El botón de encender o el HUD no responde (Mercado cerrado / Fin de semana):**\n\nEn MetaTrader 5, los gráficos y botones se actualizan en base a los precios que envía tu broker (ticks). Fines de semana (sábados y domingos) o festivos, el mercado está cerrado y no hay ticks, por lo que antes la interfaz parecía congelada.\n\n✨ **¡Lo hemos solucionado!** Hemos actualizado nuestros bots para que al hacer clic en 'ENCENDER' el HUD responda al instante, el botón cambie a color rojo y muestre **'APAGAR'**, y el estado ponga **'ARMADO (FUERA DE HORARIO)'**. En cuanto abra el mercado, empezará a operar solo sin que tengas que tocar nada."
-    },
-    {
-        keywords: ["cuenta real trial", "demo en real", "trial en real", "versión de prueba en real", "gratis en real", "demo real", "gratis real"],
-        response: "🔐 **¿Puedo usar la versión de prueba (Trial) en cuenta Real?**\n\n**NO. Está bloqueado por código.** La licencia de prueba de 1$ por 30 días de **MAIKO PRO GOLD** funciona exclusivamente en cuentas de tipo **DEMO** (dinero virtual). Si arrastras el bot de prueba a una cuenta Real, emitirá una alerta sonora en pantalla y se desinstalará de la gráfica de inmediato por tu seguridad."
-    },
-    {
-        keywords: ["fuera de horario", "esperando hora", "fuera horario", "09:00", "9 de la mañana", "horario de operativa", "no opera de noche", "esperando horario"],
-        response: "⏰ **El bot pone 'FUERA HORARIO: ESPERANDO':**\n\nEs el comportamiento correcto. El bot tiene un horario seguro de operativa (por defecto de **09:00 a 19:00 hora del broker**). Fuera de ese rango, el bot detiene la búsqueda de nuevas entradas para proteger tu capital de la baja liquidez nocturna. Al llegar la hora operativa se activará de nuevo de forma 100% automática."
-    },
-    {
-        keywords: ["dormir", "irse a dormir", "por la noche", "dejar encendido", "se enciende solo", "se activa solo", "que pasa cuando abre", "qué pasa cuando abre", "tengo que encenderlo", "tengo que volver a encenderlo", "dejarlo encendido", "dormir bot"],
-        response: "🛌 **¿Qué hago al irme a dormir? ¿Tengo que volver a encender el bot?**\n\n**No tienes que hacer nada.** Si el botón está en rojo y dice **'APAGAR'**, el bot está **armado y activo**.\n\n• Si estás fuera de horario o el mercado está cerrado, verás el texto **'ARMADO (FUERA DE HORARIO)'** y **'FUERA HORARIO: MERCADO CERRADO'**.\n• Quédate tranquilo: puedes irte a dormir. El bot se quedará en espera y comenzará a operar solo en cuanto empiece el horario de operativa, sin que tengas que volver a pulsar el botón.\n\n⚠️ **Recordatorio**: Asegúrate de tener el MetaTrader en un VPS encendido. Si apagas tu PC personal, el bot no podrá operar."
+        response: `🔄 **Actualizaciones 100% Gratuitas:**
+
+Todas las actualizaciones y mejoras del algoritmo son gratuitas para siempre. En cuanto liberemos una nueva versión (como la v11.32), te llegará una notificación al correo y podrás descargar el nuevo archivo \`.ex5\` directamente desde **[Mi Panel]**.`
     },
     {
         keywords: ["soporte", "contacto", "ayuda", "telegram", "correo", "email", "hablar con alguien", "humano", "escribir", "redes", "chat", "escribir a soporte"],
-        response: "🤖 **Contacto con Soporte Humano:**\n\nSi necesitas asistencia personalizada para configurar tu VPS o tienes preguntas sobre tu licencia:\n\n📱 **Telegram**: [@KopyTradingSoporte](https://t.me/KopyTradingSoporte)\n📧 **Email**: info@kopytrading.com\n\n¡Te responderemos a la mayor brevedad de lunes a viernes en horario de mercado!"
-    },
-    {
-        keywords: ["deslizamiento", "slippage", "recorrer", "spread", "comisión", "comision", "swap", "swaps", "spreads"],
-        response: "💹 **Spread, Slippage y Swaps:**\n\n• **Spread**: Es la comisión del broker por entrar. Si es alto, el bot espera a que baje para protegerte.\n• **Slippage**: Es cuando el precio se mueve tan rápido que entras en un punto distinto. Nuestros bots tienen filtros de 'Max Slippage'.\n• **Swap**: Es el interés por dejar la operación abierta de un día para otro. \n\nPara optimizar esto, usa siempre una cuenta **RAW o ECN** en tu broker."
-    },
-    {
-        keywords: ["backtest", "probador", "historia", "pasado", "por que es distinto", "por qué es distinto", "real vs demo", "demo vs real"],
-        response: "📈 **Backtest vs Realidad:**\n\nEl backtest es genial para ver si la estrategia funciona en el pasado, pero NO tiene en cuenta la latencia de internet ni los spreads variables del directo. \n\nNo te fíes solo del backtest: prueba el bot **30 días gratis en una cuenta DEMO** de tu broker. Esa es la única prueba real de fuego."
-    },
-    {
-        keywords: ["diferencia", "KopyTrading", "copiar", "ea", "expert advisor", "señales", "señal"],
-        response: "🔄 **¿Nuestros EAs (Bots) o CopyTrading?**\n\nEn el CopyTrading dependes de otro y de su plataforma. Con nuestros **EAs (Expert Advisors)**:\n\n1. El software corre en tu propio MetaTrader 5 (en tu PC o VPS).\n2. Tienes control absoluto de tu capital y lotajes.\n3. La ejecución es instantánea sin delays de red.\n4. Puedes apagarlo o cambiar el riesgo cuando quieras."
-    },
-    {
-        keywords: ["descargar", "descarga", "descargan", "cómo descargar", "como descargar", "bajar el bot", "donde esta el archivo", "dónde está el archivo", "descarga mi bot"],
-        response: "📥 **¿Cómo descargar tus bots?**\n\nEs instantáneo. Una vez activas una prueba o realizas una compra, ve a **[Mi Panel]** (o 'Dashboard'). \n\nAllí verás el botón de **'Descargar .ex5'** para cada uno de tus bots. Recuerda que también incluimos el manual en PDF para que no te pierdas nada."
-    },
-    {
-        keywords: ["que bots hay", "qué bots hay", "cuales teneis", "cuáles tenéis", "cuales son", "cuáles son", "lista de bots", "catálogo", "catalogo"],
-        response: "🤖 **Nuestros 4 Especialistas:**\n\n1. **La Ametralladora (XAUUSD)**: Scalping agresivo en Oro. ($$$)\n2. **Euro Precision Flow (EURUSD)**: El más seguro y estable. (✅)\n3. **Yen Ninja Ghost (USDJPY)**: Estrategia nocturna para Asia. (🥷)\n4. **BTC Storm Rider (BTCUSD)**: Solo para expertos en Bitcoin. (⚡)\n\nPuedes ver los detalles de cada uno en la sección de **Bots** de la web."
-    },
-    {
-        keywords: ["capital minimo", "capital mínimo", "cuanto dinero necesito", "cuánto dinero necesito", "deposito minimo", "depósito mínimo"],
-        response: "💰 **Capital Mínimo Recomendado:**\n\n• **Euro Precision**: 500$\n• **Yen Ninja**: 500$\n• **La Ametralladora**: 1.000$\n• **BTC Storm Rider**: 2.000$\n\n*Nota: Operamos con lotajes mínimos de 0.01. Tener este capital te permite aguantar retrocesos del mercado con seguridad.*"
-    },
-    {
-        keywords: ["mql5 vs mql4", "por que mt5", "por qué mt5", "funciona en mt4", "metatrader 4"],
-        response: "⚙️ **¿Por qué usamos MetaTrader 5 (MT5)?**\n\nMT5 es el estándar moderno. Es más rápido, permite ejecutar más hilos en el procesador y su probador de estrategias (Backtest) es infinitamente más preciso que el de MT4. \n\nNo desarrollamos para MT4 porque es una plataforma obsoleta para el trading algorítmico institucional."
-    },
-    {
-        keywords: ["varios graficos", "varias cuentas", "mas de un bot", "más de un bot", "combinar", "varios bots a la vez"],
-        response: "🔀 **¿Puedo usar varios bots a la vez?**\n\n¡Por supuesto! \n1. Abre un gráfico para cada par (ej. uno de Oro y otro de Euro).\n2. Arrastra a cada uno su respectivo bot.\n3. Asegúrate de tener capital suficiente para ambos.\n\nCada bot operará de forma independiente sin estorbar al otro."
-    },
-    {
-        keywords: ["ajustes", "parametros", "parámetros", "cambiar lotaje", "riesgo", "configuracion", "configuración"],
-        response: "🛠️ **Personalización (Inputs):**\n\nAl arrastrar el bot, verás una pestaña de **'Parámetros de Entrada'**. Aquí puedes:\n• Ajustar el **Lotaje** (recomendamos 0.01).\n• Activar/Desactivar el **Auto-Hedge**.\n• Cambiar el **Daily Stop Loss**.\n\nVienen optimizados por defecto, pero tú tienes el control final."
-    },
-    {
-        keywords: ["profit factor", "ratio de ganancia", "factor de beneficio", "ganancia esperada", "rendimiento"],
-        response: "📊 **¿Qué es el Profit Factor?**\n\nEl Profit Factor es la relación entre las ganancias brutas y las pérdidas brutas. Un Profit Factor superior a 1.0 significa que el sistema es rentable. Nuestros algoritmos, como el MAIKO PRO GOLD, buscan mantener un Profit Factor histórico por encima de 2.0 (por cada dólar perdido, se ganan dos dólares) en condiciones óptimas."
-    },
-    {
-        keywords: ["dd", "máximo retroceso", "max drawdown", "retroceso máximo"],
-        response: "📉 **Gestión de Drawdown (DD):**\n\nEl Drawdown es el retroceso máximo del saldo de tu cuenta desde un pico máximo. Es normal en el trading. Nuestros bots están diseñados con un 'Hard Stop Loss' de protección. Recomendamos un lote de 0.01 por cada 1.000$ para mantener un Drawdown histórico controlado y conservador."
-    },
-    {
-        keywords: ["slippage", "deslizamiento", "latencia", "retraso", "ping"],
-        response: "⚡ **Slippage y Latencia:**\n\nEl 'Slippage' ocurre cuando el precio se mueve entre el momento que el bot lanza la orden y el broker la ejecuta. Por eso es CRÍTICO usar un VPS (para latencia de 1-5ms) y cuentas RAW/ECN en tu broker, reduciendo drásticamente el deslizamiento y mejorando tus resultados."
-    },
-    {
-        keywords: ["stop loss", "sl", "parar pérdidas", "protección", "riesgo máximo"],
-        response: "🛑 **Uso de Stop Loss (SL):**\n\nTodos nuestros bots utilizan Stop Loss. Dependiendo de la estrategia (como el Hedge Inteligente en el Oro), el SL puede ser dinámico o basado en un % del balance de la cuenta para garantizar que NUNCA quemes tu cuenta por un movimiento negro del mercado."
-    },
-    {
-        keywords: ["take profit", "tp", "recoger beneficios", "cerrar ganancia"],
-        response: "🎯 **Toma de Beneficios (Take Profit):**\n\nNuestros algoritmos calculan el Take Profit de forma dinámica basándose en la volatilidad actual (ATR) y niveles institucionales. Además, utilizamos Trailing Stop para perseguir el precio y maximizar las ganancias si el mercado corre a nuestro favor."
-    },
-    {
-        keywords: ["inteligencia artificial", "ia", "ai", "machine learning"],
-        response: "🧠 **¿Usan Inteligencia Artificial?**\n\nNo utilizamos Inteligencia Artificial generativa o predictiva. Nuestros bots son 100% algorítmicos y matemáticos (MQL5 puro). Utilizan fórmulas precisas, acción del precio y cruce de indicadores institucionales probados durante años. Preferimos la precisión y consistencia de las matemáticas sobre lo impredecible de la IA actual."
-    },
-    {
-        keywords: ["como se si esta funcionando", "saber si funciona", "como compruebo", "como saber si esta encendido"],
-        response: "✅ **¿Cómo sé si el bot está funcionando?**\n\nPara estar 100% seguro, comprueba 3 cosas:\n1. El botón de AutoTrading (o Algo Trading) arriba en el menú de MT5 debe tener el símbolo de Play verde (▶️).\n2. En el gráfico, el HUD de KopyTrading debe mostrar el botón principal en rojo ('APAGAR'), lo que significa que está armado.\n3. Arriba a la derecha del gráfico deberías ver un icono de un gorrito azul de graduado. Si se ve gris o rojo, el autotrading global está apagado."
-    },
-    {
-        keywords: ["hay que configurarlo", "que configuracion le pongo", "parametros ideales", "que ajustes pongo", "tengo que ajustar"],
-        response: "⚙️ **¿Tengo que configurar parámetros difíciles?**\n\n¡No! Los bots vienen configurados y optimizados 'Plug & Play' (listos para usar). Los valores internos ya están ajustados a la perfección. Tú solo tienes que arrastrarlo a la gráfica, meter tu número de licencia y poner tu Lotaje inicial (recomendamos siempre empezar con 0.01 por cada 1.000$)."
-    },
-    {
-        keywords: ["en que grafica lo pongo", "que temporalidad", "timeframe", "en que par", "en que activo"],
-        response: "📊 **Temporalidad y Gráfica para cada Bot:**\n\nCada algoritmo solo funciona en su hábitat:\n• **La Ametralladora**: Gráfica de ORO (XAUUSD) en temporalidad **M5**.\n• **Euro Precision**: Gráfica de EURUSD en temporalidad **H1**.\n• **Yen Ninja**: Gráfica de USDJPY en temporalidad **M30**.\n• **BTC Storm**: Gráfica de BTCUSD en temporalidad **H4** o **M30**."
-    },
-    {
-        keywords: ["es facil de usar", "es fácil de usar", "soy novato", "soy principiante", "no tengo experiencia", "es complicado", "no se de trading", "no sé de trading"],
-        response: "👶 **¿Es fácil de usar si soy principiante?**\n\n¡Completamente! Hemos diseñado KopyTrading para que cualquier persona pueda usarlo sin conocimientos previos. Te entregamos el bot 100% optimizado y listo para funcionar (Plug & Play). Solo tienes que arrastrarlo a tu gráfica, introducir tu licencia y ajustar tu lotaje."
-    },
-    {
-        keywords: ["me devuelven el dinero", "devolucion", "devolución", "reembolso", "garantia", "garantía", "si no me gusta", "que pasa si pierdo", "recuperar el dinero"],
-        response: "🛡️ **Garantía y Devoluciones:**\n\nAl tratarse de un producto de software digital (descargable) y propiedad intelectual que recibes inmediatamente, no ofrecemos reembolsos una vez el sistema ha sido activado.\nSin embargo, para que estés 100% tranquilo, ofrecemos **licencias DEMO de 30 días** por solo 1$ en todos nuestros sistemas. Así puedes probarlos a fondo sin ningún riesgo."
-    },
-    {
-        keywords: ["para siempre", "cuanto dura", "cuánto dura", "es de pago unico", "pago único", "suscripción", "suscripcion", "pagar cada mes", "mensualidad", "licencia vitalicia", "renovar", "caduca"],
-        response: "♾️ **¿La licencia es para siempre? ¿Hay pagos mensuales?**\n\nEl tipo de licencia depende del bot que elijas. Algunos de nuestros algoritmos son de pago único y vitalicios, mientras que otros operan bajo licencia de validez anual para garantizar actualizaciones continuas.\n\n🚀 **Lanzamiento MAIKO PRO GOLD (Septiembre 2026):** Tenemos una promoción muy especial. Las **primeras 50 descargas** tendrán un superdescuento y la licencia será **VITALICIA (de por vida)**. A partir de la descarga 51, el bot pasará a su precio normal y su licencia será anual (tasa de renovación requerida)."
-    },
-    {
-        keywords: ["como lo instalo", "cómo lo instalo", "como se instala", "tutorial de instalacion", "pasos para instalar", "guia de instalacion", "como instalarlo"],
-        response: "💻 **¿Cómo instalo el bot en mi MetaTrader?**\n\nTenemos una **Guía de Instalación Paso a Paso** donde te explicamos todo. Está en la sección 'Guía de Instalación' (menú superior). En resumen:\n1. Lo descargas de tu panel.\n2. En MT5 vas a Archivo > Abrir carpeta de datos > MQL5 > Experts y lo pegas ahí.\n3. Recargas los Asesores Expertos, lo arrastras a la gráfica y permites el Algo Trading."
-    },
-    {
-        keywords: ["fuera de horario", "diferente hora", "hora del broker", "buscando entrada", "reloj", "distinta hora"],
-        response: "⏰ **¿Por qué el bot dice FUERA HORARIO en una cuenta y BUSCANDO ENTRADA en otra?**\n\nSi usas distintos brokers o versiones del bot, puede ocurrir esto. Hay dos razones principales:\n1. **Parámetros de Hora:** Revisa con `F7` que la 'Hora de Inicio' y 'Hora de Fin' sean iguales en ambos gráficos.\n2. **Hora del Servidor (Broker):** El bot no usa la hora de tu país, usa la hora del servidor del broker (reloj de 'Observación del Mercado'). Si los brokers tienen distinto huso horario, deberás ajustar las horas de inicio para compensarlo."
-    },
-    {
-        keywords: ["congelado", "no cierra", "linea azul plana", "línea azul plana", "probador", "backtest atascado", "no avanza", "grafico plano", "diario", "error indicador"],
-        response: "🧊 **¿El probador de estrategias (Backtest) se ha quedado atascado o la línea azul está plana?**\n\nSi al hacer un backtest ves que el bot no cierra operaciones (la línea de balance azul es plana durante meses) o se congela, suele ser porque MetaTrader no puede descargar el historial completo de precios o indicadores. Ve a la pestaña **Diario** del probador: si ves errores rojos de 'cannot load indicator' o fallos de lectura, ese es el motivo. Asegúrate de tener los datos descargados o reinicia la prueba."
-    },
-    {
-        keywords: ["vps", "apagar el ordenador", "se apaga el pc", "suspender", "siempre encendido", "servidor", "vps recomendado", "desconecta"],
-        response: "🖥️ **¿Es obligatorio tener el PC siempre encendido o usar un VPS?**\n\n**SÍ.** Si apagas tu PC personal, cierras MetaTrader o se va el internet, el bot se desconectará y dejará tus operaciones flotando a su suerte. Para evitar sustos (como no poder cerrar a tiempo) te recomendamos encarecidamente contratar un **VPS (Servidor Virtual)** económico. Así tu bot estará encendido 24/7 sin que tú tengas que tener tu ordenador físico encendido."
+        response: `💬 **Atención y Soporte:**
+
+Si necesitas ayuda para instalar el bot o configurar tu VPS, contáctanos:
+
+📱 **Telegram**: [@KopyTradingSoporte](https://t.me/KopyTradingSoporte)
+📧 **Email**: info@kopytrading.com
+
+Te atenderemos de lunes a viernes en horario de mercado.`
     }
 ];
 

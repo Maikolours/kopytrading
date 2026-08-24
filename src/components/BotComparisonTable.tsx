@@ -44,7 +44,7 @@ const BOTS_DATA = [
         features: [true, true, true, true, true],
         image: "/images/maiko-gold.png",
         color: "from-amber-400 to-amber-600",
-        price: "Próximamente",
+        price: "100€ (Oferta)",
         popular: true
     },
     {
@@ -59,7 +59,7 @@ const BOTS_DATA = [
         features: [true, true, true, true, true],
         image: "/images/maiko-cent.png",
         color: "from-slate-400 to-slate-600",
-        price: "Próximamente"
+        price: "100€ (Oferta)"
     },
     {
         id: "btc-storm",
