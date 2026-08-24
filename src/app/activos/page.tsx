@@ -15,7 +15,7 @@ const ASSETS = [
     name: "MAIKO SNIPER PRO GOLD 🏆", 
     desc: "Nuestro algoritmo de alta precisión en ORO (XAUUSD). Ejecución milimétrica de ondas institucionales y acción del precio optimizada.", 
     icon: "🟡",
-    stats: "M1/M5 | Price Action Avanzado",
+    stats: "M15 | Price Action Avanzado",
     color: "border-yellow-500/40 shadow-yellow-500/10",
     theme: "theme-gold",
     isUpcoming: false,

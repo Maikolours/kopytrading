@@ -5,28 +5,28 @@ import { useState, useRef, useEffect } from "react";
 const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     {
         keywords: ["hola", "hello", "buenas", "hey", "qué tal", "que tal", "saludos"],
-        response: `¡Hola! Soy KopyBot 🤖, el asistente experto de KopyTrading. Puedo ayudarte con consultas técnicas sobre nuestros algoritmos **MAIKO PRO GOLD**, **MAIKO CENT**, **MAIKO DEMO**, MetaTrader 5, VPS, brokers y gestión de riesgo. ¿En qué te puedo ayudar?`
+        response: `¡Hola! Soy KopyBot 🤖, el asistente experto de KopyTrading. Puedo ayudarte con consultas técnicas sobre nuestros algoritmos **MAIKO PRO GOLD** (en M15), **MAIKO CENT** (M15), **MAIKO DEMO** (M15), MetaTrader 5, VPS, brokers y gestión de riesgo. ¿En qué te puedo ayudar?`
     },
     {
         keywords: ["recomiendas", "recomienda", "empezar", "primer bot", "cuál compro", "cual compro", "para principiante", "soy nuevo", "nunca he", "novato", "recomendación", "mejor para"],
         response: `🏆 **Nuestra recomendación según tu perfil:**
 
-1. **Si quieres empezar con poco capital ($50 - $100)**: Te recomendamos **MAIKO SNIPER PRO GOLD CENT** ⚡. Opera en cuentas CENT de MetaTrader 5 con un riesgo extremadamente controlado y accesible.
+1. **Si quieres probar gratis sin arriesgar dinero hoy mismo**: Activa **MAIKO SNIPER PRO GOLD DEMO** 💜 por solo 1€ durante 30 días en cuenta DEMO de MT5 en gráfico de M15.
 
-2. **Si quieres probar gratis sin arriesgar dinero**: Activa **MAIKO SNIPER PRO GOLD DEMO** 💜 por solo 1€ durante 30 días en cuenta DEMO de MT5.
+2. **Si quieres empezar con poco capital en cuenta real ($50 - $100)**: **MAIKO SNIPER PRO GOLD CENT** ⚡ (Disponible a partir del 1 de Septiembre). Opera en cuentas CENT de MT5 en gráfico de M15.
 
-3. **Si vas a operar con cuenta Real estándar ($500 - $1.000)**: **MAIKO SNIPER PRO GOLD (REAL)** 🏆 es nuestro algoritmo estrella para XAUUSD en M5.
+3. **Si vas a operar con cuenta Real estándar ($500 - $1.000)**: **MAIKO SNIPER PRO GOLD (REAL)** 🏆 (Disponible a partir del 1 de Septiembre en M15).
 
-🔥 *¡Aprovecha la Oferta de Lanzamiento de Septiembre con 50% de DESCUENTO (100€ en vez de 200€)!*`
+🔥 *¡Reserva tu Oferta de Lanzamiento del 1 de Septiembre con 50% de DESCUENTO (100€ en vez de 200€)!*`
     },
     {
         keywords: ["cuándo abre", "cuando abre", "no opera", "operacion", "operación", "señal", "esperar", "cuánto tiempo", "cuanto tiempo", "no hace nada", "no abre nada", "lleva dias", "lleva días", "no mete", "cero operaciones", "ninguna operacion", "esperando"],
         response: `⏳ **¿Por qué el bot no abre operaciones en este momento?**
 
-Es 100% normal y correcto. Nuestros algoritmos MAIKO utilizan filtros muy estrictos (cruce institucional, mechas de rechazo, spread y control de volatilidad) antes de ejecutar:
+Es 100% normal y correcto. Nuestros algoritmos MAIKO (en gráfico M15) utilizan filtros muy estrictos (cruce de estructura M15, mechas de rechazo, spread y control de volatilidad) antes de ejecutar:
 
 • **Horario de Operativa**: El bot opera principalmente entre las **09:00 y las 19:00 (hora del broker)**. Fuera de ese horario pone 'FUERA HORARIO: ESPERANDO' para protegerte de la baja liquidez.
-• **Spread Alto**: Si el spread en el Oro sube por encima de lo permitido (o durante noticias de alto impacto), el bot esperará a que el mercado se calme.
+• **Confirmación M15**: El bot espera la confirmación del cierre de la vela de M15 antes de entrar. Si hay noticias de alto impacto o spread elevado en el Oro, esperará a que el mercado se calme.
 
 Ten paciencia, el algoritmo está protegiendo tu capital.`
     },
@@ -34,25 +34,26 @@ Ten paciencia, el algoritmo está protegiendo tu capital.`
         keywords: ["ametralladora", "xauusd", "oro", "gold", "maiko gold", "pro gold"],
         response: `🏆 **MAIKO SNIPER PRO GOLD (XAUUSD)** — El algoritmo estrella
 
-• Temporalidad: **M5** (Gráfico del Oro)
-• Estrategia: Scalping de alta frecuencia + Hedge Inteligente
+• Temporalidad: **M15** (Gráfico de 15 Minutos en el Oro)
+• Estrategia: Scalping de precisión institucional + Hedge Inteligente
 • Horario: 09h - 19h (hora broker)
 • Capital mínimo sugerido: $500 - $1.000 (0.01 lotes por cada 1.000$)
 • Riesgo: Controlado con Stop Loss de Equidad
 
-🔥 **Oferta Especial de Septiembre:** Adquiérelo por **100€** (50% de descuento sobre el precio regular de 200€) para las primeras 50 licencias.
+🚀 **Lanzamiento Oficial: 1 de Septiembre de 2026**
+🔥 **Oferta Especial:** **100€** (50% de descuento sobre el precio regular de 200€) para las primeras 50 licencias.
 
-🎁 **¿Quieres probarlo primero?** Activa la versión Demo por 1€ durante 30 días.`
+🎁 **¿Quieres probarlo hoy mismo?** Puedes activar ya la versión DEMO en M15 por 1€ durante 30 días.`
     },
     {
         keywords: ["cent", "micro", "bajo capital", "50$", "100$", "cuenta cent", "cuentas cent"],
         response: `⚡ **MAIKO SNIPER PRO GOLD CENT** — Ideal para bajos capitales
 
-• Diseñado específicamente para cuentas **Micro / CENT** en MetaTrader 5.
+• Diseñado específicamente para cuentas **Micro / CENT** en MetaTrader 5 (Gráfico de **M15**).
 • Te permite operar con **$50 a $100 reales**, ya que en la cuenta CENT $100 equivalen a 10.000 centavos.
-• Mantiene exactamente la misma lógica matemática del bot estrella MAIKO GOLD pero adaptado a la precisión de micro-lotes.
+• Mantiene exactamente la misma lógica matemática del bot estrella MAIKO GOLD adaptada a la precisión de micro-lotes.
 
-🔥 **Precio Promocional Septiembre:** **100€** (Antes 200€) con licencia vinculada a tu cuenta.`
+🚀 **Disponible a partir del 1 de Septiembre de 2026** por solo **100€** (Antes 200€).`
     },
     {
         keywords: ["bitcoin", "btc", "crypto", "cripto", "storm"],
@@ -67,16 +68,16 @@ Ideal para diversificar tu portafolio junto con el bot de Oro.`
     },
     {
         keywords: ["precio", "cuánto cuesta", "cuanto cuesta", "costo", "coste", "oferta", "descuento", "septiembre", "comprar", "pagar", "licencia", "pago"],
-        response: `💰 **Precios y Oferta Especial de Lanzamiento:**
+        response: `💰 **Precios y Lanzamiento el 1 de Septiembre:**
 
-🔥 **OFERTA DE SEPTIEMBRE (50% DE DESCUENTO):**
-• **MAIKO SNIPER PRO GOLD (REAL)**: **100€** *(Precio regular 200€)*
-• **MAIKO SNIPER PRO GOLD CENT**: **100€** *(Precio regular 200€)*
+🚀 **LANZAMIENTO OFICIAL (1 DE SEPTIEMBRE) CON -50% DESCUENTO:**
+• **MAIKO SNIPER PRO GOLD (REAL)**: **100€** *(Precio regular 200€ - Disponible 1 Sept)*
+• **MAIKO SNIPER PRO GOLD CENT**: **100€** *(Precio regular 200€ - Disponible 1 Sept)*
 
-💜 **VERSIÓN DEMO:**
-• **MAIKO PRO GOLD DEMO**: **1€** por **30 días de prueba** en cuenta DEMO de MT5.
+💜 **DISPONIBLE HOY MISMO EN PRUEBA:**
+• **MAIKO PRO GOLD DEMO**: **1€** por **30 días de prueba** en cuenta DEMO de MT5 (en gráfico M15).
 
-Las licencias incluyen soporte técnico, guías PDF y **todas las actualizaciones futuras 100% gratuitas** desde tu panel.`
+Las licencias de venta oficial se abren el 1 de Septiembre e incluirán soporte técnico, guías PDF y **actualizaciones futuras 100% gratuitas** desde tu panel.`
     },
     {
         keywords: ["vps", "servidor", "cloud", "siempre encendido", "apago el ordenador", "se apaga", "nube", "contabo", "hosting", "computadora", "vps servidor"],
@@ -90,7 +91,7 @@ Las licencias incluyen soporte técnico, guías PDF y **todas las actualizacione
         keywords: ["broker", "vantage", "vtmarkets", "pepperstone", "ic markets", "dónde", "donde", "qué broker", "que broker", "mt5 broker", "brokers"],
         response: `🏦 **Brokers 100% Compatibles con KopyTrading:**
 
-• **Vantage Markets**: Excelente ejecución ECN para Oro y Cuentas CENT.
+• **Vantage Markets**: Excelente ejecución ECN para Oro (M15) y Cuentas CENT.
 • **VT Markets**: Muy recomendado para cuentas CENT y estándar.
 • **Pepperstone**: Latencia hiperbaja y regulación oficial.
 • **IC Markets**: Ideal para cuentas ECN/RAW.
@@ -103,8 +104,8 @@ Las licencias incluyen soporte técnico, guías PDF y **todas las actualizacione
 
 El bot está encriptado y se vincula directamente a tu número de Cuenta MetaTrader 5.
 
-1. Al comprar o activar la demo, introduce tu Nº de Cuenta MT5 en tu panel de usuario.
-2. En MT5, al arrastrar el bot al gráfico, pon tu número en el parámetro **'MiLicencia'**.
+1. Al activar la demo o comprar (a partir del 1 de Septiembre), introduce tu Nº de Cuenta MT5 en tu panel.
+2. En MT5, al arrastrar el bot al gráfico M15, pon tu número en el parámetro **'MiLicencia'**.
 3. El algoritmo conectará con nuestra API en tiempo real y mostrará **'LICENCIA: ACTIVA'** en el HUD.`
     },
     {
@@ -114,18 +115,18 @@ El bot está encriptado y se vincula directamente a tu número de Cuenta MetaTra
 1. En MT5: Menú **Archivo** → **Abrir carpeta de datos**.
 2. Entra en \`MQL5\` → \`Experts\` y pega allí el archivo \`.ex5\` descargado.
 3. Activa el botón **'Algo Trading'** en la barra superior de MT5 (icono con Play verde ▶️).
-4. Abre el gráfico de **XAUUSD en M5**.
+4. Abre el gráfico de **XAUUSD en M15** (15 Minutos).
 5. Arrastra el bot al gráfico, introduce tu número de cuenta en 'MiLicencia' y pulsa Aceptar.
 
 ¡El panel de control (HUD) de MAIKO aparecerá en tu pantalla!`
     },
     {
         keywords: ["gratis", "demo", "trial", "mes gratis", "free", "prueba", "30 dias", "30 días", "trial 30"],
-        response: `💜 **Prueba MAIKO PRO GOLD DEMO por 30 Días:**
+        response: `💜 **Prueba MAIKO PRO GOLD DEMO en M15 hoy mismo:**
 
-Puedo probar la versión de prueba durante **30 días por solo 1€** en cualquier cuenta DEMO de MetaTrader 5.
+Puedes probar la versión de prueba durante **30 días por solo 1€** en cualquier cuenta DEMO de MetaTrader 5 en gráfico de **M15**.
 
-Es 100% idéntica en precisión al algoritmo real. Podrás comprobar su rendimiento sin arriesgar capital real.
+Es 100% idéntica en precisión al algoritmo real. Podrás comprobar su rendimiento sin arriesgar capital real antes del lanzamiento oficial del 1 de Septiembre.
 
 🔗 [Activar Demo en el Catálogo](/bots)`
     },
@@ -140,8 +141,8 @@ Aceptamos pagos mediante **PayPal Express** y tarjeta de crédito/débito a trav
         response: `🔧 **Solución a Problemas Frecuentes:**
 
 1. **'Cuenta No Autorizada / Licencia Inválida'**: Revisa que tu número de cuenta MT5 coincida exactamente en el Dashboard y en el parámetro 'MiLicencia' (sin espacios).
-2. **'AlgoTrading Deshabilitado'**: Haz clic en el botón 'Algo Trading' arriba en MT5 (debe mostrar un cuadrado rojo/verde activo).
-3. **'No abre operaciones'**: Verifica si estás en horario operativo (09:00 a 19:00 broker) y que el mercado del Oro esté abierto.`
+2. **'AlgoTrading Deshabilitado'**: Haz clic en el botón 'Algo Trading' arriba en MT5 (debe mostrar un cuadrado verde activo).
+3. **'No abre operaciones'**: Verifica si estás en la gráfica de **XAUUSD M15**, si estás en horario operativo (09:00 a 19:00 broker) y que el mercado del Oro esté abierto.`
     },
     {
         keywords: ["qué es kopytrading", "quiénes sois", "sobre vosotros", "la empresa", "kopytrading", "quienes somos"],

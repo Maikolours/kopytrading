@@ -2,54 +2,49 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("Actualizando productos en base de datos para la promoción de Lanzamiento de Septiembre (-50%)...");
+  console.log("Actualizando productos para Lanzamiento el 1 de Septiembre (M15)...");
 
-  // 1. Bot Gold Real (MAIKO PRO GOLD REAL) -> Habilitar compra, Precio 100€ (Tachado 200€)
+  // 1. Bot Gold Real -> Estado UPCOMING (Lanzamiento 1 Septiembre), M15, 100€ (Tachado 200€)
   const goldReal = await prisma.botProduct.update({
     where: { id: "cmn9hf9440001vhbclffx9no6" },
     data: {
       name: "MAIKO SNIPER PRO GOLD (REAL) 🏆",
       price: 100.00,
       originalPrice: 200.00,
-      status: "ACTIVE",
+      status: "UPCOMING",
       isActive: true,
-      description: "Nuestra versión estrella oficial para operar con dinero real en MetaTrader 5 (XAUUSD). Algoritmo de alta frecuencia con gestión de riesgo institucional. ¡Promoción especial de lanzamiento en Septiembre! Solo 100€ (50% de descuento sobre el precio regular de 200€) para los primeros compradores."
+      timeframes: "M15",
+      description: "Nuestra versión estrella oficial para operar con dinero real en MetaTrader 5 (XAUUSD en M15). Algoritmo de alta frecuencia con gestión de riesgo institucional. ¡Promoción de lanzamiento disponible a partir del 1 de Septiembre! Solo 100€ (50% de descuento sobre el precio regular de 200€) para las primeras 50 licencias."
     }
   });
-  console.log(`✅ Gold Real actualizado: ${goldReal.name} | Precio: ${goldReal.price}€ (Original: ${goldReal.originalPrice}€) | Estado: ${goldReal.status}`);
+  console.log(`✅ Gold Real actualizado: ${goldReal.name} | Estado: ${goldReal.status} | TF: ${goldReal.timeframes}`);
 
-  // 2. Bot Cent Real (MAIKO SNIPER PRO GOLD CENT) -> Habilitar compra, Precio 100€ (Tachado 200€)
+  // 2. Bot Cent Real -> Estado UPCOMING (Lanzamiento 1 Septiembre), M15, 100€ (Tachado 200€)
   const centReal = await prisma.botProduct.update({
     where: { id: "cmn9hf9800002vhbc5rky6dx8" },
     data: {
       name: "MAIKO SNIPER PRO GOLD CENT ⚡",
       price: 100.00,
       originalPrice: 200.00,
-      status: "ACTIVE",
+      status: "UPCOMING",
       isActive: true,
-      description: "Diseñado especialmente para cuentas Micro / CENT en MetaTrader 5. Ideal para operar con bajo capital inicial (desde $50) manteniendo una gestión de riesgo súper conservadora. ¡Oferta de lanzamiento en Septiembre! Adquiérelo por solo 100€ (Antes 200€)."
+      timeframes: "M15",
+      description: "Diseñado especialmente para cuentas Micro / CENT en MetaTrader 5 (XAUUSD en M15). Ideal para operar con bajo capital inicial (desde $50) manteniendo una gestión de riesgo súper conservadora. Disponible para adquisición a partir del 1 de Septiembre por solo 100€ (Antes 200€)."
     }
   });
-  console.log(`✅ Cent Real actualizado: ${centReal.name} | Precio: ${centReal.price}€ (Original: ${centReal.originalPrice}€) | Estado: ${centReal.status}`);
+  console.log(`✅ Cent Real actualizado: ${centReal.name} | Estado: ${centReal.status} | TF: ${centReal.timeframes}`);
 
-  // 3. Asegurar rutas de descarga apuntando a los .ex5 compilados protegidos
-  await prisma.botProduct.update({
-    where: { id: "cmn9hf9440001vhbclffx9no6" },
+  // 3. Bot Demo -> Estado ACTIVE, M15
+  const goldDemo = await prisma.botProduct.update({
+    where: { id: "cmn9hf8yc0000vhbcq9hbxk0j" },
     data: {
-      ex5FilePath: "/uploads/bots/Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_REAL.ex5",
-      pdfFilePath: "/uploads/Manual_Ametralladora.pdf"
+      timeframes: "M15",
+      description: "Prueba nuestro bot estrella MAIKO SNIPER PRO GOLD durante 30 días en tu cuenta demo de MetaTrader 5 en gráfico de M15. Esta versión de prueba es 100% idéntica al algoritmo real en funcionalidad y precisión."
     }
   });
+  console.log(`✅ Gold Demo actualizado: ${goldDemo.name} | Estado: ${goldDemo.status} | TF: ${goldDemo.timeframes}`);
 
-  await prisma.botProduct.update({
-    where: { id: "cmn9hf9800002vhbc5rky6dx8" },
-    data: {
-      ex5FilePath: "/uploads/bots/Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO_CENT.ex5",
-      pdfFilePath: "/uploads/Manual_Ametralladora.pdf"
-    }
-  });
-
-  console.log("🎉 ¡Base de datos de productos actualizada con éxito!");
+  console.log("🎉 ¡Base de datos de productos actualizada exitosamente!");
 }
 
 main()

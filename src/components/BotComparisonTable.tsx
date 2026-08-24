@@ -8,7 +8,7 @@ const BOTS_DATA = [
         id: "demo-gold",
         name: "MAIKO PRO GOLD DEMO",
         pair: "XAU/USD",
-        timeframe: "M5",
+        timeframe: "M15",
         risk: "Bajo",
         minCapital: "$1,000",
         frequency: "Alta (Scalping)",
@@ -22,7 +22,7 @@ const BOTS_DATA = [
         id: "ufvg-demo",
         name: "MAIKO UFVG DEMO",
         pair: "XAU/USD",
-        timeframe: "M5",
+        timeframe: "M15",
         risk: "Medio",
         minCapital: "N/A",
         frequency: "Media (OR FVG)",
@@ -36,7 +36,7 @@ const BOTS_DATA = [
         id: "ametralladora",
         name: "MAIKO PRO GOLD",
         pair: "XAU/USD",
-        timeframe: "M5",
+        timeframe: "M15",
         risk: "Medio",
         minCapital: "$1,000",
         frequency: "Alta (Scalping)",
@@ -44,14 +44,14 @@ const BOTS_DATA = [
         features: [true, true, true, true, true],
         image: "/images/maiko-gold.png",
         color: "from-amber-400 to-amber-600",
-        price: "100€ (Oferta)",
+        price: "100€ (1 Sept)",
         popular: true
     },
     {
         id: "pro-cent",
         name: "MAIKO PRO CENT",
         pair: "CENT",
-        timeframe: "M5",
+        timeframe: "M15",
         risk: "Bajo",
         minCapital: "$100",
         frequency: "Media",
@@ -59,7 +59,7 @@ const BOTS_DATA = [
         features: [true, true, true, true, true],
         image: "/images/maiko-cent.png",
         color: "from-slate-400 to-slate-600",
-        price: "100€ (Oferta)"
+        price: "100€ (1 Sept)"
     },
     {
         id: "btc-storm",
