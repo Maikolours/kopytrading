@@ -67,21 +67,21 @@ export default function Home() {
                 
                 <div className="flex-1 text-center md:text-left z-10">
                   <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest mb-2">
-                    ⚡ PRE-VENTA EXCLUSIVA SEPTIEMBRE
+                    ⚡ PRE-VENTA LANZAMIENTO 1 SEPTIEMBRE
                   </div>
                   <h3 className="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tighter mb-2">
-                    ¡OFERTA DE LANZAMIENTO: <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500">50% DESCUENTO</span>!
+                    OFERTA DE LANZAMIENTO: <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500">50% DESCUENTO</span>
                   </h3>
                   <p className="text-text-muted leading-relaxed max-w-2xl text-sm">
-                    Consigue tu bot <span className="text-amber-400 font-bold">MAIKO PRO GOLD (REAL)</span> o <span className="text-slate-300 font-bold">MAIKO CENT</span> por solo <strong className="text-white text-base">100€</strong> <span className="line-through text-white/40 text-xs">(Antes 200€)</span>. 
-                    <span className="text-amber-300 font-bold"> ¡Solo para los primeros 50 compradores este mes de Septiembre!</span>
+                    Pre-reserva tu bot <span className="text-amber-400 font-bold">MAIKO PRO GOLD REAL</span> o <span className="text-slate-300 font-bold">MAIKO PRO GOLD CENT</span> por solo <strong className="text-white text-base">100€</strong> <span className="line-through text-white/40 text-xs">(Antes 200€)</span>. 
+                    <span className="text-amber-300 font-bold"> Próximo lanzamiento oficial el 1 de Septiembre.</span>
                   </p>
                 </div>
                 
                 <div className="flex-shrink-0 z-10 w-full md:w-auto">
                   <Link href="/bots">
                     <Button variant="accent" className="w-full md:w-auto bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black px-8 py-6 h-auto font-black uppercase tracking-widest text-xs shadow-xl shadow-amber-500/20 border-none">
-                      Ver Ofertas 100€ →
+                      Ver Oferta 100€ →
                     </Button>
                   </Link>
                 </div>
@@ -99,12 +99,12 @@ export default function Home() {
               <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-tight uppercase italic break-words">
                 Trading <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-accent">
-                   Inteligente
+                   Algorítmico M15
                 </span>
               </h1>
 
               <p className="text-lg sm:text-xl text-text-muted max-w-xl mx-auto lg:mx-0 font-light leading-relaxed">
-                Algoritmos de alta precisión para MetaTrader 5. Diseñados por traders para traders.
+                Algoritmos cuantitativos de alta precisión para MetaTrader 5. Gestión de riesgo blindada y control de drawdown automatizado.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
@@ -121,8 +121,9 @@ export default function Home() {
               {/* Stats */}
               <div className="pt-8 flex flex-wrap justify-center lg:justify-start gap-10 border-t border-white/5">
                 {[
-                  { val: "1", label: "Bot Activo" },
-                  { val: "$500", label: "Capital Mínimo" },
+                  { val: "3", label: "Algoritmos Maiko" },
+                  { val: "$50", label: "Capital Mínimo CENT" },
+                  { val: "M15", label: "Gráfico Oficial Oro" },
                 ].map((s, i) => (
                   <div key={i}>
                     <p className="text-3xl font-black text-white">{s.val}</p>
@@ -141,32 +142,32 @@ export default function Home() {
                  <div className="space-y-6">
                     <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-end gap-2 sm:gap-0">
                        <div className="space-y-1">
-                          <div className="text-[10px] text-brand-light font-black uppercase tracking-[0.3em]">Live Performance</div>
-                          <div className="text-4xl font-black text-white italic tracking-tighter uppercase">XAUUSD</div>
+                          <div className="text-[10px] text-brand-light font-black uppercase tracking-[0.3em]">Auditoría Algorítmica</div>
+                          <div className="text-4xl font-black text-white italic tracking-tighter uppercase">XAUUSD M15</div>
                        </div>
                        <div className="sm:text-right">
-                          <div className="text-success font-black text-2xl tracking-tighter">+42.5%</div>
-                          <div className="text-[10px] text-text-muted uppercase font-bold tracking-widest">Este Mes</div>
+                          <div className="text-success font-black text-2xl tracking-tighter">100% MT5</div>
+                          <div className="text-[10px] text-text-muted uppercase font-bold tracking-widest">Nativo .EX5</div>
                        </div>
                     </div>
                     
                     <div className="relative h-2 bg-white/5 rounded-full overflow-hidden">
-                       <div className="absolute top-0 left-0 h-full bg-brand w-[75%] shadow-[0_0_15px_rgba(139,92,246,0.8)]" />
+                       <div className="absolute top-0 left-0 h-full bg-brand w-[85%] shadow-[0_0_15px_rgba(139,92,246,0.8)]" />
                     </div>
                     
                     <div className="grid grid-cols-2 gap-4">
                        <div className="bg-white/[0.03] border border-white/5 p-4 rounded-3xl hover:bg-white/10 transition-colors group/item">
                           <div className="text-[10px] text-white/30 uppercase font-black tracking-widest mb-1 group-hover/item:text-brand-light transition-colors">Estrategia</div>
-                          <div className="text-sm font-bold text-white uppercase italic">Scalping HFT</div>
+                          <div className="text-sm font-bold text-white uppercase italic">Scalping M15</div>
                        </div>
                        <div className="bg-white/[0.03] border border-white/5 p-4 rounded-3xl hover:bg-white/10 transition-colors group/item">
                           <div className="text-[10px] text-white/30 uppercase font-black tracking-widest mb-1 group-hover/item:text-success transition-colors">Riesgo</div>
-                          <div className="text-sm font-bold text-success uppercase italic">Controlado</div>
+                          <div className="text-sm font-bold text-success uppercase italic">SL Equidad</div>
                        </div>
                     </div>
                     
                     <Link href="/bots" className="relative group/btn block text-center bg-white/5 hover:bg-brand py-5 rounded-3xl transition-all duration-500 font-black text-[10px] uppercase tracking-[0.2em] border border-white/10 hover:border-brand shadow-xl">
-                       <span className="relative z-10 text-white">Ver Próximos Lanzamientos →</span>
+                       <span className="relative z-10 text-white">Ver Lanzamiento 1 de Septiembre →</span>
                     </Link>
                  </div>
               </div>

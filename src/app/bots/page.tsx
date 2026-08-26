@@ -151,23 +151,24 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                         const colors = getBotAccent(bot);
                         const isUpcoming = bot.status === 'UPCOMING' || bot.status === 'MAINTENANCE';
                         const isDemo = bot.name.includes('DEMO');
+                        const isOfficialPromo = bot.id === GOLD_REAL_ID || bot.id === "cmn9hf9800002vhbc5rky6dx8" || bot.name.includes('REAL') || bot.name.includes('CENT');
 
                         const cardBg = isDemo ? 'bg-purple-900/20' : 'bg-white/[0.03]';
 
                         return (
-                             <Card key={bot.id} interactive className={`flex flex-col h-full transition-all duration-700 overflow-hidden group relative rounded-[2rem] border ${cardBg} border-white/10 hover:border-brand-light/50 hover:shadow-[0_20px_50px_rgba(168,85,247,0.15)] shadow-[0_20px_60px_rgba(0,0,0,0.6)] ${isUpcoming ? 'opacity-60 hover:opacity-100' : 'opacity-100 shadow-[0_0_40px_rgba(168,85,247,0.2)] border-brand/40'}`}>
+                             <Card key={bot.id} interactive className={`flex flex-col h-full transition-all duration-700 overflow-hidden group relative rounded-[2rem] border ${cardBg} border-white/10 hover:border-brand-light/50 hover:shadow-[0_20px_50px_rgba(168,85,247,0.15)] shadow-[0_20px_60px_rgba(0,0,0,0.6)] ${isUpcoming ? 'opacity-70 hover:opacity-100' : 'opacity-100 shadow-[0_0_40px_rgba(168,85,247,0.2)] border-brand/40'}`}>
 
-                                 {/* Upcoming overlay */}
+                                 {/* Status overlay */}
                                  {isUpcoming && (
                                      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20">
-                                         <span className="bg-brand/20 border border-brand/50 text-brand-light text-[8px] font-black px-3 py-1 rounded-full tracking-[0.15em] uppercase shadow-[0_0_20px_rgba(168,85,247,0.3)] whitespace-nowrap">
-                                         ⚡ {bot.status === 'MAINTENANCE' ? 'MANTENIMIENTO' : 'PRÓXIMAMENTE'}
+                                         <span className={`border text-[8px] font-black px-3 py-1 rounded-full tracking-[0.15em] uppercase whitespace-nowrap ${isOfficialPromo ? 'bg-brand/20 border-brand/50 text-brand-light shadow-[0_0_20px_rgba(168,85,247,0.3)]' : 'bg-amber-500/10 border-amber-500/30 text-amber-300'}`}>
+                                             {isOfficialPromo ? '⚡ LANZAMIENTO 1 SEPTIEMBRE' : '🛠️ EN DESARROLLO'}
                                          </span>
                                      </div>
                                  )}
 
                                  {/* Ribbon Lanzamiento */}
-                                 {!isDemo && bot.id === GOLD_REAL_ID && (
+                                 {!isDemo && isOfficialPromo && (
                                      <div className="absolute top-7 -left-12 -rotate-45 w-48 text-center bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 text-black py-1 shadow-[0_0_20px_rgba(245,158,11,0.4)] z-30 flex flex-col leading-tight border-y border-yellow-200">
                                          <span className="text-[11px] font-black tracking-widest uppercase mt-0.5">Lanzamiento</span>
                                          <span className="text-[9px] font-black tracking-[0.2em] uppercase mb-0.5 opacity-90">SEPT 2026</span>
@@ -185,7 +186,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                     <div className="flex justify-between items-start mb-3 relative z-10">
                                         <div className="flex flex-col gap-2 min-w-0 pr-2">
                                             {/* Promoción MAIKO PRO GOLD REAL */}
-                                            {!isDemo && bot.id === GOLD_REAL_ID && (
+                                            {!isDemo && isOfficialPromo && (
                                                 <div className="flex flex-col gap-1 items-start mb-1">
                                                     <span className="bg-gradient-to-r from-brand to-purple-600 text-white text-[8px] font-black px-2.5 py-1 rounded-md tracking-widest uppercase shadow-[0_0_10px_rgba(168,85,247,0.4)] border border-brand-light/30">
                                                         🎁 50 PRIMERAS: VITALICIO
@@ -233,10 +234,12 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                         {/* Mini chart */}
                                         <div className="pt-1">
                                             <div className="flex justify-between items-center mb-2">
-                                                <span className="text-[8px] uppercase tracking-[0.3em] font-black text-white/20 italic">Previsión Alpha</span>
+                                                <span className="text-[8px] uppercase tracking-[0.3em] font-black text-white/20 italic">Estado Algoritmo</span>
                                                 <span className="flex items-center gap-1">
-                                                    <div className="w-1 h-1 rounded-full bg-success animate-ping" />
-                                                    <span className="text-[8px] text-success font-black tracking-widest uppercase">Live</span>
+                                                    <div className={`w-1 h-1 rounded-full ${isOfficialPromo || isDemo ? 'bg-success animate-ping' : 'bg-amber-400'}`} />
+                                                    <span className={`text-[8px] font-black tracking-widest uppercase ${isOfficialPromo || isDemo ? 'text-success' : 'text-amber-400'}`}>
+                                                        {isDemo ? 'Live Demo' : isOfficialPromo ? 'Auditado' : 'Fase Pruebas'}
+                                                    </span>
                                                 </span>
                                             </div>
                                             <div className="h-10 flex items-end gap-1 w-full">
@@ -271,16 +274,16 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                                 </Button>
                                             </Link>
                                         </>
-                                    ) : (
-                                        /* Bots comerciales en Lanzamiento (1 Septiembre): Oferta 100€ (Tachado 200€) + Botón Preventa */
+                                    ) : isOfficialPromo ? (
+                                        /* Bots comerciales oficiales en Lanzamiento (1 Septiembre): Oferta 100€ (Tachado 200€) + Botón Preventa */
                                         <>
                                             <div className="text-center">
                                                 <div className="flex items-baseline justify-center gap-2 mb-0.5">
                                                     <span className="text-sm font-bold line-through text-white/40">
-                                                        {bot.originalPrice ? `${bot.originalPrice}€` : '200€'}
+                                                        200€
                                                     </span>
                                                     <span className="text-3xl font-black tracking-tighter italic text-amber-400">
-                                                        {bot.price ? `${bot.price}€` : '100€'}
+                                                        100€
                                                     </span>
                                                 </div>
                                                 <div className="inline-flex items-center gap-1 text-[7px] bg-amber-500/20 text-amber-300 font-black tracking-[0.15em] px-2 py-0.5 rounded-full uppercase border border-amber-500/30">
@@ -292,6 +295,18 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                                     Disponible 1 de Septiembre 🚀
                                                 </Button>
                                             </Link>
+                                        </>
+                                    ) : (
+                                        /* Bots en Desarrollo: Sin precios engañosos */
+                                        <>
+                                            <div className="text-center py-1">
+                                                <span className="text-sm font-black text-white/40 uppercase tracking-widest italic">
+                                                    En Desarrollo
+                                                </span>
+                                            </div>
+                                            <Button disabled size="sm" className="w-full font-black uppercase tracking-[0.12em] text-[9px] h-10 rounded-xl bg-white/[0.03] text-white/30 border border-white/10 opacity-50 cursor-not-allowed">
+                                                En Desarrollo 🛠️
+                                            </Button>
                                         </>
                                     )}
                                 </CardFooter>

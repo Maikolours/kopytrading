@@ -19,22 +19,8 @@ const BOTS_DATA = [
         price: "1€"
     },
     {
-        id: "ufvg-demo",
-        name: "MAIKO UFVG DEMO",
-        pair: "XAU/USD",
-        timeframe: "M15",
-        risk: "Medio",
-        minCapital: "N/A",
-        frequency: "Media (OR FVG)",
-        amortization: "Demo 30 Días",
-        features: [true, true, true, true, true],
-        image: "/images/maiko-ufvg-demo.png",
-        color: "from-purple-400 to-purple-600",
-        price: "Próximamente"
-    },
-    {
         id: "ametralladora",
-        name: "MAIKO PRO GOLD",
+        name: "MAIKO PRO GOLD REAL",
         pair: "XAU/USD",
         timeframe: "M15",
         risk: "Medio",
@@ -49,11 +35,11 @@ const BOTS_DATA = [
     },
     {
         id: "pro-cent",
-        name: "MAIKO PRO CENT",
+        name: "MAIKO PRO GOLD CENT",
         pair: "CENT",
         timeframe: "M15",
         risk: "Bajo",
-        minCapital: "$100",
+        minCapital: "$50",
         frequency: "Media",
         amortization: "~ 8 semanas",
         features: [true, true, true, true, true],
@@ -62,18 +48,32 @@ const BOTS_DATA = [
         price: "100€ (1 Sept)"
     },
     {
+        id: "ufvg-demo",
+        name: "MAIKO UFVG",
+        pair: "XAU/USD",
+        timeframe: "M15",
+        risk: "Medio",
+        minCapital: "N/A",
+        frequency: "Media (OR FVG)",
+        amortization: "En Desarrollo",
+        features: [true, true, true, true, true],
+        image: "/images/maiko-ufvg-demo.png",
+        color: "from-purple-400 to-purple-600",
+        price: "En Desarrollo"
+    },
+    {
         id: "btc-storm",
         name: "MAIKO PRO BTC",
         pair: "BTC/USD",
         timeframe: "M30-H1",
         risk: "Alto",
         minCapital: "$2,000",
-        frequency: "Breakout (IA)",
-        amortization: "~ 4 semanas",
+        frequency: "Breakout",
+        amortization: "En Desarrollo",
         features: [true, true, true, true, true],
         image: "/images/maiko-btc.png",
         color: "from-orange-400 to-orange-600",
-        price: "Próximamente"
+        price: "En Desarrollo"
     },
     {
         id: "euro-precision",
@@ -83,11 +83,11 @@ const BOTS_DATA = [
         risk: "Bajo",
         minCapital: "$500",
         frequency: "Baja (1-3 / sem)",
-        amortization: "~ 6 semanas",
+        amortization: "En Desarrollo",
         features: [true, true, true, true, true],
         image: "/images/maiko-euro.png",
         color: "from-blue-500 to-cyan-500",
-        price: "En fabricación"
+        price: "En Desarrollo"
     },
     {
         id: "ninja-yen",
@@ -97,11 +97,11 @@ const BOTS_DATA = [
         risk: "Medio",
         minCapital: "$500",
         frequency: "Media (Noche)",
-        amortization: "~ 4 semanas",
+        amortization: "En Desarrollo",
         features: [true, true, true, true, true],
         image: "/images/maiko-yen.png",
         color: "from-purple-500 to-indigo-500",
-        price: "En fabricación"
+        price: "En Desarrollo"
     }
 ];
 
