@@ -7,8 +7,11 @@ import { Card, CardContent, CardTitle, CardHeader, CardFooter } from "@/componen
 import { Button } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
-  title: "Maiko Algorithms | KopyTrading",
-  description: "Algoritmos de alta precisión para MetaTrader 5. Diseñados por traders para traders.",
+  title: "Maiko Algorithms | Marketplace de Bots de Trading MT5",
+  description: "Catálogo oficial de algoritmos cuantitativos para MetaTrader 5: MAIKO PRO GOLD REAL, MAIKO PRO GOLD CENT y MAIKO PRO GOLD DEMO. Alta precisión en gráfico M15.",
+  alternates: {
+    canonical: "https://www.kopytrading.com/bots",
+  },
 };
 
 export const dynamic = "force-dynamic";

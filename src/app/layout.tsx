@@ -16,6 +16,7 @@ import type { Metadata } from "next";
 const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.kopytrading.com"),
   title: {
     default: "KopyTrading | Bots de Trading Avanzados para MT5",
     template: "%s | KopyTrading"
@@ -25,6 +26,20 @@ export const metadata: Metadata = {
   authors: [{ name: "KopyTrading Team" }],
   creator: "KopyTrading",
   publisher: "KopyTrading",
+  alternates: {
+    canonical: "https://www.kopytrading.com",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   formatDetection: {
     email: false,
     address: false,
@@ -33,7 +48,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_ES",
-    url: "https://kopytrading.com",
+    url: "https://www.kopytrading.com",
     siteName: "KopyTrading",
     title: "KopyTrading | Bots de Trading de Alta Precisión",
     description: "Consigue rentabilidad algorítmica con nuestros bots especializados para MT5. Oro, BTC y más.",
@@ -100,20 +115,36 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@graph": [
                 {
-                  "@type": "WebSite",
+                  "@type": "Organization",
+                  "@id": "https://www.kopytrading.com/#organization",
                   "name": "KopyTrading",
                   "url": "https://www.kopytrading.com",
-                  "description": "Automatiza tu trading en MetaTrader 5 con nuestros bots de alta precisión."
+                  "logo": "https://www.kopytrading.com/logo-kopytrading.png",
+                  "sameAs": [
+                    "https://t.me/Kpytrading",
+                    "https://www.facebook.com/profile.php?id=61591397057399"
+                  ],
+                  "description": "Plataforma de software algorítmico y bots cuantitativos para MetaTrader 5."
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://www.kopytrading.com/#website",
+                  "name": "KopyTrading",
+                  "url": "https://www.kopytrading.com",
+                  "description": "Automatiza tu trading en MetaTrader 5 con nuestros bots de alta precisión.",
+                  "publisher": {
+                    "@id": "https://www.kopytrading.com/#organization"
+                  }
                 },
                 {
                   "@type": "SoftwareApplication",
-                  "name": "KopyTrading Bots",
+                  "name": "MAIKO PRO GOLD Engine",
                   "applicationCategory": "FinanceApplication",
                   "operatingSystem": "Windows (MT5)",
                   "offers": {
                     "@type": "Offer",
-                    "price": "0",
-                    "priceCurrency": "USD"
+                    "price": "100",
+                    "priceCurrency": "EUR"
                   }
                 }
               ]
