@@ -171,6 +171,18 @@ Tú puedes ajustar cómodamente desde la ventana \`F7\`:
 • **Lotaje Inicial** (recomendamos 0.01 por cada 1.000$ o 100$ cent)`
     },
     {
+        keywords: ["control remoto", "movil", "móvil", "apagar desde el movil", "cobrar y apagar", "cerrar todo", "stop all", "tarda", "segundos", "minutos", "cerrar operaciones"],
+        response: `📱 **Control Remoto desde Móvil / Tablet:**
+
+¡Puedes controlar tu bot a distancia desde cualquier teléfono o tablet!
+
+1. Entra a **[kopytrading.com/dashboard](https://www.kopytrading.com/dashboard)** en tu móvil.
+2. Usa los botones de emergencia: **'Cobrar y Apagar'**, **'Stop All'** o **'Encender Bot'**.
+
+⏱️ **¿Cuánto tarda en ejecutarse la orden de cierre?**
+La orden se envía al instante a nuestro servidor. Tu MetaTrader 5 (en tu PC o VPS) consulta el servidor en **ciclos de seguridad de entre 15 y 30 segundos**. Por lo tanto, las operaciones se cerrarán en tu MT5 en unos pocos segundos (máximo 30 segundos según la conexión de tu VPS/broker).`
+    },
+    {
         keywords: ["actualización", "update", "versión nueva", "version", "upgrade", "descargar version"],
         response: `🔄 **Actualizaciones 100% Gratuitas:**
 

@@ -20,8 +20,12 @@ const FAQS = [
                 a: "Si apagas el MetaTrader con operaciones vivas en el mercado, el bot se 'queda ciego'. Ya no podrá gestionar esas posiciones (aplicar Break Even, Trailing Stop o cerrarlas en beneficio). Las operaciones seguirán abiertas en el broker hasta que lleguen a su Stop Loss o Take Profit original. Recomendamos encarecidamente el uso de un VPS para evitar esto."
             },
             {
-                q: "¿Puedo controlar el bot desde el móvil?",
-                a: "Desde la app de MT5 en tu móvil puedes VER y CERRAR posiciones manualmente. Sin embargo, el botón para encender/apagar el AutoTrading del bot NO existe en la aplicación móvil. Para arrancar o detener el bot en seco, necesitas estar delante de un ordenador (PC o Mac)."
+                q: "¿Puedo controlar el bot desde el móvil o tablet?",
+                a: "¡Sí! Con la plataforma de KopyTrading puedes controlar tu bot desde tu teléfono móvil o tablet entrando a tu panel de usuario en kopytrading.com/dashboard. Desde ahí puedes usar los botones de emergencia 'Cobrar y Apagar', 'Stop All' o 'Encender Bot' sin importar dónde estés."
+            },
+            {
+                q: "¿Cuánto tardan en ejecutarse las órdenes remotas (Cerrar o Apagar) desde el móvil?",
+                a: "Al pulsar un botón remoto desde tu móvil o tablet (como 'Cobrar y Apagar' o 'Stop All'), la orden se envía instantáneamente a nuestro servidor. MetaTrader 5 en tu PC o VPS consulta el servidor en ciclos de seguridad de entre 15 y 30 segundos. Por lo tanto, la orden se ejecuta en tu MetaTrader 5 en un plazo de unos segundos hasta un máximo de medio minuto."
             },
         ]
     },
