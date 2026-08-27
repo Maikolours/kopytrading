@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Script from "next/script";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/Button";
 import { getServerSession } from "next-auth/next";
@@ -19,10 +20,36 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
             description: "El algoritmo solicitado no existe o no está disponible."
         };
     }
+
+    const url = `https://www.kopytrading.com/bots/${id}`;
+    const imageUrl = bot.imageUrl ? `https://www.kopytrading.com${bot.imageUrl}` : "https://www.kopytrading.com/og-image.png";
+
     return {
         title: `${bot.name} | Expert Advisor MT5`,
         description: `${bot.description} Algoritmo optimizado para ${bot.instrument} utilizando estrategia de ${bot.strategyType}.`,
         keywords: [bot.name, bot.instrument, bot.strategyType, "expert advisor mt5", "trading automático"],
+        alternates: {
+            canonical: url,
+        },
+        openGraph: {
+            title: `${bot.name} | Bot de Trading MT5`,
+            description: bot.description,
+            url: url,
+            siteName: "KopyTrading",
+            type: "website",
+            images: [
+                {
+                    url: imageUrl,
+                    alt: bot.name,
+                }
+            ],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: `${bot.name} | Bot de Trading MT5`,
+            description: bot.description,
+            images: [imageUrl],
+        }
     };
 }
 
@@ -89,8 +116,30 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
 
     const isDemo = bot.id === GOLD_DEMO_BOT_ID;
 
+    const productUrl = `https://www.kopytrading.com/bots/${bot.id}`;
+    const productImageUrl = bot.imageUrl ? `https://www.kopytrading.com${bot.imageUrl}` : "https://www.kopytrading.com/og-image.png";
+
     return (
         <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden max-w-full relative">
+            <Script id={`json-ld-bot-${bot.id}`} type="application/ld+json" strategy="afterInteractive">
+                {`
+                    {
+                        "@context": "https://schema.org",
+                        "@type": "Product",
+                        "name": "${bot.name.replace(/"/g, '\\"')}",
+                        "description": "${bot.description.replace(/"/g, '\\"')}",
+                        "image": "${productImageUrl}",
+                        "url": "${productUrl}",
+                        "category": "Trading Software",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "${bot.price || '100'}",
+                            "priceCurrency": "EUR",
+                            "availability": "https://schema.org/InStock"
+                        }
+                    }
+                `}
+            </Script>
             {/* Background Aesthetic Blur */}
             <div className={`absolute top-0 right-0 w-[600px] h-[600px] ${colors.glow} blur-[120px] rounded-full pointer-events-none -mr-40 -mt-20 opacity-40`} />
             <div className={`absolute bottom-0 left-0 w-[400px] h-[400px] ${colors.glow} blur-[100px] rounded-full pointer-events-none -ml-20 -mb-20 opacity-20`} />
