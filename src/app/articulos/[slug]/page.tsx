@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Script from "next/script";
 import type { Metadata } from "next";
 import { ARTICLES_DATA } from "@/lib/constants/articles";
 
@@ -13,16 +14,36 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     if (!article) return { title: "Artículo no encontrado" };
 
+    const url = `https://www.kopytrading.com/articulos/${slug}`;
+    const imageUrl = article.image ? `https://www.kopytrading.com${article.image}` : "https://www.kopytrading.com/og-image.png";
+
     return {
         title: `${article.title} | KopyTrading Blog`,
         description: article.metaDescription,
-        keywords: article.keywords.join(", "),
+        keywords: article.keywords ? article.keywords.join(", ") : "Trading, MT5, Forex, Oro",
+        alternates: {
+            canonical: url,
+        },
         openGraph: {
             title: article.title,
             description: article.metaDescription,
+            url: url,
+            siteName: "KopyTrading",
             type: "article",
             publishedTime: article.date,
+            images: [
+                {
+                    url: imageUrl,
+                    alt: article.title,
+                }
+            ],
         },
+        twitter: {
+            card: "summary_large_image",
+            title: article.title,
+            description: article.metaDescription,
+            images: [imageUrl],
+        }
     };
 }
 
@@ -32,8 +53,39 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
     if (!article) notFound();
 
     const contentBlocks = article.content.split('\n\n');
+    const articleUrl = `https://www.kopytrading.com/articulos/${slug}`;
+    const articleImageUrl = article.image ? `https://www.kopytrading.com${article.image}` : "https://www.kopytrading.com/og-image.png";
+
     return (
         <div className="min-h-screen pt-28 pb-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-[#050510]">
+            <Script id={`json-ld-article-${slug}`} type="application/ld+json" strategy="afterInteractive">
+                {`
+                    {
+                        "@context": "https://schema.org",
+                        "@type": "BlogPosting",
+                        "headline": "${article.title.replace(/"/g, '\\"')}",
+                        "description": "${article.metaDescription.replace(/"/g, '\\"')}",
+                        "image": "${articleImageUrl}",
+                        "url": "${articleUrl}",
+                        "author": {
+                            "@type": "Person",
+                            "name": "Maikolours"
+                        },
+                        "publisher": {
+                            "@type": "Organization",
+                            "name": "KopyTrading",
+                            "logo": {
+                                "@type": "ImageObject",
+                                "url": "https://www.kopytrading.com/logo-kopytrading.png"
+                            }
+                        },
+                        "mainEntityOfPage": {
+                            "@type": "WebPage",
+                            "@id": "${articleUrl}"
+                        }
+                    }
+                `}
+            </Script>
             {/* Background Accents */}
             <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-brand/10 blur-[180px] rounded-full mix-blend-screen pointer-events-none" />
             <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-accent/5 blur-[150px] rounded-full mix-blend-screen pointer-events-none" />
