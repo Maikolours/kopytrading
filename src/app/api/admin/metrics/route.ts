@@ -121,3 +121,72 @@ export async function GET(req: Request) {
         }, { status: 500 });
     }
 }
+
+export async function DELETE(req: Request) {
+    const session = await getServerSession(authOptions);
+    
+    // Bloqueo estricto de seguridad en el servidor
+    if (!session?.user || (session.user as any).role !== "ADMIN") {
+        return new NextResponse("Forbidden", { status: 403 });
+    }
+
+    try {
+        const { searchParams } = new URL(req.url);
+        const type = searchParams.get("type"); // "user" | "purchase"
+        const id = searchParams.get("id");
+
+        if (!type || !id) {
+            return NextResponse.json({ success: false, error: "Missing type or id" }, { status: 400 });
+        }
+
+        if (type === "user") {
+            // Prevenir eliminar la propia cuenta del administrador principal
+            const targetUser = await prisma.user.findUnique({ where: { id } });
+            if (targetUser?.email === "viajaconsakura@gmail.com" || targetUser?.email === (session.user as any).email) {
+                return NextResponse.json({ success: false, error: "No puedes eliminar tu propia cuenta de Administrador." }, { status: 400 });
+            }
+
+            // Buscar compras del usuario
+            const userPurchases = await prisma.purchase.findMany({
+                where: { userId: id },
+                select: { id: true }
+            });
+            const purchaseIds = userPurchases.map(p => p.id);
+
+            if (purchaseIds.length > 0) {
+                // Eliminar relaciones secundarias de las compras
+                await prisma.licenseSession.deleteMany({ where: { purchaseId: { in: purchaseIds } } });
+                await prisma.livePosition.deleteMany({ where: { purchaseId: { in: purchaseIds } } });
+                await prisma.tradeHistory.deleteMany({ where: { purchaseId: { in: purchaseIds } } });
+                await prisma.remoteCommand.deleteMany({ where: { purchaseId: { in: purchaseIds } } });
+                await prisma.botSettings.deleteMany({ where: { purchaseId: { in: purchaseIds } } });
+                await prisma.purchase.deleteMany({ where: { userId: id } });
+            }
+
+            await prisma.review.deleteMany({ where: { userId: id } });
+            await prisma.user.delete({ where: { id } });
+
+            return NextResponse.json({ success: true, message: "Usuario eliminado correctamente." });
+        }
+
+        if (type === "purchase") {
+            await prisma.licenseSession.deleteMany({ where: { purchaseId: id } });
+            await prisma.livePosition.deleteMany({ where: { purchaseId: id } });
+            await prisma.tradeHistory.deleteMany({ where: { purchaseId: id } });
+            await prisma.remoteCommand.deleteMany({ where: { purchaseId: id } });
+            await prisma.botSettings.deleteMany({ where: { purchaseId: id } });
+            await prisma.purchase.delete({ where: { id } });
+
+            return NextResponse.json({ success: true, message: "Registro de descarga/compra eliminado correctamente." });
+        }
+
+        return NextResponse.json({ success: false, error: "Tipo de eliminación no válido" }, { status: 400 });
+
+    } catch (error: any) {
+        console.error("Admin Delete API Error:", error);
+        return NextResponse.json({
+            success: false,
+            error: error.message || "Error al eliminar registro"
+        }, { status: 500 });
+    }
+}

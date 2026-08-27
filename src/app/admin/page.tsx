@@ -77,6 +77,28 @@ export default function AdminPage() {
         }
     };
 
+    const handleDeleteRecord = async (type: "user" | "purchase", id: string, name: string) => {
+        const confirmMsg = type === "user"
+            ? `⚠️ ¿Eliminar al usuario "${name}"? Se eliminarán también todas sus descargas y licencias asociadas.`
+            : `⚠️ ¿Eliminar este registro de descarga (${name})?`;
+
+        if (!confirm(confirmMsg)) return;
+
+        try {
+            const res = await fetch(`/api/admin/metrics?type=${type}&id=${id}`, {
+                method: "DELETE"
+            });
+            if (res.ok) {
+                fetchMetrics();
+            } else {
+                const data = await res.json();
+                alert(`Error: ${data.error || "No se pudo eliminar"}`);
+            }
+        } catch (e) {
+            alert("Error al intentar eliminar.");
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoadingForm(true);
@@ -323,17 +345,18 @@ export default function AdminPage() {
                                             <tr className="border-b border-white/10 text-xs text-text-muted uppercase tracking-wider">
                                                 <th className="py-2 px-3 font-semibold">Email</th>
                                                 <th className="py-2 px-3 font-semibold">Nombre</th>
-                                                <th className="py-2 px-3 font-semibold">Fecha de Alta</th>
+                                                <th className="py-2 px-3 font-semibold">Fecha</th>
+                                                <th className="py-2 px-3 font-semibold text-right">Acción</th>
                                             </tr>
                                         </thead>
                                         <tbody className="text-xs text-white divide-y divide-white/5">
                                             {loadingMetrics ? (
                                                 <tr>
-                                                    <td colSpan={3} className="py-4 text-center text-text-muted">Cargando...</td>
+                                                    <td colSpan={4} className="py-4 text-center text-text-muted">Cargando...</td>
                                                 </tr>
                                             ) : !metrics?.recentUsers || metrics.recentUsers.length === 0 ? (
                                                 <tr>
-                                                    <td colSpan={3} className="py-4 text-center text-text-muted">No hay registros.</td>
+                                                    <td colSpan={4} className="py-4 text-center text-text-muted">No hay registros.</td>
                                                 </tr>
                                             ) : (
                                                 metrics.recentUsers.map((u: any) => (
@@ -342,6 +365,17 @@ export default function AdminPage() {
                                                         <td className="py-2 px-3 text-text-muted">{u.name || "Sin nombre"}</td>
                                                         <td className="py-2 px-3 text-text-muted">
                                                             {new Date(u.createdAt).toLocaleDateString()}
+                                                        </td>
+                                                        <td className="py-2 px-3 text-right">
+                                                            {u.email !== "viajaconsakura@gmail.com" && (
+                                                                <button
+                                                                    onClick={() => handleDeleteRecord("user", u.id, u.email || u.name)}
+                                                                    title="Eliminar usuario y licencias"
+                                                                    className="p-1 rounded bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-white transition-all text-xs"
+                                                                >
+                                                                    🗑️
+                                                                </button>
+                                                            )}
                                                         </td>
                                                     </tr>
                                                 ))
@@ -360,8 +394,8 @@ export default function AdminPage() {
                                             <tr className="border-b border-white/10 text-xs text-text-muted uppercase tracking-wider">
                                                 <th className="py-2 px-3 font-semibold">Usuario</th>
                                                 <th className="py-2 px-3 font-semibold">Bot / EA</th>
-                                                <th className="py-2 px-3 font-semibold">Versión</th>
                                                 <th className="py-2 px-3 font-semibold">Fecha</th>
+                                                <th className="py-2 px-3 font-semibold text-right">Acción</th>
                                             </tr>
                                         </thead>
                                         <tbody className="text-xs text-white divide-y divide-white/5">
@@ -378,9 +412,17 @@ export default function AdminPage() {
                                                     <tr key={d.id} className="hover:bg-white/5 transition-all">
                                                         <td className="py-2 px-3 font-semibold">{d.userEmail}</td>
                                                         <td className="py-2 px-3 text-brand-light font-semibold">{d.botName}</td>
-                                                        <td className="py-2 px-3 text-center">{d.downloadedVersion}</td>
                                                         <td className="py-2 px-3 text-text-muted">
                                                             {new Date(d.downloadedAt).toLocaleDateString()}
+                                                        </td>
+                                                        <td className="py-2 px-3 text-right">
+                                                            <button
+                                                                onClick={() => handleDeleteRecord("purchase", d.id, `${d.userEmail} - ${d.botName}`)}
+                                                                title="Eliminar este registro de descarga"
+                                                                className="p-1 rounded bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-white transition-all text-xs"
+                                                            >
+                                                                🗑️
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                 ))
