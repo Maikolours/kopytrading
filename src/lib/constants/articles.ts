@@ -105,7 +105,7 @@ export const ARTICLES = [
         "excerpt": "Miedo y avaricia: los destructores de cuentas. Descubre cómo los bots eliminan el sesgo emocional de tu operativa diaria.",
         "date": "12 Mar, 2026",
         "readTime": "16 min",
-        "image": "/images/candlestick-patterns.png"
+        "image": "/images/trading-psychology-discipline.png"
     },
     {
         "slug": "guia-backtesting-mt5",
@@ -132,7 +132,7 @@ export const ARTICLES = [
         "excerpt": "No todo es ganar pips. Aprende cómo el spread y el deslizamiento pueden devorar tus beneficios en operativa real de alta frecuencia.",
         "date": "20 Mar, 2026",
         "readTime": "16 min",
-        "image": "/images/mt5-mac-silicon-2026.png"
+        "image": "/images/spread-slippage-cost.png"
     },
     {
         "slug": "trading-noticias-nfp",
@@ -141,7 +141,7 @@ export const ARTICLES = [
         "excerpt": "Analizamos el impacto de las Nóminas No Agrícolas y por qué la prudencia es la mejor estrategia durante las noticias de impacto rojo.",
         "date": "22 Mar, 2026",
         "readTime": "16 min",
-        "image": "/images/mt5-server-farm.png"
+        "image": "/images/news-trading-nfp.png"
     },
     {
         "slug": "correlacion-divisas-riesgo",
@@ -177,7 +177,7 @@ export const ARTICLES = [
         "excerpt": "Desmitificamos el SMC. ¿Realmente operamos como bancos? Analizamos la liquidez institucional desde una perspectiva técnica.",
         "date": "26 Mar, 2026",
         "readTime": "16 min",
-        "image": "/images/volatility-trading.png"
+        "image": "/images/smc-liquidity-orderblock.png"
     },
     {
         "slug": "elegir-broker-algoritmico",
@@ -186,7 +186,7 @@ export const ARTICLES = [
         "excerpt": "No todos los brokers sirven. Comparamos regulación, latencia y ejecución para que tu algoritmo rinda al máximo rendimiento.",
         "date": "26 Mar, 2026",
         "readTime": "16 min",
-        "image": "/images/vps-setup.png"
+        "image": "/images/broker-spread-execution.png"
     },
     {
         "slug": "estrategias-order-flow-footprint-trading",
@@ -195,7 +195,7 @@ export const ARTICLES = [
         "excerpt": "Más allá de las velas tradicionales. Aprende a descifrar el Delta Acumulado, la absorción pasiva y los gráficos Footprint en MetaTrader 5.",
         "date": "28 Mar, 2026",
         "readTime": "16 min",
-        "image": "/images/institutional-order-flow.png"
+        "image": "/images/order-flow-footprint-mt5.png"
     },
     {
         "slug": "calculo-tamano-posicion-criterio-kelly",
@@ -204,7 +204,7 @@ export const ARTICLES = [
         "excerpt": "¿Cuánto arriesgar exactamente por operación? Desgranamos el Criterio Kelly fraccional para maximizar el crecimiento geométrico del balance.",
         "date": "29 Mar, 2026",
         "readTime": "15 min",
-        "image": "/images/fibonacci-golden-ratio.png"
+        "image": "/images/kelly-criterion-trading.png"
     },
     {
         "slug": "impacto-inteligencia-artificial-trading-algoritmico-2026",
@@ -213,7 +213,7 @@ export const ARTICLES = [
         "excerpt": "¿Puede una red neuronal predecir el mercado? Desmitificamos el uso de Python, ONNX y modelos predictivos dentro de MetaTrader 5.",
         "date": "30 Mar, 2026",
         "readTime": "16 min",
-        "image": "/images/ai-algorithmic-trading.png"
+        "image": "/images/machine-learning-mt5.png"
     },
     {
         "slug": "como-empezar-trading-algoritmico-regla-capital-riesgo-cero",
@@ -222,7 +222,7 @@ export const ARTICLES = [
         "excerpt": "Aprende la estrategia patrimonial más sensata: empezar solo con dinero no necesario a corto plazo, recuperar tu aportación inicial con retiradas progresivas y operar con tranquilidad.",
         "date": "02 Abr, 2026",
         "readTime": "16 min",
-        "image": "/images/volatility-trading.png"
+        "image": "/images/risk-management-capital.png"
     }
 ];
 
