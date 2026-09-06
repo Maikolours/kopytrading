@@ -136,23 +136,16 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                              return <div key={i} dangerouslySetInnerHTML={{ __html: trimmed }} className="my-14 rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl transition-all hover:border-brand/40 hover:scale-[1.01] duration-700 bg-black/40" />;
                         }
 
+                        // Headings
+                        if (trimmed.startsWith('## ')) return <h2 key={i} className="text-2xl sm:text-4xl font-black text-white mt-16 mb-8 tracking-tight border-l-4 border-brand pl-6">{trimmed.replace('## ', '')}</h2>;
+                        if (trimmed.startsWith('### ')) return <h3 key={i} className="text-lg sm:text-xl font-black text-brand-light mt-12 mb-6 tracking-normal flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full bg-brand" /> {trimmed.replace('### ', '')}</h3>;
+                        if (trimmed.startsWith('#### ')) return <h4 key={i} className="text-base sm:text-lg font-bold text-white mt-8 mb-4 tracking-normal border-b border-white/10 pb-2">{trimmed.replace('#### ', '')}</h4>;
+                        if (trimmed.startsWith('---')) return <hr key={i} className="border-white/5 my-14" />;
+
                         // Lists
                         if (trimmed.match(/^(\d+\.|[-•✅❌])\s/m)) {
-                            // Si empieza con un heading y luego tiene una lista pegada (bug fix)
-                            let contentToParse = trimmed;
-                            let preHeading = null;
-                            if (trimmed.startsWith('### ')) {
-                                const lines = trimmed.split('\n');
-                                preHeading = <h3 key={i + 'h3'} className="text-lg sm:text-xl font-black text-brand-light mt-12 mb-6 tracking-normal flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full bg-brand" /> {lines[0].replace('### ', '')}</h3>;
-                                contentToParse = lines.slice(1).join('\n');
-                            } else if (trimmed.startsWith('## ')) {
-                                const lines = trimmed.split('\n');
-                                preHeading = <h2 key={i + 'h2'} className="text-2xl sm:text-4xl font-black text-white mt-16 mb-8 tracking-tight border-l-4 border-brand pl-6">{lines[0].replace('## ', '')}</h2>;
-                                contentToParse = lines.slice(1).join('\n');
-                            }
-                            
-                            const items = contentToParse.split('\n').filter((l: string) => l.trim());
-                            const list = (
+                            const items = trimmed.split('\n').filter((l: string) => l.trim());
+                            return (
                                 <ul key={i + 'ul'} className="space-y-6 my-10 pl-2">
                                     {items.map((item: string, li: number) => (
                                         <li key={li} className="text-slate-300 text-lg leading-relaxed flex items-start gap-5 group">
@@ -162,8 +155,8 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                                     ))}
                                 </ul>
                             );
-                            return preHeading ? <div key={i}>{preHeading}{list}</div> : list;
                         }
+
                         // Tables
                         if (trimmed.includes('|')) {
                             const rows = trimmed.split('\n').filter((r: string) => r.includes('|') && !r.match(/^\|[-\s|]+\|$/));
@@ -186,11 +179,6 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                             );
                         }
 
-                        // Normal Headings (If not matched by list above)
-                        if (trimmed.startsWith('## ')) return <h2 key={i} className="text-2xl sm:text-4xl font-black text-white mt-16 mb-8 tracking-tight border-l-4 border-brand pl-6">{trimmed.replace('## ', '')}</h2>;
-                        if (trimmed.startsWith('### ')) return <h3 key={i} className="text-lg sm:text-xl font-black text-brand-light mt-12 mb-6 tracking-normal flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full bg-brand" /> {trimmed.replace('### ', '')}</h3>;
-                        if (trimmed.startsWith('#### ')) return <h4 key={i} className="text-base sm:text-lg font-bold text-white mt-8 mb-4 tracking-normal border-b border-white/10 pb-2">{trimmed.replace('#### ', '')}</h4>;
-                        if (trimmed.startsWith('---')) return <hr key={i} className="border-white/5 my-14" />;
                         // Paragraphs with bold and link handling
                         // Apply drop cap to the very first paragraph
                         const isFirstParagraph = i === 1 || (i === 0 && !trimmed.startsWith('#'));
