@@ -214,6 +214,15 @@ export const ARTICLES = [
         "date": "30 Mar, 2026",
         "readTime": "16 min",
         "image": "/images/ai-algorithmic-trading.png"
+    },
+    {
+        "slug": "como-empezar-trading-algoritmico-regla-capital-riesgo-cero",
+        "title": "🛡️ Cómo Empezar en Trading Algorítmico: La Regla del Capital Seguro y la Retirada Hacia Riesgo Cero",
+        "category": "Gestión Riesgo | Guía",
+        "excerpt": "Aprende la estrategia patrimonial más sensata: empezar solo con dinero no necesario a corto plazo, recuperar tu aportación inicial con retiradas progresivas y operar con tranquilidad.",
+        "date": "02 Abr, 2026",
+        "readTime": "16 min",
+        "image": "/images/volatility-trading.png"
     }
 ];
 
@@ -552,6 +561,11 @@ El ATR es uno de los indicadores cuantitativos más transparentes y útiles de l
         metaDescription: "Comparamos la velocidad y disciplina de los bots frente a la intuición humana. Descubre cuál se adapta mejor a tu perfil de inversor en 2026.",
         content: `## Hombre vs Máquina: El Dilema del Trader Contemporáneo
 
+<div class="my-6 p-4 rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-200/90 text-sm leading-relaxed">
+    <strong class="text-sky-400 block mb-1">🛡️ EL BOT COMO ASISTENTE, NO COMO PILOTO CIEGO:</strong>
+    La mayor ventaja de un bot frente a una persona es que no siente pánico ni avaricia, evitando el 80% de los errores destructivos del trading manual. Sin embargo, en un entorno donde los grandes bancos mueven el precio para cazar liquidez, ningún algoritmo tiene riesgo cero: el trader profesional complementa el bot supervisando el calendario y apagándolo si el escenario se vuelve adverso.
+</div>
+
 En los mercados financieros actuales, el debate ya no gira en torno a si el trading algorítmico es viable, sino a si un operador individual puede competir de manera rentable operando de forma exclusivamente discrecional. La evolución tecnológica y el protagonismo indiscutible de algoritmos institucionales de alta frecuencia (HFT) han transformado profundamente las dinámicas del libro de órdenes global.
 
 Analizar con objetividad las virtudes y vulnerabilidades de ambas aproximaciones operativas es el primer paso para estructurar un modelo de trabajo sostenible a largo plazo.
@@ -617,6 +631,11 @@ La automatización no ha nacido para suplantar al operador inteligente, sino par
         keywords: ["fallos bots","trading algorítmico","overfitting","gestión monetaria","dca inteligente","martingala vs dca","riesgos EA"],
         metaDescription: "Overfitting, martingalas descontroladas y falta de filtros de volatilidad. Aprende a identificar sistemas frágiles y cómo estructurar algoritmos verdaderamente robustos.",
         content: `## La Realidad Detrás de las "Curvas Milagrosas": Por Qué Fallan los Bots de Trading
+
+<div class="my-6 p-4 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-200/90 text-sm leading-relaxed">
+    <strong class="text-amber-400 block mb-1">⚠️ REALIDAD DE MERCADO Y SUPERVISIÓN ACTIVA:</strong>
+    Ningún bot es infalible porque el mercado no es un laboratorio cerrado: los grandes creadores de mercado y participantes institucionales ejecutan continuos barridos de liquidez (stop hunts). La máquina elimina tus impulsos emocionales y ejecuta la matemática con rigor, pero jamás sustituye el sentido común: el operador debe vigilar el entorno y saber cuándo apagar el bot ante situaciones de riesgo extraordinario.
+</div>
 
 Cualquiera que lleve un tiempo probando Expert Advisors en MetaTrader se ha topado con lo mismo: capturas de backtests perfectas, líneas de balance que suben como una flecha sin un solo retroceso y promesas de cuentas millonarias en cuestión de semanas. 
 
@@ -1760,6 +1779,11 @@ El éxito en el trading algorítmico no responde al azar ni a la corazonada; res
         metaDescription: "¿Puede la Inteligencia Artificial predecir el mercado? Desmitificamos el uso de Machine Learning, ONNX y modelos matemáticos en MetaTrader 5.",
         content: `## Entre la Ciencia de Datos y el Espejismo Comercial: La IA en los Mercados Financieros
 
+<div class="my-6 p-4 rounded-xl border border-purple-500/30 bg-purple-500/10 text-purple-200/90 text-sm leading-relaxed">
+    <strong class="text-purple-400 block mb-1">🧠 IA SÍ, PERO CON PIES EN LA TIERRA:</strong>
+    Por muy avanzada que sea una red neuronal o un modelo de aprendizaje automático, el mercado no es un juego estático de ajedrez. Las instituciones financieras provocan mechas de barrido imposibles de predecir matemáticamente. Los mejores resultados se logran cuando combinas la velocidad algorítmica con una gestión de capital conservadora y la decisión humana de apagar el sistema en momentos críticos.
+</div>
+
 En el panorama tecnológico contemporáneo, pocos términos generan tanto entusiasmo y al mismo tiempo tanta confusión como la **Inteligencia Artificial (IA)** y el **Aprendizaje Automático (Machine Learning)** aplicados a la inversión bursátil. En redes sociales y campañas publicitarias proliferan promesas de algoritmos "infalibles" basados en redes neuronales capaces de anticipar con certeza absoluta el precio futuro de las divisas o el Oro (**XAUUSD**).
 
 Sin embargo, para el ingeniero cuantitativo y el operador profesional, la realidad de la Inteligencia Artificial en [MetaTrader 5](https://www.mql5.com/) es radicalmente distinta: no es una bola de cristal mágica, sino un **conjunto avanzado de herramientas estadísticas y de reconocimiento de patrones** que exigen una disciplina metodológica extraordinaria.
@@ -1815,5 +1839,94 @@ La Inteligencia Artificial no es una fórmula milagrosa que convertirá el tradi
 
 ---
 ⚠️ *Aviso Legal de Responsabilidad: El uso de modelos basados en Inteligencia Artificial o Machine Learning no garantiza rentabilidad ni elimina el riesgo de pérdida total del capital depositado en los mercados financieros.*`
+    },
+    "como-empezar-trading-algoritmico-regla-capital-riesgo-cero": {
+        title: "Cómo Empezar en Trading Algorítmico: La Regla del Capital Seguro y la Retirada Hacia Riesgo Cero",
+        category: "Gestión Riesgo | Guía",
+        date: "02 Abr, 2026",
+        readTime: "16 min",
+        image: "/images/volatility-trading.png",
+        keywords: ["empezar en trading","trading algorítmico principiantes","gestión de capital","retirada de capital","riesgo cero trading","apagar el bot","psicología del dinero"],
+        metaDescription: "Guía práctica para iniciarse en bots de trading con sensatez: la regla del dinero no necesario, el plan de retirada escalonada del capital inicial y la supervisión activa.",
+        content: `## El Sentido Común en el Trading Automatizado
+
+Cuando una persona decide adentrarse en el trading algorítmico mediante Expert Advisors en [MetaTrader 5](https://www.mql5.com/), suele cometer uno de estos dos errores extremos:
+1. **El miedo paralizante:** Pensar que todo el trading es una trampa impenetrable y no atreverse a dar ningún paso ordenado.
+2. **La euforia ciega:** Creer que un robot es un cajero automático donde meter los ahorros familiares o el dinero del alquiler y desentenderse esperando hacerse millonario en tres meses.
+
+Ambas posturas nacen del desconocimiento. El trading algorítmico profesional no es ni magia ni un juego de azar: es una herramienta de apoyo disciplinada, basada en cálculos matemáticos y probabilidades. Pero para que esa herramienta trabaje a tu favor sin poner en peligro tu tranquilidad, **hace falta una estrategia financiera personal clara antes de abrir la primera operación**.
+
+En esta guía desglosamos el método más sensato y prudente para empezar: **la regla del capital no necesario a corto plazo**, el plan de **retirada periódica hasta alcanzar el «Riesgo Cero»** y la importancia de **estar siempre al mando del bot**.
+
+<div class="my-6 p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-200/90 text-sm leading-relaxed">
+    <strong class="text-emerald-400 block mb-1">🎯 EL PRINCIPIO FUNDAMENTAL DEL OPERADOR INTELIGENTE:</strong>
+    Tu primera meta en el trading no es ganar mucho dinero; es no perder el que ya tienes. Quien protege su capital inicial y retira su aportación a tiempo opera después con calma absoluta, sin la presión psicológica que lleva al desastre.
+</div>
+
+<div class="my-8 rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+    <img src="/images/volatility-trading.png" alt="Gestión de Capital en Trading Algorítmico" class="w-full h-auto" />
+    <p class="text-[10px] text-center text-text-muted py-2 bg-white/5">Estrategia de Blindaje Patrimonial: De la aportación inicial a la operativa exclusiva con rendimientos generados.</p>
+</div>
+
+### Paso 1: La Regla del Capital Sagrado (Solo Fondos no Necesarios)
+
+Nunca, bajo ninguna circunstancia, se debe depositar en un broker dinero destinado a:
+- El pago de la hipoteca, alquiler o suministros básicos.
+- Gastos comprometidos a corto o medio plazo (impuestos, colegios, deudas pendientes).
+- El fondo de emergencia familiar para imprevistos médicos o laborales.
+
+El trading en mercados volátiles como divisas o materias primas conlleva un riesgo real. Si operas con dinero que necesitas para comer o pagar facturas a fin de mes, **tu cerebro estará en modo de supervivencia**. Al primer retroceso normal de mercado (drawdown), entrarás en pánico, tomarás decisiones erróneas o exigirás al sistema rendimientos imposibles.
+
+**El capital para trading debe ser una partida de excedente:** un dinero que, si en el peor de los casos extremos sufriera una merma sustancial, no cambiaría ni un milímetro tu calidad de vida ni el bienestar de tu familia.
+
+### Paso 2: La Estrategia del «Riesgo Cero» Mediante Retiradas Progresivas
+
+Esta es la regla que diferencia a los aficionados de los gestores patrimoniales experimentados. Supongamos que decides comenzar con un depósito prudente en una cuenta auditada o en modo CENT.
+
+¿Qué hace el aficionado? Ve que el bot acumula rendimiento positivo y de inmediato sube el lotaje al triple o reinvierte todo compulsivamente buscando el "interés compuesto mágico". Si llega una noticia inesperada o un movimiento anómalo, pierde el rendimiento y su dinero inicial.
+
+¿Qué hace el operador prudente? **Aplica el Plan de Descompresión de Riesgo**:
+
+| Fase Operativa | Acción del Trader | Estado Psicológico |
+| :--- | :--- | :--- |
+| **Fase 1: Arranque** | El bot opera con volumen mínimo y conservador. | Máxima prudencia y verificación de ejecución. |
+| **Fase 2: Cosecha Periódica** | Cada mes o cada hito de balance positivo, **retira una parte fija directamente a su banco**. | Recuperando paulatinamente el depósito inicial. |
+| **Fase 3: Hito de Riesgo Cero** | El total de retiradas acumuladas **iguala al 100% del dinero inicialmente aportado**. | ¡Tranquilidad absoluta! Tu capital propio está seguro en casa. |
+| **Fase 4: Expansión Segura** | Ahora se opera **exclusivamente con el excedente generado por el mercado**. | Es aquí donde se puede evaluar un incremento moderado de volumen. |
+
+Cuando alcanzas la Fase 3, tu mentalidad cambia por completo: ya no hay miedo a perder tus ahorros porque ya están en tu bolsillo. Esa serenidad es la que permite dejar trabajar los algoritmos con la paciencia que exige la probabilidad matemática, tal como analizamos en [Psicología del Trading: Dominar el Miedo y la Avaricia](/articulos/psicologia-trading-emociones).
+
+### Paso 3: Por Qué el Mercado no es Infalible (Manipulación y Barridos de Liquidez)
+
+Muchos recién llegados piensan que un algoritmo bien programado debería acertar el 100% de las veces. Esto es imposible por una razón técnica fundamental: **el mercado financiero no es un entorno estático ni neutral**.
+
+Los grandes bancos de inversión, fondos de cobertura y creadores de mercado institucionales mueven volúmenes gigantescos. Para llenar sus enormes órdenes de compra o venta, provocan a menudo mechas violentas de cotización diseñadas para activar en masa los Stop Loss de los operadores particulares (*Stop Hunts* o barridos de liquidez), dinámica que desgranamos en nuestro estudio de [Smart Money Concepts: Realidad vs Marketing](/articulos/smart-money-concepts-realidad).
+
+#### ¿Qué hace un buen bot frente a esta realidad?
+- Un algoritmo profesional cuenta con filtros matemáticos (como rangos de vela máxima y límites de soporte/resistencia) para **evitar caer en trampas ordinarias del mercado**.
+- Como no tiene ego ni emociones, no cae en la trampa del trading de revancha (*revenge trading*).
+- Si una operación debe cerrarse en pérdida controlada para salvar el resto del capital, la ejecuta sin dudar.
+
+### Paso 4: El Trader como Supervisor: Cuándo Hay que Apagar el Bot
+
+Tener un bot de trading no significa instalarlo en [MetaTrader 5](https://www.mql5.com/) y no volver a mirar la pantalla en seis meses. **Tú eres el capitán del barco; el bot es el motor.**
+
+Un operador responsable realiza una supervisión activa que requiere apenas 5 o 10 minutos al día:
+1. **Consultar el Calendario Económico:** Antes de que comience la jornada, revisa si hay eventos de impacto rojo programados (como las Nóminas No Agrícolas en EE.UU., decisiones sobre tipos de interés de la FED o comparecencias de presidentes de bancos centrales). 
+2. **Pausar en Momentos de Shock:** Si se acerca un evento de extrema incertidumbre macroeconómica, la decisión más inteligente es **pausar el bot y dejar que pase la tormenta**, tal como enseñamos en [Trading de Noticias NFP: Por Qué Apagamos el Bot](/articulos/trading-noticias-nfp).
+3. **Control del Entorno Técnico:** Comprobar que el terminal remoto en el [Servidor VPS de Baja Latencia](/articulos/vps-trading) mantenga conexión continua y que el broker no esté aplicando deslizamientos anormales ([Spread y Slippage: Costes Ocultos](/articulos/spread-slippage-costes-ocultos)).
+
+### Resumen para Empezar con Buen Pie
+
+Si quieres adentrarte en este mundo con seriedad y protegiendo tu patrimonio:
+- Empieza con poco y exclusivamente con capital que no comprometa tu día a día.
+- Prueba primero en cuentas formativas o con micro-lotes para familiarizarte con las reacciones del software, como la versión [MAIKO PRO GOLD DEMO](/bots/cmn9hf8yc0000vhbcq9hbxk0j).
+- Ponte como primer objetivo recuperar lo depositado mediante retiradas sistemáticas.
+- Supervisa las noticias y no tengas miedo de pulsar el botón de pausa cuando el mercado esté descontrolado.
+
+El trading algorítmico consistente no premia al más arriesgado ni al más impaciente; premia al operador metódico que trata su dinero con el máximo respeto.
+
+---
+⚠️ *Aviso Legal de Riesgo: El trading con instrumentos financieros apalancados implica un riesgo elevado de pérdida de capital. Nunca opere con fondos que no pueda permitirse perder. Ningún sistema algorítmico garantiza resultados futuros ni elimina los riesgos inherentes a los mercados financieros.*`
     }
 };

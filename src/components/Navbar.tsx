@@ -25,10 +25,10 @@ export function Navbar() {
         };
     }, [isMenuOpen]);
 
-    // Close menu on resize if screen becomes large (XL breakpoint)
+    // Close menu on resize if screen becomes tablet/desktop (MD breakpoint 768px)
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth >= 1280) { // xl breakpoint
+            if (window.innerWidth >= 768) { // md breakpoint
                 setIsMenuOpen(false);
             }
         };
@@ -57,22 +57,22 @@ export function Navbar() {
                     </Link>
                 </div>
 
-                {/* Desktop Nav - Visible on XL+ (1280px+) for perfect tablet & desktop layout */}
-                <nav className="hidden xl:flex items-center gap-6 ml-6">
-                    <Link href="/bots" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/bots" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Marketplace</Link>
-                    <Link href="/resultados" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/resultados" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Resultados</Link>
-                    <Link href="/activos" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/activos" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Activos</Link>
-                    <Link href="/como-funciona" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/como-funciona" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Cómo Funciona</Link>
-                    <Link href="/articulos" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/articulos" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Blog</Link>
-                    <Link href="/faq" className={`text-xs font-black uppercase tracking-widest transition-colors ${pathname === "/faq" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>FAQ</Link>
-                    <Link href={isLoggedIn ? "/dashboard" : "/login"} className={`text-xs font-black uppercase tracking-widest transition-colors flex items-center gap-2 group ${pathname === "/dashboard" || pathname === "/login" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>
+                {/* Desktop Nav - Visible on MD+ (768px+) so laptops and desktops always see the full horizontal menu */}
+                <nav className="hidden md:flex items-center gap-3.5 lg:gap-5 xl:gap-6 ml-4 lg:ml-6">
+                    <Link href="/bots" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/bots" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Marketplace</Link>
+                    <Link href="/resultados" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/resultados" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Resultados</Link>
+                    <Link href="/activos" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/activos" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Activos</Link>
+                    <Link href="/como-funciona" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/como-funciona" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Cómo Funciona</Link>
+                    <Link href="/articulos" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/articulos" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Blog</Link>
+                    <Link href="/faq" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/faq" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>FAQ</Link>
+                    <Link href={isLoggedIn ? "/dashboard" : "/login"} className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors flex items-center gap-1.5 lg:gap-2 group ${pathname === "/dashboard" || pathname === "/login" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>
                         <span className="w-1.5 h-1.5 rounded-full bg-brand group-hover:animate-pulse"></span>
                         {isLoggedIn ? "Mi Panel" : "Mi Cuenta"}
                     </Link>
                     {isLoggedIn && (
                         <button 
                             onClick={() => signOut()}
-                            className="ml-2 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white border border-danger/40 bg-danger/10 hover:bg-danger hover:border-danger rounded-md transition-all shadow-[0_0_10px_rgba(239,68,68,0.2)] cursor-pointer"
+                            className="ml-1 lg:ml-2 px-2.5 lg:px-3 py-1 lg:py-1.5 text-[10px] font-black uppercase tracking-widest text-white border border-danger/40 bg-danger/10 hover:bg-danger hover:border-danger rounded-md transition-all shadow-[0_0_10px_rgba(239,68,68,0.2)] cursor-pointer"
                         >
                             Cerrar Sesión
                         </button>
@@ -82,19 +82,19 @@ export function Navbar() {
                 <div className="flex items-center gap-3">
                     {/* VER BOTS CTA Button */}
                     <Link href="/bots" className="hidden sm:block">
-                        <Button variant="accent" size="sm" className="text-xs font-black uppercase px-5 rounded-full shadow-lg shadow-brand/20">
+                        <Button variant="accent" size="sm" className="text-xs font-black uppercase px-4 lg:px-5 rounded-full shadow-lg shadow-brand/20">
                             VER BOTS
                         </Button>
                     </Link>
 
-                    {/* Hamburger Button - Optimized for Mobile & Tablets (below XL) */}
+                    {/* Hamburger Button - Only for Mobile (below MD) */}
                     <button
                         type="button"
                         onClick={(e) => {
                             e.stopPropagation();
                             setIsMenuOpen((prev) => !prev);
                         }}
-                        className="xl:hidden w-11 h-11 sm:w-12 sm:h-12 flex flex-col items-center justify-center gap-1.5 focus:outline-none z-[120] rounded-xl bg-brand text-white shadow-xl active:scale-95 transition-all border border-white/20 cursor-pointer touch-manipulation"
+                        className="md:hidden w-11 h-11 flex flex-col items-center justify-center gap-1.5 focus:outline-none z-[120] rounded-xl bg-brand text-white shadow-xl active:scale-95 transition-all border border-white/20 cursor-pointer touch-manipulation"
                         aria-label="Abrir menú de navegación"
                     >
                         <div className="relative w-5 h-4 flex flex-col justify-between items-center pointer-events-none">
@@ -106,9 +106,9 @@ export function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile & Tablet Fullscreen Menu Overlay */}
+            {/* Mobile Fullscreen Menu Overlay (under MD) */}
             <div 
-                className={`xl:hidden fixed inset-0 z-[1100] transition-all duration-300 flex flex-col ${
+                className={`md:hidden fixed inset-0 z-[1100] transition-all duration-300 flex flex-col ${
                     isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
                 }`}
                 style={{ height: '100dvh' }}
