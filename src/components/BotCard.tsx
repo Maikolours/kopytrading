@@ -293,17 +293,32 @@ export const BotCard = memo(function BotCard({
                                 <p className="text-[8px] text-brand-light uppercase tracking-widest font-black mb-2 flex items-center gap-2">
                                     LICENCIA MT5
                                 </p>
-                                <div className="flex items-center gap-1.5">
-                                    <code className="text-[10px] font-black font-mono text-white select-all p-2 bg-white/5 rounded border border-white/10 flex-1 truncate">
+                                <div className="flex items-center gap-2">
+                                    <code className="text-[11px] font-black font-mono text-white select-all py-2.5 px-3 bg-white/5 rounded-xl border border-white/10 flex-1 truncate">
                                         {purchase?.id || "N/A"}
                                     </code>
-                                    <Button 
-                                        size="sm" 
-                                        className={`h-9 w-9 p-0 flex items-center justify-center shrink-0 rounded bg-white/10 text-white hover:bg-white/20 transition-all ${copiedId === purchase?.id ? 'bg-success text-white' : ''}`}
+                                    <button 
+                                        type="button"
+                                        className={`h-10 px-4 flex items-center justify-center gap-1.5 shrink-0 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 active:scale-95 shadow-lg cursor-pointer ${
+                                            copiedId === purchase?.id 
+                                                ? 'bg-emerald-500 text-white shadow-emerald-500/30' 
+                                                : 'bg-brand hover:bg-brand-light text-white shadow-brand/30 hover:shadow-brand/50'
+                                        }`}
                                         onClick={() => onCopy(purchase?.id || "")}
+                                        title="Copiar clave de licencia"
                                     >
-                                        {copiedId === purchase?.id ? <CheckCircle2 size={14} /> : <Copy size={14} />}
-                                    </Button>
+                                        {copiedId === purchase?.id ? (
+                                            <>
+                                                <CheckCircle2 size={13} className="stroke-[3]" />
+                                                <span>¡COPIADO!</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Copy size={13} className="stroke-[2.5]" />
+                                                <span>COPIAR</span>
+                                            </>
+                                        )}
+                                    </button>
                                 </div>
                             </div>
                         </div>

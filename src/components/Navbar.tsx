@@ -108,7 +108,7 @@ export function Navbar() {
 
             {/* Mobile & Tablet Fullscreen Menu Overlay */}
             <div 
-                className={`xl:hidden fixed inset-0 z-[100] transition-all duration-300 flex flex-col ${
+                className={`xl:hidden fixed inset-0 z-[1100] transition-all duration-300 flex flex-col ${
                     isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
                 }`}
                 style={{ height: '100dvh' }}
@@ -123,7 +123,7 @@ export function Navbar() {
                 <button 
                     type="button"
                     onClick={() => setIsMenuOpen(false)}
-                    className="absolute top-5 right-5 w-11 h-11 flex items-center justify-center rounded-xl bg-white/10 border border-white/20 text-white z-20 hover:bg-white/20 active:scale-95 transition-all cursor-pointer"
+                    className="absolute top-4 right-4 w-11 h-11 flex items-center justify-center rounded-xl bg-white/10 border border-white/20 text-white z-20 hover:bg-white/20 active:scale-95 transition-all cursor-pointer"
                     aria-label="Cerrar menú"
                 >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,46 +132,46 @@ export function Navbar() {
                 </button>
 
                 {/* Navigation Links inside Menu */}
-                <div className="relative z-10 flex-1 flex flex-col justify-center items-center py-16 px-6 gap-6 text-center overflow-y-auto">
+                <div className="relative z-10 flex-1 flex flex-col justify-start items-center pt-16 pb-12 px-6 gap-3.5 text-center overflow-y-auto">
                     <Link 
                         onClick={() => setIsMenuOpen(false)} 
                         href="/bots" 
-                        className={`text-xl sm:text-2xl font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname === "/bots" ? "text-brand-light" : "text-white/80 hover:text-white"}`}
+                        className={`text-base sm:text-lg font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname === "/bots" ? "text-brand-light" : "text-white/80 hover:text-white"}`}
                     >
                         Marketplace
                     </Link>
                     <Link 
                         onClick={() => setIsMenuOpen(false)} 
                         href="/activos" 
-                        className={`text-xl sm:text-2xl font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname === "/activos" ? "text-brand-light" : "text-white/80 hover:text-white"}`}
+                        className={`text-base sm:text-lg font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname === "/activos" ? "text-brand-light" : "text-white/80 hover:text-white"}`}
                     >
                         Activos
                     </Link>
                     <Link 
                         onClick={() => setIsMenuOpen(false)} 
                         href="/resultados" 
-                        className={`text-xl sm:text-2xl font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname === "/resultados" ? "text-brand-light" : "text-white/80 hover:text-white"}`}
+                        className={`text-base sm:text-lg font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname === "/resultados" ? "text-brand-light" : "text-white/80 hover:text-white"}`}
                     >
                         Resultados
                     </Link>
                     <Link 
                         onClick={() => setIsMenuOpen(false)} 
                         href="/como-funciona" 
-                        className={`text-xl sm:text-2xl font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname === "/como-funciona" ? "text-brand-light" : "text-white/80 hover:text-white"}`}
+                        className={`text-base sm:text-lg font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname === "/como-funciona" ? "text-brand-light" : "text-white/80 hover:text-white"}`}
                     >
                         Cómo Funciona
                     </Link>
                     <Link 
                         onClick={() => setIsMenuOpen(false)} 
                         href="/articulos" 
-                        className={`text-xl sm:text-2xl font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname === "/articulos" ? "text-brand-light" : "text-white/80 hover:text-white"}`}
+                        className={`text-base sm:text-lg font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname === "/articulos" ? "text-brand-light" : "text-white/80 hover:text-white"}`}
                     >
                         Blog
                     </Link>
                     <Link 
                         onClick={() => setIsMenuOpen(false)} 
                         href="/faq" 
-                        className={`text-xl sm:text-2xl font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname === "/faq" ? "text-brand-light" : "text-white/80 hover:text-white"}`}
+                        className={`text-base sm:text-lg font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname === "/faq" ? "text-brand-light" : "text-white/80 hover:text-white"}`}
                     >
                         Preguntas FAQ
                     </Link>
@@ -180,30 +180,30 @@ export function Navbar() {
                         <Link 
                             onClick={() => setIsMenuOpen(false)} 
                             href="/dashboard" 
-                            className="text-xl sm:text-2xl font-black text-brand-light uppercase tracking-widest hover:text-white transition-colors py-1"
+                            className="text-base sm:text-lg font-black text-brand-light uppercase tracking-widest hover:text-white transition-colors py-1"
                         >
                             Mi Panel de Usuario
                         </Link>
                     )}
 
-                    <div className="w-full max-w-xs mt-4 flex flex-col gap-3">
+                    <div className="w-full max-w-xs mt-3 flex flex-col gap-2.5 pb-6">
                         <Link href="/bots" onClick={() => setIsMenuOpen(false)}>
-                            <Button fullWidth size="lg" variant="accent" className="font-black uppercase tracking-wider">
+                            <Button fullWidth size="md" variant="accent" className="font-black uppercase tracking-wider text-xs">
                                 Explorar Bots
                             </Button>
                         </Link>
                         {!isLoggedIn ? (
                             <Link href="/login" onClick={() => setIsMenuOpen(false)}>
-                                <Button fullWidth size="lg" variant="outline" className="font-black uppercase tracking-wider">
+                                <Button fullWidth size="md" variant="outline" className="font-black uppercase tracking-wider text-xs">
                                     Iniciar Sesión / Registro
                                 </Button>
                             </Link>
                         ) : (
                             <Button 
                                 fullWidth 
-                                size="lg" 
+                                size="md" 
                                 variant="outline" 
-                                className="font-black uppercase tracking-wider text-danger border-danger/40 hover:bg-danger hover:text-white"
+                                className="font-black uppercase tracking-wider text-xs text-danger border-danger/40 hover:bg-danger hover:text-white"
                                 onClick={() => { signOut(); setIsMenuOpen(false); }}
                             >
                                 Cerrar Sesión
