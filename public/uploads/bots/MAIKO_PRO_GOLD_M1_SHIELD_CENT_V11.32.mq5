@@ -540,8 +540,8 @@ void OnTick() {
 
     if(ArraySize(pos) > 0) {
         GestionarRefuerzoInteligente();
-        // CASCADA SOS M1
-        if(TimeTradeServer() - ultimoAtaque > 5 && volTotal < MaxLoteTotal) {
+        // CASCADA SOS M1 (Desactivada si DistanciaCascadaPips <= 0)
+        if(DistanciaCascadaPips > 0.0 && TimeTradeServer() - ultimoAtaque > 5 && volTotal < MaxLoteTotal) {
             double emaM1[1];
             if(CopyBuffer(hEMA_M1, 0, 1, 1, emaM1) > 0) {
                 double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);

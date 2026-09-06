@@ -350,9 +350,9 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                         </div>
                                     </>
                                 ) : (
-                                    // Bots comerciales en Lanzamiento (1 Septiembre): 100€ (Tachado 200€)
+                                    // Bots comerciales: Próximamente (Fase final)
                                     <>
-                                        <p className="text-[10px] text-amber-400 mb-2 uppercase tracking-[0.3em] font-black">🚀 Disponible el 1 de Septiembre</p>
+                                        <p className="text-[10px] text-brand-light mb-2 uppercase tracking-[0.3em] font-black">⏳ Próximo Lanzamiento Oficial</p>
                                         <div className="flex items-baseline justify-center gap-3 mb-3">
                                             <span className="text-2xl font-bold line-through text-white/40">
                                                 {bot.originalPrice ? `${bot.originalPrice.toFixed(0)}€` : '200€'}
@@ -362,8 +362,8 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                                 <span className="text-2xl sm:text-3xl text-amber-300 ml-1">€</span>
                                             </div>
                                         </div>
-                                        <div className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-300 text-[10px] font-black px-4 py-1.5 rounded-full border border-amber-500/30 uppercase tracking-widest flex-wrap justify-center shadow-lg">
-                                            ⚡ 50% DESCUENTO DE LANZAMIENTO
+                                        <div className="inline-flex items-center gap-2 bg-brand/20 text-brand-light text-[10px] font-black px-4 py-1.5 rounded-full border border-brand/30 uppercase tracking-widest flex-wrap justify-center shadow-lg">
+                                            🛡️ AUDITORÍA CUANTITATIVA EN CURSO
                                         </div>
                                     </>
                                 )}
@@ -401,19 +401,19 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                         </Button>
                                     </Link>
                                 ) : (
-                                    /* Bots comerciales en Lanzamiento (1 Septiembre) -> Checkout deshabilitado */
+                                    /* Bots comerciales -> Próximamente */
                                     <div className="space-y-4">
                                         <div className="space-y-2">
-                                            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-center backdrop-blur-sm">
-                                                <p className="text-[9px] text-amber-400 mb-1 uppercase tracking-widest font-black">
-                                                    Preventa Abierta
+                                            <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 text-center backdrop-blur-sm">
+                                                <p className="text-[9px] text-brand-light mb-1 uppercase tracking-widest font-black">
+                                                    Próximamente
                                                 </p>
                                                 <p className="text-sm font-black text-white uppercase italic tracking-tighter">
-                                                    Disponible el 1 de Septiembre
+                                                    En Fase de Optimización Final
                                                 </p>
                                             </div>
-                                            <Button disabled size="lg" fullWidth className="py-6 opacity-60 bg-amber-500/20 border border-amber-500/40 text-amber-300 font-black uppercase tracking-widest text-xs italic cursor-not-allowed">
-                                                Disponible 1 de Septiembre 🚀
+                                            <Button disabled size="lg" fullWidth className="py-6 opacity-60 bg-white/[0.05] border border-white/20 text-white/60 font-black uppercase tracking-widest text-xs italic cursor-not-allowed">
+                                                Próximamente Disponible ⏳
                                             </Button>
                                         </div>
 

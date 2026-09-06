@@ -278,7 +278,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                             </Link>
                                         </>
                                     ) : isOfficialPromo ? (
-                                        /* Bots comerciales oficiales en Lanzamiento (1 Septiembre): Oferta 100€ (Tachado 200€) + Botón Preventa */
+                                        /* Bots comerciales oficiales: En auditoría final / Próximamente */
                                         <>
                                             <div className="text-center">
                                                 <div className="flex items-baseline justify-center gap-2 mb-0.5">
@@ -289,13 +289,13 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                                         100€
                                                     </span>
                                                 </div>
-                                                <div className="inline-flex items-center gap-1 text-[7px] bg-amber-500/20 text-amber-300 font-black tracking-[0.15em] px-2 py-0.5 rounded-full uppercase border border-amber-500/30">
-                                                    🔥 SEPTIEMBRE: -50% DESCUENTO
+                                                <div className="inline-flex items-center gap-1 text-[7px] bg-brand/20 text-brand-light font-black tracking-[0.15em] px-2.5 py-0.5 rounded-full uppercase border border-brand/30">
+                                                    ⏳ PRÓXIMAMENTE · FASE FINAL
                                                 </div>
                                             </div>
                                             <Link href={`/bots/${bot.id}`} className="w-full">
-                                                <Button size="sm" className="w-full font-black uppercase tracking-[0.12em] text-[9px] h-10 shadow-xl transition-all duration-500 rounded-xl bg-brand/10 text-brand-light border border-brand/30 hover:bg-brand/20 hover:scale-105 active:scale-95">
-                                                    Disponible 1 de Septiembre 🚀
+                                                <Button size="sm" className="w-full font-black uppercase tracking-[0.12em] text-[9px] h-10 shadow-xl transition-all duration-500 rounded-xl bg-white/[0.05] text-white border border-white/20 hover:bg-brand/20 hover:border-brand/40 hover:scale-105 active:scale-95">
+                                                    Ver Especificaciones 🔍
                                                 </Button>
                                             </Link>
                                         </>

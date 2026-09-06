@@ -66,22 +66,22 @@ export default function Home() {
                 </div>
                 
                 <div className="flex-1 text-center md:text-left z-10">
-                  <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest mb-2">
-                    ⚡ PRE-VENTA LANZAMIENTO 1 SEPTIEMBRE
+                  <div className="inline-flex items-center gap-2 bg-brand/10 border border-brand/30 text-brand-light text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest mb-2">
+                    ⏳ PRÓXIMO LANZAMIENTO · SERIE MAIKO PRO
                   </div>
                   <h3 className="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tighter mb-2">
-                    OFERTA DE LANZAMIENTO: <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500">50% DESCUENTO</span>
+                    NUEVA GENERACIÓN <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light via-yellow-300 to-amber-400">INSTITUCIONAL M15</span>
                   </h3>
                   <p className="text-text-muted leading-relaxed max-w-2xl text-sm">
-                    Pre-reserva tu bot <span className="text-amber-400 font-bold">MAIKO PRO GOLD REAL</span> o <span className="text-slate-300 font-bold">MAIKO PRO GOLD CENT</span> por solo <strong className="text-white text-base">100€</strong> <span className="line-through text-white/40 text-xs">(Antes 200€)</span>. 
-                    <span className="text-amber-300 font-bold"> Próximo lanzamiento oficial el 1 de Septiembre.</span>
+                    Estamos ultimando la fase de auditoría cuantitativa de <span className="text-amber-400 font-bold">MAIKO PRO GOLD REAL</span>. 
+                    Mientras tanto, puedes probar el motor completo en cuenta demo con <span className="text-brand-light font-bold">MAIKO PRO GOLD DEMO por solo 1€</span> o consultar nuestras guías de operativa.
                   </p>
                 </div>
                 
-                <div className="flex-shrink-0 z-10 w-full md:w-auto">
+                <div className="flex-shrink-0 z-10 w-full md:w-auto flex flex-col sm:flex-row gap-3">
                   <Link href="/bots">
-                    <Button variant="accent" className="w-full md:w-auto bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black px-8 py-6 h-auto font-black uppercase tracking-widest text-xs shadow-xl shadow-amber-500/20 border-none">
-                      Ver Oferta 100€ →
+                    <Button variant="accent" className="w-full md:w-auto bg-gradient-to-r from-brand to-purple-600 hover:from-brand-light hover:to-brand text-white px-8 py-6 h-auto font-black uppercase tracking-widest text-xs shadow-xl shadow-brand/20 border-none">
+                      Ver Catálogo & Demo →
                     </Button>
                   </Link>
                 </div>
