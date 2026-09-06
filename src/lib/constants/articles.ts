@@ -69,7 +69,7 @@ export const ARTICLES = [
         "excerpt": "Comparamos la velocidad y disciplina de los bots frente a la intuición humana. Bienvenido a la era de la automatización en el trading financiero.",
         "date": "25 Feb, 2026",
         "readTime": "16 min",
-        "image": "/images/maiko-btc.png"
+        "image": "/images/ai-algorithmic-trading.png"
     },
     {
         "slug": "por-que-fallan-bots-trading",
@@ -78,7 +78,7 @@ export const ARTICLES = [
         "excerpt": "Overfitting, martingalas y falta de Stop Loss. Aprende a identificar bots basura y operar con algoritmos institucionales de alta calidad.",
         "date": "05 Mar, 2026",
         "readTime": "16 min",
-        "image": "/images/maiko-cent.png"
+        "image": "/images/volatility-trading.png"
     },
     {
         "slug": "configurar-metatrader-5-mac",
@@ -87,7 +87,7 @@ export const ARTICLES = [
         "excerpt": "Guía paso a paso para usuarios de Apple. VPS, Crossover o Parallels: elige la mejor vía para tus bots en macOS y Silicon Chips.",
         "date": "08 Mar, 2026",
         "readTime": "15 min",
-        "image": "/images/maiko-euro.png"
+        "image": "/images/mt5-mac-silicon-2026.png"
     },
     {
         "slug": "mejores-vps-trading-2026",
@@ -96,7 +96,7 @@ export const ARTICLES = [
         "excerpt": "Analizamos Contabo, ForexVPS y las opciones gratuitas de los brokers. Latencia y estabilidad puestas a prueba para MetaTrader 5.",
         "date": "10 Mar, 2026",
         "readTime": "16 min",
-        "image": "/images/maiko-gold-demo.png"
+        "image": "/images/vps-setup.png"
     },
     {
         "slug": "psicologia-trading-emociones",
@@ -105,7 +105,7 @@ export const ARTICLES = [
         "excerpt": "Miedo y avaricia: los destructores de cuentas. Descubre cómo los bots eliminan el sesgo emocional de tu operativa diaria.",
         "date": "12 Mar, 2026",
         "readTime": "16 min",
-        "image": "/images/maiko-gold.png"
+        "image": "/images/candlestick-patterns.png"
     },
     {
         "slug": "guia-backtesting-mt5",
@@ -114,7 +114,7 @@ export const ARTICLES = [
         "excerpt": "Aprende a realizar pruebas de estrategia profesionales. No adivines, valida tu bot con datos de ticks reales y spread variable.",
         "date": "15 Mar, 2026",
         "readTime": "16 min",
-        "image": "/images/maiko-yen.png"
+        "image": "/images/mt5-server-farm.png"
     },
     {
         "slug": "cuentas-hedging-vs-netting",
@@ -306,7 +306,7 @@ El mercado de activos digitales ha alcanzado un estadio de madurez institucional
 Comprender la microestructura subyacente de este rango resulta esencial para anticipar la próxima fase de expansión macroeconómica del ciclo cripto.
 
 <div class="my-8 rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-    <img src="/images/maiko-btc.png" alt="Consolidación Bitcoin 2026" class="w-full h-auto" />
+    <img src="/images/crypto-liquidity-pool.png" alt="Consolidación Bitcoin 2026" class="w-full h-auto" />
     <p class="text-[10px] text-center text-text-muted py-2 bg-white/5">Análisis On-Chain: El volumen institucional se concentra en la parte baja del rango, indicando una fuerte acumulación.</p>
 </div>
 
@@ -627,7 +627,7 @@ La automatización no ha nacido para suplantar al operador inteligente, sino par
         category: "Educación | Errores",
         date: "05 Mar, 2026",
         readTime: "16 min",
-        image: "/images/maiko-btc.png",
+        image: "/images/volatility-trading.png",
         keywords: ["fallos bots","trading algorítmico","overfitting","gestión monetaria","dca inteligente","martingala vs dca","riesgos EA"],
         metaDescription: "Overfitting, martingalas descontroladas y falta de filtros de volatilidad. Aprende a identificar sistemas frágiles y cómo estructurar algoritmos verdaderamente robustos.",
         content: `## La Realidad Detrás de las "Curvas Milagrosas": Por Qué Fallan los Bots de Trading
@@ -713,7 +713,7 @@ Un bot de trading no es una máquina milagrosa para hacerse rico durmiendo. Es u
         category: "Tecnología | Tutoriales",
         date: "08 Mar, 2026",
         readTime: "15 min",
-        image: "/images/maiko-cent.png",
+        image: "/images/mt5-mac-silicon-2026.png",
         keywords: ["MT5 Mac","MetaTrader Apple","Wine MT5","macOS trading","M1 M2 M3 trading","trading en macbook"],
         metaDescription: "Guía definitiva 2026 para instalar MetaTrader 5 en macOS (Silicon Chips). Optimización de rendimiento, VPS y estabilidad para trading profesional.",
         content: `## El Mito Roto: Trading Profesional en macOS
@@ -777,7 +777,7 @@ Operar en un Mac en la actualidad ofrece una experiencia estética y técnica ex
         category: "Tecnología | Comparativa",
         date: "12 Jan, 2026",
         readTime: "16 min",
-        image: "/images/maiko-euro.png",
+        image: "/images/vps-setup.png",
         keywords: ["mejores vps","vultr trading","aws trading","beeks","servidor trading","latencia forex","vps metatrader"],
         metaDescription: "Analizamos y comparamos latencia, hardware y precio de los mejores proveedores VPS para MetaTrader 5 en 2026. Beeks, Vultr y más.",
         content: `## La Batalla por el Milisegundo: Los Mejores VPS para Trading Algorítmico
@@ -847,7 +847,7 @@ En el trading cuantitativo moderno, el hardware y la conexión forman parte indi
         category: "Psicología | Mentalidad",
         date: "12 Mar, 2026",
         readTime: "16 min",
-        image: "/images/maiko-gold-demo.png",
+        image: "/images/candlestick-patterns.png",
         keywords: ["psicología trading","fomo","miedo","avaricia","sesgos cognitivos","disciplina trading"],
         metaDescription: "Miedo y avaricia: los destructores de cuentas. Descubre las estrategias mentales para mantener la disciplina en 2026 y el poder de la automatización.",
         content: `## El Campo de Batalla Interior: Neurociencia y Psicología del Trading
@@ -909,7 +909,7 @@ El mercado financiero es un sofisticado mecanismo diseñado para transferir capi
         category: "Tecnología | Guía",
         date: "15 Mar, 2026",
         readTime: "16 min",
-        image: "/images/maiko-gold.png",
+        image: "/images/mt5-server-farm.png",
         keywords: ["backtesting MT5","optimización bot","estrategia MT5","probador estrategias","calidad de ticks","monte carlo trading"],
         metaDescription: "No adivines, valida. Aprende a realizar pruebas de estrategia profesionales con datos de ticks reales, spread variable y simulaciones Monte Carlo en 2026.",
         content: `## El Laboratorio Cuantitativo: Guía Maestra de Backtesting en MT5
@@ -977,7 +977,7 @@ El backtesting científico es la herramienta fundamental que separa a los aficio
         category: "Tecnología | Cuentas",
         date: "25 Nov, 2025",
         readTime: "15 min",
-        image: "/images/maiko-yen.png",
+        image: "/images/forex-trading.png",
         keywords: ["hedging","netting","MT5 cuenta","FIFO rule","cobertura trading","posiciones simultaneas"],
         metaDescription: "Explicamos la diferencia técnica fundamental entre los modos de cuenta de MT5. Por qué el modo Hedging es vital para los algoritmos sofisticados en 2026.",
         content: `## El Corazón de tu Terminal: ¿Hedging o Netting en MetaTrader 5?
@@ -1439,7 +1439,7 @@ Durante más de una década, la economía japonesa representó el baluarte globa
 Este cambio de régimen ha desatado una onda expansiva en el par **USDJPY**, sacudiendo los cimientos del "Carry Trade" internacional y alterando las estrategias de arbitraje global.
 
 <div class="my-8 rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-    <img src="/images/maiko-yen.png" alt="Volatilidad USDJPY BoJ 2026" class="w-full h-auto" />
+    <img src="/images/candlestick-patterns.png" alt="Volatilidad USDJPY BoJ 2026" class="w-full h-auto" />
     <p class="text-[10px] text-center text-text-muted py-2 bg-white/5">Análisis de volatilidad: Velas de intención institucional tras la decisión del Banco de Japón.</p>
 </div>
 

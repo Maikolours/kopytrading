@@ -16,52 +16,64 @@ export default function ArticulosPage() {
             <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-brand/5 blur-[120px] rounded-full mix-blend-screen pointer-events-none" />
 
             <div className="max-w-7xl mx-auto z-10 relative">
-                <Link href="/" className="inline-flex items-center gap-2 text-[10px] font-black text-text-muted hover:text-white transition-colors mb-6 uppercase tracking-widest border border-white/5 px-4 py-2 rounded-full glass-card hover:border-white/20">
-                    <span className="text-base leading-none">←</span> Volver al inicio
-                </Link>
+                {/* Header: botón Volver al inicio y Título a la misma altura */}
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-3">
+                    <Link href="/" className="inline-flex items-center gap-2 text-[10px] font-black text-text-muted hover:text-white transition-colors uppercase tracking-widest border border-white/5 px-4 py-2 rounded-full glass-card hover:border-white/20 shrink-0 self-start md:self-center">
+                        <span className="text-base leading-none">←</span> Volver al inicio
+                    </Link>
 
-                <div className="mb-16 border-b border-white/5 pb-10 text-center md:text-left">
-                    <h1 className="text-4xl sm:text-6xl font-black tracking-tighter text-white mb-4 uppercase italic">Artículos de <span className="text-brand-light">Trading</span></h1>
-                    <p className="text-text-muted max-w-2xl text-base sm:text-lg font-light leading-relaxed">Explora nuestras guías institucionales, configuraciones avanzadas de MT5 y estrategias de alta frecuencia para dominar el mercado.</p>
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white uppercase italic text-center md:-ml-28">
+                        Artículos de <span className="text-brand-light">Trading</span>
+                    </h1>
+
+                    <div className="hidden md:block w-28" />
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 lg:gap-12">
+                {/* Subtítulo centrado */}
+                <div className="text-center mb-8 pb-5 border-b border-white/5">
+                    <p className="text-text-muted max-w-2xl mx-auto text-xs sm:text-sm font-light leading-relaxed">
+                        Explora nuestras guías institucionales, configuraciones avanzadas de MT5 y estrategias de alta frecuencia para dominar el mercado.
+                    </p>
+                </div>
+
+                {/* Grid con tarjetas compactas que entran completas en pantalla al hacer scroll */}
+                <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6">
                     {ARTICLES.map((article, idx) => (
                         <Link key={idx} href={`/articulos/${article.slug}`} className="block group">
-                            <Card className="relative h-full overflow-hidden border-2 border-white/5 bg-surface/30 backdrop-blur-2xl group-hover:border-brand/40 transition-all duration-700 rounded-[2.5rem] premium-card-glow shadow-2xl hover:scale-[1.02] hover:-translate-y-2">
-                                <div className="absolute inset-0 bg-gradient-to-br from-brand/10 to-transparent opacity-40 group-hover:opacity-100 transition-opacity" />
+                            <Card className="relative h-full overflow-hidden border border-white/10 bg-surface/30 backdrop-blur-2xl group-hover:border-brand/50 transition-all duration-300 rounded-2xl premium-card-glow shadow-lg hover:scale-[1.01]">
+                                <div className="absolute inset-0 bg-gradient-to-br from-brand/10 to-transparent opacity-25 group-hover:opacity-100 transition-opacity" />
                                 
-                                <CardHeader className="relative z-10 border-none pb-4 pt-10 px-8 sm:px-10">
-                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-8">
-                                        <div className="flex items-center gap-3">
-                                            <span className="w-2 h-2 rounded-full bg-brand animate-pulse shadow-[0_0_10px_rgba(139,92,246,0.8)]" />
-                                            <span className="text-[11px] font-black text-brand-light uppercase tracking-[0.3em]">{article.category}</span>
+                                <CardHeader className="relative z-10 border-none pb-2 pt-4 px-4 sm:px-5">
+                                    <div className="flex justify-between items-center mb-2">
+                                        <div className="flex items-center gap-1.5">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse shadow-[0_0_8px_rgba(139,92,246,0.8)]" />
+                                            <span className="text-[9px] font-black text-brand-light uppercase tracking-[0.2em]">{article.category}</span>
                                         </div>
-                                        <div className="flex items-center gap-4 text-[10px] text-text-muted font-bold uppercase tracking-[0.2em] opacity-60">
+                                        <div className="flex items-center gap-2 text-[9px] text-text-muted font-bold uppercase tracking-widest opacity-60">
                                             <span>✍️ Maikolours</span>
                                             <span className="w-1 h-1 rounded-full bg-white/20"></span>
-                                            <span className="flex items-center gap-1.5 whitespace-nowrap">⏱ {article.readTime}</span>
+                                            <span className="flex items-center gap-1 whitespace-nowrap">⏱ {article.readTime}</span>
                                         </div>
                                     </div>
-                                    <CardTitle className="text-2xl sm:text-4xl font-black text-white group-hover:text-brand-light transition-all duration-500 leading-[1.2] tracking-tight mb-4">
+                                    <CardTitle className="text-base sm:text-lg font-black text-white group-hover:text-brand-light transition-colors leading-snug tracking-tight mb-1 line-clamp-1">
                                         {article.title}
                                     </CardTitle>
                                 </CardHeader>
                                 
                                 {article.image && (
-                                    <div className="relative w-full h-48 sm:h-56 overflow-hidden">
-                                        <img src={article.image} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100" />
+                                    <div className="relative w-full h-32 sm:h-36 overflow-hidden bg-black/40">
+                                        <img src={article.image} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" />
                                         <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-transparent to-transparent opacity-80" />
                                     </div>
                                 )}
                                 
-                                <CardContent className="relative z-10 px-8 sm:px-10 pb-12 pt-6">
-                                    <p className="text-text-muted text-sm sm:text-base leading-relaxed opacity-70 group-hover:opacity-100 transition-opacity mb-10 line-clamp-3 font-medium">
+                                <CardContent className="relative z-10 px-4 sm:px-5 pb-4 pt-2.5">
+                                    <p className="text-text-muted text-xs leading-relaxed opacity-75 group-hover:opacity-100 transition-opacity mb-3 line-clamp-2 font-medium">
                                         {article.excerpt}
                                     </p>
                                     
-                                    <div className="flex items-center gap-3 text-[11px] font-black text-brand-light uppercase tracking-[0.3em] group-hover:translate-x-4 transition-transform duration-700">
-                                        Leer Guía Completa <span className="text-2xl leading-none">→</span>
+                                    <div className="flex items-center gap-1.5 text-[9px] font-black text-brand-light uppercase tracking-[0.2em] group-hover:translate-x-1.5 transition-transform duration-200">
+                                        Leer Guía Completa <span className="text-base leading-none">→</span>
                                     </div>
                                 </CardContent>
                             </Card>
