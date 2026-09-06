@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const router = useRouter();
@@ -80,14 +81,24 @@ export default function LoginPage() {
                             <label className="block text-xs font-bold text-text-muted uppercase tracking-widest mb-2 ml-1 group-focus-within/input:text-brand-light transition-colors">
                                 Contraseña
                             </label>
-                            <input
-                                type="password"
-                                required
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="appearance-none block w-full px-4 py-4 border border-white/10 rounded-2xl bg-white/5 text-white placeholder-text-muted/30 focus:outline-none focus:ring-2 focus:ring-brand/40 focus:border-brand transition-[border-color,box-shadow,background-color] duration-200 sm:text-sm"
-                                placeholder="••••••••"
-                            />
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    required
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="appearance-none block w-full px-4 py-4 pr-12 border border-white/10 rounded-2xl bg-white/5 text-white placeholder-text-muted/30 focus:outline-none focus:ring-2 focus:ring-brand/40 focus:border-brand transition-[border-color,box-shadow,background-color] duration-200 sm:text-sm"
+                                    placeholder="••••••••"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-white transition-colors text-lg p-1 focus:outline-none"
+                                    aria-label={showPassword ? "Ocultar contraseña" : "Ver contraseña"}
+                                >
+                                    {showPassword ? "👁️" : "🙈"}
+                                </button>
+                            </div>
                         </div>
                     </div>
 
