@@ -150,7 +150,7 @@ export const ARTICLES = [
         "excerpt": "EURUSD y GBPUSD suelen moverse igual. Aprende a diversificar de verdad tus activos para no sobreexponerte innecesariamente.",
         "date": "23 Mar, 2026",
         "readTime": "15 min",
-        "image": "/images/results-march-27.png"
+        "image": "/images/currency-correlation-matrix.png"
     },
     {
         "slug": "entender-drawdown-trading",
@@ -1241,7 +1241,7 @@ Diversificar no consiste en aumentar arbitrariamente el número de activos opera
         category: "Psicología | Gestión",
         date: "10 Nov, 2025",
         readTime: "16 min",
-        image: "/images/results-march-27.png",
+        image: "/images/mt5-server-farm.png",
         keywords: ["drawdown","pérdida máxima","recuperación cuenta","gestión de riesgo","psicología trading","máximo drawdown"],
         metaDescription: "El drawdown es el peaje inevitable del éxito. Aprende las estrategias mentales y técnicas para superar las rachas de pérdidas en 2026 sin perder la cabeza.",
         content: `## La Prueba de Fuego: Cómo Sobrevivir y Gestionar el Drawdown en Trading
