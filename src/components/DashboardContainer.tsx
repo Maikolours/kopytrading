@@ -131,9 +131,13 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
         return [...raw].sort((a, b) => {
             const nameA = a.botProduct?.name?.toUpperCase() || "";
             const nameB = b.botProduct?.name?.toUpperCase() || "";
-            if (nameA.includes("GOLD DEMO")) return -1;
-            if (nameB.includes("GOLD DEMO")) return 1;
-            return 0;
+            const getPriority = (name: string) => {
+                if (name.includes("DEMO")) return 1;
+                if (name.includes("REAL")) return 2;
+                if (name.includes("CENT")) return 3;
+                return 4;
+            };
+            return getPriority(nameA) - getPriority(nameB);
         });
     }, [categoryGroups, activeCategory]);
 
