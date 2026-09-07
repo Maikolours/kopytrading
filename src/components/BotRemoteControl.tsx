@@ -319,17 +319,17 @@ export function BotRemoteControl({
                 </div>
 
                 {/* TELEMETRY CARDS */}
-                <div className="p-3 sm:p-4 grid grid-cols-2 gap-2 sm:gap-3">
-                    <div className="col-span-2 p-3 sm:p-5 rounded-xl bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex items-center justify-between group">
-                        <div className="space-y-1">
-                            <p className="text-[9px] sm:text-[10px] uppercase font-black tracking-[0.2em] text-white/30 leading-none">PROFIT HOY</p>
-                            <h3 className={`text-2xl sm:text-4xl font-black tracking-tighter flex items-center gap-1 sm:gap-2 ${botData?.pnl_today >= 0 ? 'text-success' : 'text-danger'}`}>
-                                {botData?.pnl_today >= 0 ? <TrendingUp size={22} /> : <TrendingDown size={22} />}
-                                {formatCurrency(botData?.pnl_today || 0)}
+                <div className="p-2.5 sm:p-4 grid grid-cols-2 gap-2 sm:gap-3">
+                    <div className="col-span-2 p-3 sm:p-5 rounded-xl bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex items-center justify-between group gap-2">
+                        <div className="space-y-1 min-w-0">
+                            <p className="text-[9px] sm:text-[10px] uppercase font-black tracking-[0.15em] sm:tracking-[0.2em] text-white/30 leading-none">PROFIT HOY</p>
+                            <h3 className={`text-xl sm:text-4xl font-black tracking-tighter flex items-center gap-1 sm:gap-2 ${botData?.pnl_today >= 0 ? 'text-success' : 'text-danger'}`}>
+                                {botData?.pnl_today >= 0 ? <TrendingUp size={20} className="shrink-0" /> : <TrendingDown size={20} className="shrink-0" />}
+                                <span className="truncate">{formatCurrency(botData?.pnl_today || 0)}</span>
                             </h3>
                         </div>
-                        <div className="text-right space-y-1">
-                            <p className="text-[9px] sm:text-[10px] uppercase font-black tracking-[0.2em] text-white/30 leading-none">EQUIDAD</p>
+                        <div className="text-right space-y-1 shrink-0 pl-1">
+                            <p className="text-[9px] sm:text-[10px] uppercase font-black tracking-[0.15em] sm:tracking-[0.2em] text-white/30 leading-none">EQUIDAD</p>
                             <p className="text-sm sm:text-lg font-black text-white group-hover:text-brand-light transition-colors">{formatCurrency(botData?.equity || 0)}</p>
                         </div>
                     </div>

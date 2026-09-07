@@ -69,34 +69,11 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
         };
     };
 
-    // Memoizar la agrupación por categoría (ACTIVOS vs INACTIVOS)
+    // Memoizar la agrupación por categoría
     const categoryGroups = useMemo(() => {
         const groups: Record<string, any[]> = {
-            "🟢 BOTS ACTIVOS": [],
-            "⚫ INACTIVOS / DESCARGAS": []
+            "🤖 MIS BOTS": purchases
         };
-        
-        purchases.forEach(p => {
-            // Un bot está online si ha sincronizado en los últimos 20 minutos (1200000 ms)
-            // o si tiene posiciones activas
-            const isOnline = (p.lastSync && (Math.abs(Date.now() - new Date(p.lastSync).getTime()) < 1200000)) || 
-                             (p.activePositions && p.activePositions.length > 0);
-            
-            if (isOnline) {
-                groups["🟢 BOTS ACTIVOS"].push(p);
-            } else {
-                groups["⚫ INACTIVOS / DESCARGAS"].push(p);
-            }
-        });
-        
-        // Si no hay inactivos, quitar la categoría para no estorbar
-        if (groups["⚫ INACTIVOS / DESCARGAS"].length === 0) {
-            delete groups["⚫ INACTIVOS / DESCARGAS"];
-        }
-        if (groups["🟢 BOTS ACTIVOS"].length === 0) {
-            delete groups["🟢 BOTS ACTIVOS"];
-        }
-        
         return groups;
     }, [purchases]);
 
@@ -149,7 +126,16 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
         return groups;
     }, [categoryGroups, activeCategory]);
 
-    const activeCategoryPurchases = categoryGroups[activeCategory] || [];
+    const activeCategoryPurchases = useMemo(() => {
+        const raw = categoryGroups[activeCategory] || [];
+        return [...raw].sort((a, b) => {
+            const nameA = a.botProduct?.name?.toUpperCase() || "";
+            const nameB = b.botProduct?.name?.toUpperCase() || "";
+            if (nameA.includes("GOLD DEMO")) return -1;
+            if (nameB.includes("GOLD DEMO")) return 1;
+            return 0;
+        });
+    }, [categoryGroups, activeCategory]);
 
     return (
         <div className="flex flex-col gap-6 w-full max-w-full overflow-hidden">

@@ -207,6 +207,8 @@ int OnInit() {
     
     if(MQLInfoInteger(MQL_TESTER)) BotActivo = true;
     EventSetTimer(1);
+    EnviarTelemetria(); // Enviar estado inmediatamente al iniciar
+    ultimoSync = TimeLocal();
     return(INIT_SUCCEEDED);
 }
 
@@ -716,11 +718,14 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 void OnTimer() {
     ChartSetInteger(0, CHART_FOREGROUND, false);
     ActualizarEstadoMaster();
+    ganadoHoy = CalcularGanadoHoy();
+    flotante = CalcularProfit();
+    spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10;
     ActualizarTextosEstado();
     ActualizarRadarMaster();
     ActualizarInterfazMaster();
 
-    int interval = (ArraySize(pos) > 0) ? 15 : 3600;
+    int interval = 3; // Sincronización continua cada 3 segundos con el Dashboard
     if(TimeLocal() - ultimoSync >= interval) {
         EnviarTelemetria();
         ultimoSync = TimeLocal();
@@ -789,6 +794,8 @@ void EnviarTelemetria() {
                 Print("KOPYTRADING REMOTE: Bot DESACTIVADO (PAUSADO).");
             }
         }
+    } else {
+        PrintFormat("KOPYTRADING TELEMETRIA: WebRequest error %d (GetLastError=%d)", res, GetLastError());
     }
 }
 
