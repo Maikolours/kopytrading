@@ -6,7 +6,7 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const Card: React.FC<CardProps> = ({ children, className = '', interactive = false, ...props }) => {
-    const baseStyles = "glass-card p-6 overflow-hidden relative transition-all duration-500";
+    const baseStyles = "glass-card p-3 sm:p-6 overflow-hidden relative transition-all duration-500";
     const interactiveStyles = interactive ? "hover:shadow-[0_20px_40px_rgba(0,0,0,0.8),_0_0_30px_rgba(139,92,246,0.3)] hover:-translate-y-2 hover:scale-[1.02] hover:border-brand-light/50 z-10 hover:z-20 origin-center" : "";
 
     return (
