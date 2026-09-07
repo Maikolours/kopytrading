@@ -27,15 +27,15 @@ input double   MaxRangoVelaM1             = 20.0;        // ⚡ Rango Máximo Ve
 input double   MaxSpreadPips              = 4.0;         // 📊 Spread Máximo Permitido (Pips)
 input double   SensibilidadMechaReal      = 3.0;         // ⚖️ Sensibilidad Rechazo de Mechas
 input int      MinutosPausaTrasSusto      = 1;           // ⏱️ Minutos Pausa tras Vela Extrema
-input double   MaxRsiCompra               = 70.0;        // 📈 RSI Máximo para Compras (Filtro Techos)
-input double   MinRsiVenta                = 30.0;        // 📉 RSI Mínimo para Ventas (Filtro Suelos)
+input double   MaxRsiCompra               = 65.0;        // 📈 RSI Máximo para Compras (Filtro Techos/Agotamiento)
+input double   MinRsiVenta                = 35.0;        // 📉 RSI Mínimo para Ventas (Filtro Suelos/Agotamiento)
 
 // --- FILTRO DE TECHOS Y SUELOS (SOPORTES Y RESISTENCIAS) ---
 input group "━━━━━━ 🏛️ 𝗙 𝗜 𝗟 𝗧 𝗥 𝗢   𝗗 𝗘   𝗧 𝗘 𝗖 𝗛 𝗢 𝗦   𝗬   𝗦 𝗨 𝗘 𝗟 𝗢 𝗦 ━━━━━━"
 input bool             UsarFiltroTechosSuelos     = true;        // 🏛️ Activar Filtro Techos y Suelos M15 (S/R)
 input ENUM_TIMEFRAMES  TimeframeTechosSuelos      = PERIOD_M15;  // 📅 Temporalidad para Techos/Suelos M15
-input int              PeriodoTechosSuelos        = 24;          // 🔢 Período de Velas M15 a Analizar
-input double           DistanciaTechoSueloPips    = 15.0;        // 📏 Distancia Mínima M15 para Bloquear (Pips)
+input int              PeriodoTechosSuelos        = 48;          // 🔢 Período de Velas M15 a Analizar
+input double           DistanciaTechoSueloPips    = 35.0;        // 📏 Distancia Mínima M15 para Bloquear (Pips)
 
 // --- FILTROS ADICIONALES MULTI-TEMPORALIDAD (H1 y H4) ---
 input bool             UsarFiltroTechosSuelosH1   = true;        // 📊 Activar Filtro S/R en H1
@@ -57,6 +57,7 @@ input ENUM_TIMEFRAMES  TimeframeConfirmacion      = PERIOD_M5;   // 📅 Tempora
 // --- TENDENCIA Y DIRECCION ---
 input group "━━━━━━ 📉 𝗧 𝗘 𝗡 𝗗 𝗘 𝗡 𝗖 𝗜 𝗔   𝗬   𝗗 𝗜 𝗥 𝗘 𝗖 𝗖 𝗜 𝗢 𝗡 ━━━━━━"
 input int      PeriodoMediaFiltro         = 50;          // 🔗 Período EMA Tendencia (Filtro)
+input double   MaxDistanciaEmaPips        = 35.0;        // 📏 Distancia Máxima a la EMA (Pips) Evita entrar al final
 input bool     CheckM15                   = true;        // 📅 Confirmación Tendencia M15 (Sincronía)
 input bool     CheckM5                    = true;        // 📅 Confirmación Tendencia M5 (Sincronía)
 
@@ -77,7 +78,7 @@ input int      MaxVelasHueco              = 5;           // ⏳ Velas sin Giro p
 // --- COBRAR BENEFICIOS (TAKE PROFIT) ---
 input group "━━━━━━ 💰 𝗖 𝗢 𝗕 𝗥 𝗔 𝗥   𝗕 𝗘 𝗡 𝗘 𝗙 𝗜 𝗖 𝗜 𝗢 𝗦   ( 𝗧 𝗣 ) ━━━━━━"
 input double   ProfitNetoFlush            = 5.0;         // 💵 Beneficio Cierre Total Cesta ($)
-input double   ProfitCosechaIndividual    = 0.75;        // 💵 Beneficio Cierre SOS Individual ($)
+input double   ProfitCosechaIndividual    = 1.50;        // 💵 Beneficio Cierre SOS Individual ($)
 input double   TargetDiario               = 25.0;        // 🎯 Meta de Beneficio Diario ($)
 
 // --- HORARIOS OPERATIVOS ---
@@ -85,7 +86,7 @@ input group "━━━━━━ ⏰ 𝗛 𝗢 𝗥 𝗔 𝗥 𝗜 𝗢 𝗦   �
 input int      HoraInicioOperativa        = 3;           // 🔔 Hora de Inicio Operaciones (Broker)
 input int      HoraFinOperativa           = 23;          // 🔕 Hora de Cierre Operaciones (Broker)
 input bool     OperarViernesNoche         = false;       // 🌃 Permitir Operaciones Viernes Noche
-input bool     UsarHorarioBloqueo         = false;       // 🛑 Evitar Noticias (Bloqueo Horario)
+input bool     UsarHorarioBloqueo         = true;        // 🛑 Evitar Noticias (Bloqueo Horario)
 input int      HoraInicioBloqueo          = 14;          // 🛑 Hora Inicio Bloqueo Noticias
 input int      HoraFinBloqueo             = 16;          // 🛑 Hora Fin Bloqueo Noticias
 
@@ -192,7 +193,7 @@ int OnInit() {
     ActualizarTextosEstado();
     ActualizarRadarMaster();
     ActualizarInterfazMaster();
-    ChartSetInteger(0, CHART_FOREGROUND, false); ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
+    ChartSetInteger(0, CHART_FOREGROUND, false);
     ChartRedraw();
       
     string gvName = "MAIKO_ORIGINAL_AGOSTO_TRIAL_" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
@@ -396,6 +397,15 @@ bool ValidarEstructuraScholar(string &decision) {
     
     double precio = iClose(_Symbol, PERIOD_M1, 1); bool porEncima = (precio > ema[0]);
     
+    // --- FILTRO DE HIPEREXTENSION (EVITAR ENTRAR AL FINAL DE LA TENDENCIA) ---
+    if(MaxDistanciaEmaPips > 0) {
+        double distEmaPips = MathAbs(precio - ema[0]) / _Point / 10;
+        if(distEmaPips > MaxDistanciaEmaPips) {
+            txtVeredicto = StringFormat("PRECIO LEJOS DE EMA (%.1f > %.0f pips)", distEmaPips, MaxDistanciaEmaPips);
+            return false;
+        }
+    }
+    
     if(porEncima && upperWick > (body * SensibilidadMechaReal) && upperWick > 3.0) { txtVeredicto = "RECHAZO ALCISTA (MECHA ALTA)"; return false; }
     if(!porEncima && lowerWick > (body * SensibilidadMechaReal) && lowerWick > 3.0) { txtVeredicto = "RECHAZO BAJISTA (MECHA BAJA)"; return false; }
     
@@ -500,7 +510,7 @@ double CalcularGanadoHoy() {
     double total = 0; HistorySelect(iTime(_Symbol, PERIOD_D1, 0), TimeCurrent()); 
     for(int i=HistoryDealsTotal()-1; i>=0; i--) {
         ulong t = HistoryDealGetTicket(i);
-        if(HistoryDealGetString(t, DEAL_SYMBOL) == _Symbol) {
+        if(HistoryDealGetString(t, DEAL_SYMBOL) == _Symbol && HistoryDealGetInteger(t, DEAL_MAGIC) == ExpertMagic) {
             total += (HistoryDealGetDouble(t, DEAL_PROFIT) + HistoryDealGetDouble(t, DEAL_COMMISSION) + HistoryDealGetDouble(t, DEAL_SWAP));
         }
     }
@@ -705,7 +715,6 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 
 void OnTimer() {
     ChartSetInteger(0, CHART_FOREGROUND, false);
-    ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
     ActualizarEstadoMaster();
     ActualizarTextosEstado();
     ActualizarRadarMaster();

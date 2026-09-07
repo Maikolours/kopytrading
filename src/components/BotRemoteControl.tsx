@@ -676,10 +676,10 @@ export function BotRemoteControl({
 
 
                 {/* EMERGENCY STOP & CLOSE */}
-                <div className="p-3 sm:p-5 bg-black/60 border-t border-white/5 space-y-2.5">
-                    <div className="flex gap-2 w-full">
+                <div className="p-2.5 sm:p-5 bg-black/60 border-t border-white/5 space-y-2">
+                    <div className="grid grid-cols-2 gap-2 w-full min-w-0">
                         <button 
-                            className="flex-1 min-w-0 flex items-center justify-center gap-1.5 py-3 sm:py-4 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600 hover:text-white transition-all truncate"
+                            className="w-full min-w-0 flex items-center justify-center gap-1 sm:gap-1.5 py-3 sm:py-4 px-1.5 sm:px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-tight sm:tracking-wider bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600 hover:text-white transition-all text-center"
                             onClick={async () => {
                                 if(confirm("✅ ¿ESTÁS SEGURO? Se cerrarán las operaciones y se APAGARÁ el bot para que no abra más.")) {
                                     await sendAction("CLOSE_ALL");
@@ -687,33 +687,33 @@ export function BotRemoteControl({
                                 }
                             }}
                         >
-                            <Coins size={13} className="shrink-0" />
+                            <Coins size={12} className="shrink-0" />
                             <span className="truncate">COBRAR Y APAGAR</span>
                         </button>
                         
                         <button 
-                            className="flex-1 min-w-0 flex items-center justify-center gap-1.5 py-3 sm:py-4 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-red-600/20 text-red-500 border border-red-500/30 hover:bg-red-600 hover:text-white transition-all group truncate"
+                            className="w-full min-w-0 flex items-center justify-center gap-1 sm:gap-1.5 py-3 sm:py-4 px-1.5 sm:px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-tight sm:tracking-wider bg-red-600/20 text-red-500 border border-red-500/30 hover:bg-red-600 hover:text-white transition-all group text-center"
                             onClick={() => {
                                 if(confirm("🚨 ¿ESTÁS SEGURO? Se cerrarán TODAS las posiciones inmediatamente.")) {
                                     sendAction("CLOSE_ALL");
                                 }
                             }}
                         >
-                            <ShieldAlert size={13} className="group-hover:animate-bounce shrink-0" />
+                            <ShieldAlert size={12} className="group-hover:animate-bounce shrink-0" />
                             <span className="truncate">STOP ALL</span>
                         </button>
                     </div>
 
                     {/* NEW: ENCENDER BOT BUTTON */}
                     <button 
-                        className="w-full flex items-center justify-center gap-2 py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-green-600/20 text-green-400 border border-green-500/30 hover:bg-green-600 hover:text-white transition-all"
+                        className="w-full min-w-0 flex items-center justify-center gap-1.5 py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-green-600/20 text-green-400 border border-green-500/30 hover:bg-green-600 hover:text-white transition-all"
                         onClick={() => {
                             if(confirm("▶️ ¿ESTÁS SEGURO? El bot se ENCENDERÁ y volverá a operar automáticamente.")) {
                                 sendAction("ARM_BOT", "TRUE");
                             }
                         }}
                     >
-                        <Target size={13} className="shrink-0" />
+                        <Target size={12} className="shrink-0" />
                         <span>ENCENDER BOT (PLAY)</span>
                     </button>
                     

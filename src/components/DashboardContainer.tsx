@@ -152,15 +152,15 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
     const activeCategoryPurchases = categoryGroups[activeCategory] || [];
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 w-full max-w-full overflow-hidden">
             {/* Top Navigation Tabs - Better for Centering */}
-            <div className="w-full">
-                <div className="flex flex-wrap justify-center gap-2 pb-4 border-b border-white/5">
+            <div className="w-full max-w-full overflow-x-auto no-scrollbar py-1">
+                <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 pb-3 border-b border-white/5 min-w-0 max-w-full">
                     {categories.map(cat => (
                         <button
                             key={cat}
                             onClick={() => handleCategoryChange(cat)}
-                            className={`px-4 py-2.5 rounded-xl text-left transition-all whitespace-nowrap md:whitespace-normal font-black uppercase tracking-tighter text-[10px] border ${
+                            className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-left transition-all whitespace-nowrap font-black uppercase tracking-tighter text-[9px] sm:text-[10px] border ${
                                 activeCategory === cat 
                                 ? 'bg-brand/20 border-brand-light text-white shadow-[0_0_15px_rgba(168,85,247,0.2)]' 
                                 : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10'
