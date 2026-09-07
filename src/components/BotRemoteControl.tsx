@@ -270,12 +270,12 @@ export function BotRemoteControl({
     );
 
     return (
-        <div className="w-full sm:flex sm:justify-center py-2 sm:py-4">
-            <div className={`w-full max-w-full sm:max-w-[400px] rounded-2xl bg-black/40 border border-white/10 shadow-2xl flex flex-col backdrop-blur-xl relative overflow-hidden mx-auto`}>
+        <div className="w-full flex justify-center py-1 sm:py-4">
+            <div className={`w-full max-w-full rounded-2xl bg-black/40 border border-white/10 shadow-2xl flex flex-col backdrop-blur-xl relative overflow-hidden mx-auto`}>
                 <div className={`absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-brand/20 to-transparent blur-3xl opacity-20 pointer-events-none`} />
                 
                 {/* HEADER */}
-                <div className="p-4 border-b border-white/5">
+                <div className="p-3 sm:p-4 border-b border-white/5">
                     <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
                             <div className={`p-2 rounded-xl bg-brand/10 border border-brand/20 text-brand-light shadow-[0_0_15px_rgba(36,206,203,0.2)]`}>
@@ -320,11 +320,11 @@ export function BotRemoteControl({
 
                 {/* TELEMETRY CARDS */}
                 <div className="p-3 sm:p-4 grid grid-cols-2 gap-2 sm:gap-3">
-                    <div className="col-span-2 p-4 sm:p-5 rounded-xl bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex items-center justify-between group">
+                    <div className="col-span-2 p-3 sm:p-5 rounded-xl bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex items-center justify-between group">
                         <div className="space-y-1">
                             <p className="text-[9px] sm:text-[10px] uppercase font-black tracking-[0.2em] text-white/30 leading-none">PROFIT HOY</p>
-                            <h3 className={`text-3xl sm:text-4xl font-black tracking-tighter flex items-center gap-1 sm:gap-2 ${botData?.pnl_today >= 0 ? 'text-success' : 'text-danger'}`}>
-                                {botData?.pnl_today >= 0 ? <TrendingUp size={24} /> : <TrendingDown size={24} />}
+                            <h3 className={`text-2xl sm:text-4xl font-black tracking-tighter flex items-center gap-1 sm:gap-2 ${botData?.pnl_today >= 0 ? 'text-success' : 'text-danger'}`}>
+                                {botData?.pnl_today >= 0 ? <TrendingUp size={22} /> : <TrendingDown size={22} />}
                                 {formatCurrency(botData?.pnl_today || 0)}
                             </h3>
                         </div>
@@ -334,17 +334,20 @@ export function BotRemoteControl({
                         </div>
                     </div>
 
-                    <div className="col-span-2 p-3 sm:p-4 rounded-xl bg-brand/5 border border-brand/20 space-y-2">
-                         <p className="text-[9px] uppercase font-black tracking-widest text-brand-light flex items-center gap-1">
-                            <Target size={12} /> PLAN DE ATAQUE
-                        </p>
-                        <p className={`text-xs sm:text-sm font-bold leading-tight ${botData?.narrative?.includes("🎯") || botData?.narrative?.includes("⚡") ? "text-white" : "text-white/60"}`}>
-                            {displayNarrative}
-                        </p>
-                    </div>
+                    {/* MOSTRAR PLAN DE ATAQUE / NARRATIVA SOLO SI APORTA VALOR Y NO DICE SIMPLEMENTE APAGADO */}
+                    {botData?.narrative && !botData?.narrative?.toUpperCase()?.includes("APAGADO") && (
+                        <div className="col-span-2 p-2.5 sm:p-4 rounded-xl bg-brand/5 border border-brand/20 space-y-1.5">
+                             <p className="text-[8px] sm:text-[9px] uppercase font-black tracking-widest text-brand-light flex items-center gap-1">
+                                <Target size={11} /> NARRATIVA INSTITUCIONAL
+                            </p>
+                            <p className={`text-xs sm:text-sm font-bold leading-tight ${botData?.narrative?.includes("🎯") || botData?.narrative?.includes("⚡") ? "text-white" : "text-white/70"}`}>
+                                {displayNarrative}
+                            </p>
+                        </div>
+                    )}
 
-                    <div className="p-3 sm:p-4 rounded-xl bg-white/5 border border-white/5 space-y-2">
-                        <p className="text-[9px] uppercase font-black tracking-widest text-white/20 flex items-center gap-1">
+                    <div className="p-2.5 sm:p-4 rounded-xl bg-white/5 border border-white/5 space-y-1.5">
+                        <p className="text-[8px] sm:text-[9px] uppercase font-black tracking-widest text-white/20 flex items-center gap-1">
                             <ShieldAlert size={10} /> BIAS (4H)
                         </p>
                         <div className="flex items-center gap-1.5">
@@ -673,10 +676,10 @@ export function BotRemoteControl({
 
 
                 {/* EMERGENCY STOP & CLOSE */}
-                <div className="p-4 sm:p-5 bg-black/60 border-t border-white/5 space-y-3">
-                    <div className="flex gap-2">
+                <div className="p-3 sm:p-5 bg-black/60 border-t border-white/5 space-y-2.5">
+                    <div className="flex gap-2 w-full">
                         <button 
-                            className="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600 hover:text-white transition-all"
+                            className="flex-1 min-w-0 flex items-center justify-center gap-1.5 py-3 sm:py-4 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600 hover:text-white transition-all truncate"
                             onClick={async () => {
                                 if(confirm("✅ ¿ESTÁS SEGURO? Se cerrarán las operaciones y se APAGARÁ el bot para que no abra más.")) {
                                     await sendAction("CLOSE_ALL");
@@ -684,41 +687,41 @@ export function BotRemoteControl({
                                 }
                             }}
                         >
-                            <Coins size={14} />
-                            COBRAR Y APAGAR
+                            <Coins size={13} className="shrink-0" />
+                            <span className="truncate">COBRAR Y APAGAR</span>
                         </button>
                         
                         <button 
-                            className="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] bg-red-600/20 text-red-500 border border-red-500/30 hover:bg-red-600 hover:text-white transition-all group"
+                            className="flex-1 min-w-0 flex items-center justify-center gap-1.5 py-3 sm:py-4 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-red-600/20 text-red-500 border border-red-500/30 hover:bg-red-600 hover:text-white transition-all group truncate"
                             onClick={() => {
                                 if(confirm("🚨 ¿ESTÁS SEGURO? Se cerrarán TODAS las posiciones inmediatamente.")) {
                                     sendAction("CLOSE_ALL");
                                 }
                             }}
                         >
-                            <ShieldAlert size={14} className="group-hover:animate-bounce" />
-                            STOP ALL
+                            <ShieldAlert size={13} className="group-hover:animate-bounce shrink-0" />
+                            <span className="truncate">STOP ALL</span>
                         </button>
                     </div>
 
                     {/* NEW: ENCENDER BOT BUTTON */}
                     <button 
-                        className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] bg-green-600/20 text-green-400 border border-green-500/30 hover:bg-green-600 hover:text-white transition-all"
+                        className="w-full flex items-center justify-center gap-2 py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-green-600/20 text-green-400 border border-green-500/30 hover:bg-green-600 hover:text-white transition-all"
                         onClick={() => {
                             if(confirm("▶️ ¿ESTÁS SEGURO? El bot se ENCENDERÁ y volverá a operar automáticamente.")) {
                                 sendAction("ARM_BOT", "TRUE");
                             }
                         }}
                     >
-                        <Target size={14} />
-                        ENCENDER BOT (PLAY)
+                        <Target size={13} className="shrink-0" />
+                        <span>ENCENDER BOT (PLAY)</span>
                     </button>
                     
                     {statusMsg && (
                         <motion.div 
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="mt-4 p-2 text-center bg-brand/10 rounded-lg border border-brand/20"
+                            className="mt-3 p-2 text-center bg-brand/10 rounded-lg border border-brand/20"
                         >
                             <p className="text-[8px] font-black text-brand-light uppercase tracking-widest">{statusMsg}</p>
                         </motion.div>

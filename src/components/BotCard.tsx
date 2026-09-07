@@ -95,11 +95,11 @@ export const BotCard = memo(function BotCard({
     const isSyncing = !balance && purchase?.lastStatus === "CARGANDO...";
 
     return (
-        <div className={`animate-in fade-in slide-in-from-bottom-6 duration-700 mb-8 ${assetTheme.class}`}>
-            <Card className={`relative overflow-hidden glass-card ${assetTheme.border} bg-surface/60 backdrop-blur-3xl shadow-2xl rounded-[2.5rem] border`}>
+        <div className={`animate-in fade-in slide-in-from-bottom-6 duration-700 mb-8 w-full max-w-full overflow-hidden ${assetTheme.class}`}>
+            <Card className={`relative overflow-hidden glass-card ${assetTheme.border} bg-surface/60 backdrop-blur-3xl shadow-2xl rounded-2xl sm:rounded-[2.5rem] border p-2.5 sm:p-6 w-full max-w-full`}>
                 <div className="absolute inset-0 bg-gradient-to-b from-[var(--theme-color)]/10 to-[var(--theme-color)]/5 pointer-events-none opacity-40" />
                 
-                <CardHeader className="relative z-10 border-b border-white/5 py-3 px-4 sm:px-6">
+                <CardHeader className="relative z-10 border-b border-white/5 py-2.5 sm:py-3 px-2 sm:px-6">
                     <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
                         <div className="flex-1">
                             <div className="flex flex-wrap items-center gap-1.5 mb-2">
@@ -171,8 +171,8 @@ export const BotCard = memo(function BotCard({
                     </div>
                 </CardHeader>
 
-                <CardContent className="relative z-10 p-3 sm:p-5 space-y-4">
-                    <div className="grid lg:grid-cols-2 gap-4">
+                <CardContent className="relative z-10 p-1 sm:p-5 space-y-4 w-full max-w-full overflow-hidden">
+                    <div className="grid lg:grid-cols-2 gap-4 w-full max-w-full">
                         <div className={isMaintenance ? 'blur-md grayscale opacity-40' : ''}>
                              <BotRemoteControl 
                                 purchaseId={purchase?.id || "unknown"} 
