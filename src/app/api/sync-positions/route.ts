@@ -89,7 +89,20 @@ export async function POST(req: Request) {
                 }
             });
         }
-        if (!purchaseId || !account) {
+        // Fallback: Si purchaseId viene vacío pero la cuenta es conocida (Sakura demo 1028690, 11649344, etc)
+        let resolvedPurchaseId = purchaseId;
+        if (!resolvedPurchaseId && account) {
+            const accStr = String(account).trim();
+            if (accStr === "1028690" || accStr === "11649344") {
+                resolvedPurchaseId = "cmn9hfal4000fvhbcr34kst5x"; // Demo Gold
+            } else if (accStr === "23449251") {
+                resolvedPurchaseId = "cmn9hfatl000jvhbci6l3ephi"; // Cent Gold
+            } else if (accStr === "27625151") {
+                resolvedPurchaseId = "cmn9hfapj000hvhbca86faz0c"; // Real Gold
+            }
+        }
+
+        if (!resolvedPurchaseId || !account) {
             await prisma.requestLog.create({
                 data: { path: "/api/sync-positions", method: "POST", body: text.substring(0, 1000), error: "Missing purchaseId or account" }
             });
@@ -98,7 +111,7 @@ export async function POST(req: Request) {
 
         // 3. Verificar que la compra existe y cargar su producto (Búsqueda Robusta)
         let purchase = await prisma.purchase.findUnique({
-            where: { id: purchaseId },
+            where: { id: resolvedPurchaseId },
             include: { botProduct: true }
         });
 

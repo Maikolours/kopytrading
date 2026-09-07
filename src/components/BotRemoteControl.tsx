@@ -319,50 +319,50 @@ export function BotRemoteControl({
                 </div>
 
                 {/* TELEMETRY CARDS */}
-                <div className="p-2.5 sm:p-4 grid grid-cols-2 gap-2 sm:gap-3">
-                    <div className="col-span-2 p-3 sm:p-5 rounded-xl bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex items-center justify-between group gap-2">
-                        <div className="space-y-1 min-w-0">
-                            <p className="text-[9px] sm:text-[10px] uppercase font-black tracking-[0.15em] sm:tracking-[0.2em] text-white/30 leading-none">PROFIT HOY</p>
-                            <h3 className={`text-xl sm:text-4xl font-black tracking-tighter flex items-center gap-1 sm:gap-2 ${botData?.pnl_today >= 0 ? 'text-success' : 'text-danger'}`}>
-                                {botData?.pnl_today >= 0 ? <TrendingUp size={20} className="shrink-0" /> : <TrendingDown size={20} className="shrink-0" />}
+                <div className="p-2 sm:p-4 grid grid-cols-2 gap-1.5 sm:gap-3 w-full min-w-0 max-w-full">
+                    <div className="col-span-2 p-2.5 sm:p-5 rounded-xl bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex items-center justify-between group gap-2 w-full min-w-0 overflow-hidden">
+                        <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1">
+                            <p className="text-[8px] sm:text-[10px] uppercase font-black tracking-wider sm:tracking-[0.2em] text-white/30 leading-none">PROFIT HOY</p>
+                            <h3 className={`text-lg min-[380px]:text-xl sm:text-4xl font-black tracking-tight sm:tracking-tighter flex items-center gap-1 sm:gap-2 ${botData?.pnl_today >= 0 ? 'text-success' : 'text-danger'}`}>
+                                {botData?.pnl_today >= 0 ? <TrendingUp size={18} className="shrink-0" /> : <TrendingDown size={18} className="shrink-0" />}
                                 <span className="truncate">{formatCurrency(botData?.pnl_today || 0)}</span>
                             </h3>
                         </div>
-                        <div className="text-right space-y-1 shrink-0 pl-1">
-                            <p className="text-[9px] sm:text-[10px] uppercase font-black tracking-[0.15em] sm:tracking-[0.2em] text-white/30 leading-none">EQUIDAD</p>
-                            <p className="text-sm sm:text-lg font-black text-white group-hover:text-brand-light transition-colors">{formatCurrency(botData?.equity || 0)}</p>
+                        <div className="text-right space-y-0.5 sm:space-y-1 shrink-0 max-w-[45%]">
+                            <p className="text-[8px] sm:text-[10px] uppercase font-black tracking-wider sm:tracking-[0.2em] text-white/30 leading-none">EQUIDAD</p>
+                            <p className="text-xs min-[380px]:text-sm sm:text-lg font-black text-white group-hover:text-brand-light transition-colors truncate">{formatCurrency(botData?.equity || 0)}</p>
                         </div>
                     </div>
 
                     {/* MOSTRAR PLAN DE ATAQUE / NARRATIVA SOLO SI APORTA VALOR Y NO DICE SIMPLEMENTE APAGADO */}
                     {botData?.narrative && !botData?.narrative?.toUpperCase()?.includes("APAGADO") && (
-                        <div className="col-span-2 p-2.5 sm:p-4 rounded-xl bg-brand/5 border border-brand/20 space-y-1.5">
+                        <div className="col-span-2 p-2 sm:p-4 rounded-xl bg-brand/5 border border-brand/20 space-y-1 w-full min-w-0 overflow-hidden">
                              <p className="text-[8px] sm:text-[9px] uppercase font-black tracking-widest text-brand-light flex items-center gap-1">
-                                <Target size={11} /> NARRATIVA INSTITUCIONAL
+                                <Target size={11} className="shrink-0" /> NARRATIVA INSTITUCIONAL
                             </p>
-                            <p className={`text-xs sm:text-sm font-bold leading-tight ${botData?.narrative?.includes("🎯") || botData?.narrative?.includes("⚡") ? "text-white" : "text-white/70"}`}>
+                            <p className={`text-[11px] sm:text-sm font-bold leading-tight ${botData?.narrative?.includes("🎯") || botData?.narrative?.includes("⚡") ? "text-white" : "text-white/70"}`}>
                                 {displayNarrative}
                             </p>
                         </div>
                     )}
 
-                    <div className="p-2.5 sm:p-4 rounded-xl bg-white/5 border border-white/5 space-y-1.5">
-                        <p className="text-[8px] sm:text-[9px] uppercase font-black tracking-widest text-white/20 flex items-center gap-1">
-                            <ShieldAlert size={10} /> BIAS (4H)
+                    <div className="p-2 sm:p-4 rounded-xl bg-white/5 border border-white/5 space-y-1 min-w-0 overflow-hidden">
+                        <p className="text-[7px] min-[380px]:text-[8px] sm:text-[9px] uppercase font-black tracking-widest text-white/20 flex items-center gap-1">
+                            <ShieldAlert size={10} className="shrink-0" /> BIAS (4H)
                         </p>
-                        <div className="flex items-center gap-1.5">
-                            <div className={`w-2 h-2 rounded-full ${botData?.trend === 'BULL' ? 'bg-success' : 'bg-danger'}`} />
-                            <span className={`text-[10px] font-black uppercase ${botData?.trend === 'BULL' ? 'text-success' : 'text-danger'}`}>
+                        <div className="flex items-center gap-1.5 min-w-0">
+                            <div className={`w-2 h-2 rounded-full shrink-0 ${botData?.trend === 'BULL' ? 'bg-success' : 'bg-danger'}`} />
+                            <span className={`text-[9px] min-[380px]:text-[10px] font-black uppercase truncate ${botData?.trend === 'BULL' ? 'text-success' : 'text-danger'}`}>
                                 {botData?.trend === 'BULL' ? 'ALCISTA' : 'BAJISTA'}
                             </span>
                         </div>
                     </div>
 
-                    <div className="p-3 sm:p-4 rounded-xl bg-white/5 border border-white/5 space-y-2">
-                         <p className="text-[9px] uppercase font-black tracking-widest text-white/20 flex items-center gap-1">
-                            <Activity size={10} /> STATUS
+                    <div className="p-2 sm:p-4 rounded-xl bg-white/5 border border-white/5 space-y-1 min-w-0 overflow-hidden">
+                         <p className="text-[7px] min-[380px]:text-[8px] sm:text-[9px] uppercase font-black tracking-widest text-white/20 flex items-center gap-1">
+                            <Activity size={10} className="shrink-0" /> STATUS
                         </p>
-                        <p className={`text-[10px] sm:text-[11px] font-black uppercase truncate ${botData?.status?.includes("BOS") || botData?.status?.includes("OTE") ? "text-brand-light" : "text-white/40"}`}>
+                        <p className={`text-[9px] min-[380px]:text-[10px] sm:text-[11px] font-black uppercase truncate ${botData?.status?.includes("BOS") || botData?.status?.includes("OTE") ? "text-brand-light" : "text-white/40"}`}>
                             {displayStatus}
                         </p>
                     </div>

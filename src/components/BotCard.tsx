@@ -171,9 +171,9 @@ export const BotCard = memo(function BotCard({
                     </div>
                 </CardHeader>
 
-                <CardContent className="relative z-10 p-1 sm:p-5 space-y-4 w-full max-w-full overflow-hidden">
-                    <div className="grid lg:grid-cols-2 gap-4 w-full max-w-full">
-                        <div className={isMaintenance ? 'blur-md grayscale opacity-40' : ''}>
+                <CardContent className="relative z-10 p-0.5 sm:p-5 space-y-4 w-full min-w-0 max-w-full overflow-hidden">
+                    <div className="grid lg:grid-cols-2 gap-4 w-full min-w-0 max-w-full">
+                        <div className={`w-full min-w-0 max-w-full overflow-hidden ${isMaintenance ? 'blur-md grayscale opacity-40' : ''}`}>
                              <BotRemoteControl 
                                 purchaseId={purchase?.id || "unknown"} 
                                 botName={botDisplayName} 
@@ -186,7 +186,7 @@ export const BotCard = memo(function BotCard({
                             />
                         </div>
 
-                        <div className="space-y-4">
+                        <div className="space-y-4 w-full min-w-0 max-w-full overflow-hidden">
                             <OperativoChart 
                                 symbol={botProduct.instrument || (isGold ? "XAUUSD" : "BTCUSDT")}
                                 purchaseId={purchase?.id || "unknown"}
@@ -196,7 +196,7 @@ export const BotCard = memo(function BotCard({
                             />
 
                             {/* TERMINAL DE POSICIONES EN VIVO */}
-                            <div className="p-4 rounded-[1.5rem] bg-black/60 border border-white/5 shadow-xl space-y-3">
+                            <div className="p-3 sm:p-4 rounded-[1.5rem] bg-black/60 border border-white/5 shadow-xl space-y-3 w-full min-w-0 max-w-full overflow-hidden">
                                 <div className="flex items-center justify-between pb-2 border-b border-white/5">
                                     <p className="text-[9px] text-brand-light uppercase tracking-widest font-black flex items-center gap-2">
                                         <span className="relative flex h-2 w-2">
