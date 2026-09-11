@@ -157,7 +157,7 @@ int      g_realBuyScore = 0;
 int      g_realSellScore = 0;
 int      g_lastSignal = 0;
 datetime g_lastFGUpdate = 0, g_lastLSUpdate = 0, g_lastOBUpdate = 0;
-datetime g_lastSignalTime = 0, g_lastSLTime = 0;
+datetime g_lastSignalTime = 0, g_lastSLTime = 0, g_lastCloseTime = 0;
 int      g_ultimaDireccion = 0;
 double   g_peakBalance = 0, g_maxDrawdown = 0;
 int      g_totalTrades = 0;
@@ -562,9 +562,18 @@ void OnTick() {
 // REENTRADA
 //=================================================================
 bool PuedeReentrar() {
+    // 1. Cooldown obligatorio de 10 minutos tras cerrar CUALQUIER operación (dejar respirar al mercado)
+    if(g_lastCloseTime > 0) {
+        int segsClose = (int)(TimeCurrent() - g_lastCloseTime);
+        if(segsClose < 600) return false; // 10 minutos = 600 seg
+    }
+    // 2. Cooldown extendido de 20 minutos si el cierre fue un Stop Loss con pérdida real
+    if(g_lastSLTime > 0) {
+        int segsSL = (int)(TimeCurrent() - g_lastSLTime);
+        if(segsSL < (20 * 60)) return false; // 20 minutos
+    }
     if(g_lastSignalTime == 0) return true;
     int segs = (int)(TimeCurrent() - g_lastSignalTime);
-    if(g_lastSLTime > 0 && (TimeCurrent() - g_lastSLTime) < (InpCooldownSLMin * 60)) return false;
     if(segs < InpSegReentrada) return false;
     if(!InpReentradaRapida) return (segs >= InpCooldownNormalMin * 60);
     if(TendenciaSigueViva()) return true;
@@ -636,10 +645,11 @@ void DetectarCierres() {
             }
             else if(reason == DEAL_REASON_SO) { motivo = "STOP OUT"; emoji = "⚠️"; }
             
-            // Solo pausar con cooldown si fue un Stop Loss con PÉRDIDA real
+            g_lastCloseTime = TimeCurrent();
+            // Solo pausar con cooldown largo si fue un Stop Loss con PÉRDIDA real
             if(reason == DEAL_REASON_SL && profit < 0) {
                 g_lastSLTime = TimeCurrent();
-                Print("SL con pérdida real detectado ($", DoubleToString(profit,2), "). Cooldown de ", InpCooldownSLMin, " minutos.");
+                Print("SL con pérdida real detectado ($", DoubleToString(profit,2), "). Cooldown de 20 minutos.");
             }
             string msg = emoji + " CIERRE " + motivo + " | " + symbol + "\n";
             msg += "Precio: " + DoubleToString(price, _Digits) + "\n";
@@ -987,8 +997,8 @@ void ExecuteTrade(int direction, int score) {
         double atrPts = g_lastATR / g_point;
         int atrSl = (int)(atrPts * InpATRMultiplier);
         if(atrSl > slPts) slPts = atrSl;
-        if(!g_isBTC && slPts > 800) slPts = 800;    // Máx $8.00 de SL en Oro
-        if(g_isBTC && slPts > 18000) slPts = 18000; // Máx $180 de SL en Bitcoin
+        if(!g_isBTC && slPts > 400) slPts = 400;    // Máx $4.00 de SL en Oro
+        if(g_isBTC && slPts > 12000) slPts = 12000; // Máx $120 de SL en Bitcoin
         tpPts = (int)(slPts * 1.0);                 // Ratio 1:1 (objetivo más alcanzable y seguro)
     }
     double lot = CalculateLotSize(slPts);
@@ -1162,18 +1172,25 @@ void UpdateHUD(int score) {
         colEstado = clrGold;
     } else {
         MqlDateTime dt; TimeToStruct(TimeTradeServer(), dt);
-        if(InpPausaNoticiasUS && dt.hour == 15 && dt.min >= 15 && dt.min <= 45) {
-            estadoBot = "PAUSA NOTICIAS";
-            colEstado = clrOrange;
-        } else if((dt.day_of_week==0 || dt.day_of_week==6) && !g_isBTC) {
-            estadoBot = "FIN DE SEMANA";
-            colEstado = clrRed;
-        } else if(InpNoViernes && dt.day_of_week==5 && dt.hour>=20 && !g_isBTC) {
-            estadoBot = "CIERRE VIERNES";
-            colEstado = clrRed;
-        } else if(dt.hour < InpHoraInicio || dt.hour >= InpHoraFin) {
-            estadoBot = "FUERA HORARIO";
-            colEstado = clrRed;
+        if(g_isBTC) {
+            if((dt.hour == 23 && dt.min >= 55) || (dt.hour == 0 && dt.min <= 10)) {
+                estadoBot = "ROLLOVER SWAP";
+                colEstado = clrOrange;
+            }
+        } else {
+            if(InpPausaNoticiasUS && dt.hour == 15 && dt.min >= 15 && dt.min <= 45) {
+                estadoBot = "PAUSA NOTICIAS";
+                colEstado = clrOrange;
+            } else if(dt.day_of_week==0 || dt.day_of_week==6) {
+                estadoBot = "FIN DE SEMANA";
+                colEstado = clrRed;
+            } else if(InpNoViernes && dt.day_of_week==5 && dt.hour>=20) {
+                estadoBot = "CIERRE VIERNES";
+                colEstado = clrRed;
+            } else if(dt.hour < InpHoraInicio || dt.hour >= InpHoraFin) {
+                estadoBot = "FUERA HORARIO";
+                colEstado = clrRed;
+            }
         }
     }
     string presetName = g_isBTC ? "BTCUSD" : "XAUUSD";
@@ -1184,10 +1201,14 @@ void UpdateHUD(int score) {
     else if(g_bloqueadoTecho) extTxt = "TECHO!";
     string cooldownTxt = "-";
     if(g_lastSLTime > 0) {
-        int s = (InpCooldownSLMin * 60) - (int)(TimeCurrent() - g_lastSLTime);
-        if(s > 0) cooldownTxt = "SL " + IntegerToString(s/60) + "m";
+        int s = (20 * 60) - (int)(TimeCurrent() - g_lastSLTime);
+        if(s > 0) cooldownTxt = "SL " + IntegerToString((s+59)/60) + "m";
     }
-    if(g_lastSignalTime > 0 && cooldownTxt == "-") {
+    if(cooldownTxt == "-" && g_lastCloseTime > 0) {
+        int s = 600 - (int)(TimeCurrent() - g_lastCloseTime);
+        if(s > 0) cooldownTxt = "POST " + IntegerToString((s+59)/60) + "m";
+    }
+    if(cooldownTxt == "-" && g_lastSignalTime > 0) {
         int s = InpSegReentrada - (int)(TimeCurrent() - g_lastSignalTime);
         if(s > 0) cooldownTxt = IntegerToString(s) + "s";
         else if(TendenciaSigueViva()) cooldownTxt = "VIVA";
@@ -1291,26 +1312,25 @@ int CountOpenPositions() {
 bool IsOperatingHour() {
     MqlDateTime dt; TimeToStruct(TimeTradeServer(), dt);
     
-    // 1. Fines de semana (Sábado=6, Domingo=0):
-    // El Oro NO opera, pero Bitcoin (BTC) SÍ puede operar 24/7
-    if(dt.day_of_week==0 || dt.day_of_week==6) {
-        if(!g_isBTC) return false;
+    // 1. Bitcoin opera 24/7 (Lunes a Domingo):
+    if(g_isBTC) {
+        // En Bitcoin solo evitamos los 15 minutos del rollover nocturno del broker (23:55 a 00:10)
+        if((dt.hour == 23 && dt.min >= 55) || (dt.hour == 0 && dt.min <= 10)) return false;
+        return true;
     }
     
-    // 2. Viernes noche: El Oro no abre nuevas posiciones después de las 20:00 broker (19:00 España)
-    if(InpNoViernes && dt.day_of_week==5 && dt.hour>=20) {
-        if(!g_isBTC) return false;
-    }
+    // 2. Para Oro (XAUUSD):
+    // Fines de semana (Sábado=6, Domingo=0):
+    if(dt.day_of_week==0 || dt.day_of_week==6) return false;
     
-    // 3. Rango horario de 3:00 a 23:00
+    // Viernes noche: El Oro no abre nuevas posiciones después de las 20:00 broker (19:00 España)
+    if(InpNoViernes && dt.day_of_week==5 && dt.hour>=20) return false;
+    
+    // Rango horario de 3:00 a 23:00 para Oro
     if(dt.hour < InpHoraInicio || dt.hour >= InpHoraFin) return false;
     
-    // 4. Pausa por Noticias de EE.UU. (15:15 a 15:45 servidor broker = 14:15 a 14:45 España)
-    if(InpPausaNoticiasUS) {
-        if(dt.hour == 15 && dt.min >= 15 && dt.min <= 45) {
-            return false;
-        }
-    }
+    // Pausa por Noticias de EE.UU. en Oro (15:15 a 15:45 servidor broker = 14:15 a 14:45 España)
+    if(InpPausaNoticiasUS && dt.hour == 15 && dt.min >= 15 && dt.min <= 45) return false;
     
     return true;
 }
