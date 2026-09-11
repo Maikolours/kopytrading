@@ -52,9 +52,9 @@ input int     InpCooldownNormalMin= 10;
 input group "━━━━━━ 🚧 FILTRO SUELO/TECHO ━━━━━━"
 input bool    InpUseFiltroSueloTecho = true;
 input int     InpPeriodosSueloTecho  = 20;
-input int     InpDistanciaSueloPts   = 200;
-input int     InpRSI_Suelo           = 28;
-input int     InpRSI_Techo           = 72;
+input int     InpDistanciaSueloPts   = 400;  // 400 pts ($4.00 en Oro) para evitar vender pegado al suelo
+input int     InpRSI_Suelo           = 35;   // Bloquea venta si RSI <= 35 (sobreventa aguda)
+input int     InpRSI_Techo           = 65;   // Bloquea compra si RSI >= 65 (sobrecompra aguda)
 
 input group "━━━━━━ 💰 RIESGO ━━━━━━"
 input bool    InpUseFixedLot      = false;
