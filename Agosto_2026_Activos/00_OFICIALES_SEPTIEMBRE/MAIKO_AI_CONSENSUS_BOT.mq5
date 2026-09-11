@@ -251,21 +251,30 @@ void GetATRValue() {
 }
 
 void ActualizarTendencias() {
+    double price = symbolInfo.Bid();
+    
+    // M15: Tendencia Dinámica con EMA 20 y EMA 50
+    int h20m = iMA(g_symbol, PERIOD_M15, 20, 0, MODE_EMA, PRICE_CLOSE);
     int h50m = iMA(g_symbol, PERIOD_M15, 50, 0, MODE_EMA, PRICE_CLOSE);
-    int h200m = iMA(g_symbol, PERIOD_M15, 200, 0, MODE_EMA, PRICE_CLOSE);
-    if(h50m != INVALID_HANDLE && h200m != INVALID_HANDLE) {
+    if(h20m != INVALID_HANDLE && h50m != INVALID_HANDLE) {
         double a[1], b[1];
-        if(CopyBuffer(h50m, 0, 0, 1, a) > 0 && CopyBuffer(h200m, 0, 0, 1, b) > 0)
-            g_m15Bullish = (a[0] > b[0]);
-        IndicatorRelease(h50m); IndicatorRelease(h200m);
+        if(CopyBuffer(h20m, 0, 0, 1, a) > 0 && CopyBuffer(h50m, 0, 0, 1, b) > 0) {
+            // Alcista si el precio está sobre la EMA 20 o sobre la EMA 50
+            g_m15Bullish = (price > a[0] || a[0] > b[0]);
+        }
+        IndicatorRelease(h20m); IndicatorRelease(h50m);
     }
+    
+    // H1: Tendencia Dinámica con EMA 20 y EMA 50
+    int h20 = iMA(g_symbol, PERIOD_H1, 20, 0, MODE_EMA, PRICE_CLOSE);
     int h50 = iMA(g_symbol, PERIOD_H1, 50, 0, MODE_EMA, PRICE_CLOSE);
-    int h200 = iMA(g_symbol, PERIOD_H1, 200, 0, MODE_EMA, PRICE_CLOSE);
-    if(h50 != INVALID_HANDLE && h200 != INVALID_HANDLE) {
+    if(h20 != INVALID_HANDLE && h50 != INVALID_HANDLE) {
         double a[1], b[1];
-        if(CopyBuffer(h50, 0, 0, 1, a) > 0 && CopyBuffer(h200, 0, 0, 1, b) > 0)
-            g_h1Bullish = (a[0] > b[0]);
-        IndicatorRelease(h50); IndicatorRelease(h200);
+        if(CopyBuffer(h20, 0, 0, 1, a) > 0 && CopyBuffer(h50, 0, 0, 1, b) > 0) {
+            // Alcista si el precio está sobre la EMA 20 o sobre la EMA 50
+            g_h1Bullish = (price > a[0] || a[0] > b[0]);
+        }
+        IndicatorRelease(h20); IndicatorRelease(h50);
     }
 }
 
@@ -334,6 +343,7 @@ void OnTick() {
     UpdateDrawdown();
     g_ultimaDireccion = ObtenerDireccionActual();
     
+    ActualizarTendencias();
     int score = 0, signal = 0;
     CalculateConsensus(score, signal);
     g_lastSignal = signal;
@@ -700,8 +710,8 @@ void CalculateConsensus(int &outScore, int &outSignal) {
     CopyBuffer(ema20h,0,0,1,e20); CopyBuffer(ema50h,0,0,1,e50); CopyBuffer(ema200h,0,0,1,e200);
     IndicatorRelease(ema20h); IndicatorRelease(ema50h); IndicatorRelease(ema200h);
     double price = symbolInfo.Bid();
-    bool tBull = (e20[0]>e50[0]) && (e50[0]>e200[0]) && (price>e20[0]);
-    bool tBear = (e20[0]<e50[0]) && (e50[0]<e200[0]) && (price<e20[0]);
+    bool tBull = (price > e20[0] && (e20[0] >= e50[0] || price > e50[0]));
+    bool tBear = (price < e20[0] && (e20[0] <= e50[0] || price < e50[0]));
     double rsiH = iRSI(g_symbol,PERIOD_M5,14,PRICE_CLOSE);
     double rsi[1]; CopyBuffer(rsiH,0,0,1,rsi); IndicatorRelease(rsiH);
     g_rsiActual = rsi[0];
