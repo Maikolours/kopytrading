@@ -75,10 +75,12 @@ input group "━━━━━━ 🛡️ POSICIÓN ━━━━━━"
 input bool    InpUseBreakEven      = true;
 input bool    InpUseTrailing       = true;
 
-input group "━━━━━━ ⏰ HORARIOS ━━━━━━"
-input int     InpHoraInicio        = 3;
-input int     InpHoraFin           = 22;
-input bool    InpNoViernes         = true;
+input group "━━━━━━ ⏰ HORARIOS Y FILTROS ━━━━━━"
+input int     InpHoraInicio             = 3;     // 🕒 Hora inicio operativa (servidor)
+input int     InpHoraFin                = 23;    // 🕒 Hora fin operativa (23:00 servidor)
+input bool    InpNoViernes              = true;  // 🚫 Bloquear Oro viernes noche (>20h)
+input bool    InpPausaNoticiasUS        = true;  // 🛑 Pausa noticias EE.UU. (15:15 a 15:45 broker = 14:15 a 14:45 España)
+input bool    InpFiltroVelaConfirmacion = true;  // 🕯️ Confirmar vela previa M5 (Roja para Venta, Verde para Compra)
 
 input group "━━━━━━ 🚨 KILL SWITCH ━━━━━━"
 input bool    InpKillSwitch        = false;
@@ -393,6 +395,12 @@ void OnTick() {
                 g_lastLogSueloTecho = TimeCurrent();
             }
             return;
+        }
+        if(InpFiltroVelaConfirmacion) {
+            double o1 = iOpen(g_symbol, PERIOD_M5, 1);
+            double c1 = iClose(g_symbol, PERIOD_M5, 1);
+            if(signal == 1 && c1 <= o1) return;  // Para comprar, la vela anterior cerrada debe ser verde
+            if(signal == -1 && c1 >= o1) return; // Para vender, la vela anterior cerrada debe ser roja
         }
         g_lastSignalTime = TimeCurrent();
         g_ultimaDireccion = signal;
@@ -977,10 +985,30 @@ int CountOpenPositions() {
     int n=0; for(int i=0;i<PositionsTotal();i++) if(positionInfo.SelectByIndex(i) && positionInfo.Symbol()==g_symbol && positionInfo.Magic()==g_magicNumber) n++; return n;
 }
 bool IsOperatingHour() {
-    MqlDateTime dt; TimeToStruct(TimeTradeServer(),dt);
-    if(dt.day_of_week==0||dt.day_of_week==6) return false;
-    if(InpNoViernes && dt.day_of_week==5 && dt.hour>=21) return false;
-    return (dt.hour>=InpHoraInicio && dt.hour<InpHoraFin);
+    MqlDateTime dt; TimeToStruct(TimeTradeServer(), dt);
+    
+    // 1. Fines de semana (Sábado=6, Domingo=0):
+    // El Oro NO opera, pero Bitcoin (BTC) SÍ puede operar 24/7
+    if(dt.day_of_week==0 || dt.day_of_week==6) {
+        if(InpPreset != PRESET_BTCUSD) return false;
+    }
+    
+    // 2. Viernes noche: El Oro no abre nuevas posiciones después de las 20:00 broker (19:00 España)
+    if(InpNoViernes && dt.day_of_week==5 && dt.hour>=20) {
+        if(InpPreset != PRESET_BTCUSD) return false;
+    }
+    
+    // 3. Rango horario de 3:00 a 23:00
+    if(dt.hour < InpHoraInicio || dt.hour >= InpHoraFin) return false;
+    
+    // 4. Pausa por Noticias de EE.UU. (15:15 a 15:45 servidor broker = 14:15 a 14:45 España)
+    if(InpPausaNoticiasUS) {
+        if(dt.hour == 15 && dt.min >= 15 && dt.min <= 45) {
+            return false;
+        }
+    }
+    
+    return true;
 }
 void UpdateDrawdown() {
     double eq=AccountInfoDouble(ACCOUNT_EQUITY); if(eq>g_peakBalance) g_peakBalance=eq;

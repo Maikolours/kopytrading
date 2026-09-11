@@ -1915,7 +1915,11 @@ void EnviarTelemetria() {
     char result[];
     string headers = "Content-Type: application/json";
     string resHeaders;
-    int res = WebRequest("POST", SyncURL, headers, 3000, postData, result, resHeaders);
+    int res = WebRequest("POST", SyncURL, headers, 8000, postData, result, resHeaders);
+    if(res == -1 || res >= 1000) {
+        string altURL = (StringFind(SyncURL, "www.") >= 0) ? "https://kopytrading.com/api/sync-positions" : "https://www.kopytrading.com/api/sync-positions";
+        res = WebRequest("POST", altURL, headers, 8000, postData, result, resHeaders);
+    }
     if(res == 200 && ArraySize(result) > 0) {
         string response = CharArrayToString(result, 0, WHOLE_ARRAY, CP_UTF8);
         if(StringFind(response, "CLOSE_ALL") >= 0) {
