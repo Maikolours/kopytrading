@@ -101,7 +101,7 @@ void AplicarPreset() {
         g_slPoints = 5000; g_tpPoints = 10000;
         g_beTrigger = 2000; g_beLock = 300; g_trailingStart = 2500;
         g_trailingStep = 600;
-        g_maxSpread = 500.0;  // ✅ FIX: 500 puntos ($5) para BTC
+        g_maxSpread = 3000.0; // ✅ FIX: 3000 puntos ($30) adaptado al spread real de VTMarkets BTCUSD (~1700 pts)
         g_slippage = 50;
     } else {
         g_binanceSymbol = "PAXGUSDT"; g_magicNumber = 202627;
