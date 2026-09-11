@@ -160,6 +160,9 @@ int hRSI_v = INVALID_HANDLE;
 int hRadar[7];
 ENUM_TIMEFRAMES etfs[]={PERIOD_W1,PERIOD_D1,PERIOD_H4,PERIOD_H1,PERIOD_M15,PERIOD_M5,PERIOD_M1};
 
+int hEMA_chart = INVALID_HANDLE;
+int hRSI_chart = INVALID_HANDLE;
+
 void AgregarIndicadoresVisuales() {
     if(!CargarIndicadoresVisuales || MQLInfoInteger(MQL_TESTER)) return;
     
@@ -174,8 +177,11 @@ void AgregarIndicadoresVisuales() {
             if(StringFind(nombre, "RSI") >= 0) tieneRSI = true;
         }
     }
-    if(!tieneEMA && hEMA_v != INVALID_HANDLE) ChartIndicatorAdd(0, 0, hEMA_v);
-    if(!tieneRSI && hRSI_v != INVALID_HANDLE) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hRSI_v);
+    if(hEMA_chart == INVALID_HANDLE) hEMA_chart = (_Period == PERIOD_M1) ? hEMA_v : iMA(_Symbol, _Period, PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
+    if(hRSI_chart == INVALID_HANDLE) hRSI_chart = (_Period == PERIOD_M1) ? hRSI_v : iRSI(_Symbol, _Period, 14, PRICE_CLOSE);
+
+    if(!tieneEMA && hEMA_chart != INVALID_HANDLE) ChartIndicatorAdd(0, 0, hEMA_chart);
+    if(!tieneRSI && hRSI_chart != INVALID_HANDLE) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hRSI_chart);
 }
 
 int OnInit() {
@@ -187,8 +193,8 @@ int OnInit() {
     BotActivo = true;
     trade.SetExpertMagicNumber(ExpertMagic);
     trade.SetAsyncMode(true);
-    hEMA_v = iMA(_Symbol, _Period, PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
-    hRSI_v = iRSI(_Symbol, _Period, 14, PRICE_CLOSE);
+    hEMA_v = iMA(_Symbol, PERIOD_M1, PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
+    hRSI_v = iRSI(_Symbol, PERIOD_M1, 14, PRICE_CLOSE);
     
     for(int i=0; i<7; i++) {
         hRadar[i] = iMA(_Symbol, etfs[i], PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
@@ -233,6 +239,8 @@ void OnDeinit(const int reason) {
     }
     if(hEMA_v != INVALID_HANDLE) IndicatorRelease(hEMA_v);
     if(hRSI_v != INVALID_HANDLE) IndicatorRelease(hRSI_v);
+    if(hEMA_chart != INVALID_HANDLE && hEMA_chart != hEMA_v) { IndicatorRelease(hEMA_chart); hEMA_chart = INVALID_HANDLE; }
+    if(hRSI_chart != INVALID_HANDLE && hRSI_chart != hRSI_v) { IndicatorRelease(hRSI_chart); hRSI_chart = INVALID_HANDLE; }
     string myGv = StringFormat("MAIKO_HEARTBEAT_%d_%I64d", ExpertMagic, AccountInfoInteger(ACCOUNT_LOGIN));
     GlobalVariableDel(myGv);
     ChartRedraw(); 
