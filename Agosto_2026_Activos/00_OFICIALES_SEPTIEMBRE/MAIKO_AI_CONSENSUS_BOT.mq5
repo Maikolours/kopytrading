@@ -16,13 +16,13 @@ CSymbolInfo   symbolInfo;
 CPositionInfo positionInfo;
 
 enum ENUM_EXEC_MODE { MODE_FULL_AUTO = 0, MODE_SEMI_AUTO = 1 };
-enum ENUM_PRESET { PRESET_BTCUSD = 0, PRESET_XAUUSD = 1 };
+enum ENUM_PRESET { PRESET_AUTO = 0, PRESET_BTCUSD = 1, PRESET_XAUUSD = 2 };
 
 //=================================================================
 // PARAMETROS
 //=================================================================
 input group "━━━━━━ 🎯 PRESET ━━━━━━"
-input ENUM_PRESET InpPreset = PRESET_XAUUSD;
+input ENUM_PRESET InpPreset = PRESET_AUTO; // 🎯 Preset (AUTO detecta Bitcoin u Oro por gráfico)
 
 input group "━━━━━━ 🧠 CONSENSO ━━━━━━"
 input int     InpMinConsensus     = 65;
@@ -97,9 +97,24 @@ string g_binanceSymbol;
 int    g_magicNumber, g_slPoints, g_tpPoints, g_beTrigger, g_beLock;
 int    g_trailingStart, g_trailingStep, g_slippage;
 double g_maxSpread;
+bool   g_isBTC = false;
 
 void AplicarPreset() {
+    string s = _Symbol;
+    StringToUpper(s);
     if(InpPreset == PRESET_BTCUSD) {
+        g_isBTC = true;
+    } else if(InpPreset == PRESET_XAUUSD) {
+        g_isBTC = false;
+    } else { // PRESET_AUTO: auto-detección según el gráfico actual
+        if(StringFind(s, "BTC") >= 0 || StringFind(s, "BITCOIN") >= 0) {
+            g_isBTC = true;
+        } else {
+            g_isBTC = false;
+        }
+    }
+
+    if(g_isBTC) {
         g_binanceSymbol = "BTCUSDT"; g_magicNumber = 202626;
         g_slPoints = 5000; g_tpPoints = 10000;
         g_beTrigger = 2000; g_beLock = 300; g_trailingStart = 2500;
@@ -234,7 +249,7 @@ int OnInit() {
     int total = HistoryDealsTotal();
     if(total > 0) g_lastDealTicket = HistoryDealGetTicket(total - 1);
 
-    string presetName = (InpPreset == PRESET_BTCUSD) ? "BTCUSD" : "XAUUSD";
+    string presetName = g_isBTC ? "BTCUSD" : "XAUUSD";
     SendTelegramMsg("🤖 *MAIKO AI Iniciado* | " + presetName + " | " + g_symbol + "\n• Modo símbolo: " + modeTxt + "\n• Consenso min: " + IntegerToString(InpMinConsensus) + "/100\n• Spread max: " + DoubleToString(g_maxSpread,0) + " pts");
     return INIT_SUCCEEDED;
 }
@@ -578,7 +593,7 @@ void EscribirEstado() {
     int maxScore = MathMax(g_realBuyScore, g_realSellScore);
     FileWrite(handle,
         g_symbol,
-        (InpPreset == PRESET_BTCUSD) ? "BTC" : "XAU",
+        g_isBTC ? "BTC" : "XAU",
         (g_botActivo ? "ACTIVO" : "PAUSADO"),
         DoubleToString(AccountInfoDouble(ACCOUNT_BALANCE), 2),
         DoubleToString(CalcularFlotante(), 2),
@@ -704,7 +719,7 @@ void ProcessCommand(string cmd) {
 }
 
 void SendStatusReport() {
-    string presetName = (InpPreset == PRESET_BTCUSD) ? "BTCUSD" : "XAUUSD";
+    string presetName = g_isBTC ? "BTCUSD" : "XAUUSD";
     int nPos = CountOpenPositions();
     double flotante = CalcularFlotante();
     double spreadNow = (symbolInfo.Ask() - symbolInfo.Bid()) / g_point;
@@ -872,7 +887,7 @@ void ExecuteTrade(int direction, int score) {
         tp = NormalizeDouble(price - tpPts*g_point, symbolInfo.Digits());
         if(sl - price < stopsLevel) sl = NormalizeDouble(price + stopsLevel, symbolInfo.Digits());
     }
-    string commentTag = (direction==1 ? "MAIKO_AI_BUY_" : "MAIKO_AI_SELL_") + (InpPreset==PRESET_BTCUSD ? "BTC" : "GOLD");
+    string commentTag = (direction==1 ? "MAIKO_AI_BUY_" : "MAIKO_AI_SELL_") + (g_isBTC ? "BTC" : "GOLD");
     bool ok = (direction==1) ? trade.Buy(lot, g_symbol, price, sl, tp, commentTag) : trade.Sell(lot, g_symbol, price, sl, tp, commentTag);
     if(ok) {
         g_totalTrades++;
@@ -993,15 +1008,15 @@ void UpdateHUD(int score) {
         MqlDateTime dt; TimeToStruct(TimeTradeServer(), dt);
         if(InpPausaNoticiasUS && dt.hour == 15 && dt.min >= 15 && dt.min <= 45) {
             estadoBot = "PAUSA NOTICIAS";
-        } else if((dt.day_of_week==0 || dt.day_of_week==6) && InpPreset != PRESET_BTCUSD) {
+        } else if((dt.day_of_week==0 || dt.day_of_week==6) && !g_isBTC) {
             estadoBot = "FIN DE SEMANA";
-        } else if(InpNoViernes && dt.day_of_week==5 && dt.hour>=20 && InpPreset != PRESET_BTCUSD) {
+        } else if(InpNoViernes && dt.day_of_week==5 && dt.hour>=20 && !g_isBTC) {
             estadoBot = "CIERRE VIERNES";
         } else if(dt.hour < InpHoraInicio || dt.hour >= InpHoraFin) {
             estadoBot = "FUERA HORARIO";
         }
     }
-    string presetName = (InpPreset == PRESET_BTCUSD) ? "BTCUSD" : "XAUUSD";
+    string presetName = g_isBTC ? "BTCUSD" : "XAUUSD";
     string tendM15 = g_m15Bullish ? "ALCISTA" : "BAJISTA";
     string tendH1 = g_h1Bullish ? "ALCISTA" : "BAJISTA";
     string extTxt = "OK";
@@ -1067,12 +1082,12 @@ bool IsOperatingHour() {
     // 1. Fines de semana (Sábado=6, Domingo=0):
     // El Oro NO opera, pero Bitcoin (BTC) SÍ puede operar 24/7
     if(dt.day_of_week==0 || dt.day_of_week==6) {
-        if(InpPreset != PRESET_BTCUSD) return false;
+        if(!g_isBTC) return false;
     }
     
     // 2. Viernes noche: El Oro no abre nuevas posiciones después de las 20:00 broker (19:00 España)
     if(InpNoViernes && dt.day_of_week==5 && dt.hour>=20) {
-        if(InpPreset != PRESET_BTCUSD) return false;
+        if(!g_isBTC) return false;
     }
     
     // 3. Rango horario de 3:00 a 23:00
