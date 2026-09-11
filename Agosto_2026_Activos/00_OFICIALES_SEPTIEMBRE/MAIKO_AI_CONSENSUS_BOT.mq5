@@ -25,7 +25,7 @@ input group "━━━━━━ 🎯 PRESET ━━━━━━"
 input ENUM_PRESET InpPreset = PRESET_AUTO; // 🎯 Preset (AUTO detecta Bitcoin u Oro por gráfico)
 
 input group "━━━━━━ 🧠 CONSENSO ━━━━━━"
-input int     InpMinConsensus     = 65;
+input int     InpMinConsensus     = 50; // Calibrado para fluidez operativa (de serie)
 input int     InpSegRefrescoOB    = 30;
 
 input group "━━━━━━ 🔑 LICENCIA ━━━━━━"
@@ -43,7 +43,7 @@ input int     InpEsperaInicialSeg = 60;
 
 input group "━━━━━━ 🎯 FILTROS TENDENCIA ━━━━━━"
 input bool    InpUseFiltroM15     = true;
-input bool    InpUseFiltroH1      = true;
+input bool    InpUseFiltroH1      = false; // Desactivado de serie (suma puntos al consenso sin paralizar)
 input bool    InpReentradaRapida  = true;
 input int     InpSegReentrada     = 30;
 input int     InpCooldownSLMin    = 10;
@@ -807,12 +807,17 @@ void CalculateConsensus(int &outScore, int &outSignal) {
     if(tBull) buyS+=20; else if(tBear) buyS-=10;
     if(rsiBull) buyS+=10; else if(rsiBear) buyS-=5;
     if(lsBull) buyS+=20; else if(lsBear) buyS-=15;
+    if(g_m15Bullish) buyS += 15; else buyS -= 10;
+    if(g_h1Bullish)  buyS += 10; else buyS -= 5;
+
     int selS = 0;
     if(sellPres > buyPres*1.3) selS += 30; else if(sellPres > buyPres*1.1) selS += 15;
     if(InpUseFearGreed) { if(fg>=75) selS+=20; else if(fg>=InpFG_MaxSell) selS+=10; else if(fg<InpFG_MinBuy) selS-=10; }
     if(tBear) selS+=20; else if(tBull) selS-=10;
     if(rsiBear) selS+=10; else if(rsiBull) selS-=5;
     if(lsBear) selS+=20; else if(lsBull) selS-=15;
+    if(!g_m15Bullish) selS += 15; else selS -= 10;
+    if(!g_h1Bullish)  selS += 10; else selS -= 5;
     buyS = MathMax(0, MathMin(100, buyS));
     selS = MathMax(0, MathMin(100, selS));
     g_realBuyScore = buyS;

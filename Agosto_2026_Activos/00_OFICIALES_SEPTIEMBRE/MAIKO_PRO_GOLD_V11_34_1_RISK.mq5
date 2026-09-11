@@ -50,15 +50,15 @@ input double           DistanciaTechoSueloPips    = 15.0;        // 📏 Distanc
 // --- FILTROS ADICIONALES MULTI-TEMPORALIDAD (H1 y H4) ---
 input bool             UsarFiltroTechosSuelosH1   = true;        // 📊 Activar Filtro S/R en H1
 input int              PeriodoTechosSuelosH1      = 24;          // 📅 Período H1 a Analizar (Velas)
-input double           DistanciaTechoSueloPipsH1  = 20.0;        // 📅 Distancia Mínima H1 (Pips)
+input double           DistanciaTechoSueloPipsH1  = 15.0;        // 📅 Distancia Mínima H1 (Pips)
 
-input bool             UsarFiltroTechosSuelosH4   = true;        // 📊 Activar Filtro S/R en H4
+input bool             UsarFiltroTechosSuelosH4   = false;       // 📊 Activar Filtro S/R en H4 (Falso de serie para evitar bloqueos)
 input int              PeriodoTechosSuelosH4      = 24;          // 📅 Período H4 a Analizar (Velas)
 input double           DistanciaTechoSueloPipsH4  = 35.0;        // 📏 Distancia Mínima H4 (Pips)
 
 // --- FILTRO DE AGOTAMIENTO DE VELAS (RECHAZO DE MECHA M15) ---
 input bool             UsarFiltroAgotamientoM15   = true;        // 🕯️ Activar Filtro Agotamiento M15
-input double           MinPorcentajeMechaM15      = 40.0;        // 🕯️ % Mínimo Mecha Reversa (40.0 = 40%)
+input double           MinPorcentajeMechaM15      = 65.0;        // 🕯️ % Mínimo Mecha Reversa (65.0 = solo pinbars extremas)
 
 // --- CONFIRMACION DE RUPTURA ---
 input bool             UsarConfirmacionRuptura    = true;        // 📈 Confirmar Ruptura de S/R con Vela Cerrada
@@ -67,7 +67,7 @@ input ENUM_TIMEFRAMES  TimeframeConfirmacion      = PERIOD_M5;   // 📅 Tempora
 // --- TENDENCIA Y DIRECCION ---
 input group "━━━━━━ 📉 𝗧 𝗘 𝗡 𝗗 𝗘 𝗡 𝗖 𝗜 𝗔   𝗬   𝗗 𝗜 𝗥 𝗘 𝗖 𝗖 𝗜 𝗢 𝗡 ━━━━━━"
 input int      PeriodoMediaFiltro         = 50;          // 🔗 Período EMA Tendencia (Filtro)
-input bool     CheckM15                   = true;        // 📅 Confirmación Tendencia M15 (Sincronía)
+input bool     CheckM15                   = false;       // 📅 Confirmación Tendencia M15 (Sincronía)
 input bool     CheckM5                    = true;        // 📅 Confirmación Tendencia M5 (Sincronía)
 
 // --- OPERATIVA Y LOTES ---
