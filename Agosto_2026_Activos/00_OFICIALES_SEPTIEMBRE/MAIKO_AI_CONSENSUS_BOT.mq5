@@ -801,7 +801,8 @@ void ExecuteTrade(int direction, int score) {
         tp = NormalizeDouble(price - tpPts*g_point, symbolInfo.Digits());
         if(sl - price < stopsLevel) sl = NormalizeDouble(price + stopsLevel, symbolInfo.Digits());
     }
-    bool ok = (direction==1) ? trade.Buy(lot, g_symbol, price, sl, tp, "MAIKO_AI_BUY") : trade.Sell(lot, g_symbol, price, sl, tp, "MAIKO_AI_SELL");
+    string commentTag = (direction==1 ? "MAIKO_AI_BUY_" : "MAIKO_AI_SELL_") + (InpPreset==PRESET_BTCUSD ? "BTC" : "GOLD");
+    bool ok = (direction==1) ? trade.Buy(lot, g_symbol, price, sl, tp, commentTag) : trade.Sell(lot, g_symbol, price, sl, tp, commentTag);
     if(ok) {
         g_totalTrades++;
         g_ultimaDireccion = direction;
