@@ -80,7 +80,7 @@ input int     InpHoraInicio             = 3;     // 🕒 Hora inicio operativa (
 input int     InpHoraFin                = 23;    // 🕒 Hora fin operativa (23:00 servidor)
 input bool    InpNoViernes              = true;  // 🚫 Bloquear Oro viernes noche (>20h)
 input bool    InpPausaNoticiasUS        = true;  // 🛑 Pausa noticias EE.UU. (15:15 a 15:45 broker = 14:15 a 14:45 España)
-input bool    InpFiltroVelaConfirmacion = false; // 🕯️ Confirmar vela previa M5 (Desactivado de serie para scalping en M1)
+input bool    InpFiltroVelaConfirmacion = true;  // 🕯️ Filtro Velas: Evita Dojis, Martillos contrarios y espera confirmación
 
 input group "━━━━━━ 🚨 KILL SWITCH ━━━━━━"
 input bool    InpKillSwitch        = false;
@@ -120,9 +120,9 @@ void AplicarPreset() {
     if(g_isBTC) {
         // --- PRESET PROFESIONAL BITCOIN (BTCUSD) ---
         g_binanceSymbol = "BTCUSDT"; g_magicNumber = 202626;
-        g_slPoints = 12000; g_tpPoints = 25000;              // $120 SL / $250 TP (Ratio 1:2)
-        g_beTrigger = 10000; g_beLock = 3000;                // BE al ganar $100 asegurando $30 limpios
-        g_trailingStart = 15000; g_trailingStep = 5000;      // Trailing a los $150 manteniendo $50 de distancia
+        g_slPoints = 12000; g_tpPoints = 12000;              // $120 SL / $120 TP (Ratio 1:1)
+        g_beTrigger = 7000; g_beLock = 2000;                 // BE al ganar $70 asegurando $20 limpios
+        g_trailingStart = 9000; g_trailingStep = 3000;       // Trailing a los $90 manteniendo $30 de distancia
         g_maxSpread = 3000.0;                                // Spread máx 3000 pts ($30)
         g_distanciaSueloPts = (InpDistanciaSueloPts > 0) ? InpDistanciaSueloPts : 5000; // $50 en BTC
         g_rsiSuelo = (InpRSI_Suelo > 0) ? InpRSI_Suelo : 30; // 30 en BTC (sobreventa real)
@@ -131,9 +131,9 @@ void AplicarPreset() {
     } else {
         // --- PRESET PROFESIONAL ORO (XAUUSD) ---
         g_binanceSymbol = "PAXGUSDT"; g_magicNumber = 202627;
-        g_slPoints = 500; g_tpPoints = 1000;                // $5.00 SL / $10.00 TP (Ratio 1:2)
-        g_beTrigger = 400; g_beLock = 100;                  // BE al ganar $4.00 asegurando $1.00 limpio
-        g_trailingStart = 600; g_trailingStep = 200;         // Trailing a los $6.00 manteniendo $2.00 de distancia
+        g_slPoints = 400; g_tpPoints = 400;                 // $4.00 SL / $4.00 TP (Ratio 1:1)
+        g_beTrigger = 250; g_beLock = 100;                  // BE al ganar $2.50 asegurando $1.00 limpio
+        g_trailingStart = 300; g_trailingStep = 150;        // Trailing a los $3.00 manteniendo $1.50 de distancia
         g_maxSpread = 100.0;                                // Spread máx 100 pts ($1.00)
         g_distanciaSueloPts = (InpDistanciaSueloPts > 0) ? InpDistanciaSueloPts : 400; // $4.00 en Oro
         g_rsiSuelo = (InpRSI_Suelo > 0) ? InpRSI_Suelo : 35; // 35 en Oro
@@ -196,6 +196,7 @@ int  ObtenerDireccionActual();
 void CalculateConsensus(int &outScore, int &outSignal);
 bool EstaPegadoASuelo();
 bool EstaPegadoATecho();
+int  DetectarPatronVelaPrevia(int direccion, string &nombrePatron);
 bool IsOperatingHour();
 int  CountOpenPositions();
 bool PuedeReentrar();
@@ -388,6 +389,64 @@ bool EstaPegadoATecho() {
 }
 
 //=================================================================
+// FILTRO ACCIÓN DEL PRECIO / VELAS DE RECHAZO
+//=================================================================
+int DetectarPatronVelaPrevia(int direccion, string &nombrePatron) {
+    if(!InpFiltroVelaConfirmacion) return 0;
+    ENUM_TIMEFRAMES tf = (_Period == PERIOD_M1) ? PERIOD_M5 : _Period;
+    
+    double o1 = iOpen(g_symbol, tf, 1);
+    double c1 = iClose(g_symbol, tf, 1);
+    double h1 = iHigh(g_symbol, tf, 1);
+    double l1 = iLow(g_symbol, tf, 1);
+    double range = h1 - l1;
+    if(range <= 0) return 0;
+    
+    double body = MathAbs(c1 - o1);
+    double upperWick = h1 - MathMax(c1, o1);
+    double lowerWick = MathMin(c1, o1) - l1;
+    double bodyRatio = body / range;
+    double lowerRatio = lowerWick / range;
+    double upperRatio = upperWick / range;
+    
+    // 1. Vela de Indecisión (Doji o Peonza con cuerpo minúsculo < 20% del rango)
+    if(bodyRatio < 0.20) {
+        nombrePatron = "DOJI INDECISIÓN";
+        return 1;
+    }
+    
+    // 2. Para SEÑAL DE VENTA (-1):
+    if(direccion == -1) {
+        // Martillo Alcista: Mecha inferior larga (> 40% del rango) -> Rechazo de mínimos
+        if(lowerRatio > 0.40) {
+            nombrePatron = "MARTILLO ALCISTA";
+            return 2;
+        }
+        // Vela contraria: Si la vela previa cerró verde (alcista)
+        if(c1 > o1) {
+            nombrePatron = "ESPERANDO VELA ROJA";
+            return 3;
+        }
+    }
+    
+    // 3. Para SEÑAL DE COMPRA (+1):
+    if(direccion == 1) {
+        // Estrella Fugaz: Mecha superior larga (> 40% del rango) -> Rechazo de máximos
+        if(upperRatio > 0.40) {
+            nombrePatron = "ESTRELLA FUGAZ";
+            return 2;
+        }
+        // Vela contraria: Si la vela previa cerró roja (bajista)
+        if(c1 < o1) {
+            nombrePatron = "ESPERANDO VELA VERDE";
+            return 3;
+        }
+    }
+    
+    return 0; // Confirmación limpia
+}
+
+//=================================================================
 // REFRESCO APIs
 //=================================================================
 void RefrescarAPIs() {
@@ -489,10 +548,8 @@ void OnTick() {
             return;
         }
         if(InpFiltroVelaConfirmacion) {
-            double o1 = iOpen(g_symbol, PERIOD_M5, 1);
-            double c1 = iClose(g_symbol, PERIOD_M5, 1);
-            if(signal == 1 && c1 <= o1) return;  // Para comprar, la vela anterior cerrada debe ser verde
-            if(signal == -1 && c1 >= o1) return; // Para vender, la vela anterior cerrada debe ser roja
+            string motivoBloqueo = "";
+            if(DetectarPatronVelaPrevia(signal, motivoBloqueo) > 0) return;
         }
         g_lastSignalTime = TimeCurrent();
         g_ultimaDireccion = signal;
@@ -932,7 +989,7 @@ void ExecuteTrade(int direction, int score) {
         if(atrSl > slPts) slPts = atrSl;
         if(!g_isBTC && slPts > 800) slPts = 800;    // Máx $8.00 de SL en Oro
         if(g_isBTC && slPts > 18000) slPts = 18000; // Máx $180 de SL en Bitcoin
-        tpPts = (int)(slPts * 1.8);                 // Ratio 1:1.8
+        tpPts = (int)(slPts * 1.0);                 // Ratio 1:1 (objetivo más alcanzable y seguro)
     }
     double lot = CalculateLotSize(slPts);
     double stopsLevel = (double)SymbolInfoInteger(g_symbol, SYMBOL_TRADE_STOPS_LEVEL) * g_point;
@@ -1084,13 +1141,17 @@ void UpdateHUD(int score) {
     string sigTxt = "ESPERANDO";
     color colSig = clrGold;
     if(g_realBuyScore >= InpMinConsensus && g_realBuyScore > g_realSellScore) {
+        string patronVela = "";
         if(InpUseFiltroM15 && !g_m15Bullish) { sigTxt = "BLOQ TEND M15"; colSig = clrGold; }
         else if(g_bloqueadoTecho) { sigTxt = "BLOQ TECHO M15"; colSig = clrGold; }
+        else if(InpFiltroVelaConfirmacion && DetectarPatronVelaPrevia(1, patronVela) > 0) { sigTxt = "BLOQ: " + patronVela; colSig = clrGold; }
         else { sigTxt = "COMPRA"; colSig = clrLime; }
     }
     else if(g_realSellScore >= InpMinConsensus && g_realSellScore > g_realBuyScore) {
+        string patronVela = "";
         if(InpUseFiltroM15 && g_m15Bullish) { sigTxt = "BLOQ TEND M15"; colSig = clrGold; }
         else if(g_bloqueadoSuelo) { sigTxt = "BLOQ SUELO M15"; colSig = clrGold; }
+        else if(InpFiltroVelaConfirmacion && DetectarPatronVelaPrevia(-1, patronVela) > 0) { sigTxt = "BLOQ: " + patronVela; colSig = clrGold; }
         else { sigTxt = "VENTA"; colSig = clrTomato; }
     }
     
@@ -1147,8 +1208,13 @@ void UpdateHUD(int score) {
     string objetivoTxt;
     color colObj;
     if(faltan <= 0) {
-        objetivoTxt = StringFormat("OBJETIVO: %d%% / %d%% [LISTO DISPARO]", bestScore, InpMinConsensus);
-        colObj = (g_realBuyScore >= g_realSellScore) ? clrLime : clrTomato;
+        if(StringFind(sigTxt, "BLOQ") >= 0) {
+            objetivoTxt = StringFormat("OBJETIVO: %d%% / %d%% [CONFIRMANDO]", bestScore, InpMinConsensus);
+            colObj = clrYellow;
+        } else {
+            objetivoTxt = StringFormat("OBJETIVO: %d%% / %d%% [LISTO DISPARO]", bestScore, InpMinConsensus);
+            colObj = (g_realBuyScore >= g_realSellScore) ? clrLime : clrTomato;
+        }
     } else {
         objetivoTxt = StringFormat("OBJETIVO: %d%% / %d%% (Faltan %d%%)", bestScore, InpMinConsensus, faltan);
         colObj = (faltan <= 15) ? clrYellow : clrDeepSkyBlue;
