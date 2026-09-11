@@ -570,11 +570,16 @@ void DetectarCierres() {
             string symbol = HistoryDealGetString(ticket, DEAL_SYMBOL);
             string motivo = "MANUAL"; string emoji = "🔵";
             if(reason == DEAL_REASON_TP) { motivo = "TAKE PROFIT"; emoji = "✅"; }
-            else if(reason == DEAL_REASON_SL) { motivo = "STOP LOSS"; emoji = "❌"; }
+            else if(reason == DEAL_REASON_SL) { 
+                if(profit >= 0) { motivo = "TRAILING/BE PROFIT"; emoji = "🟢"; }
+                else { motivo = "STOP LOSS"; emoji = "❌"; }
+            }
             else if(reason == DEAL_REASON_SO) { motivo = "STOP OUT"; emoji = "⚠️"; }
-            if(reason == DEAL_REASON_SL) {
+            
+            // Solo pausar con cooldown si fue un Stop Loss con PÉRDIDA real
+            if(reason == DEAL_REASON_SL && profit < 0) {
                 g_lastSLTime = TimeCurrent();
-                Print("SL detectado. Cooldown de ", InpCooldownSLMin, " minutos.");
+                Print("SL con pérdida real detectado ($", DoubleToString(profit,2), "). Cooldown de ", InpCooldownSLMin, " minutos.");
             }
             string msg = emoji + " CIERRE " + motivo + " | " + symbol + "\n";
             msg += "Precio: " + DoubleToString(price, _Digits) + "\n";
@@ -982,14 +987,19 @@ void ManagePositions() {
         ulong ticket = positionInfo.Ticket(); bool isBuy = (positionInfo.PositionType()==POSITION_TYPE_BUY);
         symbolInfo.RefreshRates(); double curP = isBuy ? symbolInfo.Bid() : symbolInfo.Ask();
         double ptsProfit = isBuy ? (curP-openP)/g_point : (openP-curP)/g_point;
+        double stopsLevel = (double)SymbolInfoInteger(g_symbol, SYMBOL_TRADE_STOPS_LEVEL) * g_point;
+        double minDistance = MathMax(stopsLevel, (symbolInfo.Ask() - symbolInfo.Bid()) + 50*g_point);
+        
         if(InpUseBreakEven && ptsProfit >= g_beTrigger) {
             double newSL = NormalizeDouble(isBuy ? openP + g_beLock*g_point : openP - g_beLock*g_point, symbolInfo.Digits());
-            bool move = isBuy ? (newSL>curSL) : (curSL==0 || newSL<curSL);
+            bool distOk = isBuy ? ((curP - newSL) >= minDistance) : ((newSL - curP) >= minDistance);
+            bool move = distOk && (isBuy ? (newSL>curSL) : (curSL==0 || newSL<curSL));
             if(move && trade.PositionModify(ticket, newSL, curTP)) SendTelegramMsg("BREAK-EVEN | " + g_symbol);
         }
         if(InpUseTrailing && ptsProfit >= g_trailingStart) {
             double newSL = NormalizeDouble(isBuy ? curP - g_trailingStep*g_point : curP + g_trailingStep*g_point, symbolInfo.Digits());
-            bool move = isBuy ? (newSL>curSL) : (curSL==0 || newSL<curSL);
+            bool distOk = isBuy ? ((curP - newSL) >= minDistance) : ((newSL - curP) >= minDistance);
+            bool move = distOk && (isBuy ? (newSL>curSL) : (curSL==0 || newSL<curSL));
             if(move) trade.PositionModify(ticket, newSL, curTP);
         }
     }
