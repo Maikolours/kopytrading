@@ -88,6 +88,7 @@ input bool    InpKillSwitch        = false;
 input group "━━━━━━ 🎨 HUD ━━━━━━"
 input bool    InpShowHUD           = true;
 input bool    InpShowArrows        = true;
+input bool    InpCargarIndicadoresVisuales = true; // 📊 Dibujar Indicadores en Gráfico (EMA 20, EMA 50, RSI 14)
 
 //=================================================================
 // AUTO-CONFIG (spread corregido)
@@ -141,12 +142,16 @@ bool     g_bloqueadoSuelo = false;
 bool     g_bloqueadoTecho = false;
 datetime g_lastLogSueloTecho = 0;  // ✅ FIX: evita spam en el log
 datetime g_lastLogSpread = 0;
+int      g_hEMA20_v = INVALID_HANDLE;
+int      g_hEMA50_v = INVALID_HANDLE;
+int      g_hRSI_v   = INVALID_HANDLE;
 
 #define HUD_BG "MAIKO_HUD_BG"
 #define BTN_POWER "MAIKO_BTN_POWER"
 #define BTN_CLOSE "MAIKO_BTN_CLOSE"
 
 // Declaraciones de funciones previas a OnInit
+void AgregarIndicadoresVisuales();
 int GetFearAndGreedIndex();
 void GetBinanceLongShortRatio(double &ratio);
 void GetBinanceOrderBookImbalance(double &buyVol, double &sellVol);
@@ -221,6 +226,7 @@ int OnInit() {
         GetATRValue();
         ActualizarTendencias();
     }
+    if(InpCargarIndicadoresVisuales) AgregarIndicadoresVisuales();
     if(InpShowHUD) { CreateHUD(); UpdateHUD(0); }
     EscribirEstado();
 
@@ -237,6 +243,53 @@ void OnDeinit(const int reason) {
     EventKillTimer();
     ObjectsDeleteAll(0, "MAIKO_");
     FileDelete("MAIKO_STATE_" + IntegerToString(g_magicNumber) + ".csv");
+    if(g_hEMA20_v != INVALID_HANDLE) { IndicatorRelease(g_hEMA20_v); g_hEMA20_v = INVALID_HANDLE; }
+    if(g_hEMA50_v != INVALID_HANDLE) { IndicatorRelease(g_hEMA50_v); g_hEMA50_v = INVALID_HANDLE; }
+    if(g_hRSI_v   != INVALID_HANDLE) { IndicatorRelease(g_hRSI_v);   g_hRSI_v   = INVALID_HANDLE; }
+}
+
+//=================================================================
+// INDICADORES VISUALES
+//=================================================================
+void AgregarIndicadoresVisuales() {
+    if(!InpCargarIndicadoresVisuales) return;
+    if(MQLInfoInteger(MQL_TESTER)) return;
+
+    if(g_hEMA20_v == INVALID_HANDLE)
+        g_hEMA20_v = iMA(g_symbol, _Period, 20, 0, MODE_EMA, PRICE_CLOSE);
+    if(g_hEMA50_v == INVALID_HANDLE)
+        g_hEMA50_v = iMA(g_symbol, _Period, 50, 0, MODE_EMA, PRICE_CLOSE);
+    if(g_hRSI_v == INVALID_HANDLE)
+        g_hRSI_v = iRSI(g_symbol, _Period, 14, PRICE_CLOSE);
+
+    bool tieneEMA20 = false;
+    bool tieneEMA50 = false;
+    bool tieneRSI = false;
+
+    int ventanas = (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL);
+    for(int w = 0; w < ventanas; w++) {
+        int totalInd = ChartIndicatorsTotal(0, w);
+        for(int i = 0; i < totalInd; i++) {
+            string nombre = ChartIndicatorName(0, w, i);
+            if(StringFind(nombre, "20") >= 0 && (StringFind(nombre, "MA") >= 0 || StringFind(nombre, "EMA") >= 0)) tieneEMA20 = true;
+            if(StringFind(nombre, "50") >= 0 && (StringFind(nombre, "MA") >= 0 || StringFind(nombre, "EMA") >= 0)) tieneEMA50 = true;
+            if(StringFind(nombre, "RSI") >= 0) tieneRSI = true;
+        }
+    }
+
+    if(!tieneEMA20 && g_hEMA20_v != INVALID_HANDLE) {
+        if(!ChartIndicatorAdd(0, 0, g_hEMA20_v))
+            Print("Aviso: No se pudo agregar EMA 20 al gráfico. Error: ", GetLastError());
+    }
+    if(!tieneEMA50 && g_hEMA50_v != INVALID_HANDLE) {
+        if(!ChartIndicatorAdd(0, 0, g_hEMA50_v))
+            Print("Aviso: No se pudo agregar EMA 50 al gráfico. Error: ", GetLastError());
+    }
+    if(!tieneRSI && g_hRSI_v != INVALID_HANDLE) {
+        int subWin = (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL);
+        if(!ChartIndicatorAdd(0, subWin, g_hRSI_v))
+            Print("Aviso: No se pudo agregar RSI 14 al gráfico. Error: ", GetLastError());
+    }
 }
 
 //=================================================================

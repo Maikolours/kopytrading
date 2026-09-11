@@ -123,7 +123,7 @@ input bool     ShowM15                    = true;        // 📅 Mostrar Tendenc
 input bool     ShowM5                     = true;        // 📅 Mostrar Tendencia M5
 input bool     ShowM1                     = true;        // 📅 Mostrar Tendencia M1
 
-input bool     CargarIndicadoresVisuales  = false;       // 📊 Dibujar EMA y RSI en Gráfico (False si ya están en plantilla)
+input bool     CargarIndicadoresVisuales  = true;        // 📊 Dibujar EMA y RSI en Gráfico (True por defecto)
 
 input string   TradeComment               = "MAIKO_AGOSTO";             // 📝 Comentario para Órdenes (Trade Comment)
 
@@ -161,7 +161,7 @@ int hRadar[7];
 ENUM_TIMEFRAMES etfs[]={PERIOD_W1,PERIOD_D1,PERIOD_H4,PERIOD_H1,PERIOD_M15,PERIOD_M5,PERIOD_M1};
 
 void AgregarIndicadoresVisuales() {
-    if(!CargarIndicadoresVisuales && MQLInfoInteger(MQL_TESTER)) return;
+    if(!CargarIndicadoresVisuales || MQLInfoInteger(MQL_TESTER)) return;
     
     bool tieneEMA = false;
     bool tieneRSI = false;

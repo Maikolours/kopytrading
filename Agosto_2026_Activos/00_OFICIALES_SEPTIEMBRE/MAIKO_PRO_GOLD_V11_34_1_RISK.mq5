@@ -148,6 +148,7 @@ input bool     ShowH1                     = true;        // 📅 Mostrar Tendenc
 input bool     ShowM15                    = true;        // 📅 Mostrar Tendencia M15
 input bool     ShowM5                     = true;        // 📅 Mostrar Tendencia M5
 input bool     ShowM1                     = true;        // 📅 Mostrar Tendencia M1
+input bool     CargarIndicadoresVisuales  = true;        // 📊 Dibujar Indicadores en Gráfico (True por defecto)
 
 // --- COMENTARIOS DE OPERACIONES Y AISLAMIENTO ---
 input group "━━━━━━ 📝 𝗖 𝗢 𝗠 𝗘 𝗡 𝗧 𝗔 𝗥 𝗜 𝗢 𝗦   𝗬   𝗠 𝗔 𝗚 𝗜 𝗖 ━━━━━━"
@@ -218,9 +219,16 @@ int hRadar[7];
 
 ENUM_TIMEFRAMES etfs[]={PERIOD_W1,PERIOD_D1,PERIOD_H4,PERIOD_H1,PERIOD_M15,PERIOD_M5,PERIOD_M1};
 
+int hEMA_chart = INVALID_HANDLE;
+int hRSI_chart = INVALID_HANDLE;
+int hBands_chart = INVALID_HANDLE;
+
 void AgregarIndicadoresVisuales() {
+    if(!CargarIndicadoresVisuales || MQLInfoInteger(MQL_TESTER)) return;
+
     bool tieneEMA = false;
     bool tieneRSI = false;
+    bool tieneBands = false;
     int ventanas = (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL);
 
     for(int w = 0; w < ventanas; w++) {
@@ -229,14 +237,22 @@ void AgregarIndicadoresVisuales() {
             string nombre = ChartIndicatorName(0, w, i);
             if(StringFind(nombre, IntegerToString(PeriodoMediaFiltro)) >= 0 && (StringFind(nombre, "MA") >= 0 || StringFind(nombre, "EMA") >= 0)) tieneEMA = true;
             if(StringFind(nombre, "RSI") >= 0 && StringFind(nombre, "14") >= 0) tieneRSI = true;
+            if(StringFind(nombre, "Bands") >= 0 || StringFind(nombre, "Bollinger") >= 0) tieneBands = true;
             if(StringFind(nombre, "MACD") >= 0) {
                 ChartIndicatorDelete(0, w, nombre);
             }
         }
     }
 
-    if(!tieneEMA) ChartIndicatorAdd(0, 0, hEMA_v);
-    if(!tieneRSI) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hRSI_v);
+    if(hEMA_chart == INVALID_HANDLE) hEMA_chart = (_Period == PERIOD_M1) ? hEMA_v : iMA(_Symbol, _Period, PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
+    if(hRSI_chart == INVALID_HANDLE) hRSI_chart = (_Period == PERIOD_M1) ? hRSI_v : iRSI(_Symbol, _Period, 14, PRICE_CLOSE);
+
+    if(!tieneEMA && hEMA_chart != INVALID_HANDLE) ChartIndicatorAdd(0, 0, hEMA_chart);
+    if(UsarFiltroBollinger && !tieneBands) {
+        if(hBands_chart == INVALID_HANDLE) hBands_chart = (_Period == PERIOD_M1) ? hBands_v : iBands(_Symbol, _Period, BollingerPeriod, 0, BollingerDev, PRICE_CLOSE);
+        if(hBands_chart != INVALID_HANDLE) ChartIndicatorAdd(0, 0, hBands_chart);
+    }
+    if(!tieneRSI && hRSI_chart != INVALID_HANDLE) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hRSI_chart);
 }
 
 
@@ -260,7 +276,6 @@ int OnInit() {
     hEMA_v = iMA(_Symbol, PERIOD_M1, PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
     if(UsarFiltroBollinger) {
         hBands_v = iBands(_Symbol, PERIOD_M1, BollingerPeriod, 0, BollingerDev, PRICE_CLOSE);
-        if(hBands_v != INVALID_HANDLE) ChartIndicatorAdd(0, 0, hBands_v);
     }
 
 
@@ -336,6 +351,9 @@ void OnDeinit(const int reason) {
 
     if(hEMA_v != INVALID_HANDLE) IndicatorRelease(hEMA_v);
     if(hRSI_v != INVALID_HANDLE) IndicatorRelease(hRSI_v);
+    if(hEMA_chart != INVALID_HANDLE && hEMA_chart != hEMA_v) { IndicatorRelease(hEMA_chart); hEMA_chart = INVALID_HANDLE; }
+    if(hRSI_chart != INVALID_HANDLE && hRSI_chart != hRSI_v) { IndicatorRelease(hRSI_chart); hRSI_chart = INVALID_HANDLE; }
+    if(hBands_chart != INVALID_HANDLE && hBands_chart != hBands_v) { IndicatorRelease(hBands_chart); hBands_chart = INVALID_HANDLE; }
     string myGv = StringFormat("MAIKO_HEARTBEAT_%d_%I64d", ExpertMagic, AccountInfoInteger(ACCOUNT_LOGIN));
     GlobalVariableDel(myGv);
     ChartRedraw(); 
