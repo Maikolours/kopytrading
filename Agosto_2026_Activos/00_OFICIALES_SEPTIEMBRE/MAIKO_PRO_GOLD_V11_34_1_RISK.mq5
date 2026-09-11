@@ -1931,7 +1931,7 @@ void EnviarTelemetria() {
     char postData[];
     StringToCharArray(json, postData, 0, StringLen(json), CP_UTF8);
     char result[];
-    string headers = "Content-Type: application/json";
+    string headers = "Content-Type: application/json\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)\r\n";
     string resHeaders;
     int res = WebRequest("POST", SyncURL, headers, 8000, postData, result, resHeaders);
     if(res == -1 || res >= 1000) {
