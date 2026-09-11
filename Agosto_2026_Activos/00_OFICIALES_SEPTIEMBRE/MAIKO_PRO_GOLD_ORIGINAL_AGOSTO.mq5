@@ -51,7 +51,7 @@ input bool             UsarFiltroAgotamientoM15   = true;        // 🕯️ Acti
 input double           MinPorcentajeMechaM15      = 65.0;        // 🕯️ % Mínimo Mecha Reversa (65.0 = solo pinbars extremas)
 
 // --- CONFIRMACION DE RUPTURA ---
-input bool             UsarConfirmacionRuptura    = true;        // 📈 Confirmar Ruptura de S/R con Vela Cerrada
+input bool             UsarConfirmacionRuptura    = false;       // 📈 Confirmar Ruptura con Vela Cerrada (Desactivado de serie para scalping)
 input ENUM_TIMEFRAMES  TimeframeConfirmacion      = PERIOD_M5;   // 📅 Temporalidad de Confirmación (M5/M15)
 
 // --- TENDENCIA Y DIRECCION ---

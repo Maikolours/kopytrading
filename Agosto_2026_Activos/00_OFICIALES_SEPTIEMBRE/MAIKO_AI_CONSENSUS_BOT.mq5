@@ -25,7 +25,7 @@ input group "━━━━━━ 🎯 PRESET ━━━━━━"
 input ENUM_PRESET InpPreset = PRESET_AUTO; // 🎯 Preset (AUTO detecta Bitcoin u Oro por gráfico)
 
 input group "━━━━━━ 🧠 CONSENSO ━━━━━━"
-input int     InpMinConsensus     = 50; // Calibrado para fluidez operativa (de serie)
+input int     InpMinConsensus     = 60; // 🎯 Consenso mínimo requerido (60% equilibrado y seguro)
 input int     InpSegRefrescoOB    = 30;
 
 input group "━━━━━━ 🔑 LICENCIA ━━━━━━"
@@ -42,8 +42,8 @@ input ENUM_EXEC_MODE InpExecMode  = MODE_FULL_AUTO;
 input int     InpEsperaInicialSeg = 60;
 
 input group "━━━━━━ 🎯 FILTROS TENDENCIA ━━━━━━"
-input bool    InpUseFiltroM15     = true;
-input bool    InpUseFiltroH1      = false; // Desactivado de serie (suma puntos al consenso sin paralizar)
+input bool    InpUseFiltroM15     = false; // 🎯 Filtro Tendencia M15 (Desactivado de serie como veto duro; suma +20% al consenso)
+input bool    InpUseFiltroH1      = false; // 🎯 Filtro Tendencia H1 (Desactivado de serie como veto duro; suma +10% al consenso)
 input bool    InpReentradaRapida  = true;
 input int     InpSegReentrada     = 30;
 input int     InpCooldownSLMin    = 10;
@@ -80,7 +80,7 @@ input int     InpHoraInicio             = 3;     // 🕒 Hora inicio operativa (
 input int     InpHoraFin                = 23;    // 🕒 Hora fin operativa (23:00 servidor)
 input bool    InpNoViernes              = true;  // 🚫 Bloquear Oro viernes noche (>20h)
 input bool    InpPausaNoticiasUS        = true;  // 🛑 Pausa noticias EE.UU. (15:15 a 15:45 broker = 14:15 a 14:45 España)
-input bool    InpFiltroVelaConfirmacion = true;  // 🕯️ Confirmar vela previa M5 (Roja para Venta, Verde para Compra)
+input bool    InpFiltroVelaConfirmacion = false; // 🕯️ Confirmar vela previa M5 (Desactivado de serie para scalping en M1)
 
 input group "━━━━━━ 🚨 KILL SWITCH ━━━━━━"
 input bool    InpKillSwitch        = false;
@@ -782,42 +782,75 @@ void CalculateConsensus(int &outScore, int &outSignal) {
     double buyPres = g_lastOB_Buy;
     double sellPres = g_lastOB_Sell;
     int fg = g_lastFearGreed;
-    double ema20h = iMA(g_symbol,PERIOD_M5,20,0,MODE_EMA,PRICE_CLOSE);
-    double ema50h = iMA(g_symbol,PERIOD_M5,50,0,MODE_EMA,PRICE_CLOSE);
-    double ema200h= iMA(g_symbol,PERIOD_M5,200,0,MODE_EMA,PRICE_CLOSE);
+    // 1. Tendencia Dinámica Corto Plazo M5 (EMA 20, 50, 200) -> 20%
+    int ema20h = iMA(g_symbol,PERIOD_M5,20,0,MODE_EMA,PRICE_CLOSE);
+    int ema50h = iMA(g_symbol,PERIOD_M5,50,0,MODE_EMA,PRICE_CLOSE);
+    int ema200h= iMA(g_symbol,PERIOD_M5,200,0,MODE_EMA,PRICE_CLOSE);
     double e20[1],e50[1],e200[1];
     CopyBuffer(ema20h,0,0,1,e20); CopyBuffer(ema50h,0,0,1,e50); CopyBuffer(ema200h,0,0,1,e200);
     IndicatorRelease(ema20h); IndicatorRelease(ema50h); IndicatorRelease(ema200h);
     double price = symbolInfo.Bid();
     bool tBull = (price > e20[0] && (e20[0] >= e50[0] || price > e50[0]));
     bool tBear = (price < e20[0] && (e20[0] <= e50[0] || price < e50[0]));
-    double rsiH = iRSI(g_symbol,PERIOD_M5,14,PRICE_CLOSE);
+    
+    // 2. RSI 14 Momentum M5 -> 15%
+    int rsiH = iRSI(g_symbol,PERIOD_M5,14,PRICE_CLOSE);
     double rsi[1]; CopyBuffer(rsiH,0,0,1,rsi); IndicatorRelease(rsiH);
     g_rsiActual = rsi[0];
-    bool rsiBull = (rsi[0]>30 && rsi[0]<45);
-    bool rsiBear = (rsi[0]>55 && rsi[0]<70);
+    bool rsiBull = (rsi[0] > 35 && rsi[0] < 58);
+    bool rsiBear = (rsi[0] > 42 && rsi[0] < 65);
+    
+    // 3. Sentimiento Long/Short Ratio Binance -> 15%
     bool lsBull = false, lsBear = false;
     if(InpUseLSRatio) {
-        if(g_lastLSRatio < 0.8) lsBull = true;
+        if(g_lastLSRatio < 0.9) lsBull = true;
         else if(g_lastLSRatio > 1.2) lsBear = true;
     }
+    
+    // --- PUNTUACIÓN COMPRA (BUY) ---
     int buyS = 0;
-    if(buyPres > sellPres*1.3) buyS += 30; else if(buyPres > sellPres*1.1) buyS += 15;
-    if(InpUseFearGreed) { if(fg<=25) buyS+=20; else if(fg<=InpFG_MinBuy) buyS+=10; else if(fg>InpFG_MaxSell) buyS-=10; }
-    if(tBull) buyS+=20; else if(tBear) buyS-=10;
-    if(rsiBull) buyS+=10; else if(rsiBear) buyS-=5;
-    if(lsBull) buyS+=20; else if(lsBear) buyS-=15;
-    if(g_m15Bullish) buyS += 15; else buyS -= 10;
-    if(g_h1Bullish)  buyS += 10; else buyS -= 5;
-
+    if(buyPres > sellPres*1.3) buyS += 25; 
+    else if(buyPres > sellPres*1.1) buyS += 15; 
+    else if(sellPres > buyPres*1.2) buyS -= 10;
+    
+    if(tBull) buyS += 20; else if(tBear) buyS -= 10;
+    if(g_m15Bullish) buyS += 20; else buyS -= 10;
+    
+    if(rsiBull) buyS += 15; 
+    else if(rsi[0] >= 70) buyS -= 15;
+    
+    if(lsBull) buyS += 15; else if(lsBear) buyS -= 10;
+    if(g_h1Bullish) buyS += 10; else buyS -= 5;
+    
+    if(InpUseFearGreed) { 
+        if(fg <= 25) buyS += 10; 
+        else if(fg <= InpFG_MinBuy) buyS += 5; 
+        else if(fg > InpFG_MaxSell) buyS -= 5; 
+    }
+    if(g_lastATR > 0) buyS += 5;
+    
+    // --- PUNTUACIÓN VENTA (SELL) ---
     int selS = 0;
-    if(sellPres > buyPres*1.3) selS += 30; else if(sellPres > buyPres*1.1) selS += 15;
-    if(InpUseFearGreed) { if(fg>=75) selS+=20; else if(fg>=InpFG_MaxSell) selS+=10; else if(fg<InpFG_MinBuy) selS-=10; }
-    if(tBear) selS+=20; else if(tBull) selS-=10;
-    if(rsiBear) selS+=10; else if(rsiBull) selS-=5;
-    if(lsBear) selS+=20; else if(lsBull) selS-=15;
-    if(!g_m15Bullish) selS += 15; else selS -= 10;
-    if(!g_h1Bullish)  selS += 10; else selS -= 5;
+    if(sellPres > buyPres*1.3) selS += 25; 
+    else if(sellPres > buyPres*1.1) selS += 15; 
+    else if(buyPres > sellPres*1.2) selS -= 10;
+    
+    if(tBear) selS += 20; else if(tBull) selS -= 10;
+    if(!g_m15Bullish) selS += 20; else selS -= 10;
+    
+    if(rsiBear) selS += 15; 
+    else if(rsi[0] <= 30) selS -= 15;
+    
+    if(lsBear) selS += 15; else if(lsBull) selS -= 10;
+    if(!g_h1Bullish) selS += 10; else selS -= 5;
+    
+    if(InpUseFearGreed) { 
+        if(fg >= 75) selS += 10; 
+        else if(fg >= InpFG_MaxSell) selS += 5; 
+        else if(fg < InpFG_MinBuy) selS -= 5; 
+    }
+    if(g_lastATR > 0) selS += 5;
+    
     buyS = MathMax(0, MathMin(100, buyS));
     selS = MathMax(0, MathMin(100, selS));
     g_realBuyScore = buyS;
@@ -967,19 +1000,38 @@ void CreateHUD() {
     ObjectCreate(0, HUD_BG, OBJ_RECTANGLE_LABEL, 0, 0, 0);
     ObjectSetInteger(0, HUD_BG, OBJPROP_XDISTANCE, 10);
     ObjectSetInteger(0, HUD_BG, OBJPROP_YDISTANCE, 20);
-    ObjectSetInteger(0, HUD_BG, OBJPROP_XSIZE, 270);
-    ObjectSetInteger(0, HUD_BG, OBJPROP_YSIZE, 340);
+    ObjectSetInteger(0, HUD_BG, OBJPROP_XSIZE, 280);
+    ObjectSetInteger(0, HUD_BG, OBJPROP_YSIZE, 360);
     ObjectSetInteger(0, HUD_BG, OBJPROP_BGCOLOR, C'15,20,30');
     ObjectSetInteger(0, HUD_BG, OBJPROP_BORDER_TYPE, BORDER_FLAT);
     ObjectSetInteger(0, HUD_BG, OBJPROP_CORNER, CORNER_LEFT_UPPER);
     ObjectSetInteger(0, HUD_BG, OBJPROP_COLOR, clrDodgerBlue);
     ObjectSetInteger(0, HUD_BG, OBJPROP_WIDTH, 1);
     ObjectSetInteger(0, HUD_BG, OBJPROP_BACK, false);
+    
+    int yPositions[15] = {
+        28,  // L0: Cabecera
+        46,  // L1: Preset
+        64,  // L2: Estado
+        84,  // L3: Señal (Destacado)
+        104, // L4: Potencia BUY/SELL (Destacado)
+        124, // L5: Objetivo / Faltan % (Destacado)
+        146, // L6: Tend M15 / H1
+        164, // L7: RSI
+        182, // L8: F&G / L/S
+        200, // L9: OB
+        218, // L10: ATR / Spread
+        236, // L11: Reentrada
+        254, // L12: Dist.Extremo
+        272, // L13: Balance
+        290  // L14: Info
+    };
+    
     for(int i = 0; i < 15; i++) {
         string name = "MAIKO_HUD_L" + IntegerToString(i);
         ObjectCreate(0, name, OBJ_LABEL, 0, 0, 0);
         ObjectSetInteger(0, name, OBJPROP_XDISTANCE, 20);
-        ObjectSetInteger(0, name, OBJPROP_YDISTANCE, 30 + (i * 16));
+        ObjectSetInteger(0, name, OBJPROP_YDISTANCE, yPositions[i]);
         ObjectSetInteger(0, name, OBJPROP_CORNER, CORNER_LEFT_UPPER);
         ObjectSetString(0, name, OBJPROP_FONT, "Consolas");
         ObjectSetInteger(0, name, OBJPROP_FONTSIZE, 9);
@@ -989,9 +1041,9 @@ void CreateHUD() {
     }
     ObjectCreate(0, BTN_POWER, OBJ_BUTTON, 0, 0, 0);
     ObjectSetInteger(0, BTN_POWER, OBJPROP_XDISTANCE, 18);
-    ObjectSetInteger(0, BTN_POWER, OBJPROP_YDISTANCE, 310);
-    ObjectSetInteger(0, BTN_POWER, OBJPROP_XSIZE, 115);
-    ObjectSetInteger(0, BTN_POWER, OBJPROP_YSIZE, 25);
+    ObjectSetInteger(0, BTN_POWER, OBJPROP_YDISTANCE, 318);
+    ObjectSetInteger(0, BTN_POWER, OBJPROP_XSIZE, 120);
+    ObjectSetInteger(0, BTN_POWER, OBJPROP_YSIZE, 26);
     ObjectSetInteger(0, BTN_POWER, OBJPROP_CORNER, CORNER_LEFT_UPPER);
     ObjectSetString(0, BTN_POWER, OBJPROP_TEXT, "ENCENDIDO");
     ObjectSetString(0, BTN_POWER, OBJPROP_FONT, "Arial Bold");
@@ -1000,10 +1052,10 @@ void CreateHUD() {
     ObjectSetInteger(0, BTN_POWER, OBJPROP_COLOR, clrWhite);
     ObjectSetInteger(0, BTN_POWER, OBJPROP_BORDER_COLOR, clrWhite);
     ObjectCreate(0, BTN_CLOSE, OBJ_BUTTON, 0, 0, 0);
-    ObjectSetInteger(0, BTN_CLOSE, OBJPROP_XDISTANCE, 137);
-    ObjectSetInteger(0, BTN_CLOSE, OBJPROP_YDISTANCE, 310);
-    ObjectSetInteger(0, BTN_CLOSE, OBJPROP_XSIZE, 115);
-    ObjectSetInteger(0, BTN_CLOSE, OBJPROP_YSIZE, 25);
+    ObjectSetInteger(0, BTN_CLOSE, OBJPROP_XDISTANCE, 142);
+    ObjectSetInteger(0, BTN_CLOSE, OBJPROP_YDISTANCE, 318);
+    ObjectSetInteger(0, BTN_CLOSE, OBJPROP_XSIZE, 120);
+    ObjectSetInteger(0, BTN_CLOSE, OBJPROP_YSIZE, 26);
     ObjectSetInteger(0, BTN_CLOSE, OBJPROP_CORNER, CORNER_LEFT_UPPER);
     ObjectSetString(0, BTN_CLOSE, OBJPROP_TEXT, "CERRAR TODO");
     ObjectSetString(0, BTN_CLOSE, OBJPROP_FONT, "Arial Bold");
@@ -1015,21 +1067,37 @@ void CreateHUD() {
 
 void UpdateHUD(int score) {
     string sigTxt = "ESPERANDO";
-    if(g_realBuyScore >= InpMinConsensus && g_realBuyScore > g_realSellScore) sigTxt = "COMPRA";
-    else if(g_realSellScore >= InpMinConsensus && g_realSellScore > g_realBuyScore) sigTxt = "VENTA";
+    color colSig = clrGold;
+    if(g_realBuyScore >= InpMinConsensus && g_realBuyScore > g_realSellScore) {
+        if(InpUseFiltroM15 && !g_m15Bullish) { sigTxt = "BLOQ TEND M15"; colSig = clrGold; }
+        else if(g_bloqueadoTecho) { sigTxt = "BLOQ TECHO M15"; colSig = clrGold; }
+        else { sigTxt = "COMPRA"; colSig = clrLime; }
+    }
+    else if(g_realSellScore >= InpMinConsensus && g_realSellScore > g_realBuyScore) {
+        if(InpUseFiltroM15 && g_m15Bullish) { sigTxt = "BLOQ TEND M15"; colSig = clrGold; }
+        else if(g_bloqueadoSuelo) { sigTxt = "BLOQ SUELO M15"; colSig = clrGold; }
+        else { sigTxt = "VENTA"; colSig = clrTomato; }
+    }
+    
     string estadoBot = "ACTIVO";
+    color colEstado = clrLime;
     if(!g_botActivo) {
         estadoBot = "PAUSADO";
+        colEstado = clrGold;
     } else {
         MqlDateTime dt; TimeToStruct(TimeTradeServer(), dt);
         if(InpPausaNoticiasUS && dt.hour == 15 && dt.min >= 15 && dt.min <= 45) {
             estadoBot = "PAUSA NOTICIAS";
+            colEstado = clrOrange;
         } else if((dt.day_of_week==0 || dt.day_of_week==6) && !g_isBTC) {
             estadoBot = "FIN DE SEMANA";
+            colEstado = clrRed;
         } else if(InpNoViernes && dt.day_of_week==5 && dt.hour>=20 && !g_isBTC) {
             estadoBot = "CIERRE VIERNES";
+            colEstado = clrRed;
         } else if(dt.hour < InpHoraInicio || dt.hour >= InpHoraFin) {
             estadoBot = "FUERA HORARIO";
+            colEstado = clrRed;
         }
     }
     string presetName = g_isBTC ? "BTCUSD" : "XAUUSD";
@@ -1050,24 +1118,71 @@ void UpdateHUD(int score) {
         else cooldownTxt = "AGOTADA";
     }
     double spreadNow = (symbolInfo.Ask() - symbolInfo.Bid()) / g_point;
+    
+    // Potencia y Objetivo
+    int bestScore = MathMax(g_realBuyScore, g_realSellScore);
+    int faltan = InpMinConsensus - bestScore;
+    
+    string potenciaTxt = StringFormat("POTENCIA: BUY %d%% | SELL %d%%", g_realBuyScore, g_realSellScore);
+    color colPot = clrSilver;
+    if(g_realBuyScore >= InpMinConsensus) colPot = clrLime;
+    else if(g_realSellScore >= InpMinConsensus) colPot = clrTomato;
+    else if(bestScore >= (InpMinConsensus - 15)) colPot = clrGold;
+    
+    string objetivoTxt;
+    color colObj;
+    if(faltan <= 0) {
+        objetivoTxt = StringFormat("OBJETIVO: %d%% / %d%% [LISTO DISPARO]", bestScore, InpMinConsensus);
+        colObj = (g_realBuyScore >= g_realSellScore) ? clrLime : clrTomato;
+    } else {
+        objetivoTxt = StringFormat("OBJETIVO: %d%% / %d%% (Faltan %d%%)", bestScore, InpMinConsensus, faltan);
+        colObj = (faltan <= 15) ? clrYellow : clrDeepSkyBlue;
+    }
+    
     string lines[15];
-    lines[0] = "=== MAIKO AI BOT ===";
-    lines[1] = "Preset: " + presetName;
-    lines[2] = "Estado: " + estadoBot;
-    lines[3] = "Señal: " + sigTxt;
-    lines[4] = "BUY: " + IntegerToString(g_realBuyScore) + " | SELL: " + IntegerToString(g_realSellScore);
-    lines[5] = "Minimo: " + IntegerToString(InpMinConsensus) + "/100";
-    lines[6] = "Tend M15: " + tendM15;
-    lines[7] = "Tend H1:  " + tendH1;
-    lines[8] = "RSI: " + DoubleToString(g_rsiActual,1) + " | Ext: " + extTxt;
-    lines[9] = "F&G: " + IntegerToString(g_lastFearGreed) + " | L/S: " + DoubleToString(g_lastLSRatio,2);
-    lines[10] = "OB B:" + DoubleToString(g_lastOB_Buy,1) + " / S:" + DoubleToString(g_lastOB_Sell,1);
-    lines[11] = "ATR: " + DoubleToString(g_lastATR,2) + " | Spr: " + DoubleToString(spreadNow,0);
-    lines[12] = "Reentrada: " + cooldownTxt;
-    lines[13] = "Dist.Extremo: " + IntegerToString(g_distanciaSueloPts) + "pts";
-    lines[14] = "Balance: $" + DoubleToString(AccountInfoDouble(ACCOUNT_BALANCE),2);
-    for(int i = 0; i < 15; i++)
-        ObjectSetString(0, "MAIKO_HUD_L" + IntegerToString(i), OBJPROP_TEXT, lines[i]);
+    lines[0]  = "=== MAIKO AI CONSENSUS ===";
+    lines[1]  = "Preset: " + presetName;
+    lines[2]  = "Estado: " + estadoBot;
+    lines[3]  = "Señal: " + sigTxt;
+    lines[4]  = potenciaTxt;
+    lines[5]  = objetivoTxt;
+    lines[6]  = "Tend M15: " + tendM15 + " | H1: " + tendH1;
+    lines[7]  = "RSI: " + DoubleToString(g_rsiActual,1) + " | Ext: " + extTxt;
+    lines[8]  = "F&G: " + IntegerToString(g_lastFearGreed) + " | L/S: " + DoubleToString(g_lastLSRatio,2);
+    lines[9]  = "OB B:" + DoubleToString(g_lastOB_Buy,1) + " / S:" + DoubleToString(g_lastOB_Sell,1);
+    lines[10] = "ATR: " + DoubleToString(g_lastATR,2) + " | Spr: " + DoubleToString(spreadNow,0) + " pts";
+    lines[11] = "Reentrada: " + cooldownTxt;
+    lines[12] = "Dist.Extremo: " + IntegerToString(g_distanciaSueloPts) + " pts";
+    lines[13] = "Balance: $" + DoubleToString(AccountInfoDouble(ACCOUNT_BALANCE),2);
+    lines[14] = "-----------------------------";
+    
+    for(int i = 0; i < 15; i++) {
+        string name = "MAIKO_HUD_L" + IntegerToString(i);
+        ObjectSetString(0, name, OBJPROP_TEXT, lines[i]);
+    }
+    
+    // Aplicar estilos y colores dinámicos
+    ObjectSetInteger(0, "MAIKO_HUD_L0", OBJPROP_COLOR, clrDodgerBlue);
+    ObjectSetString(0, "MAIKO_HUD_L0", OBJPROP_FONT, "Arial Bold");
+    
+    ObjectSetInteger(0, "MAIKO_HUD_L2", OBJPROP_COLOR, colEstado);
+    
+    ObjectSetInteger(0, "MAIKO_HUD_L3", OBJPROP_COLOR, colSig);
+    ObjectSetString(0, "MAIKO_HUD_L3", OBJPROP_FONT, "Arial Bold");
+    ObjectSetInteger(0, "MAIKO_HUD_L3", OBJPROP_FONTSIZE, 10);
+    
+    ObjectSetInteger(0, "MAIKO_HUD_L4", OBJPROP_COLOR, colPot);
+    ObjectSetString(0, "MAIKO_HUD_L4", OBJPROP_FONT, "Consolas Bold");
+    ObjectSetInteger(0, "MAIKO_HUD_L4", OBJPROP_FONTSIZE, 10);
+    
+    ObjectSetInteger(0, "MAIKO_HUD_L5", OBJPROP_COLOR, colObj);
+    ObjectSetString(0, "MAIKO_HUD_L5", OBJPROP_FONT, "Arial Bold");
+    ObjectSetInteger(0, "MAIKO_HUD_L5", OBJPROP_FONTSIZE, 10);
+    
+    ObjectSetInteger(0, "MAIKO_HUD_L6", OBJPROP_COLOR, clrAqua);
+    ObjectSetInteger(0, "MAIKO_HUD_L13", OBJPROP_COLOR, clrSpringGreen);
+    ObjectSetString(0, "MAIKO_HUD_L13", OBJPROP_FONT, "Arial Bold");
+    
     ChartRedraw();
 }
 
