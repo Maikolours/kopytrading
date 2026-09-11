@@ -923,7 +923,21 @@ void UpdateHUD(int score) {
     string sigTxt = "ESPERANDO";
     if(g_realBuyScore >= InpMinConsensus && g_realBuyScore > g_realSellScore) sigTxt = "COMPRA";
     else if(g_realSellScore >= InpMinConsensus && g_realSellScore > g_realBuyScore) sigTxt = "VENTA";
-    string estadoBot = g_botActivo ? "ACTIVO" : "PAUSADO";
+    string estadoBot = "ACTIVO";
+    if(!g_botActivo) {
+        estadoBot = "PAUSADO";
+    } else {
+        MqlDateTime dt; TimeToStruct(TimeTradeServer(), dt);
+        if(InpPausaNoticiasUS && dt.hour == 15 && dt.min >= 15 && dt.min <= 45) {
+            estadoBot = "PAUSA NOTICIAS";
+        } else if((dt.day_of_week==0 || dt.day_of_week==6) && InpPreset != PRESET_BTCUSD) {
+            estadoBot = "FIN DE SEMANA";
+        } else if(InpNoViernes && dt.day_of_week==5 && dt.hour>=20 && InpPreset != PRESET_BTCUSD) {
+            estadoBot = "CIERRE VIERNES";
+        } else if(dt.hour < InpHoraInicio || dt.hour >= InpHoraFin) {
+            estadoBot = "FUERA HORARIO";
+        }
+    }
     string presetName = (InpPreset == PRESET_BTCUSD) ? "BTCUSD" : "XAUUSD";
     string tendM15 = g_m15Bullish ? "ALCISTA" : "BAJISTA";
     string tendH1 = g_h1Bullish ? "ALCISTA" : "BAJISTA";
