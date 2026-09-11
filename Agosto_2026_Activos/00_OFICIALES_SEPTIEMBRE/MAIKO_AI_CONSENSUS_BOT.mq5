@@ -338,8 +338,10 @@ void ActualizarTendencias() {
     if(h20m != INVALID_HANDLE && h50m != INVALID_HANDLE) {
         double a[1], b[1];
         if(CopyBuffer(h20m, 0, 0, 1, a) > 0 && CopyBuffer(h50m, 0, 0, 1, b) > 0) {
-            // Alcista si el precio está sobre la EMA 20 o sobre la EMA 50
-            g_m15Bullish = (price > a[0] || a[0] > b[0]);
+            // Alcista si el precio está sobre ambas EMAs; Bajista si está bajo ambas EMAs
+            if(price > a[0] && price > b[0]) g_m15Bullish = true;
+            else if(price < a[0] && price < b[0]) g_m15Bullish = false;
+            else g_m15Bullish = (price > a[0]); // En transición manda la EMA 20 rápida
         }
         IndicatorRelease(h20m); IndicatorRelease(h50m);
     }
@@ -350,8 +352,9 @@ void ActualizarTendencias() {
     if(h20 != INVALID_HANDLE && h50 != INVALID_HANDLE) {
         double a[1], b[1];
         if(CopyBuffer(h20, 0, 0, 1, a) > 0 && CopyBuffer(h50, 0, 0, 1, b) > 0) {
-            // Alcista si el precio está sobre la EMA 20 o sobre la EMA 50
-            g_h1Bullish = (price > a[0] || a[0] > b[0]);
+            if(price > a[0] && price > b[0]) g_h1Bullish = true;
+            else if(price < a[0] && price < b[0]) g_h1Bullish = false;
+            else g_h1Bullish = (price > a[0]);
         }
         IndicatorRelease(h20); IndicatorRelease(h50);
     }
