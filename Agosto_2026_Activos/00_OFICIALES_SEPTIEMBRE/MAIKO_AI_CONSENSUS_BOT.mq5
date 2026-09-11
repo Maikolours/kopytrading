@@ -52,9 +52,9 @@ input int     InpCooldownNormalMin= 10;
 input group "━━━━━━ 🚧 FILTRO SUELO/TECHO ━━━━━━"
 input bool    InpUseFiltroSueloTecho = true;
 input int     InpPeriodosSueloTecho  = 20;
-input int     InpDistanciaSueloPts   = 400;  // 400 pts ($4.00 en Oro) para evitar vender pegado al suelo
-input int     InpRSI_Suelo           = 35;   // Bloquea venta si RSI <= 35 (sobreventa aguda)
-input int     InpRSI_Techo           = 65;   // Bloquea compra si RSI >= 65 (sobrecompra aguda)
+input int     InpDistanciaSueloPts   = 0;   // 📏 Distancia Suelo/Techo en pts (0 = Auto: 400 Oro / 5000 BTC)
+input int     InpRSI_Suelo           = 0;   // 📉 Bloqueo RSI Venta (0 = Auto: 35 Oro / 30 BTC)
+input int     InpRSI_Techo           = 0;   // 📈 Bloqueo RSI Compra (0 = Auto: 65 Oro / 70 BTC)
 
 input group "━━━━━━ 💰 RIESGO ━━━━━━"
 input bool    InpUseFixedLot      = false;
@@ -98,6 +98,9 @@ int    g_magicNumber, g_slPoints, g_tpPoints, g_beTrigger, g_beLock;
 int    g_trailingStart, g_trailingStep, g_slippage;
 double g_maxSpread;
 bool   g_isBTC = false;
+int    g_distanciaSueloPts = 400;
+int    g_rsiSuelo = 35;
+int    g_rsiTecho = 65;
 
 void AplicarPreset() {
     string s = _Symbol;
@@ -115,18 +118,26 @@ void AplicarPreset() {
     }
 
     if(g_isBTC) {
+        // --- PRESET PROFESIONAL BITCOIN (BTCUSD) ---
         g_binanceSymbol = "BTCUSDT"; g_magicNumber = 202626;
-        g_slPoints = 5000; g_tpPoints = 10000;
-        g_beTrigger = 2000; g_beLock = 300; g_trailingStart = 2500;
-        g_trailingStep = 600;
-        g_maxSpread = 3000.0; // ✅ FIX: 3000 puntos ($30) adaptado al spread real de VTMarkets BTCUSD (~1700 pts)
+        g_slPoints = 6000; g_tpPoints = 15000;              // $60 SL / $150 TP (Ratio 1:2.5)
+        g_beTrigger = 3500; g_beLock = 500;                 // BE a los $35 asegurando $5
+        g_trailingStart = 5000; g_trailingStep = 1000;      // Trailing a partir de $50 de beneficio
+        g_maxSpread = 3000.0;                              // Spread máx 3000 pts ($30)
+        g_distanciaSueloPts = (InpDistanciaSueloPts > 0) ? InpDistanciaSueloPts : 5000; // $50 en BTC
+        g_rsiSuelo = (InpRSI_Suelo > 0) ? InpRSI_Suelo : 30; // 30 en BTC (sobreventa real)
+        g_rsiTecho = (InpRSI_Techo > 0) ? InpRSI_Techo : 70; // 70 en BTC (sobrecompra real)
         g_slippage = 50;
     } else {
+        // --- PRESET PROFESIONAL ORO (XAUUSD) ---
         g_binanceSymbol = "PAXGUSDT"; g_magicNumber = 202627;
-        g_slPoints = 500; g_tpPoints = 1000;
-        g_beTrigger = 250; g_beLock = 50; g_trailingStart = 300;
-        g_trailingStep = 80;
-        g_maxSpread = 100.0;  // ✅ FIX: 100 puntos ($1) para Oro
+        g_slPoints = 500; g_tpPoints = 1000;                // $5.00 SL / $10.00 TP (Ratio 1:2)
+        g_beTrigger = 250; g_beLock = 50;                   // BE a los $2.50 asegurando $0.50
+        g_trailingStart = 300; g_trailingStep = 80;         // Trailing a partir de $3.00 de beneficio
+        g_maxSpread = 100.0;                               // Spread máx 100 pts ($1.00)
+        g_distanciaSueloPts = (InpDistanciaSueloPts > 0) ? InpDistanciaSueloPts : 400; // $4.00 en Oro
+        g_rsiSuelo = (InpRSI_Suelo > 0) ? InpRSI_Suelo : 35; // 35 en Oro
+        g_rsiTecho = (InpRSI_Techo > 0) ? InpRSI_Techo : 65; // 65 en Oro
         g_slippage = 30;
     }
 }
@@ -358,7 +369,7 @@ bool EstaPegadoASuelo() {
     int idxMin = ArrayMinimum(low, 0, copied);
     double minLow = low[idxMin];
     double distPts = (symbolInfo.Bid() - minLow) / g_point;
-    return (distPts <= InpDistanciaSueloPts);
+    return (distPts <= g_distanciaSueloPts);
 }
 
 bool EstaPegadoATecho() {
@@ -370,7 +381,7 @@ bool EstaPegadoATecho() {
     int idxMax = ArrayMaximum(high, 0, copied);
     double maxHigh = high[idxMax];
     double distPts = (maxHigh - symbolInfo.Bid()) / g_point;
-    return (distPts <= InpDistanciaSueloPts);
+    return (distPts <= g_distanciaSueloPts);
 }
 
 //=================================================================
@@ -460,16 +471,16 @@ void OnTick() {
             }
             return;
         }
-        if(InpRSI_Suelo > 0 && g_rsiActual <= InpRSI_Suelo && signal == -1) {
+        if(g_rsiSuelo > 0 && g_rsiActual <= g_rsiSuelo && signal == -1) {
             if((TimeCurrent() - g_lastLogSueloTecho) > 300) {
-                Print("VENTA bloqueada: RSI ", DoubleToString(g_rsiActual,1), " en zona SUELO");
+                Print("VENTA bloqueada: RSI ", DoubleToString(g_rsiActual,1), " en zona SUELO (<= ", g_rsiSuelo, ")");
                 g_lastLogSueloTecho = TimeCurrent();
             }
             return;
         }
-        if(InpRSI_Techo > 0 && g_rsiActual >= InpRSI_Techo && signal == 1) {
+        if(g_rsiTecho > 0 && g_rsiActual >= g_rsiTecho && signal == 1) {
             if((TimeCurrent() - g_lastLogSueloTecho) > 300) {
-                Print("COMPRA bloqueada: RSI ", DoubleToString(g_rsiActual,1), " en zona TECHO");
+                Print("COMPRA bloqueada: RSI ", DoubleToString(g_rsiActual,1), " en zona TECHO (>= ", g_rsiTecho, ")");
                 g_lastLogSueloTecho = TimeCurrent();
             }
             return;
@@ -1048,7 +1059,7 @@ void UpdateHUD(int score) {
     lines[10] = "OB B:" + DoubleToString(g_lastOB_Buy,1) + " / S:" + DoubleToString(g_lastOB_Sell,1);
     lines[11] = "ATR: " + DoubleToString(g_lastATR,2) + " | Spr: " + DoubleToString(spreadNow,0);
     lines[12] = "Reentrada: " + cooldownTxt;
-    lines[13] = "Dist.Extremo: " + IntegerToString(InpDistanciaSueloPts) + "pts";
+    lines[13] = "Dist.Extremo: " + IntegerToString(g_distanciaSueloPts) + "pts";
     lines[14] = "Balance: $" + DoubleToString(AccountInfoDouble(ACCOUNT_BALANCE),2);
     for(int i = 0; i < 15; i++)
         ObjectSetString(0, "MAIKO_HUD_L" + IntegerToString(i), OBJPROP_TEXT, lines[i]);
