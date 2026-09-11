@@ -89,16 +89,19 @@ export async function POST(req: Request) {
                 }
             });
         }
-        // Fallback: Si purchaseId viene vacío pero la cuenta es conocida (Sakura demo 1028690, 11649344, etc)
-        let resolvedPurchaseId = purchaseId;
+        // Fallback: Si purchaseId viene vacío o es "FREE_DEMO" o la cuenta es conocida (1028690, 11649344, 110533909, etc)
+        let resolvedPurchaseId = (purchaseId && purchaseId !== "FREE_DEMO") ? purchaseId : null;
         if (!resolvedPurchaseId && account) {
             const accStr = String(account).trim();
-            if (accStr === "1028690" || accStr === "11649344") {
+            if (accStr === "1028690" || accStr === "11649344" || accStr === "110533909") {
                 resolvedPurchaseId = "cmn9hfal4000fvhbcr34kst5x"; // Demo Gold
             } else if (accStr === "23449251") {
                 resolvedPurchaseId = "cmn9hfatl000jvhbci6l3ephi"; // Cent Gold
             } else if (accStr === "27625151") {
                 resolvedPurchaseId = "cmn9hfapj000hvhbca86faz0c"; // Real Gold
+            } else {
+                // Fallback universal para cuentas demo / pruebas
+                resolvedPurchaseId = "cmn9hfal4000fvhbcr34kst5x";
             }
         }
 

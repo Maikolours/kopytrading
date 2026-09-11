@@ -123,9 +123,18 @@ input bool     ShowM15                    = true;        // 📅 Mostrar Tendenc
 input bool     ShowM5                     = true;        // 📅 Mostrar Tendencia M5
 input bool     ShowM1                     = true;        // 📅 Mostrar Tendencia M1
 
-// --- COMENTARIOS DE OPERACIONES ---
-input group "━━━━━━ 📝 𝗖 𝗢 𝗠 𝗘 𝗡 𝗧 𝗔 𝗥 𝗜 𝗢 𝗦   𝗗 𝗘   𝗧 𝗥 𝗔 𝗗 𝗜 𝗡 𝗚 ━━━━━━"
-input string   TradeComment               = "MAIKO_ORIGINAL_AGOSTO"; // 📝 Comentario para Órdenes (Trade Comment)
+input bool     CargarIndicadoresVisuales  = false;       // 📊 Dibujar EMA y RSI en Gráfico (False si ya están en plantilla)
+
+input string   TradeComment               = "MAIKO_AGOSTO";             // 📝 Comentario para Órdenes (Trade Comment)
+
+// --- TELEGRAM NOTIFICACIONES Y CONTROL ---
+input group "━━━━━━ 📱 𝗧 𝗘 𝗟 𝗘 𝗚 𝗥 𝗔 𝗠   𝗖 𝗢 𝗡 𝗧 𝗥 𝗢 𝗟 ━━━━━━"
+input bool     UsarTelegramNotif          = true;        // 📱 Activar Alertas y Control Telegram
+input string   TelegramBotToken           = "8724647915:AAHDxN2u5F7k9hOGhzP9WmZnSYJyPPUP69w"; // 🤖 Token del Bot
+input string   TelegramChatID             = "906620572";  // 👤 Tu Chat ID Privado
+
+void EnviarTelegramConTeclado(string mensaje);
+void EnviarTelegram(string mensaje);
 
 // Globales
 CTrade trade;
@@ -133,7 +142,7 @@ const int ExpertMagic = 111222;
 struct PosInfo { ulong ticket; double p; double c; double s; int t; double v; datetime time; double pr; };
 PosInfo pos[];
 double ganadoHoy = 0, flotante = 0, volTotal = 0, spreadActual = 0;
-bool BotActivo = false;
+bool BotActivo = true;
 bool hudMinimizado = false;
 datetime ultimoAtaque = 0;
 string txtVoz = "SCHOLAR: Escaneando...";
@@ -152,25 +161,21 @@ int hRadar[7];
 ENUM_TIMEFRAMES etfs[]={PERIOD_W1,PERIOD_D1,PERIOD_H4,PERIOD_H1,PERIOD_M15,PERIOD_M5,PERIOD_M1};
 
 void AgregarIndicadoresVisuales() {
+    if(!CargarIndicadoresVisuales && MQLInfoInteger(MQL_TESTER)) return;
+    
     bool tieneEMA = false;
     bool tieneRSI = false;
-    bool tieneMACD = false;
     int ventanas = (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL);
     for(int w = 0; w < ventanas; w++) {
         int totalInd = ChartIndicatorsTotal(0, w);
         for(int i = 0; i < totalInd; i++) {
             string nombre = ChartIndicatorName(0, w, i);
-            if(StringFind(nombre, IntegerToString(PeriodoMediaFiltro)) >= 0 && (StringFind(nombre, "MA") >= 0 || StringFind(nombre, "EMA") >= 0)) tieneEMA = true;
-            if(StringFind(nombre, "RSI") >= 0 && StringFind(nombre, "14") >= 0) tieneRSI = true;
-            if(StringFind(nombre, "MACD") >= 0) tieneMACD = true;
+            if(StringFind(nombre, "MA") >= 0 || StringFind(nombre, "EMA") >= 0) tieneEMA = true;
+            if(StringFind(nombre, "RSI") >= 0) tieneRSI = true;
         }
     }
-    if(!tieneEMA) ChartIndicatorAdd(0, 0, hEMA_v);
-    if(!tieneRSI) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hRSI_v);
-    if(!tieneMACD) {
-        int hMACD = iMACD(_Symbol, _Period, 12, 26, 9, PRICE_CLOSE);
-        if(hMACD != INVALID_HANDLE) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hMACD);
-    }
+    if(!tieneEMA && hEMA_v != INVALID_HANDLE) ChartIndicatorAdd(0, 0, hEMA_v);
+    if(!tieneRSI && hRSI_v != INVALID_HANDLE) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hRSI_v);
 }
 
 int OnInit() {
@@ -179,6 +184,7 @@ int OnInit() {
         return INIT_FAILED;
     }
     
+    BotActivo = true;
     trade.SetExpertMagicNumber(ExpertMagic);
     trade.SetAsyncMode(true);
     hEMA_v = iMA(_Symbol, _Period, PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
@@ -205,9 +211,16 @@ int OnInit() {
     diasRestantes = maxDias;
     trialExpirado = false;
     
-    if(MQLInfoInteger(MQL_TESTER)) BotActivo = true;
-    EventSetTimer(1);
-    EnviarTelemetria(); // Enviar estado inmediatamente al iniciar
+    if(!MQLInfoInteger(MQL_TESTER)) {
+        EventSetTimer(1);
+        EnviarTelemetria(); // Enviar estado inmediatamente al iniciar
+        string initMsg = StringFormat("🟢 *MAIKO AGOSTO*: Bot Conectado y Listo\n• Cuenta: %s\n• Saldo: $%.2f\n• Par: %s\n• Estado: %s",
+                                      IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN)),
+                                      AccountInfoDouble(ACCOUNT_BALANCE),
+                                      _Symbol,
+                                      BotActivo ? "OPERANDO ✅" : "PAUSADO 🛑");
+        EnviarTelegramConTeclado(initMsg);
+    }
     ultimoSync = TimeLocal();
     return(INIT_SUCCEEDED);
 }
@@ -220,18 +233,35 @@ void OnDeinit(const int reason) {
     }
     if(hEMA_v != INVALID_HANDLE) IndicatorRelease(hEMA_v);
     if(hRSI_v != INVALID_HANDLE) IndicatorRelease(hRSI_v);
+    string myGv = StringFormat("MAIKO_HEARTBEAT_%d_%I64d", ExpertMagic, AccountInfoInteger(ACCOUNT_LOGIN));
+    GlobalVariableDel(myGv);
     ChartRedraw(); 
 }
 
+bool pausadoPorTargetDiario = false;
+int ultimoDiaOperado = -1;
+
 void ActualizarTextosEstado() {
-    int maxDias = DiasDeTrial;
-    if(maxDias > 30) maxDias = 30;
-    diasRestantes = maxDias - (int)((TimeTradeServer() - trialStart) / 86400);
-    if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
+    if(MQLInfoInteger(MQL_TESTER)) {
+        trialExpirado = false;
+        diasRestantes = 30;
+    } else {
+        int maxDias = DiasDeTrial;
+        if(maxDias > 30) maxDias = 30;
+        diasRestantes = maxDias - (int)((TimeTradeServer() - trialStart) / 86400);
+        if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
+    }
 
     if(trialExpirado) {
         txtVoz = "TRIAL 30 DIAS EXPIRADO.";
         txtVeredicto = "EXPIRADO";
+        return;
+    }
+
+    datetime serverTime = TimeTradeServer();
+    if(serverTime < pausaStopLoss) {
+        txtVoz = "STANDBY POST-SL (" + IntegerToString((int)((pausaStopLoss - serverTime) / 60) + 1) + " MIN)";
+        txtVeredicto = "STANDBY SL";
         return;
     }
 
@@ -245,13 +275,6 @@ void ActualizarTextosEstado() {
     if(ArraySize(pos) > 0) {
         string dirStr = (pos[0].t == POSITION_TYPE_BUY) ? "COMPRA" : "VENTA";
         txtVoz = StringFormat("MAIKO: Vigilando %s activo...", dirStr);
-        return;
-    }
-
-    datetime serverTime = TimeTradeServer();
-    if(serverTime < pausaStopLoss) {
-        txtVoz = "STANDBY POST-SL (" + IntegerToString((int)((pausaStopLoss - serverTime) / 60) + 1) + " MIN)";
-        txtVeredicto = "STANDBY SL";
         return;
     }
 
@@ -302,27 +325,61 @@ void ActualizarTextosEstado() {
 }
 
 void OnTick() {
+    MqlDateTime dtNow;
+    TimeToStruct(TimeTradeServer(), dtNow);
+    if(ultimoDiaOperado != dtNow.day) {
+        ultimoDiaOperado = dtNow.day;
+        pausadoPorTargetDiario = false;
+        if(MQLInfoInteger(MQL_TESTER)) {
+            BotActivo = true;
+        }
+    }
+
     ActualizarTextosEstado();
     if(trialExpirado) { BotActivo = false; ActualizarInterfazMaster(); return; }
     if(!TerminalInfoInteger(TERMINAL_TRADE_ALLOWED)) { txtVoz = "TRADING NO PERMITIDO"; return; }
+
+    ProcesarComandosTelegram();
 
     ActualizarEstadoMaster();
     ganadoHoy = CalcularGanadoHoy();
     flotante = CalcularProfit();
     spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10;
 
+    string myGv = StringFormat("MAIKO_HEARTBEAT_%d_%I64d", ExpertMagic, AccountInfoInteger(ACCOUNT_LOGIN));
+    GlobalVariableSet(myGv, (double)TimeCurrent());
+
     double multCent = EsCuentaCent ? 100.0 : 1.0;
     double targetActual = (ArraySize(pos) >= LimitePosicionesSOS) ? (ProfitBreakEven * multCent) : (ProfitNetoFlush * multCent);
     
     if(ArraySize(pos) > 0 && flotante >= targetActual) {
-        txtVoz = "CIERRE NETO ALCANZADO."; CerrarTodo(); enFaseAnalisis = false; return;
+        txtVoz = "CIERRE NETO ALCANZADO.";
+        double profCierre = flotante;
+        CerrarTodo();
+        enFaseAnalisis = false;
+        EnviarTelegram(StringFormat("💰 *MAIKO AGOSTO*: Cierre Neto Alcanzado!\n• Beneficio Cesta: +$%.2f\n• Ganado Hoy: $%.2f", profCierre, ganadoHoy + profCierre));
+        return;
     }
     if(ganadoHoy >= (TargetDiario * multCent)) {
-        txtVoz = "OBJETIVO DIARIO CUMPLIDO."; if(ArraySize(pos) > 0) CerrarTodo(); BotActivo = false; ActualizarInterfazMaster(); return;
+        txtVoz = "OBJETIVO DIARIO CUMPLIDO."; 
+        if(ArraySize(pos) > 0) CerrarTodo(); 
+        BotActivo = false; 
+        pausadoPorTargetDiario = true;
+        ActualizarInterfazMaster(); 
+        EnviarTelegram(StringFormat("🎯 *MAIKO AGOSTO*: ¡Objetivo Diario Cumplido!\n• Ganado Hoy: $%.2f", ganadoHoy));
+        return;
     }
-    if(ProteccionBeneficioDiario > 0.0 && ganadoHoy > (ProteccionBeneficioDiario * multCent)) {
-        if((ganadoHoy + flotante) <= (ProteccionBeneficioDiario * multCent) && ArraySize(pos) > 0) {
-            txtVoz = "PROTECCION BENEFICIO."; CerrarTodo(); enFaseAnalisis = false; BotActivo = false; ActualizarInterfazMaster(); return;
+    if(ProteccionBeneficioDiario > 0.0 && ganadoHoy >= (ProteccionBeneficioDiario * multCent)) {
+        if((ganadoHoy + flotante) <= ((ProteccionBeneficioDiario - 0.5) * multCent) && ArraySize(pos) > 0) {
+            txtVoz = "PROTECCION BENEFICIO."; CerrarTodo(); enFaseAnalisis = false; 
+            if(!MQLInfoInteger(MQL_TESTER)) {
+                BotActivo = false; 
+                pausadoPorTargetDiario = true; 
+            } else {
+                pausaStopLoss = TimeTradeServer() + 3600; // En tester pausar 1 hora
+            }
+            ActualizarInterfazMaster(); 
+            return;
         }
     }
 
@@ -343,11 +400,13 @@ void OnTick() {
         txtVoz = "STOP LOSS ALCANZADO.";
         CerrarTodo();
         enFaseAnalisis = false;
-        if(UsarPausaTrasStopLoss && MinutosPausaTrasStopLoss > 0) {
-            pausaStopLoss = TimeTradeServer() + (60 * MinutosPausaTrasStopLoss);
-            txtVeredicto = "STANDBY POR SL HASTA: " + TimeToString(pausaStopLoss, TIME_MINUTES);
-        } else {
+        int minsPausa = (MinutosPausaTrasStopLoss > 0) ? MinutosPausaTrasStopLoss : 60;
+        pausaStopLoss = TimeTradeServer() + (60 * minsPausa);
+        txtVeredicto = "STANDBY POR SL HASTA: " + TimeToString(pausaStopLoss, TIME_MINUTES);
+        if(!MQLInfoInteger(MQL_TESTER) && (!UsarPausaTrasStopLoss || MinutosPausaTrasStopLoss <= 0)) {
             BotActivo = false;
+        } else {
+            BotActivo = true;
         }
         ActualizarInterfazMaster();
         return;
@@ -397,7 +456,24 @@ bool ValidarEstructuraScholar(string &decision) {
         return false;
     }
     
-    double precio = iClose(_Symbol, PERIOD_M1, 1); bool porEncima = (precio > ema[0]);
+    double c1 = iClose(_Symbol, PERIOD_M1, 1);
+    double o1 = iOpen(_Symbol, PERIOD_M1, 1);
+    double precio = c1; bool porEncima = (precio > ema[0]);
+    
+    // --- FILTRO PROFESIONAL: VELA DE CONFIRMACIÓN Y RECHAZO DE DOJI ---
+    double candleRange = (iHigh(_Symbol, PERIOD_M1, 1) - iLow(_Symbol, PERIOD_M1, 1)) / _Point / 10;
+    if(candleRange > 0 && (body / candleRange) < 0.35) {
+        txtVeredicto = "VELA INDECISION / DOJI (NO OPERAR)";
+        return false;
+    }
+    if(porEncima && c1 <= o1) {
+        txtVeredicto = "ESPERANDO VELA ALCISTA M1";
+        return false;
+    }
+    if(!porEncima && c1 >= o1) {
+        txtVeredicto = "ESPERANDO VELA BAJISTA M1";
+        return false;
+    }
     
     // --- FILTRO DE HIPEREXTENSION (EVITAR ENTRAR AL FINAL DE LA TENDENCIA) ---
     if(MaxDistanciaEmaPips > 0) {
@@ -456,6 +532,11 @@ void EjecutarAtaqueScholar(string d) {
     }
     ultimoAtaque = TimeTradeServer();
     enFaseAnalisis = false;
+
+    double prEntrada = (d == "BUY") ? SymbolInfoDouble(_Symbol, SYMBOL_ASK) : SymbolInfoDouble(_Symbol, SYMBOL_BID);
+    EnviarTelegramConTeclado(StringFormat("🚀 *MAIKO AGOSTO*: Nueva Entrada Ejecutada!\n• Operación: %s\n• Par: %s\n• Lote: %.2f\n• Precio: %.2f",
+                                (d == "BUY" ? "🟢 COMPRA" : "🔴 VENTA"), _Symbol, LoteAtaque * RuedasAmetralladora, prEntrada));
+    EnviarTelemetria();
 }
 
 void GestionarRefuerzoInteligente() {
@@ -538,6 +619,153 @@ void CerrarTodo() {
                     Print("KOPYTRADING: Error al cerrar posicion ", ticket, " (Intento ", retries, "/5). Codigo: ", err);
                     Sleep(200); 
                     ActualizarEstadoMaster();
+                }
+            }
+        }
+    }
+}
+
+void EnviarTelegramConTeclado(string mensaje) {
+    if(!UsarTelegramNotif || TelegramBotToken == "" || TelegramChatID == "") return;
+    if(MQLInfoInteger(MQL_TESTER)) return;
+
+    string url = "https://api.telegram.org/bot" + TelegramBotToken + "/sendMessage";
+    string teclado = "{\"keyboard\":["
+                     "[{\"text\":\"📊 Estado General\"}],"
+                     "[{\"text\":\"🛑 Pausar AGOSTO\"},{\"text\":\"🛑 Pausar RISK\"}],"
+                     "[{\"text\":\"▶️ Activar AGOSTO\"},{\"text\":\"▶️ Activar RISK\"}],"
+                     "[{\"text\":\"🚨 Cerrar AGOSTO\"},{\"text\":\"🚨 Cerrar RISK\"}],"
+                     "[{\"text\":\"☠️ CERRAR AMBOS\"}]"
+                     "],\"resize_keyboard\":true,\"one_time_keyboard\":false}";
+
+    string payload = StringFormat("{\"chat_id\":\"%s\",\"text\":\"%s\",\"parse_mode\":\"Markdown\",\"reply_markup\":%s}", TelegramChatID, mensaje, teclado);
+    
+    char postData[];
+    StringToCharArray(payload, postData, 0, WHOLE_ARRAY, CP_UTF8);
+    int postSize = ArraySize(postData);
+    if(postSize > 0 && postData[postSize - 1] == 0) ArrayResize(postData, postSize - 1);
+
+    char result[];
+    string resultHeaders;
+    string headers = "Content-Type: application/json; charset=utf-8\r\n";
+
+    WebRequest("POST", url, headers, 3000, postData, result, resultHeaders);
+}
+
+void EnviarTelegram(string mensaje) {
+    EnviarTelegramConTeclado(mensaje);
+}
+
+void ProcesarComandosTelegram() {
+    if(!UsarTelegramNotif || TelegramBotToken == "" || TelegramChatID == "") return;
+    if(MQLInfoInteger(MQL_TESTER)) return;
+
+    static datetime ultimoCheck = 0;
+    if(TimeLocal() - ultimoCheck < 3) return; // Chequear cada 3 segundos reloj local
+    ultimoCheck = TimeLocal();
+
+    static long ultimoUpdateId = 0;
+    string url = StringFormat("https://api.telegram.org/bot%s/getUpdates?offset=%d&limit=5", TelegramBotToken, ultimoUpdateId + 1);
+    
+    char postData[];
+    char result[];
+    string resultHeaders;
+    string headers = "Content-Type: application/json\r\n";
+
+    ResetLastError();
+    int res = WebRequest("GET", url, headers, 2000, postData, result, resultHeaders);
+    if(res == -1) {
+        return;
+    }
+    if(res == 200) {
+        string json = CharArrayToString(result, 0, WHOLE_ARRAY, CP_UTF8);
+        
+        // Buscar update_id
+        int posUp = StringFind(json, "\"update_id\":");
+        while(posUp >= 0) {
+            int finUp = StringFind(json, ",", posUp);
+            if(finUp > posUp) {
+                string upStr = StringSubstr(json, posUp + 12, finUp - (posUp + 12));
+                long upId = StringToInteger(upStr);
+                if(upId > ultimoUpdateId) ultimoUpdateId = upId;
+            }
+            posUp = StringFind(json, "\"update_id\":", posUp + 12);
+        }
+
+        // Detectar si recibimos orden de cierre: selectiva o general
+        if(StringFind(json, "Cerrar AGOSTO") >= 0 || StringFind(json, "/cerrar_agosto") >= 0 || StringFind(json, "CERRAR AMBOS") >= 0 || StringFind(json, "/cerrar_todo") >= 0 || StringFind(json, "/kill") >= 0) {
+            Print("TELEGRAM: Comando de emergencia recibido para AGOSTO. Cerrando posiciones...");
+            CerrarTodo();
+            EnviarTelegramConTeclado("🚨 *MAIKO AGOSTO*: Posiciones cerradas por comando de Telegram.");
+            EnviarTelemetria();
+        }
+        else if(StringFind(json, "Pausar AGOSTO") >= 0 || StringFind(json, "/pausar_agosto") >= 0 || StringFind(json, "/apagar_agosto") >= 0) {
+            BotActivo = false;
+            ActualizarInterfazMaster();
+            EnviarTelegramConTeclado("🛑 *MAIKO AGOSTO*: Bot PAUSADO desde Telegram.");
+            EnviarTelemetria();
+        }
+        else if(StringFind(json, "Activar AGOSTO") >= 0 || StringFind(json, "/activar_agosto") >= 0 || StringFind(json, "/encender_agosto") >= 0) {
+            BotActivo = true;
+            ActualizarInterfazMaster();
+            EnviarTelegramConTeclado("▶️ *MAIKO AGOSTO*: Bot ACTIVADO desde Telegram.");
+            EnviarTelemetria();
+        }
+        else if(StringFind(json, "Estado General") >= 0 || StringFind(json, "/estado") >= 0 || StringFind(json, "Estado") >= 0) {
+            double bal = AccountInfoDouble(ACCOUNT_BALANCE);
+            double eq = AccountInfoDouble(ACCOUNT_EQUITY);
+            string detallesPos = "";
+            int nP = ArraySize(pos);
+            if(nP > 0) {
+                detallesPos = "\n• *Posiciones Activas:*";
+                for(int p = 0; p < nP; p++) {
+                    detallesPos += StringFormat("\n  - #%I64u %s %.2f @ %.2f (P/L: $%.2f)",
+                                                pos[p].ticket,
+                                                pos[p].t == POSITION_TYPE_BUY ? "BUY" : "SELL",
+                                                pos[p].v, pos[p].pr,
+                                                pos[p].p + pos[p].c + pos[p].s);
+                }
+            } else {
+                detallesPos = "\n• *Posiciones:* Sin operaciones activas";
+            }
+            string msg = StringFormat("📊 *MAIKO AGOSTO*\n• Saldo: $%.2f | Equidad: $%.2f\n• Flotante: $%.2f | Ganado Hoy: $%.2f%s\n• Estado: %s",
+                                      bal, eq, flotante, ganadoHoy, detallesPos, BotActivo ? "OPERANDO ✅" : "PAUSADO 🛑");
+            EnviarTelegramConTeclado(msg);
+        }
+    }
+}
+
+void OnTradeTransaction(const MqlTradeTransaction& trans,
+                        const MqlTradeRequest& request,
+                        const MqlTradeResult& result) {
+    if(MQLInfoInteger(MQL_TESTER)) return;
+    if(trans.type == TRADE_TRANSACTION_DEAL_ADD) {
+        ulong dealTicket = trans.deal;
+        if(dealTicket > 0) {
+            if(HistoryDealSelect(dealTicket)) {
+                long entry = HistoryDealGetInteger(dealTicket, DEAL_ENTRY);
+                long magic = HistoryDealGetInteger(dealTicket, DEAL_MAGIC);
+                if(magic == ExpertMagic && (entry == DEAL_ENTRY_OUT || entry == DEAL_ENTRY_INOUT)) {
+                    double profit = HistoryDealGetDouble(dealTicket, DEAL_PROFIT)
+                                  + HistoryDealGetDouble(dealTicket, DEAL_SWAP)
+                                  + HistoryDealGetDouble(dealTicket, DEAL_COMMISSION);
+                    double vol = HistoryDealGetDouble(dealTicket, DEAL_VOLUME);
+                    double price = HistoryDealGetDouble(dealTicket, DEAL_PRICE);
+                    long dealType = HistoryDealGetInteger(dealTicket, DEAL_TYPE);
+                    
+                    double divFactor = EsCuentaCent ? 100.0 : 1.0;
+                    double normProfit = profit / divFactor;
+                    ganadoHoy = CalcularGanadoHoy();
+
+                    string icon = normProfit >= 0 ? "💰" : "🔴";
+                    string msg = StringFormat("%s *MAIKO AGOSTO*: Operación Cerrada!\n• Ticket: #%I64u\n• Tipo: %s\n• Lote: %.2f\n• Precio Cierre: %.2f\n• Resultado: %s$%.2f\n• Ganado Hoy: $%.2f",
+                                              icon, dealTicket,
+                                              (dealType == DEAL_TYPE_BUY ? "BUY" : "SELL"),
+                                              vol, price,
+                                              normProfit >= 0 ? "+" : "", normProfit,
+                                              ganadoHoy / divFactor);
+                    EnviarTelegramConTeclado(msg);
+                    EnviarTelemetria();
                 }
             }
         }
@@ -717,6 +945,7 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 
 void OnTimer() {
     ChartSetInteger(0, CHART_FOREGROUND, false);
+    ProcesarComandosTelegram();
     ActualizarEstadoMaster();
     ganadoHoy = CalcularGanadoHoy();
     flotante = CalcularProfit();
@@ -725,7 +954,10 @@ void OnTimer() {
     ActualizarRadarMaster();
     ActualizarInterfazMaster();
 
-    int interval = 3; // Sincronización continua cada 3 segundos con el Dashboard
+    string myGv = StringFormat("MAIKO_HEARTBEAT_%d_%I64d", ExpertMagic, AccountInfoInteger(ACCOUNT_LOGIN));
+    GlobalVariableSet(myGv, (double)TimeCurrent());
+
+    int interval = 60; // Heartbeat suave cada 60s (el resto sincroniza por eventos al abrir/cerrar ordenes)
     if(TimeLocal() - ultimoSync >= interval) {
         EnviarTelemetria();
         ultimoSync = TimeLocal();
