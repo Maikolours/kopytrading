@@ -42,8 +42,8 @@ input ENUM_EXEC_MODE InpExecMode  = MODE_FULL_AUTO;
 input int     InpEsperaInicialSeg = 60;
 
 input group "━━━━━━ 🎯 FILTROS TENDENCIA ━━━━━━"
-input bool    InpUseFiltroM15     = false; // 🎯 Filtro Tendencia M15 (Desactivado de serie como veto duro; suma +20% al consenso)
-input bool    InpUseFiltroH1      = false; // 🎯 Filtro Tendencia H1 (Desactivado de serie como veto duro; suma +10% al consenso)
+input bool    InpUseFiltroM15     = true;  // 🎯 REGLA DE ORO M15: Solo Compras si M15 es Alcista, Solo Ventas si es Bajista
+input bool    InpUseFiltroH1      = false; // 🎯 Filtro Tendencia H1 (Suma puntos al consenso sin paralizar)
 input bool    InpReentradaRapida  = true;
 input int     InpSegReentrada     = 30;
 input int     InpCooldownSLMin    = 10;
@@ -120,10 +120,10 @@ void AplicarPreset() {
     if(g_isBTC) {
         // --- PRESET PROFESIONAL BITCOIN (BTCUSD) ---
         g_binanceSymbol = "BTCUSDT"; g_magicNumber = 202626;
-        g_slPoints = 6000; g_tpPoints = 15000;              // $60 SL / $150 TP (Ratio 1:2.5)
-        g_beTrigger = 3500; g_beLock = 500;                 // BE a los $35 asegurando $5
-        g_trailingStart = 5000; g_trailingStep = 1000;      // Trailing a partir de $50 de beneficio
-        g_maxSpread = 3000.0;                              // Spread máx 3000 pts ($30)
+        g_slPoints = 12000; g_tpPoints = 25000;              // $120 SL / $250 TP (Ratio 1:2)
+        g_beTrigger = 10000; g_beLock = 3000;                // BE al ganar $100 asegurando $30 limpios
+        g_trailingStart = 15000; g_trailingStep = 5000;      // Trailing a los $150 manteniendo $50 de distancia
+        g_maxSpread = 3000.0;                                // Spread máx 3000 pts ($30)
         g_distanciaSueloPts = (InpDistanciaSueloPts > 0) ? InpDistanciaSueloPts : 5000; // $50 en BTC
         g_rsiSuelo = (InpRSI_Suelo > 0) ? InpRSI_Suelo : 30; // 30 en BTC (sobreventa real)
         g_rsiTecho = (InpRSI_Techo > 0) ? InpRSI_Techo : 70; // 70 en BTC (sobrecompra real)
@@ -132,9 +132,9 @@ void AplicarPreset() {
         // --- PRESET PROFESIONAL ORO (XAUUSD) ---
         g_binanceSymbol = "PAXGUSDT"; g_magicNumber = 202627;
         g_slPoints = 500; g_tpPoints = 1000;                // $5.00 SL / $10.00 TP (Ratio 1:2)
-        g_beTrigger = 250; g_beLock = 50;                   // BE a los $2.50 asegurando $0.50
-        g_trailingStart = 300; g_trailingStep = 80;         // Trailing a partir de $3.00 de beneficio
-        g_maxSpread = 100.0;                               // Spread máx 100 pts ($1.00)
+        g_beTrigger = 400; g_beLock = 100;                  // BE al ganar $4.00 asegurando $1.00 limpio
+        g_trailingStart = 600; g_trailingStep = 200;         // Trailing a los $6.00 manteniendo $2.00 de distancia
+        g_maxSpread = 100.0;                                // Spread máx 100 pts ($1.00)
         g_distanciaSueloPts = (InpDistanciaSueloPts > 0) ? InpDistanciaSueloPts : 400; // $4.00 en Oro
         g_rsiSuelo = (InpRSI_Suelo > 0) ? InpRSI_Suelo : 35; // 35 en Oro
         g_rsiTecho = (InpRSI_Techo > 0) ? InpRSI_Techo : 65; // 65 en Oro
@@ -920,9 +920,11 @@ void ExecuteTrade(int direction, int score) {
     int slPts = g_slPoints, tpPts = g_tpPoints;
     if(InpUseATR && g_lastATR > 0) {
         double atrPts = g_lastATR / g_point;
-        slPts = (int)(atrPts * InpATRMultiplier);
-        tpPts = slPts * 2;
-        if(slPts < g_slPoints) slPts = g_slPoints;
+        int atrSl = (int)(atrPts * InpATRMultiplier);
+        if(atrSl > slPts) slPts = atrSl;
+        if(!g_isBTC && slPts > 800) slPts = 800;    // Máx $8.00 de SL en Oro
+        if(g_isBTC && slPts > 18000) slPts = 18000; // Máx $180 de SL en Bitcoin
+        tpPts = (int)(slPts * 1.8);                 // Ratio 1:1.8
     }
     double lot = CalculateLotSize(slPts);
     double stopsLevel = (double)SymbolInfoInteger(g_symbol, SYMBOL_TRADE_STOPS_LEVEL) * g_point;
