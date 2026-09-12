@@ -224,6 +224,7 @@ void ActualizarTendencias();
 void DetectarRegimenMercado();
 void CreateHUD();
 void UpdateHUD(int score);
+void RestaurarFlechasOperaciones();
 void EscribirEstado();
 bool CheckLicense(const string key);
 void CloseAllPositions();
@@ -295,6 +296,7 @@ int OnInit() {
     }
     if(InpCargarIndicadoresVisuales) AgregarIndicadoresVisuales();
     if(InpShowHUD) { CreateHUD(); UpdateHUD(0); }
+    RestaurarFlechasOperaciones();
     EscribirEstado();
 
     HistorySelect(TimeCurrent() - 3600, TimeCurrent());
@@ -308,7 +310,12 @@ int OnInit() {
 
 void OnDeinit(const int reason) {
     EventKillTimer();
-    ObjectsDeleteAll(0, "MAIKO_");
+    // Solo borrar el HUD y botones, NUNCA las flechas en cambios de temporalidad o parámetros
+    ObjectsDeleteAll(0, "MAIKO_HUD_");
+    ObjectsDeleteAll(0, "MAIKO_BTN_");
+    if(reason == REASON_REMOVE) {
+        ObjectsDeleteAll(0, "MAIKO_ARROW_");
+    }
     FileDelete("MAIKO_STATE_" + IntegerToString(g_magicNumber) + ".csv");
     if(g_hEMA20_v != INVALID_HANDLE) { IndicatorRelease(g_hEMA20_v); g_hEMA20_v = INVALID_HANDLE; }
     if(g_hEMA50_v != INVALID_HANDLE) { IndicatorRelease(g_hEMA50_v); g_hEMA50_v = INVALID_HANDLE; }
@@ -1169,6 +1176,39 @@ void ExecuteTrade(int direction, int score) {
     } else {
         Print("Error al abrir operación: ", trade.ResultRetcodeDescription(), " (code ", trade.ResultRetcode(), ")");
     }
+}
+
+//=================================================================
+// RESTAURAR FLECHAS EN PANTALLA
+//=================================================================
+void RestaurarFlechasOperaciones() {
+    if(!InpShowArrows) return;
+    for(int i = 0; i < PositionsTotal(); i++) {
+        if(!positionInfo.SelectByIndex(i)) continue;
+        if(positionInfo.Symbol() != g_symbol || positionInfo.Magic() != g_magicNumber) continue;
+        
+        datetime openTime = (datetime)PositionGetInteger(POSITION_TIME);
+        double openPrice = PositionGetDouble(POSITION_PRICE_OPEN);
+        long type = PositionGetInteger(POSITION_TYPE);
+        ulong ticket = positionInfo.Ticket();
+        
+        string arrowName = "MAIKO_ARROW_POS_" + IntegerToString(ticket);
+        ObjectDelete(0, arrowName);
+        
+        if(type == POSITION_TYPE_BUY) {
+            ObjectCreate(0, arrowName, OBJ_ARROW_UP, 0, openTime, openPrice);
+            ObjectSetInteger(0, arrowName, OBJPROP_COLOR, clrLime);
+            ObjectSetInteger(0, arrowName, OBJPROP_WIDTH, 3);
+            ObjectSetInteger(0, arrowName, OBJPROP_ARROWCODE, 233);
+        } else {
+            ObjectCreate(0, arrowName, OBJ_ARROW_DOWN, 0, openTime, openPrice);
+            ObjectSetInteger(0, arrowName, OBJPROP_COLOR, clrRed);
+            ObjectSetInteger(0, arrowName, OBJPROP_WIDTH, 3);
+            ObjectSetInteger(0, arrowName, OBJPROP_ARROWCODE, 234);
+        }
+        ObjectSetInteger(0, arrowName, OBJPROP_ANCHOR, ANCHOR_CENTER);
+    }
+    ChartRedraw();
 }
 
 //=================================================================
