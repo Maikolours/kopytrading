@@ -196,6 +196,7 @@ int  ObtenerDireccionActual();
 void CalculateConsensus(int &outScore, int &outSignal);
 bool EstaPegadoASuelo();
 bool EstaPegadoATecho();
+bool EstaEntreMedias(int signal);
 int  DetectarPatronVelaPrevia(int direccion, string &nombrePatron);
 bool IsOperatingHour();
 int  CountOpenPositions();
@@ -391,6 +392,35 @@ bool EstaPegadoATecho() {
 }
 
 //=================================================================
+// FILTRO ANTI-SÁNDWICH (NO OPERAR EN COMPRESIÓN ENTRE MEDIAS)
+//=================================================================
+bool EstaEntreMedias(int signal) {
+    int h20 = iMA(g_symbol, _Period, 20, 0, MODE_EMA, PRICE_CLOSE);
+    int h50 = iMA(g_symbol, _Period, 50, 0, MODE_EMA, PRICE_CLOSE);
+    if(h20 == INVALID_HANDLE || h50 == INVALID_HANDLE) return false;
+    
+    double e20[1], e50[1];
+    bool ok = (CopyBuffer(h20, 0, 0, 1, e20) > 0 && CopyBuffer(h50, 0, 0, 1, e50) > 0);
+    IndicatorRelease(h20); IndicatorRelease(h50);
+    if(!ok) return false;
+    
+    double price = symbolInfo.Bid();
+    double topEma = MathMax(e20[0], e50[0]);
+    double btmEma = MathMin(e20[0], e50[0]);
+    
+    // Si el precio está entre las dos medias -> Zona de compresión / Rango
+    if(price >= btmEma && price <= topEma) return true;
+    
+    // Para COMPRAS: el precio DEBE estar por encima de ambas medias
+    if(signal == 1 && price < topEma) return true;
+    
+    // Para VENTAS: el precio DEBE estar por debajo de ambas medias
+    if(signal == -1 && price > btmEma) return true;
+    
+    return false;
+}
+
+//=================================================================
 // FILTRO ACCIÓN DEL PRECIO / VELAS DE RECHAZO
 //=================================================================
 int DetectarPatronVelaPrevia(int direccion, string &nombrePatron) {
@@ -545,6 +575,13 @@ void OnTick() {
         if(g_rsiTecho > 0 && g_rsiActual >= g_rsiTecho && signal == 1) {
             if((TimeCurrent() - g_lastLogSueloTecho) > 300) {
                 Print("COMPRA bloqueada: RSI ", DoubleToString(g_rsiActual,1), " en zona TECHO (>= ", g_rsiTecho, ")");
+                g_lastLogSueloTecho = TimeCurrent();
+            }
+            return;
+        }
+        if(EstaEntreMedias(signal)) {
+            if((TimeCurrent() - g_lastLogSueloTecho) > 300) {
+                Print("OPERACIÓN BLOQUEADA: Precio en compresión entre EMA 20 y EMA 50");
                 g_lastLogSueloTecho = TimeCurrent();
             }
             return;
@@ -1158,6 +1195,7 @@ void UpdateHUD(int score) {
         if(InpUseFiltroM15 && !g_m15Bullish) { sigTxt = bloqTendTxt; colSig = clrGold; }
         else if(g_bloqueadoTecho) { sigTxt = "BLOQ TECHO M15"; colSig = clrGold; }
         else if(g_rsiTecho > 0 && g_rsiActual >= g_rsiTecho) { sigTxt = "BLOQ: RSI TECHO"; colSig = clrGold; }
+        else if(EstaEntreMedias(1)) { sigTxt = "BLOQ: ENTRE MEDIAS"; colSig = clrGold; }
         else if(InpFiltroVelaConfirmacion && DetectarPatronVelaPrevia(1, patronVela) > 0) { sigTxt = "BLOQ: " + patronVela; colSig = clrGold; }
         else { sigTxt = "COMPRA"; colSig = clrLime; }
     }
@@ -1166,6 +1204,7 @@ void UpdateHUD(int score) {
         if(InpUseFiltroM15 && g_m15Bullish) { sigTxt = bloqTendTxt; colSig = clrGold; }
         else if(g_bloqueadoSuelo) { sigTxt = "BLOQ SUELO M15"; colSig = clrGold; }
         else if(g_rsiSuelo > 0 && g_rsiActual <= g_rsiSuelo) { sigTxt = "BLOQ: RSI SUELO"; colSig = clrGold; }
+        else if(EstaEntreMedias(-1)) { sigTxt = "BLOQ: ENTRE MEDIAS"; colSig = clrGold; }
         else if(InpFiltroVelaConfirmacion && DetectarPatronVelaPrevia(-1, patronVela) > 0) { sigTxt = "BLOQ: " + patronVela; colSig = clrGold; }
         else { sigTxt = "VENTA"; colSig = clrTomato; }
     }
