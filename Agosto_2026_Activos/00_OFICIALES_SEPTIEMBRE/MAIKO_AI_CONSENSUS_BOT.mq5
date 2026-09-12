@@ -380,9 +380,13 @@ void GetATRValue() {
 void ActualizarTendencias() {
     double price = symbolInfo.Bid();
     
-    // Tendencia Rápida Dinámica con EMA 20 y EMA 50
-    // Si el gráfico está en M1, evalúa M5 (ágil para scalping); si está en M5 o superior, evalúa M15
-    ENUM_TIMEFRAMES tfTrend = (_Period == PERIOD_M1) ? PERIOD_M5 : PERIOD_M15;
+    // Tendencia Dinámica: Evalúa el timeframe superior inmediato
+    ENUM_TIMEFRAMES tfTrend = PERIOD_M15;
+    if(_Period == PERIOD_M1) tfTrend = PERIOD_M5;
+    else if(_Period == PERIOD_M5) tfTrend = PERIOD_M15;
+    else if(_Period == PERIOD_M15) tfTrend = PERIOD_H1;
+    else if(_Period >= PERIOD_H1) tfTrend = PERIOD_H4;
+    
     int h20m = iMA(g_symbol, tfTrend, 20, 0, MODE_EMA, PRICE_CLOSE);
     int h50m = iMA(g_symbol, tfTrend, 50, 0, MODE_EMA, PRICE_CLOSE);
     if(h20m != INVALID_HANDLE && h50m != INVALID_HANDLE) {
@@ -396,9 +400,10 @@ void ActualizarTendencias() {
         IndicatorRelease(h20m); IndicatorRelease(h50m);
     }
     
-    // H1: Tendencia Dinámica con EMA 20 y EMA 50
-    int h20 = iMA(g_symbol, PERIOD_H1, 20, 0, MODE_EMA, PRICE_CLOSE);
-    int h50 = iMA(g_symbol, PERIOD_H1, 50, 0, MODE_EMA, PRICE_CLOSE);
+    // Macro Tendencia: H1 (o D1 si el gráfico ya es H1 o superior)
+    ENUM_TIMEFRAMES tfMacro = (_Period >= PERIOD_H1) ? PERIOD_D1 : PERIOD_H1;
+    int h20 = iMA(g_symbol, tfMacro, 20, 0, MODE_EMA, PRICE_CLOSE);
+    int h50 = iMA(g_symbol, tfMacro, 50, 0, MODE_EMA, PRICE_CLOSE);
     if(h20 != INVALID_HANDLE && h50 != INVALID_HANDLE) {
         double a[1], b[1];
         if(CopyBuffer(h20, 0, 0, 1, a) > 0 && CopyBuffer(h50, 0, 0, 1, b) > 0) {
@@ -456,7 +461,7 @@ bool EstaPegadoASuelo() {
     if(!InpUseFiltroSueloTecho) return false;
     double low[];
     ArraySetAsSeries(low, true);
-    int copied = CopyLow(g_symbol, PERIOD_M15, 0, InpPeriodosSueloTecho, low);
+    int copied = CopyLow(g_symbol, _Period, 0, InpPeriodosSueloTecho, low);
     if(copied <= 0) return false;
     int idxMin = ArrayMinimum(low, 0, copied);
     double minLow = low[idxMin];
@@ -468,7 +473,7 @@ bool EstaPegadoATecho() {
     if(!InpUseFiltroSueloTecho) return false;
     double high[];
     ArraySetAsSeries(high, true);
-    int copied = CopyHigh(g_symbol, PERIOD_M15, 0, InpPeriodosSueloTecho, high);
+    int copied = CopyHigh(g_symbol, _Period, 0, InpPeriodosSueloTecho, high);
     if(copied <= 0) return false;
     int idxMax = ArrayMaximum(high, 0, copied);
     double maxHigh = high[idxMax];
@@ -493,14 +498,18 @@ bool EstaEntreMedias(int signal) {
     double topEma = MathMax(e20[0], e50[0]);
     double btmEma = MathMin(e20[0], e50[0]);
     
-    // Si el precio está entre las dos medias -> Zona de compresión / Rango
+    // Si el precio actual está entre las dos medias -> Zona de compresión / Rango
     if(price >= btmEma && price <= topEma) return true;
     
-    // Para COMPRAS: el precio DEBE estar por encima de ambas medias
-    if(signal == 1 && price < topEma) return true;
+    // Si la vela actual nació entre las medias o al otro lado -> Rechazar (está cortando las medias)
+    double open0 = iOpen(g_symbol, _Period, 0);
+    if(open0 >= btmEma && open0 <= topEma) return true;
     
-    // Para VENTAS: el precio DEBE estar por debajo de ambas medias
-    if(signal == -1 && price > btmEma) return true;
+    // Para COMPRAS: tanto el precio como la apertura deben estar por encima de ambas medias
+    if(signal == 1 && (price < topEma || open0 < topEma)) return true;
+    
+    // Para VENTAS: tanto el precio como la apertura deben estar por debajo de ambas medias
+    if(signal == -1 && (price > btmEma || open0 > btmEma)) return true;
     
     return false;
 }
@@ -1315,11 +1324,22 @@ void CreateHUD() {
 void UpdateHUD(int score) {
     string sigTxt = "ESPERANDO";
     color colSig = clrGold;
-    string bloqTendTxt = (_Period == PERIOD_M1) ? "BLOQ TEND M5" : "BLOQ TEND M15";
+    ENUM_TIMEFRAMES tfTrendHUD = PERIOD_M15;
+    if(_Period == PERIOD_M1) tfTrendHUD = PERIOD_M5;
+    else if(_Period == PERIOD_M5) tfTrendHUD = PERIOD_M15;
+    else if(_Period == PERIOD_M15) tfTrendHUD = PERIOD_H1;
+    else if(_Period >= PERIOD_H1) tfTrendHUD = PERIOD_H4;
+    
+    string tfCurrentStr = StringSubstr(EnumToString(_Period), 7);
+    string tfTrendStr = StringSubstr(EnumToString(tfTrendHUD), 7);
+    string bloqTendTxt = "BLOQ TEND " + tfTrendStr;
+    string bloqTechoTxt = "BLOQ TECHO " + tfCurrentStr;
+    string bloqSueloTxt = "BLOQ SUELO " + tfCurrentStr;
+    
     if(g_realBuyScore >= InpMinConsensus && g_realBuyScore > g_realSellScore) {
         string patronVela = "";
         if(InpUseFiltroM15 && !g_m15Bullish) { sigTxt = bloqTendTxt; colSig = clrGold; }
-        else if(g_bloqueadoTecho) { sigTxt = "BLOQ TECHO M15"; colSig = clrGold; }
+        else if(g_bloqueadoTecho) { sigTxt = bloqTechoTxt; colSig = clrGold; }
         else if(g_rsiTecho > 0 && g_rsiActual >= g_rsiTecho) { sigTxt = "BLOQ: RSI TECHO"; colSig = clrGold; }
         else if(EstaEntreMedias(1)) { sigTxt = "BLOQ: ENTRE MEDIAS"; colSig = clrGold; }
         else if(InpFiltroVelaConfirmacion && DetectarPatronVelaPrevia(1, patronVela) > 0) { sigTxt = "BLOQ: " + patronVela; colSig = clrGold; }
@@ -1328,7 +1348,7 @@ void UpdateHUD(int score) {
     else if(g_realSellScore >= InpMinConsensus && g_realSellScore > g_realBuyScore) {
         string patronVela = "";
         if(InpUseFiltroM15 && g_m15Bullish) { sigTxt = bloqTendTxt; colSig = clrGold; }
-        else if(g_bloqueadoSuelo) { sigTxt = "BLOQ SUELO M15"; colSig = clrGold; }
+        else if(g_bloqueadoSuelo) { sigTxt = bloqSueloTxt; colSig = clrGold; }
         else if(g_rsiSuelo > 0 && g_rsiActual <= g_rsiSuelo) { sigTxt = "BLOQ: RSI SUELO"; colSig = clrGold; }
         else if(EstaEntreMedias(-1)) { sigTxt = "BLOQ: ENTRE MEDIAS"; colSig = clrGold; }
         else if(InpFiltroVelaConfirmacion && DetectarPatronVelaPrevia(-1, patronVela) > 0) { sigTxt = "BLOQ: " + patronVela; colSig = clrGold; }
@@ -1420,8 +1440,7 @@ void UpdateHUD(int score) {
     lines[3]  = "Señal: " + sigTxt;
     lines[4]  = potenciaTxt;
     lines[5]  = objetivoTxt;
-    string tendName = (_Period == PERIOD_M1) ? "Tend M5: " : "Tend M15: ";
-    lines[6]  = tendName + tendM15 + " | H1: " + tendH1;
+    lines[6]  = "Tend " + tfTrendStr + ": " + tendM15 + " | Macro: " + tendH1;
     lines[7]  = "RSI: " + DoubleToString(g_rsiActual,1) + " | Ext: " + extTxt;
     lines[8]  = "F&G: " + IntegerToString(g_lastFearGreed) + " | L/S: " + DoubleToString(g_lastLSRatio,2);
     lines[9]  = "OB B:" + DoubleToString(g_lastOB_Buy,1) + " / S:" + DoubleToString(g_lastOB_Sell,1);
