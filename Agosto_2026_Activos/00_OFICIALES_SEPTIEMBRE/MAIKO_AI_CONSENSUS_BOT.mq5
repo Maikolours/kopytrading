@@ -323,7 +323,7 @@ void AgregarIndicadoresVisuales() {
 // ATR Y TENDENCIAS
 //=================================================================
 void GetATRValue() {
-    int h = iATR(g_symbol, PERIOD_M5, InpATRPeriod);
+    int h = iATR(g_symbol, _Period, InpATRPeriod);
     if(h == INVALID_HANDLE) return;
     double atr[1];
     if(CopyBuffer(h, 0, 0, 1, atr) > 0) g_lastATR = atr[0];
@@ -859,10 +859,10 @@ void CalculateConsensus(int &outScore, int &outSignal) {
     double buyPres = g_lastOB_Buy;
     double sellPres = g_lastOB_Sell;
     int fg = g_lastFearGreed;
-    // 1. Tendencia Dinámica Corto Plazo M5 (EMA 20, 50, 200) -> 20%
-    int ema20h = iMA(g_symbol,PERIOD_M5,20,0,MODE_EMA,PRICE_CLOSE);
-    int ema50h = iMA(g_symbol,PERIOD_M5,50,0,MODE_EMA,PRICE_CLOSE);
-    int ema200h= iMA(g_symbol,PERIOD_M5,200,0,MODE_EMA,PRICE_CLOSE);
+    // 1. Tendencia Dinámica Corto Plazo en timeframe del gráfico (EMA 20, 50, 200) -> 20%
+    int ema20h = iMA(g_symbol,_Period,20,0,MODE_EMA,PRICE_CLOSE);
+    int ema50h = iMA(g_symbol,_Period,50,0,MODE_EMA,PRICE_CLOSE);
+    int ema200h= iMA(g_symbol,_Period,200,0,MODE_EMA,PRICE_CLOSE);
     double e20[1],e50[1],e200[1];
     CopyBuffer(ema20h,0,0,1,e20); CopyBuffer(ema50h,0,0,1,e50); CopyBuffer(ema200h,0,0,1,e200);
     IndicatorRelease(ema20h); IndicatorRelease(ema50h); IndicatorRelease(ema200h);
@@ -870,8 +870,8 @@ void CalculateConsensus(int &outScore, int &outSignal) {
     bool tBull = (price > e20[0] && (e20[0] >= e50[0] || price > e50[0]));
     bool tBear = (price < e20[0] && (e20[0] <= e50[0] || price < e50[0]));
     
-    // 2. RSI 14 Momentum M5 -> 15%
-    int rsiH = iRSI(g_symbol,PERIOD_M5,14,PRICE_CLOSE);
+    // 2. RSI 14 Momentum en timeframe del gráfico -> 15%
+    int rsiH = iRSI(g_symbol,_Period,14,PRICE_CLOSE);
     double rsi[1]; CopyBuffer(rsiH,0,0,1,rsi); IndicatorRelease(rsiH);
     g_rsiActual = rsi[0];
     bool rsiBull = (rsi[0] > 35 && rsi[0] < 58);
@@ -1157,6 +1157,7 @@ void UpdateHUD(int score) {
         string patronVela = "";
         if(InpUseFiltroM15 && !g_m15Bullish) { sigTxt = bloqTendTxt; colSig = clrGold; }
         else if(g_bloqueadoTecho) { sigTxt = "BLOQ TECHO M15"; colSig = clrGold; }
+        else if(g_rsiTecho > 0 && g_rsiActual >= g_rsiTecho) { sigTxt = "BLOQ: RSI TECHO"; colSig = clrGold; }
         else if(InpFiltroVelaConfirmacion && DetectarPatronVelaPrevia(1, patronVela) > 0) { sigTxt = "BLOQ: " + patronVela; colSig = clrGold; }
         else { sigTxt = "COMPRA"; colSig = clrLime; }
     }
@@ -1164,6 +1165,7 @@ void UpdateHUD(int score) {
         string patronVela = "";
         if(InpUseFiltroM15 && g_m15Bullish) { sigTxt = bloqTendTxt; colSig = clrGold; }
         else if(g_bloqueadoSuelo) { sigTxt = "BLOQ SUELO M15"; colSig = clrGold; }
+        else if(g_rsiSuelo > 0 && g_rsiActual <= g_rsiSuelo) { sigTxt = "BLOQ: RSI SUELO"; colSig = clrGold; }
         else if(InpFiltroVelaConfirmacion && DetectarPatronVelaPrevia(-1, patronVela) > 0) { sigTxt = "BLOQ: " + patronVela; colSig = clrGold; }
         else { sigTxt = "VENTA"; colSig = clrTomato; }
     }
@@ -1202,6 +1204,8 @@ void UpdateHUD(int score) {
     string extTxt = "OK";
     if(g_bloqueadoSuelo) extTxt = "SUELO!";
     else if(g_bloqueadoTecho) extTxt = "TECHO!";
+    else if(g_rsiSuelo > 0 && g_rsiActual <= g_rsiSuelo) extTxt = "SOBREVENTA!";
+    else if(g_rsiTecho > 0 && g_rsiActual >= g_rsiTecho) extTxt = "SOBRECOMPRA!";
     string cooldownTxt = "-";
     if(g_lastSLTime > 0) {
         int s = (20 * 60) - (int)(TimeCurrent() - g_lastSLTime);
