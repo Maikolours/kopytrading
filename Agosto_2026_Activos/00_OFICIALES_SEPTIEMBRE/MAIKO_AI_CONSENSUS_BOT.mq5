@@ -40,6 +40,7 @@ input string  InpTelegramChatID   = "906620572";
 input group "━━━━━━ ⚙️ EJECUCIÓN ━━━━━━"
 input ENUM_EXEC_MODE InpExecMode  = MODE_FULL_AUTO;
 input int     InpEsperaInicialSeg = 60;
+input bool    InpModoAutoLateral  = true;  // 🔄 Auto-detectar Mercado Lateral vs Tendencia (ADX/ATR)
 
 input group "━━━━━━ 🎯 FILTROS TENDENCIA ━━━━━━"
 input bool    InpUseFiltroM15     = true;  // 🎯 REGLA DE ORO M15: Solo Compras si M15 es Alcista, Solo Ventas si es Bajista
@@ -104,6 +105,8 @@ int    g_magicNumber, g_slPoints, g_tpPoints, g_beTrigger, g_beLock;
 int    g_trailingStart, g_trailingStep, g_slippage;
 double g_maxSpread;
 bool   g_isBTC = false;
+bool   g_esLateral = false;
+double g_adxActual = 0.0;
 int    g_distanciaSueloPts = 400;
 int    g_rsiSuelo = 35;
 int    g_rsiTecho = 65;
@@ -126,28 +129,50 @@ void AplicarPreset() {
     if(g_isBTC) {
         // --- PRESET PROFESIONAL BITCOIN (BTCUSD) ---
         g_binanceSymbol = "BTCUSDT"; g_magicNumber = 202626;
-        g_slPoints = (InpCustomSL > 0) ? InpCustomSL : 15000;              // $150 SL
-        g_tpPoints = (InpCustomTP > 0) ? InpCustomTP : 15000;              // $150 TP (Ratio 1:1)
-        g_beTrigger = (InpCustomBETrigger > 0) ? InpCustomBETrigger : 5000; // BE al ganar $1.00 ($50 BTC)
-        g_beLock = (InpCustomBELock > 0) ? InpCustomBELock : 1500;         // Asegura $0.30 limpios
-        g_trailingStart = (InpCustomTrailStart > 0) ? InpCustomTrailStart : 7000; // Trailing a los $1.40 ($70 BTC)
-        g_trailingStep = (InpCustomTrailStep > 0) ? InpCustomTrailStep : 2500;   // Persigue a $0.50
+        if(g_esLateral) {
+            // Mercado Lateral / Rango (Micro-scalping adaptado a compresiones de $50-$60)
+            g_slPoints = (InpCustomSL > 0) ? InpCustomSL : 5500;              // $55 SL
+            g_tpPoints = (InpCustomTP > 0) ? InpCustomTP : 5500;              // $55 TP (Ratio 1:1 alcanzable)
+            g_beTrigger = (InpCustomBETrigger > 0) ? InpCustomBETrigger : 2000; // BE al ganar $20
+            g_beLock = (InpCustomBELock > 0) ? InpCustomBELock : 500;          // Asegura $5 limpios
+            g_trailingStart = (InpCustomTrailStart > 0) ? InpCustomTrailStart : 3000; // Trailing a los $30
+            g_trailingStep = (InpCustomTrailStep > 0) ? InpCustomTrailStep : 1500;   // Persigue a $15
+        } else {
+            // Mercado Tendencial (Movimiento normal / alta volatilidad)
+            g_slPoints = (InpCustomSL > 0) ? InpCustomSL : 15000;             // $150 SL
+            g_tpPoints = (InpCustomTP > 0) ? InpCustomTP : 15000;             // $150 TP (Ratio 1:1)
+            g_beTrigger = (InpCustomBETrigger > 0) ? InpCustomBETrigger : 5000;// BE al ganar $50
+            g_beLock = (InpCustomBELock > 0) ? InpCustomBELock : 1500;        // Asegura $15 limpios
+            g_trailingStart = (InpCustomTrailStart > 0) ? InpCustomTrailStart : 7000; // Trailing a los $70
+            g_trailingStep = (InpCustomTrailStep > 0) ? InpCustomTrailStep : 2500;   // Persigue a $25
+        }
         g_maxSpread = 3000.0;                                // Spread máx 3000 pts ($30)
-        g_distanciaSueloPts = (InpDistanciaSueloPts > 0) ? InpDistanciaSueloPts : 5000; // $50 en BTC
+        g_distanciaSueloPts = (InpDistanciaSueloPts > 0) ? InpDistanciaSueloPts : (g_esLateral ? 2500 : 5000);
         g_rsiSuelo = (InpRSI_Suelo > 0) ? InpRSI_Suelo : 30; // 30 en BTC (sobreventa real)
         g_rsiTecho = (InpRSI_Techo > 0) ? InpRSI_Techo : 70; // 70 en BTC (sobrecompra real)
         g_slippage = 50;
     } else {
         // --- PRESET PROFESIONAL ORO (XAUUSD) ---
         g_binanceSymbol = "PAXGUSDT"; g_magicNumber = 202627;
-        g_slPoints = (InpCustomSL > 0) ? InpCustomSL : 400;                 // $4.00 SL
-        g_tpPoints = (InpCustomTP > 0) ? InpCustomTP : 400;                 // $4.00 TP (Ratio 1:1)
-        g_beTrigger = (InpCustomBETrigger > 0) ? InpCustomBETrigger : 250;  // BE al ganar $2.50
-        g_beLock = (InpCustomBELock > 0) ? InpCustomBELock : 100;          // Asegura $1.00 limpio
-        g_trailingStart = (InpCustomTrailStart > 0) ? InpCustomTrailStart : 300; // Trailing a los $3.00
-        g_trailingStep = (InpCustomTrailStep > 0) ? InpCustomTrailStep : 150;    // Persigue a $1.50
+        if(g_esLateral) {
+            // Mercado Lateral / Rango (Scalping corto en consolidaciones de $1.5-$2.0)
+            g_slPoints = (InpCustomSL > 0) ? InpCustomSL : 180;                // $1.80 SL
+            g_tpPoints = (InpCustomTP > 0) ? InpCustomTP : 180;                // $1.80 TP (Ratio 1:1 alcanzable)
+            g_beTrigger = (InpCustomBETrigger > 0) ? InpCustomBETrigger : 100; // BE al ganar $1.00
+            g_beLock = (InpCustomBELock > 0) ? InpCustomBELock : 30;          // Asegura $0.30 limpio
+            g_trailingStart = (InpCustomTrailStart > 0) ? InpCustomTrailStart : 120; // Trailing a los $1.20
+            g_trailingStep = (InpCustomTrailStep > 0) ? InpCustomTrailStep : 60;     // Persigue a $0.60
+        } else {
+            // Mercado Tendencial (Movimiento normal / alta volatilidad)
+            g_slPoints = (InpCustomSL > 0) ? InpCustomSL : 400;                // $4.00 SL
+            g_tpPoints = (InpCustomTP > 0) ? InpCustomTP : 400;                // $4.00 TP (Ratio 1:1)
+            g_beTrigger = (InpCustomBETrigger > 0) ? InpCustomBETrigger : 250; // BE al ganar $2.50
+            g_beLock = (InpCustomBELock > 0) ? InpCustomBELock : 100;         // Asegura $1.00 limpio
+            g_trailingStart = (InpCustomTrailStart > 0) ? InpCustomTrailStart : 300; // Trailing a los $3.00
+            g_trailingStep = (InpCustomTrailStep > 0) ? InpCustomTrailStep : 150;    // Persigue a $1.50
+        }
         g_maxSpread = 100.0;                                // Spread máx 100 pts ($1.00)
-        g_distanciaSueloPts = (InpDistanciaSueloPts > 0) ? InpDistanciaSueloPts : 400; // $4.00 en Oro
+        g_distanciaSueloPts = (InpDistanciaSueloPts > 0) ? InpDistanciaSueloPts : (g_esLateral ? 200 : 400);
         g_rsiSuelo = (InpRSI_Suelo > 0) ? InpRSI_Suelo : 35; // 35 en Oro
         g_rsiTecho = (InpRSI_Techo > 0) ? InpRSI_Techo : 65; // 65 en Oro
         g_slippage = 30;
@@ -196,6 +221,7 @@ void GetBinanceOrderBookImbalance(double &buyVol, double &sellVol);
 double SumOBVolume(const string &json, const string &side);
 void GetATRValue();
 void ActualizarTendencias();
+void DetectarRegimenMercado();
 void CreateHUD();
 void UpdateHUD(int score);
 void EscribirEstado();
@@ -265,6 +291,7 @@ int OnInit() {
         if(b > 0 && s > 0 && !(b == 1.0 && s == 1.0)) { g_lastOB_Buy = b; g_lastOB_Sell = s; }
         GetATRValue();
         ActualizarTendencias();
+        DetectarRegimenMercado();
     }
     if(InpCargarIndicadoresVisuales) AgregarIndicadoresVisuales();
     if(InpShowHUD) { CreateHUD(); UpdateHUD(0); }
@@ -373,6 +400,45 @@ void ActualizarTendencias() {
             else g_h1Bullish = (price > a[0]);
         }
         IndicatorRelease(h20); IndicatorRelease(h50);
+    }
+}
+
+//=================================================================
+// REGIMEN DE MERCADO: LATERAL (RANGO) VS TENDENCIAL
+//=================================================================
+void DetectarRegimenMercado() {
+    if(!InpModoAutoLateral) {
+        g_esLateral = false;
+        return;
+    }
+    
+    // 1. Calcular ADX de 14 períodos en H1 (Mide la fuerza de la tendencia macro)
+    int hADX = iADX(g_symbol, PERIOD_H1, 14);
+    if(hADX != INVALID_HANDLE) {
+        double adxBuf[1];
+        if(CopyBuffer(hADX, 0, 0, 1, adxBuf) > 0) {
+            g_adxActual = NormalizeDouble(adxBuf[0], 1);
+        }
+        IndicatorRelease(hADX);
+    }
+    
+    // 2. Condición de volatilidad reducida por ATR actual
+    bool bajaVolatilidad = false;
+    if(g_isBTC && g_lastATR > 0 && g_lastATR < 60.0) bajaVolatilidad = true;
+    if(!g_isBTC && g_lastATR > 0 && g_lastATR < 1.50) bajaVolatilidad = true;
+    
+    // 3. Evaluar régimen:
+    // ADX en H1 < 22 (falta de tendencia) o ATR en mínimos históricos del activo
+    bool prevLateral = g_esLateral;
+    if((g_adxActual > 0 && g_adxActual < 22.0) || bajaVolatilidad) {
+        g_esLateral = true;
+    } else {
+        g_esLateral = false;
+    }
+    
+    // Si cambia el régimen y no hay operaciones abiertas, actualizar los parámetros
+    if(prevLateral != g_esLateral || PositionsTotal() == 0) {
+        AplicarPreset();
     }
 }
 
@@ -514,6 +580,7 @@ void RefrescarAPIs() {
     }
     GetATRValue();
     ActualizarTendencias();
+    DetectarRegimenMercado();
 }
 
 //=================================================================
@@ -529,6 +596,7 @@ void OnTick() {
     g_ultimaDireccion = ObtenerDireccionActual();
     
     ActualizarTendencias();
+    DetectarRegimenMercado();
     int score = 0, signal = 0;
     CalculateConsensus(score, signal);
     g_lastSignal = signal;
@@ -1049,8 +1117,13 @@ void ExecuteTrade(int direction, int score) {
         double atrPts = g_lastATR / g_point;
         int atrSl = (int)(atrPts * InpATRMultiplier);
         if(atrSl > slPts) slPts = atrSl;
-        if(!g_isBTC && slPts > 400) slPts = 400;    // Máx $4.00 de SL en Oro
-        if(g_isBTC && slPts > 15000) slPts = 15000; // Máx $150 de SL en Bitcoin
+        if(g_esLateral) {
+            if(!g_isBTC && slPts > 200) slPts = 200;    // Máx $2.00 de SL en Oro lateral
+            if(g_isBTC && slPts > 6000) slPts = 6000;   // Máx $60 de SL en Bitcoin lateral
+        } else {
+            if(!g_isBTC && slPts > 400) slPts = 400;    // Máx $4.00 de SL en Oro tendencial
+            if(g_isBTC && slPts > 15000) slPts = 15000; // Máx $150 de SL en Bitcoin tendencial
+        }
         if(InpCustomTP <= 0) tpPts = (int)(slPts * 1.0); // Ratio 1:1 (objetivo más alcanzable y seguro)
     }
     double lot = CalculateLotSize(slPts);
@@ -1302,7 +1375,7 @@ void UpdateHUD(int score) {
     
     string lines[15];
     lines[0]  = "=== MAIKO AI CONSENSUS ===";
-    lines[1]  = "Preset: " + presetName;
+    lines[1]  = "Preset: " + presetName + (g_esLateral ? " [LATERAL ↔️]" : " [TENDENCIA 🚀]");
     lines[2]  = "Estado: " + estadoBot;
     lines[3]  = "Señal: " + sigTxt;
     lines[4]  = potenciaTxt;
@@ -1316,7 +1389,9 @@ void UpdateHUD(int score) {
     lines[11] = "Reentrada: " + cooldownTxt;
     lines[12] = "SL/TP: " + IntegerToString(g_slPoints) + "/" + IntegerToString(g_tpPoints) + " | BE: " + IntegerToString(g_beTrigger);
     lines[13] = "Balance: $" + DoubleToString(AccountInfoDouble(ACCOUNT_BALANCE),2);
-    lines[14] = "-----------------------------";
+    string regimenTxt = g_esLateral ? "Régimen: LATERAL ↔️" : "Régimen: TENDENCIA 🚀";
+    if(g_adxActual > 0) regimenTxt += " (ADX " + DoubleToString(g_adxActual,1) + ")";
+    lines[14] = regimenTxt;
     
     for(int i = 0; i < 15; i++) {
         string name = "MAIKO_HUD_L" + IntegerToString(i);
@@ -1344,6 +1419,9 @@ void UpdateHUD(int score) {
     ObjectSetInteger(0, "MAIKO_HUD_L6", OBJPROP_COLOR, clrAqua);
     ObjectSetInteger(0, "MAIKO_HUD_L13", OBJPROP_COLOR, clrSpringGreen);
     ObjectSetString(0, "MAIKO_HUD_L13", OBJPROP_FONT, "Arial Bold");
+    
+    ObjectSetInteger(0, "MAIKO_HUD_L14", OBJPROP_COLOR, g_esLateral ? clrGold : clrDeepSkyBlue);
+    ObjectSetString(0, "MAIKO_HUD_L14", OBJPROP_FONT, "Arial Bold");
     
     ChartRedraw();
 }
