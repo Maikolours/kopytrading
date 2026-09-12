@@ -72,8 +72,14 @@ input int     InpFG_MinBuy         = 25;
 input int     InpFG_MaxSell        = 75;
 
 input group "━━━━━━ 🛡️ POSICIÓN ━━━━━━"
-input bool    InpUseBreakEven      = true;
-input bool    InpUseTrailing       = true;
+input bool    InpUseBreakEven      = true;  // 🛡️ Activar Break-Even
+input int     InpCustomBETrigger   = 0;     // 🎯 Activar BE en pts (0 = Auto: 250 Oro / 5000 BTC)
+input int     InpCustomBELock      = 0;     // 🔒 Asegurar con BE en pts (0 = Auto: 100 Oro / 1500 BTC)
+input bool    InpUseTrailing       = true;  // 🏃 Activar Trailing Stop
+input int     InpCustomTrailStart  = 0;     // 🚀 Activar Trailing en pts (0 = Auto: 300 Oro / 7000 BTC)
+input int     InpCustomTrailStep   = 0;     // 📏 Distancia Trailing en pts (0 = Auto: 150 Oro / 2500 BTC)
+input int     InpCustomSL          = 0;     // 🛑 Stop Loss en pts (0 = Auto: 400 Oro / 15000 BTC)
+input int     InpCustomTP          = 0;     // 🎯 Take Profit en pts (0 = Auto: 400 Oro / 15000 BTC)
 
 input group "━━━━━━ ⏰ HORARIOS Y FILTROS ━━━━━━"
 input int     InpHoraInicio             = 3;     // 🕒 Hora inicio operativa (servidor)
@@ -120,9 +126,12 @@ void AplicarPreset() {
     if(g_isBTC) {
         // --- PRESET PROFESIONAL BITCOIN (BTCUSD) ---
         g_binanceSymbol = "BTCUSDT"; g_magicNumber = 202626;
-        g_slPoints = 15000; g_tpPoints = 15000;              // $150 SL / $150 TP (Ratio 1:1)
-        g_beTrigger = 5000; g_beLock = 1500;                 // BE al ganar $1.00 ($50 BTC) asegurando $0.30 limpios
-        g_trailingStart = 7000; g_trailingStep = 2500;       // Trailing a los $1.40 ($70 BTC) persiguiendo a $0.50
+        g_slPoints = (InpCustomSL > 0) ? InpCustomSL : 15000;              // $150 SL
+        g_tpPoints = (InpCustomTP > 0) ? InpCustomTP : 15000;              // $150 TP (Ratio 1:1)
+        g_beTrigger = (InpCustomBETrigger > 0) ? InpCustomBETrigger : 5000; // BE al ganar $1.00 ($50 BTC)
+        g_beLock = (InpCustomBELock > 0) ? InpCustomBELock : 1500;         // Asegura $0.30 limpios
+        g_trailingStart = (InpCustomTrailStart > 0) ? InpCustomTrailStart : 7000; // Trailing a los $1.40 ($70 BTC)
+        g_trailingStep = (InpCustomTrailStep > 0) ? InpCustomTrailStep : 2500;   // Persigue a $0.50
         g_maxSpread = 3000.0;                                // Spread máx 3000 pts ($30)
         g_distanciaSueloPts = (InpDistanciaSueloPts > 0) ? InpDistanciaSueloPts : 5000; // $50 en BTC
         g_rsiSuelo = (InpRSI_Suelo > 0) ? InpRSI_Suelo : 30; // 30 en BTC (sobreventa real)
@@ -131,9 +140,12 @@ void AplicarPreset() {
     } else {
         // --- PRESET PROFESIONAL ORO (XAUUSD) ---
         g_binanceSymbol = "PAXGUSDT"; g_magicNumber = 202627;
-        g_slPoints = 400; g_tpPoints = 400;                 // $4.00 SL / $4.00 TP (Ratio 1:1)
-        g_beTrigger = 250; g_beLock = 100;                  // BE al ganar $2.50 asegurando $1.00 limpio
-        g_trailingStart = 300; g_trailingStep = 150;        // Trailing a los $3.00 manteniendo $1.50 de distancia
+        g_slPoints = (InpCustomSL > 0) ? InpCustomSL : 400;                 // $4.00 SL
+        g_tpPoints = (InpCustomTP > 0) ? InpCustomTP : 400;                 // $4.00 TP (Ratio 1:1)
+        g_beTrigger = (InpCustomBETrigger > 0) ? InpCustomBETrigger : 250;  // BE al ganar $2.50
+        g_beLock = (InpCustomBELock > 0) ? InpCustomBELock : 100;          // Asegura $1.00 limpio
+        g_trailingStart = (InpCustomTrailStart > 0) ? InpCustomTrailStart : 300; // Trailing a los $3.00
+        g_trailingStep = (InpCustomTrailStep > 0) ? InpCustomTrailStep : 150;    // Persigue a $1.50
         g_maxSpread = 100.0;                                // Spread máx 100 pts ($1.00)
         g_distanciaSueloPts = (InpDistanciaSueloPts > 0) ? InpDistanciaSueloPts : 400; // $4.00 en Oro
         g_rsiSuelo = (InpRSI_Suelo > 0) ? InpRSI_Suelo : 35; // 35 en Oro
@@ -1031,14 +1043,15 @@ void GetBinanceLongShortRatio(double &ratio) {
 void ExecuteTrade(int direction, int score) {
     symbolInfo.RefreshRates();
     double price = (direction==1) ? symbolInfo.Ask() : symbolInfo.Bid();
-    int slPts = g_slPoints, tpPts = g_tpPoints;
-    if(InpUseATR && g_lastATR > 0) {
+    int slPts = (InpCustomSL > 0) ? InpCustomSL : g_slPoints;
+    int tpPts = (InpCustomTP > 0) ? InpCustomTP : g_tpPoints;
+    if(InpCustomSL <= 0 && InpUseATR && g_lastATR > 0) {
         double atrPts = g_lastATR / g_point;
         int atrSl = (int)(atrPts * InpATRMultiplier);
         if(atrSl > slPts) slPts = atrSl;
         if(!g_isBTC && slPts > 400) slPts = 400;    // Máx $4.00 de SL en Oro
         if(g_isBTC && slPts > 15000) slPts = 15000; // Máx $150 de SL en Bitcoin
-        tpPts = (int)(slPts * 1.0);                 // Ratio 1:1 (objetivo más alcanzable y seguro)
+        if(InpCustomTP <= 0) tpPts = (int)(slPts * 1.0); // Ratio 1:1 (objetivo más alcanzable y seguro)
     }
     double lot = CalculateLotSize(slPts);
     double stopsLevel = (double)SymbolInfoInteger(g_symbol, SYMBOL_TRADE_STOPS_LEVEL) * g_point;
@@ -1301,7 +1314,7 @@ void UpdateHUD(int score) {
     lines[9]  = "OB B:" + DoubleToString(g_lastOB_Buy,1) + " / S:" + DoubleToString(g_lastOB_Sell,1);
     lines[10] = "ATR: " + DoubleToString(g_lastATR,2) + " | Spr: " + DoubleToString(spreadNow,0) + " pts";
     lines[11] = "Reentrada: " + cooldownTxt;
-    lines[12] = "Dist.Extremo: " + IntegerToString(g_distanciaSueloPts) + " pts";
+    lines[12] = "SL/TP: " + IntegerToString(g_slPoints) + "/" + IntegerToString(g_tpPoints) + " | BE: " + IntegerToString(g_beTrigger);
     lines[13] = "Balance: $" + DoubleToString(AccountInfoDouble(ACCOUNT_BALANCE),2);
     lines[14] = "-----------------------------";
     
