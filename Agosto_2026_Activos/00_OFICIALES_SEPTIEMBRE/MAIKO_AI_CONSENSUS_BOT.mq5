@@ -120,9 +120,9 @@ void AplicarPreset() {
     if(g_isBTC) {
         // --- PRESET PROFESIONAL BITCOIN (BTCUSD) ---
         g_binanceSymbol = "BTCUSDT"; g_magicNumber = 202626;
-        g_slPoints = 12000; g_tpPoints = 12000;              // $120 SL / $120 TP (Ratio 1:1)
-        g_beTrigger = 7000; g_beLock = 2000;                 // BE al ganar $70 asegurando $20 limpios
-        g_trailingStart = 9000; g_trailingStep = 3000;       // Trailing a los $90 manteniendo $30 de distancia
+        g_slPoints = 15000; g_tpPoints = 15000;              // $150 SL / $150 TP (Ratio 1:1)
+        g_beTrigger = 5000; g_beLock = 1500;                 // BE al ganar $1.00 ($50 BTC) asegurando $0.30 limpios
+        g_trailingStart = 7000; g_trailingStep = 2500;       // Trailing a los $1.40 ($70 BTC) persiguiendo a $0.50
         g_maxSpread = 3000.0;                                // Spread máx 3000 pts ($30)
         g_distanciaSueloPts = (InpDistanciaSueloPts > 0) ? InpDistanciaSueloPts : 5000; // $50 en BTC
         g_rsiSuelo = (InpRSI_Suelo > 0) ? InpRSI_Suelo : 30; // 30 en BTC (sobreventa real)
@@ -333,9 +333,11 @@ void GetATRValue() {
 void ActualizarTendencias() {
     double price = symbolInfo.Bid();
     
-    // M15: Tendencia Dinámica con EMA 20 y EMA 50
-    int h20m = iMA(g_symbol, PERIOD_M15, 20, 0, MODE_EMA, PRICE_CLOSE);
-    int h50m = iMA(g_symbol, PERIOD_M15, 50, 0, MODE_EMA, PRICE_CLOSE);
+    // Tendencia Rápida Dinámica con EMA 20 y EMA 50
+    // Si el gráfico está en M1, evalúa M5 (ágil para scalping); si está en M5 o superior, evalúa M15
+    ENUM_TIMEFRAMES tfTrend = (_Period == PERIOD_M1) ? PERIOD_M5 : PERIOD_M15;
+    int h20m = iMA(g_symbol, tfTrend, 20, 0, MODE_EMA, PRICE_CLOSE);
+    int h50m = iMA(g_symbol, tfTrend, 50, 0, MODE_EMA, PRICE_CLOSE);
     if(h20m != INVALID_HANDLE && h50m != INVALID_HANDLE) {
         double a[1], b[1];
         if(CopyBuffer(h20m, 0, 0, 1, a) > 0 && CopyBuffer(h50m, 0, 0, 1, b) > 0) {
@@ -393,7 +395,7 @@ bool EstaPegadoATecho() {
 //=================================================================
 int DetectarPatronVelaPrevia(int direccion, string &nombrePatron) {
     if(!InpFiltroVelaConfirmacion) return 0;
-    ENUM_TIMEFRAMES tf = (_Period == PERIOD_M1) ? PERIOD_M5 : _Period;
+    ENUM_TIMEFRAMES tf = _Period;
     
     double o1 = iOpen(g_symbol, tf, 1);
     double c1 = iClose(g_symbol, tf, 1);
@@ -998,7 +1000,7 @@ void ExecuteTrade(int direction, int score) {
         int atrSl = (int)(atrPts * InpATRMultiplier);
         if(atrSl > slPts) slPts = atrSl;
         if(!g_isBTC && slPts > 400) slPts = 400;    // Máx $4.00 de SL en Oro
-        if(g_isBTC && slPts > 12000) slPts = 12000; // Máx $120 de SL en Bitcoin
+        if(g_isBTC && slPts > 15000) slPts = 15000; // Máx $150 de SL en Bitcoin
         tpPts = (int)(slPts * 1.0);                 // Ratio 1:1 (objetivo más alcanzable y seguro)
     }
     double lot = CalculateLotSize(slPts);
@@ -1150,16 +1152,17 @@ void CreateHUD() {
 void UpdateHUD(int score) {
     string sigTxt = "ESPERANDO";
     color colSig = clrGold;
+    string bloqTendTxt = (_Period == PERIOD_M1) ? "BLOQ TEND M5" : "BLOQ TEND M15";
     if(g_realBuyScore >= InpMinConsensus && g_realBuyScore > g_realSellScore) {
         string patronVela = "";
-        if(InpUseFiltroM15 && !g_m15Bullish) { sigTxt = "BLOQ TEND M15"; colSig = clrGold; }
+        if(InpUseFiltroM15 && !g_m15Bullish) { sigTxt = bloqTendTxt; colSig = clrGold; }
         else if(g_bloqueadoTecho) { sigTxt = "BLOQ TECHO M15"; colSig = clrGold; }
         else if(InpFiltroVelaConfirmacion && DetectarPatronVelaPrevia(1, patronVela) > 0) { sigTxt = "BLOQ: " + patronVela; colSig = clrGold; }
         else { sigTxt = "COMPRA"; colSig = clrLime; }
     }
     else if(g_realSellScore >= InpMinConsensus && g_realSellScore > g_realBuyScore) {
         string patronVela = "";
-        if(InpUseFiltroM15 && g_m15Bullish) { sigTxt = "BLOQ TEND M15"; colSig = clrGold; }
+        if(InpUseFiltroM15 && g_m15Bullish) { sigTxt = bloqTendTxt; colSig = clrGold; }
         else if(g_bloqueadoSuelo) { sigTxt = "BLOQ SUELO M15"; colSig = clrGold; }
         else if(InpFiltroVelaConfirmacion && DetectarPatronVelaPrevia(-1, patronVela) > 0) { sigTxt = "BLOQ: " + patronVela; colSig = clrGold; }
         else { sigTxt = "VENTA"; colSig = clrTomato; }
@@ -1248,7 +1251,8 @@ void UpdateHUD(int score) {
     lines[3]  = "Señal: " + sigTxt;
     lines[4]  = potenciaTxt;
     lines[5]  = objetivoTxt;
-    lines[6]  = "Tend M15: " + tendM15 + " | H1: " + tendH1;
+    string tendName = (_Period == PERIOD_M1) ? "Tend M5: " : "Tend M15: ";
+    lines[6]  = tendName + tendM15 + " | H1: " + tendH1;
     lines[7]  = "RSI: " + DoubleToString(g_rsiActual,1) + " | Ext: " + extTxt;
     lines[8]  = "F&G: " + IntegerToString(g_lastFearGreed) + " | L/S: " + DoubleToString(g_lastLSRatio,2);
     lines[9]  = "OB B:" + DoubleToString(g_lastOB_Buy,1) + " / S:" + DoubleToString(g_lastOB_Sell,1);
