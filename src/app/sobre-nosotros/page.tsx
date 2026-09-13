@@ -52,8 +52,8 @@ export default function SobreNosotrosPage() {
                 "@type": "AboutPage",
                 "@id": "https://www.kopytrading.com/sobre-nosotros#webpage",
                 "url": "https://www.kopytrading.com/sobre-nosotros",
-                "name": "Sobre Nosotros | KopyTrading - De la Ingeniería de Software a la Automatización Algorítmica",
-                "description": "No venimos del sector del trading, sino de la ingeniería de software y la creación de automatizaciones complejas. Vimos que el trading manual es extremadamente difícil y psicológicamente agotador (requiere años de estudio), así que decidimos aplicar nuestra verdadera especialidad: construir robots y algoritmos que automaticen el proceso sin emociones.",
+                "name": "Sobre Nosotros | KopyTrading",
+                "description": "Somos JC y Maikolours. Venimos del sector audiovisual y el diseño web. Al ver la enorme complejidad del trading manual, decidimos usar nuestra experiencia en automatizaciones para crear algoritmos que operen sin emociones ni estrés.",
                 "isPartOf": {
                     "@id": "https://www.kopytrading.com/#website"
                 },
@@ -132,91 +132,61 @@ export default function SobreNosotrosPage() {
                             Ingeniería de Software & Algoritmos MT5
                         </div>
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
-                            De la Ingeniería de Software a la{" "}
+                            Del Sector Audiovisual a la{" "}
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand via-brand-light to-white">
                                 Automatización Algorítmica
                             </span>
                         </h1>
                         <p className="text-base sm:text-lg text-text-muted max-w-3xl leading-relaxed">
-                            Cambiamos el agotamiento de las pantallas y los sesgos emocionales del trading manual por arquitectura de código robusta, disciplina matemática y ejecución milimétrica en MetaTrader 5.
+                            Buscábamos ingresos pasivos y descubrimos que el trading manual es una carrera sin fin. Así que usamos nuestra experiencia en automatizaciones para que la tecnología opere por nosotros.
                         </p>
                     </div>
                 </div>
 
-                {/* Manifesto Block (Mandatory Narrative Card) */}
+                {/* Nuestra Verdadera Historia */}
                 <section className="relative glass-card border-brand/30 bg-gradient-to-b from-brand/15 via-surface/80 to-black p-6 sm:p-8 md:p-10 rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] overflow-hidden">
                     <div className="absolute -top-24 -right-24 w-72 h-72 bg-brand/20 blur-[90px] pointer-events-none rounded-full" />
                     
-                    {/* Barra de cabecera estilo Terminal de Ingeniería */}
                     <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6 text-xs text-text-muted font-mono">
                         <div className="flex items-center gap-2">
                             <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
                             <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
                             <span className="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
-                            <span className="ml-2 text-slate-300 hidden sm:inline">~/kopytrading/philosophy/manifesto.md</span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-brand-light font-semibold">
-                            <Terminal className="w-3.5 h-3.5" />
-                            <span>DECLARACIÓN FUNDACIONAL</span>
+                        <div className="flex items-center gap-1.5 text-brand-light font-semibold uppercase tracking-widest">
+                            <span>Quiénes Somos Realmente</span>
                         </div>
                     </div>
 
-                    {/* Cita textual exacta requerida */}
-                    <blockquote className="text-lg sm:text-xl md:text-2xl font-medium text-white leading-relaxed tracking-tight border-l-4 border-brand pl-4 sm:pl-6 my-4 italic">
-                        “No venimos del sector del trading, sino de la ingeniería de software y la creación de automatizaciones complejas. Vimos que el trading manual es extremadamente difícil y psicológicamente agotador (requiere años de estudio), así que decidimos aplicar nuestra verdadera especialidad: construir robots y algoritmos que automaticen el proceso sin emociones.”
-                    </blockquote>
-
-                    {/* Firma técnica & sello de confianza */}
-                    <div className="mt-8 pt-5 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-brand/20 border border-brand/40 flex items-center justify-center text-brand-light font-mono font-bold text-sm">
-                                &lt;/&gt;
-                            </div>
-                            <div>
-                                <div className="font-semibold text-white text-sm">Equipo de Ingeniería KopyTrading</div>
-                                <div className="text-xs text-slate-400">Arquitectura de Software & MQL5 Cuantitativo</div>
-                            </div>
-                        </div>
-                        <div className="inline-flex items-center gap-2 text-brand-light text-xs font-medium bg-brand/10 px-3.5 py-2 rounded-xl border border-brand/20 self-start sm:self-auto">
-                            <ShieldCheck className="w-4 h-4 text-brand" />
-                            <span>Transparencia Radical & Cero Humo</span>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Nuestra Historia: Expansión y Contraste Real */}
-                <section className="space-y-8">
-                    <div className="border-b border-white/10 pb-4">
-                        <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                            Nuestra Historia: La Realidad Frente a la Falsa Ilusión
-                        </h2>
-                        <p className="text-brand-light text-sm font-medium mt-1">
-                            Por qué las matemáticas y el software vencen al desgaste mental del operador humano
+                    <div className="space-y-6 text-slate-300 leading-relaxed text-sm sm:text-base md:text-[17px]">
+                        <p>
+                            Si estás leyendo esto, probablemente estés harto de ver a supuestos gurús del trading conduciendo Ferraris alquilados y vendiendo fórmulas mágicas. Nosotros también lo estábamos.
                         </p>
-                    </div>
+                        <p>
+                            Somos <strong className="text-white">JC y Maikolours</strong>, y venimos de un mundo que no tiene absolutamente nada que ver con Wall Street. Durante años, nuestro día a día transcurría en el sector audiovisual, el diseño web, la creación de <em>landing pages</em> y el posicionamiento SEO.
+                        </p>
+                        <p>
+                            Hace tiempo, empezamos a interesarnos por el mundo del trading con la idea de diversificar y buscar una fuente de ingresos extra desde casa. La bofetada de realidad fue enorme: nos dimos cuenta de que el trading manual es, literalmente, una carrera universitaria. Exige años de estudio, control emocional férreo y estar pegado a una pantalla todo el día interpretando gráficos que cambian por segundos. 
+                        </p>
+                        <p>
+                            Al no tener tiempo para dedicarle a las finanzas (ya que teníamos nuestros propios trabajos en el sector audiovisual), la frustración empezó a aparecer. Pero teníamos un as bajo la manga: <strong className="text-white">nuestra experiencia técnica</strong>. Dado que JC tenía un bagaje avanzado en el mundo de las automatizaciones, decidimos dar un giro de 180 grados a nuestro enfoque. Si no podíamos ser los mejores analizando el mercado a mano, íbamos a programar sistemas que lo hicieran por nosotros.
+                        </p>
+                        
+                        <blockquote className="border-l-4 border-brand pl-5 py-2 my-8 italic text-white font-medium text-lg sm:text-xl">
+                            "Decidimos aplicar nuestra verdadera especialidad: construir robots y algoritmos matemáticos que automaticen todo el proceso, eliminando el factor humano y las emociones."
+                        </blockquote>
 
-                    <div className="grid md:grid-cols-2 gap-8 text-text-muted leading-relaxed text-sm sm:text-base">
-                        <div className="space-y-4">
-                            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                                <Cpu className="w-5 h-5 text-brand" /> El Mito del Trader Manual Infalible
-                            </h3>
+                        <p>
+                            No te vamos a mentir, el proceso ha sido de todo menos fácil. Detrás de cada bot que ves en nuestra tienda hay cientos (y a veces miles) de horas de pruebas de ensayo y error. Ha habido noches desesperantes de <em>backtesting</em>, líneas de código que no funcionaban y parámetros que tuvimos que ajustar hasta la saciedad para conseguir sistemas que realmente sobrevivieran al mercado real.
+                        </p>
+                        <p>
+                            <strong>¿Para quién hemos creado KopyTrading?</strong> Exactamente para gente como nosotros cuando empezamos: personas que no tienen ni idea de trading técnico, que no tienen tiempo libre para ponerse a estudiar gráficas porque trabajan en otros sectores, pero que buscan generar un rendimiento pasivo desde su casa utilizando la tecnología.
+                        </p>
+                        
+                        <div className="mt-8 p-5 rounded-2xl bg-danger/10 border border-danger/30 text-danger-light text-sm font-medium flex gap-4 items-start shadow-xl">
+                            <AlertTriangle className="w-6 h-6 text-danger flex-shrink-0 mt-0.5" />
                             <p>
-                                Casi todos los que se adentran en los mercados financieros escuchan las mismas promesas vacías: "aprende patrones de velas, domina tu mentalidad con 15 minutos al día y gana dinero desde tu teléfono". Pero la cruda realidad que descubrimos al operar manualmente es demoledora.
-                            </p>
-                            <p>
-                                El trading manual exige años de estudio ininterrumpido, jornadas de 6 a 10 horas analizando gráficos y, sobre todo, una carga psicológica destructiva. Pasar horas viendo fluctuar tu capital genera ansiedad, insomnio, miedo al error (*FOMO*) y revancha ante las pérdidas. El 90% de los operadores minoristas no pierden por falta de teoría, sino porque la mente humana está biológicamente programada para fallar cuando hay dinero y emociones en juego.
-                            </p>
-                        </div>
-
-                        <div className="space-y-4">
-                            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                                <Code2 className="w-5 h-5 text-brand" /> Nuestra Especialidad: Ingeniería y Sistemas
-                            </h3>
-                            <p>
-                                Nuestro punto de partida nunca fueron las tertulias financieras ni los cursos de vendehumos. Venimos del sector de la ingeniería de software: desarrollo de sistemas backend distribuidos, pipelines automatizados tolerantes a fallos y programación de algoritmos de alta fidelidad.
-                            </p>
-                            <p>
-                                Al analizar el mercado con ojos de ingeniero, el dilema quedó claro: el mercado financiero es un flujo constante de datos numéricos y probabilidades. En lugar de quemar nuestra salud mental forzando a un cerebro humano a actuar como una máquina, decidimos hacer lo que mejor sabemos hacer: <strong className="text-white">construir software especializado que ejecute reglas matemáticas estrictas sin miedo, sin fatiga y sin vacilaciones</strong>.
+                                <strong>Transparencia total:</strong> Siempre decimos la verdad. El trading con bots automatizados conlleva riesgo y las pérdidas forman parte del juego. No vendemos "hacerse rico rápido", vendemos herramientas de automatización profesional para intentar batir al mercado de la forma más fría y calculada posible.
                             </p>
                         </div>
                     </div>
