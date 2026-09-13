@@ -64,6 +64,7 @@ export function Navbar() {
                     <Link href="/activos" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/activos" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Activos</Link>
                     <Link href="/como-funciona" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/como-funciona" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Cómo Funciona</Link>
                     <Link href="/articulos" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/articulos" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Blog</Link>
+                    <Link href="/sobre-nosotros" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/sobre-nosotros" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Nosotros</Link>
                     <Link href="/faq" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/faq" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>FAQ</Link>
                     <Link href={isLoggedIn ? "/dashboard" : "/login"} className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors flex items-center gap-1.5 lg:gap-2 group ${pathname === "/dashboard" || pathname === "/login" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>
                         <span className="w-1.5 h-1.5 rounded-full bg-brand group-hover:animate-pulse"></span>
@@ -174,6 +175,13 @@ export function Navbar() {
                         className={`text-base sm:text-lg font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname === "/faq" ? "text-brand-light" : "text-white/80 hover:text-white"}`}
                     >
                         Preguntas FAQ
+                    </Link>
+                    <Link 
+                        onClick={() => setIsMenuOpen(false)} 
+                        href="/sobre-nosotros" 
+                        className={`text-base sm:text-lg font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname === "/sobre-nosotros" ? "text-brand-light" : "text-white/80 hover:text-white"}`}
+                    >
+                        Sobre Nosotros
                     </Link>
                     
                     {isLoggedIn && (
