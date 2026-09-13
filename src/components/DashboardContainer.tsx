@@ -105,6 +105,34 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
     // Estado para controlar qué bot específico está seleccionado para visualización completa
     const [selectedPurchaseId, setSelectedPurchaseId] = useState<string | null>(null);
 
+    // Estado para bots ocultados manualmente y filtro de licencias
+    const [hiddenBotIds, setHiddenBotIds] = useState<string[]>([]);
+    const [botFilter, setBotFilter] = useState<"active" | "inactive" | "all">("active");
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            try {
+                const stored = localStorage.getItem("kopytrading_hidden_bots");
+                if (stored) {
+                    setHiddenBotIds(JSON.parse(stored));
+                }
+            } catch (e) {}
+        }
+    }, []);
+
+    const toggleHideBot = (id: string, e?: React.MouseEvent) => {
+        if (e) e.stopPropagation();
+        setHiddenBotIds(prev => {
+            const next = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
+            if (typeof window !== "undefined") {
+                try {
+                    localStorage.setItem("kopytrading_hidden_bots", JSON.stringify(next));
+                } catch (err) {}
+            }
+            return next;
+        });
+    };
+
     const handleCategoryChange = (cat: string) => {
         setActiveCategory(cat);
         setSelectedPurchaseId(null);
@@ -141,16 +169,52 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
         });
     }, [categoryGroups, activeCategory]);
 
+    // Separar licencias activas de inactivas / no sincronizadas / ocultas
+    const { activePurchases, inactivePurchases } = useMemo(() => {
+        const raw = activeCategoryPurchases;
+        const active: any[] = [];
+        const inactive: any[] = [];
+
+        raw.forEach(p => {
+            const isManuallyHidden = hiddenBotIds.includes(p.id);
+            const hasActivity = !!p.lastSync || (p.balance && Number(p.balance) > 0) || (p.activePositions && p.activePositions.length > 0);
+            const isExpired = p.expiresAt && new Date(p.expiresAt).getTime() < Date.now();
+
+            if (isManuallyHidden) {
+                inactive.push(p);
+            } else if (!hasActivity || isExpired) {
+                inactive.push(p);
+            } else {
+                active.push(p);
+            }
+        });
+
+        // Si todas las licencias están en "inactivas" (ej: usuario nuevo que aún no conecta MT5),
+        // mostramos todas en activas para no dejar la vista vacía.
+        if (active.length === 0 && inactive.length > 0) {
+            return { activePurchases: inactive, inactivePurchases: [] };
+        }
+
+        return { activePurchases: active, inactivePurchases: inactive };
+    }, [activeCategoryPurchases, hiddenBotIds]);
+
+    const displayedPurchases = useMemo(() => {
+        if (inactivePurchases.length === 0) return activeCategoryPurchases;
+        if (botFilter === "active") return activePurchases;
+        if (botFilter === "inactive") return inactivePurchases;
+        return activeCategoryPurchases;
+    }, [botFilter, activePurchases, inactivePurchases, activeCategoryPurchases]);
+
     return (
-        <div className="flex flex-col gap-6 w-full max-w-full overflow-hidden">
+        <div className="flex flex-col gap-4 w-full max-w-full overflow-hidden">
             {/* Top Navigation Tabs - Better for Centering */}
             <div className="w-full max-w-full overflow-x-auto no-scrollbar py-1">
-                <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 pb-3 border-b border-white/5 min-w-0 max-w-full">
+                <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 pb-2 border-b border-white/5 min-w-0 max-w-full">
                     {categories.map(cat => (
                         <button
                             key={cat}
                             onClick={() => handleCategoryChange(cat)}
-                            className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-left transition-all whitespace-nowrap font-black uppercase tracking-tighter text-[9px] sm:text-[10px] border ${
+                            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-left transition-all whitespace-nowrap font-black uppercase tracking-tighter text-[9px] sm:text-[10px] border ${
                                 activeCategory === cat 
                                 ? 'bg-brand/20 border-brand-light text-white shadow-[0_0_15px_rgba(168,85,247,0.2)]' 
                                 : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10'
@@ -168,140 +232,203 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                     <ErrorBoundary fallbackTitle="Error en Selector de Bots">
                         {selectedPurchaseId === null ? (
                             /* ================= CATÁLOGO DE MINI-TARJETAS (VISTA PRINCIPAL) ================= */
-                            <div className="space-y-6">
-                                <div className="text-center md:text-left">
-                                    <h3 className="text-xl sm:text-2xl font-black text-white tracking-tighter uppercase italic">
-                                        🖥️ Panel de Control de Algoritmos
-                                    </h3>
-                                    <p className="text-xs text-gray-400 mt-1 italic">
-                                        Selecciona un bot para abrir su dashboard exclusivo de operaciones en vivo y telemetría.
-                                    </p>
+                            <div className="space-y-4">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1">
+                                    <div className="text-center sm:text-left">
+                                        <h3 className="text-lg sm:text-xl font-black text-white tracking-tighter uppercase italic">
+                                            🖥️ Panel de Control de Algoritmos
+                                        </h3>
+                                        <p className="text-[11px] text-gray-400 mt-0.5">
+                                            Selecciona un bot para abrir su dashboard exclusivo de operaciones en vivo y telemetría.
+                                        </p>
+                                    </div>
+
+                                    {inactivePurchases.length > 0 && (
+                                        <div className="flex items-center justify-center gap-1 bg-black/40 p-1 rounded-xl border border-white/10 self-center sm:self-auto shrink-0">
+                                            <button
+                                                type="button"
+                                                onClick={() => setBotFilter("active")}
+                                                className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all ${
+                                                    botFilter === "active"
+                                                        ? "bg-brand/30 text-white border border-brand-light/50 shadow-sm"
+                                                        : "text-white/40 hover:text-white"
+                                                }`}
+                                            >
+                                                Activas ({activePurchases.length})
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setBotFilter("inactive")}
+                                                className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all ${
+                                                    botFilter === "inactive"
+                                                        ? "bg-brand/30 text-white border border-brand-light/50 shadow-sm"
+                                                        : "text-white/40 hover:text-white"
+                                                }`}
+                                            >
+                                                Otras / Inactivas ({inactivePurchases.length})
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setBotFilter("all")}
+                                                className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all ${
+                                                    botFilter === "all"
+                                                        ? "bg-brand/30 text-white border border-brand-light/50 shadow-sm"
+                                                        : "text-white/40 hover:text-white"
+                                                }`}
+                                            >
+                                                Todas ({activeCategoryPurchases.length})
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
 
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
-                                    {activeCategoryPurchases.map((p: any) => {
-                                        const botProduct = p.botProduct || { name: "Bot Desconocido", instrument: "UNKNOWN" };
-                                        const botTheme = getBotTheme(botProduct.name);
-                                        const isOnline = p.lastSync && (Math.abs(Date.now() - new Date(p.lastSync).getTime()) < 300000);
-                                        
-                                        const isCent = botProduct.name.toUpperCase().includes("CENT");
-                                        const currency = isCent ? "USC" : "$";
-                                        
-                                        const activeAcc = p.activePositions?.[0];
-                                        const hasRealSync = (p.activePositions || []).some((pos: any) => pos.isReal);
-                                        const accountTypeLabel = hasRealSync ? (isCent ? "REAL (CENT)" : "REAL (USD)") : "DEMO";
-                                        const accountTypeColor = hasRealSync ? "bg-success/20 text-success border-success/40" : "bg-orange-500/20 text-orange-400 border-orange-500/40";
+                                {displayedPurchases.length === 0 ? (
+                                    <div className="glass-card border border-dashed border-white/20 p-8 text-center rounded-2xl">
+                                        <p className="text-sm text-text-muted">No hay bots en esta sección.</p>
+                                        <button
+                                            type="button"
+                                            onClick={() => setBotFilter("all")}
+                                            className="mt-2 text-xs text-brand-light hover:underline font-bold"
+                                        >
+                                            Ver todos los bots
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                                        {displayedPurchases.map((p: any) => {
+                                            const botProduct = p.botProduct || { name: "Bot Desconocido", instrument: "UNKNOWN" };
+                                            const botTheme = getBotTheme(botProduct.name);
+                                            const isOnline = p.lastSync && (Math.abs(Date.now() - new Date(p.lastSync).getTime()) < 300000);
+                                            
+                                            const isCent = botProduct.name.toUpperCase().includes("CENT");
+                                            const currency = isCent ? "USC" : "$";
+                                            
+                                            const activeAcc = p.activePositions?.[0];
+                                            const hasRealSync = (p.activePositions || []).some((pos: any) => pos.isReal);
+                                            const accountTypeLabel = hasRealSync ? (isCent ? "REAL (CENT)" : "REAL (USD)") : "DEMO";
+                                            const accountTypeColor = hasRealSync ? "bg-success/20 text-success border-success/40" : "bg-orange-500/20 text-orange-400 border-orange-500/40";
 
-                                        // Cálculo de Expiración / Demo 30 días
-                                        const now = new Date();
-                                        const expiresAt = p.expiresAt ? new Date(p.expiresAt) : null;
-                                        let daysRemaining = null;
-                                        if (expiresAt) {
-                                            const diffTime = expiresAt.getTime() - now.getTime();
-                                            daysRemaining = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
-                                        }
+                                            // Cálculo de Expiración / Demo 30 días
+                                            const now = new Date();
+                                            const expiresAt = p.expiresAt ? new Date(p.expiresAt) : null;
+                                            let daysRemaining = null;
+                                            if (expiresAt) {
+                                                const diffTime = expiresAt.getTime() - now.getTime();
+                                                daysRemaining = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+                                            }
 
-                                        // Cálculo de versión y actualizaciones
-                                        const botSettings = p.botSettings?.[0]?.settings;
-                                        const parsedSettings = botSettings ? (typeof botSettings === 'string' ? JSON.parse(botSettings) : botSettings) : null;
-                                        const runningVersion = parsedSettings?.version;
-                                        const latestVersion = botProduct.version || "1.0";
-                                        const hasUpdate = runningVersion 
-                                            ? (runningVersion !== latestVersion) 
-                                            : (p.lastDownloadedVersion ? (p.lastDownloadedVersion !== latestVersion) : false);
+                                            // Cálculo de versión y actualizaciones
+                                            const botSettings = p.botSettings?.[0]?.settings;
+                                            const parsedSettings = botSettings ? (typeof botSettings === 'string' ? JSON.parse(botSettings) : botSettings) : null;
+                                            const runningVersion = parsedSettings?.version;
+                                            const latestVersion = botProduct.version || "1.0";
+                                            const hasUpdate = runningVersion 
+                                                ? (runningVersion !== latestVersion) 
+                                                : (p.lastDownloadedVersion ? (p.lastDownloadedVersion !== latestVersion) : false);
 
-                                        const displayBalance = parsedSettings?.balance !== undefined && parsedSettings?.balance !== null 
-                                            ? Number(parsedSettings.balance) 
-                                            : (p.balance && Number(p.balance) > 0 ? Number(p.balance) : null);
+                                            const displayBalance = parsedSettings?.balance !== undefined && parsedSettings?.balance !== null 
+                                                ? Number(parsedSettings.balance) 
+                                                : (p.balance && Number(p.balance) > 0 ? Number(p.balance) : null);
 
-                                        return (
-                                            <div 
-                                                key={p.id}
-                                                className={`group relative overflow-hidden rounded-[2rem] border ${hasUpdate ? 'border-amber-500/50 shadow-[0_0_25px_rgba(245,158,11,0.1)]' : botTheme.border} bg-surface/40 backdrop-blur-2xl p-6 transition-all duration-500 hover:scale-[1.02] hover:border-brand-light/50 hover:shadow-[0_15px_35px_rgba(168,85,247,0.15)] flex flex-col justify-between h-[260px]`}
-                                            >
-                                                {/* Glow de fondo decorativo */}
-                                                <div className={`absolute top-0 right-0 w-32 h-32 ${hasUpdate ? 'bg-amber-500/20' : botTheme.glow} blur-[50px] -mr-10 -mt-10 rounded-full transition-all duration-700 opacity-30 group-hover:opacity-60`} />
-                                                
-                                                {/* Header de la Mini-Tarjeta */}
-                                                <div className="space-y-3 relative z-10">
-                                                    <div className="flex items-center justify-between">
-                                                        <span className={`px-2 py-0.5 rounded-lg text-[8px] font-black border ${accountTypeColor} tracking-widest uppercase`}>
-                                                            {accountTypeLabel}
-                                                        </span>
-                                                        <div className="flex items-center gap-1.5">
-                                                            {hasUpdate && (
-                                                                <span className="px-2 py-0.5 rounded-lg text-[8px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse uppercase tracking-widest">
-                                                                    ACTUALIZAR v{latestVersion} ⚠️
-                                                                </span>
-                                                            )}
-                                                            <div className="flex items-center gap-1.5 bg-black/40 px-2 py-0.5 rounded-lg border border-white/5">
-                                                                <div className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-success animate-pulse' : 'bg-white/20'}`} />
-                                                                <span className={`text-[7px] font-black tracking-widest uppercase ${isOnline ? 'text-success' : 'text-white/30'}`}>
-                                                                    {isOnline ? 'ONLINE' : 'OFFLINE'}
-                                                                </span>
+                                            const isManuallyHidden = hiddenBotIds.includes(p.id);
+
+                                            return (
+                                                <div 
+                                                    key={p.id}
+                                                    className={`group relative overflow-hidden rounded-[1.5rem] border ${hasUpdate ? 'border-amber-500/50 shadow-[0_0_25px_rgba(245,158,11,0.1)]' : botTheme.border} bg-surface/40 backdrop-blur-2xl p-5 transition-all duration-500 hover:scale-[1.01] hover:border-brand-light/50 hover:shadow-[0_15px_35px_rgba(168,85,247,0.15)] flex flex-col justify-between h-[245px]`}
+                                                >
+                                                    {/* Glow de fondo decorativo */}
+                                                    <div className={`absolute top-0 right-0 w-32 h-32 ${hasUpdate ? 'bg-amber-500/20' : botTheme.glow} blur-[50px] -mr-10 -mt-10 rounded-full transition-all duration-700 opacity-30 group-hover:opacity-60`} />
+                                                    
+                                                    {/* Header de la Mini-Tarjeta */}
+                                                    <div className="space-y-2 relative z-10">
+                                                        <div className="flex items-center justify-between">
+                                                            <span className={`px-2 py-0.5 rounded-lg text-[8px] font-black border ${accountTypeColor} tracking-widest uppercase`}>
+                                                                {accountTypeLabel}
+                                                            </span>
+                                                            <div className="flex items-center gap-1.5">
+                                                                {hasUpdate && (
+                                                                    <span className="px-2 py-0.5 rounded-lg text-[8px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse uppercase tracking-widest">
+                                                                        ACTUALIZAR v{latestVersion} ⚠️
+                                                                    </span>
+                                                                )}
+                                                                <div className="flex items-center gap-1 bg-black/40 px-2 py-0.5 rounded-lg border border-white/5">
+                                                                    <div className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-success animate-pulse' : 'bg-white/20'}`} />
+                                                                    <span className={`text-[7px] font-black tracking-widest uppercase ${isOnline ? 'text-success' : 'text-white/30'}`}>
+                                                                        {isOnline ? 'ONLINE' : 'OFFLINE'}
+                                                                    </span>
+                                                                </div>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={(e) => toggleHideBot(p.id, e)}
+                                                                    title={isManuallyHidden ? "Restaurar bot a activas" : "Ocultar bot no utilizado"}
+                                                                    className="px-1.5 py-0.5 rounded-md text-[7px] font-black tracking-wider uppercase text-white/30 hover:text-white/90 bg-black/40 hover:bg-white/10 border border-white/5 transition-colors"
+                                                                >
+                                                                    {isManuallyHidden ? "👁️ MOSTRAR" : "✕ OCULTAR"}
+                                                                </button>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    
-                                                    <div>
-                                                        <h4 className="text-base font-black tracking-tighter text-white uppercase group-hover:text-brand-light transition-colors leading-tight">
-                                                            {botProduct.name}
-                                                        </h4>
-                                                        <p className="text-[9px] font-bold text-white/40 tracking-wider mt-1 uppercase">
-                                                            Activo: {botProduct.instrument} • ID: {p.id.substring(0, 8)}...
-                                                        </p>
-                                                    </div>
-                                                </div>
-
-                                                {/* Balance & Info de Prueba */}
-                                                <div className="py-2 flex items-center justify-between border-t border-white/5 mt-auto relative z-10">
-                                                    <div>
-                                                        <p className="text-[7px] font-black uppercase tracking-widest text-white/25">Balance MT5</p>
-                                                        <p className="text-lg font-black text-white font-mono leading-none mt-1">
-                                                            {displayBalance !== null ? `${displayBalance.toFixed(2)} ${currency}` : <span className="text-xs text-white/40 font-normal">Sin Sincronizar</span>}
-                                                        </p>
+                                                        
+                                                        <div>
+                                                            <h4 className="text-base font-black tracking-tighter text-white uppercase group-hover:text-brand-light transition-colors leading-tight">
+                                                                {botProduct.name}
+                                                            </h4>
+                                                            <p className="text-[9px] font-bold text-white/40 tracking-wider mt-1 uppercase">
+                                                                Activo: {botProduct.instrument} • ID: {p.id.substring(0, 8)}...
+                                                            </p>
+                                                        </div>
                                                     </div>
 
-                                                    {/* Contador de Días Demo */}
-                                                    <div className="text-right">
-                                                        {botProduct.name.toUpperCase().includes("DEMO") ? (
-                                                            isOwner ? (
-                                                                <span className="text-[8px] font-black text-brand-light uppercase tracking-widest bg-brand/10 border border-brand/20 px-2 py-1 rounded">
-                                                                    ♾️ ACCESO DEMO ILIMITADO
-                                                                </span>
-                                                            ) : expiresAt ? (
-                                                                <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded border ${daysRemaining && daysRemaining > 5 ? 'text-orange-400 bg-orange-500/10 border-orange-500/20' : 'text-danger bg-danger/10 border-danger/20'}`}>
-                                                                    ⏳ {daysRemaining} DÍAS RESTANTES
-                                                                </span>
+                                                    {/* Balance & Info de Prueba */}
+                                                    <div className="py-2 flex items-center justify-between border-t border-white/5 mt-auto relative z-10">
+                                                        <div>
+                                                            <p className="text-[7px] font-black uppercase tracking-widest text-white/25">Balance MT5</p>
+                                                            <p className="text-lg font-black text-white font-mono leading-none mt-1">
+                                                                {displayBalance !== null ? `${displayBalance.toFixed(2)} ${currency}` : <span className="text-xs text-white/40 font-normal">Sin Sincronizar</span>}
+                                                            </p>
+                                                        </div>
+
+                                                        {/* Contador de Días Demo */}
+                                                        <div className="text-right">
+                                                            {botProduct.name.toUpperCase().includes("DEMO") ? (
+                                                                isOwner ? (
+                                                                    <span className="text-[8px] font-black text-brand-light uppercase tracking-widest bg-brand/10 border border-brand/20 px-2 py-1 rounded">
+                                                                        ♾️ ACCESO DEMO ILIMITADO
+                                                                    </span>
+                                                                ) : expiresAt ? (
+                                                                    <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded border ${daysRemaining && daysRemaining > 5 ? 'text-orange-400 bg-orange-500/10 border-orange-500/20' : 'text-danger bg-danger/10 border-danger/20'}`}>
+                                                                        ⏳ {daysRemaining} DÍAS RESTANTES
+                                                                    </span>
+                                                                ) : (
+                                                                    <span className="text-[8px] font-black text-orange-400 uppercase tracking-widest bg-orange-500/10 border border-orange-500/20 px-2 py-1 rounded">
+                                                                        ⏳ 30 DÍAS DEMO
+                                                                    </span>
+                                                                )
                                                             ) : (
-                                                                <span className="text-[8px] font-black text-orange-400 uppercase tracking-widest bg-orange-500/10 border border-orange-500/20 px-2 py-1 rounded">
-                                                                    ⏳ 30 DÍAS DEMO
+                                                                <span className="text-[8px] font-black text-white/20 uppercase tracking-widest">
+                                                                    LICENCIA COMPLETA
                                                                 </span>
-                                                            )
-                                                        ) : (
-                                                            <span className="text-[8px] font-black text-white/20 uppercase tracking-widest">
-                                                                LICENCIA COMPLETA
-                                                            </span>
-                                                        )}
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                {/* Botón de Entrada */}
-                                                <button
-                                                    onClick={() => {
-                                                        setSelectedPurchaseId(p.id);
-                                                        if (typeof window !== "undefined") {
-                                                            sessionStorage.setItem("dashboard_selected_purchase_id", p.id);
-                                                        }
-                                                    }}
-                                                    className="w-full mt-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest text-center text-black bg-white hover:bg-brand-light hover:text-white hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-all relative z-10 shrink-0"
-                                                >
-                                                    Entrar al Dashboard ⚡
-                                                </button>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
+                                                    {/* Botón de Entrada */}
+                                                    <button
+                                                        onClick={() => {
+                                                            setSelectedPurchaseId(p.id);
+                                                            if (typeof window !== "undefined") {
+                                                                sessionStorage.setItem("dashboard_selected_purchase_id", p.id);
+                                                            }
+                                                        }}
+                                                        className="w-full mt-3 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest text-center text-black bg-white hover:bg-brand-light hover:text-white hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-all relative z-10 shrink-0"
+                                                    >
+                                                        Entrar al Dashboard ⚡
+                                                    </button>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             /* ================= DASHBOARD EXCLUSIVO DE UN SOLO BOT (NIVEL 2) ================= */

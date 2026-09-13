@@ -101,7 +101,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
     };
 
     return (
-        <div className="min-h-screen pt-28 md:pt-32 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-[#050505]">
+        <div className="min-h-screen pt-24 md:pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-[#050505]">
 
             {/* Background GFX */}
             <div className="absolute top-[-10%] right-[-10%] w-[800px] h-[800px] bg-brand-light/5 blur-[150px] rounded-full pointer-events-none" />
@@ -114,12 +114,12 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
             </div>
 
             {/* Header */}
-            <div id="bot-catalog" className="max-w-7xl mx-auto mb-14 pb-10 text-center relative">
-                <div className="mb-10">
+            <div id="bot-catalog" className="max-w-7xl mx-auto mb-8 pb-2 text-center relative">
+                <div className="mb-6">
                     {/* Título con font adaptado para móvil */}
-                    <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight mb-4 uppercase italic leading-tight py-2 px-2">
+                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight mb-3 uppercase italic leading-tight py-1 px-2 break-words">
                         Maiko{" "}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-brand tracking-normal pb-2">Algorithms</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-brand tracking-normal pb-1">Algorithms</span>
                     </h1>
                     <p className="text-text-muted text-base max-w-2xl mx-auto font-light tracking-tight opacity-60 italic leading-relaxed">
                         Sistemas de alta frecuencia y precisión institucional para el mercado MT5.

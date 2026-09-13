@@ -10,25 +10,25 @@ export const metadata: Metadata = {
 
 export default function ComoFuncionaPage() {
     return (
-        <div className="min-h-screen pt-28 md:pt-32 pb-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="min-h-screen pt-20 md:pt-24 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
             {/* Background radial sutil */}
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand/10 blur-[150px] rounded-full mix-blend-screen pointer-events-none" />
 
             <div className="max-w-4xl mx-auto z-10 relative">
-                <Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-white transition-colors mb-4">
+                <Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-white transition-colors mb-2">
                     <span>←</span> Volver al inicio
                 </Link>
 
-                <div className="text-center mb-16">
-                    <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter text-white mb-6 leading-tight">
+                <div className="text-center mb-8 md:mb-10">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tighter text-white mb-3 leading-tight">
                         Cómo Funciona <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-white to-accent">KopyTrading</span>
                     </h1>
-                    <p className="text-lg md:text-xl text-text-muted max-w-2xl mx-auto font-light">
+                    <p className="text-sm md:text-base text-text-muted max-w-2xl mx-auto font-light">
                         Descargar e instalar tu mejor algoritmo en MetaTrader 5 es un proceso diseñado para ser rápido y seguro. Sigue estos tres pasos detallados para automatizar tu operativa.
                     </p>
                 </div>
 
-                <div className="space-y-12">
+                <div className="space-y-8 md:space-y-10">
                     <h2 className="sr-only">Pasos para empezar</h2>
                     {/* Step 1 */}
                     <div className="relative pl-8 md:pl-0">

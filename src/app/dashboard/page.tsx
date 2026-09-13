@@ -64,32 +64,32 @@ export default async function DashboardPage() {
     const serializedPurchases = JSON.parse(JSON.stringify(purchases));
 
     return (
-        <div className="min-h-screen pt-20 sm:pt-24 pb-12 px-2 sm:px-6 lg:px-8 w-full max-w-full overflow-x-hidden">
+        <div className="min-h-screen pt-14 sm:pt-16 pb-8 px-2 sm:px-6 lg:px-8 w-full max-w-full overflow-x-hidden">
             <DashboardRefresher />
             <div className="max-w-5xl mx-auto">
-                <div className="mb-10 pb-6 border-b border-white/10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div className="mb-3 pb-2 border-b border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div>
-                        <h1 className="text-3xl font-bold text-white mb-1">Mi Panel de Trading</h1>
-                        <p className="text-text-muted">Hola, {session.user.name || session.user.email}</p>
+                        <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Mi Panel de Trading</h1>
+                        <p className="text-xs text-text-muted">Hola, {session.user.name || session.user.email}</p>
                     </div>
                     {(session.user as any).role === "ADMIN" && (
                         <Link href="/admin">
-                            <Button variant="outline" size="sm" className="border-brand-light text-brand-light">
-                                Panel de Configuración Admin
+                            <Button variant="outline" size="sm" className="border-brand-light text-brand-light text-xs py-1 px-3 h-auto">
+                                Panel Admin
                             </Button>
                         </Link>
                     )}
                 </div>
 
                 {error && (
-                    <div className="bg-danger/10 border border-danger/20 p-4 rounded-xl text-danger mb-8">
-                        <p className="font-bold">Error de Sistema:</p>
-                        <p className="text-sm opacity-80">{error}</p>
-                        <p className="text-xs mt-2 italic opacity-60">Prueba a recargar en unos minutos.</p>
+                    <div className="bg-danger/10 border border-danger/20 p-3 rounded-xl text-danger mb-4">
+                        <p className="font-bold text-sm">Error de Sistema:</p>
+                        <p className="text-xs opacity-80">{error}</p>
+                        <p className="text-[10px] mt-1 italic opacity-60">Prueba a recargar en unos minutos.</p>
                     </div>
                 )}
 
-                <h2 className="text-xl font-semibold text-white mb-6">Mis Bots Comprados</h2>
+                <h2 className="sr-only">Mis Bots Comprados</h2>
 
                 {purchases.length === 0 ? (
                     <div className="glass-card border border-dashed border-white/20 p-12 text-center rounded-2xl">

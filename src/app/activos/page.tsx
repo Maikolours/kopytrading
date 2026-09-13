@@ -54,7 +54,7 @@ const ASSETS = [
 
 export default function ActivosPage() {
   return (
-    <div className="min-h-screen bg-bg-dark pt-32 pb-20 relative overflow-hidden">
+    <div className="min-h-screen bg-bg-dark pt-20 md:pt-24 pb-16 relative overflow-hidden">
       {/* Fondos decorativos */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand/5 blur-[150px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 blur-[120px] rounded-full pointer-events-none" />
@@ -65,26 +65,26 @@ export default function ActivosPage() {
           </Link>
       </div>
 
-      <section className="px-6 sm:px-6 lg:px-8 mb-24 relative z-10">
+      <section className="px-6 sm:px-6 lg:px-8 mb-16 relative z-10">
 
         <div className="max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/10 border border-brand/20 text-brand-light text-xs font-semibold tracking-widest uppercase mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/10 border border-brand/20 text-brand-light text-xs font-semibold tracking-widest uppercase mb-4">
             Ecosistema de Trading
           </div>
-          <h1 className="text-3xl sm:text-7xl font-black text-white mb-4 uppercase tracking-tighter italic leading-none">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white mb-3 uppercase tracking-tighter italic leading-tight break-words">
             Nuestros <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-accent">Activos</span>
           </h1>
 
-          <p className="text-text-muted text-base sm:text-lg max-w-2xl mx-auto mb-10 font-light">
+          <p className="text-text-muted text-sm sm:text-base max-w-2xl mx-auto mb-6 font-light">
             No operamos todo el mercado, solo donde la ventaja estadística es real. Descubre los instrumentos que hemos masterizado para ti.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {ASSETS.map((asset, i) => (
               <Link 
                 key={i} 
                 href={`/bots?asset=${asset.id}`}
-                className={`glass-card border-2 ${asset.color} rounded-[2.5rem] p-6 sm:p-10 text-center hover:scale-[1.05] transition-all group relative overflow-hidden flex flex-col items-center justify-between min-h-[400px] sm:min-h-[450px] shadow-2xl ${asset.theme}`}
+                className={`glass-card border-2 ${asset.color} rounded-[2.5rem] p-6 sm:p-8 text-center hover:scale-[1.05] transition-all group relative overflow-hidden flex flex-col items-center justify-between min-h-[380px] sm:min-h-[420px] shadow-2xl ${asset.theme}`}
               >
                 {asset.isUpcoming && (
                   <div className="absolute top-8 -right-12 rotate-45 bg-gradient-to-r from-brand to-accent text-white px-14 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] shadow-xl z-20">
