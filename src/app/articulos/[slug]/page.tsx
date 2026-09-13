@@ -88,6 +88,25 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                     })
                 }}
             />
+            {article.faqs && (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            "@context": "https://schema.org",
+                            "@type": "FAQPage",
+                            "mainEntity": article.faqs.map((faq: any) => ({
+                                "@type": "Question",
+                                "name": faq.question,
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": faq.answer
+                                }
+                            }))
+                        })
+                    }}
+                />
+            )}
             {/* Background Accents */}
             <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-brand/10 blur-[180px] rounded-full mix-blend-screen pointer-events-none" />
             <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-accent/5 blur-[150px] rounded-full mix-blend-screen pointer-events-none" />

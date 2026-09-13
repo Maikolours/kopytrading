@@ -1,4 +1,13 @@
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Política de Cookies | KopyTrading",
+    robots: {
+        index: false,
+        follow: true,
+    }
+};
 
 export default function CookiesPage() {
     return (
