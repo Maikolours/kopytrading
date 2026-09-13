@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Script from "next/script";
 import type { Metadata } from "next";
 import { ARTICLES_DATA } from "@/lib/constants/articles";
 
@@ -58,15 +57,16 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
 
     return (
         <div className="min-h-screen pt-28 pb-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-[#050510]">
-            <Script id={`json-ld-article-${slug}`} type="application/ld+json" strategy="afterInteractive">
-                {`
-                    {
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
                         "@context": "https://schema.org",
                         "@type": "BlogPosting",
-                        "headline": "${article.title.replace(/"/g, '\\"')}",
-                        "description": "${article.metaDescription.replace(/"/g, '\\"')}",
-                        "image": "${articleImageUrl}",
-                        "url": "${articleUrl}",
+                        "headline": article.title,
+                        "description": article.metaDescription,
+                        "image": articleImageUrl,
+                        "url": articleUrl,
                         "author": {
                             "@type": "Person",
                             "name": "Maikolours"
@@ -81,11 +81,13 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                         },
                         "mainEntityOfPage": {
                             "@type": "WebPage",
-                            "@id": "${articleUrl}"
-                        }
-                    }
-                `}
-            </Script>
+                            "@id": articleUrl
+                        },
+                        "datePublished": article.date || "2026-01-01",
+                        "dateModified": article.date || "2026-01-01"
+                    })
+                }}
+            />
             {/* Background Accents */}
             <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-brand/10 blur-[180px] rounded-full mix-blend-screen pointer-events-none" />
             <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-accent/5 blur-[150px] rounded-full mix-blend-screen pointer-events-none" />

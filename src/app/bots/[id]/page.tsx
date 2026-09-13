@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Script from "next/script";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/Button";
 import { getServerSession } from "next-auth/next";
@@ -121,25 +120,28 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
 
     return (
         <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden max-w-full relative">
-            <Script id={`json-ld-bot-${bot.id}`} type="application/ld+json" strategy="afterInteractive">
-                {`
-                    {
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
                         "@context": "https://schema.org",
                         "@type": "Product",
-                        "name": "${bot.name.replace(/"/g, '\\"')}",
-                        "description": "${bot.description.replace(/"/g, '\\"')}",
-                        "image": "${productImageUrl}",
-                        "url": "${productUrl}",
+                        "name": bot.name,
+                        "description": bot.description,
+                        "image": productImageUrl,
+                        "url": productUrl,
                         "category": "Trading Software",
+                        "brand": { "@type": "Brand", "name": "KopyTrading" },
+                        "sku": bot.id,
                         "offers": {
                             "@type": "Offer",
-                            "price": "${bot.price || '100'}",
+                            "price": bot.price || 100,
                             "priceCurrency": "EUR",
                             "availability": "https://schema.org/InStock"
                         }
-                    }
-                `}
-            </Script>
+                    })
+                }}
+            />
             {/* Background Aesthetic Blur */}
             <div className={`absolute top-0 right-0 w-[600px] h-[600px] ${colors.glow} blur-[120px] rounded-full pointer-events-none -mr-40 -mt-20 opacity-40`} />
             <div className={`absolute bottom-0 left-0 w-[400px] h-[400px] ${colors.glow} blur-[100px] rounded-full pointer-events-none -ml-20 -mb-20 opacity-20`} />

@@ -128,7 +128,7 @@ export function BotComparisonTable() {
                     {/* Encabezado */}
                     <div className="grid grid-cols-8 border-b border-white/10 bg-white/5">
                         <div className="p-4 sm:p-6 text-left m-auto w-full sticky left-0 z-20 bg-[#0a0a0a]/95 backdrop-blur-md border-r border-white/10">
-                            <h4 className="text-white font-bold text-lg mb-1">Elige tu Bot</h4>
+                            <h3 className="text-white font-bold text-lg mb-1">Elige tu Bot</h3>
                             <p className="text-xs text-text-muted">Compara características</p>
                         </div>
 
@@ -138,9 +138,9 @@ export function BotComparisonTable() {
                                     <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-brand-light to-brand"></div>
                                 )}
                                 <div className={`w-16 h-16 mx-auto rounded-full bg-gradient-to-br ${bot.color} flex items-center justify-center shadow-lg mb-3 overflow-hidden border-2 border-white/10 relative group-hover:scale-110 transition-transform duration-500`}>
-                                    <img src={bot.image} alt={bot.name} className="w-full h-full object-cover group-hover:brightness-125 transition-all duration-500" />
+                                    <img src={bot.image} alt={bot.name} className="w-full h-full object-cover group-hover:brightness-125 transition-all duration-500" width={400} height={300} loading="lazy" />
                                 </div>
-                                <h4 className="font-bold text-white text-sm sm:text-base leading-tight mb-1">{bot.name}</h4>
+                                <p className="font-bold text-white text-sm sm:text-base leading-tight mb-1">{bot.name}</p>
                                 <p className="text-xs text-brand-light font-mono bg-white/5 inline-block px-2 py-0.5 rounded uppercase">{bot.pair}</p>
                             </div>
                         ))}

@@ -29,6 +29,7 @@ export default function ComoFuncionaPage() {
                 </div>
 
                 <div className="space-y-12">
+                    <h2 className="sr-only">Pasos para empezar</h2>
                     {/* Step 1 */}
                     <div className="relative pl-8 md:pl-0">
                         <div className="hidden md:block absolute left-[50%] top-0 bottom-[-3rem] w-px bg-gradient-to-b from-brand to-transparent -translate-x-1/2"></div>

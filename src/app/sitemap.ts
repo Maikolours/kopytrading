@@ -16,13 +16,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         "/sobre-nosotros",
         "/contacto",
         "/faq",
+        "/resultados",
         "/legal/cookies",
         "/legal/privacidad",
         "/legal/riesgo",
         "/legal/terminos",
     ].map((route) => ({
         url: `${baseUrl}${route}`,
-        lastModified: new Date(),
+        lastModified: new Date("2026-09-13"),
         changeFrequency: "weekly" as const,
         priority: route === "" ? 1 : 0.8,
     }));

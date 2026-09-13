@@ -37,6 +37,7 @@ export default function ArticulosPage() {
                 </div>
 
                 {/* Grid con tarjetas compactas que entran completas en pantalla al hacer scroll */}
+                <h2 className="sr-only">Lista de artículos</h2>
                 <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6">
                     {ARTICLES.map((article, idx) => (
                         <Link key={idx} href={`/articulos/${article.slug}`} className="block group">
@@ -62,7 +63,7 @@ export default function ArticulosPage() {
                                 
                                 {article.image && (
                                     <div className="relative w-full h-32 sm:h-36 overflow-hidden bg-black/40">
-                                        <img src={article.image} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" />
+                                        <img src={article.image} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" width={600} height={400} loading="lazy" />
                                         <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-transparent to-transparent opacity-80" />
                                     </div>
                                 )}

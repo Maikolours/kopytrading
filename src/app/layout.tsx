@@ -18,8 +18,7 @@ const outfit = Outfit({ subsets: ["latin"] });
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  maximumScale: 5,
 };
 
 export const metadata: Metadata = {
@@ -96,6 +95,10 @@ export default function RootLayout({
     <html lang="es" className="dark">
       <head>
         <meta name="google-adsense-account" content="ca-pub-7217883854605334" />
+        <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <Script 
           async 
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7217883854605334"
@@ -115,49 +118,37 @@ export default function RootLayout({
             gtag('config', 'G-QWJ1GK9417');
           `}
         </Script>
-        {/* Schema.org JSON-LD para SEO */}
-        <Script id="json-ld" type="application/ld+json" strategy="afterInteractive">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@graph": [
-                {
-                  "@type": "Organization",
-                  "@id": "https://www.kopytrading.com/#organization",
-                  "name": "KopyTrading",
-                  "url": "https://www.kopytrading.com",
-                  "logo": "https://www.kopytrading.com/logo-kopytrading.png",
-                  "sameAs": [
-                    "https://t.me/Kpytrading",
-                    "https://www.facebook.com/profile.php?id=61591397057399"
-                  ],
-                  "description": "Plataforma de software algorítmico y bots cuantitativos para MetaTrader 5."
-                },
-                {
-                  "@type": "WebSite",
-                  "@id": "https://www.kopytrading.com/#website",
-                  "name": "KopyTrading",
-                  "url": "https://www.kopytrading.com",
-                  "description": "Automatiza tu trading en MetaTrader 5 con nuestros bots de alta precisión.",
-                  "publisher": {
-                    "@id": "https://www.kopytrading.com/#organization"
-                  }
-                },
-                {
-                  "@type": "SoftwareApplication",
-                  "name": "MAIKO PRO GOLD Engine",
-                  "applicationCategory": "FinanceApplication",
-                  "operatingSystem": "Windows (MT5)",
-                  "offers": {
-                    "@type": "Offer",
-                    "price": "100",
-                    "priceCurrency": "EUR"
-                  }
+        {/* Schema.org JSON-LD — SSR nativo para que Google lo vea en el HTML inicial */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Organization",
+                "@id": "https://www.kopytrading.com/#organization",
+                "name": "KopyTrading",
+                "url": "https://www.kopytrading.com",
+                "logo": "https://www.kopytrading.com/logo-kopytrading.png",
+                "sameAs": [
+                  "https://t.me/Kpytrading",
+                  "https://www.facebook.com/profile.php?id=61591397057399"
+                ],
+                "description": "Plataforma de software algorítmico y bots cuantitativos para MetaTrader 5."
+              },
+              {
+                "@type": "WebSite",
+                "@id": "https://www.kopytrading.com/#website",
+                "name": "KopyTrading",
+                "url": "https://www.kopytrading.com",
+                "description": "Automatiza tu trading en MetaTrader 5 con nuestros bots de alta precisión.",
+                "publisher": {
+                  "@id": "https://www.kopytrading.com/#organization"
                 }
-              ]
-            }
-          `}
-        </Script>
+              }
+            ]
+          }) }}
+        />
       </head>
       <body className={`${outfit.className} min-h-screen bg-black text-slate-50 antialiased selection:bg-brand/30 selection:text-white overflow-x-hidden`}>
 
@@ -165,8 +156,11 @@ export default function RootLayout({
           <MaintenanceMode />
         ) : (
           <Providers>
+            <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-4 focus:left-4 focus:p-4 focus:bg-brand focus:text-white focus:rounded-lg focus:text-sm">
+              Saltar al contenido principal
+            </a>
             <Navbar />
-            <main className="main-wrapper">
+            <main id="main-content" className="main-wrapper">
               {children}
             </main>
             <footer className="border-t border-white/5 pt-16 pb-12 px-4 sm:px-6 lg:px-8 bg-black main-wrapper">
@@ -176,7 +170,7 @@ export default function RootLayout({
                   <div className="col-span-1 sm:col-span-2 lg:col-span-1 space-y-6">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10 p-0.5 bg-black">
-                        <img src="/logo-kopytrading.png" alt="Logo" className="w-full h-full object-cover rounded-[0.5rem]" />
+                        <img src="/logo-kopytrading.png" alt="KopyTrading Logo" width={40} height={40} className="w-full h-full object-cover rounded-[0.5rem]" />
                       </div>
                       <span className="font-black text-lg sm:text-2xl tracking-tighter uppercase text-white">KopyTrading</span>
                     </div>

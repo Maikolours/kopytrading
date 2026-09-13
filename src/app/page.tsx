@@ -69,9 +69,9 @@ export default function Home() {
                   <div className="inline-flex items-center gap-2 bg-brand/10 border border-brand/30 text-brand-light text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest mb-2">
                     ⏳ PRÓXIMO LANZAMIENTO · SERIE MAIKO PRO
                   </div>
-                  <h3 className="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tighter mb-2">
+                  <div className="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tighter mb-2">
                     NUEVA GENERACIÓN <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light via-yellow-300 to-amber-400">INSTITUCIONAL M15</span>
-                  </h3>
+                  </div>
                   <p className="text-text-muted leading-relaxed max-w-2xl text-sm">
                     Estamos ultimando la fase de auditoría cuantitativa de <span className="text-amber-400 font-bold">MAIKO PRO GOLD REAL</span>. 
                     Mientras tanto, puedes probar el motor completo en cuenta demo con <span className="text-brand-light font-bold">MAIKO PRO GOLD DEMO por solo 1€</span> o consultar nuestras guías de operativa.

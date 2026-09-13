@@ -1,4 +1,5 @@
 import { FaqClient } from "./FaqClient";
+import { FAQS } from "./data";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,5 +9,23 @@ export const metadata: Metadata = {
 };
 
 export default function FAQPage() {
-    return <FaqClient />;
+    const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": FAQS.flatMap(section => section.items).map(item => ({
+            "@type": "Question",
+            "name": item.q,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": item.a
+            }
+        }))
+    };
+
+    return (
+        <>
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+            <FaqClient />
+        </>
+    );
 }

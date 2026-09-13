@@ -118,6 +118,7 @@ export function ResultsGallery() {
                     src={photo.url} 
                     alt={photo.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    width={800} height={600} loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity flex flex-col justify-end p-4">
                     <p className="text-white text-xs font-bold tracking-tight">{photo.title}</p>

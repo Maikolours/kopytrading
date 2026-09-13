@@ -142,6 +142,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
             </div>
 
             {/* Grid de bots */}
+            <h2 className="sr-only">Nuestros bots de trading</h2>
             {bots.length === 0 ? (
                 <div className="text-center py-20 px-4 glass-card border border-dashed border-white/10 rounded-[2rem]">
                     <h3 className="text-2xl font-black text-white mb-4 italic uppercase tracking-tighter opacity-40">No hay terminales disponibles</h3>
@@ -183,7 +184,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                     
                                     {/* Maiko Avatar */}
                                     <div className="absolute top-[-20px] right-[-20px] w-32 h-32 opacity-60 group-hover:opacity-100 transition-opacity duration-700 mix-blend-screen pointer-events-none z-0">
-                                        {colors.image && <img src={colors.image} alt="Maiko Warrior" className="w-full h-full object-cover rounded-full" />}
+                                        {colors.image && <img src={colors.image} alt="Maiko Warrior" className="w-full h-full object-cover rounded-full" width={400} height={300} loading="lazy" />}
                                     </div>
 
                                     <div className="flex justify-between items-start mb-3 relative z-10">

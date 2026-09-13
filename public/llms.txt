@@ -1,0 +1,20 @@
+# KopyTrading
+> Plataforma de trading algorítmico con bots cuantitativos para MetaTrader 5.
+
+## Páginas principales
+- https://www.kopytrading.com/
+- https://www.kopytrading.com/bots
+- https://www.kopytrading.com/como-funciona
+- https://www.kopytrading.com/resultados
+- https://www.kopytrading.com/articulos
+- https://www.kopytrading.com/faq
+
+## Contacto
+- https://www.kopytrading.com/contacto
+- https://www.kopytrading.com/sobre-nosotros
+
+## Legal
+- https://www.kopytrading.com/legal/privacidad
+- https://www.kopytrading.com/legal/terminos
+- https://www.kopytrading.com/legal/cookies
+- https://www.kopytrading.com/legal/riesgo

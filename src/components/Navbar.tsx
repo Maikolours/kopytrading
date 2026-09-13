@@ -51,7 +51,7 @@ export function Navbar() {
                 <div className="flex items-center gap-3 flex-shrink-0 z-20">
                     <Link href="/" className="flex items-center gap-3 flex-shrink-0 group pointer-events-auto">
                         <div className="w-11 h-11 sm:w-13 sm:h-13 rounded-xl overflow-hidden shadow-xl bg-black border border-white/10 transition-transform group-hover:scale-105">
-                            <img src="/logo-kopytrading.png" alt="Logo" className="w-full h-full object-cover" />
+                            <img src="/logo-kopytrading.png" alt="Logo" className="w-full h-full object-cover" width={40} height={40} />
                         </div>
                         <span className="font-black text-lg sm:text-2xl tracking-tighter uppercase text-white">KopyTrading</span>
                     </Link>
