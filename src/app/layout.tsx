@@ -103,14 +103,14 @@ export default function RootLayout({
           async 
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7217883854605334"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
         {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-QWJ1GK9417"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -118,7 +118,7 @@ export default function RootLayout({
             gtag('config', 'G-QWJ1GK9417');
           `}
         </Script>
-        {/* Schema.org JSON-LD — SSR nativo para que Google lo vea en el HTML inicial */}
+        {/* Schema.org JSON-LD — SSR nativo con BreadcrumbList, WebPage, SoftwareApplication, about y mentions */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify({
@@ -141,9 +141,79 @@ export default function RootLayout({
                 "@id": "https://www.kopytrading.com/#website",
                 "name": "KopyTrading",
                 "url": "https://www.kopytrading.com",
-                "description": "Automatiza tu trading en MetaTrader 5 con nuestros bots de alta precisión.",
+                "description": "Automatiza tu trading en MetaTrader 5 con nuestros bots de alta precisión en Oro (XAUUSD), Bitcoin y Forex.",
                 "publisher": {
                   "@id": "https://www.kopytrading.com/#organization"
+                }
+              },
+              {
+                "@type": "WebPage",
+                "@id": "https://www.kopytrading.com/#webpage",
+                "url": "https://www.kopytrading.com",
+                "name": "KopyTrading | Bots de Trading Avanzados para MetaTrader 5",
+                "description": "Bots de trading algorítmico de alta precisión para MetaTrader 5 en Oro (XAUUSD), Bitcoin y Forex.",
+                "isPartOf": {
+                  "@id": "https://www.kopytrading.com/#website"
+                },
+                "breadcrumb": {
+                  "@id": "https://www.kopytrading.com/#breadcrumb"
+                },
+                "about": [
+                  {
+                    "@type": "Thing",
+                    "name": "Algorithmic Trading",
+                    "sameAs": "https://en.wikipedia.org/wiki/Algorithmic_trading"
+                  },
+                  {
+                    "@type": "Thing",
+                    "name": "MetaTrader 5",
+                    "sameAs": "https://en.wikipedia.org/wiki/MetaTrader_5"
+                  },
+                  {
+                    "@type": "Thing",
+                    "name": "Expert Advisors"
+                  }
+                ],
+                "mentions": [
+                  {
+                    "@type": "Thing",
+                    "name": "XAUUSD"
+                  },
+                  {
+                    "@type": "Thing",
+                    "name": "Bitcoin"
+                  },
+                  {
+                    "@type": "Thing",
+                    "name": "Automated Trading Bots"
+                  }
+                ]
+              },
+              {
+                "@type": "BreadcrumbList",
+                "@id": "https://www.kopytrading.com/#breadcrumb",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Inicio",
+                    "item": "https://www.kopytrading.com"
+                  }
+                ]
+              },
+              {
+                "@type": "SoftwareApplication",
+                "@id": "https://www.kopytrading.com/#software",
+                "name": "KopyTrading MT5 Expert Advisors",
+                "applicationCategory": "FinanceApplication",
+                "operatingSystem": "Windows, MetaTrader 5",
+                "url": "https://www.kopytrading.com/bots",
+                "description": "Sistemas de trading automático cuantitativo para MetaTrader 5.",
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "EUR",
+                  "lowPrice": "0",
+                  "highPrice": "299"
                 }
               }
             ]
@@ -170,7 +240,7 @@ export default function RootLayout({
                   <div className="col-span-1 sm:col-span-2 lg:col-span-1 space-y-6">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10 p-0.5 bg-black">
-                        <img src="/logo-kopytrading.png" alt="KopyTrading Logo" width={40} height={40} className="w-full h-full object-cover rounded-[0.5rem]" />
+                        <img src="/logo-kopytrading.png" alt="KopyTrading Logo" width={40} height={40} loading="lazy" className="w-full h-full object-cover rounded-[0.5rem]" />
                       </div>
                       <span className="font-black text-lg sm:text-2xl tracking-tighter uppercase text-white">KopyTrading</span>
                     </div>
