@@ -62,6 +62,7 @@ export function Navbar() {
                     <Link href="/bots" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/bots" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Marketplace</Link>
                     <Link href="/resultados" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/resultados" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Resultados</Link>
                     <Link href="/activos" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/activos" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Activos</Link>
+                    <Link href="/calculadora-riesgo" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/calculadora-riesgo" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Calculadora MT5</Link>
                     <Link href="/como-funciona" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/como-funciona" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Cómo Funciona</Link>
                     <Link href="/articulos" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/articulos" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Blog</Link>
                     <Link href="/sobre-nosotros" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/sobre-nosotros" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Nosotros</Link>
@@ -147,6 +148,13 @@ export function Navbar() {
                         className={`text-base sm:text-lg font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname === "/activos" ? "text-brand-light" : "text-white/80 hover:text-white"}`}
                     >
                         Activos
+                    </Link>
+                    <Link 
+                        onClick={() => setIsMenuOpen(false)} 
+                        href="/calculadora-riesgo" 
+                        className={`text-base sm:text-lg font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname === "/calculadora-riesgo" ? "text-brand-light" : "text-white/80 hover:text-white"}`}
+                    >
+                        Calculadora MT5
                     </Link>
                     <Link 
                         onClick={() => setIsMenuOpen(false)} 

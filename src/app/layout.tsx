@@ -265,10 +265,11 @@ export default function RootLayout({
                   <div className="space-y-4">
                     <h4 className="text-white font-bold text-sm uppercase tracking-widest">Recursos</h4>
                     <ul className="space-y-2 text-xs text-text-muted">
+                      <li><Link href="/calculadora-riesgo" className="hover:text-accent transition-colors font-semibold text-brand-light">Calculadora de Riesgo MT5</Link></li>
                       <li><Link href="/articulos" className="hover:text-accent transition-colors">Blog & Análisis</Link></li>
                       <li><Link href="/activos" className="hover:text-accent transition-colors">Activos Disponibles</Link></li>
                       <li><Link href="/faq" className="hover:text-accent transition-colors">Preguntas Frecuentes</Link></li>
-                      <li><Link href="/instalar" className="hover:text-accent transition-colors">Guía de Instalación</Link></li>
+                      <li><Link href="/instalar" className="hover:text-accent transition-colors font-semibold text-accent/80">Guía de Instalación</Link></li>
                     </ul>
                   </div>
 
