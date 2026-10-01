@@ -13,6 +13,8 @@ export function Navbar() {
     const isLoggedIn = status === "authenticated";
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
     // Prevent scroll when menu is open
     useEffect(() => {
         if (isMenuOpen) {
@@ -39,6 +41,7 @@ export function Navbar() {
     // Close menu when route changes
     useEffect(() => {
         setIsMenuOpen(false);
+        setIsDropdownOpen(false);
     }, [pathname]);
 
     return (
@@ -57,13 +60,84 @@ export function Navbar() {
                     </Link>
                 </div>
 
-                {/* Desktop Nav - Visible on MD+ (768px+) so laptops and desktops always see the full horizontal menu */}
-                <nav className="hidden md:flex items-center gap-3.5 lg:gap-5 xl:gap-6 ml-4 lg:ml-6">
-                    <Link href="/bots" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/bots" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Marketplace</Link>
-                    <Link href="/resultados" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/resultados" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Resultados</Link>
-                    <Link href="/activos" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/activos" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Activos</Link>
-                    <Link href="/calculadora-riesgo" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/calculadora-riesgo" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Calculadora MT5</Link>
-                    <Link href="/como-funciona" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/como-funciona" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Cómo Funciona</Link>
+                {/* Desktop Nav */}
+                <nav className="hidden md:flex items-center gap-4 lg:gap-6 xl:gap-7 ml-4 lg:ml-6">
+                    
+                    {/* MARKETPLACE DROPDOWN MENU */}
+                    <div 
+                        className="relative"
+                        onMouseEnter={() => setIsDropdownOpen(true)}
+                        onMouseLeave={() => setIsDropdownOpen(false)}
+                    >
+                        <button 
+                            type="button"
+                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                            className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors flex items-center gap-1 cursor-pointer py-2 ${
+                                pathname === "/bots" || pathname === "/resultados" || pathname === "/activos" || pathname === "/calculadora-riesgo" || pathname === "/como-funciona"
+                                    ? "text-brand-light" 
+                                    : "text-white/70 hover:text-white"
+                            }`}
+                        >
+                            <span>Marketplace</span>
+                            <svg className={`w-3 h-3 transition-transform duration-200 ${isDropdownOpen ? "rotate-180 text-brand-light" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        {/* Dropdown Panel */}
+                        {isDropdownOpen && (
+                            <div className="absolute top-full left-0 w-56 pt-2 z-[100] animate-in fade-in slide-in-from-top-2 duration-150">
+                                <div className="bg-[#0b0f19]/95 backdrop-blur-2xl border border-white/15 rounded-xl shadow-2xl p-2 flex flex-col gap-1 overflow-hidden">
+                                    <Link 
+                                        href="/bots" 
+                                        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                                            pathname === "/bots" ? "bg-brand/20 text-brand-light font-black" : "text-white/80 hover:text-white hover:bg-white/10"
+                                        }`}
+                                    >
+                                        <span className="text-base">🤖</span>
+                                        <span>Catálogo de Bots</span>
+                                    </Link>
+                                    <Link 
+                                        href="/resultados" 
+                                        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                                            pathname === "/resultados" ? "bg-brand/20 text-brand-light font-black" : "text-white/80 hover:text-white hover:bg-white/10"
+                                        }`}
+                                    >
+                                        <span className="text-base">📈</span>
+                                        <span>Resultados Reales</span>
+                                    </Link>
+                                    <Link 
+                                        href="/como-funciona" 
+                                        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                                            pathname === "/como-funciona" ? "bg-brand/20 text-brand-light font-black" : "text-white/80 hover:text-white hover:bg-white/10"
+                                        }`}
+                                    >
+                                        <span className="text-base">⚙️</span>
+                                        <span>Cómo Funciona</span>
+                                    </Link>
+                                    <Link 
+                                        href="/calculadora-riesgo" 
+                                        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                                            pathname === "/calculadora-riesgo" ? "bg-brand/20 text-brand-light font-black" : "text-white/80 hover:text-white hover:bg-white/10"
+                                        }`}
+                                    >
+                                        <span className="text-base">🧮</span>
+                                        <span>Calculadora MT5</span>
+                                    </Link>
+                                    <Link 
+                                        href="/activos" 
+                                        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                                            pathname === "/activos" ? "bg-brand/20 text-brand-light font-black" : "text-white/80 hover:text-white hover:bg-white/10"
+                                        }`}
+                                    >
+                                        <span className="text-base">🪙</span>
+                                        <span>Nuestros Activos</span>
+                                    </Link>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
                     <Link href="/articulos" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/articulos" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Blog</Link>
                     <Link href="/sobre-nosotros" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/sobre-nosotros" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Nosotros</Link>
                     <Link href="/faq" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/faq" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>FAQ</Link>
