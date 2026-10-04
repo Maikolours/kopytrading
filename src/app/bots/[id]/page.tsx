@@ -137,7 +137,42 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             "@type": "Offer",
                             "price": bot.price || 100,
                             "priceCurrency": "EUR",
-                            "availability": "https://schema.org/InStock"
+                            "availability": "https://schema.org/InStock",
+                            "url": productUrl,
+                            "priceValidUntil": "2027-12-31",
+                            "shippingDetails": {
+                                "@type": "OfferShippingDetails",
+                                "shippingRate": {
+                                    "@type": "MonetaryAmount",
+                                    "value": "0.00",
+                                    "currency": "EUR"
+                                },
+                                "shippingDestination": {
+                                    "@type": "DefinedRegion",
+                                    "addressCountry": "ES"
+                                },
+                                "deliveryTime": {
+                                    "@type": "ShippingDeliveryTime",
+                                    "handlingTime": {
+                                        "@type": "QuantitativeValue",
+                                        "minValue": 0,
+                                        "maxValue": 0,
+                                        "unitCode": "DAY"
+                                    },
+                                    "transitTime": {
+                                        "@type": "QuantitativeValue",
+                                        "minValue": 0,
+                                        "maxValue": 0,
+                                        "unitCode": "DAY"
+                                    }
+                                }
+                            },
+                            "hasMerchantReturnPolicy": {
+                                "@type": "MerchantReturnPolicy",
+                                "applicableCountry": "ES",
+                                "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+                                "merchantReturnDays": 0
+                            }
                         }
                     })
                 }}
