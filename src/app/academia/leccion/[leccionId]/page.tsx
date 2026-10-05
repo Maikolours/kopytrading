@@ -22,6 +22,7 @@ import InteractiveQuiz from "@/components/academia/InteractiveQuiz";
 import LessonTextPage from "@/components/academia/LessonTextPage";
 import ModuleCompletedModal from "@/components/academia/ModuleCompletedModal";
 import FreeTrialClaimCard from "@/components/academia/FreeTrialClaimCard";
+import EmailGateModal from "@/components/academia/EmailGateModal";
 
 export default function LessonPlayerPage() {
   const params = useParams();
@@ -33,12 +34,20 @@ export default function LessonPlayerPage() {
   const [completedModuleName, setCompletedModuleName] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userRole, setUserRole] = useState<string>("USER");
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [showEmailGate, setShowEmailGate] = useState(false);
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("kopytrading_academia_completed");
-      if (saved) {
-        setCompletedLessonIds(JSON.parse(saved));
+      const savedCompleted = localStorage.getItem("kopytrading_academia_completed");
+      if (savedCompleted) {
+        setCompletedLessonIds(JSON.parse(savedCompleted));
+      }
+      const savedEmail = localStorage.getItem("kopytrading_user_email");
+      if (savedEmail) {
+        setUserEmail(savedEmail);
+      } else {
+        setShowEmailGate(true);
       }
     } catch (e) {
       console.error(e);
@@ -49,7 +58,7 @@ export default function LessonPlayerPage() {
 
   if (!lessonData) {
     return (
-      <div className="min-h-screen bg-[#070A10] text-white flex flex-col items-center justify-center p-6 text-center">
+      <div className="min-h-screen bg-[#070A10] text-white flex flex-col items-center justify-center p-6 text-center pt-24">
         <h1 className="text-2xl font-bold mb-4">Lección no encontrada</h1>
         <Link
           href="/academia"
@@ -116,9 +125,9 @@ export default function LessonPlayerPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070A10] text-white flex flex-col lg:flex-row font-sans selection:bg-amber-400 selection:text-slate-950">
+    <div className="min-h-screen bg-[#070A10] text-white flex flex-col lg:flex-row font-sans selection:bg-amber-400 selection:text-slate-950 pt-16 md:pt-20">
       {/* Mobile Top Header */}
-      <div className="lg:hidden p-4 bg-[#0A0D14] border-b border-slate-800 flex items-center justify-between sticky top-0 z-30">
+      <div className="lg:hidden p-4 bg-[#0A0D14] border-b border-slate-800 flex items-center justify-between sticky top-16 z-30">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300"
@@ -148,9 +157,9 @@ export default function LessonPlayerPage() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-h-screen overflow-y-auto">
-        {/* Top Navbar Header */}
-        <header className="hidden lg:flex items-center justify-between px-8 py-4 bg-[#0A0D14] border-b border-slate-800/80">
+      <div className="flex-1 flex flex-col min-h-[calc(100vh-80px)] overflow-y-auto">
+        {/* Top Breadcrumb Bar */}
+        <header className="hidden lg:flex items-center justify-between px-8 py-3.5 bg-[#0A0D14] border-b border-slate-800/80">
           <div className="flex items-center gap-3 text-xs font-mono text-slate-400">
             <Link href="/academia" className="hover:text-amber-400 transition-colors">
               ACADEMIA
@@ -170,22 +179,22 @@ export default function LessonPlayerPage() {
         </header>
 
         {/* Content Container */}
-        <main className="flex-1 max-w-4xl w-full mx-auto p-6 md:p-10 space-y-8">
-          {/* Locked Guard Screen */}
+        <main className="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6 space-y-6">
+          {/* Locked Guard Screen (Optimized height and margins) */}
           {isAccessBlocked ? (
-            <div className="rounded-3xl bg-[#0F1422] border border-amber-500/30 p-8 md:p-12 text-center space-y-6 shadow-2xl my-12">
-              <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-center mx-auto text-amber-400">
-                {isVipLocked ? <Crown className="w-8 h-8" /> : <Lock className="w-8 h-8" />}
+            <div className="rounded-2xl bg-[#0F1422] border border-amber-500/30 p-6 md:p-8 text-center space-y-4 shadow-xl max-w-xl mx-auto my-4">
+              <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-center mx-auto text-amber-400">
+                {isVipLocked ? <Crown className="w-7 h-7" /> : <Lock className="w-7 h-7" />}
               </div>
 
-              <div className="max-w-md mx-auto space-y-2">
-                <span className="px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-400 font-mono text-xs font-bold uppercase">
+              <div className="space-y-1.5">
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-400 font-mono text-[10px] font-bold uppercase">
                   {isVipLocked ? "CONTENIDO VIP RESTRINGIDO" : "LECCIÓN BLOQUEADA"}
                 </span>
-                <h2 className="text-2xl md:text-3xl font-extrabold text-white">
+                <h2 className="text-xl md:text-2xl font-extrabold text-white">
                   {isVipLocked ? "Módulo Exclusivo para Usuarios del Bot" : "Debes avanzar en orden secuencial"}
                 </h2>
-                <p className="text-sm text-slate-300 leading-relaxed">
+                <p className="text-xs md:text-sm text-slate-300 leading-relaxed">
                   {isVipLocked
                     ? "Este módulo técnico de puesta en marcha estará disponible para usuarios que adquieran o descarguen un bot oficialmente."
                     : "Para garantizar un aprendizaje veraz y sólido, no es posible saltar lecciones. Completa la lección anterior para desbloquear esta parte."}
@@ -195,7 +204,7 @@ export default function LessonPlayerPage() {
               <div className="pt-2">
                 <Link
                   href="/academia"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-amber-500/20 transition-all"
+                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow-lg shadow-amber-500/20 transition-all"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   Ir al Menú de Lecciones
@@ -205,7 +214,7 @@ export default function LessonPlayerPage() {
           ) : (
             <>
               {/* Lesson Header */}
-              <div className="space-y-2 border-b border-slate-800/80 pb-6">
+              <div className="space-y-2 border-b border-slate-800/80 pb-4">
                 <div className="flex items-center gap-3">
                   <span className="px-2.5 py-0.5 rounded bg-amber-400/10 border border-amber-400/30 text-amber-400 font-mono text-[10px] font-bold uppercase">
                     MÓDULO {currentModule.moduleNumberStr}
@@ -216,11 +225,11 @@ export default function LessonPlayerPage() {
                   </span>
                 </div>
 
-                <h1 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight">
+                <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
                   {lesson.title}
                 </h1>
                 {lesson.subtitle && (
-                  <p className="text-slate-400 text-sm md:text-base">{lesson.subtitle}</p>
+                  <p className="text-slate-400 text-xs md:text-sm">{lesson.subtitle}</p>
                 )}
               </div>
 
@@ -234,7 +243,7 @@ export default function LessonPlayerPage() {
 
               {/* Interactive Quiz Component */}
               {lesson.quiz && (
-                <div className="pt-4">
+                <div className="pt-2">
                   <InteractiveQuiz
                     quiz={lesson.quiz}
                     onCorrectAnswer={markLessonAsComplete}
@@ -244,17 +253,17 @@ export default function LessonPlayerPage() {
 
               {/* Special Lead Magnet / Free Trial Card */}
               {lesson.isFreeTrialUnlocker && (
-                <div className="pt-6">
-                  <FreeTrialClaimCard />
+                <div className="pt-4">
+                  <FreeTrialClaimCard userEmail={userEmail || undefined} />
                 </div>
               )}
 
               {/* Bottom Lesson Footer Controls */}
-              <div className="pt-8 border-t border-slate-800/80 space-y-4">
+              <div className="pt-6 border-t border-slate-800/80 space-y-3">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                   <Link
                     href="/academia"
-                    className="w-full sm:w-auto px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-300 flex items-center justify-center gap-2 transition-colors"
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-300 flex items-center justify-center gap-2 transition-colors"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     Menú de Lecciones
@@ -265,7 +274,7 @@ export default function LessonPlayerPage() {
                       markLessonAsComplete();
                       handleNextLesson();
                     }}
-                    className={`w-full sm:w-auto px-6 py-3.5 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 transition-all shadow-lg ${
+                    className={`w-full sm:w-auto px-6 py-3 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 transition-all shadow-lg ${
                       isLessonCompleted
                         ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20"
                         : "bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 shadow-amber-500/20"
@@ -277,7 +286,7 @@ export default function LessonPlayerPage() {
                   </button>
                 </div>
 
-                <p className="text-[11px] font-mono text-slate-500 text-center">
+                <p className="text-[10px] font-mono text-slate-500 text-center">
                   Completa las lecciones en orden para desbloquear progresivamente los siguientes módulos.
                 </p>
               </div>
@@ -285,7 +294,7 @@ export default function LessonPlayerPage() {
           )}
 
           {/* Disclaimer Footer */}
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-900 text-[11px] text-slate-500 space-y-1">
+          <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-900 text-[11px] text-slate-500 space-y-1">
             <div className="flex items-center gap-1.5 font-bold text-slate-400">
               <ShieldAlert className="w-3.5 h-3.5 text-amber-500" />
               Aviso de Riesgo
@@ -303,6 +312,15 @@ export default function LessonPlayerPage() {
         moduleTitle={completedModuleName}
         completedLessonsCount={completedLessonIds.length}
         onClose={() => setShowModuleModal(false)}
+      />
+
+      {/* Email Gate Modal */}
+      <EmailGateModal
+        isOpen={showEmailGate}
+        onSuccess={(email) => {
+          setUserEmail(email);
+          setShowEmailGate(false);
+        }}
       />
     </div>
   );

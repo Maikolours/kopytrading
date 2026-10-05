@@ -90,19 +90,31 @@ export const ACADEMIA_MODULES: Module[] = [
             totalPages: 2,
             title: "¿Qué aprenderás en este curso?",
             content: [
-              "A lo largo de los módulos aprenderás a entender qué son las divisas y el oro, cómo se gestiona el capital, cómo funcionan los bots en MetaTrader y cómo mantener la calma cuando hay semanas en números rojos.",
+              "A lo largo de los módulos aprenderás a entender qué son las divisas y el oro, cómo se gestiona el capital, cómo funcionan los bots en MetaTrader y cómo mantener la calma cuando hay semanas de alta volatilidad.",
               "Al completar los módulos gratuitos, recibirás un pase especial para probar nuestros bots en cuenta demo de forma 100% gratuita."
             ]
           }
-        ]
+        ],
+        quiz: {
+          id: "quiz-m00-l01",
+          badgeText: "EVALUACIÓN INICIAL",
+          question: "¿Cuál es la función real de un bot de trading algorítmico?",
+          options: [
+            { id: "A", text: "Garantizar rentabilidades fijas todos los días sin ningún tipo de riesgo" },
+            { id: "B", text: "Ejecutar reglas matemáticas y de gestión de riesgo programadas sin caer en emociones humanas" },
+            { id: "C", text: "Predecir las noticias macroeconómicas antes de que sucedan" }
+          ],
+          correctAnswerId: "B",
+          feedbackExplanation: "¡Correcto! Un bot de trading no es magia; es una herramienta informática que ejecuta reglas matemáticas con disciplina perfecta y sin caer en el miedo o la codicia."
+        }
       },
       {
         id: "m00-l02",
         moduleId: "modulo-00",
         lessonNumber: 2,
         globalIndex: 2,
-        title: "Expectativas Reales y Semanas Rojas",
-        subtitle: "Cómo reaccionar ante la volatilidad",
+        title: "Expectativas Reales y Semanas de Volatilidad",
+        subtitle: "Cómo reaccionar ante los movimientos del mercado",
         durationMinutes: 5,
         isVip: false,
         pages: [
@@ -112,21 +124,21 @@ export const ACADEMIA_MODULES: Module[] = [
             title: "Las rachas negativas son inevitables",
             content: [
               "En el trading no existe ningún sistema con un 100% de operaciones ganadoras. Los mercados financieros se mueven por eventos macroeconómicos, noticias y liquidez que cambian de un momento a otro.",
-              "Un bot profesional está diseñado para ganar puntos en las rachas favorables y limitar las pérdidas cuando el mercado está turbulento. Lo importante es medir el rendimiento en meses, nunca en horas ni en días."
+              "Un bot profesional está diseñado para ganar puntos en las rachas favorables y limitar las pérdidas cuando el mercado está turbulento. Lo importante es medir el rendimiento en ventanas de varios meses, nunca en horas ni en días."
             ]
           }
         ],
         quiz: {
           id: "quiz-m00-l02",
           badgeText: "PRACTICA",
-          question: "Tu bot lleva una semana en números rojos por alta volatilidad. ¿Qué es lo más sensato?",
+          question: "Si el mercado presenta alta volatilidad y tu cuenta experimenta un flotante negativo temporal, ¿cuál es la conducta más sensata?",
           options: [
-            { id: "A", text: "Apagarlo y cambiar toda la configuración de inmediato" },
-            { id: "B", text: "Entender que las rachas negativas son normales y mantener tu plan de gestión de riesgo" },
-            { id: "C", text: "Subir el lotaje para intentar recuperar lo acumulado rápidamente" }
+            { id: "A", text: "Apagar el bot presa del pánico y cambiar los parámetros sin criterio" },
+            { id: "B", text: "Mantener la calma, evaluar el rendimiento en plazos de varios meses y respetar la gestión de riesgo calibrada" },
+            { id: "C", text: "Subir el lotaje para intentar recuperar las pérdidas rápidamente" }
           ],
           correctAnswerId: "B",
-          feedbackExplanation: "¡Correcto! Las semanas rojas son parte totalmente normal del trading. Lo crucial es mantener tu gestión de riesgo inalterada y evaluar los resultados a largo plazo."
+          feedbackExplanation: "¡Excelente! El trading algorítmico se evalúa en plazos de semanas y meses. Respetar la gestión de riesgo inalterada es la clave para la supervivencia del capital."
         }
       }
     ]
@@ -154,9 +166,9 @@ export const ACADEMIA_MODULES: Module[] = [
             totalPages: 2,
             title: "La idea base del trading",
             content: [
-              "Vamos a empezar por lo más básico, sin prisa. El trading es, en palabras sencillas, comprar algo a un precio y venderlo cuando su valor cambia para quedarte con la diferencia.",
+              "Vamos a empezar por lo más básico, sin prisa. El trading es, en palabras sencillas, comprar o vender un activo financiero cuando su valor cambia para aprovechar la diferencia a tu favor.",
               "Piénsalo como un puesto de fruta. Si compras naranjas a 10 y las vendes a 13, obtienes 3 de rendimiento. El trading es la misma idea, pero en lugar de fruta, se compran y venden monedas de países (como el Dólar o el Euro) o activos de refugio como el Oro.",
-              "No necesitas tener los billetes físicamente. Todo se realiza desde una pantalla con un programa en tu teléfono o computadora."
+              "No necesitas tener las monedas físicamente. Todo se realiza desde una pantalla con un programa en tu teléfono o computadora."
             ],
             keyConceptCard: {
               tag: "EJEMPLO PRÁCTICO",
@@ -177,7 +189,19 @@ export const ACADEMIA_MODULES: Module[] = [
               "Los robots de trading monitorean estos pares buscando patrones repetitivos basados en indicadores matemáticos como el RSI, medias móviles o análisis bayesiano."
             ]
           }
-        ]
+        ],
+        quiz: {
+          id: "quiz-m01-l01",
+          badgeText: "EVALUACIÓN",
+          question: "¿Cómo se genera un resultado positivo al comerciar con divisas u oro en el mercado?",
+          options: [
+            { id: "A", text: "Comprando o vendiendo un activo y aprovechando la variación a tu favor entre el precio de entrada y salida" },
+            { id: "B", text: "Esperando a que el broker te pague intereses fijos anuales" },
+            { id: "C", text: "Comprando monedas físicas y guardándolas en un banco" }
+          ],
+          correctAnswerId: "A",
+          feedbackExplanation: "¡Correcto! El trading consiste en aprovechar las variaciones de precio en los activos financieros mediante plataformas digitales como MetaTrader."
+        }
       },
       {
         id: "m01-l02",
@@ -202,14 +226,14 @@ export const ACADEMIA_MODULES: Module[] = [
         quiz: {
           id: "quiz-m01-l02",
           badgeText: "PRACTICA",
-          question: "¿Por qué el Oro (XAUUSD) requiere parámetros de riesgo específicos en los bots?",
+          question: "¿Por qué el Oro (XAUUSD) es un activo tan apreciado para operar con bots pero exige parámetros estrictos?",
           options: [
-            { id: "A", text: "Porque el Oro nunca cambia de precio" },
-            { id: "B", text: "Porque es un activo de alta volatilidad con impulsos fuertes que requieren lotajes controlados" },
-            { id: "C", text: "Porque los bots no pueden leer el gráfico del Oro" }
+            { id: "A", text: "Porque el precio del Oro jamás cambia de valor" },
+            { id: "B", text: "Porque ofrece impulsos y volatilidad muy amplios, lo que exige ajustar el lotaje para proteger el saldo" },
+            { id: "C", text: "Porque MetaTrader solo permite instalar bots en el gráfico del Oro" }
           ],
           correctAnswerId: "B",
-          feedbackExplanation: "¡Excelente! El Oro se mueve con mucha fuerza, por lo que ajustar el lotaje y usar Stop Loss de protección es fundamental para cuidar el capital."
+          feedbackExplanation: "¡Excelente! El Oro realiza movimientos limpios pero muy potentes, por lo que ajustar el volumen (lotaje) es esencial para no sobrecargar la cuenta."
         }
       }
     ]
@@ -242,7 +266,19 @@ export const ACADEMIA_MODULES: Module[] = [
               "La regla de oro es mantener un volumen moderado para que la cuenta pueda respirar durante los retrocesos del mercado."
             ]
           }
-        ]
+        ],
+        quiz: {
+          id: "quiz-m02-l01",
+          badgeText: "EVALUACIÓN DE RIESGO",
+          question: "¿Qué significa 'sobrelotarse' y por qué representa el principal peligro para un principiante?",
+          options: [
+            { id: "A", text: "Configurar el bot en el gráfico equivocado" },
+            { id: "B", text: "Usar un volumen de lote demasiado alto para el saldo de la cuenta, dejando sin margen de respiración al capital" },
+            { id: "C", text: "Tener la computadora encendida durante la noche" }
+          ],
+          correctAnswerId: "B",
+          feedbackExplanation: "¡Correcto! El sobrelotaje consumirá cualquier cuenta ante un retroceso normal del mercado. Conservar lotajes moderados garantiza consistencia."
+        }
       },
       {
         id: "m02-l02",
@@ -266,15 +302,15 @@ export const ACADEMIA_MODULES: Module[] = [
         ],
         quiz: {
           id: "quiz-m02-l02",
-          badgeText: "RECOMPENSA",
-          question: "¿Qué debes hacer si observas un flotante negativo temporal dentro del rango normal recomendado?",
+          badgeText: "CONCEPTOS TÉCNICOS",
+          question: "¿Qué es el 'Drawdown' en la operativa de un algoritmo de trading?",
           options: [
-            { id: "A", text: "Cerrar todas las operaciones a mano en pánico" },
-            { id: "B", text: "Mantener la calma, confiar en el bot y respetar el margen de flotante calibrado" },
-            { id: "C", text: "Duplicar las operaciones para salir del flotante" }
+            { id: "A", text: "El beneficio total retirado al banco al final del mes" },
+            { id: "B", text: "La diferencia entre el pico máximo del saldo y la caída temporal producida por operaciones abiertas" },
+            { id: "C", text: "La comisión que cobra el broker por cada operación" }
           ],
           correctAnswerId: "B",
-          feedbackExplanation: "¡Perfecto! El flotante es parte del proceso de maduración de las posiciones. Respetar el margen calibrado es lo que mantiene la cuenta protegida."
+          feedbackExplanation: "¡Excelente! El Drawdown mide la fluctuación o flotante temporal de la cuenta mientras las posiciones están en curso antes de cerrarse."
         }
       },
       {
@@ -348,7 +384,19 @@ export const ACADEMIA_MODULES: Module[] = [
               "MetaTrader es el programa donde rueda el bot. Una VPS (Servidor Privado Virtual) es una computadora en la nube que permite que el bot funcione 24 horas al día sin necesidad de dejar tu ordenador personal encendido."
             ]
           }
-        ]
+        ],
+        quiz: {
+          id: "quiz-m03-l02",
+          badgeText: "INFRAESTRUCTURA TÉCNICA",
+          question: "¿Por qué es recomendable ejecutar un bot en una VPS (Servidor Privado Virtual) en lugar de tu PC convencional?",
+          options: [
+            { id: "A", text: "Porque la VPS garantiza que todas las operaciones sean ganadoras" },
+            { id: "B", text: "Porque la VPS funciona 24/7 con baja latencia y sin depender de que tu PC esté encendido o sufra cortes de luz e internet" },
+            { id: "C", text: "Porque MetaTrader no se puede instalar en computadoras de escritorio" }
+          ],
+          correctAnswerId: "B",
+          feedbackExplanation: "¡Correcto! La VPS proporciona continuidad, estabilidad de conexión y velocidad de ejecución ininterrumpida para tus bots."
+        }
       }
     ]
   },
