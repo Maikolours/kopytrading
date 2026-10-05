@@ -51,6 +51,11 @@ export default function LessonPlayerPage() {
       } else {
         setShowEmailGate(true);
       }
+      const savedRole = localStorage.getItem("kopytrading_user_role");
+      const trialClaimed = localStorage.getItem("kopytrading_trial_claimed");
+      if (savedRole === "VIP" || trialClaimed === "true") {
+        setUserRole("VIP");
+      }
     } catch (e) {
       console.error(e);
     }

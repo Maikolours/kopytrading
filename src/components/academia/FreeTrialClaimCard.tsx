@@ -16,6 +16,13 @@ export default function FreeTrialClaimCard({ userEmail }: FreeTrialClaimCardProp
     e.preventDefault();
     if (email) {
       setIsSubmitted(true);
+      try {
+        localStorage.setItem("kopytrading_user_email", email);
+        localStorage.setItem("kopytrading_user_role", "VIP");
+        localStorage.setItem("kopytrading_trial_claimed", "true");
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
 
