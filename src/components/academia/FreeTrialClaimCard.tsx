@@ -6,23 +6,57 @@ import Link from "next/link";
 
 interface FreeTrialClaimCardProps {
   userEmail?: string;
+  onTrialClaimed?: () => void;
 }
 
-export default function FreeTrialClaimCard({ userEmail }: FreeTrialClaimCardProps) {
+export default function FreeTrialClaimCard({ userEmail, onTrialClaimed }: FreeTrialClaimCardProps) {
   const [email, setEmail] = useState(userEmail || "");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
-      setIsSubmitted(true);
-      try {
-        localStorage.setItem("kopytrading_user_email", email);
-        localStorage.setItem("kopytrading_user_role", "VIP");
-        localStorage.setItem("kopytrading_trial_claimed", "true");
-      } catch (err) {
-        console.error(err);
+    if (!email) return;
+
+    setIsLoading(true);
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/trial", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, botId: "BAYESIAN-PRO" })
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setIsSubmitted(true);
+        try {
+          localStorage.setItem("kopytrading_user_email", email);
+          localStorage.setItem("kopytrading_user_role", "VIP");
+          localStorage.setItem("kopytrading_trial_claimed", "true");
+        } catch (err) {
+          console.error(err);
+        }
+        onTrialClaimed?.();
+      } else {
+        // If already active or error, still grant VIP access if trial was existing
+        if (data.error && data.error.includes("ya tienes")) {
+          setIsSubmitted(true);
+          localStorage.setItem("kopytrading_user_role", "VIP");
+          localStorage.setItem("kopytrading_trial_claimed", "true");
+          onTrialClaimed?.();
+        } else {
+          setErrorMsg(data.error || "No se pudo activar la prueba. Inténtalo de nuevo.");
+        }
       }
+    } catch (err) {
+      console.error(err);
+      setErrorMsg("Error de conexión. Inténtalo más tarde.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -55,17 +89,23 @@ export default function FreeTrialClaimCard({ userEmail }: FreeTrialClaimCardProp
           <div className="p-5 rounded-2xl bg-emerald-950/60 border border-emerald-500/60 text-emerald-300 space-y-3 animate-fade-in">
             <div className="flex items-center justify-center gap-2 font-bold text-lg">
               <CheckCircle2 className="w-6 h-6 text-emerald-400" />
-              ¡Prueba Gratuita Solicitada!
+              ¡Prueba Gratuita Activada!
             </div>
             <p className="text-xs md:text-sm text-slate-300">
-              Hemos registrado tu correo <strong className="text-white">{email}</strong>. Revisa tu bandeja de entrada donde recibirás las credenciales y el instalador para tu cuenta de prueba.
+              Hemos registrado y activado tu cuenta para <strong className="text-white">{email}</strong>. Te hemos enviado un correo con tus credenciales e instalador de MetaTrader 5. Además, ¡tus **Módulos VIP** ya están desbloqueados!
             </p>
-            <div className="pt-2">
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/dashboard"
+                className="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs hover:bg-amber-400 transition-colors shadow-md shadow-amber-500/20"
+              >
+                Ir a Mi Panel a Descargar el Bot →
+              </Link>
               <Link
                 href="/bots"
-                className="inline-flex items-center gap-2 text-xs font-bold text-amber-400 hover:text-amber-300 underline"
+                className="text-xs font-bold text-slate-400 hover:text-white underline"
               >
-                Ver catálogo de bots disponibles <ArrowRight className="w-3.5 h-3.5" />
+                Ver catálogo completo
               </Link>
             </div>
           </div>
@@ -85,12 +125,19 @@ export default function FreeTrialClaimCard({ userEmail }: FreeTrialClaimCardProp
               />
             </div>
 
+            {errorMsg && (
+              <p className="text-xs text-red-400 bg-red-950/40 p-2.5 rounded-lg border border-red-500/40">
+                {errorMsg}
+              </p>
+            )}
+
             <button
               type="submit"
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-extrabold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all transform hover:-translate-y-0.5"
+              disabled={isLoading}
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-extrabold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all transform hover:-translate-y-0.5 disabled:opacity-50"
             >
               <Bot className="w-4 h-4" />
-              Reclamar mi Prueba Gratuita de Bot
+              {isLoading ? "Procesando prueba..." : "Reclamar mi Prueba Gratuita de Bot"}
             </button>
             <p className="text-[11px] font-mono text-slate-400 text-center">
               100% gratuito · Sin tarjeta de crédito · Entorno de prueba seguro

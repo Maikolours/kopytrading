@@ -280,7 +280,10 @@ export default function LessonPlayerPage() {
               {/* Special Lead Magnet / Free Trial Card */}
               {lesson.isFreeTrialUnlocker && (
                 <div className="pt-4">
-                  <FreeTrialClaimCard userEmail={userEmail || undefined} />
+                  <FreeTrialClaimCard
+                    userEmail={userEmail || undefined}
+                    onTrialClaimed={() => setUserRole("VIP")}
+                  />
                 </div>
               )}
 
