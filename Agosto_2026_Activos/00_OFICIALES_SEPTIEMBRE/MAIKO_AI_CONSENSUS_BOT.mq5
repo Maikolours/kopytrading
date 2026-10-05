@@ -34,8 +34,8 @@ input string  InpMasterKey        = "KOPY-ADMIN-MASTER";
 
 input group "━━━━━━ 📱 TELEGRAM ━━━━━━"
 input bool    InpUseTelegram      = true;
-input string  InpTelegramToken    = "8724647915:AAHDxN2u5F7k9hOGhzP9WmZnSYJyPPUP69w";
-input string  InpTelegramChatID   = "906620572";
+input string   InpTelegramToken           = "";          // 🔑 Token del Bot (Vacío por defecto)
+input string   InpTelegramChatID          = "";          // 💬 Tu Chat ID Privado
 
 input group "━━━━━━ ⚙️ EJECUCIÓN ━━━━━━"
 input ENUM_EXEC_MODE InpExecMode  = MODE_FULL_AUTO;
@@ -131,18 +131,18 @@ void AplicarPreset() {
         g_binanceSymbol = "BTCUSDT"; g_magicNumber = 202626;
         if(g_esLateral) {
             // Mercado Lateral / Rango (Micro-scalping adaptado a compresiones de $50-$60)
-            g_slPoints = (InpCustomSL > 0) ? InpCustomSL : 5500;              // $55 SL
-            g_tpPoints = (InpCustomTP > 0) ? InpCustomTP : 5500;              // $55 TP (Ratio 1:1 alcanzable)
+            g_slPoints = (InpCustomSL > 0) ? InpCustomSL : 3500; // SL reducido              // $55 SL
+            g_tpPoints = (InpCustomTP > 0) ? InpCustomTP : 7000; // TP aumentado              // $55 TP (Ratio 1:1 alcanzable)
             g_beTrigger = (InpCustomBETrigger > 0) ? InpCustomBETrigger : 2000; // BE al ganar $20
-            g_beLock = (InpCustomBELock > 0) ? InpCustomBELock : 500;          // Asegura $5 limpios
+            g_beLock = (InpCustomBELock > 0) ? InpCustomBELock : 2500; // Asegura $1.75+          // Asegura $5 limpios
             g_trailingStart = (InpCustomTrailStart > 0) ? InpCustomTrailStart : 3000; // Trailing a los $30
             g_trailingStep = (InpCustomTrailStep > 0) ? InpCustomTrailStep : 1500;   // Persigue a $15
         } else {
             // Mercado Tendencial (Movimiento normal / alta volatilidad)
-            g_slPoints = (InpCustomSL > 0) ? InpCustomSL : 15000;             // $150 SL
-            g_tpPoints = (InpCustomTP > 0) ? InpCustomTP : 15000;             // $150 TP (Ratio 1:1)
+            g_slPoints = (InpCustomSL > 0) ? InpCustomSL : 8000; // SL reducido             // $150 SL
+            g_tpPoints = (InpCustomTP > 0) ? InpCustomTP : 16000; // TP aumentado             // $150 TP (Ratio 1:1)
             g_beTrigger = (InpCustomBETrigger > 0) ? InpCustomBETrigger : 5000;// BE al ganar $50
-            g_beLock = (InpCustomBELock > 0) ? InpCustomBELock : 1500;        // Asegura $15 limpios
+            g_beLock = (InpCustomBELock > 0) ? InpCustomBELock : 4500; // Asegura $3.15+        // Asegura $15 limpios
             g_trailingStart = (InpCustomTrailStart > 0) ? InpCustomTrailStart : 7000; // Trailing a los $70
             g_trailingStep = (InpCustomTrailStep > 0) ? InpCustomTrailStep : 2500;   // Persigue a $25
         }
@@ -304,7 +304,7 @@ int OnInit() {
     if(total > 0) g_lastDealTicket = HistoryDealGetTicket(total - 1);
 
     string presetName = g_isBTC ? "BTCUSD" : "XAUUSD";
-    SendTelegramMsg("🤖 *MAIKO AI Iniciado* | " + presetName + " | " + g_symbol + "\n• Modo símbolo: " + modeTxt + "\n• Consenso min: " + IntegerToString(InpMinConsensus) + "/100\n• Spread max: " + DoubleToString(g_maxSpread,0) + " pts");
+    // SendTelegramMsg("🤖 *MAIKO AI Iniciado* | " + presetName + " | " + g_symbol + "\n• Modo símbolo: " + modeTxt + "\n• Consenso min: " + IntegerToString(InpMinConsensus) + "/100\n• Spread max: " + DoubleToString(g_maxSpread,0) + " pts");
     return INIT_SUCCEEDED;
 }
 

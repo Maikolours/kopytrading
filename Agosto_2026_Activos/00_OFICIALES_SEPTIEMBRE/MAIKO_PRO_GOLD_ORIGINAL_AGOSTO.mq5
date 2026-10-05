@@ -130,7 +130,7 @@ input string   TradeComment               = "MAIKO_AGOSTO";             // 📝 
 // --- TELEGRAM NOTIFICACIONES Y CONTROL ---
 input group "━━━━━━ 📱 𝗧 𝗘 𝗟 𝗘 𝗚 𝗥 𝗔 𝗠   𝗖 𝗢 𝗡 𝗧 𝗥 𝗢 𝗟 ━━━━━━"
 input bool     UsarTelegramNotif          = true;        // 📱 Activar Alertas y Control Telegram
-input string   TelegramBotToken           = "8724647915:AAHDxN2u5F7k9hOGhzP9WmZnSYJyPPUP69w"; // 🤖 Token del Bot
+input string   TelegramBotToken           = "";          // 🤖 Token del Bot
 input string   TelegramChatID             = "906620572";  // 👤 Tu Chat ID Privado
 
 void EnviarTelegramConTeclado(string mensaje);

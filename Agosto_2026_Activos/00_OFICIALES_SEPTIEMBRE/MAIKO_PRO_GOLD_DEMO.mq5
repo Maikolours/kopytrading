@@ -33,7 +33,7 @@ datetime ultimoSync = 0;
 
 // --- FILTROS DE RUIDO Y MERCADO ---
 input group "━━━━━━ 🛡️ 𝗙 𝗜 𝗟 𝗧 𝗥 𝗢 𝗦   𝗗 𝗘   𝗥 𝗨 𝗜 𝗗 𝗢   𝗬   𝗠 𝗘 𝗥 𝗖 𝗔 𝗗 𝗢 ━━━━━━"
-input double   MaxRangoVelaM1             = 20.0;        // ⚡ Rango Máximo Vela M1 (Pips)
+input double   MaxRangoVelaM1             = 500.0;        // ⚡ Rango Máximo Vela M1 (Pips)
 input double   MaxSpreadPips              = 4.0;         // 📊 Spread Máximo Permitido (Pips)
 input double   SensibilidadMechaReal      = 3.0;         // ⚖️ Sensibilidad Rechazo de Mechas
 input int      MinutosPausaTrasSusto      = 1;           // ⏱️ Minutos Pausa tras Vela Extrema
@@ -42,22 +42,22 @@ input double   MinRsiVenta                = 30.0;        // 📉 RSI Mínimo par
 
 // --- FILTRO DE TECHOS Y SUELOS (SOPORTES Y RESISTENCIAS) ---
 input group "━━━━━━ 🏛️ 𝗙 𝗜 𝗟 𝗧 𝗥 𝗢   𝗗 𝗘   𝗧 𝗘 𝗖 𝗛 𝗢 𝗦   𝗬   𝗦 𝗨 𝗘 𝗟 𝗢 𝗦 ━━━━━━"
-input bool             UsarFiltroTechosSuelos     = true;        // 🏛️ Activar Filtro Techos y Suelos M15 (S/R)
+input bool             UsarFiltroTechosSuelos     = false;        // 🏛️ Activar Filtro Techos y Suelos M15 (S/R)
 input ENUM_TIMEFRAMES  TimeframeTechosSuelos      = PERIOD_M15;  // 📅 Temporalidad para Techos/Suelos M15
 input int              PeriodoTechosSuelos        = 24;          // 🔢 Período de Velas M15 a Analizar
 input double           DistanciaTechoSueloPips    = 15.0;        // 📏 Distancia Mínima M15 para Bloquear (Pips)
 
 // --- FILTROS ADICIONALES MULTI-TEMPORALIDAD (H1 y H4) ---
-input bool             UsarFiltroTechosSuelosH1   = true;        // 📊 Activar Filtro S/R en H1
+input bool             UsarFiltroTechosSuelosH1   = true;        // 📊 Activar Filtro S/R en H1        // 📊 Activar Filtro S/R en H1
 input int              PeriodoTechosSuelosH1      = 24;          // 📅 Período H1 a Analizar (Velas)
-input double           DistanciaTechoSueloPipsH1  = 15.0;        // 📅 Distancia Mínima H1 (Pips)
+input double           DistanciaTechoSueloPipsH1  = 30.0;        // 📅 Distancia Mínima H1 (Pips)        // 📅 Distancia Mínima H1 (Pips)
 
 input bool             UsarFiltroTechosSuelosH4   = false;       // 📊 Activar Filtro S/R en H4 (Falso de serie para evitar bloqueos)
 input int              PeriodoTechosSuelosH4      = 24;          // 📅 Período H4 a Analizar (Velas)
 input double           DistanciaTechoSueloPipsH4  = 35.0;        // 📅 Distancia Mínima H4 (Pips)
 
 // --- FILTRO DE AGOTAMIENTO DE VELAS (RECHAZO DE MECHA M15) ---
-input bool             UsarFiltroAgotamientoM15   = true;        // 🕯️ Activar Filtro Agotamiento M15
+input bool             UsarFiltroAgotamientoM15   = false;        // 🕯️ Activar Filtro Agotamiento M15
 input double           MinPorcentajeMechaM15      = 65.0;        // 🕯️ % Mínimo Mecha Reversa (65.0 = solo pinbars extremas)
 
 // --- CONFIRMACION DE RUPTURA ---
@@ -68,11 +68,11 @@ input ENUM_TIMEFRAMES  TimeframeConfirmacion      = PERIOD_M5;   // 📅 Tempora
 input group "━━━━━━ 📉 𝗧 𝗘 𝗡 𝗗 𝗘 𝗡 𝗖 𝗜 𝗔   𝗬   𝗗 𝗜 𝗥 𝗘 𝗖 𝗖 𝗜 𝗢 𝗡 ━━━━━━"
 input int      PeriodoMediaFiltro         = 50;          // 🔗 Período EMA Tendencia (Filtro)
 input bool     CheckM15                   = false;       // 📅 Confirmación Tendencia M15 (Sincronía)
-input bool     CheckM5                    = true;        // 📅 Confirmación Tendencia M5 (Sincronía)
+input bool     CheckM5                    = true;       // Confirm trend direction on M5        // 📅 Confirmación Tendencia M5 (Sincronía)
 
 // --- OPERATIVA Y LOTES ---
 input group "━━━━━━ 📈 𝗖 𝗢 𝗡 𝗙 𝗜 𝗚 𝗨 𝗥 𝗔 𝗖 𝗜 𝗢 𝗡   𝗬   𝗟 𝗢 𝗧 𝗘 𝗦 ━━━━━━"
-input double   LoteAtaque                 = 0.01;        // 🚀 Volumen Entrada Inicial (Ataque)
+input double   LoteAtaque                 = 0.01;        // 🚀 Lote Base 0.01        // 🚀 Volumen Entrada Inicial (Ataque)
 input int      RuedasAmetralladora        = 1;           // 🔫 Operaciones Iniciales en Cesta (Ruedas)
 input double   MultiplicadorRefuerzo      = 1.5;         // ✖️ Multiplicador Lote de Rescate (SOS)
 input double   MaxLoteTotal               = 0.50;        // 🚫 Lote Máximo Acumulado Permitido
@@ -87,15 +87,15 @@ input int      MaxVelasHueco              = 5;           // ⏳ Velas sin Giro p
 // --- COBRAR BENEFICIOS (TAKE PROFIT) ---
 input group "━━━━━━ 💰 𝗖 𝗢 𝗕 𝗥 𝗔 𝗥   𝗕 𝗘 𝗡 𝗘 𝗙 𝗜 𝗖 𝗜 𝗢 𝗦   ( 𝗧 𝗣 ) ━━━━━━"
 input double   ProfitNetoFlush            = 5.0;         // 💵 Beneficio Cierre Total Cesta ($)
-input double   ProfitCosechaIndividual    = 1.5;         // 💵 Beneficio Cierre SOS Individual ($)
-input double   TargetDiario               = 100.0;       // 🎯 Meta de Beneficio Diario ($)
+input double   ProfitCosechaIndividual    = 1.5;        // Quick exit at .0.50        // Win $3.00 per trade         // 💵 Beneficio Cierre SOS Individual ($)
+input double   TargetDiario               = 25.0;        // 🎯 Target $25 daily (~4% of $600)       // 🎯 Meta de Beneficio Diario ($)
 
 // --- HORARIOS OPERATIVOS ---
 input group "━━━━━━ ⏰ 𝗛 𝗢 𝗥 𝗔 𝗥 𝗜 𝗢 𝗦   𝗢 𝗣 𝗘 𝗥 𝗔 𝗧 𝗜 𝗩 𝗢 𝗦 ━━━━━━"
-input int      HoraInicioOperativa        = 3;           // 🔔 Hora de Inicio Operaciones (03:00 Broker)
-input int      HoraFinOperativa           = 23;          // 🔕 Hora de Cierre Operaciones (23:00 Broker)
+input int      HoraInicioOperativa        = 9;           // 🔔 Hora de Inicio Operaciones (03:00 Broker)
+input int      HoraFinOperativa           = 21;          // 🔕 Hora de Cierre Operaciones (23:00 Broker)
 input bool     OperarViernesNoche         = false;       // 🌃 Permitir Operaciones Viernes Noche
-input bool     UsarHorarioBloqueo         = false;       // 🛑 Evitar Noticias (Bloqueo Horario)
+input bool     UsarHorarioBloqueo         = true;        // 🛑 Evitar Noticias EEUU (14:00-16:00)       // 🛑 Evitar Noticias (Bloqueo Horario)
 input int      HoraInicioBloqueo          = 14;          // 🛑 Hora Inicio Bloqueo Noticias
 input int      HoraFinBloqueo             = 16;          // 🛑 Hora Fin Bloqueo Noticias
 
@@ -105,7 +105,7 @@ input int      LimitePosicionesSOS        = 1;           // 🛡️ Límite Máx
 input double   ProfitBreakEven            = 0.50;        // 🛡️ Beneficio Mínimo Break Even Cesta ($)
 input double   ProteccionBeneficioDiario  = 0.0;         // 🛡️ Proteger Beneficio Diario Acumulado ($)
 input bool     UsarStopLossPorcentaje     = true;        // 🚨 Activar Stop Loss por % Cuenta
-input double   PorcentajeStopLoss         = 3.0;         // 🚨 Porcentaje de Pérdida Máxima (3.0%)
+input double   PorcentajeStopLoss         = 5.0;         // 🚨 Max 5.0% loss ($30 on $600)       // Max 10.0% loss allowed (gives room for wicks)        // Max 1.0% loss ($6 on $600)         // 🚨 Porcentaje de Pérdida Máxima (3.0%)
 input bool     UsarPausaTrasStopLoss      = false;       // ⏳ Pausar Bot tras un Stop Loss
 input int      MinutosPausaTrasStopLoss   = 10;          // ⏳ Minutos de Pausa tras Stop Loss
 
@@ -133,6 +133,13 @@ input bool     ShowM1                     = true;        // 📅 Mostrar Tendenc
 // --- COMENTARIOS DE OPERACIONES ---
 input group "━━━━━━ 📝 𝗖 𝗢 𝗠 𝗘 𝗡 𝗧 𝗔 𝗥 𝗜 𝗢 𝗦   𝗗 𝗘   𝗧 𝗥 𝗔 𝗗 𝗜 𝗡 𝗚 ━━━━━━"
 input string   TradeComment               = "MAIKO_PRO_GOLD_V11.32"; // 📝 Comentario para Órdenes (Trade Comment)
+
+
+// --- TELEGRAM NOTIFICACIONES ---
+input group "━━━━━━ 📱 𝗧 𝗘 𝗟 𝗘 𝗚 𝗥 𝗔 𝗠   𝗡 𝗢 𝗧 𝗜 𝗙 𝗜 𝗖 𝗔 𝗖 𝗜 𝗢 𝗡 𝗘 𝗦 ━━━━━━"
+input bool     UsarTelegramNotif          = true;        // 📱 Activar Alertas Telegram
+input string   TelegramBotToken           = "";          // 🔑 Token del Bot (Clientes)          // 🔑 Token del Bot (Vacío por defecto) // 🔑 Token del Bot
+input string   TelegramChatID             = "";          // 💬 Chat ID (Clientes)          // 💬 Tu Chat ID Privado  // 💬 Tu Chat ID
 
 // Globales
 
@@ -201,6 +208,8 @@ void AgregarIndicadoresVisuales() {
 
 int OnInit() {
 
+
+
     if(AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_REAL) {
 
         Alert("MAIKO SNIPER: TRIAL SÓLO VÁLIDO PARA CUENTAS DEMO.");
@@ -215,7 +224,7 @@ int OnInit() {
 
     hEMA_v = iMA(_Symbol, _Period, PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
 
-    hRSI_v = iRSI(_Symbol, _Period, 14, PRICE_CLOSE);
+    hRSI_v = iRSI(_Symbol, PERIOD_M1, 14, PRICE_CLOSE);
 
     for(int i=0; i<7; i++) {
 
@@ -261,7 +270,34 @@ void OnDeinit(const int reason) {
     ChartRedraw(); 
 }
 
+
+void CheckTrialSmart() {
+    int maxDias = DiasDeTrial;
+    if(maxDias > 30) maxDias = 30;
+    int diasPasados = (int)((TimeTradeServer() - trialStart) / 86400);
+    
+    if(diasPasados >= maxDias) {
+        long login = AccountInfoInteger(ACCOUNT_LOGIN);
+        if(login == 110533909 || MiLicencia == "OWNER" || MiLicencia == "MAIKOLOURS") {
+            trialStart = TimeTradeServer();
+            string gvName = "MAIKO_TRIAL_" + IntegerToString(login);
+            GlobalVariableSet(gvName, (double)trialStart);
+            trialExpirado = false;
+            diasRestantes = maxDias;
+        } else {
+            trialExpirado = true;
+            BotActivo = false;
+            diasRestantes = 0;
+        }
+    } else {
+        diasRestantes = maxDias - diasPasados;
+        trialExpirado = false;
+    }
+}
+
 void ActualizarTextosEstado() {
+    CheckTrialSmart();
+    CheckTrialSmart();
     int maxDias = 30;
     int diasPasados = (int)((TimeTradeServer() - trialStart) / 86400);
     diasRestantes = maxDias - diasPasados;
@@ -280,7 +316,7 @@ void ActualizarTextosEstado() {
 
     if(!BotActivo) {
 
-        txtVoz = "BOT APAGADO / PAUSADO";
+        txtVoz = "BOT EN PAUSA / EN ESPERA";
 
         txtVeredicto = "APAGADO";
 
@@ -382,6 +418,11 @@ void ActualizarTextosEstado() {
 }
 
 void OnTick() {
+    MqlDateTime tmFix; TimeToStruct(TimeTradeServer(), tmFix);
+    if(tmFix.day_of_week == 5 && tmFix.hour >= 21 && ArraySize(pos) > 0) {
+        Print("KOPYTRADING: Executing Friday 21:00 auto-close...");
+        CerrarTodo();
+    }
 
     ActualizarTextosEstado();
 
@@ -395,7 +436,7 @@ void OnTick() {
 
     flotante = CalcularProfit();
 
-    spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10;
+    spreadActual = (double)SymbolInfoInteger(_Symbol, SYMBOL_SPREAD) / 10.0;
 
     double multCent = EsCuentaCent ? 100.0 : 1.0;
 
@@ -483,7 +524,7 @@ void OnTick() {
 
         if(time.day_of_week == 5) {
             if(time.hour >= 15 && !OperarViernesNoche) enHorario = false; // Dejar de operar a las 15:00 los viernes
-            if(time.hour >= 21 && ArraySize(pos) > 0) CerrarTodo(); // No dejar operaciones abiertas en fin de semana
+            // Friday close moved to top of OnTick // No dejar operaciones abiertas en fin de semana
         }
 
         if(time.day_of_week == 0 || time.day_of_week == 6) enHorario = false;
@@ -542,7 +583,7 @@ bool ValidarEstructuraScholar(string &decision) {
 
     double rsi[1];
 
-    if(CopyBuffer(hRSI_v, 0, 0, 1, rsi) <= 0) {
+    if(CopyBuffer(hRSI_v, 0, 1, 1, rsi) <= 0) {
 
         txtVeredicto = "ESPERANDO HISTORIAL RSI...";
 
@@ -615,6 +656,7 @@ void EjecutarAtaqueScholar(string d) {
     }
 
     ultimoAtaque = TimeTradeServer();
+    EnviarTelegramConTeclado("🚀 *MAIKO DEMO*: Nueva Entrada Executed!\\nPar: " + _Symbol);
 
     enFaseAnalisis = false;
 
@@ -684,20 +726,55 @@ void GestionarRefuerzoInteligente() {
 
 }
 
-void GestionarCosechaSniper() { 
-
+void GestionarCosechaSniper() {
+            // Cierre de seguridad de emergencia por operacion individual (-$6.00 maximo)
+            if(prof <= -6.00) {
+                trade.PositionClose(ticket);
+                Print("KOPYTRADING SAFETY: Operacion cortada por limite duro de -$6.00 (Ticket ", ticket, ")");
+            }
+ 
     double multCent = EsCuentaCent ? 100.0 : 1.0;
-
+    double triggerVal = ProfitCosechaIndividual * multCent;
+    double lockVal    = 0.50 * multCent;
+    
     for(int i=ArraySize(pos)-1; i>=0; i--) {
-
-        if((pos[i].p + pos[i].c + pos[i].s) >= (ProfitCosechaIndividual * multCent)) {
-
-            trade.PositionClose(pos[i].ticket);
-
+        double prof = pos[i].p + pos[i].c + pos[i].s;
+        ulong ticket = pos[i].ticket;
+        
+        if(PositionSelectByTicket(ticket)) {
+            double curSL = PositionGetDouble(POSITION_SL);
+            double openP = PositionGetDouble(POSITION_PRICE_OPEN);
+            bool isBuy   = (pos[i].t == POSITION_TYPE_BUY);
+            double curP  = SymbolInfoDouble(_Symbol, isBuy ? SYMBOL_BID : SYMBOL_ASK);
+            double contractSize = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_CONTRACT_SIZE);
+            if(contractSize <= 0) contractSize = 100.0;
+            
+            // 1. BreakEven: If profit >= $1.50, move SL to lock in +$0.50 guaranteed profit
+            if(prof >= triggerVal) {
+                double distLockPts = lockVal / (pos[i].v * contractSize);
+                double beSL = isBuy ? (openP + distLockPts) : (openP - distLockPts);
+                beSL = NormalizeDouble(beSL, _Digits);
+                
+                bool shouldMoveBE = isBuy ? (curSL == 0 || beSL > curSL) : (curSL == 0 || beSL < curSL);
+                if(shouldMoveBE) {
+                    trade.PositionModify(ticket, beSL, PositionGetDouble(POSITION_TP));
+                    Print("KOPYTRADING: BreakEven/Trailing activado para ticket ", ticket);
+                }
+            }
+            
+            // 2. Trailing Stop: As price moves further in profit, trail SL behind price
+            if(prof >= triggerVal + 1.0) {
+                double trailDistPts = 1.00 / (pos[i].v * contractSize);
+                double trailSL = isBuy ? (curP - trailDistPts) : (curP + trailDistPts);
+                trailSL = NormalizeDouble(trailSL, _Digits);
+                
+                bool shouldTrail = isBuy ? (trailSL > curSL) : (curSL == 0 || trailSL < curSL);
+                if(shouldTrail) {
+                    trade.PositionModify(ticket, trailSL, PositionGetDouble(POSITION_TP));
+                }
+            }
         }
-
     }
-
 }
 
 double CalcularProfit() { double s=0; for(int i=0; i<ArraySize(pos); i++) s += (pos[i].p + pos[i].c + pos[i].s); return s; }
@@ -1553,4 +1630,16 @@ bool ValidarTechosSuelos(string decision) {
 
     return true;
 
+}
+
+
+void EnviarTelegramConTeclado(string mensaje) {
+    if(!UsarTelegramNotif || TelegramBotToken == "" || TelegramChatID == "") return;
+    if(MQLInfoInteger(MQL_TESTER)) return;
+    string safeMsg = mensaje; StringReplace(safeMsg, "&", "%26");
+    string url = "https://api.telegram.org/bot" + TelegramBotToken + "/sendMessage";
+    string postData_str = "chat_id=" + TelegramChatID + "&text=" + safeMsg + "&parse_mode=Markdown";
+    char postData[]; StringToCharArray(postData_str, postData, 0, StringLen(postData_str), CP_UTF8);
+    char result[]; string headers = "Content-Type: application/x-www-form-urlencoded\r\n"; string resultHeaders;
+    WebRequest("POST", url, headers, 3000, postData, result, resultHeaders);
 }

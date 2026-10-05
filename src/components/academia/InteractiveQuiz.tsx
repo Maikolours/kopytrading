@@ -1,20 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
-import { Check, X, Sparkles, HelpCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Check, X, Sparkles, RotateCcw } from "lucide-react";
 import { QuizQuestion } from "@/lib/academiaData";
 
 interface InteractiveQuizProps {
   quiz: QuizQuestion;
   onCorrectAnswer?: () => void;
+  isAlreadyPassed?: boolean;
 }
 
-export default function InteractiveQuiz({ quiz, onCorrectAnswer }: InteractiveQuizProps) {
+export default function InteractiveQuiz({ quiz, onCorrectAnswer, isAlreadyPassed }: InteractiveQuizProps) {
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
-  const [isAnswered, setIsAnswered] = useState(false);
+  const [isAnswered, setIsAnswered] = useState<boolean>(isAlreadyPassed || false);
+
+  useEffect(() => {
+    if (isAlreadyPassed) {
+      setIsAnswered(true);
+      setSelectedOptionId(quiz.correctAnswerId);
+    }
+  }, [isAlreadyPassed, quiz.correctAnswerId]);
+
+  const isCorrect = isAlreadyPassed || selectedOptionId === quiz.correctAnswerId;
 
   const handleSelectOption = (optionId: string) => {
-    if (isAnswered) return; // Lock after answering
+    if (isAnswered && isCorrect) return; // Lock if already passed
     setSelectedOptionId(optionId);
     setIsAnswered(true);
 
@@ -23,17 +33,27 @@ export default function InteractiveQuiz({ quiz, onCorrectAnswer }: InteractiveQu
     }
   };
 
-  const isCorrect = selectedOptionId === quiz.correctAnswerId;
+  const handleRetry = () => {
+    setSelectedOptionId(null);
+    setIsAnswered(false);
+  };
 
   return (
-    <div className="w-full rounded-2xl bg-[#0E131F] border border-amber-500/30 p-6 shadow-2xl relative overflow-hidden">
+    <div id="evaluacion-section" className="w-full rounded-2xl bg-[#0E131F] border border-amber-500/30 p-6 shadow-2xl relative overflow-hidden my-4 scroll-mt-24">
       {/* Decorative Glow */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 blur-3xl pointer-events-none rounded-full" />
 
       {/* Top Badge */}
-      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-400 text-xs font-mono font-bold tracking-wider uppercase mb-4">
-        <Sparkles className="w-3.5 h-3.5" />
-        {quiz.badgeText || "PRACTICA"}
+      <div className="flex items-center justify-between mb-4">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-400 text-xs font-mono font-bold tracking-wider uppercase">
+          <Sparkles className="w-3.5 h-3.5" />
+          {quiz.badgeText || "EVALUACIÓN DE LA LECCIÓN"}
+        </div>
+        {isCorrect && (
+          <span className="text-xs font-mono font-bold text-emerald-400 flex items-center gap-1 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30">
+            <Check className="w-3.5 h-3.5 stroke-[3]" /> EVALUACIÓN APROBADA
+          </span>
+        )}
       </div>
 
       {/* Question Title */}
@@ -66,7 +86,7 @@ export default function InteractiveQuiz({ quiz, onCorrectAnswer }: InteractiveQu
             <button
               key={option.id}
               onClick={() => handleSelectOption(option.id)}
-              disabled={isAnswered}
+              disabled={isAnswered && isCorrect}
               className={`w-full text-left p-4 rounded-xl border transition-all duration-200 flex items-start gap-4 ${cardStyle}`}
             >
               <div
@@ -91,7 +111,7 @@ export default function InteractiveQuiz({ quiz, onCorrectAnswer }: InteractiveQu
       {/* Answer Feedback Explanation Box */}
       {isAnswered && (
         <div
-          className={`p-4 rounded-xl border animate-slide-up ${
+          className={`p-4 rounded-xl border animate-slide-up space-y-3 ${
             isCorrect
               ? "bg-emerald-950/60 border-emerald-500/60 text-emerald-300"
               : "bg-red-950/60 border-red-500/60 text-red-300"
@@ -103,17 +123,30 @@ export default function InteractiveQuiz({ quiz, onCorrectAnswer }: InteractiveQu
             ) : (
               <X className="w-5 h-5 text-red-400 shrink-0 mt-0.5 stroke-[3]" />
             )}
-            <div>
+            <div className="flex-1">
               <div className="font-bold text-sm mb-1">
-                {isCorrect ? "¡Correcto!" : "Opción incorrecta"}
+                {isCorrect ? "¡Respuesta Correcta!" : "Opción Incorrecta"}
               </div>
               <p className="text-xs md:text-sm leading-relaxed opacity-95">
                 {quiz.feedbackExplanation}
               </p>
             </div>
           </div>
+
+          {!isCorrect && (
+            <div className="pt-2 flex justify-end">
+              <button
+                onClick={handleRetry}
+                className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-colors shadow-md shadow-amber-500/20"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                Intentar otra opción
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
   );
 }
+

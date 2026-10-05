@@ -6,10 +6,11 @@ import { LessonPage } from "@/lib/academiaData";
 
 interface LessonTextPageProps {
   pages: LessonPage[];
+  hasQuiz?: boolean;
   onFinishReading?: () => void;
 }
 
-export default function LessonTextPage({ pages, onFinishReading }: LessonTextPageProps) {
+export default function LessonTextPage({ pages, hasQuiz, onFinishReading }: LessonTextPageProps) {
   const [currentPageIdx, setCurrentPageIdx] = useState(0);
 
   if (!pages || pages.length === 0) return null;
@@ -22,6 +23,12 @@ export default function LessonTextPage({ pages, onFinishReading }: LessonTextPag
     if (!isLastPage) {
       setCurrentPageIdx(prev => prev + 1);
     } else {
+      if (hasQuiz) {
+        const el = document.getElementById("evaluacion-section");
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      }
       onFinishReading?.();
     }
   };
@@ -113,7 +120,7 @@ export default function LessonTextPage({ pages, onFinishReading }: LessonTextPag
             onClick={handleNext}
             className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-amber-500/20 transition-all"
           >
-            {isLastPage ? "Completar lectura" : "Siguiente página"}
+            {isLastPage ? (hasQuiz ? "Ir a la Evaluación ↓" : "Lectura finalizada") : `Siguiente página (${currentPageIdx + 2}/${pages.length})`}
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>

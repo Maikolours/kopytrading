@@ -53,8 +53,8 @@ input int SyncIntervalSec = 3;         // Cada cuántos segundos enviar datos
 
 // --- NUEVOS FILTROS ---
 input bool UsarFiltroHorario = true;
-input int HoraInicioSesion = 9;  // 09:00
-input int HoraFinSesion = 22;    // 17:00
+input int HoraInicioSesion = 1;  // Hora Inicio Operativa (Servidor Broker 0-23h)
+input int HoraFinSesion = 23;    // Hora Fin Operativa (Servidor Broker 0-23h)
 input bool UsarFiltroATR = true;
 input double MinATR_Pips = 5.0; // Mínimo movimiento (Pips) de ATR para entrar
 

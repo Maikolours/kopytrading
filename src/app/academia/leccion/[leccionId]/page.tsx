@@ -36,12 +36,14 @@ export default function LessonPlayerPage() {
   const [userRole, setUserRole] = useState<string>("USER");
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [showEmailGate, setShowEmailGate] = useState(false);
+  const [isQuizPassed, setIsQuizPassed] = useState(false);
 
   useEffect(() => {
     try {
       const savedCompleted = localStorage.getItem("kopytrading_academia_completed");
       if (savedCompleted) {
-        setCompletedLessonIds(JSON.parse(savedCompleted));
+        const parsed = JSON.parse(savedCompleted);
+        setCompletedLessonIds(parsed);
       }
       const savedEmail = localStorage.getItem("kopytrading_user_email");
       if (savedEmail) {
@@ -55,6 +57,17 @@ export default function LessonPlayerPage() {
   }, []);
 
   const lessonData = getLessonById(lessonId);
+
+  useEffect(() => {
+    if (lessonData?.lesson) {
+      const isComp = completedLessonIds.includes(lessonData.lesson.id);
+      if (!lessonData.lesson.quiz || isComp) {
+        setIsQuizPassed(true);
+      } else {
+        setIsQuizPassed(false);
+      }
+    }
+  }, [lessonData, completedLessonIds]);
 
   if (!lessonData) {
     return (
@@ -72,6 +85,7 @@ export default function LessonPlayerPage() {
 
   const { lesson, module: currentModule } = lessonData;
   const isLessonCompleted = completedLessonIds.includes(lesson.id);
+  const canAdvance = !lesson.quiz || isQuizPassed || isLessonCompleted;
 
   // Check strict sequential lock
   const isUnlocked = (() => {
@@ -237,18 +251,25 @@ export default function LessonPlayerPage() {
               {lesson.pages && lesson.pages.length > 0 && (
                 <LessonTextPage
                   pages={lesson.pages}
-                  onFinishReading={markLessonAsComplete}
+                  hasQuiz={Boolean(lesson.quiz)}
+                  onFinishReading={() => {
+                    if (!lesson.quiz) {
+                      markLessonAsComplete();
+                    }
+                  }}
                 />
               )}
 
               {/* Interactive Quiz Component */}
               {lesson.quiz && (
-                <div className="pt-2">
-                  <InteractiveQuiz
-                    quiz={lesson.quiz}
-                    onCorrectAnswer={markLessonAsComplete}
-                  />
-                </div>
+                <InteractiveQuiz
+                  quiz={lesson.quiz}
+                  isAlreadyPassed={isLessonCompleted || isQuizPassed}
+                  onCorrectAnswer={() => {
+                    setIsQuizPassed(true);
+                    markLessonAsComplete();
+                  }}
+                />
               )}
 
               {/* Special Lead Magnet / Free Trial Card */}
@@ -271,23 +292,39 @@ export default function LessonPlayerPage() {
 
                   <button
                     onClick={() => {
+                      if (!canAdvance) {
+                        const el = document.getElementById("evaluacion-section");
+                        if (el) {
+                          el.scrollIntoView({ behavior: "smooth" });
+                        }
+                        return;
+                      }
                       markLessonAsComplete();
                       handleNextLesson();
                     }}
                     className={`w-full sm:w-auto px-6 py-3 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 transition-all shadow-lg ${
-                      isLessonCompleted
-                        ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20"
-                        : "bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 shadow-amber-500/20"
+                      canAdvance
+                        ? "bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-emerald-500/20"
+                        : "bg-slate-900 border border-amber-500/40 text-amber-300 hover:bg-slate-800"
                     }`}
                   >
-                    <CheckCircle2 className="w-4 h-4" />
-                    {isLessonCompleted ? "Lección Completada - Siguiente" : "Marcar como Completada y Avanzar"}
-                    <ChevronRight className="w-4 h-4" />
+                    {canAdvance ? (
+                      <>
+                        <CheckCircle2 className="w-4 h-4 text-slate-950" />
+                        {isLessonCompleted ? "Lección Completada - Siguiente" : "Avanzar a la Siguiente Lección"}
+                        <ChevronRight className="w-4 h-4" />
+                      </>
+                    ) : (
+                      <>
+                        <Lock className="w-4 h-4 text-amber-400" />
+                        Responde la Evaluación para Avanzar
+                      </>
+                    )}
                   </button>
                 </div>
 
                 <p className="text-[10px] font-mono text-slate-500 text-center">
-                  Completa las lecciones en orden para desbloquear progresivamente los siguientes módulos.
+                  Completa la evaluación correctamente para registrar tu avance y desbloquear las siguientes lecciones.
                 </p>
               </div>
             </>

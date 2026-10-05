@@ -1,0 +1,658 @@
+[No-Git | Int:None | File:2025-11] ExpertMACD.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Advisors\ExpertMACD.ex5
+[No-Git | Int:None | File:2025-11] ExpertMAMA.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Advisors\ExpertMAMA.ex5
+[No-Git | Int:None | File:2025-11] ExpertMAPSAR.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Advisors\ExpertMAPSAR.ex5
+[No-Git | Int:None | File:2025-11] ExpertMAPSARSizeOptimized.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Advisors\ExpertMAPSARSizeOptimized.ex5
+[No-Git | Int:None | File:2025-11] ChartInChart.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Examples\ChartInChart\ChartInChart.ex5
+[No-Git | Int:None | File:2025-11] Controls.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Examples\Controls\Controls.ex5
+[No-Git | Int:None | File:2025-11] Correlation Matrix 3D.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Examples\Correlation Matrix 3D\Correlation Matrix 3D.ex5
+[No-Git | Int:None | File:2025-11] MACD Sample.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Examples\MACD\MACD Sample.ex5
+[No-Git | Int:None | File:2025-11] Math 3D.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Examples\Math 3D\Math 3D.ex5
+[No-Git | Int:None | File:2025-11] Math 3D Morpher.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Examples\Math 3D Morpher\Math 3D Morpher.ex5
+[No-Git | Int:None | File:2025-11] Moving Average.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Examples\Moving Average\Moving Average.ex5
+[No-Git | Int:None | File:2025-11] Accelerator.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Accelerator.ex5
+[No-Git | Int:None | File:2025-11] AD.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\AD.ex5
+[No-Git | Int:None | File:2025-11] ADX.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ADX.ex5
+[No-Git | Int:None | File:2025-11] ADXW.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ADXW.ex5
+[No-Git | Int:None | File:2025-11] Alligator.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Alligator.ex5
+[No-Git | Int:None | File:2025-11] AMA.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\AMA.ex5
+[No-Git | Int:None | File:2025-11] ASI.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ASI.ex5
+[No-Git | Int:None | File:2025-11] ATR.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ATR.ex5
+[No-Git | Int:None | File:2025-11] Awesome_Oscillator.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Awesome_Oscillator.ex5
+[No-Git | Int:None | File:2025-11] BB.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\BB.ex5
+[No-Git | Int:None | File:2025-11] Bears.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Bears.ex5
+[No-Git | Int:None | File:2025-11] Bulls.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Bulls.ex5
+[No-Git | Int:None | File:2025-11] BW-ZoneTrade.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\BW-ZoneTrade.ex5
+[No-Git | Int:None | File:2025-11] CCI.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\CCI.ex5
+[No-Git | Int:None | File:2025-11] CHO.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\CHO.ex5
+[No-Git | Int:None | File:2025-11] CHV.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\CHV.ex5
+[No-Git | Int:None | File:2025-11] ColorBars.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ColorBars.ex5
+[No-Git | Int:None | File:2025-11] ColorCandlesDaily.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ColorCandlesDaily.ex5
+[No-Git | Int:None | File:2025-11] ColorLine.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ColorLine.ex5
+[No-Git | Int:None | File:2025-11] Custom Moving Average.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Custom Moving Average.ex5
+[No-Git | Int:None | File:2025-11] DEMA.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\DEMA.ex5
+[No-Git | Int:None | File:2025-11] DeMarker.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\DeMarker.ex5
+[No-Git | Int:None | File:2025-11] DPO.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\DPO.ex5
+[No-Git | Int:None | File:2025-11] Envelopes.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Envelopes.ex5
+[No-Git | Int:None | File:2025-11] Force_Index.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Force_Index.ex5
+[No-Git | Int:None | File:2025-11] Fractals.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Fractals.ex5
+[No-Git | Int:None | File:2025-11] FrAMA.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\FrAMA.ex5
+[No-Git | Int:None | File:2025-11] Gator.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Gator.ex5
+[No-Git | Int:None | File:2025-11] Gator_2.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Gator_2.ex5
+[No-Git | Int:None | File:2025-11] Heiken_Ashi.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Heiken_Ashi.ex5
+[No-Git | Int:None | File:2025-11] Ichimoku.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Ichimoku.ex5
+[No-Git | Int:None | File:2025-11] MACD.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\MACD.ex5
+[No-Git | Int:None | File:2025-11] MarketFacilitationIndex.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\MarketFacilitationIndex.ex5
+[No-Git | Int:None | File:2025-11] MFI.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\MFI.ex5
+[No-Git | Int:None | File:2025-11] MI.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\MI.ex5
+[No-Git | Int:None | File:2025-11] Momentum.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Momentum.ex5
+[No-Git | Int:None | File:2025-11] OBV.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\OBV.ex5
+[No-Git | Int:None | File:2025-11] OsMA.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\OsMA.ex5
+[No-Git | Int:None | File:2025-11] ParabolicSAR.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ParabolicSAR.ex5
+[No-Git | Int:None | File:2025-11] Price_Channel.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Price_Channel.ex5
+[No-Git | Int:None | File:2025-11] PVT.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\PVT.ex5
+[No-Git | Int:None | File:2025-11] ROC.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ROC.ex5
+[No-Git | Int:None | File:2025-11] RSI.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\RSI.ex5
+[No-Git | Int:None | File:2025-11] RVI.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\RVI.ex5
+[No-Git | Int:None | File:2025-11] Stochastic.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Stochastic.ex5
+[No-Git | Int:None | File:2025-11] TEMA.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\TEMA.ex5
+[No-Git | Int:None | File:2025-11] TRIX.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\TRIX.ex5
+[No-Git | Int:None | File:2025-11] Ultimate_Oscillator.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Ultimate_Oscillator.ex5
+[No-Git | Int:None | File:2025-11] VIDYA.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\VIDYA.ex5
+[No-Git | Int:None | File:2025-11] Volumes.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Volumes.ex5
+[No-Git | Int:None | File:2025-11] VROC.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\VROC.ex5
+[No-Git | Int:None | File:2025-11] WPR.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\WPR.ex5
+[No-Git | Int:None | File:2025-11] W_AD.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\W_AD.ex5
+[No-Git | Int:None | File:2025-11] ZigZag.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ZigZag.ex5
+[No-Git | Int:None | File:2025-11] ZigzagColor.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ZigzagColor.ex5
+[No-Git | Int:None | File:2025-11] FlameChart.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Canvas\FlameChart.ex5
+[No-Git | Int:None | File:2025-11] ChartPanel.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Panels\ChartPanel\ChartPanel.ex5
+[No-Git | Int:None | File:2025-11] SimplePanel.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Panels\SimplePanel\SimplePanel.ex5
+[No-Git | Int:None | File:2025-11] Camarilla Channel.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\Camarilla Channel.ex5
+[No-Git | Int:None | File:2025-11] DeMark Channel.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\DeMark Channel.ex5
+[No-Git | Int:None | File:2025-11] Donchian Channel.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\Donchian Channel.ex5
+[No-Git | Int:None | File:2025-11] Fibonacci Channel.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\Fibonacci Channel.ex5
+[No-Git | Int:None | File:2025-11] Keltner Channel.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\Keltner Channel.ex5
+[No-Git | Int:None | File:2025-11] MarketProfile Canvas.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\MarketProfile Canvas.ex5
+[No-Git | Int:None | File:2025-11] MarketProfile.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\MarketProfile.ex5
+[No-Git | Int:None | File:2025-11] MurreyMath Channel.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\MurreyMath Channel.ex5
+[No-Git | Int:None | File:2025-11] NRTR Channel.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\NRTR Channel.ex5
+[No-Git | Int:None | File:2025-11] Parabolic Channel.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\Parabolic Channel.ex5
+[No-Git | Int:None | File:2025-11] Pivot Channel.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\Pivot Channel.ex5
+[No-Git | Int:None | File:2025-11] Woodie Channel.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\Woodie Channel.ex5
+[No-Git | Int:None | File:2025-11] AccountInfoSample.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\AccountInfo\AccountInfoSample.ex5
+[No-Git | Int:None | File:2025-11] ArrayDoubleSample.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\ArrayDouble\ArrayDoubleSample.ex5
+[No-Git | Int:None | File:2025-11] CanvasSample.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\Canvas\CanvasSample.ex5
+[No-Git | Int:None | File:2025-11] HistogramChartSample.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\Canvas\Charts\HistogramChartSample.ex5
+[No-Git | Int:None | File:2025-11] LineChartSample.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\Canvas\Charts\LineChartSample.ex5
+[No-Git | Int:None | File:2025-11] PieChartSample.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\Canvas\Charts\PieChartSample.ex5
+[No-Git | Int:None | File:2025-11] ObjChartSample.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\ObjectChart\ObjChartSample.ex5
+[No-Git | Int:None | File:2025-11] SphereSample.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\ObjectSphere\SphereSample.ex5
+[No-Git | Int:None | File:2025-11] BitonicSort.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\OpenCL\Double\BitonicSort.ex5
+[No-Git | Int:None | File:2025-11] FFT.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\OpenCL\Double\FFT.ex5
+[No-Git | Int:None | File:2025-11] MatrixMult.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\OpenCL\Double\MatrixMult.ex5
+[No-Git | Int:None | File:2025-11] Wavelet.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\OpenCL\Double\Wavelet.ex5
+[No-Git | Int:None | File:2025-11] Seascape.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\OpenCL\Seascape\Seascape.ex5
+[No-Git | Int:None | File:2025-11] OrderInfoSample.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\OrderInfo\OrderInfoSample.ex5
+[No-Git | Int:None | File:2025-11] PositionInfoSample.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\PositionInfo\PositionInfoSample.ex5
+[No-Git | Int:None | File:2025-11] Remnant 3D.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\Remnant 3D\Remnant 3D.ex5
+[No-Git | Int:None | File:2025-11] SymbolInfoSample.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\SymbolInfo\SymbolInfoSample.ex5
+[No-Git | Int:None | File:2025-12] WH Fair Value Gap MT5.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\F762D69EEEA9B4430D7F17C82167C844\MQL5\Indicators\Market\WH Fair Value Gap MT5.ex5
+[No-Git | Int:2026 | File:2026-09] 00_ELITE_WARRIOR_PRO_v41.2.mq5 (v41.20) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\00_ELITE_WARRIOR_PRO_v41.2.mq5
+[No-Git | Int:2026 | File:2026-09] 00_ELITE_WARRIOR_PRO_v41.3.mq5 (v41.30) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\00_ELITE_WARRIOR_PRO_v41.3.mq5
+[No-Git | Int:2026 | File:2026-09] 00_ELITE_WARRIOR_PRO_v42.0.mq5 (v42.00) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\00_ELITE_WARRIOR_PRO_v42.0.mq5
+[No-Git | Int:2026 | File:2026-09] MAIKO_UFVG.mq5 (v1.01) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\01_MAYO_JUNIO_2026\MAIKO_UFVG.mq5
+[No-Git | Int:2026 | File:2026-09] SmartGrid_v31_CORREGIDO.mq5 (v1.00) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\03_AGOSTO_2026\SmartGrid_v31_CORREGIDO.mq5
+[No-Git | Int:2026 | File:2026-09] KOPYTRADING_TELEGRAM_HUB.mq5 (v2.00) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\04_SEPTIEMBRE_2026\KOPYTRADING_TELEGRAM_HUB.mq5
+[No-Git | Int:2026 | File:2025-11] ExpertMACD.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Advisors\ExpertMACD.mq5
+[No-Git | Int:2026 | File:2025-11] ExpertMAMA.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Advisors\ExpertMAMA.mq5
+[No-Git | Int:2026 | File:2025-11] ExpertMAPSAR.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Advisors\ExpertMAPSAR.mq5
+[No-Git | Int:2026 | File:2025-11] ExpertMAPSARSizeOptimized.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Advisors\ExpertMAPSARSizeOptimized.mq5
+[No-Git | Int:2026 | File:2025-11] ChartInChart.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Examples\ChartInChart\ChartInChart.mq5
+[No-Git | Int:2026 | File:2025-11] Controls.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Examples\Controls\Controls.mq5
+[No-Git | Int:2026 | File:2025-11] Correlation Matrix 3D.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Examples\Correlation Matrix 3D\Correlation Matrix 3D.mq5
+[No-Git | Int:2026 | File:2025-11] MACD Sample.mq5 (v5.50) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Examples\MACD\MACD Sample.mq5
+[No-Git | Int:2026 | File:2025-11] Math 3D.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Examples\Math 3D\Math 3D.mq5
+[No-Git | Int:2026 | File:2025-11] Math 3D Morpher.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Examples\Math 3D Morpher\Math 3D Morpher.mq5
+[No-Git | Int:2026 | File:2025-11] Moving Average.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Examples\Moving Average\Moving Average.mq5
+[No-Git | Int:2026 | File:2025-11] Accelerator.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Accelerator.mq5
+[No-Git | Int:2026 | File:2025-11] AD.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\AD.mq5
+[No-Git | Int:2026 | File:2025-11] ADX.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ADX.mq5
+[No-Git | Int:2026 | File:2025-11] ADXW.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ADXW.mq5
+[No-Git | Int:2026 | File:2025-11] Alligator.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Alligator.mq5
+[No-Git | Int:2026 | File:2025-11] AMA.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\AMA.mq5
+[No-Git | Int:2026 | File:2025-11] ASI.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ASI.mq5
+[No-Git | Int:2026 | File:2025-11] ATR.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ATR.mq5
+[No-Git | Int:2026 | File:2025-11] Awesome_Oscillator.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Awesome_Oscillator.mq5
+[No-Git | Int:2026 | File:2025-11] BB.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\BB.mq5
+[No-Git | Int:2026 | File:2025-11] Bears.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Bears.mq5
+[No-Git | Int:2026 | File:2025-11] Bulls.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Bulls.mq5
+[No-Git | Int:2026 | File:2025-11] BW-ZoneTrade.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\BW-ZoneTrade.mq5
+[No-Git | Int:2026 | File:2025-11] CCI.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\CCI.mq5
+[No-Git | Int:2026 | File:2025-11] CHO.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\CHO.mq5
+[No-Git | Int:2026 | File:2025-11] CHV.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\CHV.mq5
+[No-Git | Int:2026 | File:2025-11] ColorBars.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ColorBars.mq5
+[No-Git | Int:2026 | File:2025-11] ColorCandlesDaily.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ColorCandlesDaily.mq5
+[No-Git | Int:2026 | File:2025-11] ColorLine.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ColorLine.mq5
+[No-Git | Int:2026 | File:2025-11] Custom Moving Average.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Custom Moving Average.mq5
+[No-Git | Int:2026 | File:2025-11] DEMA.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\DEMA.mq5
+[No-Git | Int:2026 | File:2025-11] DeMarker.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\DeMarker.mq5
+[No-Git | Int:2026 | File:2025-11] DPO.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\DPO.mq5
+[No-Git | Int:2026 | File:2025-11] Envelopes.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Envelopes.mq5
+[No-Git | Int:2026 | File:2025-11] Force_Index.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Force_Index.mq5
+[No-Git | Int:2026 | File:2025-11] Fractals.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Fractals.mq5
+[No-Git | Int:2026 | File:2025-11] FrAMA.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\FrAMA.mq5
+[No-Git | Int:2026 | File:2025-11] Gator.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Gator.mq5
+[No-Git | Int:2026 | File:2025-11] Gator_2.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Gator_2.mq5
+[No-Git | Int:2026 | File:2025-11] Heiken_Ashi.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Heiken_Ashi.mq5
+[No-Git | Int:2026 | File:2025-11] Ichimoku.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Ichimoku.mq5
+[No-Git | Int:2026 | File:2025-11] MACD.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\MACD.mq5
+[No-Git | Int:2026 | File:2025-11] MarketFacilitationIndex.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\MarketFacilitationIndex.mq5
+[No-Git | Int:2026 | File:2025-11] MFI.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\MFI.mq5
+[No-Git | Int:2026 | File:2025-11] MI.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\MI.mq5
+[No-Git | Int:2026 | File:2025-11] Momentum.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Momentum.mq5
+[No-Git | Int:2026 | File:2025-11] OBV.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\OBV.mq5
+[No-Git | Int:2026 | File:2025-11] OsMA.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\OsMA.mq5
+[No-Git | Int:2026 | File:2025-11] ParabolicSAR.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ParabolicSAR.mq5
+[No-Git | Int:2026 | File:2025-11] Price_Channel.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Price_Channel.mq5
+[No-Git | Int:2026 | File:2025-11] PVT.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\PVT.mq5
+[No-Git | Int:2026 | File:2025-11] ROC.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ROC.mq5
+[No-Git | Int:2026 | File:2025-11] RSI.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\RSI.mq5
+[No-Git | Int:2026 | File:2025-11] RVI.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\RVI.mq5
+[No-Git | Int:2026 | File:2025-11] StdDev.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\StdDev.mq5
+[No-Git | Int:2026 | File:2025-11] Stochastic.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Stochastic.mq5
+[No-Git | Int:2026 | File:2025-11] TEMA.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\TEMA.mq5
+[No-Git | Int:2026 | File:2025-11] TRIX.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\TRIX.mq5
+[No-Git | Int:2026 | File:2025-11] Ultimate_Oscillator.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Ultimate_Oscillator.mq5
+[No-Git | Int:2026 | File:2025-11] VIDYA.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\VIDYA.mq5
+[No-Git | Int:2026 | File:2025-11] Volumes.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Volumes.mq5
+[No-Git | Int:2026 | File:2025-11] VROC.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\VROC.mq5
+[No-Git | Int:2026 | File:2025-11] WPR.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\WPR.mq5
+[No-Git | Int:2026 | File:2025-11] W_AD.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\W_AD.mq5
+[No-Git | Int:2026 | File:2025-11] ZigZag.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ZigZag.mq5
+[No-Git | Int:2026 | File:2025-11] ZigzagColor.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\ZigzagColor.mq5
+[No-Git | Int:2026 | File:2025-11] FlameChart.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Canvas\FlameChart.mq5
+[No-Git | Int:2026 | File:2025-11] ChartPanel.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Panels\ChartPanel\ChartPanel.mq5
+[No-Git | Int:2026 | File:2025-11] SimplePanel.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\Panels\SimplePanel\SimplePanel.mq5
+[No-Git | Int:2026 | File:2025-11] Camarilla Channel.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\Camarilla Channel.mq5
+[No-Git | Int:2026 | File:2025-11] DeMark Channel.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\DeMark Channel.mq5
+[No-Git | Int:2026 | File:2025-11] Donchian Channel.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\Donchian Channel.mq5
+[No-Git | Int:2026 | File:2025-11] Fibonacci Channel.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\Fibonacci Channel.mq5
+[No-Git | Int:2026 | File:2025-11] Keltner Channel.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\Keltner Channel.mq5
+[No-Git | Int:2026 | File:2025-11] MarketProfile Canvas.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\MarketProfile Canvas.mq5
+[No-Git | Int:2026 | File:2025-11] MarketProfile.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\MarketProfile.mq5
+[No-Git | Int:2026 | File:2025-11] MurreyMath Channel.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\MurreyMath Channel.mq5
+[No-Git | Int:2026 | File:2025-11] NRTR Channel.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\NRTR Channel.mq5
+[No-Git | Int:2026 | File:2025-11] Parabolic Channel.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\Parabolic Channel.mq5
+[No-Git | Int:2026 | File:2025-11] Pivot Channel.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\Pivot Channel.mq5
+[No-Git | Int:2026 | File:2025-11] Woodie Channel.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Free Indicators\Woodie Channel.mq5
+[No-Git | Int:2026 | File:2025-11] AccountInfoSample.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\AccountInfo\AccountInfoSample.mq5
+[No-Git | Int:2026 | File:2025-11] ArrayDoubleSample.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\ArrayDouble\ArrayDoubleSample.mq5
+[No-Git | Int:2026 | File:2025-11] CanvasSample.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\Canvas\CanvasSample.mq5
+[No-Git | Int:2026 | File:2025-11] HistogramChartSample.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\Canvas\Charts\HistogramChartSample.mq5
+[No-Git | Int:2026 | File:2025-11] LineChartSample.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\Canvas\Charts\LineChartSample.mq5
+[No-Git | Int:2026 | File:2025-11] PieChartSample.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\Canvas\Charts\PieChartSample.mq5
+[No-Git | Int:2026 | File:2025-11] ObjChartSample.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\ObjectChart\ObjChartSample.mq5
+[No-Git | Int:2026 | File:2025-11] SphereSample.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\ObjectSphere\SphereSample.mq5
+[No-Git | Int:2026 | File:2025-11] BitonicSort.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\OpenCL\Double\BitonicSort.mq5
+[No-Git | Int:2026 | File:2025-11] FFT.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\OpenCL\Double\FFT.mq5
+[No-Git | Int:2026 | File:2025-11] MatrixMult.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\OpenCL\Double\MatrixMult.mq5
+[No-Git | Int:2026 | File:2025-11] Wavelet.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\OpenCL\Double\Wavelet.mq5
+[No-Git | Int:2026 | File:2025-11] Seascape.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\OpenCL\Seascape\Seascape.mq5
+[No-Git | Int:2026 | File:2025-11] OrderInfoSample.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\OrderInfo\OrderInfoSample.mq5
+[No-Git | Int:2026 | File:2025-11] PositionInfoSample.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\PositionInfo\PositionInfoSample.mq5
+[No-Git | Int:2026 | File:2025-11] Remnant 3D.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\Remnant 3D\Remnant 3D.mq5
+[No-Git | Int:2026 | File:2025-11] SymbolInfoSample.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\Examples\SymbolInfo\SymbolInfoSample.mq5
+[No-Git | Int:2026 | File:2025-11] TestClasses.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\UnitTests\Alglib\TestClasses.mq5
+[No-Git | Int:2026 | File:2025-11] TestInterfaces.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\UnitTests\Alglib\TestInterfaces.mq5
+[No-Git | Int:2026 | File:2025-11] TestFuzzy.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\UnitTests\Fuzzy\TestFuzzy.mq5
+[No-Git | Int:2026 | File:2025-11] TestArrayList.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\UnitTests\Generic\TestArrayList.mq5
+[No-Git | Int:2026 | File:2025-11] TestHashMap.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\UnitTests\Generic\TestHashMap.mq5
+[No-Git | Int:2026 | File:2025-11] TestHashSet.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\UnitTests\Generic\TestHashSet.mq5
+[No-Git | Int:2026 | File:2025-11] TestLinkedList.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\UnitTests\Generic\TestLinkedList.mq5
+[No-Git | Int:2026 | File:2025-11] TestQueue.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\UnitTests\Generic\TestQueue.mq5
+[No-Git | Int:2026 | File:2025-11] TestRedBlackTree.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\UnitTests\Generic\TestRedBlackTree.mq5
+[No-Git | Int:2026 | File:2025-11] TestSortedMap.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\UnitTests\Generic\TestSortedMap.mq5
+[No-Git | Int:2026 | File:2025-11] TestSortedSet.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\UnitTests\Generic\TestSortedSet.mq5
+[No-Git | Int:2026 | File:2025-11] TestStack.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\UnitTests\Generic\TestStack.mq5
+[No-Git | Int:2026 | File:2025-11] TestStat.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\UnitTests\Stat\TestStat.mq5
+[No-Git | Int:2026 | File:2025-11] TestStatBenchmark.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\UnitTests\Stat\TestStatBenchmark.mq5
+[No-Git | Int:2026 | File:2025-11] TestStatPrecision.mq5 (v1.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\UnitTests\Stat\TestStatPrecision.mq5
+[No-Git | Int:2026 | File:2026-03] KOPYTRADE_GOLD_PRO_v5.mq5 (v5.00) | Path: C:\Users\Usuario\Downloads\KOPYTRADE_GOLD_PRO_v5.mq5
+[No-Git | Int:None | File:2026-01] SqATR.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Indicators\SqATR.ex5
+[No-Git | Int:None | File:2026-01] SqHighest.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\F762D69EEEA9B4430D7F17C82167C844\MQL5\Indicators\SqHighest.ex5
+[No-Git | Int:None | File:2026-01] SqLinReg.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\F762D69EEEA9B4430D7F17C82167C844\MQL5\Indicators\SqLinReg.ex5
+[No-Git | Int:None | File:2026-01] XAUUSD_EMA_RSI_ATR_Trailing_Full.ex5 | Path: C:\Users\Usuario\Desktop\archivo MQL5 compilado que saco de experts\XAUUSD_EMA_RSI_ATR_Trailing_Full.ex5
+[No-Git | Int:None | File:2026-02] XAUUSD_Scalping_Martingale.mq5 (v1.00) | Path: C:\Users\Usuario\Downloads\XAUUSD_Scalping_Martingale.mq5
+[No-Git | Int:None | File:2026-02] XAUUSD_Smart_v2.3_CORREGIDO.mq5 (v2.0) | Path: C:\Users\Usuario\Downloads\XAUUSD_Smart_v2.3_CORREGIDO.mq5
+[2026-03 | Int:None | File:2026-03] BTC_V4_Original.mq5 | Path: c:\proyectos\APP KOPYTRADING\BTC_V4_Original.mq5
+[2026-03 | Int:2026-02 | File:2026-02] KOPYTRADE_BTCUSD_BTCStormRider.mq5 (v4.20) | Path: c:\proyectos\APP KOPYTRADING\marketplace_bots_mt_5.zip::public/uploads/KOPYTRADE_BTCUSD_BTCStormRider.mq5
+[2026-03 | Int:2026-02 | File:2026-02] KOPYTRADE_EURUSD_EuroPrecisionFlow.mq5 (v2.00) | Path: c:\proyectos\APP KOPYTRADING\marketplace_bots_mt_5.zip::public/uploads/KOPYTRADE_EURUSD_EuroPrecisionFlow.mq5
+[2026-03 | Int:2026-02 | File:2026-02] KOPYTRADE_USDJPY_YenNinjaGhost.mq5 (v3.00) | Path: c:\proyectos\APP KOPYTRADING\marketplace_bots_mt_5.zip::public/uploads/KOPYTRADE_USDJPY_YenNinjaGhost.mq5
+[2026-03 | Int:2026-02 | File:2026-02] KOPYTRADE_XAUUSD_Ametralladora.mq5 | Path: c:\proyectos\APP KOPYTRADING\marketplace_bots_mt_5.zip::public/uploads/KOPYTRADE_XAUUSD_Ametralladora.mq5
+[2026-03 | Int:None | File:2026-03] BTCSTORM_RIDER_ULTRA_v7_11.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\BTCSTORM_RIDER_ULTRA_v7_11.ex5
+[2026-03 | Int:2026 | File:2026-03] BTCSTORM_RIDER_ULTRA_v7_11.mq5 (v7.11) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\BTCSTORM_RIDER_ULTRA_v7_11.mq5
+[2026-03 | Int:None | File:2026-03] KOPYTRADE_BTCUSD_BTCStormRider.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_BTCUSD_BTCStormRider.ex5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_BTCUSD_Evolution_Universal_v7_50.mq5 (v7.50) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_BTCUSD_Evolution_Universal_v7_50.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_BTCUSD_EVOLUTION_v7_4_2.mq5 (v7.42) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_BTCUSD_EVOLUTION_v7_4_2.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_BTCUSD_EVOLUTION_v7_5.mq5 (v7.50) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_BTCUSD_EVOLUTION_v7_5.mq5
+[2026-03 | Int:None | File:2026-03] KOPYTRADE_BTCUSD_EVOLUTION_v7_6_HYBRID.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_BTCUSD_EVOLUTION_v7_6_HYBRID.ex5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_BTCUSD_EVOLUTION_v7_6_HYBRID.mq5 (v7.60) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_BTCUSD_EVOLUTION_v7_6_HYBRID.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_BTCUSD_EVOLUTION_v8_0_PRICEMASTER.mq5 (v8.00) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_BTCUSD_EVOLUTION_v8_0_PRICEMASTER.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_BTCUSD_EVOLUTION_v8_1_PRICEMASTERPRO.mq5 (v8.10) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_BTCUSD_EVOLUTION_v8_1_PRICEMASTERPRO.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_BTCUSD_EVOLUTION_v8_3_1_TITAN_SHIELD.mq5 (v8.31) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_BTCUSD_EVOLUTION_v8_3_1_TITAN_SHIELD.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_Ametralladora_Evolution.mq5 (v5.50) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_Ametralladora_Evolution.mq5
+[2026-03 | Int:None | File:2026-03] KOPYTRADE_XAUUSD_Ametralladora_ORIGINAL.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_Ametralladora_ORIGINAL.ex5
+[2026-03 | Int:None | File:2026-03] KOPYTRADE_XAUUSD_Evolution_Universal_v5_90.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_Evolution_Universal_v5_90.ex5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_Evolution_Universal_v5_90.mq5 (v5.90) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_Evolution_Universal_v5_90.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_Evolution_Universal_v5_95.mq5 (v5.95) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_Evolution_Universal_v5_95.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_Evolution_Universal_v6_10.mq5 (v6.10) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_Evolution_Universal_v6_10.mq5
+[2026-03 | Int:None | File:2026-03] KOPYTRADE_XAUUSD_EVOLUTION_v7_4_2.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_EVOLUTION_v7_4_2.ex5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_EVOLUTION_v7_4_2.mq5 (v7.42) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_EVOLUTION_v7_4_2.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_EVOLUTION_v7_5.mq5 (v7.50) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_EVOLUTION_v7_5.mq5
+[2026-03 | Int:None | File:2026-03] KOPYTRADE_XAUUSD_EVOLUTION_v7_6_HYBRID.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_EVOLUTION_v7_6_HYBRID.ex5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_EVOLUTION_v7_6_HYBRID.mq5 (v7.60) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_EVOLUTION_v7_6_HYBRID.mq5
+[2026-03 | Int:None | File:2026-03] KOPYTRADE_XAUUSD_EVOLUTION_v8_0_PRICEMASTER.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_EVOLUTION_v8_0_PRICEMASTER.ex5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_EVOLUTION_v8_0_PRICEMASTER.mq5 (v8.00) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_EVOLUTION_v8_0_PRICEMASTER.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_EVOLUTION_v8_1_PRICEMASTERPRO.mq5 (v8.10) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_EVOLUTION_v8_1_PRICEMASTERPRO.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_EVOLUTION_v8_3_1_TITAN_SHIELD.mq5 (v8.31) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_EVOLUTION_v8_3_1_TITAN_SHIELD.mq5
+[2026-03 | Int:None | File:2026-03] KOPYTRADE_XAUUSD_GoldSentinelPro.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_GoldSentinelPro.ex5
+[2026-03 | Int:None | File:2026-03] KOPYTRADE_XAUUSD_GoldSentinelPro.mq5 (v1.20) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_GoldSentinelPro.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_TITAN_FIBO_PRO.mq5 (v1.00) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADE_XAUUSD_TITAN_FIBO_PRO.mq5
+[2026-03 | Int:2026 | File:2026-03] AMETRA_ULTRA_CENT_v5.71.mq5 (v5.71) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\AMETRA_ULTRA_CENT_v5.71.mq5
+[2026-03 | Int:2026 | File:2026-03] BTCSTORM_RIDER_ULTRA_v7.0.mq5 (v7.00) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\BTCSTORM_RIDER_ULTRA_v7.0.mq5
+[2026-03 | Int:2026 | File:2026-03] BTC_STORM_ULTRA_CENT.mq5 (v7.11) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\BTC_STORM_ULTRA_CENT.mq5
+[2026-03 | Int:2026 | File:2026-03] BTC_STORM_ULTRA_USD.mq5 (v7.11) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\BTC_STORM_ULTRA_USD.mq5
+[2026-03 | Int:None | File:2026-03] KOPYTRADE_BTCUSD_BTCStormRider_Cent.mq5 (v6.65) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_BTCUSD_BTCStormRider_Cent.mq5
+[2026-03 | Int:None | File:2026-03] KOPYTRADE_BTCUSD_BTCStormRider_v5.mq5 (v5.00) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_BTCUSD_BTCStormRider_v5.mq5
+[2026-03 | Int:None | File:2026-03] KOPYTRADE_BTCUSD_BTCStormRider_v6 - copia.mq5 (v6.00) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_BTCUSD_BTCStormRider_v6 - copia.mq5
+[2026-03 | Int:None | File:2026-03] KOPYTRADE_BTCUSD_BTCStormRider_v6.6.mq5 (v6.60) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_BTCUSD_BTCStormRider_v6.6.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_BTCUSD_EVOLUTION_v7_3.mq5 (v7.30) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_BTCUSD_EVOLUTION_v7_3.mq5
+[2026-03 | Int:None | File:2026-03] KOPYTRADE_XAUUSD_Ametralladora_Cent.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_XAUUSD_Ametralladora_Cent.ex5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_Ametralladora_Cent.mq5 (v5.55) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_XAUUSD_Ametralladora_Cent.mq5
+[2026-03 | Int:None | File:2026-03] KOPYTRADE_XAUUSD_Ametralladora_v5.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_XAUUSD_Ametralladora_v5.ex5
+[2026-03 | Int:None | File:2026-03] KOPYTRADE_XAUUSD_Ametralladora_v5.mq5 (v5.00) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_XAUUSD_Ametralladora_v5.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_Ametralladora_v5_3.mq5 (v5.30) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_XAUUSD_Ametralladora_v5_3.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_Evolution_Pro_v5_8.mq5 (v5.82) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_XAUUSD_Evolution_Pro_v5_8.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_EVOLUTION_v7_0.mq5 (v7.00) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_XAUUSD_EVOLUTION_v7_0.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_EVOLUTION_v7_1.mq5 (v7.10) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_XAUUSD_EVOLUTION_v7_1.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_EVOLUTION_v7_2.mq5 (v7.20) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_XAUUSD_EVOLUTION_v7_2.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_EVOLUTION_v7_3.mq5 (v7.30) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_XAUUSD_EVOLUTION_v7_3.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAUUSD_EVOLUTION_v7_4.mq5 (v7.40) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_XAUUSD_EVOLUTION_v7_4.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAU_PRO_CENT.mq5 (v5.84) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_XAU_PRO_CENT.mq5
+[2026-03 | Int:2026 | File:2026-03] KOPYTRADE_XAU_PRO_USD.mq5 (v5.84) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\KOPYTRADE_XAU_PRO_USD.mq5
+[2026-03 | Int:2026 | File:2026-03] LA_AMETRALLADORA_v6.0.mq5 (v6.00) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\LA_AMETRALLADORA_v6.0.mq5
+[2026-03 | Int:2026 | File:2026-03] XAUUSD_AMETRALLADORA_ULTRA_v53_FINAL.mq5 (v5.32) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\LEGACY\XAUUSD_AMETRALLADORA_ULTRA_v53_FINAL.mq5
+[2026-03 | Int:None | File:2026-03] EA_Scalping_Inteligente_v43.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\SCALPING\EA_Scalping_Inteligente_v43.ex5
+[2026-03 | Int:None | File:2026-03] EA_Scalping_Inteligente_v43.mq5 (v4.3) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\SCALPING\EA_Scalping_Inteligente_v43.mq5
+[2026-03 | Int:None | File:2026-03] EA_Scalping_Inteligente_v44.mq5 (v4.4) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\SCALPING\EA_Scalping_Inteligente_v44.mq5
+[2026-03 | Int:None | File:2026-03] EA_Scalping_Inteligente_v45.mq5 (v4.5) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\SCALPING\EA_Scalping_Inteligente_v45.mq5
+[2026-03 | Int:None | File:2026-03] EA_Scalping_Inteligente_v46.mq5 (v4.6) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\SCALPING\EA_Scalping_Inteligente_v46.mq5
+[2026-03 | Int:None | File:2026-03] EA_Scalping_Inteligente_v47.mq5 (v4.7) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\SCALPING\EA_Scalping_Inteligente_v47.mq5
+[2026-03 | Int:None | File:2026-03] EA_Scalping_Inteligente_v48.mq5 (v4.8) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\SCALPING\EA_Scalping_Inteligente_v48.mq5
+[2026-03 | Int:None | File:2026-03] EA_Scalping_Inteligente_v49.mq5 (v4.9) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\SCALPING\EA_Scalping_Inteligente_v49.mq5
+[2026-03 | Int:None | File:2026-03] EA_Scalping_Inteligente_v50.mq5 (v5.0) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\SCALPING\EA_Scalping_Inteligente_v50.mq5
+[2026-03 | Int:None | File:2026-03] EA_Scalping_Inteligente_v52.mq5 (v5.2) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\SCALPING\EA_Scalping_Inteligente_v52.mq5
+[2026-03 | Int:None | File:2026-03] EA_Scalping_Inteligente_v53.mq5 (v5.3) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\SCALPING\EA_Scalping_Inteligente_v53.mq5
+[No-Git | Int:None | File:2026-03] KOPYTRADE_GOLD_PRO_v5.ex5 | Path: C:\Users\Usuario\Downloads\KOPYTRADE_GOLD_PRO_v5.ex5
+[2026-03 | Int:2026 | File:2026-04] KOPYTRADE_XAUUSD_Evolution_Pro_v5_84.mq5 (v5.84) | Path: C:\Users\Usuario\Downloads\kopytrading\public\uploads\KOPYTRADE_XAUUSD_Evolution_Pro_v5_84.mq5
+[2026-03 | Int:None | File:2026-04] BTC-SR_HUD_v1.1.ex5 | Path: C:\Users\Usuario\Downloads\kopytrading\public\uploads\bots\BTC-SR_HUD_v1.1.ex5
+[2026-03 | Int:2026 | File:2026-04] BTC-SR_HUD_v1.1.mq5 (v1.10) | Path: C:\Users\Usuario\Downloads\kopytrading\public\uploads\bots\BTC-SR_HUD_v1.1.mq5
+[2026-03 | Int:2026 | File:2026-04] BTC-SR_v1.1.mq5 (v1.10) | Path: C:\Users\Usuario\Downloads\kopytrading\public\uploads\bots\BTC-SR_v1.1.mq5
+[2026-03 | Int:None | File:2026-04] EUR-EPF_v1.1.mq5 (v2.10) | Path: C:\Users\Usuario\Downloads\kopytrading\public\uploads\bots\EUR-EPF_v1.1.mq5
+[2026-03 | Int:None | File:2026-04] JPY-NG_v1.1.mq5 (v3.10) | Path: C:\Users\Usuario\Downloads\kopytrading\public\uploads\bots\JPY-NG_v1.1.mq5
+[2026-03 | Int:2026 | File:2026-04] XAU-MG_v1.1.mq5 (v1.10) | Path: C:\Users\Usuario\Downloads\kopytrading\public\uploads\bots\XAU-MG_v1.1.mq5
+[2026-03 | Int:None | File:2026-09] KOPYTRADE_BTCUSD_Evolution_Universal_v7_2.mq5 | Path: git::public/uploads/KOPYTRADE_BTCUSD_Evolution_Universal_v7_2.mq5
+[2026-03 | Int:None | File:2026-09] KOPYTRADE_XAUUSD_Ametralladora_v5_1.mq5 | Path: git::public/uploads/KOPYTRADE_XAUUSD_Ametralladora_v5_1.mq5
+[2026-03 | Int:None | File:2026-09] BTCSTORM_RIDER_ULTRA_v7_10.mq5 | Path: git::public/uploads/BTCSTORM_RIDER_ULTRA_v7_10.mq5
+[2026-03 | Int:None | File:2026-09] KOPYTRADE_XAUUSD_Evolution_Pro_v5_83.mq5 | Path: git::public/uploads/KOPYTRADE_XAUUSD_Evolution_Pro_v5_83.mq5
+[2026-03 | Int:None | File:2026-09] KOPYTRADE_BTCUSD_BTCStormRider_v4.5.mq5 | Path: git::public/uploads/KOPYTRADE_BTCUSD_BTCStormRider_v4.5.mq5
+[2026-03 | Int:None | File:2026-09] KOPYTRADE_BTCUSD_BTCStormRider_v4.mq5 | Path: git::public/uploads/KOPYTRADE_BTCUSD_BTCStormRider_v4.mq5
+[2026-03 | Int:None | File:2026-09] LA_AMETRALLADORA_ESTABLE_v3.61.ex5 | Path: git::public/uploads/LA_AMETRALLADORA_ESTABLE_v3.61.ex5
+[2026-03 | Int:None | File:2026-09] LA_AMETRALLADORA_ESTABLE_v3.61.mq5 | Path: git::public/uploads/LA_AMETRALLADORA_ESTABLE_v3.61.mq5
+[2026-03 | Int:None | File:2026-09] LA_AMETRALLADORA_MEJORADA_v4.0.ex5 | Path: git::public/uploads/LA_AMETRALLADORA_MEJORADA_v4.0.ex5
+[2026-03 | Int:None | File:2026-09] LA_AMETRALLADORA_MEJORADA_v4.0.mq5 | Path: git::public/uploads/LA_AMETRALLADORA_MEJORADA_v4.0.mq5
+[2026-03 | Int:None | File:2026-09] LA_AMETRALLADORA_MEJORADA_v4.1.mq5 | Path: git::public/uploads/LA_AMETRALLADORA_MEJORADA_v4.1.mq5
+[2026-03 | Int:None | File:2026-09] LA_AMETRALLADORA_MEJORADA_v4.2.mq5 | Path: git::public/uploads/LA_AMETRALLADORA_MEJORADA_v4.2.mq5
+[2026-03 | Int:None | File:2026-09] LA_AMETRALLADORA_MEJORADA_v4.3.mq5 | Path: git::public/uploads/LA_AMETRALLADORA_MEJORADA_v4.3.mq5
+[2026-03 | Int:None | File:2026-09] KOPYTRADE_BTCUSD_BTCStormRider_v6.mq5 | Path: git::public/uploads/KOPYTRADE_BTCUSD_BTCStormRider_v6.mq5
+[2026-03 | Int:None | File:2026-09] KOPYTRADE_XAUUSD_Ametralladora_ORIGINAL.mq5 | Path: git::public/uploads/KOPYTRADE_XAUUSD_Ametralladora_ORIGINAL.mq5
+[2026-03 | Int:None | File:2026-09] EA_Scalping_Inteligente_v51.mq5 | Path: git::public/uploads/EA_Scalping_Inteligente_v51.mq5
+[No-Git | Int:None | File:2026-04] Volumen Profile MT5.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Indicators\Volumen Profile MT5.ex5
+[No-Git | Int:2026-04 | File:2026-04] [Cent:Micro] GOLD Shield.ex5 | Path: C:\Users\Usuario\Downloads\GOLD_Shield.zip::[Cent:Micro] GOLD Shield.ex5
+[No-Git | Int:2026-04 | File:2026-04] ._[Cent:Micro] GOLD Shield.ex5 | Path: C:\Users\Usuario\Downloads\GOLD_Shield.zip::__MACOSX/._[Cent:Micro] GOLD Shield.ex5
+[No-Git | Int:2026-04 | File:2026-04] [Standard] GOLD Shield.ex5 | Path: C:\Users\Usuario\Downloads\GOLD_Shield.zip::[Standard] GOLD Shield.ex5
+[No-Git | Int:2026-04 | File:2026-04] ._[Standard] GOLD Shield.ex5 | Path: C:\Users\Usuario\Downloads\GOLD_Shield.zip::__MACOSX/._[Standard] GOLD Shield.ex5
+[2026-04 | Int:None | File:2026-09] 00_ELITE_SUPREME_v13.70.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS MARTINGALA CLAUDE/00_ELITE_SUPREME_v13.70.mq5
+[2026-04 | Int:None | File:2026-09] 00_ELITE_SUPREME_v13.61.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_SUPREME_v13.61.mq5
+[2026-04 | Int:None | File:2026-09] 00_ELITE_SUPREME_v13.80_INSTITUTIONAL.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_SUPREME_v13.80_INSTITUTIONAL.mq5
+[2026-04 | Int:None | File:2026-09] KOPYTRADE_XAUUSD_Evolution_Pro_v5_84.ex5 | Path: git::public/uploads/KOPYTRADE_XAUUSD_Evolution_Pro_v5_84.ex5
+[2026-04 | Int:None | File:2026-09] 00_ELITE_SUPREME_v13.61.ex5 | Path: git::public/uploads/bots/00_ELITE_SUPREME_v13.61.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_WARRIOR_STYLIZED_MASTER.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\00_ELITE_WARRIOR_STYLIZED_MASTER.ex5
+[2026-05 | Int:2026 | File:2026-09] 00_ELITE_WARRIOR_STYLIZED_MASTER.mq5 (v40.20) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\00_ELITE_WARRIOR_STYLIZED_MASTER.mq5
+[2026-05 | Int:None | File:2026-09] XAUUSD_Smart_Martingale_v3.4.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\XAUUSD_Smart_Martingale_v3.4.ex5
+[2026-05 | Int:None | File:2026-09] XAUUSD_Smart_Martingale_v3.4.mq5 (v1.00) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\XAUUSD_Smart_Martingale_v3.4.mq5
+[No-Git | Int:2026-05 | File:2026-07] Maiko_Sniper_PRO_CENT_TEST_V12.mq5 (v11.99) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\Maiko_Sniper_PRO_CENT_TEST_V12.mq5
+[2026-05 | Int:None | File:2026-07] Maiko_Sniper_PRO_CENT_V11.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\Maiko_Sniper_PRO_CENT_V11.ex5
+[2026-05 | Int:2026-05 | File:2026-09] Maiko_Sniper_PRO_CENT_V11.mq5 (v11.99) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\Maiko_Sniper_PRO_CENT_V11.mq5
+[No-Git | Int:2026-05 | File:2026-07] Maiko_Sniper_PRO_GOLD_TEST_V12.mq5 (v11.99) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\Maiko_Sniper_PRO_GOLD_TEST_V12.mq5
+[2026-05 | Int:None | File:2026-07] Maiko_Sniper_PRO_GOLD_V11.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\Maiko_Sniper_PRO_GOLD_V11.ex5
+[2026-05 | Int:2026-05 | File:2026-09] Maiko_Sniper_PRO_GOLD_V11.mq5 (v11.99) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\Maiko_Sniper_PRO_GOLD_V11.mq5
+[2026-05 | Int:None | File:2026-06] Maiko_Sniper_PRO_GOLD_CLIENT.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\Maiko_Sniper_PRO_GOLD_CLIENT.ex5
+[2026-05 | Int:None | File:2026-07] Maiko_BTC_Weekend_PRUEBA.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\bots\Maiko_BTC_Weekend_PRUEBA.ex5
+[2026-05 | Int:None | File:2026-07] Maiko_Sniper_PRO_CENT_PRUEBA.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\bots\Maiko_Sniper_PRO_CENT_PRUEBA.ex5
+[2026-05 | Int:None | File:2026-07] Maiko_Sniper_PRO_GOLD_PRUEBA.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\bots\Maiko_Sniper_PRO_GOLD_PRUEBA.ex5
+[2026-05 | Int:None | File:2025-11] StdDev.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Indicators\Examples\StdDev.ex5
+[No-Git | Int:None | File:2026-05] Goldwave EA MT5.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Experts\Market\Goldwave EA MT5.ex5
+[No-Git | Int:None | File:2026-05] Quantum Queen MT5.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Experts\Market\Quantum Queen MT5.ex5
+[No-Git | Int:None | File:2026-05] SwissSniperEA.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Experts\Market\SwissSniperEA.ex5
+[No-Git | Int:None | File:2026-05] SMC Liquidity.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Indicators\Market\SMC Liquidity.ex5
+[2026-05 | Int:None | File:2026-05] euro ai ea.ex5 | Path: C:\Users\Usuario\Downloads\euro ai ea.ex5
+[2026-05 | Int:2026 | File:2026-04] KOPYTRADE_v78_SCALING_BTC.mq5 (v7.46) | Path: C:\Users\Usuario\Downloads\APP\KOPYTRADE_v78_SCALING_BTC.mq5
+[2026-05 | Int:2026 | File:2026-04] KOPYTRADE_V78_SCALING_XAU.mq5 (v7.16) | Path: C:\Users\Usuario\Downloads\APP\KOPYTRADE_V78_SCALING_XAU.mq5
+[2026-05 | Int:None | File:2026-09] BTC_V4_Original_utf8.mq5 | Path: git::BTC_V4_Original_utf8.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_GOLD_AMETRALLADORA.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/00_ELITE_GOLD_AMETRALLADORA.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_GOLD_AMETRALLADORA.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/00_ELITE_GOLD_AMETRALLADORA.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_GOLD_AMETRALLADORA1.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/00_ELITE_GOLD_AMETRALLADORA1.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_GOLD_AMETRALLADORA1.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/00_ELITE_GOLD_AMETRALLADORA1.mq5
+[2026-05 | Int:None | File:2026-09] MSC_Pro_Evolution_V2_1_FINAL.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS GEMINI FINAL/MSC_Pro_Evolution_V2_1_FINAL.ex5
+[2026-05 | Int:None | File:2026-09] MSC_Pro_Evolution_V2_1_FINAL.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS GEMINI FINAL/MSC_Pro_Evolution_V2_1_FINAL.mq5
+[2026-05 | Int:None | File:2026-09] MSC_Pro_Evolution_V3_FINAL_SHIELD.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS GEMINI FINAL/MSC_Pro_Evolution_V3_FINAL_SHIELD.ex5
+[2026-05 | Int:None | File:2026-09] MSC_Pro_Evolution_V3_FINAL_SHIELD.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS GEMINI FINAL/MSC_Pro_Evolution_V3_FINAL_SHIELD.mq5
+[2026-05 | Int:None | File:2026-09] MSC_Pro_Evolution_V2_PROTECTED.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS GEMINI PROTECTED/MSC_Pro_Evolution_V2_PROTECTED.ex5
+[2026-05 | Int:None | File:2026-09] MSC_Pro_Evolution_V2_PROTECTED.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS GEMINI PROTECTED/MSC_Pro_Evolution_V2_PROTECTED.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v13.90_INSTITUTIONAL.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS MARTINGALA CLAUDE/00_ELITE_APEX_v13.90_INSTITUTIONAL.mq5
+[2026-05 | Int:None | File:2026-09] BTC-SR_v1.1.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS MARTINGALA CLAUDE/BTC-SR_v1.1.ex5
+[2026-05 | Int:None | File:2026-09] EUR-EPF_v1.1.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS MARTINGALA CLAUDE/EUR-EPF_v1.1.ex5
+[2026-05 | Int:None | File:2026-09] JPY-NG_v1.1.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS MARTINGALA CLAUDE/JPY-NG_v1.1.ex5
+[2026-05 | Int:None | File:2026-09] Bitcoin_SCALPER_v7.2_DIRECCION_SMART.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/Bitcoin_SCALPER_v7.2_DIRECCION_SMART.ex5
+[2026-05 | Int:None | File:2026-09] Bitcoin_SCALPER_v7.2_DIRECCION_SMART.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/Bitcoin_SCALPER_v7.2_DIRECCION_SMART.mq5
+[2026-05 | Int:None | File:2026-09] Bitcoin_Scalping_24_7.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/Bitcoin_Scalping_24_7.ex5
+[2026-05 | Int:None | File:2026-09] Bitcoin_Scalping_24_7.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/Bitcoin_Scalping_24_7.mq5
+[2026-05 | Int:None | File:2026-09] EA_XAUUSD_M5_BUY_SAFE_v1.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/EA_XAUUSD_M5_BUY_SAFE_v1.ex5
+[2026-05 | Int:None | File:2026-09] EA_XAUUSD_M5_BUY_SAFE_v1.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/EA_XAUUSD_M5_BUY_SAFE_v1.mq5
+[2026-05 | Int:None | File:2026-09] Scalper_EMA_RSI_ATR.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/Scalper_EMA_RSI_ATR.ex5
+[2026-05 | Int:None | File:2026-09] Scalper_EMA_RSI_ATR.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/Scalper_EMA_RSI_ATR.mq5
+[2026-05 | Int:None | File:2026-09] ScalpingFIBO.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/ScalpingFIBO.ex5
+[2026-05 | Int:None | File:2026-09] ScalpingFIBO.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/ScalpingFIBO.mq5
+[2026-05 | Int:None | File:2026-09] ScalpingSeguro_v63.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/ScalpingSeguro_v63.ex5
+[2026-05 | Int:None | File:2026-09] ScalpingSeguro_v63.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/ScalpingSeguro_v63.mq5
+[2026-05 | Int:None | File:2026-09] XAUUSD_BuyOnly_Pro.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/XAUUSD_BuyOnly_Pro.ex5
+[2026-05 | Int:None | File:2026-09] XAUUSD_BuyOnly_Pro.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/XAUUSD_BuyOnly_Pro.mq5
+[2026-05 | Int:None | File:2026-09] XAUUSD_Fast_Scalper.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/XAUUSD_Fast_Scalper.ex5
+[2026-05 | Int:None | File:2026-09] XAUUSD_Fast_Scalper.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/XAUUSD_Fast_Scalper.mq5
+[2026-05 | Int:None | File:2026-09] XAUUSD_Momentum_BB_Scalper.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/XAUUSD_Momentum_BB_Scalper.ex5
+[2026-05 | Int:None | File:2026-09] XAUUSD_Momentum_BB_Scalper.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/BOTS SCALPING Y ORO ANTIGUOS/XAUUSD_Momentum_BB_Scalper.mq5
+[2026-05 | Int:None | File:2026-09] KOPYTRADE_EURUSD_EuroPrecisionFlow.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/KOPYTRADE/KOPYTRADE_EURUSD_EuroPrecisionFlow.ex5
+[2026-05 | Int:None | File:2026-09] KOPYTRADE_USDJPY_YenNinjaGhost.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/KOPYTRADE/KOPYTRADE_USDJPY_YenNinjaGhost.ex5
+[2026-05 | Int:None | File:2026-09] KOPYTRADE_BTCUSD_EVOLUTION_v7_6_HYPER_ELITE.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/KOPYTRADE_BTCUSD_EVOLUTION_v7_6_HYPER_ELITE.ex5
+[2026-05 | Int:None | File:2026-09] KOPYTRADE_BTCUSD_EVOLUTION_v7_6_HYPER_ELITE.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/KOPYTRADE_BTCUSD_EVOLUTION_v7_6_HYPER_ELITE.mq5
+[2026-05 | Int:None | File:2026-09] KOPYTRADE_XAUUSD_Ametralladora_Evolution - copia.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/KOPYTRADE_XAUUSD_Ametralladora_Evolution - copia.mq5
+[2026-05 | Int:None | File:2026-09] KOPYTRADE_XAUUSD_Ametralladora_v5_3 - copia.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/KOPYTRADE_XAUUSD_Ametralladora_v5_3 - copia.mq5
+[2026-05 | Int:None | File:2026-09] KOPYTRADE_XAUUSD_EVOLUTION_v7_6_HYPER_ELITE.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/KOPYTRADE_XAUUSD_EVOLUTION_v7_6_HYPER_ELITE.ex5
+[2026-05 | Int:None | File:2026-09] KOPYTRADE_XAUUSD_EVOLUTION_v7_6_HYPER_ELITE.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/KOPYTRADE_XAUUSD_EVOLUTION_v7_6_HYPER_ELITE.mq5
+[2026-05 | Int:None | File:2026-09] KOPYTRADE_XAUUSD_EVOLUTION_v8_2_2_ELITE_ARCHITECT.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/KOPYTRADE_XAUUSD_EVOLUTION_v8_2_2_ELITE_ARCHITECT.mq5
+[2026-05 | Int:None | File:2026-09] KOPYTRADE_v78_SCALING_XAU.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/KOPYTRADE_v78_SCALING_XAU.ex5
+[2026-05 | Int:None | File:2026-09] Kopytrading_Integration.mqh.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/Kopytrading_Integration.mqh.mq5
+[2026-05 | Int:None | File:2026-09] LA_AMETRALLADORA_ULTRA_v53.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/LA_AMETRALLADORA_ULTRA_v53.mq5
+[2026-05 | Int:None | File:2026-09] MSC_Hybrid_V4_AMETRALLADORA.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_Hybrid_V4_AMETRALLADORA.mq5
+[2026-05 | Int:None | File:2026-09] MSC_Hybrid_V4_BI-DIRECTIONAL.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_Hybrid_V4_BI-DIRECTIONAL.mq5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_FINAL.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_FINAL.mq5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_V4_ULTIMATE.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_V4_ULTIMATE.mq5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_V6_6_HYBRID.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_V6_6_HYBRID.ex5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_V6_6_HYBRID.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_V6_6_HYBRID.mq5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_V6_75_INSISTENTE.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_V6_75_INSISTENTE.ex5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_V6_75_INSISTENTE.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_V6_75_INSISTENTE.mq5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_V6_7_COMMANDER.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_V6_7_COMMANDER.ex5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_V6_7_COMMANDER.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_V6_7_COMMANDER.mq5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_V6_ANTIBLOCK.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_V6_ANTIBLOCK.ex5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_V6_ANTIBLOCK.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_V6_ANTIBLOCK.mq5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_V6_MASTER.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_V6_MASTER.mq5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_V6_OMNI.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_V6_OMNI.ex5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_V6_OMNI.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_V6_OMNI.mq5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_V6_OMNI_CLEAN.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_V6_OMNI_CLEAN.ex5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_V6_OMNI_CLEAN.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_V6_OMNI_CLEAN.mq5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_V6_OMNI_REV.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_V6_OMNI_REV.ex5
+[2026-05 | Int:None | File:2026-09] MSC_NEO_SHIELD_V6_OMNI_REV.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/MSC NEO SHIELD/MSC_NEO_SHIELD_V6_OMNI_REV.mq5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.1.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/XAU-MG_HUD_v3.1.ex5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.1.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/XAU-MG_HUD_v3.1.mq5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.2.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/XAU-MG_HUD_v3.2.ex5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.2.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/XAU-MG_HUD_v3.2.mq5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.4.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/XAU-MG_HUD_v3.4.ex5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.4.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/XAU-MG_HUD_v3.4.mq5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.5.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/XAU-MG_HUD_v3.5.ex5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.5.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/XAU-MG_HUD_v3.5.mq5
+[2026-05 | Int:None | File:2026-09] XAU-MG_v1.1.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/XAU-MG_v1.1.ex5
+[2026-05 | Int:None | File:2026-09] XAUUSD_CENT_HUD_Movible.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/XAUUSD_CENT_HUD_Movible.ex5
+[2026-05 | Int:None | File:2026-09] XAUUSD_CENT_HUD_Movible.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/XAUUSD_CENT_HUD_Movible.mq5
+[2026-05 | Int:None | File:2026-09] XAUUSD_CENT_HUD_TotalControl.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/XAUUSD_CENT_HUD_TotalControl.ex5
+[2026-05 | Int:None | File:2026-09] XAUUSD_CENT_HUD_TotalControl.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Cent/XAUUSD_CENT_HUD_TotalControl.mq5
+[2026-05 | Int:None | File:2026-09]  KOPYTRADE_XAUUSD_Evolution_Universal_v6_10.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/ KOPYTRADE_XAUUSD_Evolution_Universal_v6_10.mq5
+[2026-05 | Int:None | File:2026-09]  Kopytrading_Integration.mqh.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/ Kopytrading_Integration.mqh.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v14.00_WARRIOR.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_APEX_v14.00_WARRIOR.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v14.00_WARRIOR.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_APEX_v14.00_WARRIOR.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v16.80_WARRIOR.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_APEX_v16.80_WARRIOR.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v16.80_WARRIOR.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_APEX_v16.80_WARRIOR.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v17.10_CHRONOS.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_APEX_v17.10_CHRONOS.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v17.10_CHRONOS.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_APEX_v17.10_CHRONOS.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_GOLD_V2.1_TENDENCIA.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_GOLD_V2.1_TENDENCIA.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_GOLD_V2.1_TENDENCIA.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_GOLD_V2.1_TENDENCIA.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_GOLD_V2.20_SNIPER_HUD.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_GOLD_V2.20_SNIPER_HUD.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_GOLD_V2.20_SNIPER_HUD.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_GOLD_V2.20_SNIPER_HUD.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_SUPREME_v13.70.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_SUPREME_v13.70.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_WARRIOR_DEFINITIVO_FIXED.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_WARRIOR_DEFINITIVO_FIXED.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_WARRIOR_DEFINITIVO_FIXED.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_WARRIOR_DEFINITIVO_FIXED.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_WARRIOR_FULL_GATILLO.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_WARRIOR_FULL_GATILLO.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_WARRIOR_FULL_GATILLO.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_WARRIOR_FULL_GATILLO.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_WARRIOR_MASTER_PREDATOR.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_WARRIOR_MASTER_PREDATOR.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_WARRIOR_MASTER_PREDATOR.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/00_ELITE_WARRIOR_MASTER_PREDATOR.mq5
+[2026-05 | Int:None | File:2026-09] MSC_Pro_Evolution_V1.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS GEMINI MSC PRO EVOLUTION ANTIGUOS XAUUSD/MSC_Pro_Evolution_V1.ex5
+[2026-05 | Int:None | File:2026-09] MSC_Pro_Evolution_V1.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS GEMINI MSC PRO EVOLUTION ANTIGUOS XAUUSD/MSC_Pro_Evolution_V1.mq5
+[2026-05 | Int:None | File:2026-09] MSC_Pro_Evolution_V3_PROTECTED_SHIELD.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS GEMINI PROTECTED BACKTEST/MSC_Pro_Evolution_V3_PROTECTED_SHIELD.ex5
+[2026-05 | Int:None | File:2026-09] MSC_Pro_Evolution_V3_PROTECTED_SHIELD.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS GEMINI PROTECTED BACKTEST/MSC_Pro_Evolution_V3_PROTECTED_SHIELD.mq5
+[2026-05 | Int:None | File:2026-09] Elite_Gold_HUGO_Sniper.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA CLAUDE/Elite_Gold_HUGO_Sniper.ex5
+[2026-05 | Int:None | File:2026-09] Elite_Gold_HUGO_Sniper.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA CLAUDE/Elite_Gold_HUGO_Sniper.mq5
+[2026-05 | Int:None | File:2026-09] Martingala Scalping Claude v2.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA CLAUDE/Martingala Scalping Claude v2.ex5
+[2026-05 | Int:None | File:2026-09] Martingala Scalping Claude v2.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA CLAUDE/Martingala Scalping Claude v2.mq5
+[2026-05 | Int:None | File:2026-09] Martingala_Scalping_Claude_UNIVERSAL.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA CLAUDE/Martingala_Scalping_Claude_UNIVERSAL.ex5
+[2026-05 | Int:None | File:2026-09] Martingala_Scalping_Claude_UNIVERSAL.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA CLAUDE/Martingala_Scalping_Claude_UNIVERSAL.mq5
+[2026-05 | Int:None | File:2026-09] Martingala_Scalping_Claude_v1.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA CLAUDE/Martingala_Scalping_Claude_v1.ex5
+[2026-05 | Int:None | File:2026-09] Martingala_Scalping_Claude_v1.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA CLAUDE/Martingala_Scalping_Claude_v1.mq5
+[2026-05 | Int:None | File:2026-09] Martingala_Scalping_Claude_v4.4_HIBRIDO.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA CLAUDE/Martingala_Scalping_Claude_v4.4_HIBRIDO.ex5
+[2026-05 | Int:None | File:2026-09] Martingala_Scalping_Claude_v4.4_HIBRIDO.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA CLAUDE/Martingala_Scalping_Claude_v4.4_HIBRIDO.mq5
+[2026-05 | Int:None | File:2026-09] Martingala_Scalping_Claude_v4.4_HIBRIDO1.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA CLAUDE/Martingala_Scalping_Claude_v4.4_HIBRIDO1.ex5
+[2026-05 | Int:None | File:2026-09] Martingala_Scalping_Claude_v4.4_HIBRIDO1.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA CLAUDE/Martingala_Scalping_Claude_v4.4_HIBRIDO1.mq5
+[2026-05 | Int:None | File:2026-09] Martingala_Scalping_Claude_v5.0_HIBRIDO_CTE.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA CLAUDE/Martingala_Scalping_Claude_v5.0_HIBRIDO_CTE.ex5
+[2026-05 | Int:None | File:2026-09] Martingala_Scalping_Claude_v5.0_HIBRIDO_CTE.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA CLAUDE/Martingala_Scalping_Claude_v5.0_HIBRIDO_CTE.mq5
+[2026-05 | Int:None | File:2026-09] Martingala_Deepseek_Aggressive_v2.0.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA DEEPSEEK/Martingala_Deepseek_Aggressive_v2.0.ex5
+[2026-05 | Int:None | File:2026-09] Martingala_Deepseek_Aggressive_v2.0.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA DEEPSEEK/Martingala_Deepseek_Aggressive_v2.0.mq5
+[2026-05 | Int:None | File:2026-09] Martingala_Deepseek_Aggressive_v2.1.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA DEEPSEEK/Martingala_Deepseek_Aggressive_v2.1.ex5
+[2026-05 | Int:None | File:2026-09] Martingala_Deepseek_Aggressive_v2.1.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA DEEPSEEK/Martingala_Deepseek_Aggressive_v2.1.mq5
+[2026-05 | Int:None | File:2026-09] Martingala_Deepseek_Aggressive_v2.2.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA DEEPSEEK/Martingala_Deepseek_Aggressive_v2.2.ex5
+[2026-05 | Int:None | File:2026-09] Martingala_Deepseek_Aggressive_v2.2.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA DEEPSEEK/Martingala_Deepseek_Aggressive_v2.2.mq5
+[2026-05 | Int:None | File:2026-09] Martingala_Deepseek_Segura_v3.0.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA DEEPSEEK/Martingala_Deepseek_Segura_v3.0.ex5
+[2026-05 | Int:None | File:2026-09] Martingala_Deepseek_Segura_v3.0.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS MARTINGALA DEEPSEEK/Martingala_Deepseek_Segura_v3.0.mq5
+[2026-05 | Int:None | File:2026-09] ESTRATEGIA_TENDENCIAL_MT5.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS VIEJOS XAUUSD/ESTRATEGIA_TENDENCIAL_MT5.ex5
+[2026-05 | Int:None | File:2026-09] ESTRATEGIA_TENDENCIAL_MT5.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS VIEJOS XAUUSD/ESTRATEGIA_TENDENCIAL_MT5.mq5
+[2026-05 | Int:None | File:2026-09] UltraFastMartingale_FIXED.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS VIEJOS XAUUSD/UltraFastMartingale_FIXED.ex5
+[2026-05 | Int:None | File:2026-09] UltraFastMartingale_FIXED.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS VIEJOS XAUUSD/UltraFastMartingale_FIXED.mq5
+[2026-05 | Int:None | File:2026-09] XAUUSD_TEST_OK.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS VIEJOS XAUUSD/XAUUSD_TEST_OK.mq5
+[2026-05 | Int:None | File:2026-09] BTCUSD Fibonacci Bot.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BTCUSD Fibonacci Bot.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v13.90_INSTITUTIONAL.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/ELITE APEX/00_ELITE_APEX_v13.90_INSTITUTIONAL.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v16.60_WARRIOR.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/ELITE APEX/00_ELITE_APEX_v16.60_WARRIOR.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v16.60_WARRIOR.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/ELITE APEX/00_ELITE_APEX_v16.60_WARRIOR.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v16.65_WARRIOR.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/ELITE APEX/00_ELITE_APEX_v16.65_WARRIOR.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v16.65_WARRIOR.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/ELITE APEX/00_ELITE_APEX_v16.65_WARRIOR.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v16.70_WARRIOR.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/ELITE APEX/00_ELITE_APEX_v16.70_WARRIOR.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v16.70_WARRIOR.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/ELITE APEX/00_ELITE_APEX_v16.70_WARRIOR.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v16.90_WARRIOR.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/ELITE APEX/00_ELITE_APEX_v16.90_WARRIOR.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v16.90_WARRIOR.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/ELITE APEX/00_ELITE_APEX_v16.90_WARRIOR.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v17.00_PREDATOR.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/ELITE APEX/00_ELITE_APEX_v17.00_PREDATOR.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v17.00_PREDATOR.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/ELITE APEX/00_ELITE_APEX_v17.00_PREDATOR.mq5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v17.20_MIRROR.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/ELITE APEX/00_ELITE_APEX_v17.20_MIRROR.ex5
+[2026-05 | Int:None | File:2026-09] 00_ELITE_APEX_v17.20_MIRROR.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/ELITE APEX/00_ELITE_APEX_v17.20_MIRROR.mq5
+[2026-05 | Int:None | File:2026-09] KOPYTRADE_BTCUSD_EVOLUTION_v8_2_3_PERFECT_ARCHITECT.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/KOPYTRADE_BTCUSD_EVOLUTION_v8_2_3_PERFECT_ARCHITECT.mq5
+[2026-05 | Int:None | File:2026-09] KOPYTRADE_v78_SCALING_BTC.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/KOPYTRADE_v78_SCALING_BTC.ex5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.3.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/XAU-MG-HUD/XAU-MG_HUD_v3.3.ex5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.3.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/XAU-MG-HUD/XAU-MG_HUD_v3.3.mq5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.41.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/XAU-MG-HUD/XAU-MG_HUD_v3.41.ex5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.41.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/XAU-MG-HUD/XAU-MG_HUD_v3.41.mq5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.6.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/XAU-MG-HUD/XAU-MG_HUD_v3.6.ex5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.6.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/XAU-MG-HUD/XAU-MG_HUD_v3.6.mq5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.7.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/XAU-MG-HUD/XAU-MG_HUD_v3.7.ex5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.7.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/XAU-MG-HUD/XAU-MG_HUD_v3.7.mq5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.0.mq5 - AMETRALLADORA.ex5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/XAU-MG_HUD_v3.0.mq5 - AMETRALLADORA.ex5
+[2026-05 | Int:None | File:2026-09] XAU-MG_HUD_v3.0.mq5 - AMETRALLADORA.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/XAU-MG_HUD_v3.0.mq5 - AMETRALLADORA.mq5
+[2026-05 | Int:None | File:2026-09] Maiko_BTC_Weekend_PRUEBA.mq5 | Path: git::private_bots_backup/Maiko_BTC_Weekend_PRUEBA.mq5
+[2026-05 | Int:None | File:2026-09] Maiko_Sniper_PRO_CENT_DEV.mq5 | Path: git::private_bots_backup/Maiko_Sniper_PRO_CENT_DEV.mq5
+[2026-05 | Int:None | File:2026-09] Maiko_Sniper_PRO_CENT_PRUEBA.mq5 | Path: git::private_bots_backup/Maiko_Sniper_PRO_CENT_PRUEBA.mq5
+[2026-05 | Int:None | File:2026-09] Maiko_Sniper_PRO_GOLD_PRUEBA.mq5 | Path: git::private_bots_backup/Maiko_Sniper_PRO_GOLD_PRUEBA.mq5
+[2026-05 | Int:None | File:2026-09] Maiko_BTC_Weekend_CLIENT.ex5 | Path: git::seguir_probando_viejos/Maiko_BTC_Weekend_CLIENT.ex5
+[2026-05 | Int:None | File:2026-09] Maiko_BTC_Weekend_CLIENT.mq5 | Path: git::seguir_probando_viejos/Maiko_BTC_Weekend_CLIENT.mq5
+[2026-05 | Int:None | File:2026-09] Maiko_BTC_Weekend_DEV.ex5 | Path: git::seguir_probando_viejos/Maiko_BTC_Weekend_DEV.ex5
+[2026-05 | Int:None | File:2026-09] Maiko_BTC_Weekend_DEV.mq5 | Path: git::seguir_probando_viejos/Maiko_BTC_Weekend_DEV.mq5
+[2026-05 | Int:None | File:2026-09] Maiko_Sniper_PRO_CENT_CLIENT.mq5 | Path: git::seguir_probando_viejos/Maiko_Sniper_PRO_CENT_CLIENT.mq5
+[2026-05 | Int:None | File:2026-09] Maiko_Sniper_PRO_CENT_DEV.ex5 | Path: git::seguir_probando_viejos/Maiko_Sniper_PRO_CENT_DEV.ex5
+[2026-05 | Int:None | File:2026-09] Maiko_Sniper_PRO_GOLD_CLIENT.mq5 | Path: git::seguir_probando_viejos/Maiko_Sniper_PRO_GOLD_CLIENT.mq5
+[2026-05 | Int:None | File:2026-09] Maiko_Sniper_PRO_GOLD_CLIENT_DEMO.mq5 | Path: git::seguir_probando_viejos/Maiko_Sniper_PRO_GOLD_CLIENT_DEMO.mq5
+[2026-05 | Int:None | File:2026-09] Maiko_Sniper_PRO_GOLD_DEV.ex5 | Path: git::seguir_probando_viejos/Maiko_Sniper_PRO_GOLD_DEV.ex5
+[2026-05 | Int:None | File:2026-09] Maiko_Sniper_PRO_GOLD_DEV.mq5 | Path: git::seguir_probando_viejos/Maiko_Sniper_PRO_GOLD_DEV.mq5
+[2026-05 | Int:None | File:2026-09] Maiko_BTC_Weekend.ex5 | Path: git::seguir_probando_viejos/_Archive/Maiko_BTC_Weekend.ex5
+[2026-05 | Int:None | File:2026-09] Maiko_BTC_Weekend.mq5 | Path: git::seguir_probando_viejos/_Archive/Maiko_BTC_Weekend.mq5
+[2026-05 | Int:None | File:2026-09] Maiko_SMC_Sniper_DEV.mq5 | Path: git::seguir_probando_viejos/_Archive/Maiko_SMC_Sniper_DEV.mq5
+[2026-05 | Int:None | File:2026-09] Maiko_Sniper_PRO_CENT.ex5 | Path: git::seguir_probando_viejos/_Archive/Maiko_Sniper_PRO_CENT.ex5
+[2026-05 | Int:None | File:2026-09] Maiko_Sniper_PRO_CENT.mq5 | Path: git::seguir_probando_viejos/_Archive/Maiko_Sniper_PRO_CENT.mq5
+[2026-05 | Int:None | File:2026-09] Maiko_Sniper_PRO_GOLD.ex5 | Path: git::seguir_probando_viejos/_Archive/Maiko_Sniper_PRO_GOLD.ex5
+[2026-05 | Int:None | File:2026-09] Maiko_Sniper_PRO_GOLD.mq5 | Path: git::seguir_probando_viejos/_Archive/Maiko_Sniper_PRO_GOLD.mq5
+[2026-05 | Int:None | File:2026-09] XAUUSD_Martingala_Hybrid_v1.mq5 | Path: git::Backup_Bots_Antiguos/Terminal_Normal/BOTS VIEJOS XAUUSD/XAUUSD_Martingala_Hybrid_v1.mq5
+[2026-05 | Int:None | File:2026-09] Elite_Gold_MAIKO_Sniper_DEV.ex5 | Path: git::public/uploads/bots/Elite_Gold_MAIKO_Sniper_DEV.ex5
+[2026-05 | Int:None | File:2026-09] Maiko_Hugo_Momentum_CENT_DEV.mq5 | Path: git::public/uploads/bots/Maiko_Hugo_Momentum_CENT_DEV.mq5
+[2026-05 | Int:None | File:2026-09] Elite_Gold_MAIKO_Sniper.mq5 | Path: git::public/uploads/bots/Elite_Gold_MAIKO_Sniper.mq5
+[2026-05 | Int:None | File:2026-09] Elite_Gold_MAIKO_Sniper_CLIENT.mq5 | Path: git::public/uploads/bots/Elite_Gold_MAIKO_Sniper_CLIENT.mq5
+[2026-06 | Int:None | File:2026-06] Maiko_Opening_Range_FVG_TRIAL.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\01_MAYO_JUNIO_2026\Maiko_Opening_Range_FVG_TRIAL.ex5
+[2026-06 | Int:None | File:2026-08] Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_REAL.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\03_AGOSTO_2026\Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_REAL.ex5
+[2026-06 | Int:None | File:2026-08] Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_REAL.mq5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\03_AGOSTO_2026\Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_REAL.mq5
+[2026-06 | Int:None | File:2026-06] Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_TRIAL.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\03_AGOSTO_2026\Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_TRIAL.ex5
+[2026-06 | Int:None | File:2026-08] Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_TRIAL.mq5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\03_AGOSTO_2026\Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_TRIAL.mq5
+[2026-06 | Int:None | File:2026-08] Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO_CENT.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\03_AGOSTO_2026\Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO_CENT.ex5
+[2026-06 | Int:None | File:2026-08] Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO_CENT.mq5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\03_AGOSTO_2026\Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO_CENT.mq5
+[2026-06 | Int:None | File:2026-06] KOPYTRADING_XAUUSD_Evolution_Pro_v5_84.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADING_XAUUSD_Evolution_Pro_v5_84.ex5
+[2026-06 | Int:2026 | File:2026-06] KOPYTRADING_XAUUSD_Evolution_Pro_v5_84.mq5 (v5.84) | Path: c:\proyectos\APP KOPYTRADING\public\uploads\KOPYTRADING_XAUUSD_Evolution_Pro_v5_84.mq5
+[2026-06 | Int:None | File:2026-06] Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\bots\Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO.ex5
+[2026-06 | Int:None | File:2026-06] Maiko_Opening_Range_FVG.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\bots\Maiko_Opening_Range_FVG.ex5
+[2026-06 | Int:None | File:2026-07] Maiko_Sniper_PRO_CENT_V12_FINAL.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\bots\Maiko_Sniper_PRO_CENT_V12_FINAL.ex5
+[2026-06 | Int:None | File:2026-07] Maiko_Sniper_PRO_CENT_V12_PROTEGIDO.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\bots\Maiko_Sniper_PRO_CENT_V12_PROTEGIDO.ex5
+[2026-06 | Int:None | File:2026-07] Maiko_Sniper_PRO_GOLD_V12_FINAL.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\bots\Maiko_Sniper_PRO_GOLD_V12_FINAL.ex5
+[2026-06 | Int:None | File:2026-07] Maiko_Sniper_PRO_GOLD_V13.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\bots\Maiko_Sniper_PRO_GOLD_V13.ex5
+[2026-06 | Int:2026 | File:2026-06] step_1952_content.mq5 | Path: c:\proyectos\APP KOPYTRADING\scratch\step_1952_content.mq5
+[No-Git | Int:None | File:2026-06] MAIKO PRO GOLD DEMO.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Advisors\MAIKO PRO GOLD DEMO.ex5
+[No-Git | Int:None | File:2026-06] MAIKO PRO GOLD.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Experts\Advisors\MAIKO PRO GOLD.ex5
+[No-Git | Int:None | File:2026-06] DeleteMaikoReport.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\DeleteMaikoReport.ex5
+[No-Git | Int:None | File:2026-06] DeleteMaikoReport.mq5 (v2.00) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\DeleteMaikoReport.mq5
+[No-Git | Int:None | File:2026-06] ExportMaikoHistory.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\ExportMaikoHistory.ex5
+[No-Git | Int:None | File:2026-06] ExportMaikoHistory.mq5 (v2.50) | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\BB8163656548A371304D87AABB7A68EB\MQL5\Scripts\ExportMaikoHistory.mq5
+[No-Git | Int:None | File:2026-06] TestCalendar.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Scripts\TestCalendar.ex5
+[No-Git | Int:None | File:2026-06] TestCalendar.mq5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Scripts\TestCalendar.mq5
+[2026-06 | Int:None | File:2026-09] Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO.mq5 | Path: git::Backup_Web_Version_Original/Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO.mq5
+[2026-06 | Int:None | File:2026-09] Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_REAL_ORIGINAL_BACKUP_JUNE19.mq5 | Path: git::private_bots_backup/Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_REAL_ORIGINAL_BACKUP_JUNE19.mq5
+[2026-06 | Int:None | File:2026-09] Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_TRIAL_ORIGINAL_BACKUP_JUNE19.mq5 | Path: git::private_bots_backup/Elite_Gold_MAIKO_Sniper_v11.30_CLIENT_TRIAL_ORIGINAL_BACKUP_JUNE19.mq5
+[2026-06 | Int:None | File:2026-09] Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO_CENT_ORIGINAL_BACKUP_JUNE19.mq5 | Path: git::private_bots_backup/Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO_CENT_ORIGINAL_BACKUP_JUNE19.mq5
+[2026-06 | Int:None | File:2026-09] Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO_ORIGINAL_BACKUP_JUNE19.mq5 | Path: git::private_bots_backup/Elite_Gold_MAIKO_Sniper_v11.30_NORMAL_HISTORICO_ORIGINAL_BACKUP_JUNE19.mq5
+[2026-06 | Int:None | File:2026-09] Maiko_Opening_Range_FVG.mq5 | Path: git::private_bots_backup/Maiko_Opening_Range_FVG.mq5
+[2026-06 | Int:None | File:2026-09] Maiko_Sniper_PRO_CENT_V12_FINAL.mq5 | Path: git::private_bots_backup/Maiko_Sniper_PRO_CENT_V12_FINAL.mq5
+[2026-06 | Int:None | File:2026-09] Maiko_Sniper_PRO_CENT_V12_PROTEGIDO.mq5 | Path: git::private_bots_backup/Maiko_Sniper_PRO_CENT_V12_PROTEGIDO.mq5
+[2026-06 | Int:None | File:2026-09] Maiko_Sniper_PRO_GOLD_V12_FINAL.mq5 | Path: git::private_bots_backup/Maiko_Sniper_PRO_GOLD_V12_FINAL.mq5
+[2026-06 | Int:None | File:2026-09] Maiko_Sniper_PRO_GOLD_V12_LIMPIO.mq5 | Path: git::private_bots_backup/Maiko_Sniper_PRO_GOLD_V12_LIMPIO.mq5
+[2026-06 | Int:None | File:2026-09] Maiko_Sniper_PRO_GOLD_V12_PROTEGIDO.mq5 | Path: git::private_bots_backup/Maiko_Sniper_PRO_GOLD_V12_PROTEGIDO.mq5
+[2026-06 | Int:None | File:2026-09] Maiko_Sniper_PRO_GOLD_V13.mq5 | Path: git::private_bots_backup/Maiko_Sniper_PRO_GOLD_V13.mq5
+[2026-06 | Int:None | File:2026-09] Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR.ex5 | Path: git::seguir_probando_viejos/Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR.ex5
+[2026-06 | Int:None | File:2026-09] Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR.mq5 | Path: git::seguir_probando_viejos/Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR.mq5
+[2026-06 | Int:None | File:2026-09] Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR_CENT.ex5 | Path: git::seguir_probando_viejos/Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR_CENT.ex5
+[2026-06 | Int:None | File:2026-09] Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR_CENT.mq5 | Path: git::seguir_probando_viejos/Elite_Gold_MAIKO_Sniper_v11.30_HEDGED_SR_CENT.mq5
+[2026-07 | Int:None | File:2026-06] MAIKO_PRO_GOLD_DEMO.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\MAIKO_PRO_GOLD_DEMO.ex5
+[2026-07 | Int:None | File:2026-09] MAIKO_PRO_GOLD_M1_SHIELD_V11.32.mq5 (v11.32) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\MAIKO_PRO_GOLD_M1_SHIELD_V11.32.mq5
+[2026-07 | Int:2026-07 | File:2026-09] Maiko_Opening_Range_FVG_TRIAL.mq5 (v1.00) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\01_MAYO_JUNIO_2026\Maiko_Opening_Range_FVG_TRIAL.mq5
+[2026-07 | Int:None | File:2026-06] MAIKO_UFVG.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\01_MAYO_JUNIO_2026\MAIKO_UFVG.ex5
+[2026-07 | Int:None | File:2026-06] MAIKO_UFVG_DEMO.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\01_MAYO_JUNIO_2026\MAIKO_UFVG_DEMO.ex5
+[No-Git | Int:2026-07 | File:2026-09] MAIKO_UFVG_DEMO.mq5 (v1.01) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\01_MAYO_JUNIO_2026\MAIKO_UFVG_DEMO.mq5
+[2026-07 | Int:2026-05 | File:2026-09] Maiko_Hybrid_PRO_CENT.mq5 (v13.92) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\Maiko_Hybrid_PRO_CENT.mq5
+[2026-07 | Int:2026-05 | File:2026-09] Maiko_Hybrid_PRO_GOLD.mq5 (v13.92) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\Maiko_Hybrid_PRO_GOLD.mq5
+[2026-07 | Int:None | File:2026-06] MAIKO_PRO_GOLD.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\MAIKO_PRO_GOLD.ex5
+[No-Git | Int:None | File:2026-07] Maiko_Sniper_PRO_GOLD_TEST_V12.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\Maiko_Sniper_PRO_GOLD_TEST_V12.ex5
+[2026-07 | Int:None | File:2026-06] sniper.mq5 (v11.30) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\sniper.mq5
+[2026-07 | Int:None | File:2026-06] MAIKO_PRO_CENT_MASTER.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\MAIKO_PRO_CENT_MASTER.ex5
+[2026-07 | Int:None | File:2026-06] MAIKO_PRO_GOLD_MASTER.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\bots\MAIKO_PRO_GOLD_MASTER.ex5
+[2026-07 | Int:None | File:2026-07] MAIKO_PRO_GOLD_MASTER_OLD.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\bots\MAIKO_PRO_GOLD_MASTER_OLD.ex5
+[2026-07 | Int:2026 | File:2026-06] fvg.mq5 (v1.00) | Path: c:\proyectos\APP KOPYTRADING\scratch\fvg.mq5
+[2026-07 | Int:None | File:2026-09] MAIKO_PRO_GOLD_M1_SHIELD_V11.32_DEMO.mq5 | Path: git::Agosto_2026_Activos/MAIKO_PRO_GOLD_M1_SHIELD_V11.32_DEMO.mq5
+[2026-08 | Int:None | File:2026-07] MAIKO_PRO_GOLD_DEMO V11.32.ex5 | Path: c:\proyectos\APP KOPYTRADING\MAIKO_PRO_GOLD_DEMO V11.32.ex5
+[2026-08 | Int:None | File:2026-08] MAIKO_PRO_GOLD_DEMO.mq5 (v11.32) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\MAIKO_PRO_GOLD_DEMO.mq5
+[2026-08 | Int:None | File:2026-08] Martingala_Inteligent-v2_PRUEBA.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\Martingala_Inteligent-v2_PRUEBA.ex5
+[2026-08 | Int:None | File:2026-08] Martingala_Inteligent-v2_PRUEBA.mq5 (v2.0) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\Martingala_Inteligent-v2_PRUEBA.mq5
+[2026-08 | Int:None | File:2026-08] test_ema.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\test_ema.ex5
+[2026-08 | Int:None | File:2026-08] test_ema.mq5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\test_ema.mq5
+[2026-08 | Int:None | File:2026-08] test_fibo.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\test_fibo.ex5
+[2026-08 | Int:None | File:2026-08] test_fibo.mq5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\test_fibo.mq5
+[2026-08 | Int:None | File:2026-08] XAUUSD_Elite_Warrior_Safe_V2.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\XAUUSD_Elite_Warrior_Safe_V2.ex5
+[2026-08 | Int:2026 | File:2026-08] XAUUSD_Elite_Warrior_Safe_V2.mq5 (v41.00) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\XAUUSD_Elite_Warrior_Safe_V2.mq5
+[2026-08 | Int:None | File:2026-08] XAUUSD_Smart_Hybrid_PRO.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\XAUUSD_Smart_Hybrid_PRO.ex5
+[2026-08 | Int:2026-04 | File:2026-08] XAUUSD_Smart_Hybrid_PRO.mq5 (v14.00) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\XAUUSD_Smart_Hybrid_PRO.mq5
+[2026-08 | Int:None | File:2026-08] XAUUSD_Zone_Recovery_PRO.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\XAUUSD_Zone_Recovery_PRO.ex5
+[2026-08 | Int:None | File:2026-08] XAUUSD_Zone_Recovery_PRO.mq5 (v1.0) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\XAUUSD_Zone_Recovery_PRO.mq5
+[2026-08 | Int:None | File:2026-08] MAIKO_PRO_GOLD_M1_SHIELD_V11.32.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\MAIKO_PRO_GOLD_M1_SHIELD_V11.32.ex5
+[2026-08 | Int:None | File:2026-09] MAIKO_PRO_BTC_SHIELD_V1.0.mq5 (v11.32) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\MAIKO_PRO_BTC_SHIELD_V1.0.mq5
+[2026-08 | Int:None | File:2026-09] MAIKO_PRO_GOLD.mq5 (v11.32) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\MAIKO_PRO_GOLD.mq5
+[2026-08 | Int:None | File:2026-08] MAIKO_PRO_GOLD_M1_SHIELD_CENT_V11.32.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\03_AGOSTO_2026\MAIKO_PRO_GOLD_M1_SHIELD_CENT_V11.32.ex5
+[2026-08 | Int:None | File:2026-08] MAIKO_PRO_GOLD_M1_SHIELD_CENT_V11.32.mq5 (v11.32) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\03_AGOSTO_2026\MAIKO_PRO_GOLD_M1_SHIELD_CENT_V11.32.mq5
+[2026-08 | Int:None | File:2026-08] MAIKO_PRO_GOLD_CENT_PROTECTED.mq5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\bots\MAIKO_PRO_GOLD_CENT_PROTECTED.mq5
+[2026-08 | Int:None | File:2026-08] MAIKO_PRO_GOLD_DEMO_PROTECTED.mq5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\bots\MAIKO_PRO_GOLD_DEMO_PROTECTED.mq5
+[2026-08 | Int:None | File:2026-08] MAIKO_PRO_GOLD_M1_SHIELD_V11.32_DEMO.ex5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\bots\MAIKO_PRO_GOLD_M1_SHIELD_V11.32_DEMO.ex5
+[2026-08 | Int:None | File:2026-08] MAIKO_PRO_GOLD_PROTECTED.mq5 | Path: c:\proyectos\APP KOPYTRADING\public\uploads\bots\MAIKO_PRO_GOLD_PROTECTED.mq5
+[2026-08 | Int:None | File:2026-09] MAIKO_PRO_GOLD_M1_SHIELD_V12_MACRO_DEMO.ex5 | Path: git::Agosto_2026_Activos/MAIKO_PRO_GOLD_M1_SHIELD_V12_MACRO_DEMO.ex5
+[2026-08 | Int:None | File:2026-09] MAIKO_PRO_GOLD_M1_SHIELD_V13_DUAL_DEMO.ex5 | Path: git::Agosto_2026_Activos/MAIKO_PRO_GOLD_M1_SHIELD_V13_DUAL_DEMO.ex5
+[2026-08 | Int:None | File:2026-09] MAIKO_PRO_GOLD_M1_SHIELD_V13_DUAL_DEMO.mq5 | Path: git::Agosto_2026_Activos/MAIKO_PRO_GOLD_M1_SHIELD_V13_DUAL_DEMO.mq5
+[2026-08 | Int:None | File:2026-09] MAIKO_PRO_GOLD_DEMO_FIXED.mq5 | Path: git::seguir_probando_viejos/MAIKO_PRO_GOLD_DEMO_FIXED.mq5
+[2026-08 | Int:None | File:2026-09] MAIKO_PRO_GOLD_FIXED.mq5 | Path: git::seguir_probando_viejos/MAIKO_PRO_GOLD_FIXED.mq5
+[2026-08 | Int:None | File:2026-09] Maiko_Pro_Gold_M1_SHIELD.mq5 | Path: git::seguir_probando_viejos/Maiko_Pro_Gold_M1_SHIELD.mq5
+[2026-08 | Int:None | File:2026-09] MAIKO_PRO_GOLD_M1_SHIELD_V12_MACRO_DEMO.mq5 | Path: git::Agosto_2026_Activos/MAIKO_PRO_GOLD_M1_SHIELD_V12_MACRO_DEMO.mq5
+[2026-08 | Int:None | File:2026-09] Maiko_Pro_Gold_M1_SHIELD.ex5 | Path: git::Agosto_2026_Activos/Maiko_Pro_Gold_M1_SHIELD.ex5
+[2026-09 | Int:None | File:2026-08] XAUUSD_Smart_Martingale_v2.ex5 | Path: c:\proyectos\APP KOPYTRADING\XAUUSD_Smart_Martingale_v2.ex5
+[2026-09 | Int:None | File:2026-08] MAIKO_PRO_GOLD_CENT.mq5 (v11.32) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\MAIKO_PRO_GOLD_CENT.mq5
+[2026-09 | Int:None | File:2026-09] MAIKO_PRO_GOLD_DEMO_V11.33.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\MAIKO_PRO_GOLD_DEMO_V11.33.ex5
+[2026-09 | Int:None | File:2026-08] MAIKO_PRO_GOLD_DEMO_V11.33.mq5 (v11.33) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\MAIKO_PRO_GOLD_DEMO_V11.33.mq5
+[2026-09 | Int:None | File:2026-08] MAIKO_PRO_GOLD_REAL.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\MAIKO_PRO_GOLD_REAL.ex5
+[2026-09 | Int:None | File:2026-08] MAIKO_PRO_GOLD_REAL.mq5 (v11.32) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\MAIKO_PRO_GOLD_REAL.mq5
+[2026-09 | Int:None | File:2026-08] Maiko_Pro_Gold_SHIELD.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\Maiko_Pro_Gold_SHIELD.ex5
+[2026-09 | Int:2026-04 | File:2026-08] Maiko_Pro_Gold_SHIELD.mq5 (v13.92) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\Maiko_Pro_Gold_SHIELD.mq5
+[No-Git | Int:None | File:2026-09] 00_ELITE_WARRIOR_PRO_v41.2.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\00_ELITE_WARRIOR_PRO_v41.2.ex5
+[No-Git | Int:None | File:2026-09] 00_ELITE_WARRIOR_PRO_v41.3.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\00_ELITE_WARRIOR_PRO_v41.3.ex5
+[No-Git | Int:None | File:2026-09] 00_ELITE_WARRIOR_PRO_v42.0.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\00_ELITE_WARRIOR_PRO_v42.0.ex5
+[2026-09 | Int:None | File:2026-09] Analisis_Rachas_Panel.mq5 (v7.00) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\Analisis_Rachas_Panel.mq5
+[2026-09 | Int:None | File:2026-09] Analisis_Rachas_Velas.mq5 (v2.10) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\Analisis_Rachas_Velas.mq5
+[2026-09 | Int:None | File:2026-09] Cerrar_Analisis_Rachas.mq5 (v1.00) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\Cerrar_Analisis_Rachas.mq5
+[2026-09 | Int:None | File:2026-09] MAIKO_AI_CONSENSUS_BOT.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\MAIKO_AI_CONSENSUS_BOT.ex5
+[2026-09 | Int:2026 | File:2026-09] MAIKO_AI_CONSENSUS_BOT.mq5 (v1.00) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\MAIKO_AI_CONSENSUS_BOT.mq5
+[2026-09 | Int:None | File:2026-09] MAIKO_PRO_GOLD_DEMO_V11.34_FrancotiradorM5.mq5 (v11.34) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\MAIKO_PRO_GOLD_DEMO_V11.34_FrancotiradorM5.mq5
+[2026-09 | Int:None | File:2026-09] MAIKO_PRO_GOLD_ORIGINAL_AGOSTO.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\MAIKO_PRO_GOLD_ORIGINAL_AGOSTO.ex5
+[2026-09 | Int:None | File:2026-09] MAIKO_PRO_GOLD_ORIGINAL_AGOSTO.mq5 (v11.32) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\MAIKO_PRO_GOLD_ORIGINAL_AGOSTO.mq5
+[2026-09 | Int:None | File:2026-09] MAIKO_PRO_GOLD_V11_34_1_RISK.ex5 | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\MAIKO_PRO_GOLD_V11_34_1_RISK.ex5
+[2026-09 | Int:None | File:2026-09] MAIKO_PRO_GOLD_V11_34_1_RISK.mq5 (v11.34.1) | Path: c:\proyectos\APP KOPYTRADING\Agosto_2026_Activos\00_OFICIALES_SEPTIEMBRE\MAIKO_PRO_GOLD_V11_34_1_RISK.mq5
+[No-Git | Int:None | File:2026-09] Maiko_Hybrid_PRO_CENT.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\Maiko_Hybrid_PRO_CENT.ex5
+[No-Git | Int:None | File:2026-09] Maiko_Hybrid_PRO_GOLD.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\Maiko_Hybrid_PRO_GOLD.ex5
+[No-Git | Int:None | File:2026-09] MAIKO_PRO_BTC_SHIELD_V1.0.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\MAIKO_PRO_BTC_SHIELD_V1.0.ex5
+[No-Git | Int:None | File:2026-09] MAIKO_PRO_GOLD_MASTER_CLEAN.mq5 (v11.31) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\MAIKO_PRO_GOLD_MASTER_CLEAN.mq5
+[No-Git | Int:None | File:2026-09] MAIKO_PRO_GOLD_MASTER_V2.mq5 (v11.31) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\MAIKO_PRO_GOLD_MASTER_V2.mq5
+[No-Git | Int:None | File:2026-09] Maiko_Sniper_PRO_CENT_TEST_V12.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\02_JULIO_2026\Maiko_Sniper_PRO_CENT_TEST_V12.ex5
+[2026-09 | Int:None | File:2026-08] MAIKO_PERFECT.mq5 (v11.32) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\03_AGOSTO_2026\MAIKO_PERFECT.mq5
+[No-Git | Int:None | File:2026-09] MAIKO_PRO_GOLD_CENT.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\03_AGOSTO_2026\MAIKO_PRO_GOLD_CENT.ex5
+[No-Git | Int:None | File:2026-09] SmartGrid_v31_CORREGIDO.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\03_AGOSTO_2026\SmartGrid_v31_CORREGIDO.ex5
+[No-Git | Int:None | File:2026-09] XAUUSD_Martingala_Segura_v5.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\03_AGOSTO_2026\XAUUSD_Martingala_Segura_v5.ex5
+[No-Git | Int:None | File:2026-09] XAUUSD_Martingala_Segura_v5.mq5 (v5.0) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\03_AGOSTO_2026\XAUUSD_Martingala_Segura_v5.mq5
+[No-Git | Int:None | File:2026-09] XAUUSD_Smart_Martingale_v2.mq5 (v2.0) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\03_AGOSTO_2026\XAUUSD_Smart_Martingale_v2.mq5
+[No-Git | Int:None | File:2026-09] KOPYTRADING_TELEGRAM_HUB.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\04_SEPTIEMBRE_2026\KOPYTRADING_TELEGRAM_HUB.ex5
+[No-Git | Int:None | File:2026-09] MAIKO_PRO_GOLD_DEMO_FIX.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\04_SEPTIEMBRE_2026\MAIKO_PRO_GOLD_DEMO_FIX.ex5
+[No-Git | Int:None | File:2026-09] MAIKO_PRO_GOLD_DEMO_FIX.mq5 (v11.32) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\04_SEPTIEMBRE_2026\MAIKO_PRO_GOLD_DEMO_FIX.mq5
+[No-Git | Int:None | File:2026-09] MAIKO_PRO_GOLD_DEMO_V11.34_FrancotiradorM5.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\04_SEPTIEMBRE_2026\MAIKO_PRO_GOLD_DEMO_V11.34_FrancotiradorM5.ex5
+[No-Git | Int:None | File:2026-09] MAIKO_PRO_GOLD_V11_34_ANTI_TURBULENCIA.ex5 | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\04_SEPTIEMBRE_2026\MAIKO_PRO_GOLD_V11_34_ANTI_TURBULENCIA.ex5
+[No-Git | Int:None | File:2026-09] MAIKO_PRO_GOLD_V11_34_ANTI_TURBULENCIA.mq5 (v11.34) | Path: c:\proyectos\APP KOPYTRADING\BOTS_MAIKO\04_SEPTIEMBRE_2026\MAIKO_PRO_GOLD_V11_34_ANTI_TURBULENCIA.mq5
+[No-Git | Int:None | File:2026-09] Analisis_Rachas_Panel.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Indicators\Analisis_Rachas_Panel.ex5
+[No-Git | Int:None | File:2026-09] Cerrar_Analisis_Rachas.ex5 | Path: C:\Users\Usuario\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Scripts\Cerrar_Analisis_Rachas.ex5
