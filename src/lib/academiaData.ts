@@ -90,8 +90,8 @@ export const ACADEMIA_MODULES: Module[] = [
             totalPages: 2,
             title: "¿Qué aprenderás en este curso?",
             content: [
-              "A lo largo de los módulos aprenderás a entender qué son las divisas y el oro, cómo se instala un robot en MetaTrader 4/5, qué es una VPS y cómo mantener la calma cuando hay semanas en números rojos.",
-              "Al completar los dos primeros módulos gratuitos, recibirás un pase especial para probar nuestros bots en cuenta demo de forma 100% gratuita."
+              "A lo largo de los módulos aprenderás a entender qué son las divisas y el oro, cómo se gestiona el capital, cómo funcionan los bots en MetaTrader y cómo mantener la calma cuando hay semanas en números rojos.",
+              "Al completar los módulos gratuitos, recibirás un pase especial para probar nuestros bots en cuenta demo de forma 100% gratuita."
             ]
           }
         ]
@@ -211,56 +211,35 @@ export const ACADEMIA_MODULES: Module[] = [
           correctAnswerId: "B",
           feedbackExplanation: "¡Excelente! El Oro se mueve con mucha fuerza, por lo que ajustar el lotaje y usar Stop Loss de protección es fundamental para cuidar el capital."
         }
-      },
-      {
-        id: "m01-l03",
-        moduleId: "modulo-01",
-        lessonNumber: 3,
-        globalIndex: 5,
-        title: "Desbloqueo de tu Prueba Gratuita",
-        subtitle: "¡Felicidades por completar el módulo inicial!",
-        durationMinutes: 4,
-        isVip: false,
-        isFreeTrialUnlocker: true,
-        pages: [
-          {
-            pageIndex: 1,
-            totalPages: 1,
-            title: "Tu premio por completar los fundamentos",
-            content: [
-              "Has completado la introducción y los fundamentos de los mercados. ¡Enhorabuena!",
-              "Como prometimos, ahora estás listo para probar uno de nuestros robots en entorno seguro de prueba (Demo) sin ningún coste ni compromiso."
-            ]
-          }
-        ]
       }
     ]
   },
   {
     id: "modulo-02",
     moduleNumberStr: "02",
-    title: "TU ROBOT DE TRADING",
-    subtitle: "Instalación y configuración",
-    description: "Aprende a configurar MetaTrader 4/5, conectar una VPS y poner a rodar tu primer algoritmo.",
+    title: "GESTIÓN DE RIESGO Y CONTROL DE CAPITAL",
+    subtitle: "Reglas fundamentales de supervivencia",
+    description: "Aprende a proteger tu dinero y a calcular el volumen adecuado según el saldo de tu cuenta.",
     isVip: false,
     lessons: [
       {
         id: "m02-l01",
         moduleId: "modulo-02",
         lessonNumber: 1,
-        globalIndex: 6,
-        title: "¿Qué es MetaTrader 4 y MetaTrader 5?",
-        subtitle: "La plataforma estándar de la industria",
+        globalIndex: 5,
+        title: "El Mayor Enemigo del Trader: El Sobrelotaje",
+        subtitle: "Por qué arriesgar de más arruina cualquier cuenta",
         durationMinutes: 5,
         isVip: false,
         pages: [
           {
             pageIndex: 1,
             totalPages: 1,
-            title: "El conector con el mercado",
+            title: "Volumen y Lotaje",
             content: [
-              "MetaTrader es el programa donde se conectan tu cuenta de corretaje (Broker) y tu robot de trading.",
-              "El bot se instala en MetaTrader como un 'Expert Advisor' (EA) y lee el gráfico segundo a segundo para ejecutar las órdenes automáticamente."
+              "El sobrelotaje ocurre cuando abres operaciones demasiado grandes para el saldo de tu cuenta.",
+              "Si tienes una cuenta de $500 y abres lotes como si tuvieras $5,000, cualquier pequeño movimiento en contra acabará consumiendo tu capital.",
+              "La regla de oro es mantener un volumen moderado para que la cuenta pueda respirar durante los retrocesos del mercado."
             ]
           }
         ]
@@ -269,21 +248,53 @@ export const ACADEMIA_MODULES: Module[] = [
         id: "m02-l02",
         moduleId: "modulo-02",
         lessonNumber: 2,
-        globalIndex: 2,
-        title: "Instalación del Robot Maiko Bayesian",
-        subtitle: "Paso a paso para cargar el archivo .ex5",
-        durationMinutes: 8,
-        isVip: true,
+        globalIndex: 6,
+        title: "Comprender el Drawdown y Flotantes",
+        subtitle: "Pérdida temporal no realizada",
+        durationMinutes: 5,
+        isVip: false,
         pages: [
           {
             pageIndex: 1,
             totalPages: 1,
-            title: "Cargar el EA en MetaTrader 5",
+            title: "¿Qué es el Drawdown?",
             content: [
-              "1. Abre MT5 y haz clic en Archivo > Abrir Carpeta de Datos.",
-              "2. Entra en MQL5 > Experts y pega el archivo Maiko_PRO.ex5.",
-              "3. Reinicia MT5 o actualiza el navegador de Expert Advisors.",
-              "4. Arrastra el bot al gráfico de XAUUSD en temporalidad H1 y activa 'Permitir Trading Algorítmico'."
+              "El Drawdown es la diferencia entre el punto más alto del saldo de tu cuenta y el punto más bajo alcanzado durante las operaciones abiertas.",
+              "Un flotante negativo no es una pérdida definitiva hasta que la operación se cierra. Un bot bien calibrado gestiona el flotante esperando a que el mercado vuelva a favor."
+            ]
+          }
+        ],
+        quiz: {
+          id: "quiz-m02-l02",
+          badgeText: "RECOMPENSA",
+          question: "¿Qué debes hacer si observas un flotante negativo temporal dentro del rango normal recomendado?",
+          options: [
+            { id: "A", text: "Cerrar todas las operaciones a mano en pánico" },
+            { id: "B", text: "Mantener la calma, confiar en el bot y respetar el margen de flotante calibrado" },
+            { id: "C", text: "Duplicar las operaciones para salir del flotante" }
+          ],
+          correctAnswerId: "B",
+          feedbackExplanation: "¡Perfecto! El flotante es parte del proceso de maduración de las posiciones. Respetar el margen calibrado es lo que mantiene la cuenta protegida."
+        }
+      },
+      {
+        id: "m02-l03",
+        moduleId: "modulo-02",
+        lessonNumber: 3,
+        globalIndex: 7,
+        title: "Desbloqueo de tu Prueba Gratuita de Bot",
+        subtitle: "¡Premio por completar la formación en riesgo!",
+        durationMinutes: 4,
+        isVip: false,
+        isFreeTrialUnlocker: true,
+        pages: [
+          {
+            pageIndex: 1,
+            totalPages: 1,
+            title: "¡Premio de Graduación!",
+            content: [
+              "Has completado la formación fundamental sobre mercados y gestión de riesgo. ¡Enhorabuena!",
+              "Como premio por tu compromiso, ya puedes reclamar tu pase de prueba gratuita para ver actuar a nuestros bots en entorno Demo de forma 100% segura."
             ]
           }
         ]
@@ -293,28 +304,28 @@ export const ACADEMIA_MODULES: Module[] = [
   {
     id: "modulo-03",
     moduleNumberStr: "03",
-    title: "ESTRATEGIA Y OPERACIÓN",
-    subtitle: "Operar como un profesional",
-    description: "Profundiza en la estrategia bayesiana, backtesting y psicología aplicada al trading automático.",
-    isVip: true,
+    title: "CÓMO FUNCIONAN LOS BOTS DE TRADING",
+    subtitle: "Iniciación al trading automático",
+    description: "Descubre cómo los algoritmos leen los gráficos y ejecutan órdenes 24/7 sin emociones.",
+    isVip: false,
     lessons: [
       {
         id: "m03-l01",
         moduleId: "modulo-03",
         lessonNumber: 1,
         globalIndex: 8,
-        title: "La Estrategia Bayesian Explicada",
-        subtitle: "Filtros matemáticos de alta probabilidad",
-        durationMinutes: 7,
-        isVip: true,
+        title: "Cómo Piensa un Robot de Trading",
+        subtitle: "Reglas matemáticas e indicadores técnicos",
+        durationMinutes: 5,
+        isVip: false,
         pages: [
           {
             pageIndex: 1,
             totalPages: 1,
-            title: "Lógica probabilística",
+            title: "Lógica sin emociones",
             content: [
-              "La estrategia bayesiana calcula la probabilidad condicional de que una dirección continúe evaluando el RSI y la volatilidad histórica.",
-              "Esto reduce las falsas entradas en momentos de consolidación de precio."
+              "Un bot de trading analiza los datos del gráfico (precios, volatilidad, medias móviles, RSI) y decide entrar al mercado únicamente cuando se cumplen el 100% de las condiciones programadas.",
+              "A diferencia del ser humano, el bot no siente miedo, avaricia ni impulso de venganza tras una racha mala."
             ]
           }
         ]
@@ -324,22 +335,71 @@ export const ACADEMIA_MODULES: Module[] = [
         moduleId: "modulo-03",
         lessonNumber: 2,
         globalIndex: 9,
-        title: "Gestión de Riesgo y Control de Lotaje",
-        subtitle: "Ajuste seguro según el balance de tu cuenta",
+        title: "¿Qué es MetaTrader 4/5 y una VPS?",
+        subtitle: "La infraestructura técnica de un bot",
         durationMinutes: 6,
+        isVip: false,
+        pages: [
+          {
+            pageIndex: 1,
+            totalPages: 1,
+            title: "Servidor VPS y Ejecución 24/7",
+            content: [
+              "MetaTrader es el programa donde rueda el bot. Una VPS (Servidor Privado Virtual) es una computadora en la nube que permite que el bot funcione 24 horas al día sin necesidad de dejar tu ordenador personal encendido."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "modulo-04",
+    moduleNumberStr: "04",
+    title: "PUESTA EN MARCHA DE TU BOT KOPYTRADING",
+    subtitle: "Solo para usuarios con Bot contratado",
+    description: "Módulo exclusivo de instalación y parámetros de configuración (En actualización según el bot oficial seleccionado).",
+    isVip: true,
+    lessons: [
+      {
+        id: "m04-l01",
+        moduleId: "modulo-04",
+        lessonNumber: 1,
+        globalIndex: 10,
+        title: "Instalación del Bot en MetaTrader 5",
+        subtitle: "Paso a paso para cargar el bot oficial",
+        durationMinutes: 8,
         isVip: true,
-        quiz: {
-          id: "quiz-m03-l02",
-          badgeText: "EVALUACIÓN VIP",
-          question: "Si tu cuenta tiene $500 y el manual del bot sugiere 0.01 lotes por cada $500, ¿cuál es el lotaje correcto?",
-          options: [
-            { id: "A", text: "0.10 lotes para acelerar los puntos" },
-            { id: "B", text: "0.01 lotes exactamente para cumplir la gestión estricta" },
-            { id: "C", text: "0.05 lotes según si el mercado parece subir" }
-          ],
-          correctAnswerId: "B",
-          feedbackExplanation: "¡Correcto! Respetar el lotaje recomendado es la única forma de garantizar la supervivencia del capital a largo plazo."
-        }
+        pages: [
+          {
+            pageIndex: 1,
+            totalPages: 1,
+            title: "Instalación del Bot Oficial",
+            content: [
+              "Este contenido estará personalizado paso a paso para el robot oficial contratado.",
+              "En este módulo aprenderás a instalar el archivo .ex5 en MetaTrader 5, vincular tu número de cuenta y activar el botón de Trading Algorítmico."
+            ]
+          }
+        ]
+      },
+      {
+        id: "m04-l02",
+        moduleId: "modulo-04",
+        lessonNumber: 2,
+        globalIndex: 11,
+        title: "Ajuste de Parámetros e Inputs del Panel",
+        subtitle: "Configuración según tu capital inicial",
+        durationMinutes: 7,
+        isVip: true,
+        pages: [
+          {
+            pageIndex: 1,
+            totalPages: 1,
+            title: "Configuración de Inputs",
+            content: [
+              "Aprenderás a ajustar el perfil de riesgo (Conservador, Balanceado o Agresivo), el lotaje base y la activación del Escudo Shield Diario."
+            ]
+          }
+        ]
       }
     ]
   }
