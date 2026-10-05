@@ -404,8 +404,8 @@ export const ACADEMIA_MODULES: Module[] = [
     id: "modulo-04",
     moduleNumberStr: "04",
     title: "PUESTA EN MARCHA DE TU BOT KOPYTRADING",
-    subtitle: "Solo para usuarios con Bot contratado",
-    description: "Módulo exclusivo de instalación y parámetros de configuración (En actualización según el bot oficial seleccionado).",
+    subtitle: "Módulo VIP de Instalación y Operativa Práctica",
+    description: "Guía técnica paso a paso para la instalación de MetaTrader 5, servidor VPS 24/7, permisos de servidor, configuración de lotajes y monitoreo diario.",
     isVip: true,
     lessons: [
       {
@@ -413,41 +413,205 @@ export const ACADEMIA_MODULES: Module[] = [
         moduleId: "modulo-04",
         lessonNumber: 1,
         globalIndex: 10,
-        title: "Instalación del Bot en MetaTrader 5",
-        subtitle: "Paso a paso para cargar el bot oficial",
+        title: "Instalación de MetaTrader 5 y Servidor VPS 24/7",
+        subtitle: "Cómo garantizar que tu bot ruede sin interrupciones",
         durationMinutes: 8,
         isVip: true,
         pages: [
           {
             pageIndex: 1,
-            totalPages: 1,
-            title: "Instalación del Bot Oficial",
+            totalPages: 2,
+            title: "¿Por qué necesitas un Servidor VPS?",
             content: [
-              "Este contenido estará personalizado paso a paso para el robot oficial contratado.",
-              "En este módulo aprenderás a instalar el archivo .ex5 en MetaTrader 5, vincular tu número de cuenta y activar el botón de Trading Algorítmico."
+              "Un bot de trading ejecuta reglas matemáticas en tiempo real. Si tu ordenador personal se apaga, pierde la conexión a internet o entra en modo de suspensión, el bot no podrá gestionar las operaciones abiertas ni aplicar sus límites de seguridad.",
+              "Un VPS (Virtual Private Server) es un ordenador en la nube optimizado para estar encendido las 24 horas del día, los 365 días del año, con bajísima latencia conectada directamente a los servidores del broker.",
+              "En este primer paso instalamos MetaTrader 5 tanto en tu equipo como en tu VPS de prueba para garantizar continuidad operativa absoluta."
+            ],
+            keyConceptCard: {
+              tag: "INFRAESTRUCTURA TÉCNICA",
+              title: "REQUISITOS DE OPERATIVA 24/7",
+              items: [
+                { label: "Disponibilidad", value: "99.9% Uptime sin apagar el PC", color: "text-amber-400" },
+                { label: "Latencia", value: "Menos de 15ms hacia el broker", color: "text-emerald-400" }
+              ]
+            }
+          },
+          {
+            pageIndex: 2,
+            totalPages: 2,
+            title: "Pasos para abrir tu Cuenta Demo en MT5",
+            content: [
+              "1. Descarga MetaTrader 5 desde el enlace oficial de tu broker de confianza.",
+              "2. Crea una cuenta Demo con el capital que planeas utilizar en el futuro (por ejemplo, 1.000$ o 10.000$ cent).",
+              "3. Guarda tus credenciales de inicio de sesión (Número de cuenta, Contraseña de operador y Servidor)."
             ]
           }
-        ]
+        ],
+        quiz: {
+          id: "quiz-m04-l01",
+          badgeText: "EVALUACIÓN TÉCNICA",
+          question: "¿Cuál es la función principal de utilizar un servidor VPS para tu bot de trading?",
+          options: [
+            { id: "A", text: "Garantizar operaciones ganadoras en un 100% sin importar la estrategia" },
+            { id: "B", text: "Mantener el bot funcionando 24/7 con baja latencia sin depender de tu PC encendido ni de la luz de tu casa" },
+            { id: "C", text: "Duplicar automáticamente el apalancamiento concedido por el broker" }
+          ],
+          correctAnswerId: "B",
+          feedbackExplanation: "¡Correcto! El VPS proporciona ejecución ininterrumpida y baja latencia directamente con el servidor del broker."
+        }
       },
       {
         id: "m04-l02",
         moduleId: "modulo-04",
         lessonNumber: 2,
         globalIndex: 11,
-        title: "Ajuste de Parámetros e Inputs del Panel",
-        subtitle: "Configuración según tu capital inicial",
+        title: "Carga del Archivo .EX5 y Permisos WebRequest",
+        subtitle: "Instalación del bot en MetaTrader 5",
         durationMinutes: 7,
         isVip: true,
         pages: [
           {
             pageIndex: 1,
-            totalPages: 1,
-            title: "Configuración de Inputs",
+            totalPages: 2,
+            title: "Cómo instalar el archivo .EX5 en MT5",
             content: [
-              "Aprenderás a ajustar el perfil de riesgo (Conservador, Balanceado o Agresivo), el lotaje base y la activación del Escudo Shield Diario."
+              "Una vez descargado el bot oficial desde tu panel de Kopytrading, abre MetaTrader 5 y dirígete a Archivo > Abrir Carpeta de Datos.",
+              "Navega a la carpeta MQL5 > Experts y pega ahí el archivo ejecutable (.ex5).",
+              "Vuelve a la ventana del Navegador en MT5, haz clic derecho sobre Asesores Expertos y pulsa en 'Actualizar'."
+            ]
+          },
+          {
+            pageIndex: 2,
+            totalPages: 2,
+            title: "Activación del Trading Algorítmico y WebRequest",
+            content: [
+              "Para que el bot valide su licencia y pueda abrir operaciones, debes habilitar dos permisos obligatorios:",
+              "1. Haz clic en el botón superior de MT5 llamado 'Trading Algorítmico' hasta que el icono muestre un símbolo verde de reproducción.",
+              "2. Ve a Herramientas > Opciones > Expert Advisors, marca 'Permitir WebRequest para las URL listadas' y añade https://kopytrading.com."
+            ],
+            keyConceptCard: {
+              tag: "PERMISOS CRÍTICOS",
+              title: "CHECKLIST DE SEGURIDAD MT5",
+              items: [
+                { label: "Trading Algorítmico", value: "Botón superior en VERDE", color: "text-emerald-400" },
+                { label: "WebRequest URL", value: "https://kopytrading.com", color: "text-amber-400" }
+              ]
+            }
+          }
+        ],
+        quiz: {
+          id: "quiz-m04-l02",
+          badgeText: "EVALUACIÓN DE PERMISOS",
+          question: "¿Qué ocurre si no agregas https://kopytrading.com en los permisos de WebRequest de MetaTrader 5?",
+          options: [
+            { id: "A", text: "El bot no podrá conectar con el servidor de licencias para verificar su validez y se detendrá" },
+            { id: "B", text: "El broker cerrará la cuenta automáticamente por incumplimiento" },
+            { id: "C", text: "El gráfico de MetaTrader 5 cambiará de color" }
+          ],
+          correctAnswerId: "A",
+          feedbackExplanation: "¡Correcto! WebRequest es indispensable para que el bot verifique su clave de activación y autentique la licencia."
+        }
+      },
+      {
+        id: "m04-l03",
+        moduleId: "modulo-04",
+        lessonNumber: 3,
+        globalIndex: 12,
+        title: "Configuración de Inputs, Lotajes y Escudo Shield",
+        subtitle: "Parámetros de gestión de riesgo según tu capital",
+        durationMinutes: 9,
+        isVip: true,
+        pages: [
+          {
+            pageIndex: 1,
+            totalPages: 2,
+            title: "Cálculo del Lotaje Inicial según tu Cuenta",
+            content: [
+              "Arrastra el bot al gráfico deseado (por ejemplo XAUUSD en M5). Aparecerá la ventana de parámetros de entrada (Inputs).",
+              "El parámetro más importante es el Lotaje Inicial. La regla institucional de Kopytrading recomienda utilizar 0.01 lotes por cada 1.000$ en cuentas Estándar/USD, o 0.01 por cada 100$ en cuentas Cent.",
+              "Nunca aumentes el lotaje base para intentar recuperar rachas negativas en poco tiempo."
+            ],
+            keyConceptCard: {
+              tag: "GESTIÓN DE CAPITAL",
+              title: "PROPORCIÓN RECOMENDADA DE LOTAJE",
+              items: [
+                { label: "Cuenta USD ($1.000)", value: "Lotaje Base: 0.01", color: "text-amber-400" },
+                { label: "Cuenta Cent ($100 / 10k cent)", value: "Lotaje Base: 0.01", color: "text-emerald-400" }
+              ]
+            }
+          },
+          {
+            pageIndex: 2,
+            totalPages: 2,
+            title: "Activación del Escudo Diario (Daily Shield Stop)",
+            content: [
+              "Nuestros algoritmos incluyen un parámetro de seguridad llamado Escudo Diario o Max Daily Drawdown Limit.",
+              "Si el flotante negativo alcanza el porcentaje establecido (por ejemplo, 5%), el algoritmo detendrá nuevas operaciones durante el resto de la jornada para proteger el balance global de tu cuenta."
             ]
           }
-        ]
+        ],
+        quiz: {
+          id: "quiz-m04-l03",
+          badgeText: "EVALUACIÓN DE CONFIGURACIÓN",
+          question: "Para una cuenta Estándar con 1.000$ de balance, ¿cuál es el lotaje inicial recomendado según la regla de conservación de capital?",
+          options: [
+            { id: "A", text: "0.10 lotes para obtener el máximo beneficio rápido" },
+            { id: "B", text: "0.01 lotes para mantener un nivel de riesgo controlado y sostenible" },
+            { id: "C", text: "1.00 lote completo para apalancarse al máximo" }
+          ],
+          correctAnswerId: "B",
+          feedbackExplanation: "¡Correcto! 0.01 lotes por cada 1.000$ garantiza un margen suficiente para absorber la volatilidad natural del mercado."
+        }
+      },
+      {
+        id: "m04-l04",
+        moduleId: "modulo-04",
+        lessonNumber: 4,
+        globalIndex: 13,
+        title: "Monitoreo Diario y Operativa en Eventos de Noticias",
+        subtitle: "Buenas prácticas para mantener la consistencia a largo plazo",
+        durationMinutes: 8,
+        isVip: true,
+        pages: [
+          {
+            pageIndex: 1,
+            totalPages: 2,
+            title: "Cómo interpretar la información del Panel en Gráfico (HUD)",
+            content: [
+              "Cuando el bot está activo en el gráfico, verás una tabla o panel frontal con información clave: Estado del bot (ONLINE), Flotante actual, Operaciones abiertas y Filtro de tendencia activa.",
+              "Verifica de un vistazo que en la esquina superior derecha del gráfico aparezca la carita sonriente o el sombrero azul del Asesor Experto."
+            ]
+          },
+          {
+            pageIndex: 2,
+            totalPages: 2,
+            title: "Gestión durante Noticias de Alto Impacto (IPC, NFP, Tipos de Interés)",
+            content: [
+              "Durante eventos macroeconómicos de nivel 3 (marcados en rojo en ForexFactory o Investing), la volatilidad del precio puede dispararse de forma impredecible.",
+              "Recomendamos revisar el calendario económico semanal. Si el bot cuenta con filtro automático de noticias, déjalo activado; de lo contrario, puedes poner en pausa las nuevas entradas 30 minutos antes y después del dato."
+            ],
+            keyConceptCard: {
+              tag: "DISCIPLINA OPERATIVA",
+              title: "REGLAS DE ORO DEL OPERADOR",
+              items: [
+                { label: "Monitoreo", value: "Revisión diaria de 2 minutos", color: "text-amber-400" },
+                { label: "Noticias Nivel 3", value: "Respetar filtros de volatilidad", color: "text-emerald-400" }
+              ]
+            }
+          }
+        ],
+        quiz: {
+          id: "quiz-m04-l04",
+          badgeText: "EVALUACIÓN FINAL DE OPERATIVA",
+          question: "¿Qué actitud profesional se debe mantener durante una semana de alta volatilidad o noticias macroeconómicas?",
+          options: [
+            { id: "A", text: "Intervenir manualmente cerrando operaciones con prisa sin respetar las reglas del algoritmo" },
+            { id: "B", text: "Respetar los parámetros de riesgo preestablecidos y permitir que el escudo de protección del bot gestione la volatilidad según lo diseñado" },
+            { id: "C", text: "Aumentar el lotaje al doble para intentar compensar la volatilidad" }
+          ],
+          correctAnswerId: "B",
+          feedbackExplanation: "¡Excelente! La disciplina y el respeto riguroso al plan matemático son la clave de la consistencia en el trading algorítmico."
+        }
       }
     ]
   }

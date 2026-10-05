@@ -163,7 +163,7 @@ export default function ProgressSidebar({
                     const isCompleted = completedLessonIds.includes(lesson.id);
                     const isActive = lesson.id === currentLessonId;
                     const isUnlocked = isLessonUnlocked(lesson);
-                    const isVipLocked = lesson.isVip && userRole !== "VIP";
+                    const isVipLocked = lesson.isVip && userRole !== "VIP" && userRole !== "ADMIN";
                     const isLocked = !isUnlocked || isVipLocked;
 
                     return (

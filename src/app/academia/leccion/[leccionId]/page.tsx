@@ -53,7 +53,13 @@ export default function LessonPlayerPage() {
       }
       const savedRole = localStorage.getItem("kopytrading_user_role");
       const trialClaimed = localStorage.getItem("kopytrading_trial_claimed");
-      if (savedRole === "VIP" || trialClaimed === "true") {
+      if (
+        savedEmail?.toLowerCase() === "viajaconsakura@gmail.com" ||
+        savedRole === "ADMIN" ||
+        localStorage.getItem("kopytrading_is_admin") === "true"
+      ) {
+        setUserRole("ADMIN");
+      } else if (savedRole === "VIP" || trialClaimed === "true") {
         setUserRole("VIP");
       }
     } catch (e) {
@@ -105,7 +111,7 @@ export default function LessonPlayerPage() {
     return false;
   })();
 
-  const isVipLocked = lesson.isVip && userRole !== "VIP";
+  const isVipLocked = lesson.isVip && userRole !== "VIP" && userRole !== "ADMIN";
   const isAccessBlocked = !isUnlocked || isVipLocked;
 
   const markLessonAsComplete = () => {
@@ -208,14 +214,14 @@ export default function LessonPlayerPage() {
 
               <div className="space-y-1.5">
                 <span className="px-2.5 py-0.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-400 font-mono text-[10px] font-bold uppercase">
-                  {isVipLocked ? "CONTENIDO VIP RESTRINGIDO" : "LECCIÓN BLOQUEADA"}
+                  {isVipLocked ? "MÓDULO VIP EN PREPARACIÓN" : "LECCIÓN BLOQUEADA"}
                 </span>
                 <h2 className="text-xl md:text-2xl font-extrabold text-white">
-                  {isVipLocked ? "Módulo Exclusivo para Usuarios del Bot" : "Debes avanzar en orden secuencial"}
+                  {isVipLocked ? "Puesta en Marcha Técnica del Bot Oficial" : "Debes avanzar en orden secuencial"}
                 </h2>
                 <p className="text-xs md:text-sm text-slate-300 leading-relaxed">
                   {isVipLocked
-                    ? "Este módulo técnico de puesta en marcha estará disponible para usuarios que adquieran o descarguen un bot oficialmente."
+                    ? "Este módulo práctico (instalación en MetaTrader 5, VPS 24/7 y parámetros) se habilitará oficialmente con el lanzamiento del Bot Maestro Definitivo. Al registrar tu prueba gratuita ya tienes reservada tu plaza VIP."
                     : "Para garantizar un aprendizaje veraz y sólido, no es posible saltar lecciones. Completa la lección anterior para desbloquear esta parte."}
                 </p>
               </div>
