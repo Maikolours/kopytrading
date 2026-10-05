@@ -138,6 +138,10 @@ export function Navbar() {
                         )}
                     </div>
 
+                    <Link href="/academia" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors flex items-center gap-1 ${pathname.startsWith("/academia") ? "text-amber-400" : "text-white/70 hover:text-white"}`}>
+                        <span>Academia</span>
+                        <span className="text-amber-400 text-[9px] px-1 py-0.5 bg-amber-400/10 rounded border border-amber-400/30">NUEVO</span>
+                    </Link>
                     <Link href="/articulos" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/articulos" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Blog</Link>
                     <Link href="/sobre-nosotros" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/sobre-nosotros" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>Nosotros</Link>
                     <Link href="/faq" className={`text-[11px] lg:text-xs font-black uppercase tracking-wider lg:tracking-widest transition-colors ${pathname === "/faq" ? "text-brand-light" : "text-white/70 hover:text-white"}`}>FAQ</Link>
@@ -209,6 +213,13 @@ export function Navbar() {
 
                 {/* Navigation Links inside Menu */}
                 <div className="relative z-10 flex-1 flex flex-col justify-start items-center pt-16 pb-12 px-6 gap-3.5 text-center overflow-y-auto">
+                    <Link 
+                        onClick={() => setIsMenuOpen(false)} 
+                        href="/academia" 
+                        className={`text-base sm:text-lg font-black uppercase tracking-[0.2em] transition-colors py-1 ${pathname.startsWith("/academia") ? "text-amber-400 font-black" : "text-white/80 hover:text-white"}`}
+                    >
+                        🎓 Academia
+                    </Link>
                     <Link 
                         onClick={() => setIsMenuOpen(false)} 
                         href="/bots" 
