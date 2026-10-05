@@ -30,6 +30,9 @@ export default function ProgressSidebar({
   const [openModules, setOpenModules] = React.useState<Record<string, boolean>>({
     "modulo-00": true,
     "modulo-01": true,
+    "modulo-02": true,
+    "modulo-03": true,
+    "modulo-04": true,
   });
 
   const toggleModule = (moduleId: string) => {
@@ -38,6 +41,20 @@ export default function ProgressSidebar({
 
   const totalCompleted = completedLessonIds.length;
   const progressPercent = Math.min(100, Math.round((totalCompleted / TOTAL_LESSONS_COUNT) * 100));
+
+  // Helper to determine if a lesson is sequentially unlocked
+  const isLessonUnlocked = (lesson: Lesson): boolean => {
+    if (lesson.globalIndex === 1) return true; // First lesson always open
+    // Find lesson with globalIndex - 1
+    for (const mod of ACADEMIA_MODULES) {
+      for (const l of mod.lessons) {
+        if (l.globalIndex === lesson.globalIndex - 1) {
+          return completedLessonIds.includes(l.id);
+        }
+      }
+    }
+    return false;
+  };
 
   return (
     <div className="w-full lg:w-80 flex flex-col h-full bg-[#0A0D14] border-r border-slate-800/80 text-white select-none">
@@ -86,12 +103,12 @@ export default function ProgressSidebar({
           </div>
 
           <div>
-            <div className="text-xs text-slate-400 font-medium">Tu progreso</div>
+            <div className="text-xs text-slate-400 font-medium">Tu progreso general</div>
             <div className="text-sm font-bold text-slate-200">
               {totalCompleted} de {TOTAL_LESSONS_COUNT} lecciones
             </div>
             <div className="text-[11px] font-mono text-emerald-400 mt-0.5">
-              Módulo 00 disponible
+              Formación progresiva
             </div>
           </div>
         </div>
@@ -99,10 +116,9 @@ export default function ProgressSidebar({
 
       {/* Modules List */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
-        {ACADEMIA_MODULES.map((mod, modIdx) => {
+        {ACADEMIA_MODULES.map((mod) => {
           const isOpen = !!openModules[mod.id];
           const completedInModule = mod.lessons.filter(l => completedLessonIds.includes(l.id)).length;
-          const isModuleDone = completedInModule === mod.lessons.length;
 
           return (
             <div key={mod.id} className="rounded-xl overflow-hidden border border-slate-800/80 bg-slate-950/40">
@@ -117,6 +133,11 @@ export default function ProgressSidebar({
                   <div className="text-[10px] font-mono font-bold tracking-wider text-amber-400/90 uppercase flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
                     Módulo {mod.moduleNumberStr}: {mod.title}
+                    {mod.isVip && (
+                      <span className="text-[9px] px-1.5 py-0.5 bg-amber-400/10 text-amber-400 rounded border border-amber-400/30">
+                        VIP
+                      </span>
+                    )}
                   </div>
                   <div className="text-xs text-slate-400 mt-0.5 font-medium">
                     {mod.subtitle}
@@ -141,18 +162,31 @@ export default function ProgressSidebar({
                   {mod.lessons.map((lesson) => {
                     const isCompleted = completedLessonIds.includes(lesson.id);
                     const isActive = lesson.id === currentLessonId;
+                    const isUnlocked = isLessonUnlocked(lesson);
                     const isVipLocked = lesson.isVip && userRole !== "VIP";
+                    const isLocked = !isUnlocked || isVipLocked;
 
                     return (
                       <div key={lesson.id}>
-                        {isVipLocked ? (
-                          <div className="flex items-center justify-between px-3 py-2.5 rounded-lg opacity-60 bg-slate-950/40 border border-transparent text-slate-400 cursor-not-allowed">
+                        {isLocked ? (
+                          <div
+                            title={
+                              isVipLocked
+                                ? "Módulo VIP exclusivo para usuarios que han contratado un Bot."
+                                : "Lección Bloqueada. Completa las lecciones anteriores para avanzar."
+                            }
+                            className="flex items-center justify-between px-3 py-2.5 rounded-lg opacity-50 bg-slate-950/60 border border-slate-900 text-slate-500 cursor-not-allowed select-none"
+                          >
                             <div className="flex items-center gap-2.5 truncate">
-                              <Crown className="w-4 h-4 text-amber-400 shrink-0" />
+                              {isVipLocked ? (
+                                <Crown className="w-4 h-4 text-amber-400 shrink-0" />
+                              ) : (
+                                <Lock className="w-4 h-4 text-slate-500 shrink-0" />
+                              )}
                               <span className="text-xs font-medium truncate">{lesson.title}</span>
                             </div>
-                            <span className="text-[10px] font-mono font-bold bg-amber-400/10 text-amber-400 border border-amber-400/30 px-1.5 py-0.5 rounded">
-                              VIP
+                            <span className="text-[9px] font-mono uppercase bg-slate-900 text-slate-500 px-1.5 py-0.5 rounded border border-slate-800">
+                              {isVipLocked ? "VIP" : "BLOQUEADA"}
                             </span>
                           </div>
                         ) : (

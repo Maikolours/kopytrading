@@ -13,7 +13,8 @@ import {
   ShieldAlert,
   ChevronRight,
   Menu,
-  X
+  X,
+  AlertCircle
 } from "lucide-react";
 import { getLessonById, ACADEMIA_MODULES } from "@/lib/academiaData";
 import ProgressSidebar from "@/components/academia/ProgressSidebar";
@@ -31,6 +32,7 @@ export default function LessonPlayerPage() {
   const [showModuleModal, setShowModuleModal] = useState(false);
   const [completedModuleName, setCompletedModuleName] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userRole, setUserRole] = useState<string>("USER");
 
   useEffect(() => {
     try {
@@ -62,6 +64,22 @@ export default function LessonPlayerPage() {
   const { lesson, module: currentModule } = lessonData;
   const isLessonCompleted = completedLessonIds.includes(lesson.id);
 
+  // Check strict sequential lock
+  const isUnlocked = (() => {
+    if (lesson.globalIndex === 1) return true;
+    for (const mod of ACADEMIA_MODULES) {
+      for (const l of mod.lessons) {
+        if (l.globalIndex === lesson.globalIndex - 1) {
+          return completedLessonIds.includes(l.id);
+        }
+      }
+    }
+    return false;
+  })();
+
+  const isVipLocked = lesson.isVip && userRole !== "VIP";
+  const isAccessBlocked = !isUnlocked || isVipLocked;
+
   const markLessonAsComplete = () => {
     if (!completedLessonIds.includes(lesson.id)) {
       const updated = [...completedLessonIds, lesson.id];
@@ -83,7 +101,6 @@ export default function LessonPlayerPage() {
   };
 
   const handleNextLesson = () => {
-    // Find next lesson
     let allLessons: string[] = [];
     ACADEMIA_MODULES.forEach(m => {
       m.lessons.forEach(l => allLessons.push(l.id));
@@ -125,7 +142,7 @@ export default function LessonPlayerPage() {
         <ProgressSidebar
           currentLessonId={lesson.id}
           completedLessonIds={completedLessonIds}
-          userRole="USER"
+          userRole={userRole}
           onSelectLesson={() => setSidebarOpen(false)}
         />
       </div>
@@ -154,83 +171,118 @@ export default function LessonPlayerPage() {
 
         {/* Content Container */}
         <main className="flex-1 max-w-4xl w-full mx-auto p-6 md:p-10 space-y-8">
-          {/* Lesson Header */}
-          <div className="space-y-2 border-b border-slate-800/80 pb-6">
-            <div className="flex items-center gap-3">
-              <span className="px-2.5 py-0.5 rounded bg-amber-400/10 border border-amber-400/30 text-amber-400 font-mono text-[10px] font-bold uppercase">
-                MÓDULO {currentModule.moduleNumberStr}
-              </span>
-              <span className="text-xs font-mono text-slate-400 flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5" />
-                {lesson.durationMinutes} min de lectura
-              </span>
+          {/* Locked Guard Screen */}
+          {isAccessBlocked ? (
+            <div className="rounded-3xl bg-[#0F1422] border border-amber-500/30 p-8 md:p-12 text-center space-y-6 shadow-2xl my-12">
+              <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-center mx-auto text-amber-400">
+                {isVipLocked ? <Crown className="w-8 h-8" /> : <Lock className="w-8 h-8" />}
+              </div>
+
+              <div className="max-w-md mx-auto space-y-2">
+                <span className="px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-400 font-mono text-xs font-bold uppercase">
+                  {isVipLocked ? "CONTENIDO VIP RESTRINGIDO" : "LECCIÓN BLOQUEADA"}
+                </span>
+                <h2 className="text-2xl md:text-3xl font-extrabold text-white">
+                  {isVipLocked ? "Módulo Exclusivo para Usuarios del Bot" : "Debes avanzar en orden secuencial"}
+                </h2>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  {isVipLocked
+                    ? "Este módulo técnico de puesta en marcha estará disponible para usuarios que adquieran o descarguen un bot oficialmente."
+                    : "Para garantizar un aprendizaje veraz y sólido, no es posible saltar lecciones. Completa la lección anterior para desbloquear esta parte."}
+                </p>
+              </div>
+
+              <div className="pt-2">
+                <Link
+                  href="/academia"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-amber-500/20 transition-all"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Ir al Menú de Lecciones
+                </Link>
+              </div>
             </div>
+          ) : (
+            <>
+              {/* Lesson Header */}
+              <div className="space-y-2 border-b border-slate-800/80 pb-6">
+                <div className="flex items-center gap-3">
+                  <span className="px-2.5 py-0.5 rounded bg-amber-400/10 border border-amber-400/30 text-amber-400 font-mono text-[10px] font-bold uppercase">
+                    MÓDULO {currentModule.moduleNumberStr}
+                  </span>
+                  <span className="text-xs font-mono text-slate-400 flex items-center gap-1">
+                    <Clock className="w-3.5 h-3.5" />
+                    {lesson.durationMinutes} min de lectura
+                  </span>
+                </div>
 
-            <h1 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight">
-              {lesson.title}
-            </h1>
-            {lesson.subtitle && (
-              <p className="text-slate-400 text-sm md:text-base">{lesson.subtitle}</p>
-            )}
-          </div>
+                <h1 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight">
+                  {lesson.title}
+                </h1>
+                {lesson.subtitle && (
+                  <p className="text-slate-400 text-sm md:text-base">{lesson.subtitle}</p>
+                )}
+              </div>
 
-          {/* Micro-learning Pages Component */}
-          {lesson.pages && lesson.pages.length > 0 && (
-            <LessonTextPage
-              pages={lesson.pages}
-              onFinishReading={markLessonAsComplete}
-            />
+              {/* Micro-learning Pages Component */}
+              {lesson.pages && lesson.pages.length > 0 && (
+                <LessonTextPage
+                  pages={lesson.pages}
+                  onFinishReading={markLessonAsComplete}
+                />
+              )}
+
+              {/* Interactive Quiz Component */}
+              {lesson.quiz && (
+                <div className="pt-4">
+                  <InteractiveQuiz
+                    quiz={lesson.quiz}
+                    onCorrectAnswer={markLessonAsComplete}
+                  />
+                </div>
+              )}
+
+              {/* Special Lead Magnet / Free Trial Card */}
+              {lesson.isFreeTrialUnlocker && (
+                <div className="pt-6">
+                  <FreeTrialClaimCard />
+                </div>
+              )}
+
+              {/* Bottom Lesson Footer Controls */}
+              <div className="pt-8 border-t border-slate-800/80 space-y-4">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <Link
+                    href="/academia"
+                    className="w-full sm:w-auto px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-300 flex items-center justify-center gap-2 transition-colors"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    Menú de Lecciones
+                  </Link>
+
+                  <button
+                    onClick={() => {
+                      markLessonAsComplete();
+                      handleNextLesson();
+                    }}
+                    className={`w-full sm:w-auto px-6 py-3.5 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 transition-all shadow-lg ${
+                      isLessonCompleted
+                        ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20"
+                        : "bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 shadow-amber-500/20"
+                    }`}
+                  >
+                    <CheckCircle2 className="w-4 h-4" />
+                    {isLessonCompleted ? "Lección Completada - Siguiente" : "Marcar como Completada y Avanzar"}
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <p className="text-[11px] font-mono text-slate-500 text-center">
+                  Completa las lecciones en orden para desbloquear progresivamente los siguientes módulos.
+                </p>
+              </div>
+            </>
           )}
-
-          {/* Interactive Quiz Component */}
-          {lesson.quiz && (
-            <div className="pt-4">
-              <InteractiveQuiz
-                quiz={lesson.quiz}
-                onCorrectAnswer={markLessonAsComplete}
-              />
-            </div>
-          )}
-
-          {/* Special Lead Magnet / Free Trial Card */}
-          {lesson.isFreeTrialUnlocker && (
-            <div className="pt-6">
-              <FreeTrialClaimCard />
-            </div>
-          )}
-
-          {/* Bottom Lesson Footer Controls */}
-          <div className="pt-8 border-t border-slate-800/80 space-y-4">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <Link
-                href="/academia"
-                className="w-full sm:w-auto px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-300 flex items-center justify-center gap-2 transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Menú de Lecciones
-              </Link>
-
-              <button
-                onClick={() => {
-                  markLessonAsComplete();
-                  handleNextLesson();
-                }}
-                className={`w-full sm:w-auto px-6 py-3.5 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 transition-all shadow-lg ${
-                  isLessonCompleted
-                    ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20"
-                    : "bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 shadow-amber-500/20"
-                }`}
-              >
-                <CheckCircle2 className="w-4 h-4" />
-                {isLessonCompleted ? "Lección Completada - Siguiente" : "Marcar como Completada y Avanzar"}
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-
-            <p className="text-[11px] font-mono text-slate-500 text-center">
-              Completa las lecciones en orden para desbloquear progresivamente los siguientes módulos.
-            </p>
-          </div>
 
           {/* Disclaimer Footer */}
           <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-900 text-[11px] text-slate-500 space-y-1">
