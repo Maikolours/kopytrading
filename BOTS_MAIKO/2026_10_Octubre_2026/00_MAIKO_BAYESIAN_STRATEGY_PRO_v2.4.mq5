@@ -1399,7 +1399,7 @@ void ActualizarValoresHUD()
         ObjectSetString(0, "BAYES_LBL_BAL", OBJPROP_TEXT, "BALANCE: $" + DoubleToString(bal, 2) + " | HOY: " + (ganadoHoy >= 0 ? "+$" : "-$") + DoubleToString(MathAbs(ganadoHoy), 2));
         ObjectSetString(0, "BAYES_LBL_CAPAS", OBJPROP_TEXT, "CAPAS ABIERTAS: " + IntegerToString(abiertas) + " / " + IntegerToString(maxCapasEfectivo));
         ObjectSetString(0, "BAYES_LBL_ACTIVO", OBJPROP_TEXT, "ACTIVO: " + txtActivoDetectado);
-        ObjectSetString(0, "BAYES_LBL_RSI", OBJPROP_TEXT, "RSI (14): " + DoubleToString(rsiActualVal, 1) + " (Compra <=30 | Venta >=70)");
+        ObjectSetString(0, "BAYES_LBL_RSI", OBJPROP_TEXT, "RSI (" + IntegerToString(rsiPeriodEfectivo) + "): " + DoubleToString(rsiActualVal, 1) + " (Compra <=" + DoubleToString(rsiOversoldEfectivo, 0) + " | Venta >=" + DoubleToString(rsiOverboughtEfectivo, 0) + ")");
         ObjectSetString(0, "BAYES_LBL_CONF", OBJPROP_TEXT, "CONFIANZA BAYES: " + DoubleToString(confianzaBayesianaUltima, 1) + "%");
         ObjectSetString(0, "BAYES_LBL_SHIELD", OBJPROP_TEXT, "REGIMEN: " + txtRegimenStr);
         ObjectSetInteger(0, "BAYES_LBL_SHIELD", OBJPROP_COLOR, colRegimen);
