@@ -269,6 +269,22 @@ int OnInit()
 
     AplicarPerfilRiesgo();
 
+    // Restablecer operativa si al modificar parámetros la pérdida actual es inferior al nuevo escudo
+    ActualizarPosiciones();
+    ActualizarFinanzasDiarias();
+    double balInit = AccountInfoDouble(ACCOUNT_BALANCE);
+    if (balInit > 0 && shieldPctEfectivo > 0)
+    {
+        double maxPerdidaUSD = balInit * (shieldPctEfectivo / 100.0);
+        double perdidasHoyVal = ganadoHoy + (flotanteActual < 0 ? flotanteActual : 0);
+        if (perdidasHoyVal > -maxPerdidaUSD)
+        {
+            botActivo = true;
+            txtEstadoCajero = "🛡️ SHIELD ESTADO: CAJERO OK";
+            txtVeredicto = "OPERATIVA NORMAL";
+        }
+    }
+
     if (InpMostrarHUD)
     {
         RedibujarHUD();
@@ -279,7 +295,7 @@ int OnInit()
         ActualizarLineasEstructura();
     }
 
-    Print("Bayesian Strategy Pro v2.3 Iniciado Correctamente. Magic: ", magicEfectivo, " Activo: ", txtActivoDetectado);
+    Print("Bayesian Strategy Pro v2.3 Iniciado Correctamente. Magic: ", magicEfectivo, " Activo: ", txtActivoDetectado, " Shield: ", shieldPctEfectivo, "%");
     return (INIT_SUCCEEDED);
 }
 
@@ -502,20 +518,12 @@ void SincronizarIndicadoresEnGrafico()
 //+------------------------------------------------------------------+
 void AsegurarIndicadoresEnGrafico()
 {
-    static int ultimoPeriodoRSI = -1;
-    static int ultimoFiltroTendencia = -1;
-    static bool indicadoresCargados = false;
+    static datetime lastSyncTime = 0;
+    datetime now = TimeCurrent();
 
-    bool filtroActivo = (InpFiltroTendencia == TENDENCIA_EMA200_STRICT);
-
-    if (!indicadoresCargados || 
-        ultimoPeriodoRSI != rsiPeriodEfectivo || 
-        ultimoFiltroTendencia != (int)InpFiltroTendencia || 
-        (filtroActivo && ChartIndicatorsTotal(0, 0) < 1))
+    if (now - lastSyncTime >= 3 || lastSyncTime == 0)
     {
-        ultimoPeriodoRSI = rsiPeriodEfectivo;
-        ultimoFiltroTendencia = (int)InpFiltroTendencia;
-        indicadoresCargados = true;
+        lastSyncTime = now;
         SincronizarIndicadoresEnGrafico();
     }
 }
@@ -525,7 +533,12 @@ void AsegurarIndicadoresEnGrafico()
 //+------------------------------------------------------------------+
 void AplicarPerfilRiesgo()
 {
-    if (InpPerfilRiesgo == PERFIL_MANUAL) return;
+    if (InpPerfilRiesgo == PERFIL_MANUAL)
+    {
+        maxCapasEfectivo = InpMaxCapasManual;
+        shieldPctEfectivo = InpShieldPctManual;
+        return;
+    }
 
     if (InpPerfilRiesgo == PERFIL_CONSERVADOR)
     {
