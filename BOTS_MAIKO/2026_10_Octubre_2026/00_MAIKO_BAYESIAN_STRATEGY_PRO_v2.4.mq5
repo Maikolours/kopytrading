@@ -1308,6 +1308,8 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 {
     if (id == CHARTEVENT_OBJECT_CLICK)
     {
+        ObjectSetInteger(0, sparam, OBJPROP_STATE, false);
+
         if (sparam == BTN_TAB_CTA) { tabActual = TAB_CUENTA; RedibujarHUD(); }
         else if (sparam == BTN_TAB_INTEL) { tabActual = TAB_INTEL; RedibujarHUD(); }
         else if (sparam == BTN_TAB_CFG) { tabActual = TAB_CFG; RedibujarHUD(); }
@@ -1405,10 +1407,10 @@ void CrearHUD()
     CrearLabel("BAYES_LBL_RSI", "RSI (14): 50.0", x + 10, y + 122, clrCyan, 8, false);
 
     // Botones Ajuste Rápido RSI (Venta / Compra)
-    CrearBoton(BTN_OB_MINUS_NAME, "V-", x + 270, y + 120, 32, 18, C'40,50,70');
-    CrearBoton(BTN_OB_PLUS_NAME, "V+", x + 305, y + 120, 32, 18, C'40,50,70');
-    CrearBoton(BTN_OS_MINUS_NAME, "C-", x + 343, y + 120, 32, 18, C'40,50,70');
-    CrearBoton(BTN_OS_PLUS_NAME, "C+", x + 378, y + 120, 32, 18, C'40,50,70');
+    CrearBoton(BTN_OB_MINUS_NAME, "V-", x + 270, y + 120, 32, 18, C'150,40,40');
+    CrearBoton(BTN_OB_PLUS_NAME, "V+", x + 305, y + 120, 32, 18, C'180,50,50');
+    CrearBoton(BTN_OS_MINUS_NAME, "C-", x + 343, y + 120, 32, 18, C'20,110,50');
+    CrearBoton(BTN_OS_PLUS_NAME, "C+", x + 378, y + 120, 32, 18, C'30,150,60');
 
     CrearLabel("BAYES_LBL_CONF", "CONFIANZA BAYES: 50.0%", x + 10, y + 138, clrLime, 8, true);
     CrearLabel("BAYES_LBL_SHIELD", "REGIMEN: DETECTANDO...", x + 10, y + 154, clrOrange, 8, true);
@@ -1552,4 +1554,9 @@ void CrearBoton(string name, string text, int x, int y, int w, int h, color bg_c
     ObjectSetInteger(0, name, OBJPROP_FONTSIZE, 8);
     ObjectSetString(0, name, OBJPROP_FONT, "Arial Bold");
     ObjectSetInteger(0, name, OBJPROP_CORNER, CORNER_LEFT_UPPER);
+    ObjectSetInteger(0, name, OBJPROP_SELECTABLE, false);
+    ObjectSetInteger(0, name, OBJPROP_SELECTED, false);
+    ObjectSetInteger(0, name, OBJPROP_HIDDEN, true);
+    ObjectSetInteger(0, name, OBJPROP_ZORDER, 10);
+    ObjectSetInteger(0, name, OBJPROP_STATE, false);
 }
