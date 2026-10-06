@@ -456,6 +456,7 @@ void CalibrarParametrosActivo()
     if (InpRSIOverbought > 0.0 && InpRSIOverbought != 70.0) rsiOverboughtEfectivo = InpRSIOverbought;
     if (InpRSIOversold > 0.0 && InpRSIOversold != 28.0 && InpRSIOversold != 30.0 && InpRSIOversold != 35.0) rsiOversoldEfectivo = InpRSIOversold;
     if (InpMinConfidence > 0.0 && InpMinConfidence != 80.0 && InpMinConfidence != 70.0) minConfidenceEfectivo = InpMinConfidence;
+    if (!InpActivarFiltroHorario) activarFiltroHorarioEfectivo = false;
 
     if (prevRSIPeriod != rsiPeriodEfectivo || hRSI == INVALID_HANDLE)
     {
