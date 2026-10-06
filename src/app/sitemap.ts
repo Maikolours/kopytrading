@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { ARTICLES } from "@/lib/constants/articles";
 import { prisma } from "@/lib/prisma";
+import { ACADEMIA_MODULES } from "@/lib/academiaData";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = "https://www.kopytrading.com";
@@ -8,6 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Rutas estáticas principales y válidas
     const staticRoutes = [
         "",
+        "/academia",
         "/bots",
         "/articulos",
         "/activos",
@@ -22,10 +24,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         "/legal/terminos",
     ].map((route) => ({
         url: `${baseUrl}${route}`,
-        lastModified: new Date("2026-09-13"),
-        changeFrequency: "weekly" as const,
-        priority: route === "" ? 1 : 0.8,
+        lastModified: new Date(),
+        changeFrequency: (route === "" || route === "/academia" ? "daily" : "weekly") as const,
+        priority: route === "" ? 1 : route === "/academia" ? 0.95 : 0.8,
     }));
+
+    // Rutas dinámicas de lecciones de la Academia
+    const academiaLessonRoutes: MetadataRoute.Sitemap = ACADEMIA_MODULES.flatMap((mod) =>
+        mod.lessons.map((lesson) => ({
+            url: `${baseUrl}/academia/leccion/${lesson.id}`,
+            lastModified: new Date(),
+            changeFrequency: "weekly" as const,
+            priority: lesson.isVip ? 0.6 : 0.85,
+        }))
+    );
 
     // Rutas dinámicas de artículos del blog
     const blogRoutes = ARTICLES.map((article) => ({
@@ -53,5 +65,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         console.error("Error generating bot routes for sitemap:", error);
     }
 
-    return [...staticRoutes, ...blogRoutes, ...botRoutes];
+    return [...staticRoutes, ...academiaLessonRoutes, ...blogRoutes, ...botRoutes];
 }
