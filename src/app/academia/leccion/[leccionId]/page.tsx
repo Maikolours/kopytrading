@@ -37,6 +37,11 @@ export default function LessonPlayerPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [showEmailGate, setShowEmailGate] = useState(false);
   const [isQuizPassed, setIsQuizPassed] = useState(false);
+  const [currentTextPageIdx, setCurrentTextPageIdx] = useState(0);
+
+  useEffect(() => {
+    setCurrentTextPageIdx(0);
+  }, [lessonId]);
 
   useEffect(() => {
     try {
@@ -88,7 +93,7 @@ export default function LessonPlayerPage() {
           href="/academia"
           className="px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-sm"
         >
-          Volver a la Academia
+          Volver al Menú de Lecciones
         </Link>
       </div>
     );
@@ -97,6 +102,8 @@ export default function LessonPlayerPage() {
   const { lesson, module: currentModule } = lessonData;
   const isLessonCompleted = completedLessonIds.includes(lesson.id);
   const canAdvance = !lesson.quiz || isQuizPassed || isLessonCompleted;
+
+  const isLastTextPage = !lesson.pages || lesson.pages.length === 0 || currentTextPageIdx === lesson.pages.length - 1;
 
   // Check strict sequential lock
   const isUnlocked = (() => {
@@ -199,7 +206,7 @@ export default function LessonPlayerPage() {
             href="/academia"
             className="px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 transition-colors"
           >
-            ← Volver al Menú
+            ← Ver Lista de Lecciones
           </Link>
         </header>
 
@@ -232,7 +239,7 @@ export default function LessonPlayerPage() {
                   className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow-lg shadow-amber-500/20 transition-all"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  Ir al Menú de Lecciones
+                  Ir a Lista de Lecciones
                 </Link>
               </div>
             </div>
@@ -263,6 +270,7 @@ export default function LessonPlayerPage() {
                 <LessonTextPage
                   pages={lesson.pages}
                   hasQuiz={Boolean(lesson.quiz)}
+                  onPageChange={(idx) => setCurrentTextPageIdx(idx)}
                   onFinishReading={() => {
                     if (!lesson.quiz) {
                       markLessonAsComplete();
@@ -271,8 +279,8 @@ export default function LessonPlayerPage() {
                 />
               )}
 
-              {/* Interactive Quiz Component */}
-              {lesson.quiz && (
+              {/* Interactive Quiz Component - ONLY rendered on the final text page */}
+              {lesson.quiz && isLastTextPage && (
                 <InteractiveQuiz
                   quiz={lesson.quiz}
                   isAlreadyPassed={isLessonCompleted || isQuizPassed}
@@ -284,7 +292,7 @@ export default function LessonPlayerPage() {
               )}
 
               {/* Special Lead Magnet / Free Trial Card */}
-              {lesson.isFreeTrialUnlocker && (
+              {lesson.isFreeTrialUnlocker && isLastTextPage && (
                 <div className="pt-4">
                   <FreeTrialClaimCard
                     userEmail={userEmail || undefined}
@@ -301,7 +309,7 @@ export default function LessonPlayerPage() {
                     className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-300 flex items-center justify-center gap-2 transition-colors"
                   >
                     <ArrowLeft className="w-4 h-4" />
-                    Menú de Lecciones
+                    Ver Lista de Lecciones
                   </Link>
 
                   <button

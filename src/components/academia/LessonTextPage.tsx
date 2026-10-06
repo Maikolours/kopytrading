@@ -7,10 +7,11 @@ import { LessonPage } from "@/lib/academiaData";
 interface LessonTextPageProps {
   pages: LessonPage[];
   hasQuiz?: boolean;
+  onPageChange?: (pageIdx: number) => void;
   onFinishReading?: () => void;
 }
 
-export default function LessonTextPage({ pages, hasQuiz, onFinishReading }: LessonTextPageProps) {
+export default function LessonTextPage({ pages, hasQuiz, onPageChange, onFinishReading }: LessonTextPageProps) {
   const [currentPageIdx, setCurrentPageIdx] = useState(0);
 
   if (!pages || pages.length === 0) return null;
@@ -21,7 +22,9 @@ export default function LessonTextPage({ pages, hasQuiz, onFinishReading }: Less
 
   const handleNext = () => {
     if (!isLastPage) {
-      setCurrentPageIdx(prev => prev + 1);
+      const nextIdx = currentPageIdx + 1;
+      setCurrentPageIdx(nextIdx);
+      onPageChange?.(nextIdx);
     } else {
       if (hasQuiz) {
         const el = document.getElementById("evaluacion-section");
@@ -35,7 +38,9 @@ export default function LessonTextPage({ pages, hasQuiz, onFinishReading }: Less
 
   const handlePrev = () => {
     if (!isFirstPage) {
-      setCurrentPageIdx(prev => prev - 1);
+      const prevIdx = currentPageIdx - 1;
+      setCurrentPageIdx(prevIdx);
+      onPageChange?.(prevIdx);
     }
   };
 

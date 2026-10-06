@@ -176,29 +176,42 @@ export default function AcademiaDashboardPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {mod.lessons.map((lesson) => {
                       const isDone = completedLessonIds.includes(lesson.id);
+                      const isNextUp = lesson.id === firstUncompletedLessonId;
 
                       return (
                         <Link
                           key={lesson.id}
                           href={`/academia/leccion/${lesson.id}`}
-                          className={`p-4 rounded-xl border transition-all flex items-center justify-between group ${
+                          className={`relative p-4 rounded-xl border transition-all flex items-center justify-between group ${
                             isDone
                               ? "bg-slate-900/40 border-emerald-500/40 text-emerald-300 hover:bg-slate-900/80"
+                              : isNextUp
+                              ? "bg-amber-500/10 border-amber-400 ring-2 ring-amber-400/50 text-white hover:bg-amber-500/20 shadow-lg shadow-amber-500/10"
                               : "bg-slate-950/60 border-slate-800 text-slate-200 hover:border-amber-400/40 hover:bg-slate-900/60"
                           }`}
                         >
+                          {isNextUp && !isDone && (
+                            <span className="absolute -top-2.5 right-4 px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[10px] font-black tracking-wider uppercase shadow-md animate-pulse">
+                              {totalCompleted > 0 ? "👉 CONTINUAR AQUÍ" : "👉 EMPEZAR AQUÍ"}
+                            </span>
+                          )}
+
                           <div className="flex items-center gap-3 truncate">
                             {isDone ? (
                               <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
                             ) : lesson.isVip ? (
                               <Crown className="w-5 h-5 text-amber-400 shrink-0" />
                             ) : (
-                              <div className="w-5 h-5 rounded-full border border-slate-600 flex items-center justify-center text-[10px] font-mono text-slate-400 shrink-0">
+                              <div className={`w-5 h-5 rounded-full border flex items-center justify-center text-[10px] font-mono shrink-0 ${
+                                isNextUp ? "border-amber-400 bg-amber-400 text-slate-950 font-bold" : "border-slate-600 text-slate-400"
+                              }`}>
                                 {lesson.lessonNumber}
                               </div>
                             )}
                             <div className="truncate">
-                              <div className="text-sm font-semibold text-white group-hover:text-amber-400 transition-colors truncate">
+                              <div className={`text-sm font-semibold transition-colors truncate ${
+                                isNextUp ? "text-amber-300 group-hover:text-amber-200 font-bold" : "text-white group-hover:text-amber-400"
+                              }`}>
                                 {lesson.title}
                               </div>
                               <div className="text-[11px] font-mono text-slate-400">
@@ -207,7 +220,9 @@ export default function AcademiaDashboardPage() {
                             </div>
                           </div>
 
-                          <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition-colors shrink-0" />
+                          <ArrowRight className={`w-4 h-4 transition-colors shrink-0 ${
+                            isNextUp ? "text-amber-400 group-hover:translate-x-1" : "text-slate-500 group-hover:text-amber-400"
+                          }`} />
                         </Link>
                       );
                     })}
