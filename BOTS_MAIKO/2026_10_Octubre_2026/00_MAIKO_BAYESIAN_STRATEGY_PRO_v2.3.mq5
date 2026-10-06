@@ -379,7 +379,7 @@ void CalibrarParametrosActivo()
         minConfidenceEfectivo = 80.0;
         distanciaCapasEfectiva = 25.0;
         stopLossUSD_Efectivo = 20.0;
-        takeProfitUSD_Efectivo = 8.0;
+        takeProfitUSD_Efectivo = 4.0; // Profit ágil y rápido en Forex ($4.00 USD / ~40 pips)
         activarFiltroHorarioEfectivo = true;
         horaInicioEfectivo = 9;
         horaFinEfectivo = 21;
