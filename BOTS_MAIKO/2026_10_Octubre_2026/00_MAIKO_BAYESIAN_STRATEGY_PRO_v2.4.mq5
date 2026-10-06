@@ -1310,10 +1310,10 @@ void CrearHUD()
         ObjectSetInteger(0, "BAYES_BG", OBJPROP_XSIZE, 220);
         ObjectSetInteger(0, "BAYES_BG", OBJPROP_YSIZE, 30);
         ObjectSetInteger(0, "BAYES_BG", OBJPROP_BGCOLOR, C'14,18,28');
-        ObjectSetInteger(0, "BAYES_BG", OBJPROP_BORDER_COLOR, clrAmber);
+        ObjectSetInteger(0, "BAYES_BG", OBJPROP_BORDER_COLOR, clrGold);
         ObjectSetInteger(0, "BAYES_BG", OBJPROP_CORNER, CORNER_LEFT_UPPER);
 
-        CrearLabel("BAYES_LBL_TITLE", "BAYES v2.4", x + 10, y + 7, clrAmber, 10, true);
+        CrearLabel("BAYES_LBL_TITLE", "BAYES v2.4", x + 10, y + 7, clrGold, 10, true);
         CrearBoton(BTN_MINIMIZE_NAME, "[+]", x + 185, y + 5, 25, 20, C'30,40,60');
         return;
     }
@@ -1335,7 +1335,7 @@ void CrearHUD()
     CrearBoton(BTN_MINIMIZE_NAME, "[  ]", x + 230, y + 10, 50, 22, C'120,40,40');
 
     // Filas de Texto de Información
-    CrearLabel("BAYES_LBL_TITLE", "CONTROL OPERATIVO v2.4", x + 10, y + 40, clrAmber, 9, true);
+    CrearLabel("BAYES_LBL_TITLE", "CONTROL OPERATIVO v2.4", x + 10, y + 40, clrGold, 9, true);
     CrearLabel("BAYES_LBL_EQ", "EQUITY: $0.00", x + 10, y + 58, clrCyan, 9, true);
     CrearLabel("BAYES_LBL_BAL", "BALANCE: $0.00 | HOY: $0.00", x + 10, y + 74, clrWhite, 8, false);
     CrearLabel("BAYES_LBL_CAPAS", "CAPAS ABIERTAS: 0 / 10", x + 10, y + 90, clrYellow, 8, true);
@@ -1359,7 +1359,7 @@ void ActualizarValoresHUD()
 {
     double eq = AccountInfoDouble(ACCOUNT_EQUITY);
     double bal = AccountInfoDouble(ACCOUNT_BALANCE);
-    int abiertas = ContarPosicionesMagic();
+    int abiertas = ArraySize(pos);
 
     if (hudMinimizado)
     {
