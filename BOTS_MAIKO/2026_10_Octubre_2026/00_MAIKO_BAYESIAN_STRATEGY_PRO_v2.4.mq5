@@ -405,7 +405,7 @@ void CalibrarParametrosActivo()
     {
         rsiPeriodEfectivo = 14;
         rsiOverboughtEfectivo = 70.0;
-        rsiOversoldEfectivo = 30.0;
+        rsiOversoldEfectivo = 35.0;
         minConfidenceEfectivo = 80.0;
         distanciaCapasEfectiva = 150.0;
         stopLossUSD_Efectivo = 25.0;
@@ -462,6 +462,7 @@ void SincronizarIndicadoresEnGrafico()
 {
     int totalVentanas = (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL);
     bool tieneRSI = false;
+    bool cambioHecho = false;
 
     for (int w = 0; w < totalVentanas; w++)
     {
@@ -475,6 +476,7 @@ void SincronizarIndicadoresEnGrafico()
                 break;
             }
         }
+        if (tieneRSI) break;
     }
 
     if (!tieneRSI)
@@ -486,29 +488,36 @@ void SincronizarIndicadoresEnGrafico()
         if (hRSI != INVALID_HANDLE && hRSI != 0)
         {
             ChartIndicatorAdd(0, 1, hRSI);
+            cambioHecho = true;
         }
     }
 
+    bool tieneEMA = false;
     int totalMain = ChartIndicatorsTotal(0, 0);
-    for (int i = totalMain - 1; i >= 0; i--)
+    for (int i = 0; i < totalMain; i++)
     {
         string name = ChartIndicatorName(0, 0, i);
         if (StringFind(name, "Moving Average") >= 0 || StringFind(name, "MA") >= 0)
         {
-            ChartIndicatorDelete(0, 0, name);
+            tieneEMA = true;
+            break;
         }
     }
 
-    if (InpFiltroTendencia != TENDENCIA_OFF)
+    if (InpFiltroTendencia != TENDENCIA_OFF && !tieneEMA)
     {
         int handleParaGrafico = (InpTimeframeRef == _Period) ? hSlowEMA : hEMA_Chart;
         if (handleParaGrafico != INVALID_HANDLE && handleParaGrafico != 0)
         {
             ChartIndicatorAdd(0, 0, handleParaGrafico);
+            cambioHecho = true;
         }
     }
 
-    ChartRedraw(0);
+    if (cambioHecho)
+    {
+        ChartRedraw(0);
+    }
 }
 
 //+------------------------------------------------------------------+
@@ -519,7 +528,7 @@ void AsegurarIndicadoresEnGrafico()
     static datetime lastSyncTime = 0;
     datetime now = TimeCurrent();
 
-    if (now - lastSyncTime >= 3 || lastSyncTime == 0)
+    if (now - lastSyncTime >= 5 || lastSyncTime == 0)
     {
         lastSyncTime = now;
         SincronizarIndicadoresEnGrafico();
