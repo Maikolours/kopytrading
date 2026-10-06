@@ -234,6 +234,11 @@ bool           autoCalibracionActiva = true;
 #define BTN_SHIELD_NAME    "BAYES_BTN_SHIELD"
 #define BTN_PAUSE_NAME     "BAYES_BTN_PAUSE"
 
+#define BTN_OB_MINUS_NAME  "BAYES_BTN_OB_MIN"
+#define BTN_OB_PLUS_NAME   "BAYES_BTN_OB_PLU"
+#define BTN_OS_MINUS_NAME  "BAYES_BTN_OS_MIN"
+#define BTN_OS_PLUS_NAME   "BAYES_BTN_OS_PLU"
+
 #define LINE_PREFIX        "BAYES_LINE_"
 
 //+------------------------------------------------------------------+
@@ -447,6 +452,11 @@ void CalibrarParametrosActivo()
         txtActivoDetectado = "MANUAL " + sym + " [PERSONALIZADO 🛠️]";
     }
 
+    // Permitir sobreescritura inmediata si el usuario modifica los inputs en F7
+    if (InpRSIOverbought > 0.0 && InpRSIOverbought != 70.0) rsiOverboughtEfectivo = InpRSIOverbought;
+    if (InpRSIOversold > 0.0 && InpRSIOversold != 28.0 && InpRSIOversold != 30.0 && InpRSIOversold != 35.0) rsiOversoldEfectivo = InpRSIOversold;
+    if (InpMinConfidence > 0.0 && InpMinConfidence != 80.0 && InpMinConfidence != 70.0) minConfidenceEfectivo = InpMinConfidence;
+
     if (prevRSIPeriod != rsiPeriodEfectivo || hRSI == INVALID_HANDLE)
     {
         if (hRSI != INVALID_HANDLE) IndicatorRelease(hRSI);
@@ -658,6 +668,12 @@ void OnTick()
     if (InpMostrarLineasEstructura) ActualizarLineasEstructura();
 
     datetime currentBarTime = iTime(_Symbol, _Period, 0);
+
+    // Calcular siempre la Inferencia Bayesiana en vivo en cada tick para el HUD
+    double liveConf = 50.0;
+    CalcularInferenciaBayesiana(liveConf);
+    if (liveConf > 0.0) confianzaBayesianaUltima = liveConf;
+
     if (currentBarTime == lastBarTime)
     {
         if (InpMostrarHUD) ActualizarValoresHUD();
@@ -821,6 +837,8 @@ void AbrirCapa(ENUM_POSITION_TYPE dir, double lotes, string comentario)
 //+------------------------------------------------------------------+
 int CalcularInferenciaBayesiana(double &confidence)
 {
+    confidence = 50.0; // Línea base por defecto
+
     if (hRSI == INVALID_HANDLE || hRSI == 0 || BarsCalculated(hRSI) < rsiPeriodEfectivo * 2) return 0;
 
     double rsiBuffer[];
@@ -873,6 +891,19 @@ int CalcularInferenciaBayesiana(double &confidence)
         {
             pSignalGivenBuy = 0.28;
             pSignalGivenSell = 0.72;
+        }
+        else
+        {
+            if (rsiCurr >= 50.0)
+            {
+                pSignalGivenBuy = 0.60;
+                pSignalGivenSell = 0.40;
+            }
+            else
+            {
+                pSignalGivenBuy = 0.40;
+                pSignalGivenSell = 0.60;
+            }
         }
     }
 
@@ -1311,6 +1342,10 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
             txtVeredicto = "CERRADO MANUAL DESDE HUD";
             RedibujarHUD();
         }
+        else if (sparam == BTN_OB_MINUS_NAME) { rsiOverboughtEfectivo -= 1.0; RedibujarHUD(); }
+        else if (sparam == BTN_OB_PLUS_NAME)  { rsiOverboughtEfectivo += 1.0; RedibujarHUD(); }
+        else if (sparam == BTN_OS_MINUS_NAME) { rsiOversoldEfectivo -= 1.0; RedibujarHUD(); }
+        else if (sparam == BTN_OS_PLUS_NAME)  { rsiOversoldEfectivo += 1.0; RedibujarHUD(); }
     }
 }
 
@@ -1368,6 +1403,13 @@ void CrearHUD()
     CrearLabel("BAYES_LBL_CAPAS", "CAPAS ABIERTAS: 0 / 10", x + 10, y + 90, clrYellow, 8, true);
     CrearLabel("BAYES_LBL_ACTIVO", "ACTIVO: DETECTANDO...", x + 10, y + 106, clrWhite, 8, false);
     CrearLabel("BAYES_LBL_RSI", "RSI (14): 50.0", x + 10, y + 122, clrCyan, 8, false);
+
+    // Botones Ajuste Rápido RSI (Venta / Compra)
+    CrearBoton(BTN_OB_MINUS_NAME, "V-", x + 270, y + 120, 32, 18, C'40,50,70');
+    CrearBoton(BTN_OB_PLUS_NAME, "V+", x + 305, y + 120, 32, 18, C'40,50,70');
+    CrearBoton(BTN_OS_MINUS_NAME, "C-", x + 343, y + 120, 32, 18, C'40,50,70');
+    CrearBoton(BTN_OS_PLUS_NAME, "C+", x + 378, y + 120, 32, 18, C'40,50,70');
+
     CrearLabel("BAYES_LBL_CONF", "CONFIANZA BAYES: 50.0%", x + 10, y + 138, clrLime, 8, true);
     CrearLabel("BAYES_LBL_SHIELD", "REGIMEN: DETECTANDO...", x + 10, y + 154, clrOrange, 8, true);
     CrearLabel("BAYES_LBL_VEREDICT", "OPERATIVA: INICIALIZANDO...", x + 10, y + 170, clrYellow, 8, true);
@@ -1478,6 +1520,10 @@ void DestruirHUD()
     ObjectDelete(0, BTN_CLOSE_NAME);
     ObjectDelete(0, BTN_SHIELD_NAME);
     ObjectDelete(0, BTN_PAUSE_NAME);
+    ObjectDelete(0, BTN_OB_MINUS_NAME);
+    ObjectDelete(0, BTN_OB_PLUS_NAME);
+    ObjectDelete(0, BTN_OS_MINUS_NAME);
+    ObjectDelete(0, BTN_OS_PLUS_NAME);
 }
 
 void CrearLabel(string name, string text, int x, int y, color col, int font_size, bool bold)
