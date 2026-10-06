@@ -360,7 +360,7 @@ void CalibrarParametrosActivo()
         rsiPeriodEfectivo = 14;
         rsiOverboughtEfectivo = 70.0;
         rsiOversoldEfectivo = 28.0;
-        minConfidenceEfectivo = 85.0;
+        minConfidenceEfectivo = 80.0;
         distanciaCapasEfectiva = 35.0;
         stopLossUSD_Efectivo = 25.0;
         takeProfitUSD_Efectivo = 8.0;
@@ -830,6 +830,20 @@ int CalcularInferenciaBayesiana(double &confidence)
 
     double priorBuy = 0.50;
     double priorSell = 0.50;
+
+    if (InpFiltroTendencia == TENDENCIA_REGIMEN_AUTO_ADX)
+    {
+        if (regimenActual == REGIMEN_ALCISTA)
+        {
+            priorBuy = 0.65;
+            priorSell = 0.35;
+        }
+        else if (regimenActual == REGIMEN_BAJISTA)
+        {
+            priorBuy = 0.35;
+            priorSell = 0.65;
+        }
+    }
 
     double pSignalGivenBuy = 0.50;
     double pSignalGivenSell = 0.50;
