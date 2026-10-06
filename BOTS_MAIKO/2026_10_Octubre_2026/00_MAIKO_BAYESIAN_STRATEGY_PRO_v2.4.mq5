@@ -351,7 +351,7 @@ void CalibrarParametrosActivo()
         operarViernesEfectivo = true;
         operarSabadoEfectivo = true;
         operarDomingoEfectivo = true;
-        magicEfectivo = (InpMagicNumber > 0) ? InpMagicNumber : 888126;
+        magicEfectivo = (InpMagicNumber > 0) ? InpMagicNumber : 888146;
         txtActivoDetectado = "BITCOIN (BTCUSD) 24/7" + (presetModoActual == PRESET_FORZAR_BTC ? " [FORZADO ⚙️]" : " [AUTO 🧠]");
     }
     // 2. PRESET ORO (XAUUSD)
@@ -374,7 +374,7 @@ void CalibrarParametrosActivo()
         operarViernesEfectivo = true;
         operarSabadoEfectivo = false;
         operarDomingoEfectivo = false;
-        magicEfectivo = (InpMagicNumber > 0) ? InpMagicNumber : 888127;
+        magicEfectivo = (InpMagicNumber > 0) ? InpMagicNumber : 888147;
         txtActivoDetectado = "ORO (XAUUSD)" + (presetModoActual == PRESET_FORZAR_ORO ? " [FORZADO ⚙️]" : " [AUTO 🧠]");
     }
     // 3. PRESET FOREX (EURUSD / GBPUSD)
@@ -397,7 +397,7 @@ void CalibrarParametrosActivo()
         operarViernesEfectivo = true;
         operarSabadoEfectivo = false;
         operarDomingoEfectivo = false;
-        magicEfectivo = (InpMagicNumber > 0) ? InpMagicNumber : 888128;
+        magicEfectivo = (InpMagicNumber > 0) ? InpMagicNumber : 888148;
         txtActivoDetectado = "FOREX " + sym + (presetModoActual == PRESET_FORZAR_EURUSD ? " [FORZADO ⚙️]" : " [AUTO 🧠]");
     }
     // 4. PRESET INDICE S&P 500 (US500 / SP500 / SPX500)
@@ -420,7 +420,7 @@ void CalibrarParametrosActivo()
         operarViernesEfectivo = true;
         operarSabadoEfectivo = false;
         operarDomingoEfectivo = false;
-        magicEfectivo = (InpMagicNumber > 0) ? InpMagicNumber : 888129;
+        magicEfectivo = (InpMagicNumber > 0) ? InpMagicNumber : 888149;
         txtActivoDetectado = "INDICE S&P 500 (" + sym + ")" + (presetModoActual == PRESET_FORZAR_SP500 ? " [FORZADO ⚙️]" : " [AUTO 🧠]");
     }
     // 5. MODO MANUAL
@@ -443,7 +443,7 @@ void CalibrarParametrosActivo()
         operarViernesEfectivo = InpOperarViernes;
         operarSabadoEfectivo = InpOperarSabado;
         operarDomingoEfectivo = InpOperarDomingo;
-        magicEfectivo = (InpMagicNumber > 0) ? InpMagicNumber : 888125;
+        magicEfectivo = (InpMagicNumber > 0) ? InpMagicNumber : 888145;
         txtActivoDetectado = "MANUAL " + sym + " [PERSONALIZADO 🛠️]";
     }
 
@@ -738,8 +738,8 @@ void OnTick()
             }
         }
 
-        if (bayesDir == 1) AbrirCapa(POSITION_TYPE_BUY, InpLoteBase, "Bayes_C1_BUY");
-        else if (bayesDir == -1) AbrirCapa(POSITION_TYPE_SELL, InpLoteBase, "Bayes_C1_SELL");
+        if (bayesDir == 1) AbrirCapa(POSITION_TYPE_BUY, InpLoteBase, "Bayes_v2.4_C1_BUY");
+        else if (bayesDir == -1) AbrirCapa(POSITION_TYPE_SELL, InpLoteBase, "Bayes_v2.4_C1_SELL");
     }
     else if (totalPos > 0 && totalPos < maxCapasEfectivo)
     {
@@ -748,11 +748,11 @@ void OnTick()
             double loteCapa = InpLoteBase;
             if (dirCesta == POSITION_TYPE_BUY)
             {
-                AbrirCapa(POSITION_TYPE_BUY, loteCapa, StringFormat("Bayes_C%d_BUY", totalPos + 1));
+                AbrirCapa(POSITION_TYPE_BUY, loteCapa, StringFormat("Bayes_v2.4_C%d_BUY", totalPos + 1));
             }
             else if (dirCesta == POSITION_TYPE_SELL)
             {
-                AbrirCapa(POSITION_TYPE_SELL, loteCapa, StringFormat("Bayes_C%d_SELL", totalPos + 1));
+                AbrirCapa(POSITION_TYPE_SELL, loteCapa, StringFormat("Bayes_v2.4_C%d_SELL", totalPos + 1));
             }
         }
     }
