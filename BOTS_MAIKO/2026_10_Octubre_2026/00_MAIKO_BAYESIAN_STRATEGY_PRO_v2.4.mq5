@@ -1321,7 +1321,7 @@ void CrearHUD()
     ObjectCreate(0, "BAYES_BG", OBJ_RECTANGLE_LABEL, 0, 0, 0);
     ObjectSetInteger(0, "BAYES_BG", OBJPROP_XDISTANCE, x);
     ObjectSetInteger(0, "BAYES_BG", OBJPROP_YDISTANCE, y);
-    ObjectSetInteger(0, "BAYES_BG", OBJPROP_XSIZE, 290);
+    ObjectSetInteger(0, "BAYES_BG", OBJPROP_XSIZE, 420);
     ObjectSetInteger(0, "BAYES_BG", OBJPROP_YSIZE, 260);
     ObjectSetInteger(0, "BAYES_BG", OBJPROP_BGCOLOR, C'14,18,28');
     ObjectSetInteger(0, "BAYES_BG", OBJPROP_BORDER_COLOR, C'40,50,70');
@@ -1332,7 +1332,7 @@ void CrearHUD()
     CrearBoton(BTN_TAB_INTEL, "INTEL", x + 55, y + 10, 48, 22, (tabActual == TAB_INTEL ? C'60,80,120' : C'25,32,48'));
     CrearBoton(BTN_TAB_CFG, "CFG", x + 108, y + 10, 40, 22, (tabActual == TAB_CFG ? C'60,80,120' : C'25,32,48'));
     CrearBoton(BTN_TAB_CTRL, "CONTROL", x + 153, y + 10, 72, 22, (tabActual == TAB_CONTROL ? C'180,130,20' : C'25,32,48'));
-    CrearBoton(BTN_MINIMIZE_NAME, "[  ]", x + 230, y + 10, 50, 22, C'120,40,40');
+    CrearBoton(BTN_MINIMIZE_NAME, "[  ]", x + 360, y + 10, 50, 22, C'120,40,40');
 
     // Filas de Texto de Información
     CrearLabel("BAYES_LBL_TITLE", "CONTROL OPERATIVO v2.4", x + 10, y + 40, clrGold, 9, true);
@@ -1346,13 +1346,13 @@ void CrearHUD()
     CrearLabel("BAYES_LBL_VEREDICT", "OPERATIVA: INICIALIZANDO...", x + 10, y + 170, clrYellow, 8, true);
 
     // Botones Rápidos Interactivos (Fila Inferior)
-    CrearBoton(BTN_TRAIL_NAME, (stateTrailing ? "TRAIL ON" : "TRAIL OFF"), x + 10, y + 195, 80, 26, (stateTrailing ? C'20,100,40' : C'60,60,60'));
-    CrearBoton(BTN_BE_NAME, (stateBE ? "BE ON" : "BE OFF"), x + 95, y + 195, 80, 26, (stateBE ? C'20,100,40' : C'60,60,60'));
-    CrearBoton(BTN_ASEG_NAME, "ASEGURAR", x + 180, y + 195, 100, 26, C'40,80,100');
+    CrearBoton(BTN_TRAIL_NAME, (stateTrailing ? "TRAIL ON" : "TRAIL OFF"), x + 10, y + 195, 120, 26, (stateTrailing ? C'20,100,40' : C'60,60,60'));
+    CrearBoton(BTN_BE_NAME, (stateBE ? "BE ON" : "BE OFF"), x + 140, y + 195, 120, 26, (stateBE ? C'20,100,40' : C'60,60,60'));
+    CrearBoton(BTN_ASEG_NAME, "ASEGURAR", x + 270, y + 195, 140, 26, C'40,80,100');
 
-    CrearBoton(BTN_CLOSE_NAME, "CERRAR TODO", x + 10, y + 226, 80, 26, C'140,30,30');
-    CrearBoton(BTN_SHIELD_NAME, "SHIELD", x + 95, y + 226, 80, 26, C'20,40,120');
-    CrearBoton(BTN_PAUSE_NAME, (statePausado ? "REANUDAR" : "APAGAR"), x + 180, y + 226, 100, 26, (statePausado ? C'40,140,40' : C'140,30,30'));
+    CrearBoton(BTN_CLOSE_NAME, "CERRAR TODO", x + 10, y + 226, 120, 26, C'140,30,30');
+    CrearBoton(BTN_SHIELD_NAME, "SHIELD", x + 140, y + 226, 120, 26, C'20,40,120');
+    CrearBoton(BTN_PAUSE_NAME, (statePausado ? "REANUDAR" : "APAGAR"), x + 270, y + 226, 140, 26, (statePausado ? C'40,140,40' : C'140,30,30'));
 }
 
 void ActualizarValoresHUD()
