@@ -642,13 +642,13 @@ void OnTick()
     {
         hRSI = iRSI(_Symbol, _Period, rsiPeriodEfectivo, PRICE_CLOSE);
     }
-    if (hRSI != INVALID_HANDLE && hRSI != 0)
+    if (hRSI != INVALID_HANDLE && hRSI != 0 && BarsCalculated(hRSI) > rsiPeriodEfectivo)
     {
         double rsiLive[];
         ArraySetAsSeries(rsiLive, true);
         if (CopyBuffer(hRSI, 0, 0, 1, rsiLive) > 0)
         {
-            if (rsiLive[0] >= 0.0 && rsiLive[0] <= 100.0)
+            if (rsiLive[0] > 3.0 && rsiLive[0] < 97.0)
             {
                 rsiActualVal = rsiLive[0];
             }
@@ -821,12 +821,16 @@ void AbrirCapa(ENUM_POSITION_TYPE dir, double lotes, string comentario)
 //+------------------------------------------------------------------+
 int CalcularInferenciaBayesiana(double &confidence)
 {
+    if (hRSI == INVALID_HANDLE || hRSI == 0 || BarsCalculated(hRSI) < rsiPeriodEfectivo * 2) return 0;
+
     double rsiBuffer[];
     ArraySetAsSeries(rsiBuffer, true);
     if (CopyBuffer(hRSI, 0, 1, 3, rsiBuffer) < 3) return 0;
 
     double rsiCurr = rsiBuffer[0];
     double rsiPrev = rsiBuffer[1];
+
+    if (rsiCurr <= 3.0 || rsiCurr >= 97.0 || rsiPrev <= 3.0 || rsiPrev >= 97.0) return 0;
 
     double priorBuy = 0.50;
     double priorSell = 0.50;
