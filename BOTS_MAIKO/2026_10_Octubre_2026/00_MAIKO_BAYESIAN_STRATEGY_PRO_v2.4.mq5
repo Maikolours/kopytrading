@@ -880,39 +880,66 @@ void AutoConfigurarTypeFilling()
 }
 
 //+------------------------------------------------------------------+
+//| Normalizar Lotes según Límites del Broker (Min, Max, Step)       |
+//+------------------------------------------------------------------+
+double NormalizarLote(double lotesDeseados)
+{
+    double minVol = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_MIN);
+    double maxVol = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_MAX);
+    double stepVol = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_STEP);
+
+    if (minVol <= 0.0) minVol = 0.01;
+    if (stepVol <= 0.0) stepVol = 0.01;
+
+    double loteCalculado = lotesDeseados;
+    if (loteCalculado < minVol) loteCalculado = minVol;
+    if (maxVol > 0.0 && loteCalculado > maxVol) loteCalculado = maxVol;
+
+    loteCalculado = MathFloor(loteCalculado / stepVol + 0.00001) * stepVol;
+    if (loteCalculado < minVol) loteCalculado = minVol;
+
+    int precision = 2;
+    if (stepVol >= 1.0) precision = 0;
+    else if (stepVol >= 0.1) precision = 1;
+
+    return NormalizeDouble(loteCalculado, precision);
+}
+
+//+------------------------------------------------------------------+
 //| Abrir Capa con Fallback Adaptativo                               |
 //+------------------------------------------------------------------+
 void AbrirCapa(ENUM_POSITION_TYPE dir, double lotes, string comentario)
 {
     AutoConfigurarTypeFilling();
+    double loteValido = NormalizarLote(lotes);
     double price = (dir == POSITION_TYPE_BUY) ? SymbolInfoDouble(_Symbol, SYMBOL_ASK) : SymbolInfoDouble(_Symbol, SYMBOL_BID);
     bool res = false;
     if (dir == POSITION_TYPE_BUY)
     {
-        res = trade.Buy(lotes, _Symbol, price, 0, 0, comentario);
+        res = trade.Buy(loteValido, _Symbol, price, 0, 0, comentario);
         if (!res)
         {
             trade.SetTypeFilling(ORDER_FILLING_IOC);
-            res = trade.Buy(lotes, _Symbol, price, 0, 0, comentario);
+            res = trade.Buy(loteValido, _Symbol, price, 0, 0, comentario);
         }
         if (!res)
         {
             trade.SetTypeFilling(ORDER_FILLING_RETURN);
-            res = trade.Buy(lotes, _Symbol, price, 0, 0, comentario);
+            res = trade.Buy(loteValido, _Symbol, price, 0, 0, comentario);
         }
     }
     else
     {
-        res = trade.Sell(lotes, _Symbol, price, 0, 0, comentario);
+        res = trade.Sell(loteValido, _Symbol, price, 0, 0, comentario);
         if (!res)
         {
             trade.SetTypeFilling(ORDER_FILLING_IOC);
-            res = trade.Sell(lotes, _Symbol, price, 0, 0, comentario);
+            res = trade.Sell(loteValido, _Symbol, price, 0, 0, comentario);
         }
         if (!res)
         {
             trade.SetTypeFilling(ORDER_FILLING_RETURN);
-            res = trade.Sell(lotes, _Symbol, price, 0, 0, comentario);
+            res = trade.Sell(loteValido, _Symbol, price, 0, 0, comentario);
         }
     }
 
@@ -921,7 +948,7 @@ void AbrirCapa(ENUM_POSITION_TYPE dir, double lotes, string comentario)
         uint code = trade.ResultRetcode();
         string desc = trade.ResultRetcodeDescription();
         txtVeredicto = "🔴 RECHAZADO POR BROKER: " + desc + " (" + IntegerToString(code) + ")";
-        Print("ERROR EJECUCIÓN EN ", _Symbol, ": ", desc, " [Retcode: ", code, "]");
+        Print("ERROR EJECUCIÓN EN ", _Symbol, ": ", desc, " [Retcode: ", code, "] Lote intentado: ", loteValido);
         if (InpMostrarHUD) ActualizarValoresHUD();
     }
 }
