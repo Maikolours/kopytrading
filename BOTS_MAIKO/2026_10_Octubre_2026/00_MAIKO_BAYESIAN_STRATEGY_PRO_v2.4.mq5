@@ -262,7 +262,7 @@ int OnInit()
 
     trade.SetExpertMagicNumber(magicEfectivo);
     trade.SetDeviationInPoints(10);
-    trade.SetTypeFilling(ORDER_FILLING_FOK);
+    AutoConfigurarTypeFilling();
 
     // Handles de Indicadores Técnicos
     hSlowEMA   = iMA(_Symbol, InpTimeframeRef, 200, 0, MODE_EMA, PRICE_CLOSE);
@@ -818,18 +818,60 @@ bool EsMomentoNuevaCapa(int direction)
 }
 
 //+------------------------------------------------------------------+
-//| Abrir Capa                                                       |
+//| Auto-Detección y Configuración de Modo de Relleno (Filling Mode)|
 //+------------------------------------------------------------------+
-void AbrirCapa(ENUM_POSITION_TYPE dir, double lotes, string comentario)
+void AutoConfigurarTypeFilling()
 {
-    double price = (dir == POSITION_TYPE_BUY) ? SymbolInfoDouble(_Symbol, SYMBOL_ASK) : SymbolInfoDouble(_Symbol, SYMBOL_BID);
-    if (dir == POSITION_TYPE_BUY)
+    uint filling = (uint)SymbolInfoInteger(_Symbol, SYMBOL_FILLING_MODE);
+    if ((filling & SYMBOL_FILLING_FOK) != 0)
     {
-        trade.Buy(lotes, _Symbol, price, 0, 0, comentario);
+        trade.SetTypeFilling(ORDER_FILLING_FOK);
+    }
+    else if ((filling & SYMBOL_FILLING_IOC) != 0)
+    {
+        trade.SetTypeFilling(ORDER_FILLING_IOC);
     }
     else
     {
-        trade.Sell(lotes, _Symbol, price, 0, 0, comentario);
+        trade.SetTypeFilling(ORDER_FILLING_RETURN);
+    }
+}
+
+//+------------------------------------------------------------------+
+//| Abrir Capa con Fallback Adaptativo                               |
+//+------------------------------------------------------------------+
+void AbrirCapa(ENUM_POSITION_TYPE dir, double lotes, string comentario)
+{
+    AutoConfigurarTypeFilling();
+    double price = (dir == POSITION_TYPE_BUY) ? SymbolInfoDouble(_Symbol, SYMBOL_ASK) : SymbolInfoDouble(_Symbol, SYMBOL_BID);
+    bool res = false;
+    if (dir == POSITION_TYPE_BUY)
+    {
+        res = trade.Buy(lotes, _Symbol, price, 0, 0, comentario);
+        if (!res)
+        {
+            trade.SetTypeFilling(ORDER_FILLING_IOC);
+            res = trade.Buy(lotes, _Symbol, price, 0, 0, comentario);
+        }
+        if (!res)
+        {
+            trade.SetTypeFilling(ORDER_FILLING_RETURN);
+            res = trade.Buy(lotes, _Symbol, price, 0, 0, comentario);
+        }
+    }
+    else
+    {
+        res = trade.Sell(lotes, _Symbol, price, 0, 0, comentario);
+        if (!res)
+        {
+            trade.SetTypeFilling(ORDER_FILLING_IOC);
+            res = trade.Sell(lotes, _Symbol, price, 0, 0, comentario);
+        }
+        if (!res)
+        {
+            trade.SetTypeFilling(ORDER_FILLING_RETURN);
+            res = trade.Sell(lotes, _Symbol, price, 0, 0, comentario);
+        }
     }
 }
 
