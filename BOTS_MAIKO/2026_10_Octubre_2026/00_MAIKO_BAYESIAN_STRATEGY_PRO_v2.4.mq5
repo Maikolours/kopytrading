@@ -416,7 +416,7 @@ void CalibrarParametrosActivo()
         stopLossUSD_Efectivo = 25.0;
         takeProfitUSD_Efectivo = 8.0;
         activarFiltroHorarioEfectivo = true;
-        horaInicioEfectivo = 15;
+        horaInicioEfectivo = 9;
         horaFinEfectivo = 22;
         operarLunesEfectivo = true;
         operarMartesEfectivo = true;
