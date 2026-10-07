@@ -915,6 +915,15 @@ void AbrirCapa(ENUM_POSITION_TYPE dir, double lotes, string comentario)
             res = trade.Sell(lotes, _Symbol, price, 0, 0, comentario);
         }
     }
+
+    if (!res)
+    {
+        uint code = trade.ResultRetcode();
+        string desc = trade.ResultRetcodeDescription();
+        txtVeredicto = "🔴 RECHAZADO POR BROKER: " + desc + " (" + IntegerToString(code) + ")";
+        Print("ERROR EJECUCIÓN EN ", _Symbol, ": ", desc, " [Retcode: ", code, "]");
+        if (InpMostrarHUD) ActualizarValoresHUD();
+    }
 }
 
 //+------------------------------------------------------------------+
