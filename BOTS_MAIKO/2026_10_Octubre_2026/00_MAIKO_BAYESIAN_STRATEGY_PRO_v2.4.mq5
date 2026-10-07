@@ -242,6 +242,40 @@ bool           autoCalibracionActiva = true;
 #define LINE_PREFIX        "BAYES_LINE_"
 
 //+------------------------------------------------------------------+
+//| Diagnóstico de Permisos de Trading del Broker y Cuenta          |
+//+------------------------------------------------------------------+
+bool ValidarPermisosTradingBroker(string &errorMsg)
+{
+    errorMsg = "";
+    ENUM_SYMBOL_TRADE_MODE symTradeMode = (ENUM_SYMBOL_TRADE_MODE)SymbolInfoInteger(_Symbol, SYMBOL_TRADE_MODE);
+    bool accTradeAllowed = (bool)AccountInfoInteger(ACCOUNT_TRADE_ALLOWED);
+    bool accExpertAllowed = (bool)AccountInfoInteger(ACCOUNT_TRADE_EXPERT);
+
+    if (symTradeMode == SYMBOL_TRADE_MODE_DISABLED)
+    {
+        errorMsg = "🔴 SÍMBOLO DESACTIVADO POR BROKER (" + _Symbol + "). Cambia a US500 o SPX500";
+        return false;
+    }
+    if (symTradeMode == SYMBOL_TRADE_MODE_CLOSEONLY)
+    {
+        errorMsg = "🔴 SÍMBOLO EN SOLO CIERRE (" + _Symbol + ")";
+        return false;
+    }
+    if (!accTradeAllowed)
+    {
+        errorMsg = "🔴 CUENTA EN SOLO LECTURA (Contraseña Inversor / Cuenta deshabilitada)";
+        return false;
+    }
+    if (!accExpertAllowed)
+    {
+        errorMsg = "🔴 TRADING ALGORÍTMICO PROHIBIDO POR EL BROKER EN ESTA CUENTA";
+        return false;
+    }
+
+    return true;
+}
+
+//+------------------------------------------------------------------+
 //| Expert Initialization Function                                   |
 //+------------------------------------------------------------------+
 int OnInit()
@@ -692,6 +726,14 @@ void OnTick()
     }
 
     if (!botActivo) return;
+
+    string errPermiso = "";
+    if (!ValidarPermisosTradingBroker(errPermiso))
+    {
+        txtVeredicto = errPermiso;
+        if (InpMostrarHUD) ActualizarValoresHUD();
+        return;
+    }
 
     if (!EsHoraOperativa())
     {
