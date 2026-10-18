@@ -60,6 +60,15 @@ function CheckoutFormContent({ bot }: { bot: any }) {
     const [email, setEmail] = useState("");
     const [step, setStep] = useState<"email" | "paypal" | "success">("email");
     const [error, setError] = useState("");
+    const [promoCode, setPromoCode] = useState("");
+    const [showPromo, setShowPromo] = useState(false);
+
+    const isFree = promoCode.trim().toUpperCase() === "MAIKOFREE" || 
+                   promoCode.trim().toUpperCase() === "SIMULACION" || 
+                   promoCode.trim().toUpperCase() === "VIPDEMO" || 
+                   promoCode.trim().toUpperCase() === "PRUEBA" || 
+                   promoCode.trim().toUpperCase() === "TEST" || 
+                   email.toLowerCase().trim() === "viajaconsakura@gmail.com";
 
     const paypalButtonStyle = useMemo<any>(() => ({
         layout: "vertical",
@@ -112,6 +121,38 @@ function CheckoutFormContent({ bot }: { bot: any }) {
         });
     }
 
+    async function handleFreeActivation() {
+        if (!email.includes("@")) return;
+        setError("");
+        startTransition(async () => {
+            try {
+                const formData = new FormData();
+                formData.append("botId", bot.id);
+                formData.append("email", email.trim().toLowerCase());
+                formData.append("promoCode", promoCode.trim().toUpperCase() || "MAIKOFREE");
+
+                const res = await fetch("/api/checkout/free", { method: "POST", body: formData });
+                const data = await res.json();
+
+                if (data.success) {
+                    if (data.autoLogin?.password) {
+                        await signIn("credentials", {
+                            email: data.autoLogin.email,
+                            password: data.autoLogin.password,
+                            redirect: false,
+                        });
+                    }
+                    setStep("success");
+                    setTimeout(() => router.push("/dashboard"), 1500);
+                } else {
+                    setError(data.error || "Error al activar la licencia de prueba");
+                }
+            } catch (err: any) {
+                setError("Error procesando la activación: " + (err.message || "Error desconocido"));
+            }
+        });
+    }
+
     if (step === "success") {
         return (
             <div className="text-center py-10 space-y-4">
@@ -137,13 +178,52 @@ function CheckoutFormContent({ bot }: { bot: any }) {
                         />
                     </div>
 
-                    <button
-                        onClick={() => setStep("paypal")}
-                        disabled={isPending || !email.includes("@")}
-                        className="w-full bg-brand hover:bg-brand-bright disabled:opacity-40 text-white font-bold py-4.5 rounded-2xl shadow-xl shadow-brand/20 transition-all hover:-translate-y-1 active:scale-[0.97]"
-                    >
-                        {isPending ? "Procesando..." : "Continuar con PayPal →"}
-                    </button>
+                    <div className="pt-1">
+                        {!showPromo && !isFree ? (
+                            <button
+                                type="button"
+                                onClick={() => setShowPromo(true)}
+                                className="text-[11px] text-brand-light/70 hover:text-brand-light transition-colors underline font-medium pl-1 cursor-pointer"
+                            >
+                                ¿Tienes un cupón o código de simulación?
+                            </button>
+                        ) : (
+                            <div className="space-y-2 animate-in fade-in duration-300">
+                                <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest pl-1">Código Promocional / Cupón de Prueba</label>
+                                <input
+                                    type="text"
+                                    value={promoCode}
+                                    onChange={e => setPromoCode(e.target.value)}
+                                    placeholder="Ej: MAIKOFREE o SIMULACION"
+                                    className="w-full bg-surface-light/40 border border-brand/30 rounded-2xl px-5 py-3 text-white placeholder:text-text-muted/40 uppercase tracking-widest text-xs focus:outline-none focus:ring-2 focus:ring-brand/40 font-mono"
+                                />
+                            </div>
+                        )}
+                    </div>
+
+                    {isFree ? (
+                        <div className="space-y-3 pt-2">
+                            <div className="p-3 bg-brand/10 border border-brand/30 rounded-xl text-center text-xs text-brand-light font-bold flex items-center justify-center gap-2">
+                                <span>🎁</span> Cupón 100% Descuento Aplicado · Total: 0.00€
+                            </div>
+                            <button
+                                type="button"
+                                onClick={handleFreeActivation}
+                                disabled={isPending || !email.includes("@")}
+                                className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 disabled:opacity-40 text-white font-black py-4.5 rounded-2xl shadow-xl shadow-emerald-500/20 transition-all hover:-translate-y-1 active:scale-[0.97] uppercase tracking-wider text-xs cursor-pointer"
+                            >
+                                {isPending ? "Activando y enviando correo..." : "🚀 Activar Demo Gratis y Recibir por Correo (0€)"}
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            onClick={() => setStep("paypal")}
+                            disabled={isPending || !email.includes("@")}
+                            className="w-full bg-brand hover:bg-brand-bright disabled:opacity-40 text-white font-bold py-4.5 rounded-2xl shadow-xl shadow-brand/20 transition-all hover:-translate-y-1 active:scale-[0.97]"
+                        >
+                            {isPending ? "Procesando..." : "Continuar con PayPal →"}
+                        </button>
+                    )}
                 </div>
             )}
 

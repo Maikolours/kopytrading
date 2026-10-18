@@ -8,58 +8,30 @@ const BOTS_DATA = [
         id: "demo-gold",
         name: "MAIKO PRO GOLD DEMO",
         pair: "XAU/USD",
-        timeframe: "M15",
+        timeframe: "M5",
         risk: "Bajo",
         minCapital: "$1,000",
-        frequency: "Alta (Scalping)",
+        frequency: "Alta (Scalping M5)",
         amortization: "Demo 30 Días",
         features: [true, true, true, true, true],
         image: "/images/maiko-gold-demo.png",
         color: "from-amber-400 to-amber-600",
-        price: "1€"
+        price: "1€ (o Gratis con Cupón)"
     },
     {
         id: "ametralladora",
         name: "MAIKO PRO GOLD REAL",
         pair: "XAU/USD",
-        timeframe: "M15",
+        timeframe: "M5",
         risk: "Medio",
         minCapital: "$1,000",
-        frequency: "Alta (Scalping)",
+        frequency: "Alta (Scalping M5)",
         amortization: "~ 2 semanas",
         features: [true, true, true, true, true],
         image: "/images/maiko-gold.png",
         color: "from-amber-400 to-amber-600",
-        price: "100€ (1 Sept)",
+        price: "100€ (Lanzamiento)",
         popular: true
-    },
-    {
-        id: "pro-cent",
-        name: "MAIKO PRO GOLD CENT",
-        pair: "CENT",
-        timeframe: "M15",
-        risk: "Bajo",
-        minCapital: "$50",
-        frequency: "Media",
-        amortization: "~ 8 semanas",
-        features: [true, true, true, true, true],
-        image: "/images/maiko-cent.png",
-        color: "from-slate-400 to-slate-600",
-        price: "100€ (1 Sept)"
-    },
-    {
-        id: "ufvg-demo",
-        name: "MAIKO UFVG",
-        pair: "XAU/USD",
-        timeframe: "M15",
-        risk: "Medio",
-        minCapital: "N/A",
-        frequency: "Media (OR FVG)",
-        amortization: "En Desarrollo",
-        features: [true, true, true, true, true],
-        image: "/images/maiko-ufvg-demo.png",
-        color: "from-purple-400 to-purple-600",
-        price: "En Desarrollo"
     },
     {
         id: "btc-storm",
@@ -73,34 +45,6 @@ const BOTS_DATA = [
         features: [true, true, true, true, true],
         image: "/images/maiko-btc.png",
         color: "from-orange-400 to-orange-600",
-        price: "En Desarrollo"
-    },
-    {
-        id: "euro-precision",
-        name: "MAIKO EURO PRECISION",
-        pair: "EUR/USD",
-        timeframe: "H1",
-        risk: "Bajo",
-        minCapital: "$500",
-        frequency: "Baja (1-3 / sem)",
-        amortization: "En Desarrollo",
-        features: [true, true, true, true, true],
-        image: "/images/maiko-euro.png",
-        color: "from-blue-500 to-cyan-500",
-        price: "En Desarrollo"
-    },
-    {
-        id: "ninja-yen",
-        name: "MAIKO YEN GHOST",
-        pair: "USD/JPY",
-        timeframe: "M30",
-        risk: "Medio",
-        minCapital: "$500",
-        frequency: "Media (Noche)",
-        amortization: "En Desarrollo",
-        features: [true, true, true, true, true],
-        image: "/images/maiko-yen.png",
-        color: "from-purple-500 to-indigo-500",
         price: "En Desarrollo"
     }
 ];
@@ -123,10 +67,9 @@ export function BotComparisonTable() {
             </div>
             <div className="w-full overflow-x-auto pb-6 custom-scrollbar">
 
-                <div className="min-w-[1000px] w-full glass-card border border-white/10 rounded-2xl overflow-hidden bg-bg-dark">
+                <div className="min-w-[650px] w-full glass-card border border-white/10 rounded-2xl overflow-hidden bg-bg-dark">
                     {/* Encabezado */}
-                    {/* Encabezado */}
-                    <div className="grid grid-cols-8 border-b border-white/10 bg-white/5">
+                    <div className="grid grid-cols-4 border-b border-white/10 bg-white/5">
                         <div className="p-4 sm:p-6 text-left m-auto w-full sticky left-0 z-20 bg-[#0a0a0a]/95 backdrop-blur-md border-r border-white/10">
                             <h3 className="text-white font-bold text-lg mb-1">Elige tu Bot</h3>
                             <p className="text-xs text-text-muted">Compara características</p>
@@ -150,7 +93,7 @@ export function BotComparisonTable() {
                     <div className="divide-y divide-white/5">
 
                         {/* Riesgo */}
-                        <div className="grid grid-cols-8 hover:bg-white/[0.02] transition-colors group">
+                        <div className="grid grid-cols-4 hover:bg-white/[0.02] transition-colors group">
                             <div className="p-4 text-sm font-semibold text-text-muted flex items-center sticky left-0 z-10 bg-[#0a0a0a]/95 backdrop-blur-md border-r border-white/10">Nivel de Riesgo</div>
                             {BOTS_DATA.map((bot, i) => (
                                 <div key={i} className={`p-4 text-sm font-bold text-center border-l border-white/5 flex items-center justify-center ${bot.popular ? 'bg-brand/5' : ''}`}>
@@ -162,7 +105,7 @@ export function BotComparisonTable() {
                         </div>
 
                         {/* Capital */}
-                        <div className="grid grid-cols-8 hover:bg-white/[0.02] transition-colors group">
+                        <div className="grid grid-cols-4 hover:bg-white/[0.02] transition-colors group">
                             <div className="p-4 text-sm font-semibold text-text-muted flex items-center sticky left-0 z-10 bg-[#0a0a0a]/95 backdrop-blur-md border-r border-white/10">Capital Mínimo Recomendado</div>
                             {BOTS_DATA.map((bot, i) => (
                                 <div key={i} className={`p-4 text-sm font-bold text-white text-center border-l border-white/5 flex items-center justify-center ${bot.popular ? 'bg-brand/5' : ''}`}>
@@ -172,7 +115,7 @@ export function BotComparisonTable() {
                         </div>
 
                         {/* Temporalidad */}
-                        <div className="grid grid-cols-8 hover:bg-white/[0.02] transition-colors group">
+                        <div className="grid grid-cols-4 hover:bg-white/[0.02] transition-colors group">
                             <div className="p-4 text-sm font-semibold text-text-muted flex items-center sticky left-0 z-10 bg-[#0a0a0a]/95 backdrop-blur-md border-r border-white/10">Temporalidad Gráfico</div>
                             {BOTS_DATA.map((bot, i) => (
                                 <div key={i} className={`p-4 text-sm font-bold text-white text-center border-l border-white/5 flex items-center justify-center ${bot.popular ? 'bg-brand/5' : ''}`}>
@@ -182,7 +125,7 @@ export function BotComparisonTable() {
                         </div>
 
                         {/* Frecuencia */}
-                        <div className="grid grid-cols-8 hover:bg-white/[0.02] transition-colors group">
+                        <div className="grid grid-cols-4 hover:bg-white/[0.02] transition-colors group">
                             <div className="p-4 text-sm font-semibold text-text-muted flex items-center sticky left-0 z-10 bg-[#0a0a0a]/95 backdrop-blur-md border-r border-white/10">Frecuencia de Operaciones</div>
                             {BOTS_DATA.map((bot, i) => (
                                 <div key={i} className={`p-4 text-xs font-medium text-text-muted text-center border-l border-white/5 flex items-center justify-center ${bot.popular ? 'bg-brand/5' : ''}`}>
@@ -192,7 +135,7 @@ export function BotComparisonTable() {
                         </div>
 
                         {/* Amortización */}
-                        <div className="grid grid-cols-8 hover:bg-white/[0.02] transition-colors group">
+                        <div className="grid grid-cols-4 hover:bg-white/[0.02] transition-colors group">
                             <div className="p-4 text-sm font-semibold text-text-muted flex items-center sticky left-0 z-10 bg-[#0a0a0a]/95 backdrop-blur-md border-r border-white/10">Amortización Estimada (con 1.000$)</div>
                             {BOTS_DATA.map((bot, i) => (
                                 <div key={i} className={`p-4 text-xs font-bold text-success text-center border-l border-white/5 flex items-center justify-center ${bot.popular ? 'bg-brand/5' : ''}`}>
@@ -203,12 +146,12 @@ export function BotComparisonTable() {
 
                         {/* Features Ticks */}
                         {FEATURE_LABELS.map((label, fIndex) => (
-                            <div key={fIndex} className="grid grid-cols-8 hover:bg-white/[0.02] transition-colors group">
+                            <div key={fIndex} className="grid grid-cols-4 hover:bg-white/[0.02] transition-colors group">
                                 <div className="p-4 text-sm font-semibold text-text-muted flex items-center sticky left-0 z-10 bg-[#0a0a0a]/95 backdrop-blur-md border-r border-white/10">{label}</div>
                                 {BOTS_DATA.map((bot, i) => (
                                     <div key={i} className={`p-4 text-center border-l border-white/5 flex items-center justify-center ${bot.popular ? 'bg-brand/5' : ''}`}>
                                         {bot.features[fIndex] ? (
-                                            <span className="text-success text-xl drop-shadow-[0_0_5px_rgba(34,197,94,0.5)]">✓</span>
+                                             <span className="text-success text-xl drop-shadow-[0_0_5px_rgba(34,197,94,0.5)]">✓</span>
                                         ) : (
                                             <span className="text-text-muted/30 text-sm">--</span>
                                         )}
@@ -218,7 +161,7 @@ export function BotComparisonTable() {
                         ))}
 
                         {/* Fila Precios / Botones */}
-                        <div className="grid grid-cols-8 bg-white/5 group">
+                        <div className="grid grid-cols-4 bg-white/5 group">
                             <div className="p-6 text-sm font-bold text-white flex items-center justify-start sticky left-0 z-10 bg-[#0a0a0a]/95 backdrop-blur-md border-r border-white/10">Estado / Licencia</div>
                             {BOTS_DATA.map((bot, i) => (
                                 <div key={i} className={`p-6 text-center border-l border-white/5 flex flex-col justify-end gap-3 rounded-b-2xl ${bot.popular ? 'bg-brand/10 shadow-[inner_0_-10px_20px_rgba(139,92,246,0.1)]' : ''}`}>
