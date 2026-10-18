@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   description: "Explora los activos y algoritmos de alta precisión que operamos en el mercado real.",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const ASSETS = [
   { 
     id: "XAUUSD", 
