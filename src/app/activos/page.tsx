@@ -12,43 +12,43 @@ export const metadata: Metadata = {
 const ASSETS = [
   { 
     id: "XAUUSD", 
-    name: "MAIKO SNIPER PRO GOLD 🏆", 
-    desc: "Nuestro algoritmo de alta precisión en ORO (XAUUSD). Ejecución milimétrica de ondas institucionales y acción del precio optimizada.", 
+    name: "MAIKO PRO GOLD FIX 🏆", 
+    desc: "Nuestro algoritmo estrella de alta precisión en ORO (XAUUSD). Ejecución milimétrica de ondas institucionales y acción del precio en M5.", 
     icon: "🟡",
-    stats: "M15 | Price Action Avanzado",
+    stats: "M5 | Scalping Institucional",
     color: "border-yellow-500/40 shadow-yellow-500/10",
     theme: "theme-gold",
     isUpcoming: false,
-    launchDate: "2026-04-15T00:00:00Z"
   },
   { 
     id: "BTCUSD", 
     name: "MAIKO SNIPER PRO BTC ₿", 
     desc: "Captura los ciclos institucionales de BITCOIN (BTCUSD) con nuestro algoritmo de alta frecuencia y análisis de liquidez en rango.", 
     icon: "₿",
-    stats: "M1/M5 | Scalping Institucional",
+    stats: "En Desarrollo | Scalping BTC",
     color: "border-purple-500/40 shadow-purple-500/10",
     theme: "theme-btc",
+    isUpcoming: true,
+  },
+  { 
+    id: "XAUUSD-CENT", 
+    name: "MAIKO PRO GOLD CENT FIX 🪙", 
+    desc: "Diseñado para cuentas Micro y CENT en ORO (XAUUSD). Ideal para empezar con bajo capital y riesgo ultra-controlado.", 
+    icon: "🪙",
+    stats: "M5 | Cuentas Micro/Cent",
+    color: "border-slate-400/40 shadow-slate-400/10",
+    theme: "theme-gold",
     isUpcoming: false,
-    launchDate: "2026-04-20T00:00:00Z"
   },
   { 
     id: "EURUSD", 
-    name: "EURUSD (EURO)", 
-    desc: "El par más líquido del mundo bajo control del algoritmo Precision Flow.", 
+    name: "MAIKO EURO PRECISION FLOW 🇪🇺", 
+    desc: "El par más líquido del mundo bajo control del algoritmo Precision Flow en temporalidades de rango.", 
     icon: "🇪🇺",
-    stats: "M1/M5 | Precision Flow",
+    stats: "En Desarrollo | Precision Flow",
     color: "border-emerald-500/40 shadow-emerald-500/10",
-    theme: "theme-eur"
-  },
-  { 
-    id: "USDJPY", 
-    name: "USDJPY (YEN)", 
-    desc: "Especializado en la sesión asiática para capturar rebotes y rangos dinámicos.", 
-    icon: "🇯🇵",
-    stats: "M1/M5 | Volatilidad Asiática",
-    color: "border-red-500/40 shadow-red-500/10",
-    theme: "theme-jpy"
+    theme: "theme-eur",
+    isUpcoming: true,
   },
 ];
 

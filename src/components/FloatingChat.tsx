@@ -11,49 +11,49 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
         keywords: ["recomiendas", "recomienda", "empezar", "primer bot", "cuál compro", "cual compro", "para principiante", "soy nuevo", "nunca he", "novato", "recomendación", "mejor para"],
         response: `🏆 **Nuestra recomendación según tu perfil:**
 
-1. **Si quieres probar gratis sin arriesgar dinero hoy mismo**: Activa **MAIKO SNIPER PRO GOLD DEMO** 💜 por solo 1€ durante 30 días en cuenta DEMO de MT5 en gráfico de M15.
+1. **Si quieres probar gratis sin arriesgar dinero hoy mismo**: Activa **MAIKO PRO GOLD DEMO FIX** 💜 por solo 1€ (o gratis con cupón) durante 30 días en cuenta DEMO de MT5 en gráfico de M5.
 
-2. **Si quieres empezar con poco capital en cuenta real ($50 - $100)**: **MAIKO SNIPER PRO GOLD CENT** ⚡ (Disponible a partir del 1 de Septiembre). Opera en cuentas CENT de MT5 en gráfico de M15.
+2. **Si quieres empezar con poco capital en cuenta real ($50 - $100)**: **MAIKO PRO GOLD CENT FIX** ⚡. Opera en cuentas CENT de MT5 en gráfico de M5.
 
-3. **Si vas a operar con cuenta Real estándar ($500 - $1.000)**: **MAIKO SNIPER PRO GOLD (REAL)** 🏆 (Disponible a partir del 1 de Septiembre en M15).
+3. **Si vas a operar con cuenta Real estándar ($500 - $1.000)**: **MAIKO PRO GOLD REAL FIX** 🏆 (Disponible en gráfico M5).
 
-🔥 *¡Reserva tu Oferta de Lanzamiento del 1 de Septiembre con 50% de DESCUENTO (100€ en vez de 200€)!*`
+🔥 *¡Aprovecha la Oferta de Lanzamiento Oficial con 50% de DESCUENTO (100€ en vez de 200€)!*`
     },
     {
         keywords: ["cuándo abre", "cuando abre", "no opera", "operacion", "operación", "señal", "esperar", "cuánto tiempo", "cuanto tiempo", "no hace nada", "no abre nada", "lleva dias", "lleva días", "no mete", "cero operaciones", "ninguna operacion", "esperando"],
         response: `⏳ **¿Por qué el bot no abre operaciones en este momento?**
 
-Es 100% normal y correcto. Nuestros algoritmos MAIKO (en gráfico M15) utilizan filtros muy estrictos (cruce de estructura M15, mechas de rechazo, spread y control de volatilidad) antes de ejecutar:
+Es 100% normal y correcto. Nuestros algoritmos MAIKO (en gráfico M5) utilizan filtros muy estrictos (cruce de estructura M5, mechas de rechazo, spread y control de volatilidad) antes de ejecutar:
 
 • **Horario de Operativa**: El bot opera principalmente entre las **09:00 y las 19:00 (hora del broker)**. Fuera de ese horario pone 'FUERA HORARIO: ESPERANDO' para protegerte de la baja liquidez.
-• **Confirmación M15**: El bot espera la confirmación del cierre de la vela de M15 antes de entrar. Si hay noticias de alto impacto o spread elevado en el Oro, esperará a que el mercado se calme.
+• **Confirmación M5**: El bot espera la confirmación del cierre de la vela de M5 antes de entrar. Si hay noticias de alto impacto o spread elevado en el Oro, esperará a que el mercado se calme.
 
 Ten paciencia, el algoritmo está protegiendo tu capital.`
     },
     {
         keywords: ["ametralladora", "xauusd", "oro", "gold", "maiko gold", "pro gold"],
-        response: `🏆 **MAIKO SNIPER PRO GOLD (XAUUSD)** — El algoritmo estrella
+        response: `🏆 **MAIKO PRO GOLD REAL FIX (XAUUSD)** — El algoritmo estrella
 
-• Temporalidad: **M15** (Gráfico de 15 Minutos en el Oro)
+• Temporalidad: **M5** (Gráfico de 5 Minutos en el Oro)
 • Estrategia: Scalping de precisión institucional + Hedge Inteligente
 • Horario: 09h - 19h (hora broker)
 • Capital mínimo sugerido: $500 - $1.000 (0.01 lotes por cada 1.000$)
-• Riesgo: Controlado con Stop Loss de Equidad
+• Riesgo: Controlado con Stop Loss de Equidad (15%) y Pausa de 120 min
 
-🚀 **Lanzamiento Oficial: 1 de Septiembre de 2026**
+🚀 **Próximo Lanzamiento Oficial:**
 🔥 **Oferta Especial:** **100€** (50% de descuento sobre el precio regular de 200€) para las primeras 50 licencias.
 
-🎁 **¿Quieres probarlo hoy mismo?** Puedes activar ya la versión DEMO en M15 por 1€ durante 30 días.`
+🎁 **¿Quieres probarlo hoy mismo?** Puedes activar ya la versión DEMO FIX en M5 por 1€ (o gratis con cupón) durante 30 días.`
     },
     {
         keywords: ["cent", "micro", "bajo capital", "50$", "100$", "cuenta cent", "cuentas cent"],
-        response: `⚡ **MAIKO SNIPER PRO GOLD CENT** — Ideal para bajos capitales
+        response: `⚡ **MAIKO PRO GOLD CENT FIX** — Ideal para bajos capitales
 
-• Diseñado específicamente para cuentas **Micro / CENT** en MetaTrader 5 (Gráfico de **M15**).
+• Diseñado específicamente para cuentas **Micro / CENT** en MetaTrader 5 (Gráfico de **M5**).
 • Te permite operar con **$50 a $100 reales**, ya que en la cuenta CENT $100 equivalen a 10.000 centavos.
 • Mantiene exactamente la misma lógica matemática del bot estrella MAIKO GOLD adaptada a la precisión de micro-lotes.
 
-🚀 **Disponible a partir del 1 de Septiembre de 2026** por solo **100€** (Antes 200€).`
+🚀 **Próximo Lanzamiento Oficial** por solo **100€** (Antes 200€).`
     },
     {
         keywords: ["bitcoin", "btc", "crypto", "cripto", "storm"],
@@ -63,21 +63,22 @@ Ten paciencia, el algoritmo está protegiendo tu capital.`
 • Estrategia: Breakout & Inercia de volatilidad en Bitcoin
 • Capital mínimo: $1.500 - $2.000
 • Riesgo: Medio-Alto (debido a la gran volatilidad del Bitcoin)
+• Estado: **En Desarrollo**
 
 Ideal para diversificar tu portafolio junto con el bot de Oro.`
     },
     {
         keywords: ["precio", "cuánto cuesta", "cuanto cuesta", "costo", "coste", "oferta", "descuento", "septiembre", "comprar", "pagar", "licencia", "pago"],
-        response: `💰 **Precios y Lanzamiento el 1 de Septiembre:**
+        response: `💰 **Precios y Oferta de Lanzamiento:**
 
-🚀 **LANZAMIENTO OFICIAL (1 DE SEPTIEMBRE) CON -50% DESCUENTO:**
-• **MAIKO SNIPER PRO GOLD (REAL)**: **100€** *(Precio regular 200€ - Disponible 1 Sept)*
-• **MAIKO SNIPER PRO GOLD CENT**: **100€** *(Precio regular 200€ - Disponible 1 Sept)*
+🚀 **LANZAMIENTO OFICIAL CON -50% DESCUENTO:**
+• **MAIKO PRO GOLD REAL FIX**: **100€** *(Precio regular 200€)*
+• **MAIKO PRO GOLD CENT FIX**: **100€** *(Precio regular 200€)*
 
 💜 **DISPONIBLE HOY MISMO EN PRUEBA:**
-• **MAIKO PRO GOLD DEMO**: **1€** por **30 días de prueba** en cuenta DEMO de MT5 (en gráfico M15).
+• **MAIKO PRO GOLD DEMO FIX**: **1€ (o Gratis con Cupón)** por **30 días de prueba** en cuenta DEMO de MT5 (en gráfico M5).
 
-Las licencias de venta oficial se abren el 1 de Septiembre e incluirán soporte técnico, guías PDF y **actualizaciones futuras 100% gratuitas** desde tu panel.`
+Las licencias oficiales incluirán soporte técnico, guías PDF y **actualizaciones futuras 100% gratuitas** desde tu panel.`
     },
     {
         keywords: ["vps", "servidor", "cloud", "siempre encendido", "apago el ordenador", "se apaga", "nube", "contabo", "hosting", "computadora", "vps servidor"],

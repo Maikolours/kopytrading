@@ -35,7 +35,7 @@ const formatBotName = (name: string, instrument: string, isTitle: boolean = fals
     }
 
     const highlightedName = name.split(' ').map((word, i) => {
-        if (['GOLD', 'BTC', 'CENT', 'DEMO', 'EURO', 'YEN', 'GHOST', 'PRECISION', 'NINJA'].includes(word)) {
+        if (['GOLD', 'BTC', 'CENT', 'DEMO', 'EURO', 'YEN', 'GHOST', 'PRECISION', 'NINJA', 'FIX', 'SNIPER'].includes(word)) {
             const wordGradient = word === 'DEMO' ? 'from-purple-400 to-brand' : gradient;
             return <span key={i} className={`text-transparent bg-clip-text bg-gradient-to-r ${wordGradient}`}>{word} </span>;
         }
@@ -166,7 +166,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                  {isUpcoming && (
                                      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20">
                                          <span className={`border text-[8px] font-black px-3 py-1 rounded-full tracking-[0.15em] uppercase whitespace-nowrap ${isOfficialPromo ? 'bg-brand/20 border-brand/50 text-brand-light shadow-[0_0_20px_rgba(168,85,247,0.3)]' : 'bg-amber-500/10 border-amber-500/30 text-amber-300'}`}>
-                                             {isOfficialPromo ? '⚡ LANZAMIENTO 1 SEPTIEMBRE' : '🛠️ EN DESARROLLO'}
+                                             {isOfficialPromo ? '⚡ PRÓXIMO LANZAMIENTO' : '🛠️ EN DESARROLLO'}
                                          </span>
                                      </div>
                                  )}
@@ -175,7 +175,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                  {!isDemo && isOfficialPromo && (
                                      <div className="absolute top-7 -left-12 -rotate-45 w-48 text-center bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 text-black py-1 shadow-[0_0_20px_rgba(245,158,11,0.4)] z-30 flex flex-col leading-tight border-y border-yellow-200">
                                          <span className="text-[11px] font-black tracking-widest uppercase mt-0.5">Lanzamiento</span>
-                                         <span className="text-[9px] font-black tracking-[0.2em] uppercase mb-0.5 opacity-90">SEPT 2026</span>
+                                         <span className="text-[9px] font-black tracking-[0.2em] uppercase mb-0.5 opacity-90">OFICIAL</span>
                                      </div>
                                  )}
 

@@ -72,7 +72,7 @@ const formatBotName = (name: string, instrument: string, isTitle: boolean = fals
     }
 
     const highlightedName = name.split(' ').map((word, i) => {
-        if (['GOLD', 'BTC', 'CENT', 'DEMO', 'EURO', 'YEN', 'GHOST', 'PRECISION', 'NINJA'].includes(word)) {
+        if (['GOLD', 'BTC', 'CENT', 'DEMO', 'EURO', 'YEN', 'GHOST', 'PRECISION', 'NINJA', 'FIX', 'SNIPER'].includes(word)) {
             const wordGradient = word === 'DEMO' ? 'from-purple-400 to-brand' : gradient;
             return <span key={i} className={`text-transparent bg-clip-text bg-gradient-to-r ${wordGradient}`}>{word} </span>;
         }
