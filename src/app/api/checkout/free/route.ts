@@ -9,13 +9,25 @@ const VALID_PROMO_CODES = ["MAIKOFREE", "SIMULACION", "VIPDEMO", "PRUEBA", "TEST
 
 export async function POST(req: Request) {
     try {
-        const formData = await req.formData();
-        const botId = formData.get("botId") as string;
-        const email = (formData.get("email") as string || "").trim().toLowerCase();
-        const promoCode = (formData.get("promoCode") as string || "").trim().toUpperCase();
+        let botId = "";
+        let email = "";
+        let promoCode = "";
 
-        if (!botId || !email) {
-            return NextResponse.json({ error: "Datos incompletos" }, { status: 400 });
+        const contentType = req.headers.get("content-type") || "";
+        if (contentType.includes("application/json")) {
+            const body = await req.json();
+            botId = body.botId || GOLD_DEMO_BOT_ID;
+            email = (body.email || "").trim().toLowerCase();
+            promoCode = (body.promoCode || "").trim().toUpperCase();
+        } else {
+            const formData = await req.formData();
+            botId = (formData.get("botId") as string) || GOLD_DEMO_BOT_ID;
+            email = (formData.get("email") as string || "").trim().toLowerCase();
+            promoCode = (formData.get("promoCode") as string || "").trim().toUpperCase();
+        }
+
+        if (!email) {
+            return NextResponse.json({ error: "Datos incompletos: email requerido" }, { status: 400 });
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
