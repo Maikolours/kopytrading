@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
   title: "Maiko Algorithms | Marketplace de Bots de Trading MT5",
-  description: "Catálogo oficial de algoritmos cuantitativos para MetaTrader 5: MAIKO PRO GOLD REAL, MAIKO PRO GOLD CENT y MAIKO PRO GOLD DEMO. Alta precisión en gráfico M15.",
+  description: "Catálogo oficial de algoritmos cuantitativos para MetaTrader 5: MAIKO PRO GOLD REAL FIX, MAIKO PRO GOLD CENT FIX y MAIKO PRO GOLD DEMO FIX. Alta precisión en gráfico M5.",
   alternates: {
     canonical: "https://www.kopytrading.com/bots",
   },

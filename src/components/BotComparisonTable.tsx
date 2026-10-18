@@ -6,7 +6,7 @@ import { useState } from "react";
 const BOTS_DATA = [
     {
         id: "demo-gold",
-        name: "MAIKO PRO GOLD DEMO",
+        name: "MAIKO PRO GOLD DEMO FIX",
         pair: "XAU/USD",
         timeframe: "M5",
         risk: "Bajo",
@@ -20,7 +20,7 @@ const BOTS_DATA = [
     },
     {
         id: "ametralladora",
-        name: "MAIKO PRO GOLD REAL",
+        name: "MAIKO PRO GOLD REAL FIX",
         pair: "XAU/USD",
         timeframe: "M5",
         risk: "Medio",
