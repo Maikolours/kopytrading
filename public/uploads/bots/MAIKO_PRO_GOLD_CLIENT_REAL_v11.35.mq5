@@ -1,8 +1,9 @@
 //+------------------------------------------------------------------+
-//|           MAIKO PRO GOLD CLIENT REAL v11.35                     |
+//|           MAIKO PRO GOLD REAL FIX (v11.35)                       |
 //|       "INSTITUTIONAL TIMETABLE EDITION - OFFICIAL REAL"          |
 //+------------------------------------------------------------------+
 #property copyright "KOPYTRADING MAIKO"
+#property description "MAIKO PRO GOLD REAL FIX"
 #property version   "11.35"
 #property strict
 
@@ -118,7 +119,7 @@ const double   ProteccionBeneficioDiario  = 0.0;
 const bool     UsarPausaTrasStopLoss      = true;
 const int      MinutosPausaTrasStopLoss   = 120;
 
-string         HUD_Branding               = "MAIKO PRO GOLD v11.35 (OFICIAL)";
+string         HUD_Branding               = "MAIKO PRO GOLD REAL FIX";
 const bool     ShowW1                     = true;
 const bool     ShowD1                     = true;
 const bool     ShowH4                     = true;
