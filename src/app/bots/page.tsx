@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardTitle, CardHeader, CardFooter } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { OfferCountdown } from "@/components/OfferCountdown";
+import { FoundersLicenseCounter } from "@/components/FoundersLicenseCounter";
 
 export const metadata: Metadata = {
   title: "Maiko Algorithms | Marketplace de Bots de Trading MT5",
@@ -193,9 +194,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                             {/* Promoción MAIKO PRO GOLD REAL */}
                                             {!isDemo && isOfficialPromo && (
                                                 <div className="flex flex-col gap-1 items-start mb-1">
-                                                    <span className="bg-gradient-to-r from-brand to-purple-600 text-white text-[8px] font-black px-2.5 py-1 rounded-md tracking-widest uppercase shadow-[0_0_10px_rgba(168,85,247,0.4)] border border-brand-light/30">
-                                                        🎁 50 PRIMERAS: VITALICIO
-                                                    </span>
+                                                    <FoundersLicenseCounter compact={true} />
                                                 </div>
                                             )}
                                             {/* Nombre del bot */}
@@ -273,11 +272,18 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                                     Licencia Demo
                                                 </div>
                                             </div>
-                                            <Link href={`/bots/${bot.id}`} className="w-full">
-                                                <Button size="sm" className="w-full font-black uppercase tracking-[0.12em] text-[9px] h-10 shadow-xl transition-all duration-500 rounded-xl bg-white text-black hover:bg-brand-light hover:text-white hover:scale-105 active:scale-95">
-                                                    Activar Demo ⚡
-                                                </Button>
-                                            </Link>
+                                            <div className="flex flex-col gap-1.5 w-full">
+                                                <Link href={`/bots/${bot.id}`} className="w-full">
+                                                    <Button size="sm" className="w-full font-black uppercase tracking-[0.12em] text-[9px] h-9 shadow-xl transition-all duration-500 rounded-xl bg-white text-black hover:bg-amber-400 hover:text-black hover:scale-[1.02] active:scale-95">
+                                                        Activar Demo · 1€ ⚡
+                                                    </Button>
+                                                </Link>
+                                                <Link href={`/bots/${bot.id}#especificaciones`} className="w-full">
+                                                    <Button size="sm" variant="outline" className="w-full font-bold uppercase tracking-[0.1em] text-[8px] h-7 rounded-lg border-white/20 text-white/70 hover:text-white hover:border-white/40">
+                                                        Ver Especificaciones 🔍
+                                                    </Button>
+                                                </Link>
+                                            </div>
                                         </>
                                     ) : isOfficialPromo ? (
                                         /* Bots comerciales oficiales: En auditoría final / Próximamente */

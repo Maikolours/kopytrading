@@ -97,6 +97,30 @@ export default function AcademiaDashboardPage() {
               La academia diseñada para personas que quieren entender cómo funcionan los bots de trading desde la realidad: gestión de riesgo estricta, paciencia matemática y configuración responsable.
             </p>
 
+            {/* NOTA DESTACADA: CONSEGUIR DEMO GRATIS SUPERANDO LA FORMACIÓN O PAGANDO 1€ */}
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/15 via-yellow-500/10 to-amber-500/15 border border-amber-400/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-left shadow-lg">
+              <div className="flex items-start gap-3">
+                <span className="text-2xl sm:text-3xl shrink-0 mt-0.5">🎁</span>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-[10px] font-mono font-black uppercase tracking-wider text-amber-300 bg-amber-400/20 px-2 py-0.5 rounded border border-amber-400/40">
+                      Cupón 100% Gratuito
+                    </span>
+                    <span className="text-xs font-black text-white">¿Quieres conseguir la Licencia Demo gratis?</span>
+                  </div>
+                  <p className="text-xs text-slate-200 font-light leading-relaxed">
+                    Si quieres conseguir la demo gratis, <strong>completa los módulos formativos de la academia y supera las evaluaciones prácticas</strong> para desbloquear tu cupón exclusivo del 100% de descuento. Si prefieres no hacer el curso y empezar ya, puedes adquirir la Demo directamente por <strong className="text-amber-400 font-bold">solo 1€</strong>.
+                  </p>
+                </div>
+              </div>
+              <Link 
+                href="/checkout/cmn9hf8yc0000vhbcq9hbxk0j"
+                className="shrink-0 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-[10px] uppercase tracking-wider whitespace-nowrap transition-all self-stretch sm:self-auto text-center"
+              >
+                Saltar curso · 1€ →
+              </Link>
+            </div>
+
             {/* Quick Action Button & Stats */}
             <div className="pt-4 flex flex-wrap items-center gap-4">
               <button

@@ -8,6 +8,7 @@ import { Metadata } from "next";
 import { ReviewSection } from "@/components/reviews/ReviewSection";
 import { VisualTestimonials } from "@/components/reviews/VisualTestimonials";
 import { OfferCountdown } from "@/components/OfferCountdown";
+import { FoundersLicenseCounter } from "@/components/FoundersLicenseCounter";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params;
@@ -267,7 +268,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             </div>
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-8 w-full max-w-full">
+                        <div id="especificaciones" className="scroll-mt-28 grid md:grid-cols-2 gap-8 w-full max-w-full">
                             <div className="glass-card p-6 sm:p-8 border border-white/5 space-y-6 w-full overflow-hidden">
                                 <h3 className="text-[10px] sm:text-xs font-black text-white uppercase tracking-[0.2em] sm:tracking-[0.3em] flex items-center gap-3 flex-wrap">
                                     <span className={`w-2 h-2 rounded-full flex-shrink-0 ${bot.riskLevel === 'Low' ? 'bg-success' : 'bg-amber-500'}`}></span>
@@ -644,14 +645,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                                         🎁 Activar Demo · 1€ (30 Días)
                                                     </Button>
                                                 </Link>
-                                                <div className="mt-4 p-4 rounded-xl bg-gradient-to-br from-brand/10 to-purple-900/20 border border-brand/20">
-                                                    <p className="text-[9px] text-brand-light uppercase tracking-widest font-black mb-1 flex items-center gap-1">
-                                                        <span>🔥</span> Promoción Fundadores
-                                                    </p>
-                                                    <p className="text-[10px] text-white/60 leading-relaxed italic">
-                                                        *Las primeras 50 personas que adquieran la licencia en el lanzamiento oficial (Septiembre 2026) obtendrán un superdescuento y la licencia será de por vida (Vitalicia). A partir de la descarga 51, el acceso requerirá suscripción anual.
-                                                    </p>
-                                                </div>
+                                                <FoundersLicenseCounter />
                                             </>
                                         ) : bot.id === BTC_REAL_BOT_ID ? (
                                             /* BTC Real → Demo próximamente */

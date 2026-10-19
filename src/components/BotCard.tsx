@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useState, useEffect } from "react";
+import Link from "next/link";
 import { Card, CardHeader, CardContent, CardTitle } from "./ui/Card";
 import { Button } from "./ui/Button";
 import { BotRemoteControl } from "./BotRemoteControl";
@@ -286,6 +287,13 @@ export const BotCard = memo(function BotCard({
                                     >
                                         📚 DESCARGAR MANUAL (PDF)
                                     </a>
+                                    <Link 
+                                        href={`/bots/${botProduct.id}`}
+                                        target="_blank"
+                                        className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-[9px] font-black uppercase tracking-wider text-center text-amber-300 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 transition-all hover:scale-[1.01] active:scale-[0.99] duration-300 col-span-1 sm:col-span-2"
+                                    >
+                                        🔍 VER FICHA TÉCNICA Y ESPECIFICACIONES COMPLETAS ↗
+                                    </Link>
                                 </div>
                             </div>
 

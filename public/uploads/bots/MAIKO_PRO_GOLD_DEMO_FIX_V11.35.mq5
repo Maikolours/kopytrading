@@ -316,6 +316,7 @@ int OnInit() {
     
     ActualizarTextosEstado();
     ActualizarInterfazMaster();
+    EnviarTelemetria();
     EventSetTimer(1);
     return(INIT_SUCCEEDED);
 
@@ -1341,7 +1342,7 @@ void OnTimer() {
     ActualizarEstadoMaster();
     ActualizarInterfazMaster();
 
-    int interval = 15;
+    int interval = (ArraySize(pos) > 0) ? 15 : 60;
 
     if(TimeLocal() - ultimoSync >= interval) {
 
