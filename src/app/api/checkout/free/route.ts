@@ -5,7 +5,7 @@ import { sendWelcomeEmail } from "@/lib/email";
 
 const GOLD_DEMO_BOT_ID = "cmn9hf8yc0000vhbcq9hbxk0j";
 const DEVELOPER_EMAILS = ["viajaconsakura@gmail.com", "viajaconsakura"];
-const VALID_PROMO_CODES = ["MAIKOFREE", "SIMULACION", "VIPDEMO", "PRUEBA", "TEST"];
+const VALID_PROMO_CODES = ["MAIKOFREE", "ACADEMIA100", "ACADEMIAPRO", "GOLD100", "SIMULACION", "VIPDEMO", "PRUEBA", "TEST"];
 
 export async function POST(req: Request) {
     try {

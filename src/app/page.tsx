@@ -99,7 +99,7 @@ export default function Home() {
               <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-tight uppercase italic break-words">
                 Trading <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-accent">
-                   Algorítmico M15
+                   Algorítmico M5
                 </span>
               </h1>
 
@@ -123,7 +123,7 @@ export default function Home() {
                 {[
                   { val: "3", label: "Algoritmos Maiko" },
                   { val: "$50", label: "Capital Mínimo CENT" },
-                  { val: "M15", label: "Gráfico Oficial Oro" },
+                  { val: "M5", label: "Gráfico Oficial Oro" },
                 ].map((s, i) => (
                   <div key={i}>
                     <p className="text-3xl font-black text-white">{s.val}</p>
@@ -143,7 +143,7 @@ export default function Home() {
                     <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-end gap-2 sm:gap-0">
                        <div className="space-y-1">
                           <div className="text-[10px] text-brand-light font-black uppercase tracking-[0.3em]">Auditoría Algorítmica</div>
-                          <div className="text-4xl font-black text-white italic tracking-tighter uppercase">XAUUSD M15</div>
+                          <div className="text-4xl font-black text-white italic tracking-tighter uppercase">XAUUSD M5</div>
                        </div>
                        <div className="sm:text-right">
                           <div className="text-success font-black text-2xl tracking-tighter">100% MT5</div>
@@ -158,7 +158,7 @@ export default function Home() {
                     <div className="grid grid-cols-2 gap-4">
                        <div className="bg-white/[0.03] border border-white/5 p-4 rounded-3xl hover:bg-white/10 transition-colors group/item">
                           <div className="text-[10px] text-white/30 uppercase font-black tracking-widest mb-1 group-hover/item:text-brand-light transition-colors">Estrategia</div>
-                          <div className="text-sm font-bold text-white uppercase italic">Scalping M15</div>
+                          <div className="text-sm font-bold text-white uppercase italic">Scalping M5</div>
                        </div>
                        <div className="bg-white/[0.03] border border-white/5 p-4 rounded-3xl hover:bg-white/10 transition-colors group/item">
                           <div className="text-[10px] text-white/30 uppercase font-black tracking-widest mb-1 group-hover/item:text-success transition-colors">Riesgo</div>
@@ -167,7 +167,7 @@ export default function Home() {
                     </div>
                     
                     <Link href="/bots" className="relative group/btn block text-center bg-white/5 hover:bg-brand py-5 rounded-3xl transition-all duration-500 font-black text-[10px] uppercase tracking-[0.2em] border border-white/10 hover:border-brand shadow-xl">
-                       <span className="relative z-10 text-white">Ver Lanzamiento 1 de Septiembre →</span>
+                       <span className="relative z-10 text-white">Ver Oferta de Lanzamiento →</span>
                     </Link>
                  </div>
               </div>

@@ -129,6 +129,43 @@ export default function AcademiaDashboardPage() {
           </div>
         </div>
 
+        {/* Banner Recompensa de Graduación: Cupón 100% Demo */}
+        <div className="relative rounded-2xl bg-gradient-to-r from-amber-500/10 via-yellow-500/10 to-amber-500/10 border border-amber-400/40 p-6 md:p-8 overflow-hidden shadow-xl">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400 shrink-0 text-2xl">
+                🎁
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/30">
+                    Recompensa de Graduación
+                  </span>
+                  <span className="text-[10px] font-bold uppercase text-emerald-400">Cupón 100% OFF</span>
+                </div>
+                <h3 className="text-lg md:text-xl font-black text-white">
+                  Desbloquea 1 Mes Gratis de MAIKO PRO GOLD CLIENT DEMO FIX
+                </h3>
+                <p className="text-xs md:text-sm text-slate-300 max-w-2xl leading-relaxed">
+                  Completa todas las lecciones y supera los cuestionarios para desbloquear tu código de descuento del 100% para activar el bot en cuenta DEMO de MT5 (en gráfico M5).
+                </p>
+                <p className="text-[11px] text-amber-300/90 pt-1">
+                  ¿Prefieres no realizar la formación? Puedes conseguir la Demo directamente en la web por <strong className="text-white">solo 1$</strong>.
+                </p>
+              </div>
+            </div>
+
+            <div className="shrink-0 w-full md:w-auto flex flex-col sm:flex-row md:flex-col gap-2">
+              <Link
+                href="/checkout/cmn9hf8yc0000vhbcq9hbxk0j"
+                className="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs uppercase tracking-wider text-center transition-all hover:scale-105"
+              >
+                Comprar Demo por 1$ →
+              </Link>
+            </div>
+          </div>
+        </div>
+
         {/* Modules List */}
         <div className="space-y-6">
           <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight flex items-center gap-2">

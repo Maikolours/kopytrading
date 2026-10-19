@@ -23,7 +23,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "El correo electrónico es obligatorio" }, { status: 400 });
         }
 
-        // Buscar el bot por ID, productKey o el primer bot activo
+        // Buscar el bot por ID, productKey o el bot DEMO oficial
         let bot = null;
         if (botId) {
             bot = await prisma.botProduct.findFirst({
@@ -31,7 +31,16 @@ export async function POST(req: Request) {
             });
         }
         if (!bot) {
-            bot = await prisma.botProduct.findFirst({ where: { isActive: true } });
+            bot = await prisma.botProduct.findFirst({
+                where: {
+                    OR: [
+                        { id: "cmn9hf8yc0000vhbcq9hbxk0j" },
+                        { name: { contains: "DEMO" } },
+                        { productKey: "XAU-MG" },
+                        { isActive: true }
+                    ]
+                }
+            });
         }
 
         if (!bot) {
@@ -92,7 +101,7 @@ export async function POST(req: Request) {
             data: {
                 userId: user.id,
                 botProductId: bot.id,
-                productKey: bot.productKey || "BAYESIAN-PRO",
+                productKey: bot.productKey || "XAU-MG",
                 amount: 0,
                 status: "TRIAL",
                 expiresAt: expiresAt

@@ -38,17 +38,28 @@ export default function ModuleCompletedModal({
         {/* Subheader Badge */}
         <div className="text-[11px] font-mono font-bold tracking-widest text-amber-400 uppercase mb-2 flex items-center justify-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5" />
-          MÓDULO COMPLETADO
+          {progressPercent >= 100 ? "🎓 ¡GRADUACIÓN DE LA ACADEMIA!" : "MÓDULO COMPLETADO"}
         </div>
 
         {/* Main Title */}
         <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-2 tracking-tight">
-          ¡Módulo completado!
+          {progressPercent >= 100 ? "¡Enhorabuena, Graduado!" : "¡Módulo completado!"}
         </h2>
 
-        <p className="text-slate-300 text-sm mb-6">
-          Terminaste <span className="text-amber-400 font-semibold">"{moduleTitle}"</span>. Vas por muy buen camino.
+        <p className="text-slate-300 text-sm mb-5">
+          {progressPercent >= 100 ? (
+            <>Has completado toda la formación de Kopytrading Academy. Has desbloqueado tu <strong>Cupón 100% OFF</strong> para 1 mes gratis de <strong>MAIKO PRO GOLD CLIENT DEMO FIX</strong>.</>
+          ) : (
+            <>Terminaste <span className="text-amber-400 font-semibold">"{moduleTitle}"</span>. Vas por muy buen camino.</>
+          )}
         </p>
+
+        {progressPercent >= 100 && (
+          <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-400/40 text-center mb-5">
+            <span className="text-[10px] font-mono text-amber-300 uppercase tracking-widest block mb-1">Tu Cupón 100% Gratuito</span>
+            <span className="text-xl font-black font-mono text-amber-400 tracking-wider">ACADEMIA100</span>
+          </div>
+        )}
 
         {/* Progress Bar Card */}
         <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-left mb-6">
@@ -74,7 +85,7 @@ export default function ModuleCompletedModal({
           onClick={onClose}
           className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-extrabold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25 transition-all transform hover:-translate-y-0.5"
         >
-          Continuar
+          {progressPercent >= 100 ? "Reclamar Cupón y Continuar" : "Continuar"}
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

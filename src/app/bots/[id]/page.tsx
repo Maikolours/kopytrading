@@ -101,6 +101,18 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
         notFound();
     }
 
+    let userHasPurchase = false;
+    if (session?.user?.email) {
+        const purchase = await prisma.purchase.findFirst({
+            where: {
+                user: { email: session.user.email },
+                botProductId: bot.id
+            }
+        });
+        if (purchase) userHasPurchase = true;
+    }
+    const canAccessFullManual = isOwner || userHasPurchase;
+
     const demoBot = await prisma.botProduct.findUnique({
         where: { id: GOLD_DEMO_BOT_ID }
     });
@@ -327,42 +339,105 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                 <div className="glass-card bg-white/[0.02] p-6 border border-white/5 hover:border-brand/30 transition-all group/dl relative overflow-hidden flex flex-col justify-between">
                                     <div>
                                         <div className="flex items-center justify-between mb-4">
-                                            <div className={`text-[10px] font-black uppercase tracking-[0.2em] ${colors.accent}`}>Guía de Usuario</div>
-                                            <span className="text-[10px] text-brand-light font-bold uppercase tracking-widest bg-brand/10 border border-brand/20 px-2 py-0.5 rounded-full">Lectura Libre</span>
+                                            <div className={`text-[10px] font-black uppercase tracking-[0.2em] ${colors.accent}`}>Ficha Técnica y Guía</div>
+                                            <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border ${
+                                                canAccessFullManual ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30" : "bg-amber-500/10 text-amber-400 border-amber-500/30"
+                                            }`}>
+                                                {canAccessFullManual ? "✓ Acceso Desbloqueado" : "Documentación 11 Págs"}
+                                            </span>
                                         </div>
                                         <h6 className="text-lg font-black text-white mb-2 uppercase italic">Manual de Operativa v11.35</h6>
-                                        <p className="text-xs text-text-muted mb-6 font-light leading-relaxed">Configuración paso a paso en gráfico M5, WebRequest, reglas de gestión de riesgo y FAQ oficiales.</p>
+                                        <p className="text-xs text-text-muted mb-4 font-light leading-relaxed">
+                                            Guía oficial con arquitectura algorítmica M5, sistema de cobertura SOS dinámico, protocolo de seguridad de fin de semana (corte viernes 19:00) y checklist de VPS.
+                                        </p>
+
+                                        {/* Puntos destacados del manual */}
+                                        <div className="space-y-1.5 py-3 border-t border-b border-white/5 text-[11px] text-slate-300">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-amber-400 text-xs">📊</span>
+                                                <span>Timeframe Oficial: <strong>M5 en XAUUSD</strong></span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-emerald-400 text-xs">🛡️</span>
+                                                <span>Cierre de Seguridad: <strong>Viernes 19:00 (GMT+2/3)</strong></span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-purple-400 text-xs">⚡</span>
+                                                <span>Breakeven SOS: <strong>0.75$ - 1.00$ de salida</strong></span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-blue-400 text-xs">🌐</span>
+                                                <span>Conectividad: <strong>WebRequest kopytrading.com</strong></span>
+                                            </div>
+                                        </div>
+
+                                        {/* Temario desplegable del manual */}
+                                        <details className="mt-4 p-3 rounded-xl bg-white/[0.03] border border-white/10 text-left text-xs group/details cursor-pointer">
+                                            <summary className="font-bold text-amber-300 flex items-center justify-between list-none">
+                                                <span>📋 Ver Índice de Contenidos (11 Páginas)</span>
+                                                <span className="text-[10px] text-text-muted group-open/details:rotate-180 transition-transform">▼</span>
+                                            </summary>
+                                            <div className="mt-3 space-y-1.5 text-text-muted border-t border-white/5 pt-3 font-light text-[11px]">
+                                                <p>• <strong>Cap. 1:</strong> Requisitos de infraestructura, MT5 y spreads ECN</p>
+                                                <p>• <strong>Cap. 2:</strong> Instalación del archivo .EX5 y permisos WebRequest</p>
+                                                <p>• <strong>Cap. 3:</strong> Entradas (Inputs): Lotaje base (0.01 por 1.000$) y SL Equidad</p>
+                                                <p>• <strong>Cap. 4:</strong> Algoritmo SOS dinámico y salidas en breakeven</p>
+                                                <p>• <strong>Cap. 5:</strong> Protocolo de horarios y corte de fin de semana (Viernes 19:00)</p>
+                                                <p>• <strong>Cap. 6:</strong> Diagnóstico de incidencias frecuentes y preguntas oficiales</p>
+                                            </div>
+                                        </details>
                                     </div>
-                                    <div className="pt-2">
-                                        <a 
-                                            href={bot.pdfFilePath || (bot.instrument === 'BTCUSD' ? '/uploads/Manual_Maiko_Pro_BTC.pdf' : bot.name.includes('CENT') ? '/uploads/Manual_Maiko_Pro_Cent.pdf' : '/uploads/Manual_Maiko_Pro_Gold.pdf')} 
-                                            target="_blank" 
-                                            rel="noopener noreferrer"
-                                            className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500/20 to-yellow-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-500/30 text-xs font-bold text-amber-300 transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98]"
-                                        >
-                                            <span>📖 Ver Manual Oficial (PDF Online)</span>
-                                            <span className="text-sm">↗</span>
-                                        </a>
+
+                                    <div className="pt-4 mt-2">
+                                        {canAccessFullManual ? (
+                                            <a 
+                                                href={bot.pdfFilePath || (bot.instrument === 'BTCUSD' ? '/uploads/Manual_Maiko_Pro_BTC.pdf' : bot.name.includes('CENT') ? '/uploads/Manual_Maiko_Pro_Cent.pdf' : '/uploads/Manual_Maiko_Pro_Gold.pdf')} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 border border-emerald-400/40 text-xs font-black text-slate-950 transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98] uppercase tracking-wider"
+                                            >
+                                                <span>📖 Descargar Manual Oficial Completo (.PDF)</span>
+                                                <span className="text-sm">↗</span>
+                                            </a>
+                                        ) : isDemo ? (
+                                            <Link 
+                                                href={`/checkout/${bot.id}`}
+                                                className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 border border-amber-400/40 text-xs font-black text-slate-950 transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98] uppercase tracking-wider text-center"
+                                            >
+                                                <span>⚡ Activar Demo para Obtener Manual Completo</span>
+                                                <span className="text-sm">→</span>
+                                            </Link>
+                                        ) : (
+                                            <Link 
+                                                href={`/bots/${GOLD_DEMO_BOT_ID}`}
+                                                className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 border border-purple-400/40 text-xs font-black text-white transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98] uppercase tracking-wider text-center"
+                                            >
+                                                <span>⚡ Probar Demo para Descargar Manual y Bot</span>
+                                                <span className="text-sm">→</span>
+                                            </Link>
+                                        )}
                                     </div>
                                 </div>
 
-                                <div className="glass-card bg-white/[0.02] p-6 border border-white/5 hover:border-white/20 transition-all group/dl relative overflow-hidden">
-                                    <div className="flex items-center justify-between mb-4">
-                                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-success">Optimización</div>
-                                        <span className="text-[10px] text-text-muted font-bold uppercase tracking-widest">SET File</span>
+                                <div className="glass-card bg-white/[0.02] p-6 border border-white/5 hover:border-white/20 transition-all group/dl relative overflow-hidden flex flex-col justify-between">
+                                    <div>
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-success">Optimización</div>
+                                            <span className="text-[10px] text-text-muted font-bold uppercase tracking-widest">SET File</span>
+                                        </div>
+                                        <h6 className="text-lg font-black text-white mb-2 uppercase italic">Ajustes Institucionales M5</h6>
+                                        <p className="text-xs text-text-muted mb-6 font-light leading-relaxed">Archivo de parámetros optimizado con corte de fin de semana a las 19:00 y control de flotante para maximizar el Sharpe Ratio.</p>
                                     </div>
-                                    <h6 className="text-lg font-black text-white mb-2 uppercase italic">Ajustes de Institucional</h6>
-                                    <p className="text-xs text-text-muted mb-6 font-light leading-relaxed">Archivo de parámetros optimizado para maximizar el Sharpe Ratio en cuentas reales.</p>
                                     <div className="flex items-center gap-3">
                                         <div className="flex-1 h-[2px] bg-white/5 overflow-hidden">
                                             <div className="h-full bg-white/20 w-2/3"></div>
                                         </div>
-                                        <span className="text-[9px] font-black text-text-muted uppercase tracking-widest whitespace-nowrap">Restringido</span>
+                                        <span className="text-[9px] font-black text-text-muted uppercase tracking-widest whitespace-nowrap">Incluido con Licencia</span>
                                     </div>
                                 </div>
                             </div>
                             
-                            <p className="text-center text-[10px] text-text-muted uppercase tracking-[0.3em] mt-10 opacity-50">El manual es de acceso libre. El archivo .SET optimizado y los ejecutables se descargan tras adquirir la licencia.</p>
+                            <p className="text-center text-[10px] text-text-muted uppercase tracking-[0.2em] mt-10 opacity-60">El resumen de características está disponible arriba. El manual oficial completo de 11 páginas (.PDF), el archivo .SET preconfigurado y el ejecutable (.EX5) se entregan tras activar la Demo o adquirir la licencia.</p>
                         </div>
                         
                         {/* REVIEWS SECTION */}

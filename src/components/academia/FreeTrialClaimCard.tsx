@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Gift, Bot, ShieldCheck, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Gift, Bot, ShieldCheck, ArrowRight, CheckCircle2, Copy, Check } from "lucide-react";
 import Link from "next/link";
 
 interface FreeTrialClaimCardProps {
@@ -14,6 +14,13 @@ export default function FreeTrialClaimCard({ userEmail, onTrialClaimed }: FreeTr
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyCoupon = () => {
+    navigator.clipboard.writeText("ACADEMIA100");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +33,7 @@ export default function FreeTrialClaimCard({ userEmail, onTrialClaimed }: FreeTr
       const res = await fetch("/api/trial", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, botId: "BAYESIAN-PRO" })
+        body: JSON.stringify({ email, botId: "cmn9hf8yc0000vhbcq9hbxk0j" })
       });
 
       const data = await res.json();
@@ -68,8 +75,8 @@ export default function FreeTrialClaimCard({ userEmail, onTrialClaimed }: FreeTr
 
       <div className="relative z-10 max-w-xl mx-auto text-center space-y-6">
         {/* Gift Icon Badge */}
-        <div className="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center mx-auto text-amber-400 shadow-xl shadow-amber-500/10">
-          <Gift className="w-8 h-8" />
+        <div className="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center mx-auto text-amber-400 shadow-xl shadow-amber-500/10 text-3xl">
+          🎁
         </div>
 
         <div>
@@ -78,26 +85,41 @@ export default function FreeTrialClaimCard({ userEmail, onTrialClaimed }: FreeTr
             RECOMPENSA DE GRADUACIÓN DESBLOQUEADA
           </div>
           <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
-            Prueba Gratis el Bot Maiko Bayesian
+            1 Mes Gratis: MAIKO PRO GOLD CLIENT DEMO FIX
           </h2>
           <p className="text-slate-300 text-sm md:text-base mt-2 leading-relaxed">
-            Has demostrado entender los conceptos clave de la operativa algorítmica y la gestión de riesgo. Como recompensa, te regalamos un acceso de prueba sin costo en cuenta demo para ver actuar al bot en tiempo real.
+            ¡Enhorabuena! Has demostrado comprender la gestión de riesgo y la operativa en M5. Tienes a tu disposición un cupón del 100% de descuento para utilizar en cuenta DEMO de MT5 sin coste alguno durante 30 días.
           </p>
+        </div>
+
+        {/* Cupón Card */}
+        <div className="p-4 rounded-2xl bg-slate-950/80 border border-amber-400/30 flex flex-col sm:flex-row items-center justify-between gap-3 max-w-md mx-auto">
+          <div className="text-left">
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Código de Cupón 100% OFF</span>
+            <span className="text-xl font-black font-mono text-amber-400 tracking-wider">ACADEMIA100</span>
+          </div>
+          <button
+            onClick={handleCopyCoupon}
+            className="px-3.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 text-xs font-bold flex items-center gap-1.5 transition-all"
+          >
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? "¡Copiado!" : "Copiar Cupón"}
+          </button>
         </div>
 
         {isSubmitted ? (
           <div className="p-5 rounded-2xl bg-emerald-950/60 border border-emerald-500/60 text-emerald-300 space-y-3 animate-fade-in">
             <div className="flex items-center justify-center gap-2 font-bold text-lg">
               <CheckCircle2 className="w-6 h-6 text-emerald-400" />
-              ¡Prueba Gratuita Activada!
+              ¡Licencia Demo Activada con Éxito!
             </div>
             <p className="text-xs md:text-sm text-slate-300">
-              Hemos registrado y activado tu cuenta para <strong className="text-white">{email}</strong>. Te hemos enviado un correo con tus credenciales e instalador de MetaTrader 5. Además, ¡tus **Módulos VIP** ya están desbloqueados!
+              Hemos registrado y activado tu licencia para <strong className="text-white">{email}</strong>. Ya puedes ingresar a tu panel para descargar el bot (.EX5) y el manual institucional en PDF.
             </p>
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/dashboard"
-                className="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs hover:bg-amber-400 transition-colors shadow-md shadow-amber-500/20"
+                className="px-4 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs hover:bg-amber-400 transition-colors shadow-md shadow-amber-500/20 uppercase tracking-wider"
               >
                 Ir a Mi Panel a Descargar el Bot →
               </Link>
@@ -105,7 +127,7 @@ export default function FreeTrialClaimCard({ userEmail, onTrialClaimed }: FreeTr
                 href="/bots"
                 className="text-xs font-bold text-slate-400 hover:text-white underline"
               >
-                Ver catálogo completo
+                Ver Catálogo Oficial
               </Link>
             </div>
           </div>
@@ -113,7 +135,7 @@ export default function FreeTrialClaimCard({ userEmail, onTrialClaimed }: FreeTr
           <form onSubmit={handleSubmit} className="space-y-4 text-left max-w-md mx-auto">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Tu correo electrónico para enviarte la licencia de prueba:
+                Tu correo para activar tu licencia de 30 días:
               </label>
               <input
                 type="email"
@@ -134,14 +156,20 @@ export default function FreeTrialClaimCard({ userEmail, onTrialClaimed }: FreeTr
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-extrabold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all transform hover:-translate-y-0.5 disabled:opacity-50"
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-extrabold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all transform hover:-translate-y-0.5 disabled:opacity-50 uppercase"
             >
               <Bot className="w-4 h-4" />
-              {isLoading ? "Procesando prueba..." : "Reclamar mi Prueba Gratuita de Bot"}
+              {isLoading ? "Activando licencia..." : "Activar 1 Mes Gratis Ahora"}
             </button>
-            <p className="text-[11px] font-mono text-slate-400 text-center">
-              100% gratuito · Sin tarjeta de crédito · Entorno de prueba seguro
-            </p>
+
+            <div className="pt-2 text-center space-y-1">
+              <p className="text-[11px] font-mono text-slate-400">
+                100% gratuito con cupón · Sin tarjeta requerida · Operativa en cuenta DEMO
+              </p>
+              <p className="text-[11px] text-slate-500">
+                ¿Prefieres no esperar? La demo también está disponible directamente en la web por <Link href="/checkout/cmn9hf8yc0000vhbcq9hbxk0j" className="text-amber-400 underline font-bold">1$</Link>.
+              </p>
+            </div>
           </form>
         )}
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useTransition, useMemo, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useTransition, useMemo, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 
@@ -49,13 +49,16 @@ export default function CheckoutClientForm({ bot }: { bot: any }) {
 
     return (
         <PayPalScriptProvider options={paypalOptions}>
-            <CheckoutFormContent bot={bot} />
+            <Suspense fallback={<div className="py-8 text-center text-xs text-text-muted">Cargando formulario de activación...</div>}>
+                <CheckoutFormContent bot={bot} />
+            </Suspense>
         </PayPalScriptProvider>
     );
 }
 
 function CheckoutFormContent({ bot }: { bot: any }) {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [isPending, startTransition] = useTransition();
     const [email, setEmail] = useState("");
     const [step, setStep] = useState<"email" | "paypal" | "success">("email");
@@ -63,7 +66,26 @@ function CheckoutFormContent({ bot }: { bot: any }) {
     const [promoCode, setPromoCode] = useState("");
     const [showPromo, setShowPromo] = useState(false);
 
+    useEffect(() => {
+        const paramPromo = searchParams?.get("promo") || searchParams?.get("coupon");
+        if (paramPromo) {
+            setPromoCode(paramPromo.toUpperCase());
+            setShowPromo(true);
+        }
+        try {
+            const savedEmail = localStorage.getItem("kopytrading_user_email");
+            if (savedEmail) {
+                setEmail(savedEmail);
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }, [searchParams]);
+
     const isFree = promoCode.trim().toUpperCase() === "MAIKOFREE" || 
+                   promoCode.trim().toUpperCase() === "ACADEMIA100" || 
+                   promoCode.trim().toUpperCase() === "ACADEMIAPRO" || 
+                   promoCode.trim().toUpperCase() === "GOLD100" || 
                    promoCode.trim().toUpperCase() === "SIMULACION" || 
                    promoCode.trim().toUpperCase() === "VIPDEMO" || 
                    promoCode.trim().toUpperCase() === "PRUEBA" || 

@@ -613,7 +613,7 @@ Para evaluar cómo un algoritmo responde a cambios bruscos de volatilidad provoc
 
 El cálculo continuo de indicadores cuantitativos como el ATR y la ejecución de Stop Loss adaptativos requieren que el terminal mantenga una sincronización milimétrica con los servidores de liquidez del broker. Operar con latencias elevadas puede provocar deslizamientos en la activación de órdenes de salida durante expansiones de volatilidad, problema abordable mediante un [VPS de Trading Dedicado](/articulos/vps-trading).
 
-Para observar el funcionamiento de un sistema con gestión avanzada de volatilidad en metales preciosos, puedes examinar el comportamiento del [MAIKO PRO GOLD DEMO](/bots/cmn9hf8yc0000vhbcq9hbxk0j) en gráfico M15.
+Para observar el funcionamiento de un sistema con gestión avanzada de volatilidad en metales preciosos, puedes examinar el comportamiento del [MAIKO PRO GOLD DEMO](/bots/cmn9hf8yc0000vhbcq9hbxk0j) en gráfico M5.
 
 ### Conclusión
 

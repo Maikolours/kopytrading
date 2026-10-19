@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Mail, GraduationCap, ArrowRight, ShieldCheck } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Mail, GraduationCap, ArrowRight, ShieldCheck, Gift } from "lucide-react";
 
 interface EmailGateModalProps {
   isOpen: boolean;
@@ -9,7 +9,16 @@ interface EmailGateModalProps {
 }
 
 export default function EmailGateModal({ isOpen, onSuccess }: EmailGateModalProps) {
-  const [email, setEmail] = useState("viajaconsakura@gmail.com");
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("kopytrading_user_email");
+      if (saved) setEmail(saved);
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
 
   if (!isOpen) return null;
 
@@ -39,16 +48,23 @@ export default function EmailGateModal({ isOpen, onSuccess }: EmailGateModalProp
         {/* Header */}
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-400 text-[11px] font-mono font-bold uppercase mb-3">
           <ShieldCheck className="w-3.5 h-3.5" />
-          ACCESO A LA ACADEMIA
+          ACCESO Y REGISTRO DE ALUMNO
         </div>
 
         <h2 className="text-2xl font-extrabold text-white tracking-tight mb-2">
           Ingresa tu correo para comenzar
         </h2>
 
-        <p className="text-xs md:text-sm text-slate-300 mb-6 leading-relaxed">
-          Guarda tu progreso de lecciones, accede a las evaluaciones interactivas y recibe periódicamente guías de gestión de riesgo y actualizaciones de bots.
+        <p className="text-xs md:text-sm text-slate-300 mb-4 leading-relaxed">
+          Guarda tu progreso de lecciones, desbloquea las evaluaciones y obtén al graduarte un <strong className="text-amber-400">Cupón de 100% de descuento</strong> para 1 mes gratis de <strong>MAIKO PRO GOLD CLIENT DEMO FIX</strong>.
         </p>
+
+        <div className="mb-6 p-3 rounded-xl bg-amber-500/10 border border-amber-400/20 text-left flex items-start gap-2.5">
+          <Gift className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+          <p className="text-[11px] text-amber-300/90 leading-relaxed">
+            ¿No deseas realizar el curso? Puedes adquirir la versión Demo directamente en la tienda por 1$.
+          </p>
+        </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4 text-left">

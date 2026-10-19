@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
     {
         keywords: ["hola", "hello", "buenas", "hey", "qué tal", "que tal", "saludos"],
-        response: `¡Hola! Soy KopyBot 🤖, el asistente experto de KopyTrading. Puedo ayudarte con consultas técnicas sobre nuestros algoritmos **MAIKO PRO GOLD** (en M15), **MAIKO CENT** (M15), **MAIKO DEMO** (M15), MetaTrader 5, VPS, brokers y gestión de riesgo. ¿En qué te puedo ayudar?`
+        response: `¡Hola! Soy KopyBot 🤖, el asistente experto de KopyTrading. Puedo ayudarte con consultas técnicas sobre nuestros algoritmos **MAIKO PRO GOLD** (en M5), **MAIKO CENT** (M5), **MAIKO DEMO** (M5), MetaTrader 5, VPS, brokers y gestión de riesgo. ¿En qué te puedo ayudar?`
     },
     {
         keywords: ["recomiendas", "recomienda", "empezar", "primer bot", "cuál compro", "cual compro", "para principiante", "soy nuevo", "nunca he", "novato", "recomendación", "mejor para"],
@@ -92,7 +92,7 @@ Las licencias oficiales incluirán soporte técnico, guías PDF y **actualizacio
         keywords: ["broker", "vantage", "vtmarkets", "pepperstone", "ic markets", "dónde", "donde", "qué broker", "que broker", "mt5 broker", "brokers"],
         response: `🏦 **Brokers 100% Compatibles con KopyTrading:**
 
-• **Vantage Markets**: Excelente ejecución ECN para Oro (M15) y Cuentas CENT.
+• **Vantage Markets**: Excelente ejecución ECN para Oro (M5) y Cuentas CENT.
 • **VT Markets**: Muy recomendado para cuentas CENT y estándar.
 • **Pepperstone**: Latencia hiperbaja y regulación oficial.
 • **IC Markets**: Ideal para cuentas ECN/RAW.
@@ -105,8 +105,8 @@ Las licencias oficiales incluirán soporte técnico, guías PDF y **actualizacio
 
 El bot está encriptado y se vincula directamente a tu número de Cuenta MetaTrader 5.
 
-1. Al activar la demo o comprar (a partir del 1 de Septiembre), introduce tu Nº de Cuenta MT5 en tu panel.
-2. En MT5, al arrastrar el bot al gráfico M15, pon tu número en el parámetro **'MiLicencia'**.
+1. Al activar la demo o comprar la licencia oficial, introduce tu Nº de Cuenta MT5 en tu panel.
+2. En MT5, al arrastrar el bot al gráfico M5, pon tu número en el parámetro **'MiLicencia'**.
 3. El algoritmo conectará con nuestra API en tiempo real y mostrará **'LICENCIA: ACTIVA'** en el HUD.`
     },
     {
@@ -116,18 +116,18 @@ El bot está encriptado y se vincula directamente a tu número de Cuenta MetaTra
 1. En MT5: Menú **Archivo** → **Abrir carpeta de datos**.
 2. Entra en \`MQL5\` → \`Experts\` y pega allí el archivo \`.ex5\` descargado.
 3. Activa el botón **'Algo Trading'** en la barra superior de MT5 (icono con Play verde ▶️).
-4. Abre el gráfico de **XAUUSD en M15** (15 Minutos).
+4. Abre el gráfico de **XAUUSD en M5** (5 Minutos).
 5. Arrastra el bot al gráfico, introduce tu número de cuenta en 'MiLicencia' y pulsa Aceptar.
 
 ¡El panel de control (HUD) de MAIKO aparecerá en tu pantalla!`
     },
     {
         keywords: ["gratis", "demo", "trial", "mes gratis", "free", "prueba", "30 dias", "30 días", "trial 30"],
-        response: `💜 **Prueba MAIKO PRO GOLD DEMO en M15 hoy mismo:**
+        response: `💜 **Prueba MAIKO PRO GOLD DEMO en M5 hoy mismo:**
 
-Puedes probar la versión de prueba durante **30 días por solo 1€** en cualquier cuenta DEMO de MetaTrader 5 en gráfico de **M15**.
+Puedes probar la versión de prueba durante **30 días por solo 1€** en cualquier cuenta DEMO de MetaTrader 5 en gráfico de **M5** (o 100% gratis con el cupón de graduación de Kopytrading Academy).
 
-Es 100% idéntica en precisión al algoritmo real. Podrás comprobar su rendimiento sin arriesgar capital real antes del lanzamiento oficial del 1 de Septiembre.
+Es 100% idéntica en precisión al algoritmo real. Podrás comprobar su rendimiento sin arriesgar capital real.
 
 🔗 [Activar Demo en el Catálogo](/bots)`
     },
@@ -143,7 +143,7 @@ Aceptamos pagos mediante **PayPal Express** y tarjeta de crédito/débito a trav
 
 1. **'Cuenta No Autorizada / Licencia Inválida'**: Revisa que tu número de cuenta MT5 coincida exactamente en el Dashboard y en el parámetro 'MiLicencia' (sin espacios).
 2. **'AlgoTrading Deshabilitado'**: Haz clic en el botón 'Algo Trading' arriba en MT5 (debe mostrar un cuadrado verde activo).
-3. **'No abre operaciones'**: Verifica si estás en la gráfica de **XAUUSD M15**, si estás en horario operativo (09:00 a 19:00 broker) y que el mercado del Oro esté abierto.`
+3. **'No abre operaciones'**: Verifica si estás en la gráfica de **XAUUSD M5**, si estás en horario operativo (09:00 a 19:00 broker) y que el mercado del Oro esté abierto.`
     },
     {
         keywords: ["qué es kopytrading", "quiénes sois", "sobre vosotros", "la empresa", "kopytrading", "quienes somos"],
