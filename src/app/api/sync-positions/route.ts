@@ -89,27 +89,19 @@ export async function POST(req: Request) {
                 }
             });
         }
-        // Fallback: Si purchaseId viene vacío o es "FREE_DEMO" o la cuenta es conocida (1028690, 11649344, 110533909, etc)
-        let resolvedPurchaseId = (purchaseId && purchaseId !== "FREE_DEMO") ? purchaseId : null;
-        if (!resolvedPurchaseId && account) {
-            const accStr = String(account).trim();
-            if (accStr === "1028690" || accStr === "11649344" || accStr === "110533909") {
-                resolvedPurchaseId = "cmn9hfal4000fvhbcr34kst5x"; // Demo Gold
-            } else if (accStr === "23449251") {
-                resolvedPurchaseId = "cmn9hfatl000jvhbci6l3ephi"; // Cent Gold
-            } else if (accStr === "27625151") {
-                resolvedPurchaseId = "cmn9hfapj000hvhbca86faz0c"; // Real Gold
-            } else {
-                // Fallback universal para cuentas demo / pruebas
-                resolvedPurchaseId = "cmn9hfal4000fvhbcr34kst5x";
-            }
-        }
+        // REGLA DE ORO DE SEGURIDAD: La licencia es 100% OBLIGATORIA.
+        // Si el robot no tiene licencia configurada en los parámetros de MT5, se rechaza y no toca la base de datos.
+        const resolvedPurchaseId = (purchaseId && purchaseId !== "FREE_DEMO") ? purchaseId : null;
 
-        if (!resolvedPurchaseId || !account) {
+        if (!resolvedPurchaseId || !account || account === "unknown") {
             await prisma.requestLog.create({
                 data: { path: "/api/sync-positions", method: "POST", body: text.substring(0, 1000), error: "Missing purchaseId or account" }
             });
-            return NextResponse.json({ error: "Missing purchaseId or account" }, { status: 400 });
+            return NextResponse.json({ 
+                error: "Licencia obligatoria no proporcionada. Introduce tu Clave de Licencia en los parámetros de entrada del robot.",
+                cmd: "ARM_BOT",
+                armed: false 
+            }, { status: 401 });
         }
 
         // 3. Verificar que la compra existe y cargar su producto (Búsqueda Robusta)
