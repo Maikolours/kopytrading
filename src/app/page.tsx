@@ -74,7 +74,7 @@ export default function Home() {
                   </div>
                   <p className="text-text-muted leading-relaxed max-w-2xl text-sm">
                     Estamos ultimando la fase de auditoría cuantitativa de <span className="text-amber-400 font-bold">MAIKO PRO GOLD REAL FIX</span>. 
-                    Mientras tanto, puedes probar el motor completo en cuenta demo con <span className="text-brand-light font-bold">MAIKO PRO GOLD CLIENT DEMO FIX por solo 1€ (o gratis con cupón)</span> o consultar nuestras guías de operativa.
+                    Mientras tanto, puedes probar el motor completo en cuenta demo con <span className="text-brand-light font-bold">MAIKO PRO GOLD CLIENT DEMO FIX por solo 1€ (o 100% GRATIS con el cupón al hacer el curso en la Academia)</span> o consultar nuestras guías de operativa.
                   </p>
                 </div>
                 
@@ -122,7 +122,8 @@ export default function Home() {
               <div className="pt-8 flex flex-wrap justify-center lg:justify-start gap-10 border-t border-white/5">
                 {[
                   { val: "3", label: "Algoritmos Maiko" },
-                  { val: "$50", label: "Capital Mínimo CENT" },
+                  { val: "$1.000", label: "Capital Sugerido Real" },
+                  { val: "$50", label: "Mínimo Cuenta Cent" },
                   { val: "M5", label: "Gráfico Oficial Oro" },
                 ].map((s, i) => (
                   <div key={i}>
@@ -175,28 +176,42 @@ export default function Home() {
           </div>
         </section>
 
-        {/* === BANNER PRUEBA GRATIS === */}
+        {/* === BANNER PRUEBA DEMO 1€ O GRATIS CON CUPÓN === */}
         <section className="px-4 sm:px-6 lg:px-8 mb-12">
           <div className="max-w-5xl mx-auto">
-            <Link href="/bots" className="block group">
-              <div className="relative overflow-hidden rounded-3xl border border-brand/40 bg-gradient-to-r from-brand/20 via-brand-dark/30 to-brand/20 p-6 sm:p-8 flex flex-col lg:flex-row items-center justify-between gap-6 hover:border-brand-light/60 transition-all duration-300 hover:shadow-[0_0_50px_rgba(139,92,246,0.3)]">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/5 to-transparent animate-gradient-sweep pointer-events-none" />
-                <div className="flex items-center gap-6 z-10">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-success to-emerald-600 flex items-center justify-center shadow-lg shadow-success/40 flex-shrink-0">
-                    <span className="text-3xl sm:text-4xl">🎁</span>
-                  </div>
-                  <div className="text-left">
-                    <h2 className="text-xl sm:text-2xl font-black text-white uppercase italic mb-1 tracking-tight">Prueba MAIKO PRO GOLD CLIENT DEMO FIX por 1$</h2>
-                    <p className="text-sm sm:text-base text-text-muted font-light">30 días de prueba en cuenta DEMO · Sin riesgo real · Licencia anual tras la prueba</p>
-                  </div>
+            <div className="relative overflow-hidden rounded-3xl border border-brand/40 bg-gradient-to-r from-brand/20 via-purple-950/40 to-amber-950/30 p-6 sm:p-8 flex flex-col lg:flex-row items-center justify-between gap-6 shadow-2xl">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/5 to-transparent animate-gradient-sweep pointer-events-none" />
+              
+              <div className="flex items-center gap-6 z-10">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-amber-400 via-brand to-purple-600 flex items-center justify-center shadow-lg shadow-brand/40 flex-shrink-0 text-3xl sm:text-4xl animate-pulse">
+                  🎁
                 </div>
-                <div className="flex-shrink-0 z-10 w-full lg:w-auto">
-                  <span className="block text-center lg:inline-flex items-center gap-3 px-10 py-5 rounded-2xl bg-success text-white font-black text-sm shadow-xl shadow-success/30 group-hover:bg-emerald-500 transition-all uppercase tracking-[0.15em]">
-                    Empezar Ahora →
-                  </span>
+                <div className="text-left space-y-1">
+                  <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-widest">
+                    ⚡ LICENCIA DEMO · ACCESO INMEDIATO
+                  </div>
+                  <h2 className="text-xl sm:text-2xl font-black text-white uppercase italic tracking-tight">
+                    Prueba MAIKO PRO GOLD por solo <span className="text-amber-400">1€</span> o <span className="text-emerald-400">GRATIS</span> con Cupón
+                  </h2>
+                  <p className="text-xs sm:text-sm text-text-muted font-light leading-relaxed max-w-xl">
+                    30 días de acceso total con telemetría en directo para MetaTrader 5. Consigue tu cupón 100% bonificado completando la primera fase de la <span className="text-white font-semibold">Academia</span> o activa tu licencia al instante por solo 1€.
+                  </p>
                 </div>
               </div>
-            </Link>
+
+              <div className="flex-shrink-0 z-10 w-full lg:w-auto flex flex-col sm:flex-row lg:flex-col gap-2.5">
+                <Link href="/academia" className="w-full">
+                  <Button variant="accent" className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-xs py-3.5 px-6 rounded-xl uppercase tracking-wider shadow-lg shadow-emerald-500/20 border-none">
+                    🎓 Conseguir Gratis con Cupón
+                  </Button>
+                </Link>
+                <Link href="/bots/cmn9hf8yc0000vhbcq9hbxk0j" className="w-full">
+                  <Button variant="outline" className="w-full border-white/20 hover:border-amber-400 text-white hover:text-amber-300 font-bold text-xs py-3.5 px-6 rounded-xl uppercase tracking-wider bg-white/5 backdrop-blur">
+                    ⚡ Activar Demo por 1€
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
 

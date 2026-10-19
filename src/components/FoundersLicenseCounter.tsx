@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 
@@ -100,10 +100,10 @@ export function FoundersLicenseCounter({ compact = false }: FoundersLicenseCount
 
             <div className="pt-1 text-[10px] text-slate-300/85 leading-relaxed relative z-10 border-t border-white/5 space-y-1">
                 <p>
-                    *Las <strong>primeras 50 licencias</strong> de lanzamiento obtienen acceso <strong className="text-white">vitalicio de por vida por 100€</strong> (sin cuotas anuales).
+                    *Las <strong>primeras 50 licencias</strong> de lanzamiento obtienen acceso <strong className="text-white">vitalicio de por vida por 100€</strong> (pago único sin cuotas).
                 </p>
-                <p className="text-text-muted text-[9px] italic">
-                    A partir de la descarga 51, la licencia pasará a suscripción anual de 250€/año.
+                <p className="text-emerald-400 font-semibold text-[9px] flex items-center gap-1.5">
+                    <span>✓</span> Licencia permanente de por vida · Incluye actualizaciones futuras y soporte MT5.
                 </p>
             </div>
 

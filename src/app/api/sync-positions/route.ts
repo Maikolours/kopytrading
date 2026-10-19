@@ -347,14 +347,22 @@ export async function POST(req: Request) {
         }
 
         // Actualizar latido de conexión y telemetría (Sincro Supreme v1.5)
+        const isFirstSync = !purchase.lastSync;
+        const updateData: any = { 
+            lastSync: new Date(),
+            balance: (balance !== null && balance !== undefined) ? Number(balance) : undefined,
+            equity: (equity !== null && equity !== undefined) ? Number(equity) : undefined,
+            lastStatus: status || undefined
+        };
+
+        // Si es la primera vez que este robot DEMO sincroniza con MT5, iniciamos la cuenta atrás de 30 días en este instante
+        if (isFirstSync && purchase.botProduct?.name?.includes("DEMO") && !isOwner) {
+            updateData.expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+        }
+
         await prisma.purchase.update({
             where: { id: officialPurchaseId },
-            data: { 
-                lastSync: new Date(),
-                balance: (balance !== null && balance !== undefined) ? Number(balance) : undefined,
-                equity: (equity !== null && equity !== undefined) ? Number(equity) : undefined,
-                lastStatus: status || undefined
-            }
+            data: updateData
         });
 
         // Sincronizar posiciones abiertas

@@ -282,7 +282,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                     </div>
                                     <div className="space-y-1">
                                         <p className="text-[10px] text-text-muted uppercase tracking-widest">Capital Sugerido</p>
-                                        <p className="text-xl font-black text-white italic">${bot.minCapital ? bot.minCapital.toLocaleString() : (bot.name.includes('CENT') ? '50' : '500')}</p>
+                                        <p className="text-xl font-black text-white italic">${bot.minCapital ? bot.minCapital.toLocaleString() : (bot.name.includes('CENT') ? '50' : '1.000')}</p>
                                     </div>
                                     <div className="space-y-1">
                                         <p className="text-[10px] text-text-muted uppercase tracking-widest">Plataforma</p>
