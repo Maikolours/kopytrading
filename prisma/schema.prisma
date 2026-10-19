@@ -25,7 +25,7 @@ model BotProduct {
   id              String     @id @default(cuid())
   name            String
   productKey      String?    @unique
-  description     String
+  description     String     @db.Text
   instrument      String
   strategyType    String
   riskLevel       String

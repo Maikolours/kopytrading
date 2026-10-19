@@ -1341,7 +1341,7 @@ void OnTimer() {
     ActualizarEstadoMaster();
     ActualizarInterfazMaster();
 
-    int interval = (ArraySize(pos) > 0) ? 15 : 3600;
+    int interval = 15;
 
     if(TimeLocal() - ultimoSync >= interval) {
 

@@ -217,7 +217,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                             Algorithmic Asset
                                         </span>
                                         <span className="text-[10px] font-bold uppercase tracking-widest bg-success/10 text-success px-3 py-1 rounded-full border border-success/20 animate-pulse">
-                                            ✨ NUEVA VERSIÓN v11.32
+                                            ✨ NUEVA VERSIÓN v{bot.version || '11.35'}
                                         </span>
                                         {isDemo && (
                                             <span className="text-[10px] font-bold uppercase tracking-widest bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20">
@@ -276,45 +276,126 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
 
                                 <div className="grid grid-cols-2 gap-4 sm:gap-8">
                                     <div className="space-y-1">
-                                        <p className="text-[10px] text-text-muted uppercase tracking-widest">Timeframes</p>
-                                        <p className="text-xl font-black text-white italic">{bot.timeframes || 'M1'}</p>
+                                        <p className="text-[10px] text-text-muted uppercase tracking-widest">Timeframe Oficial</p>
+                                        <p className="text-xl font-black text-white italic">{bot.timeframes || 'M5'}</p>
                                     </div>
                                     <div className="space-y-1">
-                                        <p className="text-[10px] text-text-muted uppercase tracking-widest">Capital Mínimo</p>
-                                        <p className="text-xl font-black text-white italic">${bot.minCapital ? bot.minCapital.toLocaleString() : '500'}</p>
+                                        <p className="text-[10px] text-text-muted uppercase tracking-widest">Capital Sugerido</p>
+                                        <p className="text-xl font-black text-white italic">${bot.minCapital ? bot.minCapital.toLocaleString() : (bot.name.includes('CENT') ? '50' : '500')}</p>
                                     </div>
                                     <div className="space-y-1">
                                         <p className="text-[10px] text-text-muted uppercase tracking-widest">Plataforma</p>
-                                        <p className="text-xl font-black text-white italic">MT5</p>
+                                        <p className="text-xl font-black text-white italic">MT5 (Nativo)</p>
                                     </div>
                                     <div className="space-y-1">
-                                        <p className="text-[10px] text-text-muted uppercase tracking-widest">Riesgo</p>
-                                        <p className={`text-xl font-black italic ${bot.riskLevel === 'Low' ? 'text-success' : 'text-amber-400'}`}>{bot.riskLevel}</p>
+                                        <p className="text-[10px] text-text-muted uppercase tracking-widest">Corte de Seguridad</p>
+                                        <p className="text-base font-black text-amber-400 italic">Viernes 19:00</p>
                                     </div>
+                                </div>
+
+                                <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[11px] text-text-muted">
+                                    <span>Gestión: <strong>SOS Dinámico + Breakeven</strong></span>
+                                    <span className="text-emerald-400 font-bold">1:100+ Apalancamiento</span>
                                 </div>
                             </div>
 
-                            <div className="glass-card p-6 sm:p-8 border border-white/5 relative overflow-hidden w-full">
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
-                                    <h4 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.2em] sm:tracking-[0.3em] break-words">Rendimiento Histórico</h4>
-                                    <span className="text-[9px] bg-success/10 text-success px-3 py-1 rounded-full border border-success/20 font-black uppercase tracking-widest self-start sm:self-auto">Auditado</span>
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-4 sm:gap-6 relative z-10">
-                                    <div className="bg-white/[0.02] p-4 rounded-2xl border border-white/5">
-                                        <p className="text-[9px] text-text-muted mb-1 uppercase tracking-widest font-black">Profit Factor</p>
-                                        <p className="text-3xl font-black text-success italic">2.14</p>
+                            <div className="glass-card p-6 sm:p-8 border border-white/5 relative overflow-hidden w-full flex flex-col justify-between">
+                                <div>
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
+                                        <h4 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.2em] sm:tracking-[0.3em] break-words">Rendimiento Auditado 2026</h4>
+                                        <span className="text-[9px] bg-success/10 text-success px-3 py-1 rounded-full border border-success/20 font-black uppercase tracking-widest self-start sm:self-auto">Backtest M5 Oficial</span>
                                     </div>
-                                    <div className="bg-white/[0.02] p-4 rounded-2xl border border-white/5">
-                                        <p className="text-[9px] text-text-muted mb-1 uppercase tracking-widest font-black">Drawdown Max</p>
-                                        <p className="text-3xl font-black text-danger italic">4.2%</p>
+
+                                    <div className="grid grid-cols-2 gap-4 relative z-10">
+                                        <div className="bg-white/[0.02] p-4 rounded-2xl border border-white/5">
+                                            <p className="text-[9px] text-text-muted mb-1 uppercase tracking-widest font-black">Profit Factor (PF)</p>
+                                            <p className="text-3xl font-black text-success italic">3.29</p>
+                                            <span className="text-[9px] text-text-muted">Auditado 2026 M5</span>
+                                        </div>
+                                        <div className="bg-white/[0.02] p-4 rounded-2xl border border-white/5">
+                                            <p className="text-[9px] text-text-muted mb-1 uppercase tracking-widest font-black">Drawdown Máx Equidad</p>
+                                            <p className="text-3xl font-black text-amber-400 italic">7.81%</p>
+                                            <span className="text-[9px] text-text-muted">Con corte viernes 19:00</span>
+                                        </div>
+                                        <div className="bg-white/[0.02] p-3 rounded-2xl border border-white/5">
+                                            <p className="text-[8px] text-text-muted mb-0.5 uppercase tracking-widest font-black">Tasa de Acierto</p>
+                                            <p className="text-xl font-black text-white italic">92.08%</p>
+                                            <span className="text-[8px] text-success font-medium">6.500 / 7.059 positivas</span>
+                                        </div>
+                                        <div className="bg-white/[0.02] p-3 rounded-2xl border border-white/5">
+                                            <p className="text-[8px] text-text-muted mb-0.5 uppercase tracking-widest font-black">Ratio Sharpe</p>
+                                            <p className="text-xl font-black text-white italic">11.30</p>
+                                            <span className="text-[8px] text-emerald-400 font-medium">Estabilidad institucional</span>
+                                        </div>
                                     </div>
                                 </div>
                                 
-                                <div className="mt-6 h-12 flex items-end gap-1 w-full opacity-30 group-hover:opacity-100 transition-opacity">
-                                    {[30, 45, 40, 60, 55, 85, 75, 100].map((h, i) => (
-                                        <div key={i} className="flex-1 bg-gradient-to-t from-success/5 to-success/40 rounded-t-sm" style={{ height: `${h}%` }} />
+                                <div className="mt-4 pt-3 border-t border-white/5 text-[10px] text-text-muted flex items-center justify-between">
+                                    <span>Pérdida Capital Inicial: <strong className="text-success">0.00 $</strong></span>
+                                    <span>Factor Recuperación: <strong className="text-white">13.26x</strong></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* NUEVO: SECCIÓN DE AUDITORÍA VISUAL DEL BACKTEST (SIN COMPROMETER ESTRATEGIA PRIVADA) */}
+                        <div className="glass-card p-6 sm:p-8 border border-white/10 w-full overflow-hidden">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
+                                <div>
+                                    <div className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-400">Auditoría Cuantitativa y Curva de Rendimiento</div>
+                                    <h4 className="text-xl font-black text-white uppercase italic tracking-tight">Proyección Auditada 2026 (M5 XAUUSD)</h4>
+                                </div>
+                                <div className="text-[10px] font-black uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-full border border-white/10 text-slate-300">
+                                    Tick Data Real 99.9%
+                                </div>
+                            </div>
+
+                            <p className="text-xs text-text-muted font-light leading-relaxed mb-6">
+                                Este gráfico refleja el balance neto consolidado mes a mes durante la prueba exhaustiva realizada en 2026 con el corte estricto de los viernes a las 19:00. Al proteger la cuenta antes del cierre del mercado, el drawdown máximo se mantuvo bajo el 8% preservando el capital en todo momento.
+                            </p>
+
+                            {/* Curva de Rendimiento Mensual Segura */}
+                            <div className="space-y-3 bg-white/[0.02] p-5 rounded-2xl border border-white/5">
+                                <div className="flex items-center justify-between text-xs font-bold text-white mb-2">
+                                    <span>Progresión Mensual 2026 (Balance Neto +8.045,73 USD)</span>
+                                    <span className="text-success font-black">10 Meses en Positivo</span>
+                                </div>
+
+                                <div className="grid grid-cols-5 sm:grid-cols-10 gap-1.5 sm:gap-2 items-end h-28 pt-4">
+                                    {[
+                                        { mes: 'Ene', val: 780, pct: '65%' },
+                                        { mes: 'Feb', val: 840, pct: '70%' },
+                                        { mes: 'Mar', val: 920, pct: '78%' },
+                                        { mes: 'Abr', val: 810, pct: '68%' },
+                                        { mes: 'May', val: 790, pct: '66%' },
+                                        { mes: 'Jun', val: 860, pct: '72%' },
+                                        { mes: 'Jul', val: 910, pct: '77%' },
+                                        { mes: 'Ago', val: 850, pct: '71%' },
+                                        { mes: 'Sep', val: 765, pct: '64%' },
+                                        { mes: 'Oct', val: 520, pct: '45%' }
+                                    ].map((m, idx) => (
+                                        <div key={idx} className="flex flex-col items-center gap-1 group/bar h-full justify-end">
+                                            <div 
+                                                className="w-full bg-gradient-to-t from-emerald-500/20 via-emerald-500/40 to-emerald-400 rounded-t-md transition-all group-hover/bar:brightness-125"
+                                                style={{ height: m.pct }}
+                                            />
+                                            <span className="text-[9px] font-bold text-slate-400 uppercase">{m.mes}</span>
+                                        </div>
                                     ))}
+                                </div>
+
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-white/5 text-[11px]">
+                                    <div className="flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-success"></span>
+                                        <span className="text-slate-300">Operaciones Ganadoras: <strong>92,08%</strong></span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                                        <span className="text-slate-300">Drawdown Máx Flotante: <strong>7,81%</strong></span>
+                                    </div>
+                                    <div className="flex items-center gap-2 col-span-2 sm:col-span-1">
+                                        <span className="w-2 h-2 rounded-full bg-brand-light"></span>
+                                        <span className="text-slate-300">Corte Viernes: <strong>19:00 (GMT+2/3)</strong></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -328,9 +409,9 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             <div className="mb-8 bg-brand/5 border border-brand/20 p-4 rounded-xl flex gap-4 items-start">
                                 <div className="text-brand text-xl mt-0.5">🔄</div>
                                 <div>
-                                    <h6 className="text-sm font-bold text-white mb-1 uppercase tracking-wider">Políticas de Actualización (Fase de Optimización)</h6>
+                                    <h6 className="text-sm font-bold text-white mb-1 uppercase tracking-wider">Políticas de Actualización y Transparencia</h6>
                                     <p className="text-xs text-text-muted leading-relaxed">
-                                        Actualmente nos encontramos en un proceso de mejora continua. Dado que estamos ajustando parámetros para que el algoritmo salga de fábrica en su estado más óptimo, <strong>es posible que recibas diferentes actualizaciones frecuentemente</strong>. Es muy recomendable estar atento al correo y <strong className="text-white">descargar siempre la última versión</strong> que te notifiquemos. Llegará un punto de madurez donde las actualizaciones serán escasas, pero en esta etapa son vitales.
+                                        Para garantizar el rendimiento óptimo y la seguridad de las cuentas de trading, <strong>puedes consultar libremente el resumen técnico y el temario oficial del manual</strong>. El paquete descargable de producción (manual completo de 11 páginas en PDF, archivo de configuración institucional .SET y ejecutable .EX5) se suministra al activar la Demo o adquirir la licencia.
                                     </p>
                                 </div>
                             </div>
@@ -343,7 +424,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                             <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border ${
                                                 canAccessFullManual ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30" : "bg-amber-500/10 text-amber-400 border-amber-500/30"
                                             }`}>
-                                                {canAccessFullManual ? "✓ Acceso Desbloqueado" : "Documentación 11 Págs"}
+                                                {canAccessFullManual ? "✓ Acceso Desbloqueado" : "Previsualización Abierta"}
                                             </span>
                                         </div>
                                         <h6 className="text-lg font-black text-white mb-2 uppercase italic">Manual de Operativa v11.35</h6>
@@ -404,7 +485,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                                 href={`/checkout/${bot.id}`}
                                                 className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 border border-amber-400/40 text-xs font-black text-slate-950 transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98] uppercase tracking-wider text-center"
                                             >
-                                                <span>⚡ Activar Demo para Obtener Manual Completo</span>
+                                                <span>⚡ Activar Demo (1€) para Descargar Manual Completo</span>
                                                 <span className="text-sm">→</span>
                                             </Link>
                                         ) : (
@@ -423,21 +504,35 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                     <div>
                                         <div className="flex items-center justify-between mb-4">
                                             <div className="text-[10px] font-black uppercase tracking-[0.2em] text-success">Optimización</div>
-                                            <span className="text-[10px] text-text-muted font-bold uppercase tracking-widest">SET File</span>
+                                            <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 font-bold uppercase tracking-widest">SET File Listo</span>
                                         </div>
                                         <h6 className="text-lg font-black text-white mb-2 uppercase italic">Ajustes Institucionales M5</h6>
-                                        <p className="text-xs text-text-muted mb-6 font-light leading-relaxed">Archivo de parámetros optimizado con corte de fin de semana a las 19:00 y control de flotante para maximizar el Sharpe Ratio.</p>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <div className="flex-1 h-[2px] bg-white/5 overflow-hidden">
-                                            <div className="h-full bg-white/20 w-2/3"></div>
+                                        <p className="text-xs text-text-muted mb-4 font-light leading-relaxed">
+                                            Archivo de configuración con calibración oficial: lotaje base de 0.01 por cada 1.000$, distancia SOS de 30 pips, salida SOS a 0.75$, TP Flush a 5.00$ y corte estricto de los viernes a las 19:00.
+                                        </p>
+                                        <div className="p-3 bg-white/[0.02] border border-white/5 rounded-xl space-y-1 text-[11px] text-slate-300 mb-4">
+                                            <div className="flex justify-between">
+                                                <span className="text-text-muted">Carga en MT5:</span>
+                                                <strong className="text-white">1 Clic (Importar .set)</strong>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-text-muted">Compatibilidad:</span>
+                                                <strong className="text-emerald-400">Cuentas ECN / RAW</strong>
+                                            </div>
                                         </div>
-                                        <span className="text-[9px] font-black text-text-muted uppercase tracking-widest whitespace-nowrap">Incluido con Licencia</span>
+                                    </div>
+                                    <div className="flex items-center gap-3 pt-2">
+                                        <div className="flex-1 h-[2px] bg-white/5 overflow-hidden">
+                                            <div className="h-full bg-emerald-400/40 w-full"></div>
+                                        </div>
+                                        <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest whitespace-nowrap">Incluido con Licencia / Demo</span>
                                     </div>
                                 </div>
                             </div>
                             
-                            <p className="text-center text-[10px] text-text-muted uppercase tracking-[0.2em] mt-10 opacity-60">El resumen de características está disponible arriba. El manual oficial completo de 11 páginas (.PDF), el archivo .SET preconfigurado y el ejecutable (.EX5) se entregan tras activar la Demo o adquirir la licencia.</p>
+                            <p className="text-center text-[10px] text-text-muted uppercase tracking-[0.2em] mt-10 opacity-70">
+                                La previsualización de arquitectura y datos cuantitativos es pública. El manual oficial completo (.PDF de 11 páginas), el preset institucional (.SET) y el robot ejecutable (.EX5) se entregan tras activar la versión Demo o adquirir la licencia.
+                            </p>
                         </div>
                         
                         {/* REVIEWS SECTION */}
