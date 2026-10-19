@@ -324,18 +324,25 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             </div>
                             
                             <div className="grid sm:grid-cols-2 gap-6">
-                                <div className="glass-card bg-white/[0.02] p-6 border border-white/5 hover:border-white/20 transition-all group/dl relative overflow-hidden">
-                                    <div className="flex items-center justify-between mb-4">
-                                        <div className={`text-[10px] font-black uppercase tracking-[0.2em] ${colors.accent}`}>Guía de Usuario</div>
-                                        <span className="text-[10px] text-text-muted font-bold uppercase tracking-widest">PDF Premium</span>
-                                    </div>
-                                    <h6 className="text-lg font-black text-white mb-2 uppercase italic">Manual de Operativa</h6>
-                                    <p className="text-xs text-text-muted mb-6 font-light leading-relaxed">Configuración avanzada de lotaje dinámico y gestión de riesgos paso a paso.</p>
-                                    <div className="flex items-center gap-3">
-                                        <div className="flex-1 h-[2px] bg-white/5 overflow-hidden">
-                                            <div className="h-full bg-white/20 w-1/3"></div>
+                                <div className="glass-card bg-white/[0.02] p-6 border border-white/5 hover:border-brand/30 transition-all group/dl relative overflow-hidden flex flex-col justify-between">
+                                    <div>
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className={`text-[10px] font-black uppercase tracking-[0.2em] ${colors.accent}`}>Guía de Usuario</div>
+                                            <span className="text-[10px] text-brand-light font-bold uppercase tracking-widest bg-brand/10 border border-brand/20 px-2 py-0.5 rounded-full">Lectura Libre</span>
                                         </div>
-                                        <span className="text-[9px] font-black text-text-muted uppercase tracking-widest whitespace-nowrap">Restringido</span>
+                                        <h6 className="text-lg font-black text-white mb-2 uppercase italic">Manual de Operativa v11.35</h6>
+                                        <p className="text-xs text-text-muted mb-6 font-light leading-relaxed">Configuración paso a paso en gráfico M5, WebRequest, reglas de gestión de riesgo y FAQ oficiales.</p>
+                                    </div>
+                                    <div className="pt-2">
+                                        <a 
+                                            href={bot.pdfFilePath || (bot.instrument === 'BTCUSD' ? '/uploads/Manual_Maiko_Pro_BTC.pdf' : bot.name.includes('CENT') ? '/uploads/Manual_Maiko_Pro_Cent.pdf' : '/uploads/Manual_Maiko_Pro_Gold.pdf')} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500/20 to-yellow-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-500/30 text-xs font-bold text-amber-300 transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+                                        >
+                                            <span>📖 Ver Manual Oficial (PDF Online)</span>
+                                            <span className="text-sm">↗</span>
+                                        </a>
                                     </div>
                                 </div>
 
@@ -355,7 +362,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                 </div>
                             </div>
                             
-                            <p className="text-center text-[10px] text-text-muted uppercase tracking-[0.3em] mt-10 opacity-30">Los archivos se desbloquean automáticamente tras la adquisición de la licencia</p>
+                            <p className="text-center text-[10px] text-text-muted uppercase tracking-[0.3em] mt-10 opacity-50">El manual es de acceso libre. El archivo .SET optimizado y los ejecutables se descargan tras adquirir la licencia.</p>
                         </div>
                         
                         {/* REVIEWS SECTION */}
