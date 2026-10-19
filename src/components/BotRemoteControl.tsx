@@ -111,11 +111,16 @@ export function BotRemoteControl({
                         mode: data.mode !== undefined ? data.mode : 1,
                         dir: data.dir !== undefined ? data.dir : 2,
                         insights_on: data.insights_on !== undefined ? data.insights_on : true,
-                        lote_manual: data.lote_manual !== undefined ? data.lote_manual : 0.08,
-                        max_reentries: data.max_reentries !== undefined ? data.max_reentries : 8,
+                        lote_manual: data.lote_manual !== undefined ? data.lote_manual : (data.loteAtaque !== undefined ? data.loteAtaque : 0.01),
+                        max_reentries: data.max_reentries !== undefined ? data.max_reentries : (data.maxSOS !== undefined ? data.maxSOS : 2),
+                        distancia_sos: data.distancia_sos !== undefined ? data.distancia_sos : (data.distanciaSOS !== undefined ? data.distanciaSOS : 30.0),
+                        profit_flush: data.profit_flush !== undefined ? data.profit_flush : (data.profitFlush !== undefined ? data.profitFlush : 5.0),
+                        profit_cosecha: data.profit_cosecha !== undefined ? data.profit_cosecha : (data.profitSOS !== undefined ? data.profitSOS : 0.75),
+                        profit_be: data.profit_be !== undefined ? data.profit_be : (data.profitBE !== undefined ? data.profitBE : 0.50),
                         casOn: data.casOn !== undefined ? data.casOn : true,
-                        usar_sl_equidad: data.usar_sl_equidad !== undefined ? data.usar_sl_equidad : false,
-                        dd_max: data.dd_max !== undefined ? data.dd_max : 20.0
+                        usar_sl_equidad: data.usar_sl_equidad !== undefined ? data.usar_sl_equidad : true,
+                        dd_max: data.dd_max !== undefined ? data.dd_max : (data.slPorcentaje !== undefined ? data.slPorcentaje : 15.0),
+                        hora_cierre_viernes: data.hora_cierre_viernes !== undefined ? data.hora_cierre_viernes : (data.horaCierreViernes !== undefined ? data.horaCierreViernes : 21)
                     });
                 }
             }
@@ -499,130 +504,95 @@ export function BotRemoteControl({
                                         
                                         <div className="space-y-3 pt-3 border-t border-white/5">
                                             <div className="flex items-center justify-between">
-                                                <span className="text-[8px] font-black uppercase text-purple-400 tracking-widest">
-                                                    ⚡ AJUSTES AVANZADOS DE ESTRATEGIA
+                                                <span className="text-[8px] font-black uppercase text-amber-400 tracking-widest flex items-center gap-1.5">
+                                                    ⚡ PARÁMETROS REALES MAIKO PRO GOLD FIX
                                                 </span>
                                             </div>
 
-                                            <div className="grid grid-cols-3 gap-2">
-                                                <div className="space-y-1">
-                                                    <label className="text-[7px] font-bold uppercase text-white/30">TAKE PROFIT (TP)</label>
-                                                    <input
-                                                        type="number"
-                                                        className="w-full bg-white/5 border border-white/10 text-white text-[10px] font-bold font-mono px-2 py-1 rounded"
-                                                        value={localSettings.tp}
-                                                        onChange={(e) => setLocalSettings({ ...localSettings, tp: parseInt(e.target.value) || 0 })}
-                                                    />
-                                                </div>
-                                                <div className="space-y-1">
-                                                    <label className="text-[7px] font-bold uppercase text-white/30">STOP LOSS (SL)</label>
-                                                    <input
-                                                        type="number"
-                                                        className="w-full bg-white/5 border border-white/10 text-white text-[10px] font-bold font-mono px-2 py-1 rounded"
-                                                        value={localSettings.sl}
-                                                        onChange={(e) => setLocalSettings({ ...localSettings, sl: parseInt(e.target.value) || 0 })}
-                                                    />
-                                                </div>
-                                                <div className="space-y-1">
-                                                    <label className="text-[7px] font-bold uppercase text-white/30">BREAK EVEN (BE)</label>
-                                                    <input
-                                                        type="number"
-                                                        className="w-full bg-white/5 border border-white/10 text-white text-[10px] font-bold font-mono px-2 py-1 rounded"
-                                                        value={localSettings.be}
-                                                        onChange={(e) => setLocalSettings({ ...localSettings, be: parseInt(e.target.value) || 0 })}
-                                                    />
+                                            {/* TOMA DE BENEFICIOS EN DÓLARES */}
+                                            <div className="p-2.5 rounded-lg bg-white/5 border border-white/5 space-y-2">
+                                                <span className="text-[7px] font-black uppercase tracking-wider text-emerald-400 block">
+                                                    💵 OBJETIVOS DE BENEFICIO EN DÓLARES ($)
+                                                </span>
+                                                <div className="grid grid-cols-3 gap-2">
+                                                    <div className="space-y-1">
+                                                        <label className="text-[7px] font-bold uppercase text-white/40">CESTA FLUSH ($)</label>
+                                                        <input
+                                                            type="number"
+                                                            step="0.5"
+                                                            className="w-full bg-white/5 border border-white/10 text-white text-[10px] font-bold font-mono px-2 py-1 rounded"
+                                                            value={localSettings.profit_flush || 5.0}
+                                                            onChange={(e) => setLocalSettings({ ...localSettings, profit_flush: parseFloat(e.target.value) || 5.0 })}
+                                                        />
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <label className="text-[7px] font-bold uppercase text-white/40">COSECHA SOS ($)</label>
+                                                        <input
+                                                            type="number"
+                                                            step="0.05"
+                                                            className="w-full bg-white/5 border border-white/10 text-white text-[10px] font-bold font-mono px-2 py-1 rounded"
+                                                            value={localSettings.profit_cosecha || 0.75}
+                                                            onChange={(e) => setLocalSettings({ ...localSettings, profit_cosecha: parseFloat(e.target.value) || 0.75 })}
+                                                        />
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <label className="text-[7px] font-bold uppercase text-white/40">BREAK EVEN ($)</label>
+                                                        <input
+                                                            type="number"
+                                                            step="0.05"
+                                                            className="w-full bg-white/5 border border-white/10 text-white text-[10px] font-bold font-mono px-2 py-1 rounded"
+                                                            value={localSettings.profit_be || 0.50}
+                                                            onChange={(e) => setLocalSettings({ ...localSettings, profit_be: parseFloat(e.target.value) || 0.50 })}
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
 
+                                            {/* DISTANCIA SOS Y HORARIO */}
                                             <div className="grid grid-cols-2 gap-2">
-                                                <div className="space-y-1">
-                                                    <label className="text-[7px] font-bold uppercase text-white/30">TRAILING (TRA)</label>
-                                                    <input
-                                                        type="number"
-                                                        className="w-full bg-white/5 border border-white/10 text-white text-[10px] font-bold font-mono px-2 py-1 rounded"
-                                                        value={localSettings.tra}
-                                                        onChange={(e) => setLocalSettings({ ...localSettings, tra: parseInt(e.target.value) || 0 })}
-                                                    />
+                                                <div className="space-y-1 p-2 rounded-lg bg-white/5 border border-white/5">
+                                                    <label className="text-[7px] font-bold uppercase text-white/40">DISTANCIA REFUERZO SOS</label>
+                                                    <div className="flex items-center gap-1.5">
+                                                        <input
+                                                            type="number"
+                                                            step="5"
+                                                            className="w-full bg-white/5 border border-white/10 text-white text-[10px] font-bold font-mono px-2 py-1 rounded"
+                                                            value={localSettings.distancia_sos || 30.0}
+                                                            onChange={(e) => setLocalSettings({ ...localSettings, distancia_sos: parseFloat(e.target.value) || 30.0 })}
+                                                        />
+                                                        <span className="text-[8px] font-bold text-white/30">pips</span>
+                                                    </div>
                                                 </div>
-                                                <div className="space-y-1">
-                                                    <label className="text-[7px] font-bold uppercase text-white/30">LOOKBACK (LKB)</label>
-                                                    <input
-                                                        type="number"
-                                                        className="w-full bg-white/5 border border-white/10 text-white text-[10px] font-bold font-mono px-2 py-1 rounded"
-                                                        value={localSettings.lkb}
-                                                        onChange={(e) => setLocalSettings({ ...localSettings, lkb: parseInt(e.target.value) || 0 })}
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <div className="grid grid-cols-3 gap-2">
-                                                <div className="space-y-1">
-                                                    <label className="text-[7px] font-bold uppercase text-white/30">TF TENDENCIA</label>
-                                                    <select
-                                                        className="w-full bg-white/5 border border-white/10 text-white text-[8px] font-bold px-1 py-1 rounded"
-                                                        value={localSettings.tf_trend}
-                                                        onChange={(e) => setLocalSettings({ ...localSettings, tf_trend: e.target.value })}
-                                                    >
-                                                        {["PERIOD_M5", "PERIOD_M15", "PERIOD_M30", "PERIOD_H1", "PERIOD_H4", "PERIOD_D1"].map((tf) => (
-                                                            <option key={tf} value={tf} className="bg-black">{tf.replace("PERIOD_", "")}</option>
-                                                        ))}
-                                                    </select>
-                                                </div>
-                                                <div className="space-y-1">
-                                                    <label className="text-[7px] font-bold uppercase text-white/30">TF FIBONACCI</label>
-                                                    <select
-                                                        className="w-full bg-white/5 border border-white/10 text-white text-[8px] font-bold px-1 py-1 rounded"
-                                                        value={localSettings.tf_fibo}
-                                                        onChange={(e) => setLocalSettings({ ...localSettings, tf_fibo: e.target.value })}
-                                                    >
-                                                        {["PERIOD_M5", "PERIOD_M15", "PERIOD_M30", "PERIOD_H1", "PERIOD_H4", "PERIOD_D1"].map((tf) => (
-                                                            <option key={tf} value={tf} className="bg-black">{tf.replace("PERIOD_", "")}</option>
-                                                        ))}
-                                                    </select>
-                                                </div>
-                                                <div className="space-y-1">
-                                                    <label className="text-[7px] font-bold uppercase text-white/30">TF ENTRADA</label>
-                                                    <select
-                                                        className="w-full bg-white/5 border border-white/10 text-white text-[8px] font-bold px-1 py-1 rounded"
-                                                        value={localSettings.tf_entry}
-                                                        onChange={(e) => setLocalSettings({ ...localSettings, tf_entry: e.target.value })}
-                                                    >
-                                                        {["PERIOD_M1", "PERIOD_M5", "PERIOD_M15", "PERIOD_M30", "PERIOD_H1"].map((tf) => (
-                                                            <option key={tf} value={tf} className="bg-black">{tf.replace("PERIOD_", "")}</option>
-                                                        ))}
-                                                    </select>
+                                                <div className="space-y-1 p-2 rounded-lg bg-white/5 border border-white/5">
+                                                    <label className="text-[7px] font-bold uppercase text-white/40">HORA CIERRE VIERNES</label>
+                                                    <div className="flex items-center gap-1.5">
+                                                        <input
+                                                            type="number"
+                                                            min="12"
+                                                            max="23"
+                                                            className="w-full bg-white/5 border border-white/10 text-white text-[10px] font-bold font-mono px-2 py-1 rounded"
+                                                            value={localSettings.hora_cierre_viernes || 21}
+                                                            onChange={(e) => setLocalSettings({ ...localSettings, hora_cierre_viernes: parseInt(e.target.value) || 21 })}
+                                                        />
+                                                        <span className="text-[8px] font-bold text-white/30">:00h</span>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <div className="grid grid-cols-2 gap-2">
-                                                <div className="space-y-1">
-                                                    <label className="text-[7px] font-bold uppercase text-white/30">DIRECCIÓN</label>
-                                                    <select
-                                                        className="w-full bg-white/5 border border-white/10 text-white text-[9px] font-bold px-2 py-1 rounded"
-                                                        value={localSettings.dir}
-                                                        onChange={(e) => setLocalSettings({ ...localSettings, dir: parseInt(e.target.value) })}
-                                                    >
-                                                        <option value={0} className="bg-black">SOLO COMPRAS (BUY)</option>
-                                                        <option value={1} className="bg-black">SOLO VENTAS (SELL)</option>
-                                                        <option value={2} className="bg-black">BIDIRECCIONAL (BOTH)</option>
-                                                    </select>
-                                                </div>
-                                                <div className="space-y-1">
-                                                    <label className="text-[7px] font-bold uppercase text-white/30">MODO OPERATIVO</label>
-                                                    <select
-                                                        className="w-full bg-white/5 border border-white/10 text-white text-[9px] font-bold px-2 py-1 rounded"
-                                                        value={localSettings.mode}
-                                                        onChange={(e) => setLocalSettings({ ...localSettings, mode: parseInt(e.target.value) })}
-                                                    >
-                                                        <option value={0} className="bg-black">SNIPER (CONSERVADOR)</option>
-                                                        <option value={1} className="bg-black">MODERADO</option>
-                                                        <option value={2} className="bg-black">AGRESIVO</option>
-                                                    </select>
+                                            {/* FILTROS QUIRÚRGICOS NOTICIAS (INDICADORES) */}
+                                            <div className="p-2.5 rounded-lg bg-purple-500/10 border border-purple-500/20 space-y-1.5">
+                                                <span className="text-[7px] font-black uppercase tracking-wider text-purple-300 block">
+                                                    🛡️ FILTROS QUIRÚRGICOS DE ALTA VOLATILIDAD (ACTIVOS)
+                                                </span>
+                                                <div className="text-[8px] font-mono text-white/70 space-y-1">
+                                                    <div className="flex justify-between"><span>• Miércoles Noticias:</span><span className="text-emerald-400 font-bold">12:00 - 14:00 (Bloqueado)</span></div>
+                                                    <div className="flex justify-between"><span>• Jueves Madrugada:</span><span className="text-emerald-400 font-bold">01:00 - 07:00 (Bloqueado)</span></div>
+                                                    <div className="flex justify-between"><span>• Viernes Noticias/NFP:</span><span className="text-emerald-400 font-bold">13:00 - 14:00 (Bloqueado)</span></div>
                                                 </div>
                                             </div>
 
                                             <div className="flex items-center justify-between p-2 rounded bg-white/5 border border-white/5">
-                                                <span className="text-[8px] font-bold uppercase text-white/60">MOSTRAR NARRATIVA</span>
+                                                <span className="text-[8px] font-bold uppercase text-white/60">MOSTRAR NARRATIVA INSTITUCIONAL</span>
                                                 <button
                                                     onClick={() => setLocalSettings({ ...localSettings, insights_on: !localSettings.insights_on })}
                                                     className={`px-2 py-1 rounded text-[7px] font-black uppercase transition-all ${
@@ -704,18 +674,42 @@ export function BotRemoteControl({
                         </button>
                     </div>
 
-                    {/* NEW: ENCENDER BOT BUTTON */}
-                    <button 
-                        className="w-full min-w-0 flex items-center justify-center gap-1.5 py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-green-600/20 text-green-400 border border-green-500/30 hover:bg-green-600 hover:text-white transition-all"
-                        onClick={() => {
-                            if(confirm("▶️ ¿ESTÁS SEGURO? El bot se ENCENDERÁ y volverá a operar automáticamente.")) {
-                                sendAction("ARM_BOT", "TRUE");
-                            }
-                        }}
-                    >
-                        <Target size={12} className="shrink-0" />
-                        <span>ENCENDER BOT (PLAY)</span>
-                    </button>
+                    {/* ESTADO DINÁMICO DEL BOT / BOTÓN DE ACCIÓN */}
+                    {(botData?.status?.toUpperCase()?.includes("APAGADO") || botData?.armed === false) ? (
+                        <button 
+                            className="w-full min-w-0 flex items-center justify-center gap-1.5 py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500 hover:text-black transition-all animate-pulse"
+                            onClick={() => {
+                                if(confirm("▶️ ¿ESTÁS SEGURO? El bot se ENCENDERÁ y volverá a operar automáticamente.")) {
+                                    sendAction("ARM_BOT", "TRUE");
+                                }
+                            }}
+                        >
+                            <Target size={12} className="shrink-0" />
+                            <span>▶️ REANUDAR / ENCENDER BOT (PLAY)</span>
+                        </button>
+                    ) : (
+                        <div className="w-full flex items-center justify-between py-2.5 px-3 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+                            <div className="flex items-center gap-2">
+                                <span className="relative flex h-2.5 w-2.5">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                                </span>
+                                <span className="text-[10px] font-black uppercase tracking-wider">
+                                    BOT ACTIVO Y EN EJECUCIÓN (ENCENDIDO)
+                                </span>
+                            </div>
+                            <button
+                                onClick={() => {
+                                    if(confirm("¿Deseas reenviar la señal de sincronización para asegurar que el bot siga armado?")) {
+                                        sendAction("ARM_BOT", "TRUE");
+                                    }
+                                }}
+                                className="text-[9px] font-bold underline text-emerald-400/70 hover:text-emerald-300 transition-colors"
+                            >
+                                Sincronizar
+                            </button>
+                        </div>
+                    )}
                     
                     {statusMsg && (
                         <motion.div 

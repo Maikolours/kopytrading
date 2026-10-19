@@ -119,7 +119,7 @@ const double   ProteccionBeneficioDiario  = 0.0;
 const bool     UsarPausaTrasStopLoss      = true;
 const int      MinutosPausaTrasStopLoss   = 120;
 
-string         HUD_Branding               = "MAIKO PRO GOLD CLIENT DEMO FIX";
+string         HUD_Branding               = "MAIKO PRO GOLD CLIENT DEMO FIX V11.35";
 const bool     ShowW1                     = true;
 const bool     ShowD1                     = true;
 const bool     ShowH4                     = true;
@@ -1380,27 +1380,18 @@ void EnviarTelemetria() {
     
 
     string json = StringFormat(
-
         "{\"purchaseId\":\"%s\",\"account\":\"%s\",\"balance\":%.2f,\"equity\":%.2f,"
-
         "\"pnl_today\":%.2f,\"status\":\"%s\",\"symbol\":\"%s\",\"narrative\":\"%s\","
-
-        "\"armed\":%s,\"isReal\":%s,\"version\":\"11.32\",\"positions\":%s,"
-
+        "\"armed\":%s,\"isReal\":%s,\"version\":\"11.35\",\"positions\":%s,"
+        "\"loteAtaque\":%.2f,\"maxSOS\":%d,\"distanciaSOS\":%.1f,\"profitFlush\":%.2f,\"profitSOS\":%.2f,\"profitBE\":%.2f,\"slPorcentaje\":%.1f,\"horaCierreViernes\":%d,"
         "\"trialExpirado\":%s,\"diasRestantes\":%d}",
-
         MiLicencia, account, normBalance, normEquity,
-
         normGanadoHoy, status, _Symbol, narrative,
-
         BotActivo ? "true" : "false", 
-
         (AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_REAL) ? "true" : "false",
-
         posJson,
-
+        LoteAtaque, LimitePosicionesSOS, DistanciaRefuerzoPips, ProfitNetoFlush, ProfitCosechaIndividual, ProfitBreakEven, PorcentajeStopLoss, HoraCierreViernes,
         trialExpirado ? "true" : "false", diasRestantes
-
     );
 
     
