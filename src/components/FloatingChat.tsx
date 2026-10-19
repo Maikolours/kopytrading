@@ -11,13 +11,13 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
         keywords: ["recomiendas", "recomienda", "empezar", "primer bot", "cuál compro", "cual compro", "para principiante", "soy nuevo", "nunca he", "novato", "recomendación", "mejor para"],
         response: `🏆 **Nuestra recomendación según tu perfil:**
 
-1. **Si quieres probar gratis sin arriesgar dinero hoy mismo**: Activa **MAIKO PRO GOLD DEMO FIX** 💜 por solo 1€ (o gratis con cupón) durante 30 días en cuenta DEMO de MT5 en gráfico de M5.
+1. **Si quieres probar gratis sin arriesgar dinero hoy mismo**: Activa **MAIKO PRO GOLD CLIENT DEMO FIX** 💜 por solo 1€ (o gratis con cupón) durante 30 días en cuenta DEMO de MT5 en gráfico de M5.
 
 2. **Si quieres empezar con poco capital en cuenta real ($50 - $100)**: **MAIKO PRO GOLD CENT FIX** ⚡. Opera en cuentas CENT de MT5 en gráfico de M5.
 
 3. **Si vas a operar con cuenta Real estándar ($500 - $1.000)**: **MAIKO PRO GOLD REAL FIX** 🏆 (Disponible en gráfico M5).
 
-🔥 *¡Aprovecha la Oferta de Lanzamiento Oficial con 50% de DESCUENTO (100€ en vez de 200€)!*`
+🔥 *¡Aprovecha la Oferta de Lanzamiento Oficial con 60% de DESCUENTO (100€ en vez de 250€) durante los primeros 15 días!*`
     },
     {
         keywords: ["cuándo abre", "cuando abre", "no opera", "operacion", "operación", "señal", "esperar", "cuánto tiempo", "cuanto tiempo", "no hace nada", "no abre nada", "lleva dias", "lleva días", "no mete", "cero operaciones", "ninguna operacion", "esperando"],
@@ -71,12 +71,12 @@ Ideal para diversificar tu portafolio junto con el bot de Oro.`
         keywords: ["precio", "cuánto cuesta", "cuanto cuesta", "costo", "coste", "oferta", "descuento", "septiembre", "comprar", "pagar", "licencia", "pago"],
         response: `💰 **Precios y Oferta de Lanzamiento:**
 
-🚀 **LANZAMIENTO OFICIAL CON -50% DESCUENTO:**
-• **MAIKO PRO GOLD REAL FIX**: **100€** *(Precio regular 200€)*
-• **MAIKO PRO GOLD CENT FIX**: **100€** *(Precio regular 200€)*
+🚀 **LANZAMIENTO OFICIAL CON -60% DESCUENTO (OFERTA 15 DÍAS):**
+• **MAIKO PRO GOLD REAL FIX**: **100€** *(Precio regular 250€)*
+• **MAIKO PRO GOLD CENT FIX**: **100€** *(Precio regular 250€)*
 
 💜 **DISPONIBLE HOY MISMO EN PRUEBA:**
-• **MAIKO PRO GOLD DEMO FIX**: **1€ (o Gratis con Cupón)** por **30 días de prueba** en cuenta DEMO de MT5 (en gráfico M5).
+• **MAIKO PRO GOLD CLIENT DEMO FIX**: **1€ (o Gratis con Cupón)** por **30 días de prueba** en cuenta DEMO de MT5 (en gráfico M5).
 
 Las licencias oficiales incluirán soporte técnico, guías PDF y **actualizaciones futuras 100% gratuitas** desde tu panel.`
     },

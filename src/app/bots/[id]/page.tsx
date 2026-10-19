@@ -7,6 +7,7 @@ import { authOptions } from "@/lib/auth";
 import { Metadata } from "next";
 import { ReviewSection } from "@/components/reviews/ReviewSection";
 import { VisualTestimonials } from "@/components/reviews/VisualTestimonials";
+import { OfferCountdown } from "@/components/OfferCountdown";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params;
@@ -389,15 +390,18 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                 ) : (
                                     // Bots comerciales: Próximamente (Fase final)
                                     <>
-                                        <p className="text-[10px] text-brand-light mb-2 uppercase tracking-[0.3em] font-black">⏳ Próximo Lanzamiento Oficial</p>
+                                        <p className="text-[10px] text-amber-300 mb-2 uppercase tracking-[0.3em] font-black">🔥 Próximo Lanzamiento Oficial</p>
                                         <div className="flex items-baseline justify-center gap-3 mb-3">
                                             <span className="text-2xl font-bold line-through text-white/40">
-                                                {bot.originalPrice ? `${bot.originalPrice.toFixed(0)}€` : '200€'}
+                                                {bot.originalPrice ? `${bot.originalPrice.toFixed(0)}€` : '250€'}
                                             </span>
                                             <div className="text-5xl sm:text-7xl font-black text-amber-400 tracking-tighter leading-none italic break-all">
                                                 {bot.price ? bot.price.toFixed(0) : '100'}
                                                 <span className="text-2xl sm:text-3xl text-amber-300 ml-1">€</span>
                                             </div>
+                                        </div>
+                                        <div className="mb-4">
+                                            <OfferCountdown compact={false} />
                                         </div>
                                         <div className="inline-flex items-center gap-2 bg-brand/20 text-brand-light text-[10px] font-black px-4 py-1.5 rounded-full border border-brand/30 uppercase tracking-widest flex-wrap justify-center shadow-lg">
                                             🛡️ AUDITORÍA CUANTITATIVA EN CURSO

@@ -5,10 +5,11 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardTitle, CardHeader, CardFooter } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { OfferCountdown } from "@/components/OfferCountdown";
 
 export const metadata: Metadata = {
   title: "Maiko Algorithms | Marketplace de Bots de Trading MT5",
-  description: "Catálogo oficial de algoritmos cuantitativos para MetaTrader 5: MAIKO PRO GOLD REAL FIX, MAIKO PRO GOLD CENT FIX y MAIKO PRO GOLD DEMO FIX. Alta precisión en gráfico M5.",
+  description: "Catálogo oficial de algoritmos cuantitativos para MetaTrader 5: MAIKO PRO GOLD REAL FIX, MAIKO PRO GOLD CENT FIX y MAIKO PRO GOLD CLIENT DEMO FIX. Alta precisión en gráfico M5.",
   alternates: {
     canonical: "https://www.kopytrading.com/bots",
   },
@@ -281,17 +282,20 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                     ) : isOfficialPromo ? (
                                         /* Bots comerciales oficiales: En auditoría final / Próximamente */
                                         <>
-                                            <div className="text-center">
-                                                <div className="flex items-baseline justify-center gap-2 mb-0.5">
+                                            <div className="text-center space-y-1.5">
+                                                <div className="flex items-baseline justify-center gap-2">
                                                     <span className="text-sm font-bold line-through text-white/40">
-                                                        200€
+                                                        250€
                                                     </span>
                                                     <span className="text-3xl font-black tracking-tighter italic text-amber-400">
                                                         100€
                                                     </span>
                                                 </div>
-                                                <div className="inline-flex items-center gap-1 text-[7px] bg-brand/20 text-brand-light font-black tracking-[0.15em] px-2.5 py-0.5 rounded-full uppercase border border-brand/30">
-                                                    ⏳ PRÓXIMAMENTE · FASE FINAL
+                                                <div className="flex flex-col items-center gap-1">
+                                                    <OfferCountdown compact={true} />
+                                                    <div className="inline-flex items-center gap-1 text-[7px] bg-brand/20 text-brand-light font-black tracking-[0.15em] px-2.5 py-0.5 rounded-full uppercase border border-brand/30">
+                                                        ⏳ PRÓXIMAMENTE · FASE FINAL
+                                                    </div>
                                                 </div>
                                             </div>
                                             <Link href={`/bots/${bot.id}`} className="w-full">

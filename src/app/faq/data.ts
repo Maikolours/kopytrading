@@ -58,7 +58,7 @@ export const FAQS = [
             },
             {
                 q: "¿Puedo probar el bot antes de comprar?",
-                a: "Sí, tenemos disponible una versión de prueba del bot estrella **MAIKO PRO GOLD DEMO FIX** por solo 1$ (o gratis con cupón de prueba) durante 30 días en cuenta DEMO. Te recomendamos siempre usarlo en una cuenta DEMO virtual con tu broker y probarlo durante 2-4 semanas. Si el comportamiento te convence, podrás adquirir la licencia oficial. Si no te convence, la prueba simplemente expira al cabo de los 30 días."
+                a: "Sí, tenemos disponible una versión de prueba del bot estrella **MAIKO PRO GOLD CLIENT DEMO FIX** por solo 1$ (o gratis con cupón de prueba) durante 30 días en cuenta DEMO. Te recomendamos siempre usarlo en una cuenta DEMO virtual con tu broker y probarlo durante 2-4 semanas. Si el comportamiento te convence, podrás adquirir la licencia oficial. Si no te convence, la prueba simplemente expira al cabo de los 30 días."
             },
             {
                 q: "¿KopyTrading tiene acceso a mi cuenta del broker?",
@@ -71,7 +71,7 @@ export const FAQS = [
         items: [
             {
                 q: "¿Cómo activo mi prueba demo de 30 días?",
-                a: "Es muy sencillo. En el Marketplace, elige el bot **MAIKO PRO GOLD DEMO FIX** y pulsa en 'Activar Demo'. Introduce tu email, aplica si tienes un cupón o completa el pago simbólico de 1$ y el sistema te creará una cuenta automáticamente y te llevará a 'Mi Panel', donde podrás descargar el bot (.ex5) y el manual PDF al instante. Tendrás 30 días completos para probar la estrategia en tu cuenta DEMO de MetaTrader 5."
+                a: "Es muy sencillo. En el Marketplace, elige el bot **MAIKO PRO GOLD CLIENT DEMO FIX** y pulsa en 'Activar Demo'. Introduce tu email, aplica si tienes un cupón o completa el pago simbólico de 1$ y el sistema te creará una cuenta automáticamente y te llevará a 'Mi Panel', donde podrás descargar el bot (.ex5) y el manual PDF al instante. Tendrás 30 días completos para probar la estrategia en tu cuenta DEMO de MetaTrader 5."
             },
             {
                 q: "¿Cuál es mi contraseña y cómo accedo a mi cuenta?",

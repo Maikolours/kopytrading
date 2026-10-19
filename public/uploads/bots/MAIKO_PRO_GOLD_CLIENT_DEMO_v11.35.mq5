@@ -119,7 +119,7 @@ const double   ProteccionBeneficioDiario  = 0.0;
 const bool     UsarPausaTrasStopLoss      = true;
 const int      MinutosPausaTrasStopLoss   = 120;
 
-string         HUD_Branding               = "MAIKO PRO GOLD DEMO FIX";
+string         HUD_Branding               = "MAIKO PRO GOLD CLIENT DEMO FIX";
 const bool     ShowW1                     = true;
 const bool     ShowD1                     = true;
 const bool     ShowH4                     = true;

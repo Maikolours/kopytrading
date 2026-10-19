@@ -6,7 +6,7 @@ import { useState } from "react";
 const BOTS_DATA = [
     {
         id: "demo-gold",
-        name: "MAIKO PRO GOLD DEMO FIX",
+        name: "MAIKO PRO GOLD CLIENT DEMO FIX",
         pair: "XAU/USD",
         timeframe: "M5",
         risk: "Bajo",
@@ -30,7 +30,7 @@ const BOTS_DATA = [
         features: [true, true, true, true, true],
         image: "/images/maiko-gold.png",
         color: "from-amber-400 to-amber-600",
-        price: "100€ (Lanzamiento)",
+        price: "100€ (Lanzamiento · Antes 250€)",
         popular: true
     },
     {

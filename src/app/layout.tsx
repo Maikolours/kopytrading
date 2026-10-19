@@ -253,7 +253,7 @@ export default function RootLayout({
                   <div className="space-y-4">
                     <h4 className="text-white font-bold text-sm uppercase tracking-widest">Sistemas</h4>
                     <ul className="space-y-2 text-xs text-text-muted">
-                      <li><Link href="/bots/cmn9hf8yc0000vhbcq9hbxk0j" className="hover:text-accent transition-colors">MAIKO PRO GOLD DEMO FIX</Link></li>
+                      <li><Link href="/bots/cmn9hf8yc0000vhbcq9hbxk0j" className="hover:text-accent transition-colors">MAIKO PRO GOLD CLIENT DEMO FIX</Link></li>
                       <li><Link href="/bots/cmn9hf9440001vhbclffx9no6" className="hover:text-accent transition-colors">MAIKO PRO GOLD REAL FIX</Link></li>
                       <li><Link href="/bots/cmn9hf9800002vhbc5rky6dx8" className="hover:text-accent transition-colors">MAIKO PRO GOLD CENT FIX</Link></li>
                       <li><Link href="/bots/cmn9hf9bm0003vhbckaamkqal" className="hover:text-accent transition-colors">MAIKO PRO BTC</Link></li>

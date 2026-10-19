@@ -74,7 +74,7 @@ export default function Home() {
                   </div>
                   <p className="text-text-muted leading-relaxed max-w-2xl text-sm">
                     Estamos ultimando la fase de auditoría cuantitativa de <span className="text-amber-400 font-bold">MAIKO PRO GOLD REAL FIX</span>. 
-                    Mientras tanto, puedes probar el motor completo en cuenta demo con <span className="text-brand-light font-bold">MAIKO PRO GOLD DEMO FIX por solo 1€ (o gratis con cupón)</span> o consultar nuestras guías de operativa.
+                    Mientras tanto, puedes probar el motor completo en cuenta demo con <span className="text-brand-light font-bold">MAIKO PRO GOLD CLIENT DEMO FIX por solo 1€ (o gratis con cupón)</span> o consultar nuestras guías de operativa.
                   </p>
                 </div>
                 
@@ -186,7 +186,7 @@ export default function Home() {
                     <span className="text-3xl sm:text-4xl">🎁</span>
                   </div>
                   <div className="text-left">
-                    <h2 className="text-xl sm:text-2xl font-black text-white uppercase italic mb-1 tracking-tight">Prueba MAIKO PRO GOLD DEMO FIX por 1$</h2>
+                    <h2 className="text-xl sm:text-2xl font-black text-white uppercase italic mb-1 tracking-tight">Prueba MAIKO PRO GOLD CLIENT DEMO FIX por 1$</h2>
                     <p className="text-sm sm:text-base text-text-muted font-light">30 días de prueba en cuenta DEMO · Sin riesgo real · Licencia anual tras la prueba</p>
                   </div>
                 </div>
