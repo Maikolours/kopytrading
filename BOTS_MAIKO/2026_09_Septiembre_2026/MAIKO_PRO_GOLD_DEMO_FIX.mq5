@@ -21,7 +21,7 @@
 #include <Trade\Trade.mqh>
 
 // --- CONFIGURACION ---
-input group "?????? ?? ?? ?? ?? ?? ?? ?? ?? ??   ?? ??   ?? ?? ?? ?? ?? ?? ?? ?? ??????"
+input group "=== CONFIGURACION GENERAL ==="
 input string   MiLicencia                 = "";          // ?? Clave de Licencia o Correo Usuario
 input int      DiasDeTrial                = 30;          // ? Días de Prueba (Solo Trial)
 const bool     EsCuentaCent               = false;       // Cuenta en Centavos (Hardcoded para seguridad)
@@ -32,7 +32,7 @@ int SyncIntervalSec = 2;
 datetime ultimoSync = 0;
 
 // --- FILTROS DE RUIDO Y MERCADO ---
-input group "?????? ??? ?? ?? ?? ?? ?? ?? ??   ?? ??   ?? ?? ?? ?? ??   ??   ?? ?? ?? ?? ?? ?? ?? ??????"
+input group "=== FILTROS DE RUIDO Y MERCADO ==="
 input double   MaxRangoVelaM1             = 20.0;        // ? Rango Máximo Vela M1 (Pips)
 input double   MaxSpreadPips              = 4.0;         // ?? Spread Máximo Permitido (Pips)
 input double   SensibilidadMechaReal      = 3.0;         // ?? Sensibilidad Rechazo de Mechas
@@ -41,7 +41,7 @@ input double   MaxRsiCompra               = 70.0;        // ?? RSI Máximo para 
 input double   MinRsiVenta                = 30.0;        // ?? RSI Mínimo para Ventas (Filtro Suelos)
 
 // --- FILTRO DE TECHOS Y SUELOS (SOPORTES Y RESISTENCIAS) ---
-input group "?????? ??? ?? ?? ?? ?? ?? ??   ?? ??   ?? ?? ?? ?? ?? ??   ??   ?? ?? ?? ?? ?? ?? ??????"
+input group "=== FILTRO TECHOS Y SUELOS (S/R) ==="
 input bool             UsarFiltroTechosSuelos     = true;        // ??? Activar Filtro Techos y Suelos M15 (S/R)
 input ENUM_TIMEFRAMES  TimeframeTechosSuelos      = PERIOD_M15;  // ?? Temporalidad para Techos/Suelos M15
 input int              PeriodoTechosSuelos        = 24;          // ?? Período de Velas M15 a Analizar
@@ -65,13 +65,13 @@ input bool             UsarConfirmacionRuptura    = true;        // ?? Confirmar
 input ENUM_TIMEFRAMES  TimeframeConfirmacion      = PERIOD_M5;   // ?? Temporalidad de Confirmación (M5/M15)
 
 // --- TENDENCIA Y DIRECCION ---
-input group "?????? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??   ??   ?? ?? ?? ?? ?? ?? ?? ?? ?? ??????"
+input group "=== TENDENCIA Y DIRECCION ==="
 input int      PeriodoMediaFiltro         = 50;          // ?? Período EMA Tendencia (Filtro)
 input bool     CheckM15                   = true;        // ?? Confirmación Tendencia M15 (Sincronía)
 input bool     CheckM5                    = true;        // ?? Confirmación Tendencia M5 (Sincronía)
 
 // --- OPERATIVA Y LOTES ---
-input group "?????? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??   ??   ?? ?? ?? ?? ?? ??????"
+input group "=== OPERATIVA Y LOTES ==="
 input double   LoteAtaque                 = 0.01;        // ?? Volumen Entrada Inicial (Ataque)
 input int      RuedasAmetralladora        = 1;           // ?? Operaciones Iniciales en Cesta (Ruedas)
 input double   MultiplicadorRefuerzo      = 1.5;         // ?? Multiplicador Lote de Rescate (SOS)
@@ -79,19 +79,19 @@ input double   MaxLoteTotal               = 0.50;        // ?? Lote Máximo Acum
 input double   MaxLoteIndividual          = 0.02;        // ?? Volumen Máximo por Operación SOS
 
 // --- DISTANCIAS Y CASCADA ---
-input group "?????? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??   ??   ?? ?? ?? ?? ?? ?? ?? ??????"
+input group "=== DISTANCIAS Y CASCADA SOS ==="
 input double   DistanciaRefuerzoPips      = 30.0;        // ?? Distancia Mínima para Abrir SOS (Pips)
 input double   MaxPipsHueco               = 50.0;        // ??? Pips de Vacío para Forzar SOS
 input int      MaxVelasHueco              = 5;           // ? Velas sin Giro para Forzar SOS
 
 // --- COBRAR BENEFICIOS (TAKE PROFIT) ---
-input group "?????? ?? ?? ?? ?? ?? ?? ??   ?? ?? ?? ?? ?? ?? ?? ?? ?? ??   ( ?? ?? ) ??????"
+input group "=== COBRAR BENEFICIOS (TAKE PROFIT) ==="
 input double   ProfitNetoFlush            = 5.0;         // ?? Beneficio Cierre Total Cesta ($)
 input double   ProfitCosechaIndividual    = 0.75;        // ?? Beneficio Cierre SOS Individual ($)
-input double   TargetDiario               = 25.0;        // ?? Meta de Beneficio Diario ($)
+input double   TargetDiario               = 100.0;       // ?? Meta de Beneficio Diario ($)
 
 // --- HORARIOS OPERATIVOS ---
-input group "?????? ? ?? ?? ?? ?? ?? ?? ?? ??   ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??????"
+input group "=== HORARIOS OPERATIVOS ==="
 input int      HoraInicioOperativa        = 1;           // ?? Hora de Inicio Operaciones (Broker)
 input int      HoraFinOperativa           = 23;          // ?? Hora de Cierre Operaciones (Broker)
 input bool     OperarViernesNoche         = false;       // ?? Permitir Operaciones Viernes Noche
@@ -100,7 +100,7 @@ input int      HoraInicioBloqueo          = 14;          // ?? Hora Inicio Bloqu
 input int      HoraFinBloqueo             = 16;          // ?? Hora Fin Bloqueo Noticias
 
 // --- PROTECCIONES Y SEGURIDAD ---
-input group "?????? ??? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??   ??   ?? ?? ?? ?? ?? ?? ?? ?? ?? ??????"
+input group "=== PROTECCIONES Y SEGURIDAD ==="
 input int      LimitePosicionesSOS        = 2;           // ??? Límite Máximo Posiciones SOS
 input double   ProfitBreakEven            = 0.50;        // ??? Beneficio Mínimo Break Even Cesta ($)
 input double   ProteccionBeneficioDiario  = 0.0;         // ??? Proteger Beneficio Diario Acumulado ($)
@@ -115,7 +115,7 @@ input int      HoraInicioBloqueo_Interno  = 14;
 input int      HoraFinBloqueo_Interno     = 16;
 
 // --- INTERFAZ GRAFICA (HUD) ---
-input group "?????? ?? ?? ?? ?? ?? ?? ?? ?? ??   ?? ?? ?? ?? ?? ?? ??   ( ?? ?? ?? ) ??????"
+input group "=== INTERFAZ GRAFICA (HUD) ==="
 string         HUD_Branding               = "MAIKO PRO GOLD DEMO FIX";
 input color    ColorMain                  = clrGold;     // ?? Color Principal HUD (Acento)
 input color    ColorHeader                = C'30,30,30'; // ?? Color Encabezado Panel HUD
@@ -131,7 +131,7 @@ input bool     ShowM5                     = true;        // ?? Mostrar Tendencia
 input bool     ShowM1                     = true;        // ?? Mostrar Tendencia M1
 
 // --- COMENTARIOS DE OPERACIONES ---
-input group "?????? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??   ?? ??   ?? ?? ?? ?? ?? ?? ?? ??????"
+input group "=== COMENTARIOS DE OPERACIONES ==="
 input string   TradeComment               = "MAIKO_PRO_GOLD_DEMO_FIX"; // ?? Comentario para Órdenes (Trade Comment)
 
 // Globales
@@ -188,15 +188,13 @@ void AgregarIndicadoresVisuales() {
 
     bool tieneRSI = false;
 
-    bool tieneMACD = false;
-
     int ventanas = (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL);
 
-    for(int w = 0; w < ventanas; w++) {
+    for(int w = ventanas - 1; w >= 0; w--) {
 
         int totalInd = ChartIndicatorsTotal(0, w);
 
-        for(int i = 0; i < totalInd; i++) {
+        for(int i = totalInd - 1; i >= 0; i--) {
 
             string nombre = ChartIndicatorName(0, w, i);
 
@@ -204,7 +202,11 @@ void AgregarIndicadoresVisuales() {
 
             if(StringFind(nombre, "RSI") >= 0 && StringFind(nombre, "14") >= 0) tieneRSI = true;
 
-            if(StringFind(nombre, "MACD") >= 0) tieneMACD = true;
+            if(StringFind(nombre, "MACD") >= 0) {
+
+                ChartIndicatorDelete(0, w, nombre);
+
+            }
 
         }
 
@@ -213,14 +215,6 @@ void AgregarIndicadoresVisuales() {
     if(!tieneEMA) ChartIndicatorAdd(0, 0, hEMA_v);
 
     if(!tieneRSI) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hRSI_v);
-
-    if(!tieneMACD) {
-
-        int hMACD = iMACD(_Symbol, _Period, 12, 26, 9, PRICE_CLOSE);
-
-        if(hMACD != INVALID_HANDLE) ChartIndicatorAdd(0, (int)ChartGetInteger(0, CHART_WINDOWS_TOTAL), hMACD);
-
-    }
 
 }
 
@@ -284,22 +278,21 @@ int OnInit() {
 
     }
 
-      int maxDias = DiasDeTrial;
-
-      if(maxDias > 30) maxDias = 30;
-
-      diasRestantes = maxDias - (int)((TimeCurrent() - trialStart) / 86400);
-
-      int diasOperando = (int)((TimeCurrent() - trialStart) / 86400) + 1;
-
-      if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
-
+      if(MQLInfoInteger(MQL_TESTER)) {
+          trialExpirado = false;
+          diasRestantes = 30;
+          BotActivo = true;
+      } else {
+          int maxDias = DiasDeTrial;
+          if(maxDias > 30) maxDias = 30;
+          diasRestantes = maxDias - (int)((TimeCurrent() - trialStart) / 86400);
+          int diasOperando = (int)((TimeCurrent() - trialStart) / 86400) + 1;
+          if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
+      }
     
-
-    if(MQLInfoInteger(MQL_TESTER)) BotActivo = true;
-
+    ActualizarTextosEstado();
+    ActualizarInterfazMaster();
     EventSetTimer(1);
-
     return(INIT_SUCCEEDED);
 
 }
@@ -329,14 +322,15 @@ void OnDeinit(const int reason) {
 
 
 void ActualizarTextosEstado() {
-
-    int maxDias = DiasDeTrial;
-
-    if(maxDias > 30) maxDias = 30;
-
-    diasRestantes = maxDias - (int)((TimeTradeServer() - trialStart) / 86400);
-
-    if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
+    if(MQLInfoInteger(MQL_TESTER)) {
+        trialExpirado = false;
+        diasRestantes = 30;
+    } else {
+        int maxDias = DiasDeTrial;
+        if(maxDias > 30) maxDias = 30;
+        diasRestantes = maxDias - (int)((TimeTradeServer() - trialStart) / 86400);
+        if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
+    }
 
 
 
@@ -502,60 +496,47 @@ void OnTick() {
 
     }
 
+    static datetime ultimoDiaReset = 0;
+    datetime diaActual = iTime(_Symbol, PERIOD_D1, 0);
+    if(diaActual != ultimoDiaReset) {
+        ultimoDiaReset = diaActual;
+        BotActivo = true; // Reiniciar automáticamente en cada nuevo día
+    }
+
     if(ganadoHoy >= (TargetDiario * multCent)) {
-
-        txtVoz = "OBJETIVO DIARIO CUMPLIDO."; if(ArraySize(pos) > 0) CerrarTodo(); BotActivo = false; ActualizarInterfazMaster(); return;
-
+        txtVoz = "OBJETIVO DIARIO CUMPLIDO."; 
+        if(ArraySize(pos) > 0) CerrarTodo(); 
+        enFaseAnalisis = false;
+        txtVeredicto = "OBJETIVO DIARIO ALCANZADO (PAUSA HOY)";
+        ActualizarInterfazMaster(); 
+        return;
     }
 
     if(ProteccionBeneficioDiario > 0.0 && ganadoHoy > (ProteccionBeneficioDiario * multCent)) {
-
         if((ganadoHoy + flotante) <= (ProteccionBeneficioDiario * multCent) && ArraySize(pos) > 0) {
-
-            txtVoz = "PROTECCION BENEFICIO."; CerrarTodo(); enFaseAnalisis = false; BotActivo = false; ActualizarInterfazMaster(); return;
-
+            txtVoz = "PROTECCION BENEFICIO."; CerrarTodo(); enFaseAnalisis = false; ActualizarInterfazMaster(); return;
         }
-
     }
 
-
-
     if(UsarStopLossPorcentaje && ArraySize(pos) > 0) {
-
         double balance = AccountInfoDouble(ACCOUNT_BALANCE);
-
         if(balance > 0) {
-
             double maxLossAllowed = balance * (MathAbs(PorcentajeStopLoss) / 100.0);
-
             if(flotante <= -maxLossAllowed) {
-
                 txtVoz = "STOP LOSS ALCANZADO.";
-
                 CerrarTodo();
-
                 enFaseAnalisis = false;
-
                 if(UsarPausaTrasStopLoss && MinutosPausaTrasStopLoss > 0) {
-
                     pausaStopLoss = TimeTradeServer() + (60 * MinutosPausaTrasStopLoss);
-
                     txtVeredicto = "STANDBY POR SL HASTA: " + TimeToString(pausaStopLoss, TIME_MINUTES);
-
                 } else {
-
-                    BotActivo = false;
-
+                    txtVeredicto = "REINICIANDO TRAS SL";
                 }
-
+                BotActivo = true; // Sigue funcionando, no se apaga
                 ActualizarInterfazMaster();
-
                 return;
-
             }
-
         }
-
     }
 
 
@@ -857,23 +838,41 @@ double CalcularProfit() { double s=0; for(int i=0; i<ArraySize(pos); i++) s += (
 
 
 double CalcularGanadoHoy() { 
-
     double total = 0; HistorySelect(iTime(_Symbol, PERIOD_D1, 0), TimeCurrent()); 
-
-    for(int i=HistoryDealsTotal()-1; i>=0; i--) {
-
+    int totalDeals = HistoryDealsTotal();
+    struct DealData { ulong ticket; long magic; long pos_id; double profit; };
+    DealData deals[]; ArrayResize(deals, totalDeals);
+    int valid_deals = 0;
+    
+    for(int i=0; i<totalDeals; i++) {
         ulong t = HistoryDealGetTicket(i);
-
         if(HistoryDealGetString(t, DEAL_SYMBOL) == _Symbol) {
-
-            total += (HistoryDealGetDouble(t, DEAL_PROFIT) + HistoryDealGetDouble(t, DEAL_COMMISSION) + HistoryDealGetDouble(t, DEAL_SWAP));
-
+            deals[valid_deals].ticket = t;
+            deals[valid_deals].magic = HistoryDealGetInteger(t, DEAL_MAGIC);
+            deals[valid_deals].pos_id = HistoryDealGetInteger(t, DEAL_POSITION_ID);
+            deals[valid_deals].profit = HistoryDealGetDouble(t, DEAL_PROFIT) + HistoryDealGetDouble(t, DEAL_COMMISSION) + HistoryDealGetDouble(t, DEAL_SWAP);
+            valid_deals++;
         }
-
     }
-
+    
+    for(int i=0; i<valid_deals; i++) {
+        long d_magic = deals[i].magic;
+        if(d_magic == 0) {
+            if(HistorySelectByPosition(deals[i].pos_id)) {
+                for(int j=0; j<HistoryDealsTotal(); j++) {
+                    ulong t_in = HistoryDealGetTicket(j);
+                    if(HistoryDealGetInteger(t_in, DEAL_ENTRY) == DEAL_ENTRY_IN) {
+                        d_magic = HistoryDealGetInteger(t_in, DEAL_MAGIC);
+                        break;
+                    }
+                }
+            }
+        }
+        if(d_magic == ExpertMagic) total += deals[i].profit;
+    }
+    
+    HistorySelect(0, TimeCurrent());
     return total; 
-
 }
 
 
@@ -1076,15 +1075,17 @@ void CrearInterfazMaster() {
 
     
 
-    CrearLabel("MAIKO_Vered", x+10, y+85, txtVeredicto, clrCyan, 9, CORNER_LEFT_UPPER); 
+    CrearLabel("MAIKO_Vered", x+10, y+75, txtVeredicto, clrCyan, 9, CORNER_LEFT_UPPER); 
 
-    CrearLabel("MAIKO_Hoy", x+10, y+125, "GANADO HOY: $0.00", clrSpringGreen, 14, CORNER_LEFT_UPPER); 
+    CrearLabel("MAIKO_Bal", x+10, y+98, "BALANCE: $0.00", clrWhite, 12, CORNER_LEFT_UPPER); 
 
-    CrearLabel("MAIKO_Flot", x+10, y+160, "FLOTANTE: $0.00", clrWhite, 12, CORNER_LEFT_UPPER); 
+    CrearLabel("MAIKO_Hoy", x+10, y+124, "GANADO HOY: $0.00", clrSpringGreen, 13, CORNER_LEFT_UPPER); 
 
-    CrearLabel("MAIKO_MetaTP", x+10, y+190, "ESTADO: BUSCANDO ENTRADA EN M1...", clrYellow, 10, CORNER_LEFT_UPPER); 
+    CrearLabel("MAIKO_Flot", x+10, y+152, "FLOTANTE: $0.00", clrWhite, 12, CORNER_LEFT_UPPER); 
 
-    CrearLabel("MAIKO_TrialUI", x+10, y+215, "TRIAL: DIA 1 DE 30", clrYellow, 11, CORNER_LEFT_UPPER);
+    CrearLabel("MAIKO_MetaTP", x+10, y+180, "ESTADO: BUSCANDO ENTRADA EN M1...", clrYellow, 10, CORNER_LEFT_UPPER); 
+
+    CrearLabel("MAIKO_TrialUI", x+10, y+208, "TRIAL: DIA 1 DE 30", clrYellow, 10, CORNER_LEFT_UPPER);
 
     CrearLabel("MAIKO_Spd", x+w-120, y+65, "SPD: 0.0", clrWhite, 8, CORNER_LEFT_UPPER);  
 
@@ -1094,9 +1095,11 @@ void CrearInterfazMaster() {
 
     CrearLabel("MAIKO_Voz", x+10, y+h-25, txtVoz, ColorMain, 10, CORNER_LEFT_UPPER); 
 
-    CrearBoton("MAIKO_BtnP", x+w-120, y+110, 110, 50, "ENCENDER", clrDarkGreen, clrWhite, CORNER_LEFT_UPPER); 
+    string btnText = BotActivo ? "APAGAR" : "ENCENDER";
+    color btnBg = BotActivo ? clrRed : clrDarkGreen;
+    CrearBoton("MAIKO_BtnP", x+w-120, y+105, 110, 50, btnText, btnBg, clrWhite, CORNER_LEFT_UPPER); 
 
-    CrearBoton("MAIKO_BtnC", x+w-120, y+175, 110, 35, "CERRAR", clrDarkRed, clrWhite, CORNER_LEFT_UPPER); 
+    CrearBoton("MAIKO_BtnC", x+w-120, y+168, 110, 35, "CERRAR", clrDarkRed, clrWhite, CORNER_LEFT_UPPER); 
 
 }
 
@@ -1105,6 +1108,9 @@ void CrearInterfazMaster() {
 void ActualizarInterfazMaster() { 
 
     double multCent = EsCuentaCent ? 100.0 : 1.0; 
+    double balanceActual = AccountInfoDouble(ACCOUNT_BALANCE);
+
+    ObjectSetString(0, "MAIKO_Bal", OBJPROP_TEXT, StringFormat("BALANCE: $%.2f", balanceActual / multCent)); 
 
     ObjectSetString(0, "MAIKO_Hoy", OBJPROP_TEXT, StringFormat("GANADO HOY: $%.2f", ganadoHoy / multCent)); 
 
@@ -1154,7 +1160,7 @@ void ActualizarInterfazMaster() {
 
     ObjectSetString(0, "MAIKO_BtnP", OBJPROP_TEXT, BotActivo ? "APAGAR" : "ENCENDER"); 
 
-    ObjectSetInteger(0, "MAIKO_BtnP", OBJPROP_BGCOLOR, BotActivo ? clrMaroon : clrDarkGreen); 
+    ObjectSetInteger(0, "MAIKO_BtnP", OBJPROP_BGCOLOR, BotActivo ? clrRed : clrDarkGreen); 
 
     
 
@@ -1230,9 +1236,9 @@ void ToggleHUD() {
 
     long tf = hudMinimizado ? OBJ_NO_PERIODS : OBJ_ALL_PERIODS; 
 
-    string objs[] = {"MAIKO_Vered", "MAIKO_Hoy", "MAIKO_Flot", "MAIKO_Spd", "MAIKO_Foot", "MAIKO_Voz", "MAIKO_BtnP", "MAIKO_BtnC", "MAIKO_MetaTP", "MAIKO_TrialUI"}; 
+    string objs[] = {"MAIKO_Vered", "MAIKO_Bal", "MAIKO_Hoy", "MAIKO_Flot", "MAIKO_Spd", "MAIKO_Foot", "MAIKO_Voz", "MAIKO_BtnP", "MAIKO_BtnC", "MAIKO_MetaTP", "MAIKO_TrialUI"}; 
 
-    for(int i=0; i<10; i++) ObjectSetInteger(0, objs[i], OBJPROP_TIMEFRAMES, tf); 
+    for(int i=0; i<ArraySize(objs); i++) ObjectSetInteger(0, objs[i], OBJPROP_TIMEFRAMES, tf); 
 
     string tfs[]={"W1","D1","H4","H1","M15","M5","M1"}; 
 
@@ -1278,6 +1284,7 @@ void OnTimer() {
     ChartSetInteger(0, CHART_FOREGROUND, false);
     ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
     ActualizarEstadoMaster();
+    ActualizarInterfazMaster();
 
     int interval = (ArraySize(pos) > 0) ? 15 : 3600;
 

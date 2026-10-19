@@ -831,23 +831,41 @@ double CalcularProfit() { double s=0; for(int i=0; i<ArraySize(pos); i++) s += (
 
 
 double CalcularGanadoHoy() { 
-
     double total = 0; HistorySelect(iTime(_Symbol, PERIOD_D1, 0), TimeCurrent()); 
-
-    for(int i=HistoryDealsTotal()-1; i>=0; i--) {
-
+    int totalDeals = HistoryDealsTotal();
+    struct DealData { ulong ticket; long magic; long pos_id; double profit; };
+    DealData deals[]; ArrayResize(deals, totalDeals);
+    int valid_deals = 0;
+    
+    for(int i=0; i<totalDeals; i++) {
         ulong t = HistoryDealGetTicket(i);
-
         if(HistoryDealGetString(t, DEAL_SYMBOL) == _Symbol) {
-
-            total += (HistoryDealGetDouble(t, DEAL_PROFIT) + HistoryDealGetDouble(t, DEAL_COMMISSION) + HistoryDealGetDouble(t, DEAL_SWAP));
-
+            deals[valid_deals].ticket = t;
+            deals[valid_deals].magic = HistoryDealGetInteger(t, DEAL_MAGIC);
+            deals[valid_deals].pos_id = HistoryDealGetInteger(t, DEAL_POSITION_ID);
+            deals[valid_deals].profit = HistoryDealGetDouble(t, DEAL_PROFIT) + HistoryDealGetDouble(t, DEAL_COMMISSION) + HistoryDealGetDouble(t, DEAL_SWAP);
+            valid_deals++;
         }
-
     }
-
+    
+    for(int i=0; i<valid_deals; i++) {
+        long d_magic = deals[i].magic;
+        if(d_magic == 0) {
+            if(HistorySelectByPosition(deals[i].pos_id)) {
+                for(int j=0; j<HistoryDealsTotal(); j++) {
+                    ulong t_in = HistoryDealGetTicket(j);
+                    if(HistoryDealGetInteger(t_in, DEAL_ENTRY) == DEAL_ENTRY_IN) {
+                        d_magic = HistoryDealGetInteger(t_in, DEAL_MAGIC);
+                        break;
+                    }
+                }
+            }
+        }
+        if(d_magic == ExpertMagic) total += deals[i].profit;
+    }
+    
+    HistorySelect(0, TimeCurrent());
     return total; 
-
 }
 
 
