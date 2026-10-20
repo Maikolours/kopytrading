@@ -93,19 +93,28 @@ export default function FreeTrialClaimCard({ userEmail, onTrialClaimed }: FreeTr
         </div>
 
         {/* Cupón Card */}
-        <div className="p-4 rounded-2xl bg-slate-950/80 border border-amber-400/30 flex flex-col sm:flex-row items-center justify-between gap-3 max-w-md mx-auto">
-          <div className="text-left">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Código de Cupón 100% OFF</span>
-            <span className="text-xl font-black font-mono text-amber-400 tracking-wider">ACADEMIA100</span>
+        {!isSubmitted ? (
+          <div className="p-4 rounded-2xl bg-slate-950/80 border border-amber-400/30 flex flex-col sm:flex-row items-center justify-between gap-3 max-w-md mx-auto text-left">
+            <div>
+              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Código Promocional 100% OFF</span>
+              <span className="text-xl font-black font-mono text-amber-400 tracking-wider">ACADEMIA100</span>
+              <span className="text-[11px] text-emerald-400 block mt-0.5">✓ Se aplica automáticamente con el botón</span>
+            </div>
+            <button
+              type="button"
+              onClick={handleCopyCoupon}
+              className="px-3.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 text-xs font-bold flex items-center gap-1.5 transition-all shrink-0"
+            >
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {copied ? "¡Copiado!" : "Copiar"}
+            </button>
           </div>
-          <button
-            onClick={handleCopyCoupon}
-            className="px-3.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 text-xs font-bold flex items-center gap-1.5 transition-all"
-          >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-            {copied ? "¡Copiado!" : "Copiar Cupón"}
-          </button>
-        </div>
+        ) : (
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold mx-auto">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            Cupón ACADEMIA100 canjeado y aplicado automáticamente
+          </div>
+        )}
 
         {isSubmitted ? (
           <div className="p-5 rounded-2xl bg-emerald-950/60 border border-emerald-500/60 text-emerald-300 space-y-3 animate-fade-in">
