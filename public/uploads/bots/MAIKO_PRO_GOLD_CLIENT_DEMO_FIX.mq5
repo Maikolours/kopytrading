@@ -1385,7 +1385,7 @@ void EnviarTelemetria() {
 
         "\"pnl_today\":%.2f,\"status\":\"%s\",\"symbol\":\"%s\",\"narrative\":\"%s\","
 
-        "\"armed\":%s,\"isReal\":%s,\"version\":\"11.32\",\"positions\":%s,"
+        "\"armed\":%s,\"isReal\":%s,\"version\":\"11.35\",\"positions\":%s,"
 
         "\"trialExpirado\":%s,\"diasRestantes\":%d}",
 
