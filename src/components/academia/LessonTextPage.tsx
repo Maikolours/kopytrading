@@ -6,30 +6,48 @@ import { LessonPage } from "@/lib/academiaData";
 
 interface LessonTextPageProps {
   pages: LessonPage[];
+  currentPageIdx?: number;
   hasQuiz?: boolean;
   onPageChange?: (pageIdx: number) => void;
   onFinishReading?: () => void;
 }
 
-export default function LessonTextPage({ pages, hasQuiz, onPageChange, onFinishReading }: LessonTextPageProps) {
-  const [currentPageIdx, setCurrentPageIdx] = useState(0);
+export default function LessonTextPage({ pages, currentPageIdx: controlledIdx, hasQuiz, onPageChange, onFinishReading }: LessonTextPageProps) {
+  const [internalPageIdx, setInternalPageIdx] = useState(0);
+
+  const currentPageIdx = controlledIdx !== undefined ? controlledIdx : internalPageIdx;
 
   if (!pages || pages.length === 0) return null;
 
-  const page = pages[currentPageIdx];
+  const page = pages[currentPageIdx] || pages[0];
   const isFirstPage = currentPageIdx === 0;
   const isLastPage = currentPageIdx === pages.length - 1;
+
+  const scrollToLessonTop = () => {
+    if (typeof window === "undefined") return;
+    const anchor = document.getElementById("lesson-top-anchor");
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    const container = document.getElementById("lesson-scroll-container");
+    if (container) {
+      container.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   const handleNext = () => {
     if (!isLastPage) {
       const nextIdx = currentPageIdx + 1;
-      setCurrentPageIdx(nextIdx);
+      setInternalPageIdx(nextIdx);
       onPageChange?.(nextIdx);
+      scrollToLessonTop();
     } else {
       if (hasQuiz) {
         const el = document.getElementById("evaluacion-section");
         if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
         }
       }
       onFinishReading?.();
@@ -39,8 +57,9 @@ export default function LessonTextPage({ pages, hasQuiz, onPageChange, onFinishR
   const handlePrev = () => {
     if (!isFirstPage) {
       const prevIdx = currentPageIdx - 1;
-      setCurrentPageIdx(prevIdx);
+      setInternalPageIdx(prevIdx);
       onPageChange?.(prevIdx);
+      scrollToLessonTop();
     }
   };
 

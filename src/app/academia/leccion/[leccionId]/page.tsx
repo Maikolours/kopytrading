@@ -41,6 +41,18 @@ export default function LessonPlayerPage() {
 
   useEffect(() => {
     setCurrentTextPageIdx(0);
+    if (typeof window !== "undefined") {
+      const anchor = document.getElementById("lesson-top-anchor");
+      if (anchor) {
+        anchor.scrollIntoView({ behavior: "instant", block: "start" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "instant" });
+      }
+      const container = document.getElementById("lesson-scroll-container");
+      if (container) {
+        container.scrollTo({ top: 0, behavior: "instant" });
+      }
+    }
   }, [lessonId]);
 
   useEffect(() => {
@@ -189,7 +201,7 @@ export default function LessonPlayerPage() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-h-[calc(100vh-80px)] overflow-y-auto">
+      <div id="lesson-scroll-container" className="flex-1 flex flex-col min-h-[calc(100vh-80px)] overflow-y-auto">
         {/* Top Breadcrumb Bar */}
         <header className="hidden lg:flex items-center justify-between px-8 py-3.5 bg-[#0A0D14] border-b border-slate-800/80">
           <div className="flex items-center gap-3 text-xs font-mono text-slate-400">
@@ -212,6 +224,7 @@ export default function LessonPlayerPage() {
 
         {/* Content Container */}
         <main className="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6 space-y-6">
+          <div id="lesson-top-anchor" className="scroll-mt-28" />
           {/* Locked Guard Screen (Optimized height and margins) */}
           {isAccessBlocked ? (
             <div className="rounded-2xl bg-[#0F1422] border border-amber-500/30 p-6 md:p-8 text-center space-y-4 shadow-xl max-w-xl mx-auto my-4">
@@ -268,7 +281,9 @@ export default function LessonPlayerPage() {
               {/* Micro-learning Pages Component */}
               {lesson.pages && lesson.pages.length > 0 && (
                 <LessonTextPage
+                  key={lesson.id}
                   pages={lesson.pages}
+                  currentPageIdx={currentTextPageIdx}
                   hasQuiz={Boolean(lesson.quiz)}
                   onPageChange={(idx) => setCurrentTextPageIdx(idx)}
                   onFinishReading={() => {
@@ -314,10 +329,22 @@ export default function LessonPlayerPage() {
 
                   <button
                     onClick={() => {
+                      if (!isLastTextPage) {
+                        const nextIdx = currentTextPageIdx + 1;
+                        setCurrentTextPageIdx(nextIdx);
+                        if (typeof window !== "undefined") {
+                          const anchor = document.getElementById("lesson-top-anchor");
+                          if (anchor) anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+                          const container = document.getElementById("lesson-scroll-container");
+                          if (container) container.scrollTo({ top: 0, behavior: "smooth" });
+                        }
+                        return;
+                      }
+
                       if (!canAdvance) {
                         const el = document.getElementById("evaluacion-section");
                         if (el) {
-                          el.scrollIntoView({ behavior: "smooth" });
+                          el.scrollIntoView({ behavior: "smooth", block: "start" });
                         }
                         return;
                       }
@@ -325,12 +352,19 @@ export default function LessonPlayerPage() {
                       handleNextLesson();
                     }}
                     className={`w-full sm:w-auto px-6 py-3 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 transition-all shadow-lg ${
-                      canAdvance
+                      !isLastTextPage
+                        ? "bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-amber-500/20"
+                        : canAdvance
                         ? "bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-emerald-500/20"
                         : "bg-slate-900 border border-amber-500/40 text-amber-300 hover:bg-slate-800"
                     }`}
                   >
-                    {canAdvance ? (
+                    {!isLastTextPage ? (
+                      <>
+                        <span>Siguiente página ({currentTextPageIdx + 2}/{lesson.pages?.length || 1})</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </>
+                    ) : canAdvance ? (
                       <>
                         <CheckCircle2 className="w-4 h-4 text-slate-950" />
                         {isLessonCompleted ? "Lección Completada - Siguiente" : "Avanzar a la Siguiente Lección"}
@@ -346,7 +380,9 @@ export default function LessonPlayerPage() {
                 </div>
 
                 <p className="text-[10px] font-mono text-slate-500 text-center">
-                  Completa la evaluación correctamente para registrar tu avance y desbloquear las siguientes lecciones.
+                  {!isLastTextPage
+                    ? `Página ${currentTextPageIdx + 1} de ${lesson.pages?.length || 1}. Avanza a la siguiente página para ver todo el temario.`
+                    : "Completa la evaluación correctamente para registrar tu avance y desbloquear las siguientes lecciones."}
                 </p>
               </div>
             </>
