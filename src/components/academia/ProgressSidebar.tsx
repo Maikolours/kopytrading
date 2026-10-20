@@ -44,6 +44,7 @@ export default function ProgressSidebar({
 
   // Helper to determine if a lesson is sequentially unlocked
   const isLessonUnlocked = (lesson: Lesson): boolean => {
+    if (userRole === "ADMIN") return true;
     if (lesson.globalIndex === 1) return true; // First lesson always open
     // Find lesson with globalIndex - 1
     for (const mod of ACADEMIA_MODULES) {

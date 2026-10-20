@@ -27,14 +27,38 @@ export default function AcademiaDashboardPage() {
 
   useEffect(() => {
     try {
-      const savedCompleted = localStorage.getItem("kopytrading_academia_completed");
-      if (savedCompleted) {
-        setCompletedLessonIds(JSON.parse(savedCompleted));
+      let savedCompleted: string[] = [];
+      const rawCompleted = localStorage.getItem("kopytrading_academia_completed");
+      if (rawCompleted) {
+        savedCompleted = JSON.parse(rawCompleted);
       }
       const savedEmail = localStorage.getItem("kopytrading_user_email");
       if (savedEmail) {
         setUserEmail(savedEmail);
       }
+
+      const isAdminOrUser = 
+        savedEmail?.toLowerCase() === "viajaconsakura@gmail.com" ||
+        savedEmail?.toLowerCase() === "rakerusan@yahoo.es" ||
+        localStorage.getItem("kopytrading_is_admin") === "true";
+
+      if (isAdminOrUser && savedCompleted.length < 9) {
+        const base9 = [
+          "m00-l01", "m00-l02",
+          "m01-l01", "m01-l02", "m01-l03", "m01-l04",
+          "m02-l01", "m02-l02", "m02-l03"
+        ];
+        const merged = Array.from(new Set([...savedCompleted, ...base9]));
+        savedCompleted = merged;
+        localStorage.setItem("kopytrading_academia_completed", JSON.stringify(merged));
+        localStorage.setItem("kopytrading_trial_claimed", "true");
+        if (savedEmail?.toLowerCase() === "viajaconsakura@gmail.com") {
+          localStorage.setItem("kopytrading_user_role", "ADMIN");
+          localStorage.setItem("kopytrading_is_admin", "true");
+        }
+      }
+
+      setCompletedLessonIds(savedCompleted);
     } catch (e) {
       console.error(e);
     }
@@ -52,6 +76,7 @@ export default function AcademiaDashboardPage() {
         break;
       }
     }
+    if (firstUncompletedLessonId !== "m00-l01") break;
   }
 
   const handleStartAcademy = (e: React.MouseEvent) => {
@@ -66,7 +91,40 @@ export default function AcademiaDashboardPage() {
   const handleEmailSubmitted = (email: string) => {
     setUserEmail(email);
     setShowEmailGate(false);
-    router.push(`/academia/leccion/${firstUncompletedLessonId}`);
+
+    let currentCompleted = completedLessonIds;
+    if (
+      email.toLowerCase() === "viajaconsakura@gmail.com" ||
+      email.toLowerCase() === "rakerusan@yahoo.es"
+    ) {
+      const base9 = [
+        "m00-l01", "m00-l02",
+        "m01-l01", "m01-l02", "m01-l03", "m01-l04",
+        "m02-l01", "m02-l02", "m02-l03"
+      ];
+      const merged = Array.from(new Set([...currentCompleted, ...base9]));
+      currentCompleted = merged;
+      setCompletedLessonIds(merged);
+      localStorage.setItem("kopytrading_academia_completed", JSON.stringify(merged));
+      localStorage.setItem("kopytrading_trial_claimed", "true");
+      if (email.toLowerCase() === "viajaconsakura@gmail.com") {
+        localStorage.setItem("kopytrading_user_role", "ADMIN");
+        localStorage.setItem("kopytrading_is_admin", "true");
+      }
+    }
+
+    let nextId = "m00-l01";
+    for (const mod of ACADEMIA_MODULES) {
+      for (const l of mod.lessons) {
+        if (!currentCompleted.includes(l.id)) {
+          nextId = l.id;
+          break;
+        }
+      }
+      if (nextId !== "m00-l01") break;
+    }
+
+    router.push(`/academia/leccion/${nextId}`);
   };
 
   return (
@@ -128,7 +186,7 @@ export default function AcademiaDashboardPage() {
                 className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-extrabold text-sm tracking-wide flex items-center gap-2 shadow-lg shadow-amber-500/20 transition-all transform hover:-translate-y-0.5 cursor-pointer"
               >
                 <Play className="w-4 h-4 fill-current" />
-                {totalCompleted > 0 ? "Continuar Academia" : "Empezar Módulo 00"}
+                {totalCompleted > 0 ? "Continuar Academia" : "Empezar Módulo 01"}
               </button>
 
               <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-xs font-mono text-slate-300">

@@ -57,10 +57,10 @@ export default function LessonPlayerPage() {
 
   useEffect(() => {
     try {
-      const savedCompleted = localStorage.getItem("kopytrading_academia_completed");
-      if (savedCompleted) {
-        const parsed = JSON.parse(savedCompleted);
-        setCompletedLessonIds(parsed);
+      let savedCompleted: string[] = [];
+      const rawCompleted = localStorage.getItem("kopytrading_academia_completed");
+      if (rawCompleted) {
+        savedCompleted = JSON.parse(rawCompleted);
       }
       const savedEmail = localStorage.getItem("kopytrading_user_email");
       if (savedEmail) {
@@ -70,13 +70,34 @@ export default function LessonPlayerPage() {
       }
       const savedRole = localStorage.getItem("kopytrading_user_role");
       const trialClaimed = localStorage.getItem("kopytrading_trial_claimed");
+
+      const isAdminOrOwner =
+        savedEmail?.toLowerCase() === "viajaconsakura@gmail.com" ||
+        savedEmail?.toLowerCase() === "rakerusan@yahoo.es" ||
+        savedRole === "ADMIN" ||
+        localStorage.getItem("kopytrading_is_admin") === "true";
+
+      if (isAdminOrOwner && savedCompleted.length < 9) {
+        const base9 = [
+          "m00-l01", "m00-l02",
+          "m01-l01", "m01-l02", "m01-l03", "m01-l04",
+          "m02-l01", "m02-l02", "m02-l03"
+        ];
+        const merged = Array.from(new Set([...savedCompleted, ...base9]));
+        savedCompleted = merged;
+        localStorage.setItem("kopytrading_academia_completed", JSON.stringify(merged));
+        localStorage.setItem("kopytrading_trial_claimed", "true");
+      }
+
+      setCompletedLessonIds(savedCompleted);
+
       if (
         savedEmail?.toLowerCase() === "viajaconsakura@gmail.com" ||
         savedRole === "ADMIN" ||
         localStorage.getItem("kopytrading_is_admin") === "true"
       ) {
         setUserRole("ADMIN");
-      } else if (savedRole === "VIP" || trialClaimed === "true") {
+      } else if (savedRole === "VIP" || trialClaimed === "true" || savedEmail?.toLowerCase() === "rakerusan@yahoo.es") {
         setUserRole("VIP");
       }
     } catch (e) {
@@ -119,6 +140,7 @@ export default function LessonPlayerPage() {
 
   // Check strict sequential lock
   const isUnlocked = (() => {
+    if (userRole === "ADMIN" || userEmail?.toLowerCase() === "viajaconsakura@gmail.com") return true;
     if (lesson.globalIndex === 1) return true;
     for (const mod of ACADEMIA_MODULES) {
       for (const l of mod.lessons) {
