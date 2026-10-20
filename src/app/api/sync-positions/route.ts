@@ -457,7 +457,7 @@ export async function POST(req: Request) {
             tf_trend: body.tf_trend || "PERIOD_H1",
             tf_fibo: body.tf_fibo || "PERIOD_M15",
             tf_entry: body.tf_entry || "PERIOD_M5",
-            version: body.version || "11.35",
+            version: (body.version === "11.32" || !body.version) ? "11.35" : body.version,
             
             // Maiko Pro Gold FIX Native Telemetry
             loteAtaque: Number(body.loteAtaque) || Number(body.lots) || 0.01,
