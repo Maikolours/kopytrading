@@ -497,6 +497,7 @@ export async function POST(req: Request) {
                 ...rawSettings,
                 ...(body.proposedSettings || {}),
                 ...telemetry,
+                version: (rawSettings.version === "11.35" && body.version && body.version !== "11.35") ? "11.35" : (body.version || rawSettings.version || "11.35"),
                 balance: telemetry.balance,
                 equity: telemetry.equity,
                 pnl_today: telemetry.pnl_today,

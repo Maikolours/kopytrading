@@ -90,7 +90,7 @@ export async function GET(req: Request) {
             include: {
                 user: true,
                 botProduct: true,
-                licenseSession: true
+                licenseSessions: true
             },
             orderBy: { updatedAt: "desc" }
         });
@@ -131,7 +131,7 @@ export async function GET(req: Request) {
                 instrument: d.botProduct?.instrument || "XAUUSD",
                 version: d.lastDownloadedVersion,
                 date: d.updatedAt,
-                account: d.licenseSession?.account || "N/A",
+                account: d.licenseSessions?.account || "N/A",
                 balance: d.balance || 0,
                 equity: d.equity || 0,
                 isOnline: isBotOnline,
