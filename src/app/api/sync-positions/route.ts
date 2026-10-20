@@ -328,23 +328,23 @@ export async function POST(req: Request) {
                     });
                 }
             }
-            
-            // Actualizar/Crear la sesión de la licencia vinculándola a este número de cuenta de MT5
-            await prisma.licenseSession.upsert({
-                where: { purchaseId: officialPurchaseId },
-                update: { 
-                    account: accountStr, 
-                    lastActivity: new Date(), 
-                    isActive: true 
-                },
-                create: { 
-                    purchaseId: officialPurchaseId, 
-                    account: accountStr, 
-                    lastActivity: new Date(), 
-                    isActive: true 
-                }
-            });
         }
+            
+        // Actualizar/Crear la sesión de la licencia vinculándola a este número de cuenta de MT5
+        await prisma.licenseSession.upsert({
+            where: { purchaseId: officialPurchaseId },
+            update: { 
+                account: accountStr, 
+                lastActivity: new Date(), 
+                isActive: true 
+            },
+            create: { 
+                purchaseId: officialPurchaseId, 
+                account: accountStr, 
+                lastActivity: new Date(), 
+                isActive: true 
+            }
+        });
 
         // Actualizar latido de conexión y telemetría (Sincro Supreme v1.5)
         const isFirstSync = !purchase.lastSync;

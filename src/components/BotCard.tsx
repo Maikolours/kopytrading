@@ -7,7 +7,7 @@ import { Button } from "./ui/Button";
 import { BotRemoteControl } from "./BotRemoteControl";
 import { SyncStatus } from "./SyncStatus";
 import { CleanupButton } from "./CleanupButton";
-import { Copy, CheckCircle2 } from "lucide-react";
+import { Copy, CheckCircle2, Eye, EyeOff } from "lucide-react";
 import { OperativoChart } from "./OperativoChart";
 
 interface BotCardProps {
@@ -54,6 +54,7 @@ export const BotCard = memo(function BotCard({
     ])).filter(Boolean);
 
     const [selectedAccount, setSelectedAccount] = useState(accounts[0] || "unknown");
+    const [showLicense, setShowLicense] = useState(false);
 
     // Sincronizar selectedAccount si cambian las variantes o la compra seleccionada
     useEffect(() => {
@@ -298,12 +299,25 @@ export const BotCard = memo(function BotCard({
                             </div>
 
                             <div className="p-3 rounded-xl bg-black/60 border border-brand/20 shadow-xl">
-                                <p className="text-[8px] text-brand-light uppercase tracking-widest font-black mb-2 flex items-center gap-2">
-                                    LICENCIA MT5
-                                </p>
+                                <div className="flex items-center justify-between mb-2">
+                                    <p className="text-[8px] text-brand-light uppercase tracking-widest font-black flex items-center gap-1.5">
+                                        🔒 LICENCIA MT5
+                                    </p>
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowLicense(!showLicense)}
+                                        className="text-[9px] text-white/60 hover:text-white flex items-center gap-1 transition-colors px-2 py-0.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10"
+                                        title={showLicense ? "Ocultar clave de licencia" : "Mostrar clave de licencia"}
+                                    >
+                                        {showLicense ? <EyeOff size={11} /> : <Eye size={11} />}
+                                        <span className="text-[7.5px] uppercase font-bold tracking-wider">{showLicense ? "Ocultar" : "Mostrar"}</span>
+                                    </button>
+                                </div>
                                 <div className="flex items-center gap-2">
-                                    <code className="text-[11px] font-black font-mono text-white select-all py-2.5 px-3 bg-white/5 rounded-xl border border-white/10 flex-1 truncate">
-                                        {purchase?.id || "N/A"}
+                                    <code className="text-[11px] font-black font-mono text-white select-all py-2.5 px-3 bg-white/5 rounded-xl border border-white/10 flex-1 truncate tracking-wider">
+                                        {showLicense 
+                                            ? (purchase?.id || "N/A") 
+                                            : (purchase?.id ? `${purchase.id.substring(0, 4)}••••••••••••••••${purchase.id.substring(purchase.id.length - 4)}` : "••••••••••••••••")}
                                     </code>
                                     <button 
                                         type="button"
@@ -313,7 +327,7 @@ export const BotCard = memo(function BotCard({
                                                 : 'bg-brand hover:bg-brand-light text-white shadow-brand/30 hover:shadow-brand/50'
                                         }`}
                                         onClick={() => onCopy(purchase?.id || "")}
-                                        title="Copiar clave de licencia"
+                                        title="Copiar clave de licencia al portapapeles"
                                     >
                                         {copiedId === purchase?.id ? (
                                             <>

@@ -64,33 +64,84 @@ export async function GET(req: Request) {
             orderBy: { lastActivity: "desc" }
         });
 
-        const activeSessions = licenseSessions.map(session => ({
-            id: session.id,
-            account: session.account,
-            lastActivity: session.purchase?.lastSync || session.lastActivity,
-            isActive: session.isActive,
-            userEmail: session.purchase?.user?.email || "unknown",
-            userName: session.purchase?.user?.name || "unknown",
-            botName: session.purchase?.botProduct?.name || "unknown",
-            balance: session.purchase?.balance || 0,
-            equity: session.purchase?.equity || 0,
-            status: session.purchase?.lastStatus || "unknown"
-        }));
+        const now = Date.now();
+        const activeSessions = licenseSessions.map(session => {
+            const lastTime = new Date(session.purchase?.lastSync || session.lastActivity).getTime();
+            const isLive = !isNaN(lastTime) && (now - lastTime) < 15 * 60 * 1000;
+            return {
+                id: session.id,
+                account: session.account,
+                lastActivity: session.purchase?.lastSync || session.lastActivity,
+                isActive: isLive,
+                userEmail: session.purchase?.user?.email || "unknown",
+                userName: session.purchase?.user?.name || "unknown",
+                botName: session.purchase?.botProduct?.name || "unknown",
+                balance: session.purchase?.balance || 0,
+                equity: session.purchase?.equity || 0,
+                status: isLive ? (session.purchase?.lastStatus || "ONLINE") : "OFFLINE"
+            };
+        });
 
-        // 4. Historial de descargas realizadas por usuarios
-        const downloadsRaw = await prisma.purchase.findMany({
+        // 4. Historial de descargas sintetizado por usuario
+        const allDownloadsRaw = await prisma.purchase.findMany({
             where: {
                 lastDownloadedVersion: { not: null }
             },
             include: {
                 user: true,
-                botProduct: true
+                botProduct: true,
+                licenseSession: true
             },
-            orderBy: { updatedAt: "desc" },
-            take: 30
+            orderBy: { updatedAt: "desc" }
         });
 
-        const downloads = downloadsRaw.map(d => ({
+        const userDownloadsMap = new Map<string, any>();
+
+        for (const d of allDownloadsRaw) {
+            const email = d.user?.email || "unknown";
+            const lastSyncTime = d.lastSync ? new Date(d.lastSync).getTime() : 0;
+            const isBotOnline = !isNaN(lastSyncTime) && (now - lastSyncTime) < 15 * 60 * 1000;
+
+            if (!userDownloadsMap.has(email)) {
+                userDownloadsMap.set(email, {
+                    userId: d.userId,
+                    userEmail: email,
+                    userName: d.user?.name || "Usuario",
+                    totalDownloads: 0,
+                    bots: [] as string[],
+                    isOnline: false,
+                    lastDownloadedAt: d.updatedAt,
+                    items: [] as any[]
+                });
+            }
+
+            const userGroup = userDownloadsMap.get(email);
+            userGroup.totalDownloads += 1;
+            if (isBotOnline) userGroup.isOnline = true;
+            if (d.botProduct?.name && !userGroup.bots.includes(d.botProduct.name)) {
+                userGroup.bots.push(d.botProduct.name);
+            }
+            if (new Date(d.updatedAt) > new Date(userGroup.lastDownloadedAt)) {
+                userGroup.lastDownloadedAt = d.updatedAt;
+            }
+
+            userGroup.items.push({
+                purchaseId: d.id,
+                botName: d.botProduct?.name || "unknown",
+                instrument: d.botProduct?.instrument || "XAUUSD",
+                version: d.lastDownloadedVersion,
+                date: d.updatedAt,
+                account: d.licenseSession?.account || "N/A",
+                balance: d.balance || 0,
+                equity: d.equity || 0,
+                isOnline: isBotOnline,
+                status: d.lastStatus || "unknown"
+            });
+        }
+
+        const groupedDownloads = Array.from(userDownloadsMap.values());
+
+        const downloads = allDownloadsRaw.slice(0, 30).map(d => ({
             id: d.id,
             userEmail: d.user?.email || "unknown",
             userName: d.user?.name || "unknown",
@@ -110,7 +161,8 @@ export async function GET(req: Request) {
             recentUsers,
             sales,
             activeSessions,
-            downloads
+            downloads,
+            groupedDownloads
         });
 
     } catch (error: any) {

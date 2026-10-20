@@ -64,7 +64,7 @@ export default async function DashboardPage() {
     const serializedPurchases = JSON.parse(JSON.stringify(purchases));
 
     return (
-        <div className="min-h-screen pt-14 sm:pt-16 pb-8 px-2 sm:px-6 lg:px-8 w-full max-w-full overflow-x-hidden">
+        <div className="min-h-screen pt-28 sm:pt-32 pb-8 px-2 sm:px-6 lg:px-8 w-full max-w-full overflow-x-hidden">
             <DashboardRefresher />
             <div className="max-w-5xl mx-auto">
                 <div className="mb-3 pb-2 border-b border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2">

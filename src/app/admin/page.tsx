@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
@@ -29,6 +29,16 @@ export default function AdminPage() {
     const [pdfPath, setPdfPath] = useState("");
     const [updateMessage, setUpdateMessage] = useState("");
     const [updating, setUpdating] = useState(false);
+    const [expandedUserEmail, setExpandedUserEmail] = useState<string | null>(null);
+    const [copiedEmails, setCopiedEmails] = useState(false);
+
+    const copyUserEmails = () => {
+        if (!metrics?.recentUsers) return;
+        const emails = metrics.recentUsers.map((u: any) => u.email).filter(Boolean).join(", ");
+        navigator.clipboard.writeText(emails);
+        setCopiedEmails(true);
+        setTimeout(() => setCopiedEmails(false), 2500);
+    };
 
     // Bloqueo y redirección de seguridad
     useEffect(() => {
@@ -338,7 +348,17 @@ export default function AdminPage() {
                             
                             {/* Column 1: Recent Users */}
                             <div className="glass-card border border-white/10 p-6 rounded-2xl space-y-4">
-                                <h3 className="text-lg font-bold text-white">Últimos Registros</h3>
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-lg font-bold text-white">Últimos Registros</h3>
+                                    <button
+                                        type="button"
+                                        onClick={copyUserEmails}
+                                        className="text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg bg-brand/20 hover:bg-brand text-brand-light hover:text-white border border-brand/40 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+                                        title="Copiar todos los correos registrados para campañas de Email Marketing"
+                                    >
+                                        <span>{copiedEmails ? "✓ ¡COPIADOS!" : "📋 COPIAR EMAILS"}</span>
+                                    </button>
+                                </div>
                                 <div className="overflow-y-auto max-h-[300px]">
                                     <table className="w-full text-left border-collapse">
                                         <thead>
@@ -385,17 +405,22 @@ export default function AdminPage() {
                                 </div>
                             </div>
 
-                            {/* Column 2: Recent Downloads */}
+                            {/* Column 2: Recent Downloads (Grouped by User) */}
                             <div className="glass-card border border-white/10 p-6 rounded-2xl space-y-4">
-                                <h3 className="text-lg font-bold text-white">Historial de Descargas</h3>
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-lg font-bold text-white">Historial de Descargas</h3>
+                                    <span className="text-[10px] text-text-muted font-mono font-bold bg-white/5 px-2 py-0.5 rounded-full border border-white/10">
+                                        {metrics?.groupedDownloads?.length || 0} usuarios únicos
+                                    </span>
+                                </div>
                                 <div className="overflow-y-auto max-h-[300px]">
                                     <table className="w-full text-left border-collapse">
                                         <thead>
                                             <tr className="border-b border-white/10 text-xs text-text-muted uppercase tracking-wider">
                                                 <th className="py-2 px-3 font-semibold">Usuario</th>
-                                                <th className="py-2 px-3 font-semibold">Bot / EA</th>
-                                                <th className="py-2 px-3 font-semibold">Fecha</th>
-                                                <th className="py-2 px-3 font-semibold text-right">Acción</th>
+                                                <th className="py-2 px-3 font-semibold">Bots</th>
+                                                <th className="py-2 px-3 font-semibold text-center">Total</th>
+                                                <th className="py-2 px-3 font-semibold text-right">Live</th>
                                             </tr>
                                         </thead>
                                         <tbody className="text-xs text-white divide-y divide-white/5">
@@ -403,28 +428,84 @@ export default function AdminPage() {
                                                 <tr>
                                                     <td colSpan={4} className="py-4 text-center text-text-muted">Cargando...</td>
                                                 </tr>
-                                            ) : !metrics?.downloads || metrics.downloads.length === 0 ? (
+                                            ) : !metrics?.groupedDownloads || metrics.groupedDownloads.length === 0 ? (
                                                 <tr>
                                                     <td colSpan={4} className="py-4 text-center text-text-muted">No hay descargas registradas.</td>
                                                 </tr>
                                             ) : (
-                                                metrics.downloads.map((d: any) => (
-                                                    <tr key={d.id} className="hover:bg-white/5 transition-all">
-                                                        <td className="py-2 px-3 font-semibold">{d.userEmail}</td>
-                                                        <td className="py-2 px-3 text-brand-light font-semibold">{d.botName}</td>
-                                                        <td className="py-2 px-3 text-text-muted">
-                                                            {new Date(d.downloadedAt).toLocaleDateString()}
-                                                        </td>
-                                                        <td className="py-2 px-3 text-right">
-                                                            <button
-                                                                onClick={() => handleDeleteRecord("purchase", d.id, `${d.userEmail} - ${d.botName}`)}
-                                                                title="Eliminar este registro de descarga"
-                                                                className="p-1 rounded bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-white transition-all text-xs"
-                                                            >
-                                                                🗑️
-                                                            </button>
-                                                        </td>
-                                                    </tr>
+                                                metrics.groupedDownloads.map((group: any) => (
+                                                    <React.Fragment key={group.userEmail}>
+                                                        <tr 
+                                                            onClick={() => setExpandedUserEmail(expandedUserEmail === group.userEmail ? null : group.userEmail)}
+                                                            className="hover:bg-white/5 transition-all cursor-pointer group"
+                                                        >
+                                                            <td className="py-2.5 px-3">
+                                                                <p className="font-semibold text-white group-hover:text-brand-light transition-colors">{group.userEmail}</p>
+                                                                <p className="text-[10px] text-text-muted">{group.userName}</p>
+                                                            </td>
+                                                            <td className="py-2.5 px-3">
+                                                                <div className="flex flex-wrap gap-1">
+                                                                    {group.bots.map((b: string, idx: number) => (
+                                                                        <span key={idx} className="text-[8.5px] px-1.5 py-0.5 rounded bg-brand/10 border border-brand/20 text-brand-light font-medium whitespace-nowrap">
+                                                                            {b.replace("MAIKO PRO GOLD ", "").replace(" FIX", "")}
+                                                                        </span>
+                                                                    ))}
+                                                                </div>
+                                                            </td>
+                                                            <td className="py-2.5 px-3 text-center">
+                                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10 text-white font-black text-[9px] hover:bg-brand hover:text-white transition-all shadow-sm">
+                                                                    📦 {group.totalDownloads}
+                                                                    <span className="text-[8px] opacity-60">{expandedUserEmail === group.userEmail ? '▲' : '▼'}</span>
+                                                                </span>
+                                                            </td>
+                                                            <td className="py-2.5 px-3 text-right">
+                                                                <span className={`inline-flex items-center gap-1 text-[8px] font-black uppercase px-2 py-0.5 rounded-full ${group.isOnline ? 'bg-success/20 text-success border border-success/30' : 'bg-white/5 text-text-muted border border-white/10'}`}>
+                                                                    <span className={`w-1.5 h-1.5 rounded-full ${group.isOnline ? 'bg-success animate-ping' : 'bg-white/30'}`} />
+                                                                    {group.isOnline ? 'ONLINE' : 'OFFLINE'}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                        {expandedUserEmail === group.userEmail && (
+                                                            <tr className="bg-black/40 border-b border-brand/20">
+                                                                <td colSpan={4} className="p-3">
+                                                                    <div className="space-y-2 bg-surface/60 p-3 rounded-xl border border-white/10">
+                                                                        <p className="text-[9px] font-black text-brand-light uppercase tracking-widest flex items-center justify-between">
+                                                                            <span>Desglose de descargas y terminales ({group.userEmail}):</span>
+                                                                            <span className="text-white/40 font-mono text-[8px]">Última actividad: {new Date(group.lastDownloadedAt).toLocaleDateString()}</span>
+                                                                        </p>
+                                                                        <div className="space-y-1.5 max-h-[160px] overflow-y-auto divide-y divide-white/5">
+                                                                            {group.items.map((it: any) => (
+                                                                                <div key={it.purchaseId} className="pt-1.5 first:pt-0 flex items-center justify-between text-[10px] gap-2">
+                                                                                    <div className="space-y-0.5 min-w-0">
+                                                                                        <p className="font-bold text-white truncate">{it.botName}</p>
+                                                                                        <p className="text-[9px] text-text-muted font-mono">
+                                                                                            v{it.version || '1.0'} · Cuenta: <span className="text-brand-light font-bold">#{it.account}</span>
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <div className="flex items-center gap-2 shrink-0">
+                                                                                        <span className="text-text-muted text-[9px]">{new Date(it.date).toLocaleDateString()}</span>
+                                                                                        <span className={`font-mono text-[9px] font-bold ${it.isOnline ? 'text-success' : 'text-text-muted'}`}>
+                                                                                            ${Number(it.balance || 0).toFixed(2)}
+                                                                                        </span>
+                                                                                        <button
+                                                                                            onClick={(e) => {
+                                                                                                e.stopPropagation();
+                                                                                                handleDeleteRecord("purchase", it.purchaseId, `${group.userEmail} - ${it.botName}`);
+                                                                                            }}
+                                                                                            className="p-1 rounded bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white transition-all text-[9px]"
+                                                                                            title="Eliminar este registro"
+                                                                                        >
+                                                                                            🗑️
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        )}
+                                                    </React.Fragment>
                                                 ))
                                             )}
                                         </tbody>
