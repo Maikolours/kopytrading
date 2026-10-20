@@ -51,7 +51,7 @@ export interface Module {
 export const ACADEMIA_MODULES: Module[] = [
   {
     id: "modulo-00",
-    moduleNumberStr: "00",
+    moduleNumberStr: "01",
     title: "BIENVENIDA Y EXPECTATIVAS REALES",
     subtitle: "Primeros pasos y mentalidad",
     description: "Comprende qué es el trading algorítmico, por qué la gestión de riesgo lo es todo y cómo evitar los errores comunes del principiante.",
@@ -167,7 +167,7 @@ export const ACADEMIA_MODULES: Module[] = [
   },
   {
     id: "modulo-01",
-    moduleNumberStr: "01",
+    moduleNumberStr: "02",
     title: "MERCADOS, VELAS Y ESTRUCTURA TÉCNICA",
     subtitle: "Cómo se mueve el precio en M5 y cómo lo lee el bot",
     description: "Domina la anatomía de las velas japonesas, la lectura de mechas de rechazo, las tendencias y la volatilidad institucional en el Oro (XAUUSD).",
@@ -392,7 +392,7 @@ export const ACADEMIA_MODULES: Module[] = [
   },
   {
     id: "modulo-02",
-    moduleNumberStr: "02",
+    moduleNumberStr: "03",
     title: "GESTIÓN DE RIESGO Y CONTROL DE CAPITAL",
     subtitle: "Reglas fundamentales de supervivencia y graduación",
     description: "Aprende a proteger tu dinero, calcular el volumen según tu balance y desbloquea tu cupón para la prueba gratuita de 30 días.",
@@ -531,7 +531,7 @@ export const ACADEMIA_MODULES: Module[] = [
   },
   {
     id: "modulo-03",
-    moduleNumberStr: "03",
+    moduleNumberStr: "04",
     title: "CÓMO FUNCIONAN LOS BOTS DE TRADING",
     subtitle: "Iniciación al trading automático y servidores",
     description: "Descubre cómo los algoritmos leen los gráficos, ejecutan órdenes 24/7 sin emociones y por qué se utiliza un VPS.",
@@ -620,7 +620,7 @@ export const ACADEMIA_MODULES: Module[] = [
   },
   {
     id: "modulo-04",
-    moduleNumberStr: "04",
+    moduleNumberStr: "05",
     title: "PUESTA EN MARCHA DE TU BOT KOPYTRADING",
     subtitle: "Módulo VIP de Instalación y Operativa Práctica",
     description: "Guía técnica paso a paso para la instalación en MetaTrader 5, permisos WebRequest, configuración de lotajes, gestión SOS y protocolo de corte los viernes a las 19:00.",
