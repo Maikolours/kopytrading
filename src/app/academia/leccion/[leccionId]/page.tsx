@@ -23,11 +23,13 @@ import LessonTextPage from "@/components/academia/LessonTextPage";
 import ModuleCompletedModal from "@/components/academia/ModuleCompletedModal";
 import FreeTrialClaimCard from "@/components/academia/FreeTrialClaimCard";
 import EmailGateModal from "@/components/academia/EmailGateModal";
+import { useSession } from "next-auth/react";
 
 export default function LessonPlayerPage() {
   const params = useParams();
   const router = useRouter();
   const lessonId = params?.leccionId as string;
+  const { data: session } = useSession();
 
   const [completedLessonIds, setCompletedLessonIds] = useState<string[]>([]);
   const [showModuleModal, setShowModuleModal] = useState(false);
@@ -62,18 +64,22 @@ export default function LessonPlayerPage() {
       if (rawCompleted) {
         savedCompleted = JSON.parse(rawCompleted);
       }
-      const savedEmail = localStorage.getItem("kopytrading_user_email");
+      const savedEmail = localStorage.getItem("kopytrading_user_email") || session?.user?.email || null;
       if (savedEmail) {
         setUserEmail(savedEmail);
+        localStorage.setItem("kopytrading_user_email", savedEmail);
       } else {
         setShowEmailGate(true);
       }
       const savedRole = localStorage.getItem("kopytrading_user_role");
       const trialClaimed = localStorage.getItem("kopytrading_trial_claimed");
 
+      const effectiveEmail = session?.user?.email || savedEmail;
+
       const isAdminOrOwner =
-        savedEmail?.toLowerCase() === "viajaconsakura@gmail.com" ||
-        savedEmail?.toLowerCase() === "rakerusan@yahoo.es" ||
+        effectiveEmail?.toLowerCase() === "viajaconsakura@gmail.com" ||
+        effectiveEmail?.toLowerCase() === "rakerusan@yahoo.es" ||
+        (session?.user as any)?.role === "ADMIN" ||
         savedRole === "ADMIN" ||
         localStorage.getItem("kopytrading_is_admin") === "true";
 
@@ -92,18 +98,19 @@ export default function LessonPlayerPage() {
       setCompletedLessonIds(savedCompleted);
 
       if (
-        savedEmail?.toLowerCase() === "viajaconsakura@gmail.com" ||
+        effectiveEmail?.toLowerCase() === "viajaconsakura@gmail.com" ||
+        (session?.user as any)?.role === "ADMIN" ||
         savedRole === "ADMIN" ||
         localStorage.getItem("kopytrading_is_admin") === "true"
       ) {
         setUserRole("ADMIN");
-      } else if (savedRole === "VIP" || trialClaimed === "true" || savedEmail?.toLowerCase() === "rakerusan@yahoo.es") {
+      } else if (savedRole === "VIP" || trialClaimed === "true" || effectiveEmail?.toLowerCase() === "rakerusan@yahoo.es") {
         setUserRole("VIP");
       }
     } catch (e) {
       console.error(e);
     }
-  }, []);
+  }, [session]);
 
   const lessonData = getLessonById(lessonId);
 

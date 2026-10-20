@@ -18,9 +18,11 @@ import {
 import { ACADEMIA_MODULES, TOTAL_LESSONS_COUNT } from "@/lib/academiaData";
 import { Navbar } from "@/components/Navbar";
 import EmailGateModal from "@/components/academia/EmailGateModal";
+import { useSession } from "next-auth/react";
 
 export default function AcademiaDashboardPage() {
   const router = useRouter();
+  const { data: session } = useSession();
   const [completedLessonIds, setCompletedLessonIds] = useState<string[]>([]);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [showEmailGate, setShowEmailGate] = useState(false);
@@ -32,14 +34,18 @@ export default function AcademiaDashboardPage() {
       if (rawCompleted) {
         savedCompleted = JSON.parse(rawCompleted);
       }
-      const savedEmail = localStorage.getItem("kopytrading_user_email");
+      const savedEmail = localStorage.getItem("kopytrading_user_email") || session?.user?.email || null;
       if (savedEmail) {
         setUserEmail(savedEmail);
+        localStorage.setItem("kopytrading_user_email", savedEmail);
       }
 
+      const effectiveEmail = session?.user?.email || savedEmail;
+
       const isAdminOrUser = 
-        savedEmail?.toLowerCase() === "viajaconsakura@gmail.com" ||
-        savedEmail?.toLowerCase() === "rakerusan@yahoo.es" ||
+        effectiveEmail?.toLowerCase() === "viajaconsakura@gmail.com" ||
+        effectiveEmail?.toLowerCase() === "rakerusan@yahoo.es" ||
+        (session?.user as any)?.role === "ADMIN" ||
         localStorage.getItem("kopytrading_is_admin") === "true";
 
       if (isAdminOrUser && savedCompleted.length < 9) {
@@ -52,7 +58,7 @@ export default function AcademiaDashboardPage() {
         savedCompleted = merged;
         localStorage.setItem("kopytrading_academia_completed", JSON.stringify(merged));
         localStorage.setItem("kopytrading_trial_claimed", "true");
-        if (savedEmail?.toLowerCase() === "viajaconsakura@gmail.com") {
+        if (effectiveEmail?.toLowerCase() === "viajaconsakura@gmail.com") {
           localStorage.setItem("kopytrading_user_role", "ADMIN");
           localStorage.setItem("kopytrading_is_admin", "true");
         }
@@ -62,7 +68,7 @@ export default function AcademiaDashboardPage() {
     } catch (e) {
       console.error(e);
     }
-  }, []);
+  }, [session]);
 
   const totalCompleted = completedLessonIds.length;
   const progressPercent = Math.min(100, Math.round((totalCompleted / TOTAL_LESSONS_COUNT) * 100));
