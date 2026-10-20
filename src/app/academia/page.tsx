@@ -72,6 +72,7 @@ export default function AcademiaDashboardPage() {
 
   const totalCompleted = completedLessonIds.length;
   const progressPercent = Math.min(100, Math.round((totalCompleted / TOTAL_LESSONS_COUNT) * 100));
+  const isGraduated = totalCompleted >= TOTAL_LESSONS_COUNT;
 
   // Find next uncompleted lesson
   let firstUncompletedLessonId = "m00-l01";
@@ -162,42 +163,80 @@ export default function AcademiaDashboardPage() {
             </p>
 
             {/* NOTA DESTACADA: CONSEGUIR DEMO GRATIS SUPERANDO LA FORMACIÓN O PAGANDO 1€ */}
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/15 via-yellow-500/10 to-amber-500/15 border border-amber-400/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-left shadow-lg">
-              <div className="flex items-start gap-3">
-                <span className="text-2xl sm:text-3xl shrink-0 mt-0.5">🎁</span>
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-[10px] font-mono font-black uppercase tracking-wider text-amber-300 bg-amber-400/20 px-2 py-0.5 rounded border border-amber-400/40">
-                      Cupón 100% Gratuito
-                    </span>
-                    <span className="text-xs font-black text-white">¿Quieres conseguir la Licencia Demo gratis?</span>
+            {!isGraduated ? (
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/15 via-yellow-500/10 to-amber-500/15 border border-amber-400/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-left shadow-lg">
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl sm:text-3xl shrink-0 mt-0.5">🎁</span>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-[10px] font-mono font-black uppercase tracking-wider text-amber-300 bg-amber-400/20 px-2 py-0.5 rounded border border-amber-400/40">
+                        Cupón 100% Gratuito
+                      </span>
+                      <span className="text-xs font-black text-white">¿Quieres conseguir la Licencia Demo gratis?</span>
+                    </div>
+                    <p className="text-xs text-slate-200 font-light leading-relaxed">
+                      Si quieres conseguir la demo gratis, <strong>completa los módulos formativos de la academia y supera las evaluaciones prácticas</strong> para desbloquear tu cupón exclusivo del 100% de descuento. Si prefieres no hacer el curso y empezar ya, puedes adquirir la Demo directamente por <strong className="text-amber-400 font-bold">solo 1€</strong>.
+                    </p>
                   </div>
-                  <p className="text-xs text-slate-200 font-light leading-relaxed">
-                    Si quieres conseguir la demo gratis, <strong>completa los módulos formativos de la academia y supera las evaluaciones prácticas</strong> para desbloquear tu cupón exclusivo del 100% de descuento. Si prefieres no hacer el curso y empezar ya, puedes adquirir la Demo directamente por <strong className="text-amber-400 font-bold">solo 1€</strong>.
-                  </p>
                 </div>
+                <Link 
+                  href="/checkout/cmn9hf8yc0000vhbcq9hbxk0j"
+                  className="shrink-0 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-[10px] uppercase tracking-wider whitespace-nowrap transition-all self-stretch sm:self-auto text-center"
+                >
+                  Saltar curso · 1€ →
+                </Link>
               </div>
-              <Link 
-                href="/checkout/cmn9hf8yc0000vhbcq9hbxk0j"
-                className="shrink-0 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-[10px] uppercase tracking-wider whitespace-nowrap transition-all self-stretch sm:self-auto text-center"
-              >
-                Saltar curso · 1€ →
-              </Link>
-            </div>
+            ) : (
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-emerald-500/15 border border-emerald-400/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-left shadow-lg">
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl sm:text-3xl shrink-0 mt-0.5">🎓</span>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-[10px] font-mono font-black uppercase tracking-wider text-emerald-300 bg-emerald-400/20 px-2 py-0.5 rounded border border-emerald-400/40">
+                        ¡Formación 100% Completada!
+                      </span>
+                      <span className="text-xs font-black text-white">Graduación Oficial de la Academia</span>
+                    </div>
+                    <p className="text-xs text-slate-200 font-light leading-relaxed">
+                      ¡Enhorabuena! Has superado todas las evaluaciones y completado el temario formativo. Tu <strong>Licencia Demo de 30 días de MAIKO PRO GOLD</strong> ya está activada y lista en tu panel de control.
+                    </p>
+                  </div>
+                </div>
+                <Link 
+                  href="/dashboard"
+                  className="shrink-0 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider whitespace-nowrap transition-all shadow-md shadow-amber-500/20 self-stretch sm:self-auto text-center"
+                >
+                  Ir a Mi Panel →
+                </Link>
+              </div>
+            )}
 
             {/* Quick Action Button & Stats */}
             <div className="pt-4 flex flex-wrap items-center gap-4">
-              <button
-                onClick={handleStartAcademy}
-                className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-extrabold text-sm tracking-wide flex items-center gap-2 shadow-lg shadow-amber-500/20 transition-all transform hover:-translate-y-0.5 cursor-pointer"
-              >
-                <Play className="w-4 h-4 fill-current" />
-                {totalCompleted > 0 ? "Continuar Academia" : "Empezar Módulo 01"}
-              </button>
+              {isGraduated ? (
+                <Link
+                  href="/dashboard"
+                  className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-extrabold text-sm tracking-wide flex items-center gap-2 shadow-lg shadow-amber-500/20 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+                >
+                  <Award className="w-4 h-4 text-slate-950" />
+                  <span>Ir a Mi Panel a Descargar el Bot</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              ) : (
+                <button
+                  onClick={handleStartAcademy}
+                  className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-extrabold text-sm tracking-wide flex items-center gap-2 shadow-lg shadow-amber-500/20 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+                >
+                  <Play className="w-4 h-4 fill-current" />
+                  {totalCompleted > 0 ? "Continuar Academia" : "Empezar Módulo 01"}
+                </button>
+              )}
 
               <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-xs font-mono text-slate-300">
                 <BookOpen className="w-4 h-4 text-amber-400" />
-                <span>{totalCompleted} / {TOTAL_LESSONS_COUNT} Lecciones completadas ({progressPercent}%)</span>
+                <span className={isGraduated ? "text-emerald-300 font-bold" : ""}>
+                  {totalCompleted} / {TOTAL_LESSONS_COUNT} Lecciones completadas ({progressPercent}%{isGraduated ? " · ¡Graduado!" : ""})
+                </span>
               </div>
             </div>
           </div>
@@ -207,52 +246,93 @@ export default function AcademiaDashboardPage() {
         <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
           <div className="flex items-center justify-between text-sm">
             <span className="font-bold text-slate-200">Tu Progreso General</span>
-            <span className="font-mono font-bold text-amber-400">{progressPercent}% completado</span>
+            <span className={`font-mono font-bold ${isGraduated ? "text-emerald-400" : "text-amber-400"}`}>
+              {progressPercent}% completado {isGraduated ? "🎓" : ""}
+            </span>
           </div>
           <div className="w-full h-3 rounded-full bg-slate-950 overflow-hidden p-0.5 border border-slate-800">
             <div
-              className="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full transition-all duration-700"
+              className={`h-full rounded-full transition-all duration-700 ${
+                isGraduated
+                  ? "bg-gradient-to-r from-emerald-500 to-teal-400"
+                  : "bg-gradient-to-r from-amber-500 to-yellow-400"
+              }`}
               style={{ width: `${progressPercent}%` }}
             />
           </div>
         </div>
 
         {/* Banner Recompensa de Graduación: Cupón 100% Demo */}
-        <div className="relative rounded-2xl bg-gradient-to-r from-amber-500/10 via-yellow-500/10 to-amber-500/10 border border-amber-400/40 p-6 md:p-8 overflow-hidden shadow-xl">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400 shrink-0 text-2xl">
-                🎁
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/30">
-                    Recompensa de Graduación
-                  </span>
-                  <span className="text-[10px] font-bold uppercase text-emerald-400">Cupón 100% OFF</span>
+        {!isGraduated ? (
+          <div className="relative rounded-2xl bg-gradient-to-r from-amber-500/10 via-yellow-500/10 to-amber-500/10 border border-amber-400/40 p-6 md:p-8 overflow-hidden shadow-xl">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400 shrink-0 text-2xl">
+                  🎁
                 </div>
-                <h3 className="text-lg md:text-xl font-black text-white">
-                  Desbloquea 1 Mes Gratis de MAIKO PRO GOLD CLIENT DEMO FIX
-                </h3>
-                <p className="text-xs md:text-sm text-slate-300 max-w-2xl leading-relaxed">
-                  Completa todas las lecciones y supera los cuestionarios para desbloquear tu código de descuento del 100% para activar el bot en cuenta DEMO de MT5 (en gráfico M5).
-                </p>
-                <p className="text-[11px] text-amber-300/90 pt-1">
-                  ¿Prefieres no realizar la formación? Puedes conseguir la Demo directamente en la web por <strong className="text-white">solo 1$</strong>.
-                </p>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/30">
+                      Recompensa de Graduación
+                    </span>
+                    <span className="text-[10px] font-bold uppercase text-emerald-400">Cupón 100% OFF</span>
+                  </div>
+                  <h3 className="text-lg md:text-xl font-black text-white">
+                    Desbloquea 1 Mes Gratis de MAIKO PRO GOLD CLIENT DEMO FIX
+                  </h3>
+                  <p className="text-xs md:text-sm text-slate-300 max-w-2xl leading-relaxed">
+                    Completa todas las lecciones y supera los cuestionarios para desbloquear tu código de descuento del 100% para activar el bot en cuenta DEMO de MT5 (en gráfico M5).
+                  </p>
+                  <p className="text-[11px] text-amber-300/90 pt-1">
+                    ¿Prefieres no realizar la formación? Puedes conseguir la Demo directamente en la web por <strong className="text-white">solo 1$</strong>.
+                  </p>
+                </div>
               </div>
-            </div>
 
-            <div className="shrink-0 w-full md:w-auto flex flex-col sm:flex-row md:flex-col gap-2">
-              <Link
-                href="/checkout/cmn9hf8yc0000vhbcq9hbxk0j"
-                className="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs uppercase tracking-wider text-center transition-all hover:scale-105"
-              >
-                Comprar Demo por 1$ →
-              </Link>
+              <div className="shrink-0 w-full md:w-auto flex flex-col sm:flex-row md:flex-col gap-2">
+                <Link
+                  href="/checkout/cmn9hf8yc0000vhbcq9hbxk0j"
+                  className="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs uppercase tracking-wider text-center transition-all hover:scale-105"
+                >
+                  Comprar Demo por 1$ →
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="relative rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-emerald-500/10 border border-emerald-400/40 p-6 md:p-8 overflow-hidden shadow-xl">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shrink-0 text-2xl">
+                  ✅
+                </div>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-400 bg-emerald-400/10 px-2.5 py-0.5 rounded-full border border-emerald-400/30">
+                      Licencia Demo Activa
+                    </span>
+                    <span className="text-[10px] font-bold uppercase text-emerald-400">Cupón ACADEMIA100 Canjeado</span>
+                  </div>
+                  <h3 className="text-lg md:text-xl font-black text-white">
+                    MAIKO PRO GOLD CLIENT DEMO FIX está listo en tu panel
+                  </h3>
+                  <p className="text-xs md:text-sm text-slate-300 max-w-2xl leading-relaxed">
+                    Has completado las 15 lecciones con éxito. Ya puedes ingresar a tu panel de usuario para descargar el bot (.EX5) y el manual de configuración técnica en MetaTrader 5.
+                  </p>
+                </div>
+              </div>
+
+              <div className="shrink-0 w-full md:w-auto flex flex-col sm:flex-row md:flex-col gap-2">
+                <Link
+                  href="/dashboard"
+                  className="px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider text-center transition-all shadow-md shadow-amber-500/20"
+                >
+                  Descargar Bot en Mi Panel →
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Modules List */}
         <div className="space-y-6">
@@ -301,7 +381,7 @@ export default function AcademiaDashboardPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {mod.lessons.map((lesson) => {
                       const isDone = completedLessonIds.includes(lesson.id);
-                      const isNextUp = lesson.id === firstUncompletedLessonId;
+                      const isNextUp = !isGraduated && lesson.id === firstUncompletedLessonId;
 
                       return (
                         <Link
