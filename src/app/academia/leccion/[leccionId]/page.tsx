@@ -312,6 +312,7 @@ export default function LessonPlayerPage() {
                   <FreeTrialClaimCard
                     userEmail={userEmail || undefined}
                     onTrialClaimed={() => setUserRole("VIP")}
+                    onNextLesson={handleNextLesson}
                   />
                 </div>
               )}
