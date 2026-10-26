@@ -16,6 +16,9 @@ input double   LoteAtaque                 = 0.01;        // 📊 Volumen Entrada
 
 // --- GESTION DE RIESGO Y BENEFICIOS ---
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
+input double   MultiplicadorRefuerzo      = 1.5;         // ✖️ Multiplicador Lote de Rescate (SOS)
+input int      LimitePosicionesSOS        = 2;           // 🛡️ Límite Máximo Posiciones SOS
+input double   ProfitCosechaIndividual    = 0.75;        // 🎯 Beneficio Cierre Operación Individual ($)
 input double   ProfitNetoFlush            = 5.0;         // 💰 Beneficio Cierre Total Cesta ($)
 input double   TargetDiario               = 50.0;        // 🎯 Meta de Beneficio Diario ($)
 input bool     UsarStopLossPorcentaje     = true;        // 🛡️ Activar Stop Loss por % Cuenta (DE SERIE)
@@ -83,15 +86,12 @@ const bool     CheckM15                   = true;
 const bool     CheckM5                    = true;
 
 const int      RuedasAmetralladora        = 1;
-const double   MultiplicadorRefuerzo      = 1.5;
 const double   MaxLoteTotal               = 0.50;
 const double   MaxLoteIndividual          = 0.02;
 
 const double   DistanciaRefuerzoPips      = 30.0;
 const double   MaxPipsHueco               = 50.0;
 const int      MaxVelasHueco              = 5;
-
-const double   ProfitCosechaIndividual    = 0.75;
 
 const bool     UsarBloqueoJuevesMadrugada = true;
 const int      HoraInicioJueves           = 1;
@@ -113,7 +113,6 @@ const bool     CerrarTodoViernesCierre    = true;
 const int      HoraCierreViernes          = 21;
 const bool     OperarViernesNoche         = false;
 
-const int      LimitePosicionesSOS        = 2;
 const double   ProfitBreakEven            = 0.50;
 const double   ProteccionBeneficioDiario  = 0.0;
 const bool     UsarPausaTrasStopLoss      = true;
