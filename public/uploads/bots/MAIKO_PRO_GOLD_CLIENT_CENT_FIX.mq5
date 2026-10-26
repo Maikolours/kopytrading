@@ -41,7 +41,7 @@ input int      PosY_HUD                   = 25;          // 📍 Posición Y en 
 
 // --- COMENTARIOS DE OPERACIONES ---
 input group "=== COMENTARIOS DE OPERACIONES ==="
-input string   TradeComment               = "MAIKO_GOLD_CENT"; // 🏷️ Comentario para Órdenes
+input string   TradeComment               = "MAIKO_CLIENT_CENT_FIX"; // 🏷️ Comentario para Órdenes
 
 // --- TELEMETRIA ---
 string SyncURL = "https://www.kopytrading.com/api/sync-positions";

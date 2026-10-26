@@ -140,7 +140,7 @@ input int      MinutosPausaTrasStopLoss   = 120;         // ⏳ Minutos de Pausa
 
 // --- INTERFAZ GRAFICA (HUD) ---
 input group "------- 🎨 INTERFAZ GRAFICA (HUD) -------"
-string         HUD_Branding               = "MAIKO PRO SHIELD v11.35";
+string         HUD_Branding               = "MAIKO PRO GOLD M1 SHIELD V11.35";
 input color    ColorMain                  = clrGold;     // 🎨 Color Principal HUD (Acento)
 input color    ColorHeader                = C'30,30,30'; // 🎨 Color Encabezado Panel HUD
 input color    ColorBody                  = C'20,20,20'; // 🎨 Color Cuerpo Panel HUD

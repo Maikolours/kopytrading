@@ -65,7 +65,7 @@ input int      PosY_HUD                   = 25;          // 📍 Posición Y en 
 
 // --- COMENTARIOS DE OPERACIONES ---
 input group "=== COMENTARIOS DE OPERACIONES ==="
-input string   TradeComment               = "MAIKO_GOLD_DEMO"; // 🏷️ Comentario para Órdenes
+input string   TradeComment               = "MAIKO_CLIENT_DEMO_FIX"; // 🏷️ Comentario para Órdenes
 
 // --- TELEMETRIA ---
 string SyncURL = "https://www.kopytrading.com/api/sync-positions";
@@ -125,7 +125,7 @@ const double   ProteccionBeneficioDiario  = 0.0;
 const bool     UsarPausaTrasStopLoss      = true;
 const int      MinutosPausaTrasStopLoss   = 120;
 
-string         HUD_Branding               = "MAIKO PRO GOLD DEMO FIX V11.35";
+string         HUD_Branding               = "MAIKO PRO GOLD CLIENT DEMO FIX";
 const bool     ShowW1                     = true;
 const bool     ShowD1                     = true;
 const bool     ShowH4                     = true;
@@ -139,7 +139,7 @@ const bool     ShowM1                     = true;
 
 CTrade trade;
 
-input int ExpertMagic = 111336;
+input int ExpertMagic = 111335;
 
 struct PosInfo { ulong ticket; double p; double c; double s; int t; double v; datetime time; double pr; };
 

@@ -134,7 +134,7 @@ input int      MinutosPausaTrasStopLoss   = 120;         // ⏳ Minutos de Pausa
 
 // --- INTERFAZ GRAFICA (HUD) ---
 input group "=== INTERFAZ GRAFICA (HUD) ===" 
-string         HUD_Branding               = "MAIKO PRO GOLD FIX V11.35";
+string         HUD_Branding               = "MAIKO PRO GOLD DEMO FIX V11.35";
 input color    ColorMain                  = clrGold;     // ?? Color Principal HUD (Acento)
 input color    ColorHeader                = C'30,30,30'; // ?? Color Encabezado Panel HUD
 input color    ColorBody                  = C'20,20,20'; // ?? Color Cuerpo Panel HUD
@@ -156,7 +156,7 @@ input string   TradeComment               = "MAIKO_DEMO_FIX_V11.35"; // ?? Comen
 
 CTrade trade;
 
-input int ExpertMagic = 111335;
+input int ExpertMagic = 111336;
 
 struct PosInfo { ulong ticket; double p; double c; double s; int t; double v; datetime time; double pr; };
 
