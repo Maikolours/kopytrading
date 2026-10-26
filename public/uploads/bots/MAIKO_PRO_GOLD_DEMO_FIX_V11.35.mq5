@@ -37,8 +37,8 @@ input double   MaxRangoVelaM1             = 20.0;        // ? Rango Máximo Vela
 input double   MaxSpreadPips              = 4.0;         // ?? Spread Máximo Permitido (Pips)
 input double   SensibilidadMechaReal      = 3.0;         // ?? Sensibilidad Rechazo de Mechas
 input int      MinutosPausaTrasSusto      = 1;           // ?? Minutos Pausa tras Vela Extrema
-input double   MaxRsiCompra               = 70.0;        // ?? RSI Máximo para Compras (Filtro Techos)
-input double   MinRsiVenta                = 30.0;        // ?? RSI Mínimo para Ventas (Filtro Suelos)
+input double   MaxRsiCompra               = 70.0;        // 📈 RSI Máximo para Compras (Filtro Techos)        // ?? RSI Máximo para Compras (Filtro Techos)
+input double   MinRsiVenta                = 30.0;        // 📉 RSI Mínimo para Ventas (Filtro Suelos)        // ?? RSI Mínimo para Ventas (Filtro Suelos)
 
 // --- FILTRO DE TECHOS Y SUELOS (SOPORTES Y RESISTENCIAS) ---
 input group "=== FILTRO TECHOS Y SUELOS (S/R) ==="
@@ -50,11 +50,11 @@ input double           DistanciaTechoSueloPips    = 15.0;        // ?? Distancia
 // --- FILTROS ADICIONALES MULTI-TEMPORALIDAD (H1 y H4) ---
 input bool             UsarFiltroTechosSuelosH1   = true;        // ?? Activar Filtro S/R en H1
 input int              PeriodoTechosSuelosH1      = 24;          // ?? Período H1 a Analizar (Velas)
-input double           DistanciaTechoSueloPipsH1  = 30.0;        // ?? Distancia Mínima H1 (Pips)
+input double           DistanciaTechoSueloPipsH1  = 60.0;        // 📏 Distancia Mínima H1 (Pips)
 
 input bool             UsarFiltroTechosSuelosH4   = true;        // ?? Activar Filtro S/R en H4
 input int              PeriodoTechosSuelosH4      = 24;          // ?? Período H4 a Analizar (Velas)
-input double           DistanciaTechoSueloPipsH4  = 50.0;        // ?? Distancia Mínima H4 (Pips)
+input double           DistanciaTechoSueloPipsH4  = 60.0;        // 📏 Distancia Mínima H4 (Pips)
 
 // --- FILTRO DE AGOTAMIENTO DE VELAS (RECHAZO DE MECHA M15) ---
 input bool             UsarFiltroAgotamientoM15   = true;        // ??? Activar Filtro Agotamiento M15
@@ -88,7 +88,7 @@ input int      MaxVelasHueco              = 5;           // ? Velas sin Giro par
 input group "=== COBRAR BENEFICIOS (TAKE PROFIT) ==="
 input double   ProfitNetoFlush            = 5.0;         // ?? Beneficio Cierre Total Cesta ($)
 input double   ProfitCosechaIndividual    = 0.75;        // ?? Beneficio Cierre SOS Individual ($)
-input double   TargetDiario               = 100.0;       // ?? Meta de Beneficio Diario ($)
+input double   TargetDiario               = 50.0;        // 🎯 Meta de Beneficio Diario ($)
 
 // --- HORARIOS OPERATIVOS Y DIAS DE LA SEMANA ---
 input group "=== HORARIOS OPERATIVOS Y DIAS ==="
@@ -106,13 +106,13 @@ input bool     UsarBloqueoJuevesMadrugada = true;        // 🚫 Bloquear Jueves
 input int      HoraInicioJueves           = 1;           // ⏰ Hora Inicio Bloqueo Jueves
 input int      HoraFinJueves              = 7;           // ⏰ Hora Fin Bloqueo Jueves
 
-input bool     UsarBloqueoMiercolesNoticias = true;      // 🚫 Bloquear Miércoles Noticias (12:00-14:00)
-input int      HoraInicioMiercoles        = 12;          // ⏰ Hora Inicio Bloqueo Miércoles
-input int      HoraFinMiercoles           = 14;          // ⏰ Hora Fin Bloqueo Miércoles
+input bool     UsarBloqueoMiercolesNoticias = true;      // 🚫 Miércoles: Cierre Noticias Macro EE.UU. (14:00-17:00 Broker | 13:00-16:00 Esp)
+input int      HoraInicioMiercoles        = 14;          // ⏰ Hora Inicio Bloqueo Miércoles (Broker: 14:00)
+input int      HoraFinMiercoles           = 17;          // ⏰ Hora Fin Bloqueo Miércoles (Broker: 17:00)
 
-input bool     UsarBloqueoViernesNoticias = true;        // 🚫 Bloquear Viernes Noticias / NFP (13:00-14:00)
-input int      HoraInicioViernes          = 13;          // ⏰ Hora Inicio Bloqueo Viernes
-input int      HoraFinViernes             = 14;          // ⏰ Hora Fin Bloqueo Viernes
+input bool     UsarBloqueoViernesNoticias = true;        // 🚫 Viernes: Cierre Noticias NFP / Empleo EE.UU. (14:00-17:00 Broker | 13:00-16:00 Esp)
+input int      HoraInicioViernes          = 14;          // ⏰ Hora Inicio Bloqueo Viernes (Broker: 14:00)
+input int      HoraFinViernes             = 17;          // ⏰ Hora Fin Bloqueo Viernes (Broker: 17:00)
 
 input bool     UsarHorarioBloqueo         = false;       // 📰 Bloqueo Horario Genérico Diario (Todos los días)
 input int      HoraInicioBloqueo          = 14;          // ⏰ Hora Inicio Bloqueo Genérico

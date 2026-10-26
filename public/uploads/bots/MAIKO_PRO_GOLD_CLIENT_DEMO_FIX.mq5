@@ -17,19 +17,43 @@ input double   LoteAtaque                 = 0.01;        // 📊 Volumen Entrada
 // --- GESTION DE RIESGO Y BENEFICIOS ---
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
 input double   ProfitNetoFlush            = 5.0;         // 💰 Beneficio Cierre Total Cesta ($)
-input double   TargetDiario               = 100.0;       // 🎯 Meta de Beneficio Diario ($)
+input double   TargetDiario               = 50.0;        // 🎯 Meta de Beneficio Diario ($)
 input bool     UsarStopLossPorcentaje     = true;        // 🛡️ Activar Stop Loss por % Cuenta (DE SERIE)
 input double   PorcentajeStopLoss         = 15.0;        // 📉 Porcentaje de Pérdida Máxima (15.0% DE SERIE)
 
-// --- HORARIOS OPERATIVOS Y DIAS ---
-input group "=== HORARIOS OPERATIVOS Y DIAS ==="
-input int      HoraInicioOperativa        = 1;           // ⏰ Hora de Inicio Operaciones Diaria (Broker)
-input int      HoraFinOperativa           = 23;          // ⏰ Hora de Cierre Operaciones Diaria (Broker)
+// --- HORARIOS GLOBALES Y DIAS DE OPERACION ---
+input group "=== HORARIOS GLOBALES Y DIAS ==="
+input int      HoraInicioOperativa        = 1;           // ⏰ Hora Global Inicio (Broker: 01:00)
+input int      HoraFinOperativa           = 23;          // ⏰ Hora Global Cierre (Broker: 23:00)
 input bool     OperarLunes                = true;        // 📅 Operar los Lunes
 input bool     OperarMartes               = true;        // 📅 Operar los Martes
 input bool     OperarMiercoles            = true;        // 📅 Operar los Miércoles
 input bool     OperarJueves               = true;        // 📅 Operar los Jueves
 input bool     OperarViernes              = true;        // 📅 Operar los Viernes
+
+// --- BLOQUEOS QUIRURGICOS POR NOTICIAS (DE SERIE) ---
+input group "=== BLOQUEOS QUIRURGICOS POR NOTICIAS ==="
+input bool     UsarBloqueoMiercolesNoticias = true;      // 🚫 Miércoles: Cierre Noticias Macro EE.UU. (14:00-17:00 Broker | 13:00-16:00 Esp)
+input int      HoraInicioMiercoles        = 14;          // ⏰ Hora Inicio Bloqueo Miércoles (Broker)
+input int      HoraFinMiercoles           = 17;          // ⏰ Hora Fin Bloqueo Miércoles (Broker)
+
+input bool     UsarBloqueoJuevesMadrugada = true;        // 🚫 Jueves: Cierre Madrugada Rollover & Triple Swap (01:00-07:00 Broker)
+input int      HoraInicioJueves           = 1;           // ⏰ Hora Inicio Bloqueo Jueves (Broker)
+input int      HoraFinJueves              = 7;           // ⏰ Hora Fin Bloqueo Jueves (Broker)
+
+input bool     UsarBloqueoViernesNoticias = true;        // 🚫 Viernes: Cierre Noticias NFP / Empleo EE.UU. (14:00-17:00 Broker | 13:00-16:00 Esp)
+input int      HoraInicioViernes          = 14;          // ⏰ Hora Inicio Bloqueo Viernes (Broker)
+input int      HoraFinViernes             = 17;          // ⏰ Hora Fin Bloqueo Viernes (Broker)
+
+input bool     UsarHorarioBloqueo         = false;       // ⏸️ Pausa Diaria Personalizada (Opcional Todos los Días)
+input int      HoraInicioBloqueo          = 14;          // ⏰ Hora Inicio Pausa Diaria
+input int      HoraFinBloqueo             = 16;          // ⏰ Hora Fin Pausa Diaria
+
+// --- PROTECCION FIN DE SEMANA Y CIERRE FORZOSO ---
+input group "=== PROTECCION FIN DE SEMANA ==="
+input bool     CerrarTodoViernesCierre    = true;        // 🚪 Viernes: Cierre Total Fin de Semana (21:00 Broker - Evita Gaps)
+input int      HoraCierreViernes          = 21;          // ⏰ Hora Cierre Forzoso Viernes (Broker: 21:00)
+input bool     OperarViernesNoche         = false;       // 🌃 Permitir Nuevas Operaciones Viernes Noche
 
 // --- INTERFAZ GRAFICA (HUD) ---
 input group "=== INTERFAZ GRAFICA (HUD) ===" 
@@ -66,11 +90,11 @@ const double   DistanciaTechoSueloPips    = 15.0;
 
 const bool     UsarFiltroTechosSuelosH1   = true;
 const int      PeriodoTechosSuelosH1      = 24;
-const double   DistanciaTechoSueloPipsH1  = 30.0;
+const double   DistanciaTechoSueloPipsH1  = 60.0;
 
 const bool     UsarFiltroTechosSuelosH4   = true;
 const int      PeriodoTechosSuelosH4      = 24;
-const double   DistanciaTechoSueloPipsH4  = 50.0;
+const double   DistanciaTechoSueloPipsH4  = 60.0;
 
 const bool     UsarFiltroAgotamientoM15   = true;
 const double   MinPorcentajeMechaM15      = 40.0;
@@ -93,25 +117,7 @@ const int      MaxVelasHueco              = 5;
 
 const double   ProfitCosechaIndividual    = 0.75;
 
-const bool     UsarBloqueoJuevesMadrugada = true;
-const int      HoraInicioJueves           = 1;
-const int      HoraFinJueves              = 7;
-
-const bool     UsarBloqueoMiercolesNoticias = true;
-const int      HoraInicioMiercoles        = 12;
-const int      HoraFinMiercoles           = 14;
-
-const bool     UsarBloqueoViernesNoticias = true;
-const int      HoraInicioViernes          = 13;
-const int      HoraFinViernes             = 14;
-
-const bool     UsarHorarioBloqueo         = false;
-const int      HoraInicioBloqueo          = 14;
-const int      HoraFinBloqueo             = 16;
-
-const bool     CerrarTodoViernesCierre    = true;
-const int      HoraCierreViernes          = 21;
-const bool     OperarViernesNoche         = false;
+// (Horarios y bloqueos configurables en inputs arriba)
 
 const int      LimitePosicionesSOS        = 2;
 const double   ProfitBreakEven            = 0.50;
@@ -119,7 +125,7 @@ const double   ProteccionBeneficioDiario  = 0.0;
 const bool     UsarPausaTrasStopLoss      = true;
 const int      MinutosPausaTrasStopLoss   = 120;
 
-string         HUD_Branding               = "MAIKO PRO GOLD CLIENT DEMO FIX";
+string         HUD_Branding               = "MAIKO PRO GOLD DEMO FIX V11.35";
 const bool     ShowW1                     = true;
 const bool     ShowD1                     = true;
 const bool     ShowH4                     = true;
@@ -336,70 +342,52 @@ bool EsHorarioPermitido(datetime serverTime, string &motivo) {
         return false;
     }
 
-    // 2. Días de la semana
-    if(time.day_of_week == 1 && !OperarLunes) {
-        motivo = "DIA DESACTIVADO: LUNES";
-        return false;
-    }
-    if(time.day_of_week == 2 && !OperarMartes) {
-        motivo = "DIA DESACTIVADO: MARTES";
-        return false;
-    }
-    if(time.day_of_week == 3 && !OperarMiercoles) {
-        motivo = "DIA DESACTIVADO: MIERCOLES";
-        return false;
-    }
-    if(time.day_of_week == 4 && !OperarJueves) {
-        motivo = "DIA DESACTIVADO: JUEVES";
-        return false;
-    }
-    if(time.day_of_week == 5 && !OperarViernes) {
-        motivo = "DIA DESACTIVADO: VIERNES";
-        return false;
-    }
+    // 2. Dias de la semana activados/desactivados
+    if(time.day_of_week == 1 && !OperarLunes)     { motivo = "DIA DESACTIVADO: LUNES"; return false; }
+    if(time.day_of_week == 2 && !OperarMartes)    { motivo = "DIA DESACTIVADO: MARTES"; return false; }
+    if(time.day_of_week == 3 && !OperarMiercoles) { motivo = "DIA DESACTIVADO: MIERCOLES"; return false; }
+    if(time.day_of_week == 4 && !OperarJueves)    { motivo = "DIA DESACTIVADO: JUEVES"; return false; }
+    if(time.day_of_week == 5 && !OperarViernes)   { motivo = "DIA DESACTIVADO: VIERNES"; return false; }
 
-    // 3. Viernes noche / cierre fin de semana
-    if(time.day_of_week == 5 && time.hour >= HoraCierreViernes && !OperarViernesNoche) {
-        motivo = "VIERNES CIERRE FIN DE SEMANA";
-        return false;
-    }
-
-    // 4. Horario general diario
+    // 3. Rango global operativo diario (01:00 a 23:00 Broker)
     if(time.hour < HoraInicioOperativa || time.hour >= HoraFinOperativa) {
-        motivo = "FUERA DE HORARIO (" + IntegerToString(HoraInicioOperativa) + ":00-" + IntegerToString(HoraFinOperativa) + ":00)";
+        motivo = StringFormat("FUERA DE HORARIO (%02d:00-%02d:00 Broker)", HoraInicioOperativa, HoraFinOperativa);
         return false;
     }
 
-    // 5. Bloqueo quirúrgico Jueves Madrugada
-    if(UsarBloqueoJuevesMadrugada && time.day_of_week == 4) {
-        if(time.hour >= HoraInicioJueves && time.hour < HoraFinJueves) {
-            motivo = "BLOQUEO JUEVES MADRUGADA (" + IntegerToString(HoraInicioJueves) + ":00-" + IntegerToString(HoraFinJueves) + ":00)";
-            return false;
-        }
-    }
-
-    // 6. Bloqueo quirúrgico Miércoles Noticias
-    if(UsarBloqueoMiercolesNoticias && time.day_of_week == 3) {
+    // 4. Bloqueos Quirúrgicos por Noticias y Eventos Institucionales
+    // Miércoles: Noticias Macro EE.UU. (IPC, PIB, ADP, Inventarios)
+    if(time.day_of_week == 3 && UsarBloqueoMiercolesNoticias) {
         if(time.hour >= HoraInicioMiercoles && time.hour < HoraFinMiercoles) {
-            motivo = "BLOQUEO MIERCOLES NOTICIAS (" + IntegerToString(HoraInicioMiercoles) + ":00-" + IntegerToString(HoraFinMiercoles) + ":00)";
+            motivo = StringFormat("CIERRE NOTICIAS MIERCOLES (%02d:00-%02d:00 Broker / 13-16h Esp)", HoraInicioMiercoles, HoraFinMiercoles);
             return false;
         }
     }
 
-    // 7. Bloqueo quirúrgico Viernes Noticias (NFP)
-    if(UsarBloqueoViernesNoticias && time.day_of_week == 5) {
-        if(time.hour >= HoraInicioViernes && time.hour < HoraFinViernes) {
-            motivo = "BLOQUEO VIERNES NOTICIAS (" + IntegerToString(HoraInicioViernes) + ":00-" + IntegerToString(HoraFinViernes) + ":00)";
+    // Jueves: Madrugada Triple Swap & Rollover (Spreads Elevados)
+    if(time.day_of_week == 4 && UsarBloqueoJuevesMadrugada) {
+        if(time.hour >= HoraInicioJueves && time.hour < HoraFinJueves) {
+            motivo = StringFormat("CIERRE JUEVES MADRUGADA (%02d:00-%02d:00 Broker / Rollover)", HoraInicioJueves, HoraFinJueves);
             return false;
         }
     }
 
-    // 8. Bloqueo Horario Genérico Diario (Noticias)
-    if(UsarHorarioBloqueo) {
-        if(time.hour >= HoraInicioBloqueo && time.hour < HoraFinBloqueo) {
-            motivo = "BLOQUEO HORARIO NOTICIAS (" + IntegerToString(HoraInicioBloqueo) + ":00-" + IntegerToString(HoraFinBloqueo) + ":00)";
+    // Viernes: Noticias NFP / Datos de Empleo y Cierre Fin de Semana
+    if(time.day_of_week == 5) {
+        if(UsarBloqueoViernesNoticias && time.hour >= HoraInicioViernes && time.hour < HoraFinViernes) {
+            motivo = StringFormat("CIERRE NOTICIAS NFP VIERNES (%02d:00-%02d:00 Broker / 13-16h Esp)", HoraInicioViernes, HoraFinViernes);
             return false;
         }
+        if(CerrarTodoViernesCierre && time.hour >= HoraCierreViernes && !OperarViernesNoche) {
+            motivo = "VIERNES CIERRE FIN DE SEMANA (ANTI-GAPS)";
+            return false;
+        }
+    }
+
+    // 5. Bloqueo Horario Genérico Diario (opcional para todos los días)
+    if(UsarHorarioBloqueo && time.hour >= HoraInicioBloqueo && time.hour < HoraFinBloqueo) {
+        motivo = StringFormat("PAUSA DIARIA PERSONALIZADA (%02d:00-%02d:00 Broker)", HoraInicioBloqueo, HoraFinBloqueo);
+        return false;
     }
 
     motivo = "OPERATIVO";
