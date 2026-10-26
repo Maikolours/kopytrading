@@ -157,7 +157,7 @@ bool           ShowM1                     = true;
 // --- COMENTARIOS ---
 input group "------- 🏷️ COMENTARIOS Y MAGIC -------"
 input string   TradeComment               = "MAIKO_SHIELD_V11.35";     // 🏷️ Comentario para Órdenes
-input int      ExpertMagic                = 111336;                   // 🔢 Magic Number del Bot
+input int      ExpertMagic                = 111339;                   // 🔢 Magic Number del Bot
 
 // Globales
 

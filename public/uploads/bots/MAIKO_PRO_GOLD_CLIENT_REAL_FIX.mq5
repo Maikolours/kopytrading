@@ -133,7 +133,7 @@ const bool     ShowM1                     = true;
 
 CTrade trade;
 
-input int ExpertMagic = 111336;
+input int ExpertMagic = 111337;
 
 struct PosInfo { ulong ticket; double p; double c; double s; int t; double v; datetime time; double pr; };
 

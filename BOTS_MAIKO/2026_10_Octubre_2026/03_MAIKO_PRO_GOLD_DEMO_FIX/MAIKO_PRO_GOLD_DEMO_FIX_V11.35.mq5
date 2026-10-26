@@ -156,7 +156,7 @@ input string   TradeComment               = "MAIKO_DEMO_FIX_V11.35"; // ?? Comen
 
 CTrade trade;
 
-input int ExpertMagic = 111336;
+input int ExpertMagic = 111335;
 
 struct PosInfo { ulong ticket; double p; double c; double s; int t; double v; datetime time; double pr; };
 
