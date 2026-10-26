@@ -17,7 +17,7 @@ input double   LoteAtaque                 = 0.01;        // 📊 Volumen Entrada
 // --- GESTION DE RIESGO Y BENEFICIOS ---
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
 input double   ProfitNetoFlush            = 500.0;         // 💰 Beneficio Cierre Total Cesta ($)
-input double   TargetDiario               = 10000.0;       // 🎯 Meta de Beneficio Diario ($)
+input double   TargetDiario               = 5000.0;        // 🎯 Meta de Beneficio Diario (5000.0)       // 🎯 Meta de Beneficio Diario ($)
 input bool     UsarStopLossPorcentaje     = true;        // 🛡️ Activar Stop Loss por % Cuenta (DE SERIE)
 input double   PorcentajeStopLoss         = 15.0;        // 📉 Porcentaje de Pérdida Máxima (15.0% DE SERIE)
 
@@ -66,11 +66,11 @@ const double   DistanciaTechoSueloPips    = 15.0;
 
 const bool     UsarFiltroTechosSuelosH1   = true;
 const int      PeriodoTechosSuelosH1      = 24;
-const double   DistanciaTechoSueloPipsH1  = 30.0;
+const double   DistanciaTechoSueloPipsH1  = 60.0;
 
 const bool     UsarFiltroTechosSuelosH4   = true;
 const int      PeriodoTechosSuelosH4      = 24;
-const double   DistanciaTechoSueloPipsH4  = 50.0;
+const double   DistanciaTechoSueloPipsH4  = 60.0;
 
 const bool     UsarFiltroAgotamientoM15   = true;
 const double   MinPorcentajeMechaM15      = 40.0;
