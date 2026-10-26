@@ -339,64 +339,73 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                         </div>
 
                         {/* NUEVO: SECCIÓN DE AUDITORÍA VISUAL DEL BACKTEST (SIN COMPROMETER ESTRATEGIA PRIVADA) */}
-                        <div className="glass-card p-6 sm:p-8 border border-white/10 w-full overflow-hidden">
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
+                        <div className="glass-card p-6 sm:p-8 border border-white/10 w-full overflow-hidden space-y-6">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                 <div>
                                     <div className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-400">Auditoría Cuantitativa y Curva de Rendimiento</div>
-                                    <h4 className="text-xl font-black text-white uppercase italic tracking-tight">Proyección Auditada 2026 (M5 XAUUSD)</h4>
+                                    <h4 className="text-xl font-black text-white uppercase italic tracking-tight">Auditoría Oficial 2026 (XAUUSD · M5)</h4>
                                 </div>
-                                <div className="text-[10px] font-black uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-full border border-white/10 text-slate-300">
-                                    Tick Data Real 99.9%
+                                <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest">
+                                    ✓ Calidad de Historial 100% (Real Ticks)
                                 </div>
                             </div>
 
-                            <p className="text-xs text-text-muted font-light leading-relaxed mb-6">
-                                Este gráfico refleja el balance neto consolidado mes a mes durante la prueba exhaustiva realizada en 2026 con el corte estricto de los viernes a las 19:00. Al proteger la cuenta antes del cierre del mercado, el drawdown máximo se mantuvo bajo el 8% preservando el capital en todo momento.
+                            <p className="text-xs text-text-muted font-light leading-relaxed">
+                                Auditoría cuantitativa oficial ejecutada sobre datos reales de ticks de alta fidelidad durante todo el ejercicio 2026. La curva de balance refleja el crecimiento sostenido del algoritmo protegiendo el capital ante noticias macroeconómicas (bloqueos quirúrgicos) y cerrando el mercado los viernes a las 21:00 para evitar los gaps de apertura del fin de semana.
                             </p>
 
-                            {/* Curva de Rendimiento Mensual Segura */}
-                            <div className="space-y-3 bg-white/[0.02] p-5 rounded-2xl border border-white/5">
-                                <div className="flex items-center justify-between text-xs font-bold text-white mb-2">
-                                    <span>Progresión Mensual 2026 (Balance Neto +8.045,73 USD)</span>
-                                    <span className="text-success font-black">10 Meses en Positivo</span>
+                            {/* Capturas Oficiales Auditadas (Curva e Informe) */}
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
+                                        <span>📈 Curva de Crecimiento de Balance y Patrimonio (2026)</span>
+                                        <span className="text-emerald-400 font-black">+385.9% Neto</span>
+                                    </div>
+                                    <div className="rounded-2xl overflow-hidden border border-white/10 bg-black/40 shadow-2xl p-1">
+                                        <img 
+                                            src="/images/backtests/backtest_2026_curva.png" 
+                                            alt="Curva de Balance y Patrimonio MAIKO PRO GOLD 2026" 
+                                            className="w-full h-auto rounded-xl object-contain hover:scale-[1.01] transition-transform duration-300"
+                                        />
+                                    </div>
                                 </div>
 
-                                <div className="grid grid-cols-5 sm:grid-cols-10 gap-1.5 sm:gap-2 items-end h-28 pt-4">
-                                    {[
-                                        { mes: 'Ene', val: 780, pct: '65%' },
-                                        { mes: 'Feb', val: 840, pct: '70%' },
-                                        { mes: 'Mar', val: 920, pct: '78%' },
-                                        { mes: 'Abr', val: 810, pct: '68%' },
-                                        { mes: 'May', val: 790, pct: '66%' },
-                                        { mes: 'Jun', val: 860, pct: '72%' },
-                                        { mes: 'Jul', val: 910, pct: '77%' },
-                                        { mes: 'Ago', val: 850, pct: '71%' },
-                                        { mes: 'Sep', val: 765, pct: '64%' },
-                                        { mes: 'Oct', val: 520, pct: '45%' }
-                                    ].map((m, idx) => (
-                                        <div key={idx} className="flex flex-col items-center gap-1 group/bar h-full justify-end">
-                                            <div 
-                                                className="w-full bg-gradient-to-t from-emerald-500/20 via-emerald-500/40 to-emerald-400 rounded-t-md transition-all group-hover/bar:brightness-125"
-                                                style={{ height: m.pct }}
-                                            />
-                                            <span className="text-[9px] font-bold text-slate-400 uppercase">{m.mes}</span>
-                                        </div>
-                                    ))}
+                                <div className="space-y-2 pt-2">
+                                    <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
+                                        <span>📊 Informe Detallado de Métricas Institucionales</span>
+                                        <span className="text-amber-400 font-bold">Sharpe: 14.20 | Profit Factor: 2.99</span>
+                                    </div>
+                                    <div className="rounded-2xl overflow-hidden border border-white/10 bg-black/40 shadow-2xl p-1">
+                                        <img 
+                                            src="/images/backtests/backtest_2026_informe.png" 
+                                            alt="Informe de Rendimiento MAIKO PRO GOLD 2026" 
+                                            className="w-full h-auto rounded-xl object-contain hover:scale-[1.01] transition-transform duration-300"
+                                        />
+                                    </div>
                                 </div>
+                            </div>
 
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-white/5 text-[11px]">
-                                    <div className="flex items-center gap-2">
-                                        <span className="w-2 h-2 rounded-full bg-success"></span>
-                                        <span className="text-slate-300">Operaciones Ganadoras: <strong>92,08%</strong></span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <span className="w-2 h-2 rounded-full bg-amber-400"></span>
-                                        <span className="text-slate-300">Drawdown Máx Flotante: <strong>7,81%</strong></span>
-                                    </div>
-                                    <div className="flex items-center gap-2 col-span-2 sm:col-span-1">
-                                        <span className="w-2 h-2 rounded-full bg-brand-light"></span>
-                                        <span className="text-slate-300">Corte Viernes: <strong>19:00 (GMT+2/3)</strong></span>
-                                    </div>
+                            {/* Tarjetas de Métricas Clave */}
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-white/5">
+                                <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5">
+                                    <div className="text-[9px] uppercase tracking-widest text-text-muted font-bold">Beneficio Neto</div>
+                                    <div className="text-lg font-black text-emerald-400">+$3.859,89</div>
+                                    <div className="text-[9px] text-text-muted">Depósito: $1.000</div>
+                                </div>
+                                <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5">
+                                    <div className="text-[9px] uppercase tracking-widest text-text-muted font-bold">Tasa de Acierto</div>
+                                    <div className="text-lg font-black text-white">92,59%</div>
+                                    <div className="text-[9px] text-text-muted">3.563 / 3.848 ganadas</div>
+                                </div>
+                                <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5">
+                                    <div className="text-[9px] uppercase tracking-widest text-text-muted font-bold">Profit Factor</div>
+                                    <div className="text-lg font-black text-amber-400">2.99</div>
+                                    <div className="text-[9px] text-text-muted">Recuperación: 9.20</div>
+                                </div>
+                                <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5">
+                                    <div className="text-[9px] uppercase tracking-widest text-text-muted font-bold">Drawdown Máx</div>
+                                    <div className="text-lg font-black text-slate-200">13,30%</div>
+                                    <div className="text-[9px] text-emerald-400/80">Control estricto &lt; 15%</div>
                                 </div>
                             </div>
                         </div>
