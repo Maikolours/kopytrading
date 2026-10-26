@@ -17,7 +17,7 @@ input double   LoteAtaque                 = 0.01;        // 📊 Volumen Entrada
 // --- GESTION DE RIESGO Y BENEFICIOS ---
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
 input double   ProfitNetoFlush            = 5.0;         // 💰 Beneficio Cierre Total Cesta ($)
-input double   TargetDiario               = 50.0;        // 🎯 Meta de Beneficio Diario (50.0)       // 🎯 Meta de Beneficio Diario ($)
+input double   TargetDiario               = 50.0;        // 🎯 Meta de Beneficio Diario ($)
 input bool     UsarStopLossPorcentaje     = true;        // 🛡️ Activar Stop Loss por % Cuenta (DE SERIE)
 input double   PorcentajeStopLoss         = 15.0;        // 📉 Porcentaje de Pérdida Máxima (15.0% DE SERIE)
 
@@ -41,7 +41,7 @@ input int      PosY_HUD                   = 25;          // 📍 Posición Y en 
 
 // --- COMENTARIOS DE OPERACIONES ---
 input group "=== COMENTARIOS DE OPERACIONES ==="
-input string   TradeComment               = "MAIKO_GOLD_REAL"; // 🏷️ Comentario para Órdenes (Trade Comment)
+input string   TradeComment               = "MAIKO_GOLD_REAL"; // 🏷️ Comentario para Órdenes
 
 // --- TELEMETRIA ---
 string SyncURL = "https://www.kopytrading.com/api/sync-positions";

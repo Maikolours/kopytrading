@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
-//|           MAIKO PRO GOLD CENT FIX (v11.35)                       |
+//|           MAIKO PRO GOLD REAL FIX (v11.35)                       |
 //|       "INSTITUTIONAL TIMETABLE EDITION - OFFICIAL REAL"          |
 //+------------------------------------------------------------------+
 #property copyright "KOPYTRADING MAIKO"
-#property description "MAIKO PRO GOLD CENT FIX"
+#property description "MAIKO PRO GOLD REAL FIX"
 #property version   "11.35"
 #property strict
 
@@ -16,8 +16,8 @@ input double   LoteAtaque                 = 0.01;        // 📊 Volumen Entrada
 
 // --- GESTION DE RIESGO Y BENEFICIOS ---
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
-input double   ProfitNetoFlush            = 500.0;         // 💰 Beneficio Cierre Total Cesta ($)
-input double   TargetDiario               = 5000.0;        // 🎯 Meta de Beneficio Diario (5000.0)       // 🎯 Meta de Beneficio Diario ($)
+input double   ProfitNetoFlush            = 5.0;         // 💰 Beneficio Cierre Total Cesta ($)
+input double   TargetDiario               = 50.0;        // 🎯 Meta de Beneficio Diario ($)
 input bool     UsarStopLossPorcentaje     = true;        // 🛡️ Activar Stop Loss por % Cuenta (DE SERIE)
 input double   PorcentajeStopLoss         = 15.0;        // 📉 Porcentaje de Pérdida Máxima (15.0% DE SERIE)
 
@@ -41,7 +41,7 @@ input int      PosY_HUD                   = 25;          // 📍 Posición Y en 
 
 // --- COMENTARIOS DE OPERACIONES ---
 input group "=== COMENTARIOS DE OPERACIONES ==="
-input string   TradeComment               = "MAIKO_GOLD_CENT"; // 🏷️ Comentario para Órdenes (Trade Comment)
+input string   TradeComment               = "MAIKO_GOLD_REAL"; // 🏷️ Comentario para Órdenes
 
 // --- TELEMETRIA ---
 string SyncURL = "https://www.kopytrading.com/api/sync-positions";
@@ -50,7 +50,7 @@ datetime ultimoSync = 0;
 
 // --- ESTRATEGIA CUANTITATIVA INSTITUCIONAL (PARAMETROS INTERNOS PROTEGIDOS) ---
 const int      DiasDeTrial                = 30;
-const bool     EsCuentaCent               = true;
+const bool     EsCuentaCent               = false;
 
 const double   MaxRangoVelaM1             = 20.0;
 const double   MaxSpreadPips              = 4.0;
@@ -119,7 +119,7 @@ const double   ProteccionBeneficioDiario  = 0.0;
 const bool     UsarPausaTrasStopLoss      = true;
 const int      MinutosPausaTrasStopLoss   = 120;
 
-string         HUD_Branding               = "MAIKO PRO GOLD CENT FIX";
+string         HUD_Branding               = "MAIKO PRO GOLD REAL FIX";
 const bool     ShowW1                     = true;
 const bool     ShowD1                     = true;
 const bool     ShowH4                     = true;
