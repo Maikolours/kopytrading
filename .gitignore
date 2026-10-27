@@ -43,3 +43,10 @@ next-env.d.ts
 /src/generated/prisma
 
 .vercel
+
+# Videos pesados locales
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.vrm
