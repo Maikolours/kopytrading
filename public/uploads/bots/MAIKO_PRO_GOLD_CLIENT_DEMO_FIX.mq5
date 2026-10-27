@@ -226,6 +226,16 @@ void AgregarIndicadoresVisuales() {
 
 
 
+//+------------------------------------------------------------------+
+//| FUNCION AUXILIAR: TIEMPO SEGURO (AUTO-FALLBACK)                  |
+//+------------------------------------------------------------------+
+datetime ObtenerTiempoSeguro() {
+    datetime t = TimeTradeServer();
+    if(t < 1704067200) t = TimeCurrent();
+    if(t < 1704067200) t = TimeLocal();
+    return t;
+}
+
 int OnInit() {
 
     if(AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_REAL) {
@@ -270,32 +280,43 @@ int OnInit() {
 
       
 
-    string gvName = "MAIKO_TRIAL_" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
+    long accLogin = AccountInfoInteger(ACCOUNT_LOGIN);
+    string gvName = "MAIKO_TRIAL_V11_" + IntegerToString(accLogin);
+    datetime nowTime = ObtenerTiempoSeguro();
 
     if(GlobalVariableCheck(gvName)) {
-
         trialStart = (datetime)GlobalVariableGet(gvName);
-
     } else {
-
-        trialStart = TimeCurrent();
-
+        trialStart = nowTime;
         GlobalVariableSet(gvName, (double)trialStart);
-
     }
 
-      if(MQLInfoInteger(MQL_TESTER)) {
-          trialExpirado = false;
-          diasRestantes = 30;
-          BotActivo = true;
-      } else {
-          int maxDias = DiasDeTrial;
-          if(maxDias > 30) maxDias = 30;
-          diasRestantes = maxDias - (int)((TimeCurrent() - trialStart) / 86400);
-          int diasOperando = (int)((TimeCurrent() - trialStart) / 86400) + 1;
-          if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
-      }
-    
+    if(trialStart < 1704067200 || trialStart > nowTime + 86400) {
+        trialStart = nowTime;
+        GlobalVariableSet(gvName, (double)trialStart);
+    }
+
+    if(MQLInfoInteger(MQL_TESTER)) {
+        trialExpirado = false;
+        diasRestantes = 30;
+        BotActivo = true;
+    } else {
+        long secElapsed = (long)(nowTime - trialStart);
+        if(secElapsed < 0) secElapsed = 0;
+        int dTrans = (int)(secElapsed / 86400);
+        int maxDias = DiasDeTrial;
+        if(maxDias > 30) maxDias = 30;
+        diasRestantes = maxDias - dTrans;
+        if(diasRestantes < 0) diasRestantes = 0;
+        if(dTrans >= maxDias) {
+            trialExpirado = true;
+            BotActivo = false;
+        } else {
+            trialExpirado = false;
+            BotActivo = true;
+        }
+    }
+
     ActualizarTextosEstado();
     ActualizarInterfazMaster();
     EventSetTimer(1);
@@ -394,26 +415,40 @@ bool EsHorarioPermitido(datetime serverTime, string &motivo) {
 }
 
 void ActualizarTextosEstado() {
+    datetime nowTime = ObtenerTiempoSeguro();
+
+    if(trialStart < 1704067200 || trialStart > nowTime + 86400) {
+        trialStart = nowTime;
+        long accLogin = AccountInfoInteger(ACCOUNT_LOGIN);
+        if(accLogin > 0) {
+            string gv = "MAIKO_TRIAL_V11_" + IntegerToString(accLogin);
+            GlobalVariableSet(gv, (double)trialStart);
+        }
+    }
+
     if(MQLInfoInteger(MQL_TESTER)) {
         trialExpirado = false;
         diasRestantes = 30;
     } else {
+        long secElapsed = (long)(nowTime - trialStart);
+        if(secElapsed < 0) secElapsed = 0;
+        int dTrans = (int)(secElapsed / 86400);
         int maxDias = DiasDeTrial;
         if(maxDias > 30) maxDias = 30;
-        diasRestantes = maxDias - (int)((TimeTradeServer() - trialStart) / 86400);
-        if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
+        diasRestantes = maxDias - dTrans;
+        if(diasRestantes < 0) diasRestantes = 0;
+        if(dTrans >= maxDias) {
+            trialExpirado = true;
+            BotActivo = false;
+        } else {
+            trialExpirado = false;
+        }
     }
 
-
-
     if(trialExpirado) {
-
         txtVoz = "TRIAL 30 DIAS EXPIRADO.";
-
         txtVeredicto = "EXPIRADO";
-
         return;
-
     }
 
 
@@ -491,22 +526,18 @@ void ActualizarTextosEstado() {
 
 
 void OnTick() {
-
-    ActualizarTextosEstado();
-
-    if(trialExpirado) { BotActivo = false; ActualizarInterfazMaster(); return; }
-
-    if(!TerminalInfoInteger(TERMINAL_TRADE_ALLOWED)) { txtVoz = "TRADING NO PERMITIDO"; return; }
-
-
-
-    ActualizarEstadoMaster();
-
+    spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10.0;
     ganadoHoy = CalcularGanadoHoy();
-
     flotante = CalcularProfit();
 
-    spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10;
+    ActualizarTextosEstado();
+    ActualizarInterfazMaster();
+
+    if(trialExpirado) { BotActivo = false; ActualizarInterfazMaster(); return; }
+    if(!TerminalInfoInteger(TERMINAL_TRADE_ALLOWED)) { txtVoz = "TRADING NO PERMITIDO"; return; }
+    if(!BotActivo) { return; }
+
+    ActualizarEstadoMaster();
 
 
 
@@ -1139,17 +1170,18 @@ void ActualizarInterfazMaster() {
 
       
 
-      int elapsedSeconds = (int)(TimeCurrent() - trialStart);
+      datetime nowTime = ObtenerTiempoSeguro();
+      long secElapsed = (long)(nowTime - trialStart);
+      if(secElapsed < 0) secElapsed = 0;
 
-      int remainingSeconds = 86400 - (elapsedSeconds % 86400);
+      long secHoy = secElapsed % 86400;
+      long secRestantesDia = 86400 - secHoy;
+      int remHours = (int)((secRestantesDia / 3600) % 24);
+      int remMinutes = (int)((secRestantesDia % 3600) / 60);
 
-      int remHours = remainingSeconds / 3600;
-
-      int remMinutes = (remainingSeconds % 3600) / 60;
-
-      int dOp = (int)((TimeCurrent() - trialStart) / 86400) + 1;
-
-      
+      int dOp = (int)(secElapsed / 86400) + 1;
+      if(dOp > DiasDeTrial) dOp = DiasDeTrial;
+      if(dOp < 1) dOp = 1;
 
       if(trialExpirado) {
           ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "CUENTA DEMO | TRIAL EXPIRADO (30 DIAS)");
@@ -1293,6 +1325,9 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 void OnTimer() {
     ChartSetInteger(0, CHART_FOREGROUND, false);
     ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
+    spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10.0;
+    flotante = CalcularProfit();
+    ganadoHoy = CalcularGanadoHoy();
     ActualizarEstadoMaster();
     ActualizarInterfazMaster();
 

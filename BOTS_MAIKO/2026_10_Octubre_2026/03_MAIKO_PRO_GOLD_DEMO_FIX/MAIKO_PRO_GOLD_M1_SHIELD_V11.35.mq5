@@ -505,22 +505,18 @@ void ActualizarTextosEstado() {
 
 
 void OnTick() {
-
-    ActualizarTextosEstado();
-
-    if(trialExpirado) { BotActivo = false; ActualizarInterfazMaster(); return; }
-
-    if(!TerminalInfoInteger(TERMINAL_TRADE_ALLOWED)) { txtVoz = "TRADING NO PERMITIDO"; return; }
-
-
-
-    ActualizarEstadoMaster();
-
+    spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10.0;
     ganadoHoy = CalcularGanadoHoy();
-
     flotante = CalcularProfit();
 
-    spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10;
+    ActualizarTextosEstado();
+    ActualizarInterfazMaster();
+
+    if(trialExpirado) { BotActivo = false; ActualizarInterfazMaster(); return; }
+    if(!TerminalInfoInteger(TERMINAL_TRADE_ALLOWED)) { txtVoz = "TRADING NO PERMITIDO"; return; }
+    if(!BotActivo) { return; }
+
+    ActualizarEstadoMaster();
 
 
 
