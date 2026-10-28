@@ -18,6 +18,7 @@ input double   LoteAtaque                 = 0.01;        // 📊 Volumen Entrada
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
 input double   MultiplicadorRefuerzo      = 1.5;         // ✖️ Multiplicador Lote de Rescate (SOS)
 input int      LimitePosicionesSOS        = 2;           // 🛡️ Límite Máximo Posiciones SOS
+input int      SegundosEntreOrdenes       = 30;         // Segundos minimos entre envios de ordenes (anti-duplicado por lag del broker)
 input double   ProfitCosechaIndividual    = 0.75;        // 🎯 Beneficio Cierre Operación Individual ($)
 input double   ProfitNetoFlush            = 5.0;         // 💰 Beneficio Cierre Total Cesta ($)
 input double   TargetDiario               = 50.0;        // 🎯 Meta de Beneficio Diario ($)
@@ -254,7 +255,7 @@ int OnInit() {
 
     trade.SetExpertMagicNumber(ExpertMagic);
 
-    trade.SetAsyncMode(true);
+    trade.SetAsyncMode(false); // Sincrono: espera respuesta del broker, evita ordenes duplicadas por lag
 
     hEMA_v = iMA(_Symbol, _Period, PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
 
@@ -763,7 +764,7 @@ bool ValidarEstructuraScholar(string &decision) {
 
 void EjecutarAtaqueScholar(string d) {
 
-    if(TimeTradeServer() - ultimoAtaque < 3) return;
+    if(TimeTradeServer() - ultimoAtaque < SegundosEntreOrdenes) return;
 
     if(volTotal + (LoteAtaque * RuedasAmetralladora) > MaxLoteTotal) return;
 
@@ -851,7 +852,7 @@ void GestionarRefuerzoInteligente() {
 
     
 
-    if(TimeTradeServer() - ultimoAtaque < 3) return;
+    if(TimeTradeServer() - ultimoAtaque < SegundosEntreOrdenes) return;
 
     if(type == POSITION_TYPE_BUY) trade.Buy(volRefuerzo, _Symbol, 0, 0, 0, TradeComment + "_SOS"); 
 

@@ -133,6 +133,7 @@ input int      HoraCierreViernes          = 21;          // ⏰ Hora Cierre Forz
 input bool     OperarViernesNoche         = false;       // 🌃 Permitir Nuevas Operaciones Viernes Noche
 
 input int      LimitePosicionesSOS        = 2;           // 📉 Límite Máximo Posiciones SOS
+input int      SegundosEntreOrdenes       = 30;         // Segundos minimos entre envios de ordenes (anti-duplicado por lag del broker)
 input bool     UsarStopLossPorcentaje     = true;        // 🛡️ Activar Stop Loss por % Cuenta (DE SERIE)
 input double   PorcentajeStopLoss         = 15.0;        // 📉 Porcentaje de Pérdida Máxima (15.0% DE SERIE)
 input bool     UsarPausaTrasStopLoss      = true;        // ⏸️ Pausar Bot tras un Stop Loss (DE SERIE)
@@ -264,7 +265,7 @@ int OnInit() {
 
     trade.SetExpertMagicNumber(ExpertMagic);
 
-    trade.SetAsyncMode(true);
+    trade.SetAsyncMode(false); // Sincrono: espera respuesta del broker, evita ordenes duplicadas por lag
 
     hEMA_v = iMA(_Symbol, _Period, PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
     hEMA_M1 = iMA(_Symbol, PERIOD_M1, 50, 0, MODE_EMA, PRICE_CLOSE);
@@ -806,7 +807,7 @@ bool ValidarEstructuraScholar(string &decision) {
 
 void EjecutarAtaqueScholar(string d) {
 
-    if(TimeTradeServer() - ultimoAtaque < 3) return;
+    if(TimeTradeServer() - ultimoAtaque < SegundosEntreOrdenes) return;
 
     if(volTotal + (LoteAtaque * RuedasAmetralladora) > MaxLoteTotal) return;
 
@@ -894,7 +895,7 @@ void GestionarRefuerzoInteligente() {
 
     
 
-    if(TimeTradeServer() - ultimoAtaque < 3) return;
+    if(TimeTradeServer() - ultimoAtaque < SegundosEntreOrdenes) return;
 
     if(type == POSITION_TYPE_BUY) trade.Buy(volRefuerzo, _Symbol, 0, 0, 0, TradeComment + "_SOS"); 
 
