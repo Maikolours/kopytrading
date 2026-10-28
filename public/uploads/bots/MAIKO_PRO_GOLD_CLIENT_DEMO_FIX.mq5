@@ -318,8 +318,14 @@ int OnInit() {
         }
     }
 
-    ActualizarTextosEstado();
-    ActualizarInterfazMaster();
+    spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10.0;
+    ganadoHoy = CalcularGanadoHoy();
+    flotante = CalcularProfit();
+    ActualizarEstadoMaster();
+    ActualizarTextosEstado();
+    ActualizarInterfazMaster();
+    EnviarTelemetria();
+    ultimoSync = TimeLocal();
     EventSetTimer(1);
     return(INIT_SUCCEEDED);
 
@@ -1332,7 +1338,7 @@ void OnTimer() {
     ActualizarEstadoMaster();
     ActualizarInterfazMaster();
 
-    int interval = (ArraySize(pos) > 0) ? 15 : 3600;
+    int interval = (ArraySize(pos) > 0) ? 15 : 60;
 
     if(TimeLocal() - ultimoSync >= interval) {
 

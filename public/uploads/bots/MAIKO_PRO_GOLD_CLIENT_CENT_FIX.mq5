@@ -271,9 +271,14 @@ int OnInit() {
     diasRestantes = 9999;
     BotActivo = true;
     
-    ActualizarTextosEstado();
-    ActualizarInterfazMaster();
-    EnviarTelemetria();
+    spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10.0;
+    ganadoHoy = CalcularGanadoHoy();
+    flotante = CalcularProfit();
+    ActualizarEstadoMaster();
+    ActualizarTextosEstado();
+    ActualizarInterfazMaster();
+    EnviarTelemetria();
+    ultimoSync = TimeLocal();
     EventSetTimer(1);
     return(INIT_SUCCEEDED);
 

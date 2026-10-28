@@ -22,52 +22,6 @@ export async function GET(
             where: { purchaseId_account: { purchaseId: id, account } }
         });
 
-        // 🛡️ SAKURA MASTER FETCH: Si eres tú, buscamos tu balance más fresco en todo el sistema.
-        // v14.0: Ahora filtramos por instrumento y tipo de bot para evitar cruces en tiempo real
-        const isSakura = session.user.email?.includes("viajaconsakura") || id.includes("viajaconsakura");
-        if (isSakura) {
-            let botSymbolPrefix = symbol ? symbol.substring(0, 3) : null;
-            let productNameKeyword = "";
-            
-            const currentPurchase = await prisma.purchase.findUnique({
-                where: { id },
-                include: { botProduct: true }
-            });
-            
-            if (currentPurchase?.botProduct) {
-                const nameUpper = currentPurchase.botProduct.name.toUpperCase();
-                if (nameUpper.includes("CENT")) productNameKeyword = "CENT";
-                else if (nameUpper.includes("DEMO")) productNameKeyword = "DEMO";
-                else if (nameUpper.includes("GOLD")) productNameKeyword = "GOLD";
-                else if (nameUpper.includes("BTC")) productNameKeyword = "BTC";
-                
-                if (!botSymbolPrefix) {
-                    botSymbolPrefix = currentPurchase.botProduct.instrument.substring(0, 3).toUpperCase();
-                }
-            }
-            
-            const freshestRecord = await prisma.botSettings.findFirst({
-                where: { 
-                    purchase: { 
-                        user: { email: { contains: "viajaconsakura" } },
-                        botProduct: {
-                            AND: [
-                                botSymbolPrefix ? { instrument: { contains: botSymbolPrefix } } : {},
-                                productNameKeyword ? { 
-                                    name: productNameKeyword === "GOLD" 
-                                        ? { contains: "GOLD", not: { contains: "DEMO" } }
-                                        : { contains: productNameKeyword }
-                                } : {}
-                            ]
-                        }
-                    },
-                    account: account !== "unknown" ? account : undefined
-                },
-                orderBy: { updatedAt: 'desc' }
-            });
-            if (freshestRecord) record = freshestRecord;
-        }
-
         // FALLBACK UNIVERSAL: Si no hay registro para esa cuenta, o la cuenta es "unknown", 
         // servimos los datos más frescos que tengamos para este bot.
         if (!record) {
