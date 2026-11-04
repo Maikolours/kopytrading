@@ -45,14 +45,14 @@ body {
   min-height: 100vh;
 }
 
-/* --- CUSTOM LUXURY CURSOR (0ms LAG, GPU ACCELERATED) --- */
+/* --- CUSTOM BRANDED LOGO CURSOR (KOPYTRADING EMBLEM, GPU ACCELERATED) --- */
 @media (hover: hover) and (pointer: fine) {
-  body {
-    cursor: url('/images/cursor/cursor-default.png') 1 1, auto;
+  html, body {
+    cursor: url('/images/cursor/cursor-default.png?v=3') 0 0, auto;
   }
 
-  a, button, [role="button"], input[type="submit"], input[type="button"], select {
-    cursor: url('/images/cursor/cursor-pointer.png') 11 11, pointer;
+  a, button, [role="button"], input[type="submit"], input[type="button"], select, .cursor-pointer, [onclick], summary {
+    cursor: url('/images/cursor/cursor-pointer.png?v=3') 0 0, pointer !important;
   }
 }
 
