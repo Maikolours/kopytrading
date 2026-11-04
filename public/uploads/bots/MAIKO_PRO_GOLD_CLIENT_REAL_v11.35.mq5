@@ -12,9 +12,11 @@
 // --- CONFIGURACION GENERAL ---
 input group "=== CONFIGURACION GENERAL ==="
 input string   MiLicencia                 = "";          // 🔑 Clave de Licencia o Correo Usuario
-input double   LoteAtaque                 = 0.01;        // 📊 Volumen Entrada Inicial (Ataque)
+input double   LoteAtaque                 = 0.01;        //  Volumen Entrada Inicial (Ataque)
 
 // --- GESTION DE RIESGO Y BENEFICIOS ---
+//  Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
+
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
 input double   ProfitNetoFlush            = 5.0;         // 💰 Beneficio Cierre Total Cesta ($)
 input double   TargetDiario               = 50.0;        // 🎯 Meta de Beneficio Diario (50.0)       // 🎯 Meta de Beneficio Diario ($)
@@ -22,6 +24,8 @@ input bool     UsarStopLossPorcentaje     = true;        // 🛡️ Activar Stop
 input double   PorcentajeStopLoss         = 15.0;        // 📉 Porcentaje de Pérdida Máxima (15.0% DE SERIE)
 
 // --- HORARIOS OPERATIVOS Y DIAS ---
+//  false = Dejar correr SOS con Trailing/BE; true = Cortar a $0.75
+
 input group "=== HORARIOS OPERATIVOS Y DIAS ==="
 input int      HoraInicioOperativa        = 1;           // ⏰ Hora de Inicio Operaciones Diaria (Broker)
 input int      HoraFinOperativa           = 23;          // ⏰ Hora de Cierre Operaciones Diaria (Broker)
@@ -83,11 +87,11 @@ const bool     CheckM15                   = true;
 const bool     CheckM5                    = true;
 
 const int      RuedasAmetralladora        = 1;
-const double   MultiplicadorRefuerzo      = 1.5;
-const double   MaxLoteTotal               = 0.50;
-const double   MaxLoteIndividual          = 0.02;
 
-const double   DistanciaRefuerzoPips      = 30.0;
+const double   MaxLoteTotal               = 0.50;
+
+
+
 const double   MaxPipsHueco               = 50.0;
 const int      MaxVelasHueco              = 5;
 
@@ -134,6 +138,24 @@ const bool     ShowM1                     = true;
 CTrade trade;
 
 input int ExpertMagic = 111336;
+
+// ====================================================================
+// --- PARAMETROS INTERNOS Y SECRET SAUCE BLINDADOS (HARDCODED) ---
+// ====================================================================
+const bool     UsarFiltroTendenciaH1      = true;        // Filtro Tendencia H1 (EMA 50): Bloquea contra-tendencia H1
+const bool     UsarFiltroTendenciaH4      = false;       // Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
+
+const double   MultiplicadorRefuerzo      = 2.0;         // Multiplicador Lote SOS -> 0.01 x 2.0 = 0.02
+const double   MaxLoteIndividual          = 0.02;        // Lote maximo para rescate SOS
+const double   DistanciaRefuerzoPips      = 60.0;        // Distancia Disparo SOS (6.0$ en Oro)
+
+const bool     UsarBreakEvenSOS           = true;        // Activar BreakEven en Orden SOS
+const double   PipsActivacionBESOS        = 15.0;        // Pips a favor para asegurar el dolar (1.50$ Oro -> +$3.00 flotante)
+const double   PipsAseguradosBESOS        = 7.0;         // Pips Asegurados BreakEven (7 pips = 0.70$ Oro -> > $1.00 neto garantizado)
+const bool     UsarTrailingStopSOS        = true;        // Activar Trailing Stop dinamico en Orden SOS
+const double   PipsTrailingStopSOS        = 15.0;        // Distancia Trailing Stop SOS (15 pips = 1.50$ Oro)
+const double   PipsPasoTrailingSOS        = 3.0;         // Paso minimo avance Trailing (3 pips = 0.30$ Oro)
+const bool     PermitirCosechaRapidaSOS   = false;       // false = Dejar correr SOS con Trailing/BE para salvar cesta
 
 struct PosInfo { ulong ticket; double p; double c; double s; int t; double v; datetime time; double pr; };
 
@@ -562,7 +584,7 @@ void OnTick() {
         }
     }
 
-    if(ArraySize(pos) > 0) { GestionarRefuerzoInteligente(); return; }
+    if(ArraySize(pos) > 0) { GestionarRefuerzoInteligente(); GestionarProteccionSOS(); return; }
 
     if(ArraySize(pos) == 0) {
         datetime serverTime = TimeTradeServer();
@@ -685,7 +707,40 @@ bool ValidarEstructuraScholar(string &decision) {
 
     if(!m15_ok) { txtVeredicto = StringFormat("M15 EN CONTRA (C:%.2f O:%.2f)", c15, o15); return false; }
 
-    if(!m5_ok) { txtVeredicto = StringFormat("M5 EN CONTRA (C:%.2f O:%.2f)", c5, o5); return false; }
+    if(!m5_ok) { txtVeredicto = StringFormat("M5 EN CONTRA (C:%.2f O:%.2f)", c5, o5);
+
+    // --- FILTRO DE TENDENCIA H1 (EMA 50) ---
+    if(UsarFiltroTendenciaH1) {
+        double emaH1[1];
+        if(CopyBuffer(hRadar[3], 0, 1, 1, emaH1) > 0) {
+            double closeH1 = iClose(_Symbol, PERIOD_H1, 1);
+            if(porEncima && closeH1 < emaH1[0]) {
+                txtVeredicto = "BLOQUEO: H1 BAJISTA (EMA 50)";
+                return false;
+            }
+            if(!porEncima && closeH1 > emaH1[0]) {
+                txtVeredicto = "BLOQUEO: H1 ALCISTA (EMA 50)";
+                return false;
+            }
+        }
+    }
+
+    // --- FILTRO DE TENDENCIA H4 (EMA 50) ---
+    if(UsarFiltroTendenciaH4) {
+        double emaH4[1];
+        if(CopyBuffer(hRadar[2], 0, 1, 1, emaH4) > 0) {
+            double closeH4 = iClose(_Symbol, PERIOD_H4, 1);
+            if(porEncima && closeH4 < emaH4[0]) {
+                txtVeredicto = "BLOQUEO: H4 BAJISTA (EMA 50)";
+                return false;
+            }
+            if(!porEncima && closeH4 > emaH4[0]) {
+                txtVeredicto = "BLOQUEO: H4 ALCISTA (EMA 50)";
+                return false;
+            }
+        }
+    }
+ return false; }
 
 
 
@@ -809,12 +864,87 @@ void GestionarRefuerzoInteligente() {
 
 
 
+
+void GestionarProteccionSOS() {
+    if(ArraySize(pos) <= 1) return; // Solo si hay al menos una orden SOS abierta
+    if(!UsarBreakEvenSOS && !UsarTrailingStopSOS) return;
+
+    double point_pips = _Point * 10.0;
+    double current_bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
+    double current_ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
+
+    for(int i=1; i<ArraySize(pos); i++) {
+        ulong ticket = pos[i].ticket;
+        if(!PositionSelectByTicket(ticket)) continue;
+
+        long pos_type = PositionGetInteger(POSITION_TYPE);
+        double open_price = PositionGetDouble(POSITION_PRICE_OPEN);
+        double current_sl = PositionGetDouble(POSITION_SL);
+        double current_tp = PositionGetDouble(POSITION_TP);
+
+        // --- CASO COMPRA (BUY) ---
+        if(pos_type == POSITION_TYPE_BUY) {
+            double profit_pips = (current_bid - open_price) / point_pips;
+
+            // 1. BreakEven SOS
+            if(UsarBreakEvenSOS && profit_pips >= PipsActivacionBESOS) {
+                double be_sl = NormalizeDouble(open_price + (PipsAseguradosBESOS * point_pips), _Digits);
+                if(current_sl < be_sl) {
+                    if(trade.PositionModify(ticket, be_sl, current_tp)) {
+                        Print("MAIKO SOS: BreakEven activado en orden ", ticket, " SL: ", be_sl);
+                        current_sl = be_sl;
+                    }
+                }
+            }
+
+            // 2. Trailing Stop SOS
+            if(UsarTrailingStopSOS && profit_pips >= PipsTrailingStopSOS) {
+                double trail_sl = NormalizeDouble(current_bid - (PipsTrailingStopSOS * point_pips), _Digits);
+                if(trail_sl > open_price) {
+                    if(current_sl == 0 || (trail_sl - current_sl) >= (PipsPasoTrailingSOS * point_pips)) {
+                        if(trade.PositionModify(ticket, trail_sl, current_tp)) {
+                            Print("MAIKO SOS: Trailing Stop actualizado en orden ", ticket, " nuevo SL: ", trail_sl);
+                        }
+                    }
+                }
+            }
+        }
+        // --- CASO VENTA (SELL) ---
+        else if(pos_type == POSITION_TYPE_SELL) {
+            double profit_pips = (open_price - current_ask) / point_pips;
+
+            // 1. BreakEven SOS
+            if(UsarBreakEvenSOS && profit_pips >= PipsActivacionBESOS) {
+                double be_sl = NormalizeDouble(open_price - (PipsAseguradosBESOS * point_pips), _Digits);
+                if(current_sl == 0 || current_sl > be_sl) {
+                    if(trade.PositionModify(ticket, be_sl, current_tp)) {
+                        Print("MAIKO SOS: BreakEven activado en orden ", ticket, " SL: ", be_sl);
+                        current_sl = be_sl;
+                    }
+                }
+            }
+
+            // 2. Trailing Stop SOS
+            if(UsarTrailingStopSOS && profit_pips >= PipsTrailingStopSOS) {
+                double trail_sl = NormalizeDouble(current_ask + (PipsTrailingStopSOS * point_pips), _Digits);
+                if(trail_sl < open_price) {
+                    if(current_sl == 0 || (current_sl - trail_sl) >= (PipsPasoTrailingSOS * point_pips)) {
+                        if(trade.PositionModify(ticket, trail_sl, current_tp)) {
+                            Print("MAIKO SOS: Trailing Stop actualizado en orden ", ticket, " nuevo SL: ", trail_sl);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 void GestionarCosechaSniper() { 
 
     double multCent = EsCuentaCent ? 100.0 : 1.0;
 
     for(int i=ArraySize(pos)-1; i>=0; i--) {
-
+        if(i > 0 && !PermitirCosechaRapidaSOS) continue;
         if((pos[i].p + pos[i].c + pos[i].s) >= (ProfitCosechaIndividual * multCent)) {
 
             trade.PositionClose(pos[i].ticket);

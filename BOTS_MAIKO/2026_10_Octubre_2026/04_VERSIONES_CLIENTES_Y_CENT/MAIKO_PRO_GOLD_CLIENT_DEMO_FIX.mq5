@@ -17,11 +17,12 @@ input double   LoteAtaque                 = 0.01;        // 📊 Volumen Entrada
 // --- GESTION DE RIESGO Y BENEFICIOS ---
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
 input double   MultiplicadorRefuerzo      = 1.5;         // ✖️ Multiplicador Lote de Rescate (SOS)
+input double   MaxLoteIndividual          = 0.04;        // 🛡️ Volumen Máximo por Operación SOS
 input int      LimitePosicionesSOS        = 2;           // 🛡️ Límite Máximo Posiciones SOS
 input int      SegundosEntreOrdenes       = 30;         // Segundos minimos entre envios de ordenes (anti-duplicado por lag del broker)
 input double   ProfitCosechaIndividual    = 0.75;        // 🎯 Beneficio Cierre Operación Individual ($)
 input double   ProfitNetoFlush            = 5.0;         // 💰 Beneficio Cierre Total Cesta ($)
-input double   TargetDiario               = 50.0;        // 🎯 Meta de Beneficio Diario ($)
+input double   TargetDiario               = 40.0;        // 🎯 Meta de Beneficio Diario ($)
 input bool     UsarStopLossPorcentaje     = true;        // 🛡️ Activar Stop Loss por % Cuenta (DE SERIE)
 input double   PorcentajeStopLoss         = 15.0;        // 📉 Porcentaje de Pérdida Máxima (15.0% DE SERIE)
 
@@ -112,7 +113,7 @@ const bool     CheckM5                    = true;
 
 const int      RuedasAmetralladora        = 1;
 const double   MaxLoteTotal               = 0.50;
-const double   MaxLoteIndividual          = 0.02;
+// MaxLoteIndividual ahora configurable en inputs
 
 const double   DistanciaRefuerzoPips      = 30.0;
 const double   MaxPipsHueco               = 50.0;
@@ -318,14 +319,22 @@ int OnInit() {
         }
     }
 
-    spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10.0;
-    ganadoHoy = CalcularGanadoHoy();
-    flotante = CalcularProfit();
-    ActualizarEstadoMaster();
-    ActualizarTextosEstado();
-    ActualizarInterfazMaster();
-    EnviarTelemetria();
-    ultimoSync = TimeLocal();
+    spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10.0;
+
+    ganadoHoy = CalcularGanadoHoy();
+
+    flotante = CalcularProfit();
+
+    ActualizarEstadoMaster();
+
+    ActualizarTextosEstado();
+
+    ActualizarInterfazMaster();
+
+    EnviarTelemetria();
+
+    ultimoSync = TimeLocal();
+
     EventSetTimer(1);
     return(INIT_SUCCEEDED);
 

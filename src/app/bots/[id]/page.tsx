@@ -304,41 +304,41 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                 <div>
                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
                                         <h4 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.2em] sm:tracking-[0.3em] break-words">Rendimiento Auditado 2026</h4>
-                                        <span className="text-[9px] bg-success/10 text-success px-3 py-1 rounded-full border border-success/20 font-black uppercase tracking-widest self-start sm:self-auto">Backtest M5 Oficial</span>
+                                        <span className="text-[9px] bg-success/10 text-success px-3 py-1 rounded-full border border-success/20 font-black uppercase tracking-widest self-start sm:self-auto">Backtest M5 Oficial v11.35</span>
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-4 relative z-10">
                                         <div className="bg-white/[0.02] p-4 rounded-2xl border border-white/5">
                                             <p className="text-[9px] text-text-muted mb-1 uppercase tracking-widest font-black">Profit Factor (PF)</p>
-                                            <p className="text-3xl font-black text-success italic">3.29</p>
-                                            <span className="text-[9px] text-text-muted">Auditado 2026 M5</span>
+                                            <p className="text-3xl font-black text-success italic">3.08</p>
+                                            <span className="text-[9px] text-text-muted">Auditado 10 Meses (5.070 trades)</span>
                                         </div>
                                         <div className="bg-white/[0.02] p-4 rounded-2xl border border-white/5">
                                             <p className="text-[9px] text-text-muted mb-1 uppercase tracking-widest font-black">Drawdown Máx Equidad</p>
-                                            <p className="text-3xl font-black text-amber-400 italic">7.81%</p>
-                                            <span className="text-[9px] text-text-muted">Con corte viernes 19:00</span>
+                                            <p className="text-3xl font-black text-amber-400 italic">15.52%</p>
+                                            <span className="text-[9px] text-text-muted">$378.08 (Riesgo Controlado)</span>
                                         </div>
                                         <div className="bg-white/[0.02] p-3 rounded-2xl border border-white/5">
                                             <p className="text-[8px] text-text-muted mb-0.5 uppercase tracking-widest font-black">Tasa de Acierto</p>
-                                            <p className="text-xl font-black text-white italic">92.08%</p>
-                                            <span className="text-[8px] text-success font-medium">6.500 / 7.059 positivas</span>
+                                            <p className="text-xl font-black text-white italic">96.00%</p>
+                                            <span className="text-[8px] text-success font-medium">4.867 / 5.070 positivas</span>
                                         </div>
                                         <div className="bg-white/[0.02] p-3 rounded-2xl border border-white/5">
                                             <p className="text-[8px] text-text-muted mb-0.5 uppercase tracking-widest font-black">Ratio Sharpe</p>
-                                            <p className="text-xl font-black text-white italic">11.30</p>
-                                            <span className="text-[8px] text-emerald-400 font-medium">Estabilidad institucional</span>
+                                            <p className="text-xl font-black text-white italic">10.12</p>
+                                            <span className="text-[8px] text-emerald-400 font-medium">Élite institucional</span>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div className="mt-4 pt-3 border-t border-white/5 text-[10px] text-text-muted flex items-center justify-between">
                                     <span>Pérdida Capital Inicial: <strong className="text-success">0.00 $</strong></span>
-                                    <span>Factor Recuperación: <strong className="text-white">13.26x</strong></span>
+                                    <span>Factor Recuperación: <strong className="text-white">15.05x</strong></span>
                                 </div>
                             </div>
                         </div>
 
-                        {/* NUEVO: SECCIÓN DE AUDITORÍA VISUAL DEL BACKTEST (SIN COMPROMETER ESTRATEGIA PRIVADA) */}
+                        {/* SECCIÓN DE AUDITORÍA VISUAL DEL BACKTEST, MONTE CARLO Y STRESS TESTING */}
                         <div className="glass-card p-6 sm:p-8 border border-white/10 w-full overflow-hidden space-y-6">
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                 <div>
@@ -351,15 +351,15 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             </div>
 
                             <p className="text-xs text-text-muted font-light leading-relaxed">
-                                Auditoría cuantitativa oficial ejecutada sobre datos reales de ticks de alta fidelidad durante todo el ejercicio 2026. La curva de balance refleja el crecimiento sostenido del algoritmo protegiendo el capital ante noticias macroeconómicas (bloqueos quirúrgicos) y cerrando el mercado los viernes a las 21:00 para evitar los gaps de apertura del fin de semana.
+                                Auditoría cuantitativa oficial ejecutada sobre datos reales de ticks de alta fidelidad durante 10 meses completos de 2026. La curva de balance refleja el crecimiento sostenido del algoritmo protegiendo el capital ante noticias macroeconómicas (bloqueos quirúrgicos), cerrando el mercado los viernes y operando estrictamente alineado con la tendencia horaria macro (EMA-50 en H1).
                             </p>
 
                             {/* Capturas Oficiales Auditadas (Curva e Informe) */}
-                            <div className="space-y-4">
+                            <div className="space-y-6">
                                 <div className="space-y-2">
                                     <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
                                         <span>📈 Curva de Crecimiento de Balance y Patrimonio (2026)</span>
-                                        <span className="text-emerald-400 font-black">+385.9% Neto</span>
+                                        <span className="text-emerald-400 font-black">+568.9% Neto (+$5.689,35)</span>
                                     </div>
                                     <div className="rounded-2xl overflow-hidden border border-white/10 bg-black/40 shadow-2xl p-1">
                                         <img 
@@ -370,15 +370,43 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                     </div>
                                 </div>
 
-                                <div className="space-y-2 pt-2">
+                                <div className="space-y-2">
                                     <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
-                                        <span>📊 Informe Detallado de Métricas Institucionales</span>
-                                        <span className="text-amber-400 font-bold">Sharpe: 14.20 | Profit Factor: 2.99</span>
+                                        <span>📊 Informe Detallado de Métricas Institucionales (MT5)</span>
+                                        <span className="text-amber-400 font-bold">Sharpe: 10.12 | Profit Factor: 3.08</span>
                                     </div>
                                     <div className="rounded-2xl overflow-hidden border border-white/10 bg-black/40 shadow-2xl p-1">
                                         <img 
                                             src="/images/backtests/backtest_2026_informe.png" 
                                             alt="Informe de Rendimiento MAIKO PRO GOLD 2026" 
+                                            className="w-full h-auto rounded-xl object-contain hover:scale-[1.01] transition-transform duration-300"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
+                                        <span>🎲 Auditoría Cuantitativa Monte Carlo (2.000 Simulaciones)</span>
+                                        <span className="text-cyan-400 font-bold">Riesgo de Ruina: 0.00%</span>
+                                    </div>
+                                    <div className="rounded-2xl overflow-hidden border border-white/10 bg-black/40 shadow-2xl p-1">
+                                        <img 
+                                            src="/images/backtests/backtest_monte_carlo.png" 
+                                            alt="Simulación Monte Carlo MAIKO PRO GOLD 2026" 
+                                            className="w-full h-auto rounded-xl object-contain hover:scale-[1.01] transition-transform duration-300"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
+                                        <span>🛡️ Pruebas de Estrés Institucional y Resistencia a Cisnes Negros</span>
+                                        <span className="text-purple-400 font-bold">Calmar: 45.29 | Sin Outliers</span>
+                                    </div>
+                                    <div className="rounded-2xl overflow-hidden border border-white/10 bg-black/40 shadow-2xl p-1">
+                                        <img 
+                                            src="/images/backtests/backtest_stress_testing.png" 
+                                            alt="Pruebas de Estrés Institucional MAIKO PRO GOLD 2026" 
                                             className="w-full h-auto rounded-xl object-contain hover:scale-[1.01] transition-transform duration-300"
                                         />
                                     </div>
@@ -389,23 +417,23 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-white/5">
                                 <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5">
                                     <div className="text-[9px] uppercase tracking-widest text-text-muted font-bold">Beneficio Neto</div>
-                                    <div className="text-lg font-black text-emerald-400">+$3.859,89</div>
-                                    <div className="text-[9px] text-text-muted">Depósito: $1.000</div>
+                                    <div className="text-lg font-black text-emerald-400">+$5.689,35</div>
+                                    <div className="text-[9px] text-text-muted">Depósito: $1.000 (Saldo: $6.689)</div>
                                 </div>
                                 <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5">
                                     <div className="text-[9px] uppercase tracking-widest text-text-muted font-bold">Tasa de Acierto</div>
-                                    <div className="text-lg font-black text-white">92,59%</div>
-                                    <div className="text-[9px] text-text-muted">3.563 / 3.848 ganadas</div>
+                                    <div className="text-lg font-black text-white">96,00%</div>
+                                    <div className="text-[9px] text-text-muted">4.867 / 5.070 ganadas</div>
                                 </div>
                                 <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5">
                                     <div className="text-[9px] uppercase tracking-widest text-text-muted font-bold">Profit Factor</div>
-                                    <div className="text-lg font-black text-amber-400">2.99</div>
-                                    <div className="text-[9px] text-text-muted">Recuperación: 9.20</div>
+                                    <div className="text-lg font-black text-amber-400">3.08</div>
+                                    <div className="text-[9px] text-text-muted">Recuperación: 15.05x</div>
                                 </div>
                                 <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5">
                                     <div className="text-[9px] uppercase tracking-widest text-text-muted font-bold">Drawdown Máx</div>
-                                    <div className="text-lg font-black text-slate-200">13,30%</div>
-                                    <div className="text-[9px] text-emerald-400/80">Control estricto &lt; 15%</div>
+                                    <div className="text-lg font-black text-slate-200">15,11%</div>
+                                    <div className="text-[9px] text-emerald-400/80">Riesgo Ruina: 0.00%</div>
                                 </div>
                             </div>
                         </div>

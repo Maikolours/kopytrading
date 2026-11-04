@@ -16,7 +16,8 @@ input double   LoteAtaque                 = 0.01;        // 📊 Volumen Entrada
 
 // --- GESTION DE RIESGO Y BENEFICIOS ---
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
-input double   MultiplicadorRefuerzo      = 1.5;         // ✖️ Multiplicador Lote de Rescate (SOS)
+input double   MultiplicadorRefuerzo      = 2.0;         // Multiplicador Lote de Rescate (SOS)         // ✖️ Multiplicador Lote de Rescate (SOS)
+input double   MaxLoteIndividual          = 0.02;        // Volumen Maximo por Operacion SOS        // 🛡️ Volumen Máximo por Operación SOS
 input int      LimitePosicionesSOS        = 2;           // 🛡️ Límite Máximo Posiciones SOS
 input int      SegundosEntreOrdenes       = 30;         // Segundos minimos entre envios de ordenes (anti-duplicado por lag del broker)
 input double   ProfitCosechaIndividual    = 0.75;        // 🎯 Beneficio Cierre Operación Individual ($)
@@ -112,7 +113,7 @@ const bool     CheckM5                    = true;
 
 const int      RuedasAmetralladora        = 1;
 const double   MaxLoteTotal               = 0.50;
-const double   MaxLoteIndividual          = 0.02;
+// MaxLoteIndividual ahora configurable en inputs
 
 const double   DistanciaRefuerzoPips      = 30.0;
 const double   MaxPipsHueco               = 50.0;
@@ -277,7 +278,7 @@ int OnInit() {
 
     CrearInterfazMaster();
 
-    ChartSetInteger(0, CHART_FOREGROUND, false); ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
+    ChartSetInteger(0, CHART_FOREGROUND, false); ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, true);
 
       
 
@@ -318,14 +319,22 @@ int OnInit() {
         }
     }
 
-    spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10.0;
-    ganadoHoy = CalcularGanadoHoy();
-    flotante = CalcularProfit();
-    ActualizarEstadoMaster();
-    ActualizarTextosEstado();
-    ActualizarInterfazMaster();
-    EnviarTelemetria();
-    ultimoSync = TimeLocal();
+    spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10.0;
+
+    ganadoHoy = CalcularGanadoHoy();
+
+    flotante = CalcularProfit();
+
+    ActualizarEstadoMaster();
+
+    ActualizarTextosEstado();
+
+    ActualizarInterfazMaster();
+
+    EnviarTelemetria();
+
+    ultimoSync = TimeLocal();
+
     EventSetTimer(1);
     return(INIT_SUCCEEDED);
 
@@ -1331,7 +1340,6 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 
 void OnTimer() {
     ChartSetInteger(0, CHART_FOREGROUND, false);
-    ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
     spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10.0;
     flotante = CalcularProfit();
     ganadoHoy = CalcularGanadoHoy();

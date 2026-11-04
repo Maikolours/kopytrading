@@ -88,7 +88,7 @@ input int      MaxVelasHueco              = 5;           // ? Velas sin Giro par
 input group "=== COBRAR BENEFICIOS (TAKE PROFIT) ==="
 input double   ProfitNetoFlush            = 5.0;         // ?? Beneficio Cierre Total Cesta ($)
 input double   ProfitCosechaIndividual    = 0.75;        // ?? Beneficio Cierre SOS Individual ($)
-input double   TargetDiario               = 50.0;        // 🎯 Meta de Beneficio Diario ($)
+input double   TargetDiario               = 40.0;        // 🎯 Meta de Beneficio Diario ($)
 
 // --- HORARIOS OPERATIVOS Y DIAS DE LA SEMANA ---
 input group "=== HORARIOS OPERATIVOS Y DIAS ==="
@@ -336,14 +336,22 @@ int OnInit() {
         }
     }
 
-    spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10.0;
-    ganadoHoy = CalcularGanadoHoy();
-    flotante = CalcularProfit();
-    ActualizarEstadoMaster();
-    ActualizarTextosEstado();
-    ActualizarInterfazMaster();
-    EnviarTelemetria();
-    ultimoSync = TimeLocal();
+    spreadActual = (SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID)) / _Point / 10.0;
+
+    ganadoHoy = CalcularGanadoHoy();
+
+    flotante = CalcularProfit();
+
+    ActualizarEstadoMaster();
+
+    ActualizarTextosEstado();
+
+    ActualizarInterfazMaster();
+
+    EnviarTelemetria();
+
+    ultimoSync = TimeLocal();
+
     EventSetTimer(1);
     return(INIT_SUCCEEDED);
 
