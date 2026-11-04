@@ -196,7 +196,7 @@ int FaseRefuerzo = 0;
 
 datetime trialStart = 0;
 
-int diasRestantes = 30;
+int diasRestantes = 7;
 
 bool trialExpirado = false;
 
@@ -318,11 +318,11 @@ int OnInit() {
 
       if(MQLInfoInteger(MQL_TESTER)) {
           trialExpirado = false;
-          diasRestantes = 30;
+          diasRestantes = 7;
           BotActivo = true;
       } else {
           int maxDias = DiasDeTrial;
-          if(maxDias > 30) maxDias = 30;
+          if(maxDias > 7) maxDias = 7;
           diasRestantes = maxDias - (int)((TimeCurrent() - trialStart) / 86400);
           int diasOperando = (int)((TimeCurrent() - trialStart) / 86400) + 1;
           if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
@@ -453,10 +453,10 @@ bool EsHorarioPermitido(datetime serverTime, string &motivo) {
 void ActualizarTextosEstado() {
     if(MQLInfoInteger(MQL_TESTER)) {
         trialExpirado = false;
-        diasRestantes = 30;
+        diasRestantes = 7;
     } else {
         int maxDias = DiasDeTrial;
-        if(maxDias > 30) maxDias = 30;
+        if(maxDias > 7) maxDias = 7;
         diasRestantes = maxDias - (int)((TimeTradeServer() - trialStart) / 86400);
         if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
     }

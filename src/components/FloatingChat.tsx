@@ -11,7 +11,7 @@ const BOT_RESPONSES: { keywords: string[]; response: string }[] = [
         keywords: ["recomiendas", "recomienda", "empezar", "primer bot", "cuál compro", "cual compro", "para principiante", "soy nuevo", "nunca he", "novato", "recomendación", "mejor para"],
         response: `🏆 **Nuestra recomendación según tu perfil:**
 
-1. **Si quieres probar gratis sin arriesgar dinero hoy mismo**: Activa **MAIKO PRO GOLD CLIENT DEMO FIX** 💜 por solo 1€ (o gratis con cupón) durante 30 días en cuenta DEMO de MT5 en gráfico de M5.
+1. **Si quieres probar gratis sin arriesgar dinero hoy mismo**: Activa **MAIKO PRO GOLD CLIENT DEMO FIX** 💜 por solo 1€ (o gratis con cupón) durante 7 días en cuenta DEMO de MT5 en gráfico de M5.
 
 2. **Si quieres empezar con poco capital en cuenta real ($50 - $100)**: **MAIKO PRO GOLD CENT FIX** ⚡. Opera en cuentas CENT de MT5 en gráfico de M5.
 
@@ -43,7 +43,7 @@ Ten paciencia, el algoritmo está protegiendo tu capital.`
 🚀 **Próximo Lanzamiento Oficial:**
 🔥 **Oferta Especial:** **100€** (50% de descuento sobre el precio regular de 200€) para las primeras 50 licencias.
 
-🎁 **¿Quieres probarlo hoy mismo?** Puedes activar ya la versión DEMO FIX en M5 por 1€ (o gratis con cupón) durante 30 días.`
+🎁 **¿Quieres probarlo hoy mismo?** Puedes activar ya la versión DEMO FIX en M5 por 1€ (o gratis con cupón) durante 7 días.`
     },
     {
         keywords: ["cent", "micro", "bajo capital", "50$", "100$", "cuenta cent", "cuentas cent"],
@@ -76,7 +76,7 @@ Ideal para diversificar tu portafolio junto con el bot de Oro.`
 • **MAIKO PRO GOLD CENT FIX**: **100€** *(Precio regular 250€)*
 
 💜 **DISPONIBLE HOY MISMO EN PRUEBA:**
-• **MAIKO PRO GOLD CLIENT DEMO FIX**: **1€ (o Gratis con Cupón)** por **30 días de prueba** en cuenta DEMO de MT5 (en gráfico M5).
+• **MAIKO PRO GOLD CLIENT DEMO FIX**: **1€ (o Gratis con Cupón)** por **7 días de prueba** en cuenta DEMO de MT5 (en gráfico M5).
 
 Las licencias oficiales incluirán soporte técnico, guías PDF y **actualizaciones futuras 100% gratuitas** desde tu panel.`
     },

@@ -36,7 +36,7 @@ export async function GET(req: Request) {
          return NextResponse.json({ 
             allowed: false, 
             error: "TRIAL_EXPIRED",
-            message: "Tu periodo de prueba de 30 días ha terminado." 
+            message: "Tu periodo de prueba de 7 días ha terminado." 
          });
       }
 

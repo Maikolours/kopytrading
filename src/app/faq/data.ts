@@ -58,7 +58,7 @@ export const FAQS = [
             },
             {
                 q: "¿Puedo probar el bot antes de comprar?",
-                a: "Sí, tenemos disponible una versión de prueba del bot estrella **MAIKO PRO GOLD CLIENT DEMO FIX** por solo 1$ (o gratis con cupón de prueba) durante 30 días en cuenta DEMO. Te recomendamos siempre usarlo en una cuenta DEMO virtual con tu broker y probarlo durante 2-4 semanas. Si el comportamiento te convence, podrás adquirir la licencia oficial. Si no te convence, la prueba simplemente expira al cabo de los 30 días."
+                a: "Sí, tenemos disponible una versión de prueba del bot estrella **MAIKO PRO GOLD CLIENT DEMO FIX** por solo 1$ (o gratis con cupón de prueba) durante 7 días en cuenta DEMO. Te recomendamos siempre usarlo en una cuenta DEMO virtual con tu broker y probarlo durante 2-4 semanas. Si el comportamiento te convence, podrás adquirir la licencia oficial. Si no te convence, la prueba simplemente expira al cabo de los 7 días."
             },
             {
                 q: "¿KopyTrading tiene acceso a mi cuenta del broker?",

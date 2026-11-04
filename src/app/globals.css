@@ -45,6 +45,17 @@ body {
   min-height: 100vh;
 }
 
+/* --- CUSTOM LUXURY CURSOR (0ms LAG, GPU ACCELERATED) --- */
+@media (hover: hover) and (pointer: fine) {
+  body {
+    cursor: url('/images/cursor/cursor-default.png') 1 1, auto;
+  }
+
+  a, button, [role="button"], input[type="submit"], input[type="button"], select {
+    cursor: url('/images/cursor/cursor-pointer.png') 11 11, pointer;
+  }
+}
+
 /* --- GLASSMISM OPTIMIZATION --- */
 .glass-card {
   background: rgba(15, 15, 25, 0.6);

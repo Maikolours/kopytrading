@@ -71,7 +71,7 @@ export async function POST(req: Request) {
                 botProductId: bot.id,
                 amount: 0.00,
                 status: "TRIAL",
-                expiresAt: isDev ? null : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                expiresAt: isDev ? null : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
                 productKey: bot.productKey || "XAU-MG"
             }
         });

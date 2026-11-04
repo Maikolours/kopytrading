@@ -56,7 +56,7 @@ export default function EmailGateModal({ isOpen, onSuccess }: EmailGateModalProp
         </h2>
 
         <p className="text-xs md:text-sm text-slate-300 mb-4 leading-relaxed">
-          Guarda tu progreso de lecciones, desbloquea las evaluaciones y obtén al graduarte un <strong className="text-amber-400">Cupón de 100% de descuento</strong> para 1 mes gratis de <strong>MAIKO PRO GOLD CLIENT DEMO FIX</strong>.
+          Guarda tu progreso de lecciones, desbloquea las evaluaciones y obtén al graduarte un <strong className="text-amber-400">Cupón de 100% de descuento</strong> para 7 días gratis de <strong>MAIKO PRO GOLD CLIENT DEMO FIX</strong>.
         </p>
 
         <div className="mb-6 p-3 rounded-xl bg-amber-500/10 border border-amber-400/20 text-left flex items-start gap-2.5">

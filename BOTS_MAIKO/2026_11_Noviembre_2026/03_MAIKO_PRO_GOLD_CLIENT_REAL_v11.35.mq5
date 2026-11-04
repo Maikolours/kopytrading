@@ -170,7 +170,7 @@ int FaseRefuerzo = 0;
 
 datetime trialStart = 0;
 
-int diasRestantes = 30;
+int diasRestantes = 7;
 
 bool trialExpirado = false;
 
@@ -292,11 +292,11 @@ int OnInit() {
 
       if(MQLInfoInteger(MQL_TESTER)) {
           trialExpirado = false;
-          diasRestantes = 30;
+          diasRestantes = 7;
           BotActivo = true;
       } else {
           int maxDias = DiasDeTrial;
-          if(maxDias > 30) maxDias = 30;
+          if(maxDias > 7) maxDias = 7;
           diasRestantes = maxDias - (int)((TimeCurrent() - trialStart) / 86400);
           int diasOperando = (int)((TimeCurrent() - trialStart) / 86400) + 1;
           if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
@@ -421,10 +421,10 @@ bool EsHorarioPermitido(datetime serverTime, string &motivo) {
 void ActualizarTextosEstado() {
     if(MQLInfoInteger(MQL_TESTER)) {
         trialExpirado = false;
-        diasRestantes = 30;
+        diasRestantes = 7;
     } else {
         int maxDias = DiasDeTrial;
-        if(maxDias > 30) maxDias = 30;
+        if(maxDias > 7) maxDias = 7;
         diasRestantes = maxDias - (int)((TimeTradeServer() - trialStart) / 86400);
         if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
     }
@@ -1285,13 +1285,13 @@ void ActualizarInterfazMaster() {
       
 
       if(trialExpirado) {
-          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "CUENTA DEMO | TRIAL EXPIRADO (30 DIAS)");
+          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "CUENTA DEMO | TRIAL EXPIRADO (7 DIAS)");
           ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrRed);
       } else if(diasRestantes <= 7) {
           ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("CUENTA DEMO | EXPIRA EN %d DIAS [%dh %dm] | ADQUIERE REAL", diasRestantes, remHours, remMinutes));
           ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, C'255,69,0');
       } else {
-          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("CUENTA DEMO | TRIAL DIA %d DE 30 [%dh %dm]", dOp, remHours, remMinutes));
+          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("CUENTA DEMO | TRIAL DIA %d DE 7 [%dh %dm]", dOp, remHours, remMinutes));
           ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrYellow);
       }
 

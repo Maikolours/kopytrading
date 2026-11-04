@@ -92,7 +92,7 @@ export const ACADEMIA_MODULES: Module[] = [
             title: "¿Qué aprenderás en este curso?",
             content: [
               "A lo largo de los módulos aprenderás a interpretar las velas japonesas, identificar la estructura del mercado (tendencias y rangos), entender la volatilidad del Oro (XAUUSD) y dominar la configuración de MetaTrader 5.",
-              "Al completar los módulos y superar los cuestionarios de evaluación, desbloquearás un cupón del 100% de descuento (ACADEMIA100) para activar 1 mes gratis de MAIKO PRO GOLD CLIENT DEMO FIX en tu cuenta demo de MT5."
+              "Al completar los módulos y superar los cuestionarios de evaluación, desbloquearás un cupón del 100% de descuento (ACADEMIA100) para activar 7 días gratis de MAIKO PRO GOLD CLIENT DEMO FIX en tu cuenta demo de MT5."
             ]
           }
         ],
@@ -512,7 +512,7 @@ export const ACADEMIA_MODULES: Module[] = [
             title: "¡Premio de Graduación: Tu Cupón 100% Gratuito!",
             content: [
               "Has completado con éxito los módulos formativos sobre fundamentos de mercado, análisis de velas japonesas, tendencias y control de riesgo estricto. ¡Enhorabuena!",
-              "Como premio por tu compromiso, has desbloqueado el cupón de descuento del 100% (código: ACADEMIA100) para obtener 1 mes gratis de MAIKO PRO GOLD CLIENT DEMO FIX.",
+              "Como premio por tu compromiso, has desbloqueado el cupón de descuento del 100% (código: ACADEMIA100) para obtener 7 días gratis de MAIKO PRO GOLD CLIENT DEMO FIX.",
               "Podrás instalar el bot en tu cuenta DEMO de MetaTrader 5 (en gráfico M5) y comprobar su operativa real sin arriesgar ni un solo céntimo de tu bolsillo. Al mismo tiempo, ¡tus Módulos VIP de instalación técnica quedan desbloqueados a continuación!"
             ],
             keyConceptCard: {

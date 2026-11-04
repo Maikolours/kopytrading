@@ -57,7 +57,7 @@ export async function POST(req: Request) {
         if (isDemo) {
             purchaseStatus = "TRIAL";
             if (!isDeveloper) {
-                expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+                expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
             }
         }
 

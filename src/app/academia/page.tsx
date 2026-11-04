@@ -278,7 +278,7 @@ export default function AcademiaDashboardPage() {
                     <span className="text-[10px] font-bold uppercase text-emerald-400">Cupón 100% OFF</span>
                   </div>
                   <h3 className="text-lg md:text-xl font-black text-white">
-                    Desbloquea 1 Mes Gratis de MAIKO PRO GOLD CLIENT DEMO FIX
+                    Desbloquea 7 Días Gratis de MAIKO PRO GOLD CLIENT DEMO FIX
                   </h3>
                   <p className="text-xs md:text-sm text-slate-300 max-w-2xl leading-relaxed">
                     Completa todas las lecciones y supera los cuestionarios para desbloquear tu código de descuento del 100% para activar el bot en cuenta DEMO de MT5 (en gráfico M5).

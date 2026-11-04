@@ -357,7 +357,7 @@ export async function POST(req: Request) {
 
         // Si es la primera vez que este robot DEMO sincroniza con MT5, iniciamos la cuenta atrás de 30 días en este instante
         if (isFirstSync && purchase.botProduct?.name?.includes("DEMO") && !isOwner) {
-            updateData.expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+            updateData.expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
         }
 
         await prisma.purchase.update({

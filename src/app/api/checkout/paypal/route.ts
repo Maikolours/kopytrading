@@ -67,7 +67,7 @@ export async function POST(req: Request) {
             purchaseStatus = "TRIAL";
             if (!isDeveloper) {
                 // 30 días exactos de acceso
-                expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+                expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
             }
             // Si es desarrollador: expiresAt queda null = acceso ilimitado de prueba
         }

@@ -96,7 +96,7 @@ export default function FreeTrialClaimCard({ userEmail, onTrialClaimed, onNextLe
             RECOMPENSA DE GRADUACIÓN DESBLOQUEADA
           </div>
           <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
-            1 Mes Gratis: MAIKO PRO GOLD CLIENT DEMO FIX
+            7 Días Gratis: MAIKO PRO GOLD CLIENT DEMO FIX
           </h2>
           <p className="text-slate-300 text-sm md:text-base mt-2 leading-relaxed">
             ¡Enhorabuena! Has demostrado comprender la gestión de riesgo y la operativa en M5. Tu cupón de regalo del 100% de descuento (<strong>ACADEMIA100</strong>) está listo para activar tu licencia de 30 días en cuenta DEMO de MT5 sin coste alguno.
@@ -168,7 +168,7 @@ export default function FreeTrialClaimCard({ userEmail, onTrialClaimed, onNextLe
                 ✓ Cupón 100% OFF (ACADEMIA100) aplicado automáticamente · Sin tarjeta
               </p>
               <p className="text-[11px] text-slate-500">
-                Operativa completa en cuenta DEMO de MT5 durante 30 días.
+                Operativa completa en cuenta DEMO de MT5 durante 7 días.
               </p>
             </div>
           </form>

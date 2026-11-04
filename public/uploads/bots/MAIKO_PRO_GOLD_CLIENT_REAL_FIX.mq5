@@ -160,7 +160,7 @@ int FaseRefuerzo = 0;
 
 datetime trialStart = 0;
 
-int diasRestantes = 30;
+int diasRestantes = 7;
 
 bool trialExpirado = false;
 

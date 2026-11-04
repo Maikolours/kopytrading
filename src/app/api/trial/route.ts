@@ -94,7 +94,7 @@ export async function POST(req: Request) {
         if (isEternalUser) {
             expiresAt.setFullYear(expiresAt.getFullYear() + 100);
         } else {
-            expiresAt.setDate(expiresAt.getDate() + 30);
+            expiresAt.setDate(expiresAt.getDate() + 7);
         }
 
         const purchase = await prisma.purchase.create({
