@@ -964,6 +964,8 @@ void GestionarProteccionBE_TS() {
     if(!UsarBreakEven && !UsarTrailingStop) return;
 
     double point_pips = _Point * 10.0;
+    double contractSize = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_CONTRACT_SIZE);
+    if(contractSize <= 0) contractSize = 100.0;
     double current_bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
     double current_ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
 
@@ -976,13 +978,17 @@ void GestionarProteccionBE_TS() {
         double current_sl = PositionGetDouble(POSITION_SL);
         double current_tp = PositionGetDouble(POSITION_TP);
 
-        // --- CASO COMPRA (BUY) ---
+                // --- CASO COMPRA (BUY) ---
         if(pos_type == POSITION_TYPE_BUY) {
             double profit_pips = (current_bid - open_price) / point_pips;
 
-            // 1. BreakEven Dinamico
+            // 1. BreakEven Dinamico (Cubre comision y swap)
             if(UsarBreakEven && profit_pips >= PipsActivacionBE) {
-                double be_sl = NormalizeDouble(open_price + (PipsAseguradosBE * point_pips), _Digits);
+                double vol = PositionGetDouble(POSITION_VOLUME);
+                double comm_swap = MathAbs(PositionGetDouble(POSITION_COMMISSION) + PositionGetDouble(POSITION_SWAP));
+                double extra_pips_coste = (vol > 0 && contractSize > 0) ? ((comm_swap / (vol * contractSize)) / point_pips) : 0.0;
+                double pips_netos_aseg = MathMax(PipsAseguradosBE, extra_pips_coste + 2.0);
+                double be_sl = NormalizeDouble(open_price + (pips_netos_aseg * point_pips), _Digits);
                 if(current_sl < be_sl) {
                     if(trade.PositionModify(ticket, be_sl, current_tp)) {
                         Print("MAIKO: BreakEven activado en orden ", ticket, " SL positivo: ", be_sl);
@@ -1003,13 +1009,17 @@ void GestionarProteccionBE_TS() {
                 }
             }
         }
-        // --- CASO VENTA (SELL) ---
+                // --- CASO VENTA (SELL) ---
         else if(pos_type == POSITION_TYPE_SELL) {
             double profit_pips = (open_price - current_ask) / point_pips;
 
-            // 1. BreakEven Dinamico
+            // 1. BreakEven Dinamico (Cubre comision y swap)
             if(UsarBreakEven && profit_pips >= PipsActivacionBE) {
-                double be_sl = NormalizeDouble(open_price - (PipsAseguradosBE * point_pips), _Digits);
+                double vol = PositionGetDouble(POSITION_VOLUME);
+                double comm_swap = MathAbs(PositionGetDouble(POSITION_COMMISSION) + PositionGetDouble(POSITION_SWAP));
+                double extra_pips_coste = (vol > 0 && contractSize > 0) ? ((comm_swap / (vol * contractSize)) / point_pips) : 0.0;
+                double pips_netos_aseg = MathMax(PipsAseguradosBE, extra_pips_coste + 2.0);
+                double be_sl = NormalizeDouble(open_price - (pips_netos_aseg * point_pips), _Digits);
                 if(current_sl == 0 || current_sl > be_sl) {
                     if(trade.PositionModify(ticket, be_sl, current_tp)) {
                         Print("MAIKO: BreakEven activado en orden ", ticket, " SL positivo: ", be_sl);
