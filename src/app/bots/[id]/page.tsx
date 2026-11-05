@@ -222,7 +222,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                         </span>
                                         {isDemo && (
                                             <span className="text-[10px] font-bold uppercase tracking-widest bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20">
-                                                DEMO · 30 Días
+                                                DEMO · 7 Días
                                             </span>
                                         )}
                                     </div>
@@ -590,16 +590,16 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             {/* Precio / Estado */}
                             <div className="text-center mb-10 pb-10 border-b border-white/5 relative z-10">
                                 {isDemo ? (
-                                    // Gold Demo: mostrar precio de 1€ con badge de 30 días
+                                    // Gold Demo: mostrar precio de 1€ con badge de 7 días
                                     <>
-                                        <p className="text-[10px] text-text-muted mb-4 uppercase tracking-[0.4em] font-black">Licencia Demo (30 Días)</p>
+                                        <p className="text-[10px] text-text-muted mb-4 uppercase tracking-[0.4em] font-black">Licencia Demo (7 Días de Prueba)</p>
                                         <div className="text-5xl sm:text-7xl font-black text-white tracking-tighter leading-none italic mb-4 break-all">
                                             {bot.price.toFixed(0)}
                                             <span className="text-2xl sm:text-3xl text-amber-400 ml-1">€</span>
                                             <span className="text-base sm:text-lg text-text-muted ml-1 italic">.00</span>
                                         </div>
                                         <div className="inline-flex items-center gap-2 bg-amber-500/10 text-amber-400 text-[10px] font-black px-4 py-1.5 rounded-full border border-amber-500/20 uppercase tracking-widest flex-wrap justify-center">
-                                            ⏱ 30 Días Acceso Demo
+                                            ⏱ 7 Días Acceso Demo
                                         </div>
                                     </>
                                 ) : (
@@ -632,7 +632,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                     '✓ Acceso Exclusivo Demo MT5',
                                     '✓ Dashboard Connectivity',
                                     '✓ Soporte Técnico Directo',
-                                    '✓ Válido por 30 Días',
+                                    '✓ Válido por 7 Días',
                                 ] : [
                                     '✓ Compilación Nativa .ex5',
                                     '✓ Soporte Técnico Directo',
@@ -679,7 +679,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                             <>
                                                 <Link href="/checkout/cmn9hf8yc0000vhbcq9hbxk0j" className="block mt-2">
                                                     <Button size="lg" variant="outline" fullWidth className="py-7 border-brand-light/30 hover:border-brand-light text-brand-light font-black uppercase tracking-widest text-[10px] hover:bg-brand/10 h-10 shadow-lg shadow-brand/10">
-                                                        🎁 Activar Demo · 1€ (30 Días)
+                                                        🎁 Activar Demo · 1€ (7 Días)
                                                     </Button>
                                                 </Link>
                                                 <FoundersLicenseCounter />

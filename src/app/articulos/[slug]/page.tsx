@@ -238,7 +238,7 @@ export default async function ArticuloDetallePage({ params }: { params: Promise<
                                     Ver Catálogo →
                                 </Link>
                                 <Link href="/bots/cmn9hf8yc0000vhbcq9hbxk0j" className="w-full sm:w-auto inline-flex items-center justify-center px-12 py-6 rounded-2xl bg-white/5 border border-white/10 text-white font-black text-xs uppercase tracking-[0.2em] hover:bg-white/10 transition-all hover:border-white/30">
-                                    🎁 Activar Demo 30 Días · 1$
+                                    🎁 Activar Demo 7 Días · 1$
                                 </Link>
                             </div>
                         </div>

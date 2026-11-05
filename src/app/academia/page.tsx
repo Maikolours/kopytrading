@@ -198,7 +198,7 @@ export default function AcademiaDashboardPage() {
                       <span className="text-xs font-black text-white">Graduación Oficial de la Academia</span>
                     </div>
                     <p className="text-xs text-slate-200 font-light leading-relaxed">
-                      ¡Enhorabuena! Has superado todas las evaluaciones y completado el temario formativo. Tu <strong>Licencia Demo de 30 días de MAIKO PRO GOLD</strong> ya está activada y lista en tu panel de control.
+                      ¡Enhorabuena! Has superado todas las evaluaciones y completado el temario formativo. Tu <strong>Licencia Demo de 7 días de MAIKO PRO GOLD</strong> ya está activada y lista en tu panel de control.
                     </p>
                   </div>
                 </div>

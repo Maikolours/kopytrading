@@ -165,7 +165,7 @@ export async function sendTrialExpiredEmail(email: string, botName: string, purc
             
             <h2 style="color: #ffffff; text-align: center;">Tu Trial ha Finalizado</h2>
             <p>Hola,</p>
-            <p>El período de 30 días de prueba para tu bot <strong>${botName}</strong> en cuenta Demo ha expirado hoy, y las operaciones se han pausado.</p>
+            <p>El período de 7 días de prueba para tu bot <strong>${botName}</strong> en cuenta Demo ha expirado hoy, y las operaciones se han pausado.</p>
             <p>Esperamos que hayas podido comprobar el funcionamiento y consistencia del algoritmo en el mercado real de simulación.</p>
             
             <div style="background-color: #161b22; padding: 25px; border-radius: 8px; border: 1px solid #ff7b72/30; margin: 25px 0; text-align: center;">

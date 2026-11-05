@@ -395,7 +395,7 @@ export const ACADEMIA_MODULES: Module[] = [
     moduleNumberStr: "03",
     title: "GESTIÓN DE RIESGO Y CONTROL DE CAPITAL",
     subtitle: "Reglas fundamentales de supervivencia y graduación",
-    description: "Aprende a proteger tu dinero, calcular el volumen según tu balance y desbloquea tu cupón para la prueba gratuita de 30 días.",
+    description: "Aprende a proteger tu dinero, calcular el volumen según tu balance y desbloquea tu cupón para la prueba gratuita de 7 días.",
     isVip: false,
     lessons: [
       {
@@ -500,7 +500,7 @@ export const ACADEMIA_MODULES: Module[] = [
         moduleId: "modulo-02",
         lessonNumber: 3,
         globalIndex: 9,
-        title: "Desbloqueo de tu Cupón 100% y Licencia Demo de 30 Días",
+        title: "Desbloqueo de tu Cupón 100% y Licencia Demo de 7 Días",
         subtitle: "¡Premio por completar la formación en riesgo!",
         durationMinutes: 4,
         isVip: false,
@@ -521,7 +521,7 @@ export const ACADEMIA_MODULES: Module[] = [
               items: [
                 { label: "Cupón 100% OFF", value: "ACADEMIA100", color: "text-amber-400" },
                 { label: "Producto", value: "MAIKO PRO GOLD CLIENT DEMO FIX", color: "text-emerald-400" },
-                { label: "Duración", value: "30 Días de Prueba Completa", color: "text-blue-400" }
+                { label: "Duración", value: "7 Días de Prueba Completa", color: "text-blue-400" }
               ]
             }
           }

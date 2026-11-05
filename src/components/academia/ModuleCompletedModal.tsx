@@ -57,7 +57,7 @@ export default function ModuleCompletedModal({
         {progressPercent >= 100 && (
           <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/40 text-center mb-5 space-y-1">
             <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block font-bold">
-              ✓ LICENCIA DEMO DE 30 DÍAS ACTIVADA
+              ✓ LICENCIA DEMO DE 7 DÍAS ACTIVADA
             </span>
             <span className="text-sm font-bold text-white block">
               MAIKO PRO GOLD CLIENT DEMO FIX

@@ -122,10 +122,10 @@ El bot está encriptado y se vincula directamente a tu número de Cuenta MetaTra
 ¡El panel de control (HUD) de MAIKO aparecerá en tu pantalla!`
     },
     {
-        keywords: ["gratis", "demo", "trial", "mes gratis", "free", "prueba", "30 dias", "30 días", "trial 30"],
+        keywords: ["gratis", "demo", "trial", "mes gratis", "free", "prueba", "7 dias", "7 días", "30 dias", "30 días", "trial 7"],
         response: `💜 **Prueba MAIKO PRO GOLD DEMO en M5 hoy mismo:**
 
-Puedes probar la versión de prueba durante **30 días por solo 1€** en cualquier cuenta DEMO de MetaTrader 5 en gráfico de **M5** (o 100% gratis con el cupón de graduación de Kopytrading Academy).
+Tras concluir el primer mes de lanzamiento oficial, la nueva oferta disponible es de **7 días de prueba completa por solo 1€** en cualquier cuenta DEMO de MetaTrader 5 en gráfico de **M5** (o 100% gratis con el cupón de graduación de Kopytrading Academy).
 
 Es 100% idéntica en precisión al algoritmo real. Podrás comprobar su rendimiento sin arriesgar capital real.
 

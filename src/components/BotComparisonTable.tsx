@@ -12,7 +12,7 @@ const BOTS_DATA = [
         risk: "Bajo",
         minCapital: "$1,000",
         frequency: "Alta (Scalping M5)",
-        amortization: "Demo 30 Días",
+        amortization: "Demo 7 Días",
         features: [true, true, true, true, true],
         image: "/images/maiko-gold-demo.png",
         color: "from-amber-400 to-amber-600",

@@ -188,13 +188,13 @@ export default function Home() {
                 </div>
                 <div className="text-left space-y-1">
                   <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-widest">
-                    ⚡ LICENCIA DEMO · ACCESO INMEDIATO
+                    ⚡ NUEVA OFERTA · PRUEBA DEMO 7 DÍAS
                   </div>
                   <h2 className="text-xl sm:text-2xl font-black text-white uppercase italic tracking-tight">
                     Prueba MAIKO PRO GOLD por solo <span className="text-amber-400">1€</span> o <span className="text-emerald-400">GRATIS</span> con Cupón
                   </h2>
                   <p className="text-xs sm:text-sm text-text-muted font-light leading-relaxed max-w-xl">
-                    30 días de acceso total con telemetría en directo para MetaTrader 5. Consigue tu cupón 100% bonificado completando la primera fase de la <span className="text-white font-semibold">Academia</span> o activa tu licencia al instante por solo 1€.
+                    <span className="text-amber-300 font-medium">Fase de Lanzamiento completada:</span> Concluido nuestro primer mes oficial de operaciones con balance récord, la nueva oferta disponible son <strong className="text-white">7 días de acceso Demo completo</strong> con telemetría en directo para MetaTrader 5. Consigue tu cupón 100% bonificado en la <span className="text-white font-semibold">Academia</span> o activa tu licencia al instante por solo 1€.
                   </p>
                 </div>
               </div>

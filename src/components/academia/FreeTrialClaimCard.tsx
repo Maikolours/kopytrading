@@ -99,7 +99,7 @@ export default function FreeTrialClaimCard({ userEmail, onTrialClaimed, onNextLe
             7 Días Gratis: MAIKO PRO GOLD CLIENT DEMO FIX
           </h2>
           <p className="text-slate-300 text-sm md:text-base mt-2 leading-relaxed">
-            ¡Enhorabuena! Has demostrado comprender la gestión de riesgo y la operativa en M5. Tu cupón de regalo del 100% de descuento (<strong>ACADEMIA100</strong>) está listo para activar tu licencia de 30 días en cuenta DEMO de MT5 sin coste alguno.
+            ¡Enhorabuena! Has demostrado comprender la gestión de riesgo y la operativa en M5. Tu cupón de regalo del 100% de descuento (<strong>ACADEMIA100</strong>) está listo para activar tu licencia de 7 días en cuenta DEMO de MT5 sin coste alguno.
           </p>
         </div>
 
@@ -110,7 +110,7 @@ export default function FreeTrialClaimCard({ userEmail, onTrialClaimed, onNextLe
               ¡Licencia Demo Activada con Éxito!
             </div>
             <p className="text-xs md:text-sm text-slate-300 leading-relaxed">
-              Hemos registrado y activado tu licencia de 30 días para <strong className="text-white">{email}</strong>. Ya puedes ingresar a tu panel para descargar el bot (.EX5) y el manual o continuar con las siguientes lecciones.
+              Hemos registrado y activado tu licencia de 7 días para <strong className="text-white">{email}</strong>. Ya puedes ingresar a tu panel para descargar el bot (.EX5) y el manual o continuar con las siguientes lecciones.
             </p>
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
@@ -136,7 +136,7 @@ export default function FreeTrialClaimCard({ userEmail, onTrialClaimed, onNextLe
           <form onSubmit={handleSubmit} className="space-y-4 text-left max-w-md mx-auto">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Tu correo para activar tu licencia de 30 días:
+                Tu correo para activar tu licencia de 7 días:
               </label>
               <input
                 type="email"

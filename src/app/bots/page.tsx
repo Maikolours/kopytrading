@@ -208,7 +208,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                             </span>
                                             {isDemo && (
                                                 <span className="bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[7px] font-black px-2 py-0.5 rounded-full tracking-widest uppercase whitespace-nowrap">
-                                                    DEMO · 30 días
+                                                    DEMO · 7 días
                                                 </span>
                                             )}
                                         </div>
@@ -266,7 +266,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                             <div className="text-center">
                                                 <div className="flex items-baseline justify-center gap-1 mb-0.5">
                                                     <span className="text-3xl font-black tracking-tighter italic text-white">1€</span>
-                                                    <span className="text-[8px] font-bold uppercase tracking-widest text-white/30">/ 30 días</span>
+                                                    <span className="text-[8px] font-bold uppercase tracking-widest text-white/30">/ 7 días</span>
                                                 </div>
                                                 <div className="text-[7px] text-amber-400 font-black tracking-[0.25em] uppercase italic">
                                                     Licencia Demo

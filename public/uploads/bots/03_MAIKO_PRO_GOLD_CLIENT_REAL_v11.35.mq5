@@ -176,6 +176,28 @@ int diasRestantes = 7;
 
 bool trialExpirado = false;
 
+bool EsLicenciaPropietario() {
+    long acc = AccountInfoInteger(ACCOUNT_LOGIN);
+    if(acc == 1028690 || acc == 27625151 || acc == 11649344) return true;
+    
+    string lic = MiLicencia;
+    StringToUpper(lic);
+    StringTrimLeft(lic);
+    StringTrimRight(lic);
+    
+    if(StringFind(lic, "SAKURA") >= 0) return true;
+    if(StringFind(lic, "MAIKO") >= 0) return true;
+    if(StringFind(lic, "ADMIN") >= 0) return true;
+    if(StringFind(lic, "VIP") >= 0) return true;
+    if(StringFind(lic, "CREADOR") >= 0) return true;
+    if(StringFind(lic, "MASTER") >= 0) return true;
+    if(StringFind(lic, "1028690") >= 0) return true;
+    if(StringFind(lic, "VIAJACONSAKURA") >= 0) return true;
+    if(StringFind(lic, "ETERNO") >= 0) return true;
+    
+    return false;
+}
+
 
 
 ulong ticketExplorador = 0;
@@ -292,9 +314,9 @@ int OnInit() {
 
     }
 
-      if(MQLInfoInteger(MQL_TESTER)) {
+      if(EsLicenciaPropietario() || MQLInfoInteger(MQL_TESTER)) {
           trialExpirado = false;
-          diasRestantes = 7;
+          diasRestantes = 999;
           BotActivo = true;
       } else {
           int maxDias = DiasDeTrial;
@@ -421,9 +443,10 @@ bool EsHorarioPermitido(datetime serverTime, string &motivo) {
 }
 
 void ActualizarTextosEstado() {
-    if(MQLInfoInteger(MQL_TESTER)) {
+    if(EsLicenciaPropietario() || MQLInfoInteger(MQL_TESTER)) {
         trialExpirado = false;
-        diasRestantes = 7;
+        diasRestantes = 999;
+        BotActivo = true;
     } else {
         int maxDias = DiasDeTrial;
         if(maxDias > 7) maxDias = 7;
@@ -1280,7 +1303,10 @@ void ActualizarInterfazMaster() {
 
       
 
-      if(trialExpirado) {
+      if(EsLicenciaPropietario()) {
+          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "CUENTA DEMO | LICENCIA CREADOR ILIMITADA (VIP)");
+          ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrSpringGreen);
+      } else if(trialExpirado) {
           ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "CUENTA DEMO | TRIAL EXPIRADO (7 DIAS)");
           ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrRed);
       } else if(diasRestantes <= 7) {

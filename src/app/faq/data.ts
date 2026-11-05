@@ -70,8 +70,8 @@ export const FAQS = [
         category: "🎁 Pruebas y Cuentas",
         items: [
             {
-                q: "¿Cómo activo mi prueba demo de 30 días?",
-                a: "Es muy sencillo. En el Marketplace, elige el bot **MAIKO PRO GOLD CLIENT DEMO FIX** y pulsa en 'Activar Demo'. Introduce tu email, aplica si tienes un cupón o completa el pago simbólico de 1$ y el sistema te creará una cuenta automáticamente y te llevará a 'Mi Panel', donde podrás descargar el bot (.ex5) y el manual PDF al instante. Tendrás 30 días completos para probar la estrategia en tu cuenta DEMO de MetaTrader 5."
+                q: "¿Cómo activo mi prueba demo de 7 días?",
+                a: "Es muy sencillo. En el Marketplace, elige el bot **MAIKO PRO GOLD CLIENT DEMO FIX** y pulsa en 'Activar Demo'. Introduce tu email, aplica si tienes un cupón o completa el pago simbólico de 1$ y el sistema te creará una cuenta automáticamente y te llevará a 'Mi Panel', donde podrás descargar el bot (.ex5) y el manual PDF al instante. Tras finalizar con éxito el mes de lanzamiento oficial, dispones de 7 días completos para probar la estrategia en tu cuenta DEMO de MetaTrader 5 sin riesgo."
             },
             {
                 q: "¿Cuál es mi contraseña y cómo accedo a mi cuenta?",
@@ -79,7 +79,7 @@ export const FAQS = [
             },
             {
                 q: "¿Puedo usar la prueba demo en una cuenta real?",
-                a: "No. Las licencias de prueba de 30 días están limitadas técnicamente para funcionar SOLO en cuentas de tipo DEMO (dinero ficticio). Esto es para que puedas testear la estrategia sin riesgo. Para operar en una cuenta REAL, necesitarás adquirir la licencia anual correspondiente, cuyo precio se anunciará en breve."
+                a: "No. Las licencias de prueba de 7 días están limitadas técnicamente para funcionar SOLO en cuentas de tipo DEMO (dinero ficticio). Esto es para que puedas testear la estrategia sin riesgo. Para operar en una cuenta REAL, necesitarás adquirir la licencia anual correspondiente, cuyo precio se anunciará en breve."
             },
         ]
     },

@@ -39,7 +39,7 @@ export default async function CheckoutPage(props: any) {
 
     const isDemo = bot.id === GOLD_DEMO_BOT_ID || bot.name.toUpperCase().includes("DEMO");
     const priceDisplay = `${bot.price.toFixed(2)} EUR`;
-    const licenseLabel = isDemo ? "Licencia Demo · 30 Días" : "Licencia Profesional";
+    const licenseLabel = isDemo ? "Licencia Demo · 7 Días" : "Licencia Profesional";
 
     return (
         <main className="min-h-screen pt-20 pb-12 flex items-center justify-center bg-[#050505] text-white px-4 relative overflow-hidden">
@@ -96,7 +96,7 @@ export default async function CheckoutPage(props: any) {
                             <div className="mt-4 p-3 rounded-xl bg-amber-500/5 border border-amber-500/20 flex items-center gap-3">
                                 <span className="text-amber-400 text-sm">⏱</span>
                                 <p className="text-[11px] text-amber-300/80 font-medium leading-relaxed">
-                                    Licencia de prueba válida por <strong className="text-amber-300">30 días</strong> en cuenta <strong className="text-amber-300">DEMO</strong> de MetaTrader 5. Tras la prueba, podrás adquirir tu <strong className="text-amber-300">licencia anual</strong>.
+                                    Licencia de prueba válida por <strong className="text-amber-300">7 días</strong> en cuenta <strong className="text-amber-300">DEMO</strong> de MetaTrader 5 (fase promocional de 30 días finalizada tras el primer mes). Tras la prueba, podrás adquirir tu <strong className="text-amber-300">licencia anual</strong>.
                                 </p>
                             </div>
                         )}

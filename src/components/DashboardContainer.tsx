@@ -308,7 +308,7 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                                             const accountTypeLabel = hasRealSync ? (isCent ? "REAL (CENT)" : "REAL (USD)") : "DEMO";
                                             const accountTypeColor = hasRealSync ? "bg-success/20 text-success border-success/40" : "bg-orange-500/20 text-orange-400 border-orange-500/40";
 
-                                            // Cálculo de Expiración / Demo 30 días
+                                            // Cálculo de Expiración / Demo 7 días
                                             const now = new Date();
                                             const expiresAt = p.expiresAt ? new Date(p.expiresAt) : null;
                                             let daysRemaining = null;
@@ -401,7 +401,7 @@ export function DashboardContainer({ purchases }: DashboardContainerProps) {
                                                                     </span>
                                                                 ) : (
                                                                     <span className="text-[8px] font-black text-orange-400 uppercase tracking-widest bg-orange-500/10 border border-orange-500/20 px-2 py-1 rounded">
-                                                                        ⏳ 30 DÍAS DEMO
+                                                                        ⏳ 7 DÍAS DEMO
                                                                     </span>
                                                                 )
                                                             ) : (
