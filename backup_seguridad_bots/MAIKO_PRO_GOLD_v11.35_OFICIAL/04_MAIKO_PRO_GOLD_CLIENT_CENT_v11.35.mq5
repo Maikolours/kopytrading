@@ -87,6 +87,12 @@ const double   SensibilidadMechaReal      = 3.0;
 const int      MinutosPausaTrasSusto      = 1;
 const double   MaxRsiCompra               = 70.0;
 const double   MinRsiVenta                = 30.0;
+const bool     UsarFiltroRsiH1            = true;
+const double   MaxRsiH1Compra             = 68.0;
+const double   MinRsiH1Venta              = 32.0;
+const double   MaxDistanciaEmaPips        = 60.0;
+const bool     BloquearFinalVelaH1        = true;
+
 
 // Filtro de Techos y Suelos (S/R)
 const bool     UsarFiltroTechosSuelos     = true;
@@ -205,6 +211,7 @@ ulong ticketExplorador = 0;
 int hEMA_v = INVALID_HANDLE;
 
 int hRSI_v = INVALID_HANDLE;
+int hRSI_H1 = INVALID_HANDLE;
 
 int hRadar[7];
 
@@ -279,6 +286,7 @@ int OnInit() {
     hEMA_v = iMA(_Symbol, _Period, PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
 
     hRSI_v = iRSI(_Symbol, _Period, 14, PRICE_CLOSE);
+    hRSI_H1 = iRSI(_Symbol, PERIOD_H1, 14, PRICE_CLOSE);
 
     
 
@@ -351,6 +359,7 @@ void OnDeinit(const int reason) {
     if(hEMA_v != INVALID_HANDLE) IndicatorRelease(hEMA_v);
 
     if(hRSI_v != INVALID_HANDLE) IndicatorRelease(hRSI_v);
+    if(hRSI_H1 != INVALID_HANDLE) IndicatorRelease(hRSI_H1);
 
     ChartRedraw(); 
 
@@ -760,7 +769,7 @@ bool ValidarEstructuraScholar(string &decision) {
 
     if(!m15_ok) { txtVeredicto = StringFormat("M15 EN CONTRA (C:%.2f O:%.2f)", c15, o15); return false; }
 
-    if(!m5_ok) { txtVeredicto = StringFormat("M5 EN CONTRA (C:%.2f O:%.2f)", c5, o5);
+    if(!m5_ok) { txtVeredicto = StringFormat("M5 EN CONTRA (C:%.2f O:%.2f)", c5, o5); return false; }
 
     // --- FILTRO DE TENDENCIA H1 (EMA 50) ---
     if(UsarFiltroTendenciaH1) {
@@ -793,7 +802,39 @@ bool ValidarEstructuraScholar(string &decision) {
             }
         }
     }
- return false; }
+
+    // --- FILTRO ANTI-TECHOS H1 (RSI H1 SOBRECOMPRA / SOBREVENTA) ---
+    if(UsarFiltroRsiH1 && hRSI_H1 != INVALID_HANDLE) {
+        double rsiH1[1];
+        if(CopyBuffer(hRSI_H1, 0, 0, 1, rsiH1) > 0) {
+            if(porEncima && rsiH1[0] >= MaxRsiH1Compra) {
+                txtVeredicto = StringFormat("TECHO H1 SOBRECOMPRA (RSI H1: %.1f >= %.0f)", rsiH1[0], MaxRsiH1Compra);
+                return false;
+            }
+            if(!porEncima && rsiH1[0] <= MinRsiH1Venta) {
+                txtVeredicto = StringFormat("SUELO H1 SOBREVENTA (RSI H1: %.1f <= %.0f)", rsiH1[0], MinRsiH1Venta);
+                return false;
+            }
+            // Bloqueo tramo final de vela H1 si hay sobreextension (minutos 50 a 59)
+            if(BloquearFinalVelaH1) {
+                MqlDateTime dt;
+                TimeToStruct(TimeTradeServer(), dt);
+                if(dt.min >= 50 && ((porEncima && rsiH1[0] > 65.0) || (!porEncima && rsiH1[0] < 35.0))) {
+                    txtVeredicto = StringFormat("ESPERANDO CIERRE VELA H1 (MINUTO %d)", dt.min);
+                    return false;
+                }
+            }
+        }
+    }
+
+    // --- FILTRO DE SOBREEXTENSION DE EMA (EVITAR COMPRAR EN EL PICO) ---
+    if(MaxDistanciaEmaPips > 0.0) {
+        double distEmaPips = MathAbs(precio - ema[0]) / (_Point * 10);
+        if(distEmaPips > MaxDistanciaEmaPips) {
+            txtVeredicto = StringFormat("SOBREEXTENSION EMA: %.1f pips > %.0f", distEmaPips, MaxDistanciaEmaPips);
+            return false;
+        }
+    }
 
 
 
