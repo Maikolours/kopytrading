@@ -35,10 +35,10 @@ input ENUM_TIMEFRAMES TimeframeTechosSuelos = PERIOD_M15;// Temporalidad Techos/
 input int      PeriodoTechosSuelos        = 24;          // Periodo de Velas M15 a Analizar
 input double   DistanciaTechoSueloPips    = 15.0;        // Distancia Minima M15 para Bloquear (Pips)
 input bool     UsarFiltroTechosSuelosH1   = true;        // Activar Filtro S/R en H1
-input int      PeriodoTechosSuelosH1      = 24;          // Periodo H1 a Analizar (Velas)
+input int      PeriodoTechosSuelosH1      = 60;          // Periodo H1 a Analizar (Velas)
 input double   DistanciaTechoSueloPipsH1  = 60.0;        // Distancia Minima H1 (Pips) [60 Pips de serie]
 input bool     UsarFiltroTechosSuelosH4   = true;        // Activar Filtro S/R en H4
-input int      PeriodoTechosSuelosH4      = 24;          // Periodo H4 a Analizar (Velas)
+input int      PeriodoTechosSuelosH4      = 60;          // Periodo H4 a Analizar (Velas)
 input double   DistanciaTechoSueloPipsH4  = 60.0;        // Distancia Minima H4 (Pips) [60 Pips de serie]
 input bool     UsarFiltroAgotamientoM15   = true;        // Activar Filtro Agotamiento M15
 input double   MinPorcentajeMechaM15      = 40.0;        // % Minimo Mecha Reversa (40% de serie)
@@ -50,20 +50,20 @@ input group "=== FILTROS DE TENDENCIA MULTITEMPORAL ==="
 input int      PeriodoMediaFiltro         = 50;          // Periodo EMA Tendencia (Filtro)
 input bool     CheckM15                   = true;        // Confirmacion Tendencia M15 (Sincronizada)
 input bool     CheckM5                    = true;        // Confirmacion Tendencia M5 (Sincronizada)
-input bool     UsarFiltroTendenciaH1      = true;        // Filtro Tendencia H1 (EMA 50): Bloquea contra-tendencia H1
+input bool     UsarFiltroTendenciaH1      = false;        // Filtro Tendencia H1 (EMA 50): Bloquea contra-tendencia H1
 input bool     UsarFiltroTendenciaH4      = false;       // Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
 
 // --- CONFIGURACION DE LOTES Y RESCATE SOS ---
 input group "=== CONFIGURACION DE LOTES Y RESCATE SOS ==="
 input int      RuedasAmetralladora        = 1;           // Operaciones Iniciales en Cesta (Ruedas)
-input double   MultiplicadorRefuerzo      = 2.0;         // Multiplicador Lote de Rescate (SOS) [2.0 de serie]
+input double   MultiplicadorRefuerzo      = 1.5;         // Multiplicador Lote de Rescate (SOS) [2.0 de serie]
 input double   MaxLoteIndividual          = 0.02;        // Volumen Maximo por Operacion SOS [0.02 de serie]
 input double   MaxLoteTotal               = 0.50;        // Lote Maximo Acumulado Permitido
 input int      LimitePosicionesSOS        = 2;           // Limite Maximo Posiciones SOS
 
 // --- GESTION DINAMICA SOS (BREAKEVEN Y TRAILING) ---
 input group "=== GESTION DINAMICA SOS (BREAKEVEN Y TRAILING) ==="
-input double   DistanciaRefuerzoPips      = 60.0;        // Distancia Disparo SOS (pips) [6.0$ en Oro]
+input double   DistanciaRefuerzoPips      = 30.0;        // Distancia Disparo SOS (pips) [6.0$ en Oro]
 input double   MaxPipsHueco               = 50.0;        // Pips de Vacio para Forzar SOS
 input int      MaxVelasHueco              = 5;           // Velas sin Giro para Forzar SOS
 input bool     UsarBreakEven              = true;        // Activar BreakEven (Asegurar Ganancia en Positivo)
@@ -77,7 +77,7 @@ input double   ProfitCosechaIndividual    = 2.50;        // Beneficio Cierre Fij
 
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
 input double   ProfitNetoFlush            = 5.0;         // Beneficio Cierre Total Cesta ($)
-input double   TargetDiario               = 30.0;        // Meta de Beneficio Diario ($)
+input double   TargetDiario               = 50.0;        // Meta de Beneficio Diario ($)
 input double   ProfitBreakEven            = 0.50;        // Beneficio Minimo BreakEven Cesta ($)
 input double   ProteccionBeneficioDiario  = 0.0;         // Proteccion Ganancia Diaria Acumulada ($)
 input bool     UsarStopLossPorcentaje     = true;        // Activar Stop Loss por % Cuenta (DE SERIE)

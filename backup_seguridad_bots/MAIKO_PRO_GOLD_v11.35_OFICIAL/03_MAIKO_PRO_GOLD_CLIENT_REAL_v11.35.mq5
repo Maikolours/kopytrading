@@ -16,7 +16,7 @@ input double   LoteAtaque                 = 0.01;        // Volumen Entrada Inic
 
 // --- GESTION DE RIESGO Y BENEFICIOS ---
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
-input double   MultiplicadorRefuerzo      = 2.0;         // Multiplicador Lote de Rescate (SOS) [2.0 de serie]
+input double   MultiplicadorRefuerzo      = 1.5;         // Multiplicador Lote de Rescate (SOS) [2.0 de serie]
 input double   MaxLoteIndividual          = 0.02;        // Volumen Maximo por Operacion SOS [0.02 de serie]
 input int      LimitePosicionesSOS        = 2;           // Limite Maximo Posiciones SOS
 input int      SegundosEntreOrdenes       = 30;          // Segundos minimos entre envios de ordenes (anti-duplicado)
@@ -100,10 +100,10 @@ const ENUM_TIMEFRAMES TimeframeTechosSuelos = PERIOD_M15;
 const int      PeriodoTechosSuelos        = 24;
 const double   DistanciaTechoSueloPips    = 15.0;
 const bool     UsarFiltroTechosSuelosH1   = true;
-const int      PeriodoTechosSuelosH1      = 24;
+const int      PeriodoTechosSuelosH1      = 60;
 const double   DistanciaTechoSueloPipsH1  = 60.0;
 const bool     UsarFiltroTechosSuelosH4   = true;
-const int      PeriodoTechosSuelosH4      = 24;
+const int      PeriodoTechosSuelosH4      = 60;
 const double   DistanciaTechoSueloPipsH4  = 60.0;
 const bool     UsarFiltroAgotamientoM15   = true;
 const double   MinPorcentajeMechaM15      = 40.0;
@@ -114,11 +114,11 @@ const ENUM_TIMEFRAMES TimeframeConfirmacion = PERIOD_M5;
 const int      PeriodoMediaFiltro         = 50;
 const bool     CheckM15                   = true;
 const bool     CheckM5                    = true;
-const bool     UsarFiltroTendenciaH1      = true;        // Filtro Tendencia H1 (EMA 50): Bloquea contra-tendencia H1
+const bool     UsarFiltroTendenciaH1      = false;        // Filtro Tendencia H1 (EMA 50): Bloquea contra-tendencia H1
 const bool     UsarFiltroTendenciaH4      = false;       // Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
 
 // Gestion Dinamica SOS
-const double   DistanciaRefuerzoPips      = 60.0;        // Distancia Disparo SOS (pips) [6.0$ en Oro]
+const double   DistanciaRefuerzoPips      = 30.0;        // Distancia Disparo SOS (pips) [6.0$ en Oro]
 const double   MaxPipsHueco               = 50.0;
 const int      MaxVelasHueco              = 5;
 
