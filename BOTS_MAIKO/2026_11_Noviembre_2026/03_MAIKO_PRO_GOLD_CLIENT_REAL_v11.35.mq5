@@ -116,13 +116,13 @@ const double   DistanciaRefuerzoPips      = 60.0;        // Distancia Disparo SO
 const double   MaxPipsHueco               = 50.0;
 const int      MaxVelasHueco              = 5;
 
-// Proteccion BreakEven y Trailing Stop
+// Proteccion BreakEven y Trailing Stop Pegado al Precio
 const bool     UsarBreakEven              = true;        // BreakEven activo
-const double   PipsActivacionBE           = 12.0;        // Pips a favor para BreakEven (1.20$ en Oro)
-const double   PipsAseguradosBE           = 5.0;         // Pips asegurados (0.50$ neto)
+const double   PipsActivacionBE           = 10.0;        // Pips a favor para BreakEven (1.00$ en Oro)
+const double   PipsAseguradosBE           = 4.0;         // Pips asegurados (0.50$ neto)
 const bool     UsarTrailingStop           = true;        // Trailing Stop activo
-const double   PipsTrailingStop           = 12.0;        // Distancia Trailing (1.20$ Oro)
-const double   PipsPasoTrailing           = 3.0;         // Paso minimo Trailing (0.30$ Oro)
+const double   PipsTrailingStop           = 8.0;         // Distancia Trailing Pegada (8 pips = 0.80$ Oro)
+const double   PipsPasoTrailing           = 1.5;         // Paso minimo Trailing (1.5 pips = 0.15$ Oro)
 const bool     UsarCosechaRapidaFija      = false;       // false = Dejar correr con BE/TS
 
 // Gestion Cesta y Riesgo

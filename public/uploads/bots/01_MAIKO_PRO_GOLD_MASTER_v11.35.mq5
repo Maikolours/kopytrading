@@ -62,11 +62,11 @@ input double   DistanciaRefuerzoPips      = 60.0;        // Distancia Disparo SO
 input double   MaxPipsHueco               = 50.0;        // Pips de Vacio para Forzar SOS
 input int      MaxVelasHueco              = 5;           // Velas sin Giro para Forzar SOS
 input bool     UsarBreakEven              = true;        // Activar BreakEven (Asegurar Ganancia en Positivo)
-input double   PipsActivacionBE           = 12.0;        // Pips a favor para mover a BreakEven (1.20$ en Oro)
-input double   PipsAseguradosBE           = 5.0;         // Pips Asegurados en BreakEven (0.50$ ganancia minima asegurada)
+input double   PipsActivacionBE           = 10.0;        // Pips a favor para BreakEven (1.00$ en Oro)
+input double   PipsAseguradosBE           = 4.0;         // Pips Asegurados en BreakEven (0.40$ ganancia minima)
 input bool     UsarTrailingStop           = true;        // Activar Trailing Stop (Acompanar Tendencia sin techo)
-input double   PipsTrailingStop           = 12.0;        // Distancia Trailing Stop (12 pips = 1.20$ Oro)
-input double   PipsPasoTrailing           = 3.0;         // Paso minimo avance Trailing (3 pips = 0.30$ Oro)
+input double   PipsTrailingStop           = 7.0;         // Distancia Trailing Pegada al Precio (7 pips = 0.70$ Oro)
+input double   PipsPasoTrailing           = 1.0;         // Paso minimo avance Trailing (1 pip = 0.10$ Oro)
 input bool     UsarCosechaRapidaFija      = false;       // false = Dejar correr con BE y Trailing Stop; true = Cortar fijo
 input double   ProfitCosechaIndividual    = 2.50;        // Beneficio Cierre Fijo si se activa Cosecha Rapida ($)
 
@@ -239,9 +239,9 @@ int OnInit() {
 
     if(AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_REAL) {
 
-        Alert("MAIKO SNIPER: TRIAL SÓLO VÁLIDO PARA CUENTAS DEMO.");
+        // Master liberado para Real y Demo
 
-        return INIT_FAILED;
+        // return INIT_FAILED;
 
     }
 
@@ -293,17 +293,9 @@ int OnInit() {
 
     }
 
-      if(MQLInfoInteger(MQL_TESTER)) {
-          trialExpirado = false;
-          diasRestantes = 7;
-          BotActivo = true;
-      } else {
-          int maxDias = DiasDeTrial;
-          if(maxDias > 7) maxDias = 7;
-          diasRestantes = maxDias - (int)((TimeCurrent() - trialStart) / 86400);
-          int diasOperando = (int)((TimeCurrent() - trialStart) / 86400) + 1;
-          if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
-      }
+      trialExpirado = false;
+      diasRestantes = 999;
+      BotActivo = true;
     
     ActualizarTextosEstado();
     ActualizarInterfazMaster();
@@ -422,27 +414,8 @@ bool EsHorarioPermitido(datetime serverTime, string &motivo) {
 }
 
 void ActualizarTextosEstado() {
-    if(MQLInfoInteger(MQL_TESTER)) {
-        trialExpirado = false;
-        diasRestantes = 7;
-    } else {
-        int maxDias = DiasDeTrial;
-        if(maxDias > 7) maxDias = 7;
-        diasRestantes = maxDias - (int)((TimeTradeServer() - trialStart) / 86400);
-        if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
-    }
-
-
-
-    if(trialExpirado) {
-
-        txtVoz = "TRIAL 30 DIAS EXPIRADO.";
-
-        txtVeredicto = "EXPIRADO";
-
-        return;
-
-    }
+    trialExpirado = false;
+    diasRestantes = 999;
 
 
 
@@ -738,19 +711,18 @@ bool ValidarEstructuraScholar(string &decision) {
 
     if(!m15_ok) { txtVeredicto = StringFormat("M15 EN CONTRA (C:%.2f O:%.2f)", c15, o15); return false; }
 
-    if(!m5_ok) { txtVeredicto = StringFormat("M5 EN CONTRA (C:%.2f O:%.2f)", c5, o5); return false; }
+    if(!m5_ok) { txtVeredicto = StringFormat("M5 EN CONTRA (C:%.2f O:%.2f)", c5, o5);
 
     // --- FILTRO DE TENDENCIA H1 (EMA 50) ---
     if(UsarFiltroTendenciaH1) {
         double emaH1[1];
         if(CopyBuffer(hRadar[3], 0, 1, 1, emaH1) > 0) {
             double closeH1 = iClose(_Symbol, PERIOD_H1, 1);
-            double curPrice = SymbolInfoDouble(_Symbol, SYMBOL_BID);
-            if(porEncima && (closeH1 < emaH1[0] || curPrice < emaH1[0])) {
+            if(porEncima && closeH1 < emaH1[0]) {
                 txtVeredicto = "BLOQUEO: H1 BAJISTA (EMA 50)";
                 return false;
             }
-            if(!porEncima && (closeH1 > emaH1[0] || curPrice > emaH1[0])) {
+            if(!porEncima && closeH1 > emaH1[0]) {
                 txtVeredicto = "BLOQUEO: H1 ALCISTA (EMA 50)";
                 return false;
             }
@@ -762,18 +734,17 @@ bool ValidarEstructuraScholar(string &decision) {
         double emaH4[1];
         if(CopyBuffer(hRadar[2], 0, 1, 1, emaH4) > 0) {
             double closeH4 = iClose(_Symbol, PERIOD_H4, 1);
-            double curPrice = SymbolInfoDouble(_Symbol, SYMBOL_BID);
-            if(porEncima && (closeH4 < emaH4[0] || curPrice < emaH4[0])) {
+            if(porEncima && closeH4 < emaH4[0]) {
                 txtVeredicto = "BLOQUEO: H4 BAJISTA (EMA 50)";
                 return false;
             }
-            if(!porEncima && (closeH4 > emaH4[0] || curPrice > emaH4[0])) {
+            if(!porEncima && closeH4 > emaH4[0]) {
                 txtVeredicto = "BLOQUEO: H4 ALCISTA (EMA 50)";
                 return false;
             }
         }
     }
-
+ return false; }
 
 
 
@@ -1283,16 +1254,8 @@ void ActualizarInterfazMaster() {
 
       
 
-      if(trialExpirado) {
-          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "CUENTA DEMO | TRIAL EXPIRADO (7 DIAS)");
-          ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrRed);
-      } else if(diasRestantes <= 7) {
-          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("CUENTA DEMO | EXPIRA EN %d DIAS [%dh %dm] | ADQUIERE REAL", diasRestantes, remHours, remMinutes));
-          ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, C'255,69,0');
-      } else {
-          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("CUENTA DEMO | TRIAL DIA %d DE 7 [%dh %dm]", dOp, remHours, remMinutes));
-          ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrYellow);
-      }
+      ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "LICENCIA MASTER PRO | ILIMITADA (OFICIAL)");
+      ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrSpringGreen);
 
     ObjectSetInteger(0, "MAIKO_Flot", OBJPROP_COLOR, flotante >= 0 ? clrSpringGreen : clrRed); 
 
