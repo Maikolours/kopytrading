@@ -128,7 +128,27 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                     </p>
                 </div>
 
-                {/* Filtros por categoría */}
+                {/* Banner de Actualización / En Revisión */}
+            <div className="max-w-7xl mx-auto mb-8 relative z-10">
+                <div className="p-6 sm:p-8 rounded-[2rem] border border-amber-500/30 bg-amber-500/5 backdrop-blur-xl shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+                    <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-3xl shrink-0 shadow-inner">
+                        ⚙️
+                    </div>
+                    <div className="flex-1">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-black uppercase tracking-widest mb-2">
+                            <span>SISTEMAS EN REVISIÓN TÉCNICA</span>
+                        </div>
+                        <h2 className="text-xl sm:text-2xl font-black text-white uppercase italic tracking-tight mb-2">
+                            Trabajando en una Actualización Integral a Nueva Versión
+                        </h2>
+                        <p className="text-xs sm:text-sm text-text-muted font-light leading-relaxed max-w-3xl">
+                            Actualmente estamos revisando y optimizando toda nuestra suite de algoritmos cuantitativos (tanto la versión Demo como las versiones Comerciales) para implementar nuevas mejoras de precisión y estabilidad en MetaTrader 5. Las nuevas altas y precios se encuentran pausados temporalmente mientras finalizamos el despliegue de la nueva versión.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Filtros por categoría */}
                 <div className="flex flex-wrap gap-2 md:gap-3 justify-center">
                     {categories.map((cat) => (
                         <Link key={cat.id} href={cat.id ? `/bots?asset=${cat.id}` : "/bots"}>
@@ -260,69 +280,24 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                 </CardContent>
 
                                 <CardFooter className="flex-col items-center mt-auto border-t border-white/5 pt-5 px-5 pb-5 bg-black/10 gap-3">
-                                    {isDemo && !isUpcoming ? (
-                                        /* Demo: precio centrado + botón */
-                                        <>
-                                            <div className="text-center">
-                                                <div className="flex items-baseline justify-center gap-1 mb-0.5">
-                                                    <span className="text-3xl font-black tracking-tighter italic text-white">1€</span>
-                                                    <span className="text-[8px] font-bold uppercase tracking-widest text-white/30">/ 7 días</span>
-                                                </div>
-                                                <div className="text-[7px] text-amber-400 font-black tracking-[0.25em] uppercase italic">
-                                                    Licencia Demo
-                                                </div>
-                                            </div>
-                                            <div className="flex flex-col gap-1.5 w-full">
-                                                <Link href={`/bots/${bot.id}`} className="w-full">
-                                                    <Button size="sm" className="w-full font-black uppercase tracking-[0.12em] text-[9px] h-9 shadow-xl transition-all duration-500 rounded-xl bg-white text-black hover:bg-amber-400 hover:text-black hover:scale-[1.02] active:scale-95">
-                                                        Activar Demo · 1€ ⚡
-                                                    </Button>
-                                                </Link>
-                                                <Link href={`/bots/${bot.id}#especificaciones`} className="w-full">
-                                                    <Button size="sm" variant="outline" className="w-full font-bold uppercase tracking-[0.1em] text-[8px] h-7 rounded-lg border-white/20 text-white/70 hover:text-white hover:border-white/40">
-                                                        Ver Especificaciones 🔍
-                                                    </Button>
-                                                </Link>
-                                            </div>
-                                        </>
-                                    ) : isOfficialPromo ? (
-                                        /* Bots comerciales oficiales: En auditoría final / Próximamente */
-                                        <>
-                                            <div className="text-center space-y-1.5">
-                                                <div className="flex items-baseline justify-center gap-2">
-                                                    <span className="text-sm font-bold line-through text-white/40">
-                                                        250€
-                                                    </span>
-                                                    <span className="text-3xl font-black tracking-tighter italic text-amber-400">
-                                                        100€
-                                                    </span>
-                                                </div>
-                                                <div className="flex flex-col items-center gap-1">
-                                                    <OfferCountdown compact={true} />
-                                                    <div className="inline-flex items-center gap-1 text-[7px] bg-brand/20 text-brand-light font-black tracking-[0.15em] px-2.5 py-0.5 rounded-full uppercase border border-brand/30">
-                                                        ⏳ PRÓXIMAMENTE · FASE FINAL
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <Link href={`/bots/${bot.id}`} className="w-full">
-                                                <Button size="sm" className="w-full font-black uppercase tracking-[0.12em] text-[9px] h-10 shadow-xl transition-all duration-500 rounded-xl bg-white/[0.05] text-white border border-white/20 hover:bg-brand/20 hover:border-brand/40 hover:scale-105 active:scale-95">
-                                                    Ver Especificaciones 🔍
-                                                </Button>
-                                            </Link>
-                                        </>
-                                    ) : (
-                                        /* Bots en Desarrollo: Sin precios engañosos */
-                                        <>
-                                            <div className="text-center py-1">
-                                                <span className="text-sm font-black text-white/40 uppercase tracking-widest italic">
-                                                    En Desarrollo
-                                                </span>
-                                            </div>
-                                            <Button disabled size="sm" className="w-full font-black uppercase tracking-[0.12em] text-[9px] h-10 rounded-xl bg-white/[0.03] text-white/30 border border-white/10 opacity-50 cursor-not-allowed">
-                                                En Desarrollo 🛠️
+                                    <div className="text-center py-1">
+                                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[9px] font-black uppercase tracking-widest mb-1.5">
+                                            <span>⚙️ EN REVISIÓN</span>
+                                        </div>
+                                        <div className="text-[11px] font-black text-white/90 uppercase tracking-wider italic">
+                                            Actualizando a nueva versión
+                                        </div>
+                                        <p className="text-[9px] text-text-muted mt-0.5">
+                                            {isDemo ? "Trabajando en la actualización de la Demo" : "Actualización en progreso"}
+                                        </p>
+                                    </div>
+                                    <div className="flex flex-col gap-1.5 w-full">
+                                        <Link href={`/bots/${bot.id}#especificaciones`} className="w-full">
+                                            <Button size="sm" variant="outline" className="w-full font-black uppercase tracking-[0.1em] text-[9px] h-9 rounded-xl border-white/20 text-white hover:text-amber-300 hover:border-amber-400/40 bg-white/[0.03]">
+                                                Ver Especificaciones 🔍
                                             </Button>
-                                        </>
-                                    )}
+                                        </Link>
+                                    </div>
                                 </CardFooter>
                             </Card>
                         );

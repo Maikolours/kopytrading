@@ -13,12 +13,12 @@ export default async function CheckoutPage(props: any) {
 
     if (!bot) notFound();
 
-    // Redirigir a una página amigable si el bot no está activo (nunca mostrar error técnico al cliente)
-    if (bot.status !== "ACTIVE") {
-        const statusLabel = bot.status === "MAINTENANCE" ? "En Optimización" : "Próximo Lanzamiento";
-        const statusIcon = bot.status === "MAINTENANCE" ? "⚙️" : "🚀";
+    // Sistema en revisión / Actualizando a nueva versión
+    if (true || bot.status !== "ACTIVE") {
+        const statusLabel = "En Revisión Técnica";
+        const statusIcon = "⚙️";
         const statusDesc = bot.status === "MAINTENANCE"
-            ? "Este algoritmo está siendo optimizado para maximizar su rendimiento. Vuelve pronto o contacta con nosotros para ser notificado cuando esté disponible."
+            ? "Estamos trabajando en una nueva actualización para este algoritmo. Las compras y activaciones de licencias demo y reales están temporalmente pausadas. Muy pronto estará disponible la nueva versión."
             : "Este algoritmo se encuentra en fase de optimización final y estará disponible muy pronto. Pónte en contacto para información de preventa.";
         return (
             <main className="min-h-screen pt-24 flex items-center justify-center bg-[#050505] text-white px-4">

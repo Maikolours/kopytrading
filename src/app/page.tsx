@@ -73,8 +73,7 @@ export default function Home() {
                     NUEVA GENERACIÓN <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light via-yellow-300 to-amber-400">INSTITUCIONAL M5</span>
                   </div>
                   <p className="text-text-muted leading-relaxed max-w-2xl text-sm">
-                    Estamos ultimando la fase de auditoría cuantitativa de <span className="text-amber-400 font-bold">MAIKO PRO GOLD REAL FIX</span>. 
-                    Mientras tanto, puedes probar el motor completo en cuenta demo con <span className="text-brand-light font-bold">MAIKO PRO GOLD CLIENT DEMO FIX por solo 1€ (o 100% GRATIS con el cupón al hacer el curso en la Academia)</span> o consultar nuestras guías de operativa.
+                    Estamos trabajando en una nueva actualización técnica integral de toda la serie de algoritmos MAIKO PRO (versiones Demo y Real). Muy pronto estará disponible la nueva versión optimizada para MetaTrader 5.
                   </p>
                 </div>
                 
@@ -187,27 +186,27 @@ export default function Home() {
                   🎁
                 </div>
                 <div className="text-left space-y-1">
-                  <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-widest">
-                    ⚡ NUEVA OFERTA · PRUEBA DEMO 7 DÍAS
+                  <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-widest">
+                    ⚙️ EN REVISIÓN · TRABAJANDO EN ACTUALIZACIÓN
                   </div>
                   <h2 className="text-xl sm:text-2xl font-black text-white uppercase italic tracking-tight">
-                    Prueba MAIKO PRO GOLD por solo <span className="text-amber-400">1€</span> o <span className="text-emerald-400">GRATIS</span> con Cupón
+                    Algoritmos MAIKO en Revisión y Actualización
                   </h2>
                   <p className="text-xs sm:text-sm text-text-muted font-light leading-relaxed max-w-xl">
-                    <span className="text-amber-300 font-medium">Fase de Lanzamiento completada:</span> Concluido nuestro primer mes oficial de operaciones con balance récord, la nueva oferta disponible son <strong className="text-white">7 días de acceso Demo completo</strong> con telemetría en directo para MetaTrader 5. Consigue tu cupón 100% bonificado en la <span className="text-white font-semibold">Academia</span> o activa tu licencia al instante por solo 1€.
+                    Estamos trabajando en una actualización técnica integral de nuestra suite de bots cuantitativos (tanto la versión Demo como las versiones Comerciales) para incorporar nuevas mejoras de precisión y estabilidad en MetaTrader 5. Las nuevas altas y precios se encuentran pausados temporalmente mientras finalizamos el despliegue.
                   </p>
                 </div>
               </div>
 
               <div className="flex-shrink-0 z-10 w-full lg:w-auto flex flex-col sm:flex-row lg:flex-col gap-2.5">
-                <Link href="/academia" className="w-full">
-                  <Button variant="accent" className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-xs py-3.5 px-6 rounded-xl uppercase tracking-wider shadow-lg shadow-emerald-500/20 border-none">
-                    🎓 Conseguir Gratis con Cupón
+                <Link href="/bots" className="w-full">
+                  <Button variant="accent" className="w-full bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-black font-black text-xs py-3.5 px-6 rounded-xl uppercase tracking-wider shadow-lg shadow-amber-500/20 border-none">
+                    Ver Estado en el Catálogo →
                   </Button>
                 </Link>
-                <Link href="/bots/cmn9hf8yc0000vhbcq9hbxk0j" className="w-full">
-                  <Button variant="outline" className="w-full border-white/20 hover:border-amber-400 text-white hover:text-amber-300 font-bold text-xs py-3.5 px-6 rounded-xl uppercase tracking-wider bg-white/5 backdrop-blur">
-                    ⚡ Activar Demo por 1€
+                <Link href="/academia" className="w-full">
+                  <Button variant="outline" className="w-full border-white/20 hover:border-white/40 text-white font-bold text-xs py-3.5 px-6 rounded-xl uppercase tracking-wider bg-white/5 backdrop-blur">
+                    🎓 Ir a la Academia
                   </Button>
                 </Link>
               </div>

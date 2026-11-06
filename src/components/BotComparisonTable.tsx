@@ -16,7 +16,7 @@ const BOTS_DATA = [
         features: [true, true, true, true, true],
         image: "/images/maiko-gold-demo.png",
         color: "from-amber-400 to-amber-600",
-        price: "1€ (o Gratis con Cupón)"
+        price: "En Revisión · Actualizando"
     },
     {
         id: "ametralladora",
@@ -30,7 +30,7 @@ const BOTS_DATA = [
         features: [true, true, true, true, true],
         image: "/images/maiko-gold.png",
         color: "from-amber-400 to-amber-600",
-        price: "100€ (Lanzamiento · Antes 250€)",
+        price: "En Revisión · Actualizando",
         popular: true
     },
     {
