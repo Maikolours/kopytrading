@@ -106,8 +106,8 @@ input double   TargetDiario               = 100.0;       // ?? Meta de Beneficio
 // --- HORARIOS OPERATIVOS Y DIAS DE LA SEMANA ---
 input group "=== HORARIOS OPERATIVOS Y DIAS ==="
 input int      HoraInicioOperativa        = 1;           // ⏰ Hora de Inicio Operaciones Diaria (Broker)
-input int      HoraFinOperativa           = 11;          // ⏰ Hora de Cierre Operaciones Diaria (Broker - 11:00 Evita NY!)
-input bool     BloquearNuevaYork          = true;        // 🇺🇸 Bloqueo Estricto Sesión Americana (12:00 a 22:00)
+input int      HoraFinOperativa           = 23;          // ⏰ Hora de Cierre Operaciones Diaria (Broker - 11:00 Evita NY!)
+input bool     BloquearNuevaYork          = false;        // 🇺🇸 Bloqueo Estricto Sesión Americana (12:00 a 22:00)
 input bool     OperarLunes                = true;        // 📅 Operar los Lunes
 input bool     OperarMartes               = true;        // 📅 Operar los Martes
 input bool     OperarMiercoles            = true;        // 📅 Operar los Miércoles
@@ -403,7 +403,7 @@ bool EsHorarioPermitido(datetime serverTime, string &motivo) {
     }
 
     // 4. Bloqueo Nueva York (Sesión Americana de Alta Volatilidad)
-    if(BloquearNuevaYork && time.hour >= 12 && time.hour <= 22) {
+    if(false && BloquearNuevaYork && time.hour >= 12 && time.hour <= 22) {
         motivo = "BLOQUEO SESION AMERICANA / NY (12-22h)";
         return false;
     }
@@ -1348,7 +1348,7 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 
         }
 
-        if(sparam == "MAIKO_BtnC") { CerrarTodo(); enFaseAnalisis = false; } 
+        if(sparam == "MAIKO_BtnC") { CerrarTodo(); enFaseAnalisis = false; ObjectSetInteger(0, "MAIKO_BtnC", OBJPROP_STATE, false); } 
 
         if(sparam == "MAIKO_BtnMin") { ToggleHUD(); ObjectSetInteger(0, sparam, OBJPROP_STATE, false); } 
 

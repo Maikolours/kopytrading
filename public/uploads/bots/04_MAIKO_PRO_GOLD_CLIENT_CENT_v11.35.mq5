@@ -1484,7 +1484,7 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 
         }
 
-        if(sparam == "MAIKO_BtnC") { CerrarTodo(); enFaseAnalisis = false; } 
+        if(sparam == "MAIKO_BtnC") { CerrarTodo(); enFaseAnalisis = false; ObjectSetInteger(0, "MAIKO_BtnC", OBJPROP_STATE, false); } 
 
         if(sparam == "MAIKO_BtnMin") { ToggleHUD(); ObjectSetInteger(0, sparam, OBJPROP_STATE, false); } 
 

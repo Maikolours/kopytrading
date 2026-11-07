@@ -30,26 +30,26 @@ input bool     BloquearFinalVelaH1        = true;        // Evitar compras en mi
 
 // --- FILTRO DE TECHOS Y SUELOS (SOPORTES Y RESISTENCIAS) ---
 input group "=== FILTRO DE TECHOS Y SUELOS (S/R) ==="
-input bool     UsarFiltroTechosSuelos     = true;        // Activar Filtro Techos y Suelos M15
+input bool     UsarFiltroTechosSuelos     = false;        // Activar Filtro Techos y Suelos M15
 input ENUM_TIMEFRAMES TimeframeTechosSuelos = PERIOD_M15;// Temporalidad Techos/Suelos
 input int      PeriodoTechosSuelos        = 24;          // Periodo de Velas M15 a Analizar
 input double   DistanciaTechoSueloPips    = 15.0;        // Distancia Minima M15 para Bloquear (Pips)
 input bool     UsarFiltroTechosSuelosH1   = true;        // Activar Filtro S/R en H1
 input int      PeriodoTechosSuelosH1      = 60;          // Periodo H1 a Analizar (Velas)
 input double   DistanciaTechoSueloPipsH1  = 60.0;        // Distancia Minima H1 (Pips) [60 Pips de serie]
-input bool     UsarFiltroTechosSuelosH4   = true;        // Activar Filtro S/R en H4
+input bool     UsarFiltroTechosSuelosH4   = false;        // Activar Filtro S/R en H4
 input int      PeriodoTechosSuelosH4      = 60;          // Periodo H4 a Analizar (Velas)
 input double   DistanciaTechoSueloPipsH4  = 60.0;        // Distancia Minima H4 (Pips) [60 Pips de serie]
-input bool     UsarFiltroAgotamientoM15   = true;        // Activar Filtro Agotamiento M15
+input bool     UsarFiltroAgotamientoM15   = false;        // Activar Filtro Agotamiento M15
 input double   MinPorcentajeMechaM15      = 40.0;        // % Minimo Mecha Reversa (40% de serie)
-input bool     UsarConfirmacionRuptura    = true;        // Confirmar Ruptura de S/R con Vela
+input bool     UsarConfirmacionRuptura    = false;        // Confirmar Ruptura de S/R con Vela
 input ENUM_TIMEFRAMES TimeframeConfirmacion = PERIOD_M5; // Temporalidad de Confirmacion
 
 // --- FILTROS DE TENDENCIA MULTITEMPORAL ---
 input group "=== FILTROS DE TENDENCIA MULTITEMPORAL ==="
 input int      PeriodoMediaFiltro         = 50;          // Periodo EMA Tendencia (Filtro)
-input bool     CheckM15                   = true;        // Confirmacion Tendencia M15 (Sincronizada)
-input bool     CheckM5                    = true;        // Confirmacion Tendencia M5 (Sincronizada)
+input bool     CheckM15                   = false;        // Confirmacion Tendencia M15 (Sincronizada)
+input bool     CheckM5                    = false;        // Confirmacion Tendencia M5 (Sincronizada)
 input bool     UsarFiltroTendenciaH1      = false;        // Filtro Tendencia H1 (EMA 50): Bloquea contra-tendencia H1
 input bool     UsarFiltroTendenciaH4      = false;       // Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
 
@@ -1423,7 +1423,7 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 
         }
 
-        if(sparam == "MAIKO_BtnC") { CerrarTodo(); enFaseAnalisis = false; } 
+        if(sparam == "MAIKO_BtnC") { CerrarTodo(); enFaseAnalisis = false; ObjectSetInteger(0, "MAIKO_BtnC", OBJPROP_STATE, false); } 
 
         if(sparam == "MAIKO_BtnMin") { ToggleHUD(); ObjectSetInteger(0, sparam, OBJPROP_STATE, false); } 
 
