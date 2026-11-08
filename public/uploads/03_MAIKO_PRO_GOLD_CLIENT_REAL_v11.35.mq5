@@ -12,23 +12,23 @@
 // --- CONFIGURACION GENERAL ---
 input group "=== CONFIGURACION GENERAL ==="
 input string   MiLicencia                 = "";          // 🔑 Clave de Licencia o Correo Usuario
-input double   LoteAtaque                 = 0.01;        //  Volumen Entrada Inicial (Ataque)
+input double   LoteAtaque                 = 0.02;        // Volumen Entrada Inicial (Ataque)        //  Volumen Entrada Inicial (Ataque)
 
 // --- GESTION DE RIESGO Y BENEFICIOS ---
 //  Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
 
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
-input double   ProfitNetoFlush            = 5.0;         // 💰 Beneficio Cierre Total Cesta ($)
-input double   TargetDiario               = 50.0;        // 🎯 Meta de Beneficio Diario (50.0)       // 🎯 Meta de Beneficio Diario ($)
+input double   ProfitNetoFlush            = 5.0;         // Beneficio Cierre Total Cesta ($)         // 💰 Beneficio Cierre Total Cesta ($)
+input double   TargetDiario               = 60.0;        // Meta de Beneficio Diario ($)        // 🎯 Meta de Beneficio Diario (50.0)       // 🎯 Meta de Beneficio Diario ($)
 input bool     UsarStopLossPorcentaje     = true;        // 🛡️ Activar Stop Loss por % Cuenta (DE SERIE)
-input double   PorcentajeStopLoss         = 15.0;        // 📉 Porcentaje de Pérdida Máxima (15.0% DE SERIE)
+input double   PorcentajeStopLoss         = 10.0;        // Porcentaje de Perdida Maxima (10.0% DE SERIE)        // 📉 Porcentaje de Pérdida Máxima (15.0% DE SERIE)
 
 // --- HORARIOS OPERATIVOS Y DIAS ---
 //  false = Dejar correr SOS con Trailing/BE; true = Cortar a $0.75
 
 input group "=== HORARIOS OPERATIVOS Y DIAS ==="
-input int      HoraInicioOperativa        = 1;           // ⏰ Hora de Inicio Operaciones Diaria (Broker)
-input int      HoraFinOperativa           = 23;          // ⏰ Hora de Cierre Operaciones Diaria (Broker)
+input int      HoraInicioOperativa        = 2;           // Hora de Inicio Operaciones Diaria (Broker)           // ⏰ Hora de Inicio Operaciones Diaria (Broker)
+input int      HoraFinOperativa           = 21;          // Hora de Cierre Operaciones Diaria (Broker)          // ⏰ Hora de Cierre Operaciones Diaria (Broker)
 input bool     OperarLunes                = true;        // 📅 Operar los Lunes
 input bool     OperarMartes               = true;        // 📅 Operar los Martes
 input bool     OperarMiercoles            = true;        // 📅 Operar los Miércoles
@@ -66,7 +66,7 @@ const double   MinRsiVenta                = 30.0;
 const bool     UsarFiltroTechosSuelos     = true;
 const ENUM_TIMEFRAMES TimeframeTechosSuelos = PERIOD_M15;
 const int      PeriodoTechosSuelos        = 24;
-const double   DistanciaTechoSueloPips    = 15.0;
+const double   DistanciaTechoSueloPips    = 20.0;
 
 const bool     UsarFiltroTechosSuelosH1   = true;
 const int      PeriodoTechosSuelosH1      = 24;
@@ -95,19 +95,19 @@ const double   MaxLoteTotal               = 0.50;
 const double   MaxPipsHueco               = 50.0;
 const int      MaxVelasHueco              = 5;
 
-const double   ProfitCosechaIndividual    = 0.75;
+const double   ProfitCosechaIndividual    = 1.0;
 
 const bool     UsarBloqueoJuevesMadrugada = true;
 const int      HoraInicioJueves           = 1;
 const int      HoraFinJueves              = 7;
 
 const bool     UsarBloqueoMiercolesNoticias = true;
-const int      HoraInicioMiercoles        = 12;
-const int      HoraFinMiercoles           = 14;
+const int      HoraInicioMiercoles        = 14;
+const int      HoraFinMiercoles           = 17;
 
 const bool     UsarBloqueoViernesNoticias = true;
-const int      HoraInicioViernes          = 13;
-const int      HoraFinViernes             = 14;
+const int      HoraInicioViernes          = 14;
+const int      HoraFinViernes             = 17;
 
 const bool     UsarHorarioBloqueo         = false;
 const int      HoraInicioBloqueo          = 14;
@@ -146,7 +146,7 @@ const bool     UsarFiltroTendenciaH1      = true;        // Filtro Tendencia H1 
 const bool     UsarFiltroTendenciaH4      = false;       // Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
 
 const double   MultiplicadorRefuerzo      = 2.0;         // Multiplicador Lote SOS -> 0.01 x 2.0 = 0.02
-const double   MaxLoteIndividual          = 0.02;        // Lote maximo para rescate SOS
+const double   MaxLoteIndividual          = 0.04;        // Lote maximo para rescate SOS
 const double   DistanciaRefuerzoPips      = 60.0;        // Distancia Disparo SOS (6.0$ en Oro)
 
 const bool     UsarBreakEvenSOS           = true;        // Activar BreakEven en Orden SOS

@@ -12,7 +12,7 @@
 // --- CONFIGURACION GENERAL ---
 input group "=== CONFIGURACION GENERAL ==="
 input string   MiLicencia                 = "";          // Clave de Licencia o Correo Usuario
-input double   LoteAtaque                 = 0.01;        // Volumen Entrada Inicial (Ataque)
+input double   LoteAtaque                 = 0.02;        // Volumen Entrada Inicial (Ataque)        // Volumen Entrada Inicial (Ataque)
 
 // --- FILTRO DE VELAS Y VOLATILIDAD ---
 input group "=== FILTRO DE VELAS Y VOLATILIDAD ==="
@@ -22,44 +22,44 @@ input double   SensibilidadMechaReal      = 3.0;         // Sensibilidad Rechazo
 input int      MinutosPausaTrasSusto      = 1;           // Minutos Pausa tras Vela Extrema
 input double   MaxRsiCompra               = 70.0;        // RSI Maximo para Compras (Filtro Techos)
 input double   MinRsiVenta                = 30.0;        // RSI Minimo para Ventas (Filtro Suelos)
-input bool     UsarFiltroRsiH1            = true;        // Activar Filtro Anti-Techos H1 (RSI Sobrecompra/Sobreventa)
+input bool     UsarFiltroRsiH1            = false;       // Activar Filtro Anti-Techos H1 (RSI Sobrecompra/Sobreventa)        // Activar Filtro Anti-Techos H1 (RSI Sobrecompra/Sobreventa)
 input double   MaxRsiH1Compra             = 68.0;        // Maximo RSI H1 para Compras (Si >= 68, BLOQUEAR COMPRAS)
 input double   MinRsiH1Venta              = 32.0;        // Minimo RSI H1 para Ventas (Si <= 32, BLOQUEAR VENTAS)
 input double   MaxDistanciaEmaPips        = 60.0;        // Distancia Maxima a EMA (Pips) para Evitar Climax
-input bool     BloquearFinalVelaH1        = true;        // Evitar compras en minutos finales de H1 si RSI > 65
+input bool     BloquearFinalVelaH1        = true;        // Evitar compras en minutos finales de H1 si RSI > 65        // Evitar compras en minutos finales de H1 si RSI > 65
 
 // --- FILTRO DE TECHOS Y SUELOS (SOPORTES Y RESISTENCIAS) ---
 input group "=== FILTRO DE TECHOS Y SUELOS (S/R) ==="
-input bool     UsarFiltroTechosSuelos     = false;        // Activar Filtro Techos y Suelos M15
+input bool     UsarFiltroTechosSuelos     = true;        // Activar Filtro Techos y Suelos M15        // Activar Filtro Techos y Suelos M15
 input ENUM_TIMEFRAMES TimeframeTechosSuelos = PERIOD_M15;// Temporalidad Techos/Suelos
 input int      PeriodoTechosSuelos        = 24;          // Periodo de Velas M15 a Analizar
-input double   DistanciaTechoSueloPips    = 15.0;        // Distancia Minima M15 para Bloquear (Pips)
-input bool     UsarFiltroTechosSuelosH1   = true;        // Activar Filtro S/R en H1
-input int      PeriodoTechosSuelosH1      = 60;          // Periodo H1 a Analizar (Velas)
-input double   DistanciaTechoSueloPipsH1  = 60.0;        // Distancia Minima H1 (Pips) [60 Pips de serie]
-input bool     UsarFiltroTechosSuelosH4   = false;        // Activar Filtro S/R en H4
-input int      PeriodoTechosSuelosH4      = 60;          // Periodo H4 a Analizar (Velas)
-input double   DistanciaTechoSueloPipsH4  = 60.0;        // Distancia Minima H4 (Pips) [60 Pips de serie]
-input bool     UsarFiltroAgotamientoM15   = false;        // Activar Filtro Agotamiento M15
+input double   DistanciaTechoSueloPips    = 20.0;        // Distancia Minima M15 para Bloquear (Pips)        // Distancia Minima M15 para Bloquear (Pips)
+input bool     UsarFiltroTechosSuelosH1   = true;        // Activar Filtro S/R en H1        // Activar Filtro S/R en H1
+input int      PeriodoTechosSuelosH1      = 24;          // Periodo H1 a Analizar (Velas)          // Periodo H1 a Analizar (Velas)
+input double   DistanciaTechoSueloPipsH1  = 60.0;        // Distancia Minima H1 (Pips) [60 Pips de serie]        // Distancia Minima H1 (Pips) [60 Pips de serie]
+input bool     UsarFiltroTechosSuelosH4   = true;        // Activar Filtro S/R en H4        // Activar Filtro S/R en H4
+input int      PeriodoTechosSuelosH4      = 24;          // Periodo H4 a Analizar (Velas)          // Periodo H4 a Analizar (Velas)
+input double   DistanciaTechoSueloPipsH4  = 60.0;        // Distancia Minima H4 (Pips) [60 Pips de serie]        // Distancia Minima H4 (Pips) [60 Pips de serie]
+input bool     UsarFiltroAgotamientoM15   = true;        // Activar Filtro Agotamiento M15        // Activar Filtro Agotamiento M15
 input double   MinPorcentajeMechaM15      = 40.0;        // % Minimo Mecha Reversa (40% de serie)
-input bool     UsarConfirmacionRuptura    = false;        // Confirmar Ruptura de S/R con Vela
+input bool     UsarConfirmacionRuptura    = true;        // Confirmar Ruptura de S/R con Vela        // Confirmar Ruptura de S/R con Vela
 input ENUM_TIMEFRAMES TimeframeConfirmacion = PERIOD_M5; // Temporalidad de Confirmacion
 
 // --- FILTROS DE TENDENCIA MULTITEMPORAL ---
 input group "=== FILTROS DE TENDENCIA MULTITEMPORAL ==="
 input int      PeriodoMediaFiltro         = 50;          // Periodo EMA Tendencia (Filtro)
-input bool     CheckM15                   = false;        // Confirmacion Tendencia M15 (Sincronizada)
-input bool     CheckM5                    = false;        // Confirmacion Tendencia M5 (Sincronizada)
-input bool     UsarFiltroTendenciaH1      = false;        // Filtro Tendencia H1 (EMA 50): Bloquea contra-tendencia H1
-input bool     UsarFiltroTendenciaH4      = false;       // Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
+input bool     CheckM15                   = true;        // Confirmacion Tendencia M15 (Sincronizada)        // Confirmacion Tendencia M15 (Sincronizada)
+input bool     CheckM5                    = true;        // Confirmacion Tendencia M5 (Sincronizada)        // Confirmacion Tendencia M5 (Sincronizada)
+input bool     UsarFiltroTendenciaH1      = false;       // Filtro Tendencia H1 (EMA 50): Bloquea contra-tendencia H1        // Filtro Tendencia H1 (EMA 50): Bloquea contra-tendencia H1
+input bool     UsarFiltroTendenciaH4      = false;       // Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4       // Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
 
 // --- CONFIGURACION DE LOTES Y RESCATE SOS ---
 input group "=== CONFIGURACION DE LOTES Y RESCATE SOS ==="
 input int      RuedasAmetralladora        = 1;           // Operaciones Iniciales en Cesta (Ruedas)
-input double   MultiplicadorRefuerzo      = 1.5;         // Multiplicador Lote de Rescate (SOS) [2.0 de serie]
-input double   MaxLoteIndividual          = 0.02;        // Volumen Maximo por Operacion SOS [0.02 de serie]
-input double   MaxLoteTotal               = 0.50;        // Lote Maximo Acumulado Permitido
-input int      LimitePosicionesSOS        = 2;           // Limite Maximo Posiciones SOS
+input double   MultiplicadorRefuerzo      = 2.0;         // Multiplicador Lote de Rescate (SOS) [2.0 de serie]         // Multiplicador Lote de Rescate (SOS) [2.0 de serie]
+input double   MaxLoteIndividual          = 0.04;        // Volumen Maximo por Operacion SOS [0.04 de serie]        // Volumen Maximo por Operacion SOS [0.02 de serie]
+input double   MaxLoteTotal               = 0.50;        // Lote Maximo Acumulado Permitido        // Lote Maximo Acumulado Permitido
+input int      LimitePosicionesSOS        = 2;           // Limite Maximo Posiciones SOS           // Limite Maximo Posiciones SOS
 
 // --- GESTION DINAMICA SOS (BREAKEVEN Y TRAILING) ---
 input group "=== GESTION DINAMICA SOS (BREAKEVEN Y TRAILING) ==="
@@ -72,16 +72,16 @@ input double   PipsAseguradosBE           = 4.0;         // Pips Asegurados en B
 input bool     UsarTrailingStop           = true;        // Activar Trailing Stop (Acompanar Tendencia sin techo)
 input double   PipsTrailingStop           = 7.0;         // Distancia Trailing Pegada al Precio (7 pips = 0.70$ Oro)
 input double   PipsPasoTrailing           = 1.0;         // Paso minimo avance Trailing (1 pip = 0.10$ Oro)
-input bool     UsarCosechaRapidaFija      = false;       // false = Dejar correr con BE y Trailing Stop; true = Cortar fijo
-input double   ProfitCosechaIndividual    = 2.50;        // Beneficio Cierre Fijo si se activa Cosecha Rapida ($)
+input bool     UsarCosechaRapidaFija      = true;        // false = Dejar correr con BE y Trailing Stop; true = Cortar fijo       // false = Dejar correr con BE y Trailing Stop; true = Cortar fijo
+input double   ProfitCosechaIndividual    = 1.0;         // Beneficio Cierre Fijo si se activa Cosecha Rapida ($)        // Beneficio Cierre Fijo si se activa Cosecha Rapida ($)
 
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
-input double   ProfitNetoFlush            = 5.0;         // Beneficio Cierre Total Cesta ($)
-input double   TargetDiario               = 50.0;        // Meta de Beneficio Diario ($)
-input double   ProfitBreakEven            = 0.50;        // Beneficio Minimo BreakEven Cesta ($)
+input double   ProfitNetoFlush            = 5.0;         // Beneficio Cierre Total Cesta ($)         // Beneficio Cierre Total Cesta ($)
+input double   TargetDiario               = 60.0;        // Meta de Beneficio Diario ($)        // Meta de Beneficio Diario ($)
+input double   ProfitBreakEven            = 0.50;        // Beneficio Minimo BreakEven Cesta ($)        // Beneficio Minimo BreakEven Cesta ($)
 input double   ProteccionBeneficioDiario  = 0.0;         // Proteccion Ganancia Diaria Acumulada ($)
 input bool     UsarStopLossPorcentaje     = true;        // Activar Stop Loss por % Cuenta (DE SERIE)
-input double   PorcentajeStopLoss         = 15.0;        // Porcentaje de Perdida Maxima (15.0% DE SERIE)
+input double   PorcentajeStopLoss         = 10.0;        // Porcentaje de Perdida Maxima (10.0% DE SERIE)        // Porcentaje de Perdida Maxima (15.0% DE SERIE)
 input bool     UsarPausaTrasStopLoss      = true;        // Activar Pausa tras Stop Loss
 input int      MinutosPausaTrasStopLoss   = 120;         // Minutos Pausa tras Stop Loss (120 min de serie)
 
@@ -103,13 +103,13 @@ input int      HoraFinBloqueo             = 16;          // Hora Fin Pausa Diari
 // --- PROTECCION FIN DE SEMANA ---
 input group "=== PROTECCION FIN DE SEMANA ==="
 input bool     CerrarTodoViernesCierre    = true;        // Viernes: Cierre Total Fin de Semana (Gaps)
-input int      HoraCierreViernes          = 21;          // Hora Cierre Forzoso Viernes (Broker)
+input int      HoraCierreViernes          = 21;          // Hora Cierre Forzoso Viernes (Broker)          // Hora Cierre Forzoso Viernes (Broker)
 input bool     OperarViernesNoche         = false;       // Permitir Nuevas Operaciones Viernes Noche
 
 // --- HORARIOS OPERATIVOS Y DIAS ---
 input group "=== HORARIOS OPERATIVOS Y DIAS ==="
-input int      HoraInicioOperativa        = 1;           // Hora de Inicio Operaciones Diaria (Broker)
-input int      HoraFinOperativa           = 23;          // Hora de Cierre Operaciones Diaria (Broker)
+input int      HoraInicioOperativa        = 2;           // Hora de Inicio Operaciones Diaria (Broker)           // Hora de Inicio Operaciones Diaria (Broker)
+input int      HoraFinOperativa           = 21;          // Hora de Cierre Operaciones Diaria (Broker)          // Hora de Cierre Operaciones Diaria (Broker)
 input bool     OperarLunes                = true;        // Operar los Lunes
 input bool     OperarMartes               = true;        // Operar los Martes
 input bool     OperarMiercoles            = true;        // Operar los Miercoles
@@ -118,7 +118,7 @@ input bool     OperarViernes              = true;        // Operar los Viernes
 
 // --- INTERFAZ GRAFICA (HUD) ---
 input group "=== INTERFAZ GRAFICA (HUD) ===" 
-input color    ColorMain                  = clrGold;     // Color Principal HUD (Acento)
+input color    ColorMain                  = 55295;       // Color Principal HUD (Acento)     // Color Principal HUD (Acento)
 input color    ColorHeader                = C'30,30,30'; // Color Encabezado Panel HUD
 input color    ColorBody                  = C'20,20,20'; // Color Cuerpo Panel HUD
 input int      HUD_X                      = 15;          // Posicion X en Pantalla (Pixeles)

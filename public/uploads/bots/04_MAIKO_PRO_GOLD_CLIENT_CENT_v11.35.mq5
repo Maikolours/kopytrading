@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
-//|           MAIKO PRO GOLD MASTER FIX (v11.35)                       |
-//|       "INSTITUTIONAL TIMETABLE EDITION - MASTER"             |
+//|           MAIKO PRO GOLD CENT FIX (v11.35)                       |
+//|       "INSTITUTIONAL TIMETABLE EDITION - OFFICIAL REAL"          |
 //+------------------------------------------------------------------+
 #property copyright "KOPYTRADING MAIKO"
-#property description "MAIKO PRO GOLD DEMO FIX"
+#property description "MAIKO PRO GOLD CENT FIX"
 #property version   "11.35"
 #property strict
 
@@ -11,134 +11,119 @@
 
 // --- CONFIGURACION GENERAL ---
 input group "=== CONFIGURACION GENERAL ==="
-input string   MiLicencia                 = "";          // Clave de Licencia o Correo Usuario
-input double   LoteAtaque                 = 0.01;        // Volumen Entrada Inicial (Ataque)
+input string   MiLicencia                 = "";          // 🔑 Clave de Licencia o Correo Usuario
+input double   LoteAtaque                 = 0.02;        // Volumen Entrada Inicial (Ataque Cent)        //  Volumen Entrada Inicial (Ataque)
 
 // --- GESTION DE RIESGO Y BENEFICIOS ---
+//  Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
+
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
-input double   MultiplicadorRefuerzo      = 1.5;         // Multiplicador Lote de Rescate (SOS) [2.0 de serie]
-input double   MaxLoteIndividual          = 0.02;        // Volumen Maximo por Operacion SOS [0.02 de serie]
-input int      LimitePosicionesSOS        = 2;           // Limite Maximo Posiciones SOS
-input int      SegundosEntreOrdenes       = 30;          // Segundos minimos entre envios de ordenes (anti-duplicado)
-input double   ProfitCosechaIndividual    = 0.75;        // Beneficio Cierre Operacion Individual ($)
-input double   ProfitNetoFlush            = 5.0;         // Beneficio Cierre Total Cesta ($)
-input double   TargetDiario               = 50.0;        // Meta de Beneficio Diario ($)
-input bool     UsarStopLossPorcentaje     = true;        // Activar Stop Loss por % Cuenta (DE SERIE)
-input double   PorcentajeStopLoss         = 15.0;        // Porcentaje de Perdida Maxima (15.0% DE SERIE)
+input double   ProfitNetoFlush            = 5.0;         // Beneficio Cierre Total Cesta (5 Cents)         // 💰 Beneficio Cierre Total Cesta ($)
+input double   TargetDiario               = 60.0;        // Meta Beneficio Diario (60 Cents)        // 🎯 Meta de Beneficio Diario (5000.0)       // 🎯 Meta de Beneficio Diario ($)
+input bool     UsarStopLossPorcentaje     = true;        // 🛡️ Activar Stop Loss por % Cuenta (DE SERIE)
+input double   PorcentajeStopLoss         = 10.0;        // Porcentaje de Perdida Maxima (10.0% DE SERIE)        // 📉 Porcentaje de Pérdida Máxima (15.0% DE SERIE)
 
-// --- HORARIOS GLOBALES Y DIAS ---
-input group "=== HORARIOS GLOBALES Y DIAS ==="
-input int      HoraInicioOperativa        = 1;           // Hora Global Inicio (Broker: 01:00)
-input int      HoraFinOperativa           = 23;          // Hora Global Cierre (Broker: 23:00)
-input bool     OperarLunes                = true;        // Operar los Lunes
-input bool     OperarMartes               = true;        // Operar los Martes
-input bool     OperarMiercoles            = true;        // Operar los Miercoles
-input bool     OperarJueves               = true;        // Operar los Jueves
-input bool     OperarViernes              = true;        // Operar los Viernes
+// --- HORARIOS OPERATIVOS Y DIAS ---
+//  false = Dejar correr SOS con Trailing/BE; true = Cortar a $0.75
 
-// --- BLOQUEOS QUIRURGICOS POR NOTICIAS ---
-input group "=== BLOQUEOS QUIRURGICOS POR NOTICIAS ==="
-input bool     UsarBloqueoMiercolesNoticias = true;      // Miercoles: Cierre Noticias Macro EE.UU. (14:00-17:00 Broker)
-input int      HoraInicioMiercoles        = 14;          // Hora Inicio Bloqueo Miercoles (Broker)
-input int      HoraFinMiercoles           = 17;          // Hora Fin Bloqueo Miercoles (Broker)
-input bool     UsarBloqueoJuevesMadrugada = true;        // Jueves: Cierre Madrugada Rollover Swaps (01:00-07:00 Broker)
-input int      HoraInicioJueves           = 1;           // Hora Inicio Bloqueo Jueves (Broker)
-input int      HoraFinJueves              = 7;           // Hora Fin Bloqueo Jueves (Broker)
-input bool     UsarBloqueoViernesNoticias = true;        // Viernes: Cierre Noticias NFP / Empleo EE.UU. (14:00-17:00 Broker)
-input int      HoraInicioViernes          = 14;          // Hora Inicio Bloqueo Viernes (Broker)
-input int      HoraFinViernes             = 17;          // Hora Fin Bloqueo Viernes (Broker)
-input bool     UsarHorarioBloqueo         = false;       // Pausa Diaria Personalizada (Opcional)
-input int      HoraInicioBloqueo          = 14;          // Hora Inicio Pausa Diaria
-input int      HoraFinBloqueo             = 16;          // Hora Fin Pausa Diaria
-
-// --- PROTECCION FIN DE SEMANA ---
-input group "=== PROTECCION FIN DE SEMANA ==="
-input bool     CerrarTodoViernesCierre    = true;        // Viernes: Cierre Total Fin de Semana (21:00 Broker - Evita Gaps)
-input int      HoraCierreViernes          = 21;          // Hora Cierre Forzoso Viernes (Broker: 21:00)
-input bool     OperarViernesNoche         = false;       // Permitir Nuevas Operaciones Viernes Noche
+input group "=== HORARIOS OPERATIVOS Y DIAS ==="
+input int      HoraInicioOperativa        = 2;           // Hora de Inicio Operaciones Diaria (Broker)           // ⏰ Hora de Inicio Operaciones Diaria (Broker)
+input int      HoraFinOperativa           = 21;          // Hora de Cierre Operaciones Diaria (Broker)          // ⏰ Hora de Cierre Operaciones Diaria (Broker)
+input bool     OperarLunes                = true;        // 📅 Operar los Lunes
+input bool     OperarMartes               = true;        // 📅 Operar los Martes
+input bool     OperarMiercoles            = true;        // 📅 Operar los Miércoles
+input bool     OperarJueves               = true;        // 📅 Operar los Jueves
+input bool     OperarViernes              = true;        // 📅 Operar los Viernes
 
 // --- INTERFAZ GRAFICA (HUD) ---
 input group "=== INTERFAZ GRAFICA (HUD) ===" 
-input color    ColorMain                  = clrGold;     // Color Principal HUD (Acento)
-input color    ColorHeader                = C'30,30,30'; // Color Encabezado Panel HUD
-input color    ColorBody                  = C'20,20,20'; // Color Cuerpo Panel HUD
-input int      HUD_X                      = 15;          // Posicion X en Pantalla (Pixeles)
-input int      PosY_HUD                   = 25;          // Posicion Y en Pantalla (Pixeles)
+input color    ColorMain                  = clrGold;     // 🎨 Color Principal HUD (Acento)
+input color    ColorHeader                = C'30,30,30'; // 🎨 Color Encabezado Panel HUD
+input color    ColorBody                  = C'20,20,20'; // 🎨 Color Cuerpo Panel HUD
+input int      HUD_X                      = 15;          // 📍 Posición X en Pantalla (Pixeles)
+input int      PosY_HUD                   = 25;          // 📍 Posición Y en Pantalla (Pixeles)
 
 // --- COMENTARIOS DE OPERACIONES ---
 input group "=== COMENTARIOS DE OPERACIONES ==="
-input string   TradeComment               = "MAIKO_CLIENT_CENT"; // Comentario para Ordenes
+input string   TradeComment               = "MAIKO_GOLD_CENT"; // 🏷️ Comentario para Órdenes (Trade Comment)
 
 // --- TELEMETRIA ---
 string SyncURL = "https://www.kopytrading.com/api/sync-positions";
 int SyncIntervalSec = 2;
 datetime ultimoSync = 0;
 
-// ==============================================================================
-// === ESTRATEGIA CUANTITATIVA INSTITUCIONAL (PARAMETROS INTERNOS BLINDADOS) ===
-// ==============================================================================
+// --- ESTRATEGIA CUANTITATIVA INSTITUCIONAL (PARAMETROS INTERNOS PROTEGIDOS) ---
 const int      DiasDeTrial                = 30;
 const bool     EsCuentaCent               = true;
 
-// Filtro de Velas y Volatilidad
 const double   MaxRangoVelaM1             = 20.0;
 const double   MaxSpreadPips              = 4.0;
 const double   SensibilidadMechaReal      = 3.0;
 const int      MinutosPausaTrasSusto      = 1;
 const double   MaxRsiCompra               = 70.0;
 const double   MinRsiVenta                = 30.0;
-const bool     UsarFiltroRsiH1            = true;
-const double   MaxRsiH1Compra             = 68.0;
-const double   MinRsiH1Venta              = 32.0;
-const double   MaxDistanciaEmaPips        = 60.0;
-const bool     BloquearFinalVelaH1        = true;
 
-
-// Filtro de Techos y Suelos (S/R)
 const bool     UsarFiltroTechosSuelos     = true;
 const ENUM_TIMEFRAMES TimeframeTechosSuelos = PERIOD_M15;
 const int      PeriodoTechosSuelos        = 24;
-const double   DistanciaTechoSueloPips    = 15.0;
+const double   DistanciaTechoSueloPips    = 20.0;
+
 const bool     UsarFiltroTechosSuelosH1   = true;
-const int      PeriodoTechosSuelosH1      = 60;
+const int      PeriodoTechosSuelosH1      = 24;
 const double   DistanciaTechoSueloPipsH1  = 60.0;
+
 const bool     UsarFiltroTechosSuelosH4   = true;
-const int      PeriodoTechosSuelosH4      = 60;
+const int      PeriodoTechosSuelosH4      = 24;
 const double   DistanciaTechoSueloPipsH4  = 60.0;
+
 const bool     UsarFiltroAgotamientoM15   = true;
 const double   MinPorcentajeMechaM15      = 40.0;
+
 const bool     UsarConfirmacionRuptura    = true;
 const ENUM_TIMEFRAMES TimeframeConfirmacion = PERIOD_M5;
 
-// Filtros de Tendencia Multitemporal
 const int      PeriodoMediaFiltro         = 50;
 const bool     CheckM15                   = true;
 const bool     CheckM5                    = true;
-const bool     UsarFiltroTendenciaH1      = false;        // Filtro Tendencia H1 (EMA 50): Bloquea contra-tendencia H1
-const bool     UsarFiltroTendenciaH4      = false;       // Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
 
-// Gestion Dinamica SOS
-const double   DistanciaRefuerzoPips      = 30.0;        // Distancia Disparo SOS (pips) [6.0$ en Oro]
+const int      RuedasAmetralladora        = 1;
+
+const double   MaxLoteTotal               = 0.50;
+
+
+
 const double   MaxPipsHueco               = 50.0;
 const int      MaxVelasHueco              = 5;
 
-// Proteccion BreakEven y Trailing Stop Pegado al Precio
-const bool     UsarBreakEven              = true;        // BreakEven activo
-const double   PipsActivacionBE           = 10.0;        // Pips a favor para BreakEven (1.00$ en Oro)
-const double   PipsAseguradosBE           = 4.0;         // Pips asegurados (0.50$ neto)
-const bool     UsarTrailingStop           = true;        // Trailing Stop activo
-const double   PipsTrailingStop           = 8.0;         // Distancia Trailing Pegada (8 pips = 0.80$ Oro)
-const double   PipsPasoTrailing           = 1.5;         // Paso minimo Trailing (1.5 pips = 0.15$ Oro)
-const bool     UsarCosechaRapidaFija      = false;       // false = Dejar correr con BE/TS
+const double   ProfitCosechaIndividual    = 1.0;
 
-// Gestion Cesta y Riesgo
-const int      RuedasAmetralladora        = 1;
-const double   MaxLoteTotal               = 0.50;
+const bool     UsarBloqueoJuevesMadrugada = true;
+const int      HoraInicioJueves           = 1;
+const int      HoraFinJueves              = 7;
+
+const bool     UsarBloqueoMiercolesNoticias = true;
+const int      HoraInicioMiercoles        = 14;
+const int      HoraFinMiercoles           = 17;
+
+const bool     UsarBloqueoViernesNoticias = true;
+const int      HoraInicioViernes          = 14;
+const int      HoraFinViernes             = 17;
+
+const bool     UsarHorarioBloqueo         = false;
+const int      HoraInicioBloqueo          = 14;
+const int      HoraFinBloqueo             = 16;
+
+const bool     CerrarTodoViernesCierre    = true;
+const int      HoraCierreViernes          = 21;
+const bool     OperarViernesNoche         = false;
+
+const int      LimitePosicionesSOS        = 2;
 const double   ProfitBreakEven            = 0.50;
 const double   ProteccionBeneficioDiario  = 0.0;
 const bool     UsarPausaTrasStopLoss      = true;
 const int      MinutosPausaTrasStopLoss   = 120;
-string         HUD_Branding               = "MAIKO PRO GOLD CLIENT CENT V11.35";
+
+string         HUD_Branding               = "MAIKO PRO GOLD CENT FIX";
 const bool     ShowW1                     = true;
 const bool     ShowD1                     = true;
 const bool     ShowH4                     = true;
@@ -152,7 +137,25 @@ const bool     ShowM1                     = true;
 
 CTrade trade;
 
-input int ExpertMagic = 111338;
+input int ExpertMagic = 111336;
+
+// ====================================================================
+// --- PARAMETROS INTERNOS Y SECRET SAUCE BLINDADOS (HARDCODED) ---
+// ====================================================================
+const bool     UsarFiltroTendenciaH1      = true;        // Filtro Tendencia H1 (EMA 50): Bloquea contra-tendencia H1
+const bool     UsarFiltroTendenciaH4      = false;       // Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
+
+const double   MultiplicadorRefuerzo      = 2.0;         // Multiplicador Lote SOS -> 0.01 x 2.0 = 0.02
+const double   MaxLoteIndividual          = 0.04;        // Lote maximo para rescate SOS
+const double   DistanciaRefuerzoPips      = 60.0;        // Distancia Disparo SOS (6.0$ en Oro)
+
+const bool     UsarBreakEvenSOS           = true;        // Activar BreakEven en Orden SOS
+const double   PipsActivacionBESOS        = 15.0;        // Pips a favor para asegurar el dolar (1.50$ Oro -> +$3.00 flotante)
+const double   PipsAseguradosBESOS        = 7.0;         // Pips Asegurados BreakEven (7 pips = 0.70$ Oro -> > $1.00 neto garantizado)
+const bool     UsarTrailingStopSOS        = true;        // Activar Trailing Stop dinamico en Orden SOS
+const double   PipsTrailingStopSOS        = 15.0;        // Distancia Trailing Stop SOS (15 pips = 1.50$ Oro)
+const double   PipsPasoTrailingSOS        = 3.0;         // Paso minimo avance Trailing (3 pips = 0.30$ Oro)
+const bool     PermitirCosechaRapidaSOS   = false;       // false = Dejar correr SOS con Trailing/BE para salvar cesta
 
 struct PosInfo { ulong ticket; double p; double c; double s; int t; double v; datetime time; double pr; };
 
@@ -178,31 +181,9 @@ int FaseRefuerzo = 0;
 
 datetime trialStart = 0;
 
-int diasRestantes = 7;
+int diasRestantes = 30;
 
 bool trialExpirado = false;
-
-bool EsLicenciaPropietario() {
-    long acc = AccountInfoInteger(ACCOUNT_LOGIN);
-    if(acc == 1028690 || acc == 27625151 || acc == 11649344) return true;
-    
-    string lic = MiLicencia;
-    StringToUpper(lic);
-    StringTrimLeft(lic);
-    StringTrimRight(lic);
-    
-    if(StringFind(lic, "SAKURA") >= 0) return true;
-    if(StringFind(lic, "MAIKO") >= 0) return true;
-    if(StringFind(lic, "ADMIN") >= 0) return true;
-    if(StringFind(lic, "VIP") >= 0) return true;
-    if(StringFind(lic, "CREADOR") >= 0) return true;
-    if(StringFind(lic, "MASTER") >= 0) return true;
-    if(StringFind(lic, "1028690") >= 0) return true;
-    if(StringFind(lic, "VIAJACONSAKURA") >= 0) return true;
-    if(StringFind(lic, "ETERNO") >= 0) return true;
-    
-    return false;
-}
 
 
 
@@ -211,7 +192,6 @@ ulong ticketExplorador = 0;
 int hEMA_v = INVALID_HANDLE;
 
 int hRSI_v = INVALID_HANDLE;
-int hRSI_H1 = INVALID_HANDLE;
 
 int hRadar[7];
 
@@ -265,13 +245,8 @@ void AgregarIndicadoresVisuales() {
 
 int OnInit() {
 
-    if(AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_REAL) {
+    // Operativa oficial autorizada en REAL y DEMO
 
-        Alert("MAIKO SNIPER: TRIAL SÓLO VÁLIDO PARA CUENTAS DEMO.");
-
-        return INIT_FAILED;
-
-    }
 
     
 
@@ -286,7 +261,6 @@ int OnInit() {
     hEMA_v = iMA(_Symbol, _Period, PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
 
     hRSI_v = iRSI(_Symbol, _Period, 14, PRICE_CLOSE);
-    hRSI_H1 = iRSI(_Symbol, PERIOD_H1, 14, PRICE_CLOSE);
 
     
 
@@ -304,35 +278,20 @@ int OnInit() {
 
     CrearInterfazMaster();
 
-    ChartSetInteger(0, CHART_FOREGROUND, false); ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, true);
+    ChartSetInteger(0, CHART_FOREGROUND, false); ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
 
       
 
-    string gvName = "MAIKO_TRIAL_" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
-
+    string gvName = "MAIKO_REAL_" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
     if(GlobalVariableCheck(gvName)) {
-
         trialStart = (datetime)GlobalVariableGet(gvName);
-
     } else {
-
         trialStart = TimeCurrent();
-
         GlobalVariableSet(gvName, (double)trialStart);
-
     }
-
-      if(EsLicenciaPropietario() || MQLInfoInteger(MQL_TESTER)) {
-          trialExpirado = false;
-          diasRestantes = 999;
-          BotActivo = true;
-      } else {
-          int maxDias = DiasDeTrial;
-          if(maxDias > 7) maxDias = 7;
-          diasRestantes = maxDias - (int)((TimeCurrent() - trialStart) / 86400);
-          int diasOperando = (int)((TimeCurrent() - trialStart) / 86400) + 1;
-          if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
-      }
+    trialExpirado = false;
+    diasRestantes = 9999;
+    BotActivo = true;
     
     ActualizarTextosEstado();
     ActualizarInterfazMaster();
@@ -359,7 +318,6 @@ void OnDeinit(const int reason) {
     if(hEMA_v != INVALID_HANDLE) IndicatorRelease(hEMA_v);
 
     if(hRSI_v != INVALID_HANDLE) IndicatorRelease(hRSI_v);
-    if(hRSI_H1 != INVALID_HANDLE) IndicatorRelease(hRSI_H1);
 
     ChartRedraw(); 
 
@@ -452,28 +410,8 @@ bool EsHorarioPermitido(datetime serverTime, string &motivo) {
 }
 
 void ActualizarTextosEstado() {
-    if(EsLicenciaPropietario() || MQLInfoInteger(MQL_TESTER)) {
-        trialExpirado = false;
-        diasRestantes = 999;
-        BotActivo = true;
-    } else {
-        int maxDias = DiasDeTrial;
-        if(maxDias > 7) maxDias = 7;
-        diasRestantes = maxDias - (int)((TimeTradeServer() - trialStart) / 86400);
-        if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
-    }
-
-
-
-    if(trialExpirado) {
-
-        txtVoz = "TRIAL 30 DIAS EXPIRADO.";
-
-        txtVeredicto = "EXPIRADO";
-
-        return;
-
-    }
+    trialExpirado = false;
+    diasRestantes = 9999;
 
 
 
@@ -569,7 +507,7 @@ void OnTick() {
 
 
 
-    double multCent = EsCuentaCent ? 100.0 : 1.0;
+    double multCent = 1.0; // En cuenta Cent, 1.0 USC = 10 pips igual que 1.0 USD en estandar
 
     double targetActual = (ArraySize(pos) >= LimitePosicionesSOS) ? (ProfitBreakEven * multCent) : (ProfitNetoFlush * multCent);
 
@@ -626,7 +564,7 @@ void OnTick() {
 
 
 
-    GestionarProteccionBE_TS(); GestionarCosechaSniper(); ActualizarRadarMaster(); ActualizarInterfazMaster();
+    GestionarCosechaSniper(); ActualizarRadarMaster(); ActualizarInterfazMaster();
 
 
 
@@ -646,7 +584,7 @@ void OnTick() {
         }
     }
 
-    if(ArraySize(pos) > 0) { GestionarRefuerzoInteligente(); GestionarProteccionBE_TS(); return; }
+    if(ArraySize(pos) > 0) { GestionarRefuerzoInteligente(); GestionarProteccionSOS(); return; }
 
     if(ArraySize(pos) == 0) {
         datetime serverTime = TimeTradeServer();
@@ -769,7 +707,7 @@ bool ValidarEstructuraScholar(string &decision) {
 
     if(!m15_ok) { txtVeredicto = StringFormat("M15 EN CONTRA (C:%.2f O:%.2f)", c15, o15); return false; }
 
-    if(!m5_ok) { txtVeredicto = StringFormat("M5 EN CONTRA (C:%.2f O:%.2f)", c5, o5); return false; }
+    if(!m5_ok) { txtVeredicto = StringFormat("M5 EN CONTRA (C:%.2f O:%.2f)", c5, o5);
 
     // --- FILTRO DE TENDENCIA H1 (EMA 50) ---
     if(UsarFiltroTendenciaH1) {
@@ -802,39 +740,7 @@ bool ValidarEstructuraScholar(string &decision) {
             }
         }
     }
-
-    // --- FILTRO ANTI-TECHOS H1 (RSI H1 SOBRECOMPRA / SOBREVENTA) ---
-    if(UsarFiltroRsiH1 && hRSI_H1 != INVALID_HANDLE) {
-        double rsiH1[1];
-        if(CopyBuffer(hRSI_H1, 0, 0, 1, rsiH1) > 0) {
-            if(porEncima && rsiH1[0] >= MaxRsiH1Compra) {
-                txtVeredicto = StringFormat("TECHO H1 SOBRECOMPRA (RSI H1: %.1f >= %.0f)", rsiH1[0], MaxRsiH1Compra);
-                return false;
-            }
-            if(!porEncima && rsiH1[0] <= MinRsiH1Venta) {
-                txtVeredicto = StringFormat("SUELO H1 SOBREVENTA (RSI H1: %.1f <= %.0f)", rsiH1[0], MinRsiH1Venta);
-                return false;
-            }
-            // Bloqueo tramo final de vela H1 si hay sobreextension (minutos 50 a 59)
-            if(BloquearFinalVelaH1) {
-                MqlDateTime dt;
-                TimeToStruct(TimeTradeServer(), dt);
-                if(dt.min >= 50 && ((porEncima && rsiH1[0] > 65.0) || (!porEncima && rsiH1[0] < 35.0))) {
-                    txtVeredicto = StringFormat("ESPERANDO CIERRE VELA H1 (MINUTO %d)", dt.min);
-                    return false;
-                }
-            }
-        }
-    }
-
-    // --- FILTRO DE SOBREEXTENSION DE EMA (EVITAR COMPRAR EN EL PICO) ---
-    if(MaxDistanciaEmaPips > 0.0) {
-        double distEmaPips = MathAbs(precio - ema[0]) / (_Point * 10);
-        if(distEmaPips > MaxDistanciaEmaPips) {
-            txtVeredicto = StringFormat("SOBREEXTENSION EMA: %.1f pips > %.0f", distEmaPips, MaxDistanciaEmaPips);
-            return false;
-        }
-    }
+ return false; }
 
 
 
@@ -959,17 +865,15 @@ void GestionarRefuerzoInteligente() {
 
 
 
-void GestionarProteccionBE_TS() {
-    if(ArraySize(pos) == 0) return;
-    if(!UsarBreakEven && !UsarTrailingStop) return;
+void GestionarProteccionSOS() {
+    if(ArraySize(pos) <= 1) return; // Solo si hay al menos una orden SOS abierta
+    if(!UsarBreakEvenSOS && !UsarTrailingStopSOS) return;
 
     double point_pips = _Point * 10.0;
-    double contractSize = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_CONTRACT_SIZE);
-    if(contractSize <= 0) contractSize = 100.0;
     double current_bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
     double current_ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
 
-    for(int i=0; i<ArraySize(pos); i++) {
+    for(int i=1; i<ArraySize(pos); i++) {
         ulong ticket = pos[i].ticket;
         if(!PositionSelectByTicket(ticket)) continue;
 
@@ -978,63 +882,55 @@ void GestionarProteccionBE_TS() {
         double current_sl = PositionGetDouble(POSITION_SL);
         double current_tp = PositionGetDouble(POSITION_TP);
 
-                // --- CASO COMPRA (BUY) ---
+        // --- CASO COMPRA (BUY) ---
         if(pos_type == POSITION_TYPE_BUY) {
             double profit_pips = (current_bid - open_price) / point_pips;
 
-            // 1. BreakEven Dinamico (Cubre comision y swap)
-            if(UsarBreakEven && profit_pips >= PipsActivacionBE) {
-                double vol = PositionGetDouble(POSITION_VOLUME);
-                double comm_swap = MathAbs(PositionGetDouble(POSITION_COMMISSION) + PositionGetDouble(POSITION_SWAP));
-                double extra_pips_coste = (vol > 0 && contractSize > 0) ? ((comm_swap / (vol * contractSize)) / point_pips) : 0.0;
-                double pips_netos_aseg = MathMax(PipsAseguradosBE, extra_pips_coste + 2.0);
-                double be_sl = NormalizeDouble(open_price + (pips_netos_aseg * point_pips), _Digits);
+            // 1. BreakEven SOS
+            if(UsarBreakEvenSOS && profit_pips >= PipsActivacionBESOS) {
+                double be_sl = NormalizeDouble(open_price + (PipsAseguradosBESOS * point_pips), _Digits);
                 if(current_sl < be_sl) {
                     if(trade.PositionModify(ticket, be_sl, current_tp)) {
-                        Print("MAIKO: BreakEven activado en orden ", ticket, " SL positivo: ", be_sl);
+                        Print("MAIKO SOS: BreakEven activado en orden ", ticket, " SL: ", be_sl);
                         current_sl = be_sl;
                     }
                 }
             }
 
-            // 2. Trailing Stop Acompana Tendencia
-            if(UsarTrailingStop && profit_pips >= PipsTrailingStop) {
-                double trail_sl = NormalizeDouble(current_bid - (PipsTrailingStop * point_pips), _Digits);
+            // 2. Trailing Stop SOS
+            if(UsarTrailingStopSOS && profit_pips >= PipsTrailingStopSOS) {
+                double trail_sl = NormalizeDouble(current_bid - (PipsTrailingStopSOS * point_pips), _Digits);
                 if(trail_sl > open_price) {
-                    if(current_sl == 0 || (trail_sl - current_sl) >= (PipsPasoTrailing * point_pips)) {
+                    if(current_sl == 0 || (trail_sl - current_sl) >= (PipsPasoTrailingSOS * point_pips)) {
                         if(trade.PositionModify(ticket, trail_sl, current_tp)) {
-                            Print("MAIKO: Trailing Stop actualizado en orden ", ticket, " nuevo SL: ", trail_sl);
+                            Print("MAIKO SOS: Trailing Stop actualizado en orden ", ticket, " nuevo SL: ", trail_sl);
                         }
                     }
                 }
             }
         }
-                // --- CASO VENTA (SELL) ---
+        // --- CASO VENTA (SELL) ---
         else if(pos_type == POSITION_TYPE_SELL) {
             double profit_pips = (open_price - current_ask) / point_pips;
 
-            // 1. BreakEven Dinamico (Cubre comision y swap)
-            if(UsarBreakEven && profit_pips >= PipsActivacionBE) {
-                double vol = PositionGetDouble(POSITION_VOLUME);
-                double comm_swap = MathAbs(PositionGetDouble(POSITION_COMMISSION) + PositionGetDouble(POSITION_SWAP));
-                double extra_pips_coste = (vol > 0 && contractSize > 0) ? ((comm_swap / (vol * contractSize)) / point_pips) : 0.0;
-                double pips_netos_aseg = MathMax(PipsAseguradosBE, extra_pips_coste + 2.0);
-                double be_sl = NormalizeDouble(open_price - (pips_netos_aseg * point_pips), _Digits);
+            // 1. BreakEven SOS
+            if(UsarBreakEvenSOS && profit_pips >= PipsActivacionBESOS) {
+                double be_sl = NormalizeDouble(open_price - (PipsAseguradosBESOS * point_pips), _Digits);
                 if(current_sl == 0 || current_sl > be_sl) {
                     if(trade.PositionModify(ticket, be_sl, current_tp)) {
-                        Print("MAIKO: BreakEven activado en orden ", ticket, " SL positivo: ", be_sl);
+                        Print("MAIKO SOS: BreakEven activado en orden ", ticket, " SL: ", be_sl);
                         current_sl = be_sl;
                     }
                 }
             }
 
-            // 2. Trailing Stop Acompana Tendencia
-            if(UsarTrailingStop && profit_pips >= PipsTrailingStop) {
-                double trail_sl = NormalizeDouble(current_ask + (PipsTrailingStop * point_pips), _Digits);
+            // 2. Trailing Stop SOS
+            if(UsarTrailingStopSOS && profit_pips >= PipsTrailingStopSOS) {
+                double trail_sl = NormalizeDouble(current_ask + (PipsTrailingStopSOS * point_pips), _Digits);
                 if(trail_sl < open_price) {
-                    if(current_sl == 0 || (current_sl - trail_sl) >= (PipsPasoTrailing * point_pips)) {
+                    if(current_sl == 0 || (current_sl - trail_sl) >= (PipsPasoTrailingSOS * point_pips)) {
                         if(trade.PositionModify(ticket, trail_sl, current_tp)) {
-                            Print("MAIKO: Trailing Stop actualizado en orden ", ticket, " nuevo SL: ", trail_sl);
+                            Print("MAIKO SOS: Trailing Stop actualizado en orden ", ticket, " nuevo SL: ", trail_sl);
                         }
                     }
                 }
@@ -1044,13 +940,19 @@ void GestionarProteccionBE_TS() {
 }
 
 void GestionarCosechaSniper() { 
-    if(!UsarCosechaRapidaFija) return;
-    double multCent = EsCuentaCent ? 100.0 : 1.0;
+
+    double multCent = 1.0; // En cuenta Cent, 1.0 USC = 10 pips igual que 1.0 USD en estandar
+
     for(int i=ArraySize(pos)-1; i>=0; i--) {
+        if(i > 0 && !PermitirCosechaRapidaSOS) continue;
         if((pos[i].p + pos[i].c + pos[i].s) >= (ProfitCosechaIndividual * multCent)) {
+
             trade.PositionClose(pos[i].ticket);
+
         }
+
     }
+
 }
 
 
@@ -1251,7 +1153,7 @@ double CalcularMetaEscapeTP() {
 
     
 
-    double multCent = EsCuentaCent ? 100.0 : 1.0;
+    double multCent = 1.0; // En cuenta Cent, 1.0 USC = 10 pips igual que 1.0 USD en estandar
 
     double targetActual = (totalPos >= LimitePosicionesSOS) ? (ProfitBreakEven * multCent) : (ProfitNetoFlush * multCent);
 
@@ -1329,7 +1231,7 @@ void CrearInterfazMaster() {
 
 void ActualizarInterfazMaster() { 
 
-    double multCent = EsCuentaCent ? 100.0 : 1.0; 
+    double multCent = 1.0; // En cuenta Cent, 1.0 USC = 10 pips igual que 1.0 USD en estandar 
     double balanceActual = AccountInfoDouble(ACCOUNT_BALANCE);
 
     ObjectSetString(0, "MAIKO_Bal", OBJPROP_TEXT, StringFormat("BALANCE: $%.2f", balanceActual / multCent)); 
@@ -1354,19 +1256,10 @@ void ActualizarInterfazMaster() {
 
       
 
-      if(EsLicenciaPropietario()) {
-          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "CUENTA DEMO | LICENCIA CREADOR ILIMITADA (VIP)");
-          ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrSpringGreen);
-      } else if(trialExpirado) {
-          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "CUENTA DEMO | TRIAL EXPIRADO (7 DIAS)");
-          ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrRed);
-      } else if(diasRestantes <= 7) {
-          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("CUENTA DEMO | EXPIRA EN %d DIAS [%dh %dm] | ADQUIERE REAL", diasRestantes, remHours, remMinutes));
-          ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, C'255,69,0');
-      } else {
-          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("CUENTA DEMO | TRIAL DIA %d DE 7 [%dh %dm]", dOp, remHours, remMinutes));
-          ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrYellow);
-      }
+      bool esReal = (AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_REAL);
+      string tipoCuenta = esReal ? "CUENTA REAL" : "CUENTA DEMO";
+      ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("%s | LICENCIA ACTIVA [DIA %d]", tipoCuenta, dOp));
+      ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, esReal ? clrLimeGreen : clrCyan);
 
     ObjectSetInteger(0, "MAIKO_Flot", OBJPROP_COLOR, flotante >= 0 ? clrSpringGreen : clrRed); 
 
@@ -1484,7 +1377,7 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 
         }
 
-        if(sparam == "MAIKO_BtnC") { CerrarTodo(); enFaseAnalisis = false; ObjectSetInteger(0, "MAIKO_BtnC", OBJPROP_STATE, false); } 
+        if(sparam == "MAIKO_BtnC") { CerrarTodo(); enFaseAnalisis = false; } 
 
         if(sparam == "MAIKO_BtnMin") { ToggleHUD(); ObjectSetInteger(0, sparam, OBJPROP_STATE, false); } 
 
@@ -1498,6 +1391,7 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 
 void OnTimer() {
     ChartSetInteger(0, CHART_FOREGROUND, false);
+    ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
     ActualizarEstadoMaster();
     ActualizarInterfazMaster();
 
