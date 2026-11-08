@@ -12,23 +12,23 @@
 // --- CONFIGURACION GENERAL ---
 input group "=== CONFIGURACION GENERAL ==="
 input string   MiLicencia                 = "";          // 🔑 Clave de Licencia o Correo Usuario
-input double   LoteAtaque                 = 0.01;        //  Volumen Entrada Inicial (Ataque)
+input double   LoteAtaque                 = 0.02;        // Volumen Entrada Inicial (Ataque)        //  Volumen Entrada Inicial (Ataque)
 
 // --- GESTION DE RIESGO Y BENEFICIOS ---
 //  Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
 
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
-input double   ProfitNetoFlush            = 5.0;         // 💰 Beneficio Cierre Total Cesta ($)
-input double   TargetDiario               = 100.0;       // 🎯 Meta de Beneficio Diario ($)
+input double   ProfitNetoFlush            = 5.0;         // Beneficio Cierre Total Cesta ($)         // 💰 Beneficio Cierre Total Cesta ($)
+input double   TargetDiario               = 60.0;        // Meta de Beneficio Diario ($)       // 🎯 Meta de Beneficio Diario ($)
 input bool     UsarStopLossPorcentaje     = true;        // 🛡️ Activar Stop Loss por % Cuenta (DE SERIE)
-input double   PorcentajeStopLoss         = 15.0;        // 📉 Porcentaje de Pérdida Máxima (15.0% DE SERIE)
+input double   PorcentajeStopLoss         = 10.0;        // Porcentaje de Perdida Maxima (10.0% DE SERIE)        // 📉 Porcentaje de Pérdida Máxima (15.0% DE SERIE)
 
 // --- HORARIOS OPERATIVOS Y DIAS ---
 //  false = Dejar correr SOS con Trailing/BE; true = Cortar a $0.75
 
 input group "=== HORARIOS OPERATIVOS Y DIAS ==="
-input int      HoraInicioOperativa        = 1;           // ⏰ Hora de Inicio Operaciones Diaria (Broker)
-input int      HoraFinOperativa           = 23;          // ⏰ Hora de Cierre Operaciones Diaria (Broker)
+input int      HoraInicioOperativa        = 2;           // Hora de Inicio Operaciones Diaria (Broker)           // ⏰ Hora de Inicio Operaciones Diaria (Broker)
+input int      HoraFinOperativa           = 21;          // Hora de Cierre Operaciones Diaria (Broker)          // ⏰ Hora de Cierre Operaciones Diaria (Broker)
 input bool     OperarLunes                = true;        // 📅 Operar los Lunes
 input bool     OperarMartes               = true;        // 📅 Operar los Martes
 input bool     OperarMiercoles            = true;        // 📅 Operar los Miércoles
@@ -66,15 +66,15 @@ const double   MinRsiVenta                = 30.0;
 const bool     UsarFiltroTechosSuelos     = true;
 const ENUM_TIMEFRAMES TimeframeTechosSuelos = PERIOD_M15;
 const int      PeriodoTechosSuelos        = 24;
-const double   DistanciaTechoSueloPips    = 15.0;
+const double   DistanciaTechoSueloPips    = 20.0;
 
 const bool     UsarFiltroTechosSuelosH1   = true;
 const int      PeriodoTechosSuelosH1      = 24;
-const double   DistanciaTechoSueloPipsH1  = 30.0;
+const double   DistanciaTechoSueloPipsH1  = 60.0;
 
 const bool     UsarFiltroTechosSuelosH4   = true;
 const int      PeriodoTechosSuelosH4      = 24;
-const double   DistanciaTechoSueloPipsH4  = 50.0;
+const double   DistanciaTechoSueloPipsH4  = 60.0;
 
 const bool     UsarFiltroAgotamientoM15   = true;
 const double   MinPorcentajeMechaM15      = 40.0;
@@ -95,19 +95,19 @@ const double   MaxLoteTotal               = 0.50;
 const double   MaxPipsHueco               = 50.0;
 const int      MaxVelasHueco              = 5;
 
-const double   ProfitCosechaIndividual    = 0.75;
+const double   ProfitCosechaIndividual    = 1.0;
 
 const bool     UsarBloqueoJuevesMadrugada = true;
 const int      HoraInicioJueves           = 1;
 const int      HoraFinJueves              = 7;
 
 const bool     UsarBloqueoMiercolesNoticias = true;
-const int      HoraInicioMiercoles        = 12;
-const int      HoraFinMiercoles           = 14;
+const int      HoraInicioMiercoles        = 14;
+const int      HoraFinMiercoles           = 17;
 
 const bool     UsarBloqueoViernesNoticias = true;
-const int      HoraInicioViernes          = 13;
-const int      HoraFinViernes             = 14;
+const int      HoraInicioViernes          = 14;
+const int      HoraFinViernes             = 17;
 
 const bool     UsarHorarioBloqueo         = false;
 const int      HoraInicioBloqueo          = 14;
@@ -145,8 +145,8 @@ input int ExpertMagic = 111336;
 const bool     UsarFiltroTendenciaH1      = true;        // Filtro Tendencia H1 (EMA 50): Bloquea contra-tendencia H1
 const bool     UsarFiltroTendenciaH4      = false;       // Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
 
-const double   MultiplicadorRefuerzo      = 2.0;         // Multiplicador Lote de Rescate (SOS)         // Multiplicador Lote SOS -> 0.01 x 2.0 = 0.02
-const double   MaxLoteIndividual          = 0.02;        // Volumen Maximo por Operacion SOS        // Lote maximo para rescate SOS
+const double   MultiplicadorRefuerzo      = 2.0;         // Multiplicador Lote SOS -> 0.01 x 2.0 = 0.02
+const double   MaxLoteIndividual          = 0.04;        // Lote maximo para rescate SOS
 const double   DistanciaRefuerzoPips      = 60.0;        // Distancia Disparo SOS (6.0$ en Oro)
 
 const bool     UsarBreakEvenSOS           = true;        // Activar BreakEven en Orden SOS
@@ -181,7 +181,7 @@ int FaseRefuerzo = 0;
 
 datetime trialStart = 0;
 
-int diasRestantes = 7;
+int diasRestantes = 30;
 
 bool trialExpirado = false;
 
@@ -283,7 +283,7 @@ int OnInit() {
 
     CrearInterfazMaster();
 
-    ChartSetInteger(0, CHART_FOREGROUND, false); ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, true);
+    ChartSetInteger(0, CHART_FOREGROUND, false); ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
 
       
 
@@ -303,11 +303,11 @@ int OnInit() {
 
       if(MQLInfoInteger(MQL_TESTER)) {
           trialExpirado = false;
-          diasRestantes = 7;
+          diasRestantes = 30;
           BotActivo = true;
       } else {
           int maxDias = DiasDeTrial;
-          if(maxDias > 7) maxDias = 7;
+          if(maxDias > 30) maxDias = 30;
           diasRestantes = maxDias - (int)((TimeCurrent() - trialStart) / 86400);
           int diasOperando = (int)((TimeCurrent() - trialStart) / 86400) + 1;
           if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
@@ -432,10 +432,10 @@ bool EsHorarioPermitido(datetime serverTime, string &motivo) {
 void ActualizarTextosEstado() {
     if(MQLInfoInteger(MQL_TESTER)) {
         trialExpirado = false;
-        diasRestantes = 7;
+        diasRestantes = 30;
     } else {
         int maxDias = DiasDeTrial;
-        if(maxDias > 7) maxDias = 7;
+        if(maxDias > 30) maxDias = 30;
         diasRestantes = maxDias - (int)((TimeTradeServer() - trialStart) / 86400);
         if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
     }
@@ -1296,13 +1296,13 @@ void ActualizarInterfazMaster() {
       
 
       if(trialExpirado) {
-          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "CUENTA DEMO | TRIAL EXPIRADO (7 DIAS)");
+          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "CUENTA DEMO | TRIAL EXPIRADO (30 DIAS)");
           ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrRed);
       } else if(diasRestantes <= 7) {
           ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("CUENTA DEMO | EXPIRA EN %d DIAS [%dh %dm] | ADQUIERE REAL", diasRestantes, remHours, remMinutes));
           ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, C'255,69,0');
       } else {
-          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("CUENTA DEMO | TRIAL DIA %d DE 7 [%dh %dm]", dOp, remHours, remMinutes));
+          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("CUENTA DEMO | TRIAL DIA %d DE 30 [%dh %dm]", dOp, remHours, remMinutes));
           ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrYellow);
       }
 
@@ -1422,7 +1422,7 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 
         }
 
-        if(sparam == "MAIKO_BtnC") { CerrarTodo(); enFaseAnalisis = false; ObjectSetInteger(0, "MAIKO_BtnC", OBJPROP_STATE, false); } 
+        if(sparam == "MAIKO_BtnC") { CerrarTodo(); enFaseAnalisis = false; } 
 
         if(sparam == "MAIKO_BtnMin") { ToggleHUD(); ObjectSetInteger(0, sparam, OBJPROP_STATE, false); } 
 
@@ -1436,6 +1436,7 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 
 void OnTimer() {
     ChartSetInteger(0, CHART_FOREGROUND, false);
+    ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
     ActualizarEstadoMaster();
     ActualizarInterfazMaster();
 
