@@ -18,8 +18,8 @@ input double   LoteAtaque                 = 0.02;        // Volumen Entrada Inic
 //  Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
 
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
-input double   ProfitNetoFlush            = 5.0;         // Beneficio Cierre Total Cesta (5 Cents)         // 💰 Beneficio Cierre Total Cesta ($)
-input double   TargetDiario               = 60.0;        // Meta Beneficio Diario (60 Cents)        // 🎯 Meta de Beneficio Diario (5000.0)       // 🎯 Meta de Beneficio Diario ($)
+input double   ProfitNetoFlush            = 250.0;       // Beneficio Cierre Total Cesta (2.50$ = 250 Cents)         // Beneficio Cierre Total Cesta (5 Cents)         // 💰 Beneficio Cierre Total Cesta ($)
+input double   TargetDiario               = 3000.0;      // Meta de Beneficio Diario (30.00$ = 3000 Cents)        // Meta Beneficio Diario (60 Cents)        // 🎯 Meta de Beneficio Diario (5000.0)       // 🎯 Meta de Beneficio Diario ($)
 input bool     UsarStopLossPorcentaje     = true;        // 🛡️ Activar Stop Loss por % Cuenta (DE SERIE)
 input double   PorcentajeStopLoss         = 10.0;        // Porcentaje de Perdida Maxima (10.0% DE SERIE)        // 📉 Porcentaje de Pérdida Máxima (15.0% DE SERIE)
 
@@ -95,7 +95,7 @@ const double   MaxLoteTotal               = 0.50;
 const double   MaxPipsHueco               = 50.0;
 const int      MaxVelasHueco              = 5;
 
-const double   ProfitCosechaIndividual    = 1.0;
+const double   ProfitCosechaIndividual    = 50.0;        // Cosecha Individual Fija (0.50$ = 50 Cents)
 
 const bool     UsarBloqueoJuevesMadrugada = true;
 const int      HoraInicioJueves           = 1;
@@ -118,7 +118,7 @@ const int      HoraCierreViernes          = 21;
 const bool     OperarViernesNoche         = false;
 
 const int      LimitePosicionesSOS        = 2;
-const double   ProfitBreakEven            = 0.50;
+const double   ProfitBreakEven            = 20.0;        // Beneficio Minimo BreakEven (0.20$ = 20 Cents)
 const double   ProteccionBeneficioDiario  = 0.0;
 const bool     UsarPausaTrasStopLoss      = true;
 const int      MinutosPausaTrasStopLoss   = 120;
