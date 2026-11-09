@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
-//|           MAIKO PRO GOLD REAL FIX (v11.35)                       |
-//|       "INSTITUTIONAL TIMETABLE EDITION - OFFICIAL REAL"          |
+//|           MAIKO PRO GOLD MASTER FIX (v11.35)                       |
+//|       "INSTITUTIONAL TIMETABLE EDITION - MASTER"             |
 //+------------------------------------------------------------------+
 #property copyright "KOPYTRADING MAIKO"
-#property description "MAIKO PRO GOLD REAL FIX"
+#property description "MAIKO PRO GOLD CLIENT REAL v11.35"
 #property version   "11.35"
 #property strict
 
@@ -11,119 +11,134 @@
 
 // --- CONFIGURACION GENERAL ---
 input group "=== CONFIGURACION GENERAL ==="
-input string   MiLicencia                 = "";          // 🔑 Clave de Licencia o Correo Usuario
-input double   LoteAtaque                 = 0.02;        // Volumen Entrada Inicial (Ataque)        //  Volumen Entrada Inicial (Ataque)
+input string   MiLicencia                 = "";          // Clave de Licencia o Correo Usuario
+input double   LoteAtaque                 = 0.02;        // Volumen Entrada Inicial (Ataque)        // Volumen Entrada Inicial (Ataque)
 
-// --- GESTION DE RIESGO Y BENEFICIOS ---
-//  Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
+// --- FILTRO DE VELAS Y VOLATILIDAD ---
+// input group "=== FILTRO DE VELAS Y VOLATILIDAD ==="
+const double   MaxRangoVelaM1             = 20.0;        // Rango Maximo Vela M1 (Pips)
+const double   MaxSpreadPips              = 4.0;         // Spread Maximo Permitido (Pips)
+const double   SensibilidadMechaReal      = 3.0;         // Sensibilidad Rechazo de Mechas
+const int      MinutosPausaTrasSusto      = 1;           // Minutos Pausa tras Vela Extrema
+const double   MaxRsiCompra               = 70.0;        // RSI Maximo para Compras (Filtro Techos)
+const double   MinRsiVenta                = 30.0;        // RSI Minimo para Ventas (Filtro Suelos)
+const bool     UsarFiltroRsiH1            = false;       // Activar Filtro Anti-Techos H1 (RSI Sobrecompra/Sobreventa)        // Activar Filtro Anti-Techos H1 (RSI Sobrecompra/Sobreventa)
+const double   MaxRsiH1Compra             = 68.0;        // Maximo RSI H1 para Compras (Si >= 68, BLOQUEAR COMPRAS)
+const double   MinRsiH1Venta              = 32.0;        // Minimo RSI H1 para Ventas (Si <= 32, BLOQUEAR VENTAS)
+const double   MaxDistanciaEmaPips        = 60.0;        // Distancia Maxima a EMA (Pips) para Evitar Climax
+const bool     BloquearFinalVelaH1        = true;        // Evitar compras en minutos finales de H1 si RSI > 65        // Evitar compras en minutos finales de H1 si RSI > 65
+
+// --- FILTRO DE TECHOS Y SUELOS (SOPORTES Y RESISTENCIAS) ---
+// input group "=== FILTRO DE TECHOS Y SUELOS (S/R) ==="
+const bool     UsarFiltroTechosSuelos     = true;        // Activar Filtro Techos y Suelos M15        // Activar Filtro Techos y Suelos M15
+const ENUM_TIMEFRAMES TimeframeTechosSuelos = PERIOD_M15;// Temporalidad Techos/Suelos
+const int      PeriodoTechosSuelos        = 24;          // Periodo de Velas M15 a Analizar
+const double   DistanciaTechoSueloPips    = 20.0;        // Distancia Minima M15 para Bloquear (Pips)        // Distancia Minima M15 para Bloquear (Pips)
+const bool     UsarFiltroTechosSuelosH1   = true;        // Activar Filtro S/R en H1        // Activar Filtro S/R en H1
+const int      PeriodoTechosSuelosH1      = 24;          // Periodo H1 a Analizar (Velas)          // Periodo H1 a Analizar (Velas)
+const double   DistanciaTechoSueloPipsH1  = 60.0;        // Distancia Minima H1 (Pips) [60 Pips de serie]        // Distancia Minima H1 (Pips) [60 Pips de serie]
+const bool     UsarFiltroTechosSuelosH4   = true;        // Activar Filtro S/R en H4        // Activar Filtro S/R en H4
+const int      PeriodoTechosSuelosH4      = 24;          // Periodo H4 a Analizar (Velas)          // Periodo H4 a Analizar (Velas)
+const double   DistanciaTechoSueloPipsH4  = 60.0;        // Distancia Minima H4 (Pips) [60 Pips de serie]        // Distancia Minima H4 (Pips) [60 Pips de serie]
+const bool     UsarFiltroAgotamientoM15   = true;        // Activar Filtro Agotamiento M15        // Activar Filtro Agotamiento M15
+const double   MinPorcentajeMechaM15      = 40.0;        // % Minimo Mecha Reversa (40% de serie)
+const bool     UsarConfirmacionRuptura    = true;        // Confirmar Ruptura de S/R con Vela        // Confirmar Ruptura de S/R con Vela
+const ENUM_TIMEFRAMES TimeframeConfirmacion = PERIOD_M5; // Temporalidad de Confirmacion
+
+// --- FILTROS DE TENDENCIA MULTITEMPORAL ---
+// input group "=== FILTROS DE TENDENCIA MULTITEMPORAL ==="
+const int      PeriodoMediaFiltro         = 50;          // Periodo EMA Tendencia (Filtro)
+const bool     CheckM15                   = true;        // Confirmacion Tendencia M15 (Sincronizada)        // Confirmacion Tendencia M15 (Sincronizada)
+const bool     CheckM5                    = true;        // Confirmacion Tendencia M5 (Sincronizada)        // Confirmacion Tendencia M5 (Sincronizada)
+const bool     UsarFiltroTendenciaH1      = false;       // Filtro Tendencia H1 (EMA 50): Bloquea contra-tendencia H1        // Filtro Tendencia H1 (EMA 50): Bloquea contra-tendencia H1
+const bool     UsarFiltroTendenciaH4      = false;       // Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4       // Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
+
+// --- CONFIGURACION DE LOTES Y RESCATE SOS ---
+// input group "=== CONFIGURACION DE LOTES Y RESCATE SOS ==="
+const int      RuedasAmetralladora        = 1;           // Operaciones Iniciales en Cesta (Ruedas)
+const double   MultiplicadorRefuerzo      = 2.0;         // Multiplicador Lote de Rescate (SOS) [2.0 de serie]         // Multiplicador Lote de Rescate (SOS) [2.0 de serie]
+const double   MaxLoteIndividual          = 0.04;        // Volumen Maximo por Operacion SOS [0.04 de serie]        // Volumen Maximo por Operacion SOS [0.02 de serie]
+const double   MaxLoteTotal               = 0.50;        // Lote Maximo Acumulado Permitido        // Lote Maximo Acumulado Permitido
+const int      LimitePosicionesSOS        = 2;           // Limite Maximo Posiciones SOS           // Limite Maximo Posiciones SOS
+
+// --- GESTION DINAMICA SOS (BREAKEVEN Y TRAILING) ---
+// input group "=== GESTION DINAMICA SOS (BREAKEVEN Y TRAILING) ==="
+const double   DistanciaRefuerzoPips      = 30.0;        // Distancia Disparo SOS (pips) [6.0$ en Oro]
+const double   MaxPipsHueco               = 50.0;        // Pips de Vacio para Forzar SOS
+const int      MaxVelasHueco              = 5;           // Velas sin Giro para Forzar SOS
+const bool     UsarBreakEven              = true;        // Activar BreakEven (Asegurar Ganancia en Positivo)
+const double   PipsActivacionBE           = 10.0;        // Pips a favor para BreakEven (1.00$ en Oro)
+const double   PipsAseguradosBE           = 4.0;         // Pips Asegurados en BreakEven (0.40$ ganancia minima)
+const bool     UsarTrailingStop           = true;        // Activar Trailing Stop (Acompanar Tendencia sin techo)
+const double   PipsTrailingStop           = 7.0;         // Distancia Trailing Pegada al Precio (7 pips = 0.70$ Oro)
+const double   PipsPasoTrailing           = 1.0;         // Paso minimo avance Trailing (1 pip = 0.10$ Oro)
+const bool     UsarCosechaRapidaFija      = true;        // false = Dejar correr con BE y Trailing Stop; true = Cortar fijo       // false = Dejar correr con BE y Trailing Stop; true = Cortar fijo
+const double   ProfitCosechaIndividual    = 1.0;         // Beneficio Cierre Fijo si se activa Cosecha Rapida ($)        // Beneficio Cierre Fijo si se activa Cosecha Rapida ($)
 
 input group "=== GESTION DE RIESGO Y BENEFICIOS ==="
-input double   ProfitNetoFlush            = 5.0;         // Beneficio Cierre Total Cesta ($)         // 💰 Beneficio Cierre Total Cesta ($)
-input double   TargetDiario               = 60.0;        // Meta de Beneficio Diario ($)        // 🎯 Meta de Beneficio Diario (50.0)       // 🎯 Meta de Beneficio Diario ($)
-input bool     UsarStopLossPorcentaje     = true;        // 🛡️ Activar Stop Loss por % Cuenta (DE SERIE)
-input double   PorcentajeStopLoss         = 10.0;        // Porcentaje de Perdida Maxima (10.0% DE SERIE)        // 📉 Porcentaje de Pérdida Máxima (15.0% DE SERIE)
+input double   ProfitNetoFlush            = 5.0;         // Beneficio Cierre Total Cesta ($)         // Beneficio Cierre Total Cesta ($)
+input double   TargetDiario               = 60.0;        // Meta de Beneficio Diario ($)        // Meta de Beneficio Diario ($)
+const double   ProfitBreakEven            = 0.50;        // Beneficio Minimo BreakEven Cesta ($)        // Beneficio Minimo BreakEven Cesta ($)
+const double   ProteccionBeneficioDiario  = 0.0;         // Proteccion Ganancia Diaria Acumulada ($)
+input bool     UsarStopLossPorcentaje     = true;        // Activar Stop Loss por % Cuenta (DE SERIE)
+input double   PorcentajeStopLoss         = 10.0;        // Porcentaje de Perdida Maxima (10.0% DE SERIE)        // Porcentaje de Perdida Maxima (15.0% DE SERIE)
+const bool     UsarPausaTrasStopLoss      = true;        // Activar Pausa tras Stop Loss
+const int      MinutosPausaTrasStopLoss   = 120;         // Minutos Pausa tras Stop Loss (120 min de serie)
+
+// --- BLOQUEOS QUIRURGICOS POR NOTICIAS ---
+// input group "=== BLOQUEOS QUIRURGICOS POR NOTICIAS ==="
+const bool     UsarBloqueoMiercolesNoticias = true;      // Miercoles: Cierre Noticias Macro EE.UU.
+const int      HoraInicioMiercoles        = 14;          // Hora Inicio Bloqueo Miercoles (Broker)
+const int      HoraFinMiercoles           = 17;          // Hora Fin Bloqueo Miercoles (Broker)
+const bool     UsarBloqueoJuevesMadrugada = true;        // Jueves: Cierre Madrugada Rollover Swaps
+const int      HoraInicioJueves           = 1;           // Hora Inicio Bloqueo Jueves (Broker)
+const int      HoraFinJueves              = 7;           // Hora Fin Bloqueo Jueves (Broker)
+const bool     UsarBloqueoViernesNoticias = true;        // Viernes: Cierre Noticias NFP / Empleo EE.UU.
+const int      HoraInicioViernes          = 14;          // Hora Inicio Bloqueo Viernes (Broker)
+const int      HoraFinViernes             = 17;          // Hora Fin Bloqueo Viernes (Broker)
+const bool     UsarHorarioBloqueo         = false;       // Pausa Diaria Personalizada (Opcional)
+const int      HoraInicioBloqueo          = 14;          // Hora Inicio Pausa Diaria
+const int      HoraFinBloqueo             = 16;          // Hora Fin Pausa Diaria
+
+// --- PROTECCION FIN DE SEMANA ---
+// input group "=== PROTECCION FIN DE SEMANA ==="
+const bool     CerrarTodoViernesCierre    = true;        // Viernes: Cierre Total Fin de Semana (Gaps)
+const int      HoraCierreViernes          = 21;          // Hora Cierre Forzoso Viernes (Broker)          // Hora Cierre Forzoso Viernes (Broker)
+const bool     OperarViernesNoche         = false;       // Permitir Nuevas Operaciones Viernes Noche
 
 // --- HORARIOS OPERATIVOS Y DIAS ---
-//  false = Dejar correr SOS con Trailing/BE; true = Cortar a $0.75
-
 input group "=== HORARIOS OPERATIVOS Y DIAS ==="
-input int      HoraInicioOperativa        = 2;           // Hora de Inicio Operaciones Diaria (Broker)           // ⏰ Hora de Inicio Operaciones Diaria (Broker)
-input int      HoraFinOperativa           = 21;          // Hora de Cierre Operaciones Diaria (Broker)          // ⏰ Hora de Cierre Operaciones Diaria (Broker)
-input bool     OperarLunes                = true;        // 📅 Operar los Lunes
-input bool     OperarMartes               = true;        // 📅 Operar los Martes
-input bool     OperarMiercoles            = true;        // 📅 Operar los Miércoles
-input bool     OperarJueves               = true;        // 📅 Operar los Jueves
-input bool     OperarViernes              = true;        // 📅 Operar los Viernes
+input int      HoraInicioOperativa        = 2;           // Hora de Inicio Operaciones Diaria (Broker)           // Hora de Inicio Operaciones Diaria (Broker)
+input int      HoraFinOperativa           = 21;          // Hora de Cierre Operaciones Diaria (Broker)          // Hora de Cierre Operaciones Diaria (Broker)
+input bool     OperarLunes                = true;        // Operar los Lunes
+input bool     OperarMartes               = true;        // Operar los Martes
+input bool     OperarMiercoles            = true;        // Operar los Miercoles
+input bool     OperarJueves               = true;        // Operar los Jueves
+input bool     OperarViernes              = true;        // Operar los Viernes
 
 // --- INTERFAZ GRAFICA (HUD) ---
 input group "=== INTERFAZ GRAFICA (HUD) ===" 
-input color    ColorMain                  = clrGold;     // 🎨 Color Principal HUD (Acento)
-input color    ColorHeader                = C'30,30,30'; // 🎨 Color Encabezado Panel HUD
-input color    ColorBody                  = C'20,20,20'; // 🎨 Color Cuerpo Panel HUD
-input int      HUD_X                      = 15;          // 📍 Posición X en Pantalla (Pixeles)
-input int      PosY_HUD                   = 25;          // 📍 Posición Y en Pantalla (Pixeles)
+input color    ColorMain                  = 55295;       // Color Principal HUD (Acento)     // Color Principal HUD (Acento)
+input color    ColorHeader                = C'30,30,30'; // Color Encabezado Panel HUD
+input color    ColorBody                  = C'20,20,20'; // Color Cuerpo Panel HUD
+input int      HUD_X                      = 15;          // Posicion X en Pantalla (Pixeles)
+input int      PosY_HUD                   = 25;          // Posicion Y en Pantalla (Pixeles)
 
 // --- COMENTARIOS DE OPERACIONES ---
 input group "=== COMENTARIOS DE OPERACIONES ==="
-input string   TradeComment               = "MAIKO_GOLD_REAL"; // 🏷️ Comentario para Órdenes (Trade Comment)
+input string   TradeComment               = "MAIKO_GOLD_REAL"; // Comentario para Ordenes // Comentario para Ordenes (Trade Comment)
 
 // --- TELEMETRIA ---
 string SyncURL = "https://www.kopytrading.com/api/sync-positions";
 int SyncIntervalSec = 2;
 datetime ultimoSync = 0;
 
-// --- ESTRATEGIA CUANTITATIVA INSTITUCIONAL (PARAMETROS INTERNOS PROTEGIDOS) ---
+// Constantes internas del sistema
 const int      DiasDeTrial                = 30;
 const bool     EsCuentaCent               = false;
 
-const double   MaxRangoVelaM1             = 20.0;
-const double   MaxSpreadPips              = 4.0;
-const double   SensibilidadMechaReal      = 3.0;
-const int      MinutosPausaTrasSusto      = 1;
-const double   MaxRsiCompra               = 70.0;
-const double   MinRsiVenta                = 30.0;
 
-const bool     UsarFiltroTechosSuelos     = true;
-const ENUM_TIMEFRAMES TimeframeTechosSuelos = PERIOD_M15;
-const int      PeriodoTechosSuelos        = 24;
-const double   DistanciaTechoSueloPips    = 20.0;
-
-const bool     UsarFiltroTechosSuelosH1   = true;
-const int      PeriodoTechosSuelosH1      = 24;
-const double   DistanciaTechoSueloPipsH1  = 60.0;
-
-const bool     UsarFiltroTechosSuelosH4   = true;
-const int      PeriodoTechosSuelosH4      = 24;
-const double   DistanciaTechoSueloPipsH4  = 60.0;
-
-const bool     UsarFiltroAgotamientoM15   = true;
-const double   MinPorcentajeMechaM15      = 40.0;
-
-const bool     UsarConfirmacionRuptura    = true;
-const ENUM_TIMEFRAMES TimeframeConfirmacion = PERIOD_M5;
-
-const int      PeriodoMediaFiltro         = 50;
-const bool     CheckM15                   = true;
-const bool     CheckM5                    = true;
-
-const int      RuedasAmetralladora        = 1;
-
-const double   MaxLoteTotal               = 0.50;
-
-
-
-const double   MaxPipsHueco               = 50.0;
-const int      MaxVelasHueco              = 5;
-
-const double   ProfitCosechaIndividual    = 1.0;
-
-const bool     UsarBloqueoJuevesMadrugada = true;
-const int      HoraInicioJueves           = 1;
-const int      HoraFinJueves              = 7;
-
-const bool     UsarBloqueoMiercolesNoticias = true;
-const int      HoraInicioMiercoles        = 14;
-const int      HoraFinMiercoles           = 17;
-
-const bool     UsarBloqueoViernesNoticias = true;
-const int      HoraInicioViernes          = 14;
-const int      HoraFinViernes             = 17;
-
-const bool     UsarHorarioBloqueo         = false;
-const int      HoraInicioBloqueo          = 14;
-const int      HoraFinBloqueo             = 16;
-
-const bool     CerrarTodoViernesCierre    = true;
-const int      HoraCierreViernes          = 21;
-const bool     OperarViernesNoche         = false;
-
-const int      LimitePosicionesSOS        = 2;
-const double   ProfitBreakEven            = 0.50;
-const double   ProteccionBeneficioDiario  = 0.0;
-const bool     UsarPausaTrasStopLoss      = true;
-const int      MinutosPausaTrasStopLoss   = 120;
-
-string         HUD_Branding               = "MAIKO PRO GOLD REAL FIX";
+string         HUD_Branding               = "MAIKO PRO GOLD MASTER V11.35";
 const bool     ShowW1                     = true;
 const bool     ShowD1                     = true;
 const bool     ShowH4                     = true;
@@ -138,24 +153,6 @@ const bool     ShowM1                     = true;
 CTrade trade;
 
 input int ExpertMagic = 111336;
-
-// ====================================================================
-// --- PARAMETROS INTERNOS Y SECRET SAUCE BLINDADOS (HARDCODED) ---
-// ====================================================================
-const bool     UsarFiltroTendenciaH1      = true;        // Filtro Tendencia H1 (EMA 50): Bloquea contra-tendencia H1
-const bool     UsarFiltroTendenciaH4      = false;       // Filtro Tendencia H4 (EMA 50): Bloquea contra-tendencia H4
-
-const double   MultiplicadorRefuerzo      = 2.0;         // Multiplicador Lote SOS -> 0.01 x 2.0 = 0.02
-const double   MaxLoteIndividual          = 0.04;        // Lote maximo para rescate SOS
-const double   DistanciaRefuerzoPips      = 60.0;        // Distancia Disparo SOS (6.0$ en Oro)
-
-const bool     UsarBreakEvenSOS           = true;        // Activar BreakEven en Orden SOS
-const double   PipsActivacionBESOS        = 15.0;        // Pips a favor para asegurar el dolar (1.50$ Oro -> +$3.00 flotante)
-const double   PipsAseguradosBESOS        = 7.0;         // Pips Asegurados BreakEven (7 pips = 0.70$ Oro -> > $1.00 neto garantizado)
-const bool     UsarTrailingStopSOS        = true;        // Activar Trailing Stop dinamico en Orden SOS
-const double   PipsTrailingStopSOS        = 15.0;        // Distancia Trailing Stop SOS (15 pips = 1.50$ Oro)
-const double   PipsPasoTrailingSOS        = 3.0;         // Paso minimo avance Trailing (3 pips = 0.30$ Oro)
-const bool     PermitirCosechaRapidaSOS   = false;       // false = Dejar correr SOS con Trailing/BE para salvar cesta
 
 struct PosInfo { ulong ticket; double p; double c; double s; int t; double v; datetime time; double pr; };
 
@@ -181,7 +178,7 @@ int FaseRefuerzo = 0;
 
 datetime trialStart = 0;
 
-int diasRestantes = 30;
+int diasRestantes = 7;
 
 bool trialExpirado = false;
 
@@ -192,6 +189,7 @@ ulong ticketExplorador = 0;
 int hEMA_v = INVALID_HANDLE;
 
 int hRSI_v = INVALID_HANDLE;
+int hRSI_H1 = INVALID_HANDLE;
 
 int hRadar[7];
 
@@ -245,8 +243,13 @@ void AgregarIndicadoresVisuales() {
 
 int OnInit() {
 
-    // Operativa oficial autorizada en REAL y DEMO
+    if(AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_REAL) {
 
+        // Master liberado para Real y Demo
+
+        // return INIT_FAILED;
+
+    }
 
     
 
@@ -261,6 +264,7 @@ int OnInit() {
     hEMA_v = iMA(_Symbol, _Period, PeriodoMediaFiltro, 0, MODE_EMA, PRICE_CLOSE);
 
     hRSI_v = iRSI(_Symbol, _Period, 14, PRICE_CLOSE);
+    hRSI_H1 = iRSI(_Symbol, PERIOD_H1, 14, PRICE_CLOSE);
 
     
 
@@ -278,20 +282,27 @@ int OnInit() {
 
     CrearInterfazMaster();
 
-    ChartSetInteger(0, CHART_FOREGROUND, false); ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
+    ChartSetInteger(0, CHART_FOREGROUND, false); ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, true);
 
       
 
-    string gvName = "MAIKO_REAL_" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
+    string gvName = "MAIKO_TRIAL_" + IntegerToString(AccountInfoInteger(ACCOUNT_LOGIN));
+
     if(GlobalVariableCheck(gvName)) {
+
         trialStart = (datetime)GlobalVariableGet(gvName);
+
     } else {
+
         trialStart = TimeCurrent();
+
         GlobalVariableSet(gvName, (double)trialStart);
+
     }
-    trialExpirado = false;
-    diasRestantes = 9999;
-    BotActivo = true;
+
+      trialExpirado = false;
+      diasRestantes = 999;
+      BotActivo = true;
     
     ActualizarTextosEstado();
     ActualizarInterfazMaster();
@@ -318,6 +329,7 @@ void OnDeinit(const int reason) {
     if(hEMA_v != INVALID_HANDLE) IndicatorRelease(hEMA_v);
 
     if(hRSI_v != INVALID_HANDLE) IndicatorRelease(hRSI_v);
+    if(hRSI_H1 != INVALID_HANDLE) IndicatorRelease(hRSI_H1);
 
     ChartRedraw(); 
 
@@ -411,7 +423,7 @@ bool EsHorarioPermitido(datetime serverTime, string &motivo) {
 
 void ActualizarTextosEstado() {
     trialExpirado = false;
-    diasRestantes = 9999;
+    diasRestantes = 999;
 
 
 
@@ -564,7 +576,7 @@ void OnTick() {
 
 
 
-    GestionarCosechaSniper(); ActualizarRadarMaster(); ActualizarInterfazMaster();
+    GestionarProteccionBE_TS(); GestionarCosechaSniper(); ActualizarRadarMaster(); ActualizarInterfazMaster();
 
 
 
@@ -584,7 +596,7 @@ void OnTick() {
         }
     }
 
-    if(ArraySize(pos) > 0) { GestionarRefuerzoInteligente(); GestionarProteccionSOS(); return; }
+    if(ArraySize(pos) > 0) { GestionarRefuerzoInteligente(); GestionarProteccionBE_TS(); return; }
 
     if(ArraySize(pos) == 0) {
         datetime serverTime = TimeTradeServer();
@@ -707,7 +719,7 @@ bool ValidarEstructuraScholar(string &decision) {
 
     if(!m15_ok) { txtVeredicto = StringFormat("M15 EN CONTRA (C:%.2f O:%.2f)", c15, o15); return false; }
 
-    if(!m5_ok) { txtVeredicto = StringFormat("M5 EN CONTRA (C:%.2f O:%.2f)", c5, o5);
+    if(!m5_ok) { txtVeredicto = StringFormat("M5 EN CONTRA (C:%.2f O:%.2f)", c5, o5); return false; }
 
     // --- FILTRO DE TENDENCIA H1 (EMA 50) ---
     if(UsarFiltroTendenciaH1) {
@@ -740,7 +752,39 @@ bool ValidarEstructuraScholar(string &decision) {
             }
         }
     }
- return false; }
+
+    // --- FILTRO ANTI-TECHOS H1 (RSI H1 SOBRECOMPRA / SOBREVENTA) ---
+    if(UsarFiltroRsiH1 && hRSI_H1 != INVALID_HANDLE) {
+        double rsiH1[1];
+        if(CopyBuffer(hRSI_H1, 0, 0, 1, rsiH1) > 0) {
+            if(porEncima && rsiH1[0] >= MaxRsiH1Compra) {
+                txtVeredicto = StringFormat("TECHO H1 SOBRECOMPRA (RSI H1: %.1f >= %.0f)", rsiH1[0], MaxRsiH1Compra);
+                return false;
+            }
+            if(!porEncima && rsiH1[0] <= MinRsiH1Venta) {
+                txtVeredicto = StringFormat("SUELO H1 SOBREVENTA (RSI H1: %.1f <= %.0f)", rsiH1[0], MinRsiH1Venta);
+                return false;
+            }
+            // Bloqueo tramo final de vela H1 si hay sobreextension (minutos 50 a 59)
+            if(BloquearFinalVelaH1) {
+                MqlDateTime dt;
+                TimeToStruct(TimeTradeServer(), dt);
+                if(dt.min >= 50 && ((porEncima && rsiH1[0] > 65.0) || (!porEncima && rsiH1[0] < 35.0))) {
+                    txtVeredicto = StringFormat("ESPERANDO CIERRE VELA H1 (MINUTO %d)", dt.min);
+                    return false;
+                }
+            }
+        }
+    }
+
+    // --- FILTRO DE SOBREEXTENSION DE EMA (EVITAR COMPRAR EN EL PICO) ---
+    if(MaxDistanciaEmaPips > 0.0) {
+        double distEmaPips = MathAbs(precio - ema[0]) / (_Point * 10);
+        if(distEmaPips > MaxDistanciaEmaPips) {
+            txtVeredicto = StringFormat("SOBREEXTENSION EMA: %.1f pips > %.0f", distEmaPips, MaxDistanciaEmaPips);
+            return false;
+        }
+    }
 
 
 
@@ -865,15 +909,17 @@ void GestionarRefuerzoInteligente() {
 
 
 
-void GestionarProteccionSOS() {
-    if(ArraySize(pos) <= 1) return; // Solo si hay al menos una orden SOS abierta
-    if(!UsarBreakEvenSOS && !UsarTrailingStopSOS) return;
+void GestionarProteccionBE_TS() {
+    if(ArraySize(pos) == 0) return;
+    if(!UsarBreakEven && !UsarTrailingStop) return;
 
     double point_pips = _Point * 10.0;
+    double contractSize = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_CONTRACT_SIZE);
+    if(contractSize <= 0) contractSize = 100.0;
     double current_bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
     double current_ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
 
-    for(int i=1; i<ArraySize(pos); i++) {
+    for(int i=0; i<ArraySize(pos); i++) {
         ulong ticket = pos[i].ticket;
         if(!PositionSelectByTicket(ticket)) continue;
 
@@ -882,55 +928,63 @@ void GestionarProteccionSOS() {
         double current_sl = PositionGetDouble(POSITION_SL);
         double current_tp = PositionGetDouble(POSITION_TP);
 
-        // --- CASO COMPRA (BUY) ---
+                // --- CASO COMPRA (BUY) ---
         if(pos_type == POSITION_TYPE_BUY) {
             double profit_pips = (current_bid - open_price) / point_pips;
 
-            // 1. BreakEven SOS
-            if(UsarBreakEvenSOS && profit_pips >= PipsActivacionBESOS) {
-                double be_sl = NormalizeDouble(open_price + (PipsAseguradosBESOS * point_pips), _Digits);
+            // 1. BreakEven Dinamico (Cubre comision y swap)
+            if(UsarBreakEven && profit_pips >= PipsActivacionBE) {
+                double vol = PositionGetDouble(POSITION_VOLUME);
+                double comm_swap = MathAbs(PositionGetDouble(POSITION_COMMISSION) + PositionGetDouble(POSITION_SWAP));
+                double extra_pips_coste = (vol > 0 && contractSize > 0) ? ((comm_swap / (vol * contractSize)) / point_pips) : 0.0;
+                double pips_netos_aseg = MathMax(PipsAseguradosBE, extra_pips_coste + 2.0);
+                double be_sl = NormalizeDouble(open_price + (pips_netos_aseg * point_pips), _Digits);
                 if(current_sl < be_sl) {
                     if(trade.PositionModify(ticket, be_sl, current_tp)) {
-                        Print("MAIKO SOS: BreakEven activado en orden ", ticket, " SL: ", be_sl);
+                        Print("MAIKO: BreakEven activado en orden ", ticket, " SL positivo: ", be_sl);
                         current_sl = be_sl;
                     }
                 }
             }
 
-            // 2. Trailing Stop SOS
-            if(UsarTrailingStopSOS && profit_pips >= PipsTrailingStopSOS) {
-                double trail_sl = NormalizeDouble(current_bid - (PipsTrailingStopSOS * point_pips), _Digits);
+            // 2. Trailing Stop Acompana Tendencia
+            if(UsarTrailingStop && profit_pips >= PipsTrailingStop) {
+                double trail_sl = NormalizeDouble(current_bid - (PipsTrailingStop * point_pips), _Digits);
                 if(trail_sl > open_price) {
-                    if(current_sl == 0 || (trail_sl - current_sl) >= (PipsPasoTrailingSOS * point_pips)) {
+                    if(current_sl == 0 || (trail_sl - current_sl) >= (PipsPasoTrailing * point_pips)) {
                         if(trade.PositionModify(ticket, trail_sl, current_tp)) {
-                            Print("MAIKO SOS: Trailing Stop actualizado en orden ", ticket, " nuevo SL: ", trail_sl);
+                            Print("MAIKO: Trailing Stop actualizado en orden ", ticket, " nuevo SL: ", trail_sl);
                         }
                     }
                 }
             }
         }
-        // --- CASO VENTA (SELL) ---
+                // --- CASO VENTA (SELL) ---
         else if(pos_type == POSITION_TYPE_SELL) {
             double profit_pips = (open_price - current_ask) / point_pips;
 
-            // 1. BreakEven SOS
-            if(UsarBreakEvenSOS && profit_pips >= PipsActivacionBESOS) {
-                double be_sl = NormalizeDouble(open_price - (PipsAseguradosBESOS * point_pips), _Digits);
+            // 1. BreakEven Dinamico (Cubre comision y swap)
+            if(UsarBreakEven && profit_pips >= PipsActivacionBE) {
+                double vol = PositionGetDouble(POSITION_VOLUME);
+                double comm_swap = MathAbs(PositionGetDouble(POSITION_COMMISSION) + PositionGetDouble(POSITION_SWAP));
+                double extra_pips_coste = (vol > 0 && contractSize > 0) ? ((comm_swap / (vol * contractSize)) / point_pips) : 0.0;
+                double pips_netos_aseg = MathMax(PipsAseguradosBE, extra_pips_coste + 2.0);
+                double be_sl = NormalizeDouble(open_price - (pips_netos_aseg * point_pips), _Digits);
                 if(current_sl == 0 || current_sl > be_sl) {
                     if(trade.PositionModify(ticket, be_sl, current_tp)) {
-                        Print("MAIKO SOS: BreakEven activado en orden ", ticket, " SL: ", be_sl);
+                        Print("MAIKO: BreakEven activado en orden ", ticket, " SL positivo: ", be_sl);
                         current_sl = be_sl;
                     }
                 }
             }
 
-            // 2. Trailing Stop SOS
-            if(UsarTrailingStopSOS && profit_pips >= PipsTrailingStopSOS) {
-                double trail_sl = NormalizeDouble(current_ask + (PipsTrailingStopSOS * point_pips), _Digits);
+            // 2. Trailing Stop Acompana Tendencia
+            if(UsarTrailingStop && profit_pips >= PipsTrailingStop) {
+                double trail_sl = NormalizeDouble(current_ask + (PipsTrailingStop * point_pips), _Digits);
                 if(trail_sl < open_price) {
-                    if(current_sl == 0 || (current_sl - trail_sl) >= (PipsPasoTrailingSOS * point_pips)) {
+                    if(current_sl == 0 || (current_sl - trail_sl) >= (PipsPasoTrailing * point_pips)) {
                         if(trade.PositionModify(ticket, trail_sl, current_tp)) {
-                            Print("MAIKO SOS: Trailing Stop actualizado en orden ", ticket, " nuevo SL: ", trail_sl);
+                            Print("MAIKO: Trailing Stop actualizado en orden ", ticket, " nuevo SL: ", trail_sl);
                         }
                     }
                 }
@@ -940,19 +994,13 @@ void GestionarProteccionSOS() {
 }
 
 void GestionarCosechaSniper() { 
-
+    if(!UsarCosechaRapidaFija) return;
     double multCent = EsCuentaCent ? 100.0 : 1.0;
-
     for(int i=ArraySize(pos)-1; i>=0; i--) {
-        if(i > 0 && !PermitirCosechaRapidaSOS) continue;
         if((pos[i].p + pos[i].c + pos[i].s) >= (ProfitCosechaIndividual * multCent)) {
-
             trade.PositionClose(pos[i].ticket);
-
         }
-
     }
-
 }
 
 
@@ -1256,10 +1304,8 @@ void ActualizarInterfazMaster() {
 
       
 
-      bool esReal = (AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_REAL);
-      string tipoCuenta = esReal ? "CUENTA REAL" : "CUENTA DEMO";
-      ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("%s | LICENCIA ACTIVA [DIA %d]", tipoCuenta, dOp));
-      ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, esReal ? clrLimeGreen : clrCyan);
+      ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "LICENCIA MASTER PRO | ILIMITADA (OFICIAL)");
+      ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrSpringGreen);
 
     ObjectSetInteger(0, "MAIKO_Flot", OBJPROP_COLOR, flotante >= 0 ? clrSpringGreen : clrRed); 
 
@@ -1377,7 +1423,7 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 
         }
 
-        if(sparam == "MAIKO_BtnC") { CerrarTodo(); enFaseAnalisis = false; } 
+        if(sparam == "MAIKO_BtnC") { CerrarTodo(); enFaseAnalisis = false; ObjectSetInteger(0, "MAIKO_BtnC", OBJPROP_STATE, false); } 
 
         if(sparam == "MAIKO_BtnMin") { ToggleHUD(); ObjectSetInteger(0, sparam, OBJPROP_STATE, false); } 
 
@@ -1391,7 +1437,6 @@ void OnChartEvent(const int id, const long &lparam, const double &dparam, const 
 
 void OnTimer() {
     ChartSetInteger(0, CHART_FOREGROUND, false);
-    ChartSetInteger(0, CHART_SHOW_TRADE_HISTORY, false);
     ActualizarEstadoMaster();
     ActualizarInterfazMaster();
 
@@ -1702,5 +1747,4 @@ bool ValidarTechosSuelos(string decision) {
 
     return true;
 }
-
 
