@@ -11,6 +11,15 @@ const nextConfig = {
         buildActivity: false,
         appIsrStatus: false,
     },
+    async redirects() {
+        return [
+            {
+                source: '/bots/cmpo1aurf0001vhdgp94zvl4m',
+                destination: '/bots',
+                permanent: true,
+            },
+        ];
+    },
     async headers() {
         return [
             {

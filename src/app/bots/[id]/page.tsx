@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/Button";
@@ -99,7 +99,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
     });
 
     if (!bot || (!bot.isActive && !isOwner)) {
-        notFound();
+        redirect("/bots");
     }
 
     let userHasPurchase = false;
