@@ -143,7 +143,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                             MAIKO PRO GOLD DEMO v11.35 Vuelve a Estar 100% Operativo
                         </h2>
                         <p className="text-xs sm:text-sm text-text-muted font-light leading-relaxed max-w-3xl">
-                            Hemos completado la optimización del algoritmo en Oro (XAUUSD M5) con los parámetros institucionales ganadores (+7.764$ auditados y 12% Max DD). La <strong className="text-amber-400 font-bold">versión Demo está abierta y lista para descargar gratuitamente</strong>. Las licencias comerciales se encuentran en fase de homologación final.
+                            Hemos completado la optimización del algoritmo en Oro (XAUUSD M5) con los parámetros institucionales ganadores (+8.020$ auditados y 11.6% Max DD). La <strong className="text-amber-400 font-bold">versión Demo está abierta y lista para descargar gratuitamente</strong>. Las licencias comerciales se encuentran en fase de homologación final.
                         </p>
                     </div>
                     <div className="shrink-0 flex flex-col sm:flex-row md:flex-col gap-2.5 w-full md:w-auto">
@@ -304,7 +304,7 @@ export default async function BotsPage({ searchParams }: { searchParams: Promise
                                                     Licencia Demo Gratuita (7 Días)
                                                 </div>
                                                 <p className="text-[9px] text-amber-400/90 mt-0.5 font-medium">
-                                                    Preset ganador +7.764$ incluido
+                                                    Preset ganador +8.020$ incluido
                                                 </p>
                                             </div>
                                             <div className="flex flex-col gap-2 w-full">

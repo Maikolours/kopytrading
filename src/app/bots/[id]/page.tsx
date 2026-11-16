@@ -310,22 +310,22 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                     <div className="grid grid-cols-2 gap-4 relative z-10">
                                         <div className="bg-white/[0.02] p-4 rounded-2xl border border-white/5">
                                             <p className="text-[9px] text-text-muted mb-1 uppercase tracking-widest font-black">Profit Factor (PF)</p>
-                                            <p className="text-3xl font-black text-success italic">3.08</p>
-                                            <span className="text-[9px] text-text-muted">Auditado 10 Meses (5.070 trades)</span>
+                                            <p className="text-3xl font-black text-success italic">3.12</p>
+                                            <span className="text-[9px] text-text-muted">Auditado 10 Meses (4.733 trades)</span>
                                         </div>
                                         <div className="bg-white/[0.02] p-4 rounded-2xl border border-white/5">
                                             <p className="text-[9px] text-text-muted mb-1 uppercase tracking-widest font-black">Drawdown Máx Equidad</p>
-                                            <p className="text-3xl font-black text-amber-400 italic">15.52%</p>
+                                            <p className="text-3xl font-black text-amber-400 italic">11.61%</p>
                                             <span className="text-[9px] text-text-muted">$378.08 (Riesgo Controlado)</span>
                                         </div>
                                         <div className="bg-white/[0.02] p-3 rounded-2xl border border-white/5">
                                             <p className="text-[8px] text-text-muted mb-0.5 uppercase tracking-widest font-black">Tasa de Acierto</p>
-                                            <p className="text-xl font-black text-white italic">96.00%</p>
-                                            <span className="text-[8px] text-success font-medium">4.867 / 5.070 positivas</span>
+                                            <p className="text-xl font-black text-white italic">93.18%</p>
+                                            <span className="text-[8px] text-success font-medium">4.410 / 4.733 positivas</span>
                                         </div>
                                         <div className="bg-white/[0.02] p-3 rounded-2xl border border-white/5">
                                             <p className="text-[8px] text-text-muted mb-0.5 uppercase tracking-widest font-black">Ratio Sharpe</p>
-                                            <p className="text-xl font-black text-white italic">10.12</p>
+                                            <p className="text-xl font-black text-white italic">15.96</p>
                                             <span className="text-[8px] text-emerald-400 font-medium">Élite institucional</span>
                                         </div>
                                     </div>
@@ -359,7 +359,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                 <div className="space-y-2">
                                     <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
                                         <span>📈 Curva de Crecimiento de Balance y Patrimonio (2026)</span>
-                                        <span className="text-emerald-400 font-black">+568.9% Neto (+$5.689,35)</span>
+                                        <span className="text-emerald-400 font-black">+802.1% Neto (+$5.020,35)</span>
                                     </div>
                                     <div className="rounded-2xl overflow-hidden border border-white/10 bg-black/40 shadow-2xl p-1">
                                         <img 
@@ -373,7 +373,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                 <div className="space-y-2">
                                     <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
                                         <span>📊 Informe Detallado de Métricas Institucionales (MT5)</span>
-                                        <span className="text-amber-400 font-bold">Sharpe: 10.12 | Profit Factor: 3.08</span>
+                                        <span className="text-amber-400 font-bold">Sharpe: 15.96 | Profit Factor: 3.12</span>
                                     </div>
                                     <div className="rounded-2xl overflow-hidden border border-white/10 bg-black/40 shadow-2xl p-1">
                                         <img 
@@ -417,22 +417,22 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-white/5">
                                 <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5">
                                     <div className="text-[9px] uppercase tracking-widest text-text-muted font-bold">Beneficio Neto</div>
-                                    <div className="text-lg font-black text-emerald-400">+$5.689,35</div>
-                                    <div className="text-[9px] text-text-muted">Depósito: $1.000 (Saldo: $6.689)</div>
+                                    <div className="text-lg font-black text-emerald-400">+$5.020,35</div>
+                                    <div className="text-[9px] text-text-muted">Depósito: $1.000 (Saldo: $6.020)</div>
                                 </div>
                                 <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5">
                                     <div className="text-[9px] uppercase tracking-widest text-text-muted font-bold">Tasa de Acierto</div>
-                                    <div className="text-lg font-black text-white">96,00%</div>
-                                    <div className="text-[9px] text-text-muted">4.867 / 5.070 ganadas</div>
+                                    <div className="text-lg font-black text-white">93.18%</div>
+                                    <div className="text-[9px] text-text-muted">4.410 / 4.733 ganadas</div>
                                 </div>
                                 <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5">
                                     <div className="text-[9px] uppercase tracking-widest text-text-muted font-bold">Profit Factor</div>
-                                    <div className="text-lg font-black text-amber-400">3.08</div>
+                                    <div className="text-lg font-black text-amber-400">3.12</div>
                                     <div className="text-[9px] text-text-muted">Recuperación: 15.05x</div>
                                 </div>
                                 <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5">
                                     <div className="text-[9px] uppercase tracking-widest text-text-muted font-bold">Drawdown Máx</div>
-                                    <div className="text-lg font-black text-slate-200">15,11%</div>
+                                    <div className="text-lg font-black text-slate-200">11.61%</div>
                                     <div className="text-[9px] text-emerald-400/80">Riesgo Ruina: 0.00%</div>
                                 </div>
                             </div>
@@ -615,7 +615,7 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                             Descarga Gratuita <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-300">Inmediata</span>
                                         </div>
                                         <p className="text-xs text-slate-300 font-light leading-relaxed max-w-xs mx-auto">
-                                            Prueba el algoritmo oficial en tu MetaTrader 5 durante 7 días sin coste. Preset ganador (+7.764$ auditados) preconfigurado de serie.
+                                            Prueba el algoritmo oficial en tu MetaTrader 5 durante 7 días sin coste. Preset ganador (+8.020$ auditados) preconfigurado de serie.
                                         </p>
                                     </>
                                 ) : (

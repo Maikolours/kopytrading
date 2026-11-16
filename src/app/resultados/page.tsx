@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
     title: "Auditoría Cuantitativa, Backtests & Resultados | KopyTrading",
-    description: "Auditoría técnica oficial de MAIKO PRO GOLD v11.35. Rendimiento institucional de +7.764$ en XAUUSD (M5), simulación Monte Carlo de 2.000 iteraciones y resultados de la comunidad.",
+    description: "Auditoría técnica oficial de MAIKO PRO GOLD v11.35. Rendimiento institucional de +8.020$ en XAUUSD (M5), simulación Monte Carlo de 2.000 iteraciones y resultados de la comunidad.",
     alternates: {
         canonical: "https://www.kopytrading.com/resultados",
     },
@@ -49,18 +49,18 @@ export default function ResultadosPage() {
                     <div className="glass-card p-6 border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-black/40 to-transparent relative overflow-hidden group hover:border-amber-400/60 transition-all shadow-xl shadow-amber-500/5">
                         <div className="text-[10px] text-amber-400 font-black uppercase tracking-widest mb-1">Beneficio Neto Auditado</div>
                         <div className="text-2xl sm:text-4xl font-black text-white italic tracking-tight mb-1">+$7.764,72</div>
-                        <div className="text-[11px] text-emerald-400 font-bold">+776.47% ROI (Depósito: $1.000)</div>
+                        <div className="text-[11px] text-emerald-400 font-bold">+802.06% ROI (Depósito: $1.000)</div>
                     </div>
 
                     <div className="glass-card p-6 border border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 via-black/40 to-transparent relative overflow-hidden group hover:border-emerald-400/60 transition-all shadow-xl shadow-emerald-500/5">
                         <div className="text-[10px] text-emerald-400 font-black uppercase tracking-widest mb-1">Tasa de Acierto (Win Rate)</div>
-                        <div className="text-2xl sm:text-4xl font-black text-white italic tracking-tight mb-1">96.50%</div>
-                        <div className="text-[11px] text-slate-300 font-light">4.867 ganadas / 5.070 órdenes</div>
+                        <div className="text-2xl sm:text-4xl font-black text-white italic tracking-tight mb-1">93.18%</div>
+                        <div className="text-[11px] text-slate-300 font-light">4.410 ganadas / 4.733 órdenes</div>
                     </div>
 
                     <div className="glass-card p-6 border border-blue-500/30 bg-gradient-to-br from-blue-500/10 via-black/40 to-transparent relative overflow-hidden group hover:border-blue-400/60 transition-all shadow-xl shadow-blue-500/5">
                         <div className="text-[10px] text-blue-400 font-black uppercase tracking-widest mb-1">Drawdown Máx Equidad</div>
-                        <div className="text-2xl sm:text-4xl font-black text-white italic tracking-tight mb-1">12.18%</div>
+                        <div className="text-2xl sm:text-4xl font-black text-white italic tracking-tight mb-1">11.61%</div>
                         <div className="text-[11px] text-slate-300 font-light">Escudo de seguridad con 10% SL</div>
                     </div>
 
@@ -132,7 +132,7 @@ export default function ResultadosPage() {
                             </h2>
                         </div>
                         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-black uppercase tracking-wider shrink-0">
-                            Profit Factor: 2.54 | Sharpe: 8.68
+                            Profit Factor: 3.12 | Sharpe: 15.96
                         </div>
                     </div>
 

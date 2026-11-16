@@ -74,7 +74,7 @@ export default function Home() {
                     MAIKO PRO GOLD DEMO <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500">¡VUELVE A ESTAR 100% OPERATIVO!</span>
                   </div>
                   <p className="text-slate-300 leading-relaxed max-w-2xl text-xs sm:text-sm font-light">
-                    Calibración de alta precisión M5 finalizada. La versión Demo con el preset institucional ganador (<strong className="text-amber-400 font-semibold">+7.764$ auditados con 10% Stop Loss y solo 12% Drawdown</strong>) ya está abierta al público para su descarga inmediata.
+                    Calibración de alta precisión M5 finalizada. La versión Demo con el preset institucional ganador (<strong className="text-amber-400 font-semibold">+8.020$ auditados con 10% Stop Loss, solo 11.6% Drawdown y PF 3.12</strong>) ya está abierta al público para su descarga inmediata.
                   </p>
                 </div>
                 
