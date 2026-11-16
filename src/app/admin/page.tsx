@@ -9,7 +9,11 @@ export default function AdminPage() {
     const { data: session, status } = useSession();
     const router = useRouter();
     
-    const [activeTab, setActiveTab] = useState<"metrics" | "publish" | "update">("metrics");
+    const [activeTab, setActiveTab] = useState<"metrics" | "traffic" | "publish" | "update">("metrics");
+    const [analyticsData, setAnalyticsData] = useState<any>(null);
+    const [loadingAnalytics, setLoadingAnalytics] = useState(false);
+    const [customClientTag, setCustomClientTag] = useState("");
+    const [copiedCustomLink, setCopiedCustomLink] = useState(false);
     const [metrics, setMetrics] = useState<any>(null);
     const [loadingMetrics, setLoadingMetrics] = useState(true);
     
@@ -54,8 +58,24 @@ export default function AdminPage() {
         if (session?.user && (session.user as any).role === "ADMIN") {
             fetchMetrics();
             fetchBots();
+            fetchAnalytics();
         }
     }, [session]);
+
+    const fetchAnalytics = async () => {
+        setLoadingAnalytics(true);
+        try {
+            const res = await fetch("/api/admin/analytics");
+            if (res.ok) {
+                const data = await res.json();
+                setAnalyticsData(data);
+            }
+        } catch (e) {
+            console.error("Error fetching analytics:", e);
+        } finally {
+            setLoadingAnalytics(false);
+        }
+    };
 
     const fetchBots = async () => {
         setLoadingBots(true);
@@ -222,6 +242,12 @@ export default function AdminPage() {
                             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === "metrics" ? "bg-brand text-white shadow-md shadow-brand/20" : "text-text-muted hover:text-white"}`}
                         >
                             📊 Panel de Control
+                        </button>
+                        <button 
+                            onClick={() => { setActiveTab("traffic"); fetchAnalytics(); }}
+                            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === "traffic" ? "bg-brand text-white shadow-md shadow-brand/20" : "text-text-muted hover:text-white"}`}
+                        >
+                            🌍 Visitantes y Tráfico
                         </button>
                         <button 
                             onClick={() => setActiveTab("publish")}
@@ -516,6 +542,349 @@ export default function AdminPage() {
 
                     </div>
                 )}
+                {/* TAB: TRAFFIC & VISITOR GEOLOCATION ANALYTICS */}
+                {activeTab === "traffic" && (
+                    <div className="space-y-8">
+                        {/* Header con botón de refrescar */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 glass-card p-6 border border-white/10 rounded-2xl">
+                            <div>
+                                <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                                    <span>🌍</span> Analítica de Visitantes y Geolocalización en Tiempo Real
+                                </h2>
+                                <p className="text-text-muted text-xs sm:text-sm mt-1">
+                                    Conteo independiente y privado de visitas, países, dispositivos y fuentes de tráfico (100% legal y anónimo).
+                                </p>
+                            </div>
+                            <Button 
+                                onClick={fetchAnalytics}
+                                disabled={loadingAnalytics}
+                                size="sm"
+                                className="self-start sm:self-auto shrink-0 flex items-center gap-2"
+                            >
+                                <span>🔄</span> {loadingAnalytics ? "Actualizando..." : "Actualizar en Vivo"}
+                            </Button>
+                        </div>
+
+                        {/* Summary Cards */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div className="glass-card p-6 border border-white/10 rounded-2xl flex flex-col justify-between space-y-2">
+                                <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">Visitas Hoy</span>
+                                <div className="text-3xl font-bold text-brand-light">
+                                    {analyticsData?.summary?.todayHits || 0}
+                                </div>
+                                <span className="text-[11px] text-white/50">
+                                    👤 {analyticsData?.summary?.uniqueToday || 0} visitantes únicos hoy
+                                </span>
+                            </div>
+
+                            <div className="glass-card p-6 border border-white/10 rounded-2xl flex flex-col justify-between space-y-2">
+                                <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">Últimos 7 Días</span>
+                                <div className="text-3xl font-bold text-white">
+                                    {analyticsData?.summary?.weekHits || 0}
+                                </div>
+                                <span className="text-[11px] text-white/50">
+                                    👤 {analyticsData?.summary?.uniqueWeek || 0} visitantes únicos en 7d
+                                </span>
+                            </div>
+
+                            <div className="glass-card p-6 border border-white/10 rounded-2xl flex flex-col justify-between space-y-2">
+                                <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">Últimos 30 Días</span>
+                                <div className="text-3xl font-bold text-success">
+                                    {analyticsData?.summary?.monthHits || 0}
+                                </div>
+                                <span className="text-[11px] text-white/50">
+                                    👤 {analyticsData?.summary?.uniqueMonth || 0} visitantes únicos en el mes
+                                </span>
+                            </div>
+
+                            <div className="glass-card p-6 border border-white/10 rounded-2xl flex flex-col justify-between space-y-2">
+                                <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">Total Histórico</span>
+                                <div className="text-3xl font-bold text-accent">
+                                    {analyticsData?.summary?.totalHits || 0}
+                                </div>
+                                <span className="text-[11px] text-white/50">
+                                    📈 Páginas vistas acumuladas
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Generador de Enlaces Personalizados para Redes / Clientes */}
+                        <div className="glass-card p-6 border border-brand/20 bg-brand/5 rounded-2xl space-y-4">
+                            <div className="flex items-center gap-2">
+                                <span className="text-xl">🎯</span>
+                                <h3 className="text-base font-bold text-white">Generador de Enlaces para Instagram / Facebook / Clientes Privados</h3>
+                            </div>
+                            <p className="text-xs text-text-muted">
+                                Escribe el nombre de un cliente, post o red social (ej: <code className="text-brand-light">instagram_bio</code>, <code className="text-brand-light">carlos_trading</code>, <code className="text-brand-light">facebook_post</code>). Cuando entren por ese enlace, sabrás al instante quién es y qué está viendo.
+                            </p>
+                            <div className="flex flex-col sm:flex-row items-center gap-3">
+                                <input 
+                                    type="text" 
+                                    placeholder="Nombre del cliente o campaña (ej: carlos_trading)" 
+                                    value={customClientTag}
+                                    onChange={(e) => setCustomClientTag(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ""))}
+                                    className="w-full sm:w-80 px-4 py-2 bg-black/60 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-brand"
+                                />
+                                <div className="flex-1 w-full bg-black/40 border border-white/10 px-4 py-2 rounded-xl text-xs text-brand-light font-mono truncate">
+                                    {`https://www.kopytrading.com/?cliente=${customClientTag || "carlos_trading"}`}
+                                </div>
+                                <Button 
+                                    onClick={() => {
+                                        const url = `https://www.kopytrading.com/?cliente=${customClientTag || "carlos_trading"}`;
+                                        navigator.clipboard.writeText(url);
+                                        setCopiedCustomLink(true);
+                                        setTimeout(() => setCopiedCustomLink(false), 2500);
+                                    }}
+                                    size="sm"
+                                    className="shrink-0 w-full sm:w-auto"
+                                >
+                                    {copiedCustomLink ? "✅ ¡Copiado!" : "📋 Copiar Enlace"}
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* Grids de Países, Ciudades, Fuentes y Dispositivos */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            
+                            {/* Países y Ciudades */}
+                            <div className="glass-card p-6 border border-white/10 rounded-2xl space-y-6">
+                                <div>
+                                    <h3 className="text-base font-bold text-white flex items-center gap-2 mb-1">
+                                        <span>🗺️</span> Principales Países (Últimos 30 Días)
+                                    </h3>
+                                    <p className="text-xs text-text-muted">De dónde vienen las visitas a la página.</p>
+                                </div>
+
+                                {loadingAnalytics ? (
+                                    <div className="py-8 text-center text-xs text-text-muted">Cargando países...</div>
+                                ) : !analyticsData?.topCountries || analyticsData.topCountries.length === 0 ? (
+                                    <div className="py-8 text-center text-xs text-text-muted bg-white/[0.02] rounded-xl border border-white/5">
+                                        Aún no hay visitas registradas hoy. ¡Comparte tu primer enlace para ver los datos aquí!
+                                    </div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        {analyticsData.topCountries.map((c: any, idx: number) => {
+                                            const totalHitsInPeriod = analyticsData.summary.monthHits || 1;
+                                            const percentage = Math.round((c.count / totalHitsInPeriod) * 100);
+                                            const flag = (c.code === "ES" ? "🇪🇸" : c.code === "MX" ? "🇲🇽" : c.code === "CO" ? "🇨🇴" : c.code === "AR" ? "🇦🇷" : c.code === "CL" ? "🇨🇱" : c.code === "PE" ? "🇵🇪" : c.code === "US" ? "🇺🇸" : c.code === "VE" ? "🇻🇪" : c.code === "EC" ? "🇪🇨" : "🌐");
+                                            return (
+                                                <div key={idx} className="space-y-1">
+                                                    <div className="flex justify-between items-center text-xs">
+                                                        <span className="font-semibold text-white flex items-center gap-2">
+                                                            <span>{flag}</span> {c.country} ({c.code})
+                                                        </span>
+                                                        <span className="text-text-muted font-mono">{c.count} visitas ({percentage}%)</span>
+                                                    </div>
+                                                    <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden">
+                                                        <div className="bg-brand h-full rounded-full transition-all duration-500" style={{ width: `${Math.max(5, percentage)}%` }} />
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+
+                                {/* Ciudades */}
+                                <div className="border-t border-white/10 pt-4">
+                                    <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-3">Ciudades Más Activas</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {!analyticsData?.topCities || analyticsData.topCities.length === 0 ? (
+                                            <span className="text-xs text-text-muted">Sin datos de ciudad aún</span>
+                                        ) : (
+                                            analyticsData.topCities.map((ct: any, idx: number) => (
+                                                <span key={idx} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-surface border border-white/10 text-white/90">
+                                                    📍 {ct.city} <span className="text-brand-light font-bold">({ct.count})</span>
+                                                </span>
+                                            ))
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Origen del Tráfico y Dispositivos */}
+                            <div className="glass-card p-6 border border-white/10 rounded-2xl space-y-6">
+                                <div>
+                                    <h3 className="text-base font-bold text-white flex items-center gap-2 mb-1">
+                                        <span>📡</span> Fuentes de Tráfico (Cómo llegaron)
+                                    </h3>
+                                    <p className="text-xs text-text-muted">Redes sociales, buscadores o enlaces directos.</p>
+                                </div>
+
+                                <div className="space-y-3">
+                                    {!analyticsData?.topSources || analyticsData.topSources.length === 0 ? (
+                                        <div className="py-6 text-center text-xs text-text-muted bg-white/[0.02] rounded-xl border border-white/5">
+                                            Esperando primeras visitas registradas.
+                                        </div>
+                                    ) : (
+                                        analyticsData.topSources.map((s: any, idx: number) => {
+                                            const totalHitsInPeriod = analyticsData.summary.monthHits || 1;
+                                            const pct = Math.round((s.count / totalHitsInPeriod) * 100);
+                                            const icon = s.source.includes("Instagram") ? "📱" : s.source.includes("Facebook") ? "📘" : s.source.includes("Google") ? "🔍" : s.source.includes("WhatsApp") ? "💬" : s.source.includes("Cliente") ? "👤" : "🔗";
+                                            return (
+                                                <div key={idx} className="flex justify-between items-center p-2.5 rounded-xl bg-surface border border-white/5 text-xs">
+                                                    <span className="font-semibold text-white flex items-center gap-2">
+                                                        <span>{icon}</span> {s.source}
+                                                    </span>
+                                                    <span className="text-brand-light font-mono font-bold">{s.count} ({pct}%)</span>
+                                                </div>
+                                            );
+                                        })
+                                    )}
+                                </div>
+
+                                {/* Dispositivos */}
+                                <div className="border-t border-white/10 pt-4">
+                                    <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-3">Dispositivos Utilizados</h4>
+                                    <div className="grid grid-cols-3 gap-3 text-center">
+                                        {(() => {
+                                            const total = (analyticsData?.devices || []).reduce((acc: number, d: any) => acc + d.count, 0) || 1;
+                                            const mobileCount = analyticsData?.devices?.find((d: any) => d.device === "mobile")?.count || 0;
+                                            const desktopCount = analyticsData?.devices?.find((d: any) => d.device === "desktop")?.count || 0;
+                                            const tabletCount = analyticsData?.devices?.find((d: any) => d.device === "tablet")?.count || 0;
+
+                                            return (
+                                                <>
+                                                    <div className="p-3 rounded-xl bg-surface border border-white/5">
+                                                        <div className="text-xl mb-1">📱</div>
+                                                        <div className="text-xs text-text-muted">Móvil</div>
+                                                        <div className="text-sm font-bold text-white mt-1">{Math.round((mobileCount / total) * 100)}%</div>
+                                                        <div className="text-[10px] text-white/40">{mobileCount} visitas</div>
+                                                    </div>
+                                                    <div className="p-3 rounded-xl bg-surface border border-white/5">
+                                                        <div className="text-xl mb-1">💻</div>
+                                                        <div className="text-xs text-text-muted">Ordenador</div>
+                                                        <div className="text-sm font-bold text-white mt-1">{Math.round((desktopCount / total) * 100)}%</div>
+                                                        <div className="text-[10px] text-white/40">{desktopCount} visitas</div>
+                                                    </div>
+                                                    <div className="p-3 rounded-xl bg-surface border border-white/5">
+                                                        <div className="text-xl mb-1">📟</div>
+                                                        <div className="text-xs text-text-muted">Tablet</div>
+                                                        <div className="text-sm font-bold text-white mt-1">{Math.round((tabletCount / total) * 100)}%</div>
+                                                        <div className="text-[10px] text-white/40">{tabletCount} visitas</div>
+                                                    </div>
+                                                </>
+                                            );
+                                        })()}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Páginas Más Vistas */}
+                        <div className="glass-card p-6 border border-white/10 rounded-2xl space-y-4">
+                            <h3 className="text-base font-bold text-white flex items-center gap-2">
+                                <span>📄</span> Páginas Más Vistas de tu Web
+                            </h3>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left text-xs">
+                                    <thead className="bg-surface-light border-b border-white/10 text-text-muted uppercase text-[10px]">
+                                        <tr>
+                                            <th className="p-3">Ruta / Página</th>
+                                            <th className="p-3 text-right">Visitas Registradas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-white/5">
+                                        {!analyticsData?.topPages || analyticsData.topPages.length === 0 ? (
+                                            <tr>
+                                                <td colSpan={2} className="p-4 text-center text-text-muted">Sin datos aún</td>
+                                            </tr>
+                                        ) : (
+                                            analyticsData.topPages.map((p: any, idx: number) => (
+                                                <tr key={idx} className="hover:bg-white/[0.02]">
+                                                    <td className="p-3 font-mono text-brand-light">{p.path}</td>
+                                                    <td className="p-3 text-right font-bold text-white">{p.count}</td>
+                                                </tr>
+                                            ))
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {/* Feed en Vivo de Últimas Visitas */}
+                        <div className="glass-card p-6 border border-white/10 rounded-2xl space-y-4">
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    <h3 className="text-base font-bold text-white flex items-center gap-2">
+                                        <span>⚡</span> Feed en Vivo: Últimas Visitas Registradas
+                                    </h3>
+                                    <p className="text-xs text-text-muted">Monitoreo segundo a segundo de quién entra a la web.</p>
+                                </div>
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] bg-green-500/10 border border-green-500/20 text-green-400 font-semibold animate-pulse">
+                                    <span className="w-2 h-2 rounded-full bg-green-400"></span> Sensor Activo
+                                </span>
+                            </div>
+
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left text-xs">
+                                    <thead className="bg-surface-light border-b border-white/10 text-text-muted uppercase text-[10px]">
+                                        <tr>
+                                            <th className="p-3">Fecha y Hora</th>
+                                            <th className="p-3">Ubicación</th>
+                                            <th className="p-3">Dispositivo / Navegador</th>
+                                            <th className="p-3">Origen</th>
+                                            <th className="p-3">Página Visitada</th>
+                                            <th className="p-3">Identificación</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-white/5 font-mono text-[11px]">
+                                        {!analyticsData?.recentHits || analyticsData.recentHits.length === 0 ? (
+                                            <tr>
+                                                <td colSpan={6} className="p-8 text-center text-text-muted">
+                                                    No se han registrado visitas todavía. En cuanto entre un visitante desde tu enlace de Instagram o Google aparecerá aquí al segundo.
+                                                </td>
+                                            </tr>
+                                        ) : (
+                                            analyticsData.recentHits.map((hit: any) => {
+                                                const flag = (hit.countryCode === "ES" ? "🇪🇸" : hit.countryCode === "MX" ? "🇲🇽" : hit.countryCode === "CO" ? "🇨🇴" : hit.countryCode === "AR" ? "🇦🇷" : hit.countryCode === "CL" ? "🇨🇱" : hit.countryCode === "PE" ? "🇵🇪" : hit.countryCode === "US" ? "🇺🇸" : hit.countryCode === "VE" ? "🇻🇪" : hit.countryCode === "EC" ? "🇪🇨" : "🌐");
+                                                const dateStr = new Date(hit.createdAt).toLocaleString("es-ES", {
+                                                    day: "2-digit",
+                                                    month: "2-digit",
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                    second: "2-digit"
+                                                });
+                                                return (
+                                                    <tr key={hit.id} className="hover:bg-white/[0.02]">
+                                                        <td className="p-3 text-text-muted">{dateStr}</td>
+                                                        <td className="p-3 text-white">
+                                                            <span className="mr-1.5">{flag}</span>
+                                                            {hit.city && hit.city !== "Desconocida" ? `${hit.city}, ` : ""}{hit.country}
+                                                        </td>
+                                                        <td className="p-3 text-text-muted">
+                                                            {hit.device === "mobile" ? "📱 Móvil" : hit.device === "tablet" ? "📟 Tablet" : "💻 PC"} ({hit.os} / {hit.browser})
+                                                        </td>
+                                                        <td className="p-3">
+                                                            <span className="px-2 py-0.5 rounded bg-surface border border-white/10 text-white font-sans text-[11px]">
+                                                                {hit.source}
+                                                            </span>
+                                                        </td>
+                                                        <td className="p-3 text-brand-light font-bold truncate max-w-xs">{hit.path}</td>
+                                                        <td className="p-3">
+                                                            {hit.clientTag ? (
+                                                                <span className="px-2 py-0.5 rounded bg-brand/20 border border-brand/40 text-brand-light font-bold">
+                                                                    🎯 {hit.clientTag}
+                                                                </span>
+                                                            ) : hit.userEmail ? (
+                                                                <span className="px-2 py-0.5 rounded bg-green-500/10 border border-green-500/30 text-green-400 font-bold">
+                                                                    👤 {hit.userEmail}
+                                                                </span>
+                                                            ) : (
+                                                                <span className="text-white/30 text-[10px]">Anónimo</span>
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                )}
+
 
                 {activeTab === "publish" && (
                     /* Existing Form to Publish Bots */

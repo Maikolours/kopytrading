@@ -178,3 +178,25 @@ model Review {
   @@index([botProductId])
 }
 
+model VisitorHit {
+  id          String   @id @default(cuid())
+  path        String
+  country     String?  @default("España")
+  countryCode String?  @default("ES")
+  city        String?  @default("Desconocida")
+  device      String?  @default("desktop")
+  browser     String?  @default("Chrome")
+  os          String?  @default("Windows")
+  source      String?  @default("Directo")
+  referrer    String?  @db.Text
+  clientTag   String?
+  userEmail   String?
+  visitorHash String?
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([countryCode])
+  @@index([source])
+}
+
+

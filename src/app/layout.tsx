@@ -7,6 +7,7 @@ import CookieBanner from "@/components/CookieBanner";
 import RiskBanner from "@/components/RiskBanner";
 import FloatingChat from "@/components/FloatingChat";
 import { MaintenanceMode } from "@/components/MaintenanceMode";
+import { VisitorTracker } from "@/components/VisitorTracker";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Script from "next/script";
@@ -308,6 +309,7 @@ export default function RootLayout({
             <CookieBanner />
             <RiskBanner />
             <FloatingChat />
+            <VisitorTracker />
             <Analytics />
             <SpeedInsights />
           </Providers>
