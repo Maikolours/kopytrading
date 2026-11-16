@@ -508,7 +508,18 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                     </div>
 
                                     <div className="pt-4 mt-2">
-                                        {canAccessFullManual ? (
+                                        {isDemo ? (
+                                            <a 
+                                                href="/uploads/Manual_Maiko_Pro_Gold.pdf" 
+                                                target="_blank" 
+                                                rel="noopener noreferrer"
+                                                download
+                                                className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 border border-amber-400/40 text-xs font-black text-slate-950 transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98] uppercase tracking-wider"
+                                            >
+                                                <span>📖 Descargar Manual Oficial Completo (.PDF)</span>
+                                                <span className="text-sm">⬇️</span>
+                                            </a>
+                                        ) : canAccessFullManual ? (
                                             <a 
                                                 href={bot.pdfFilePath || (bot.instrument === 'BTCUSD' ? '/uploads/Manual_Maiko_Pro_BTC.pdf' : bot.name.includes('CENT') ? '/uploads/Manual_Maiko_Pro_Cent.pdf' : '/uploads/Manual_Maiko_Pro_Gold.pdf')} 
                                                 target="_blank" 
@@ -518,20 +529,12 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                                 <span>📖 Descargar Manual Oficial Completo (.PDF)</span>
                                                 <span className="text-sm">↗</span>
                                             </a>
-                                        ) : isDemo ? (
-                                            <Link 
-                                                href={`/checkout/${bot.id}`}
-                                                className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 border border-amber-400/40 text-xs font-black text-slate-950 transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98] uppercase tracking-wider text-center"
-                                            >
-                                                <span>⚡ Activar Demo (1€) para Descargar Manual Completo</span>
-                                                <span className="text-sm">→</span>
-                                            </Link>
                                         ) : (
                                             <Link 
                                                 href={`/bots/${GOLD_DEMO_BOT_ID}`}
-                                                className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 border border-purple-400/40 text-xs font-black text-white transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98] uppercase tracking-wider text-center"
+                                                className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 border border-amber-400/40 text-xs font-black text-slate-950 transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98] uppercase tracking-wider text-center"
                                             >
-                                                <span>⚡ Probar Demo para Descargar Manual y Bot</span>
+                                                <span>⚡ Descargar Demo Gratuita y Manual</span>
                                                 <span className="text-sm">→</span>
                                             </Link>
                                         )}
@@ -559,11 +562,24 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-3 pt-2">
-                                        <div className="flex-1 h-[2px] bg-white/5 overflow-hidden">
-                                            <div className="h-full bg-emerald-400/40 w-full"></div>
-                                        </div>
-                                        <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest whitespace-nowrap">Incluido con Licencia / Demo</span>
+                                    <div className="pt-3 border-t border-white/5">
+                                        {isDemo ? (
+                                            <a 
+                                                href="/uploads/bots/CONFIGURACION_GANADORA_V11.35.set" 
+                                                download 
+                                                className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-amber-500/30 text-xs font-bold text-amber-300 hover:text-white transition-all uppercase tracking-wider"
+                                            >
+                                                <span>⚙️ Descargar Preset Ganador (.SET)</span>
+                                                <span>⬇️</span>
+                                            </a>
+                                        ) : (
+                                            <div className="flex items-center gap-3 pt-2">
+                                                <div className="flex-1 h-[2px] bg-white/5 overflow-hidden">
+                                                    <div className="h-full bg-emerald-400/40 w-full"></div>
+                                                </div>
+                                                <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest whitespace-nowrap">Incluido con Licencia / Demo</span>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -587,17 +603,34 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
                             {/* Decorative Glow */}
                             <div className={`absolute -top-24 -right-24 w-48 h-48 ${colors.glow} blur-[80px] rounded-full group-hover/side:opacity-100 opacity-50 transition-opacity`} />
                             
-                            {/* Estado En Revisión */}
+                            {/* Estado / Disponibilidad */}
                             <div className="text-center mb-8 pb-8 border-b border-white/5 relative z-10">
-                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[10px] font-black uppercase tracking-widest mb-4">
-                                    <span>⚙️ EN REVISIÓN</span>
-                                </div>
-                                <div className="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tight mb-2">
-                                    Actualizando a Nueva Versión
-                                </div>
-                                <p className="text-xs text-text-muted font-light leading-relaxed max-w-xs mx-auto">
-                                    Estamos trabajando en una nueva actualización técnica para este algoritmo {isDemo ? "(Versión Demo)" : "(Versión Comercial)"}. Los precios y accesos están pausados temporalmente mientras finalizamos el despliegue.
-                                </p>
+                                {isDemo ? (
+                                    <>
+                                        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[10px] font-black uppercase tracking-widest mb-3 shadow-sm">
+                                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                                            <span>DEMO ACTIVA Y OPERATIVA</span>
+                                        </div>
+                                        <div className="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tight mb-2">
+                                            Descarga Gratuita <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-300">Inmediata</span>
+                                        </div>
+                                        <p className="text-xs text-slate-300 font-light leading-relaxed max-w-xs mx-auto">
+                                            Prueba el algoritmo oficial en tu MetaTrader 5 durante 7 días sin coste. Preset ganador (+7.764$ auditados) preconfigurado de serie.
+                                        </p>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[10px] font-black uppercase tracking-widest mb-4">
+                                            <span>⚙️ EN REVISIÓN</span>
+                                        </div>
+                                        <div className="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tight mb-2">
+                                            Actualizando a Nueva Versión
+                                        </div>
+                                        <p className="text-xs text-text-muted font-light leading-relaxed max-w-xs mx-auto">
+                                            Estamos trabajando en una nueva actualización técnica para este algoritmo comercial. Los accesos se habilitarán tras concluir la homologación.
+                                        </p>
+                                    </>
+                                )}
                             </div>
 
                             {/* Features list */}
@@ -624,17 +657,67 @@ export default async function BotDetailPage({ params }: { params: Promise<{ id: 
 
                             {/* CTAs */}
                             <div className="space-y-4 relative z-10">
-                                <div className="p-4 rounded-xl border border-white/5 bg-white/[0.02] text-center">
-                                    <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider">Estado actual:</span>
-                                    <div className="text-sm font-black text-amber-400 uppercase tracking-wider mt-1">
-                                        🛠️ Revisión y Calibración en Curso
-                                    </div>
-                                </div>
-                                <Link href="/bots" className="block">
-                                    <Button size="lg" fullWidth variant="outline" className="text-xs py-5 uppercase tracking-widest font-black border-white/20 text-white hover:bg-white/5">
-                                        ← Volver al Catálogo
-                                    </Button>
-                                </Link>
+                                {isDemo ? (
+                                    <>
+                                        <a 
+                                            href="/uploads/bots/02_MAIKO_PRO_GOLD_CLIENT_DEMO_v11.35.ex5" 
+                                            download 
+                                            className="block w-full"
+                                        >
+                                            <Button 
+                                                size="lg" 
+                                                fullWidth 
+                                                className="text-xs py-5 uppercase tracking-widest font-black bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 hover:from-amber-400 hover:to-yellow-300 text-slate-950 shadow-xl shadow-amber-500/30 border-none transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                            >
+                                                ⬇️ Descargar Bot MT5 (.EX5)
+                                            </Button>
+                                        </a>
+
+                                        <div className="grid grid-cols-2 gap-2 pt-1">
+                                            <a 
+                                                href="/uploads/bots/CONFIGURACION_GANADORA_V11.35.set" 
+                                                download 
+                                                className="inline-flex items-center justify-center gap-1.5 py-3 px-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-amber-500/30 text-[10px] font-bold text-amber-300 transition-all text-center uppercase tracking-wider"
+                                            >
+                                                <span>⚙️ Preset .SET</span>
+                                            </a>
+                                            <a 
+                                                href="/uploads/Manual_Maiko_Pro_Gold.pdf" 
+                                                target="_blank" 
+                                                rel="noopener noreferrer" 
+                                                download 
+                                                className="inline-flex items-center justify-center gap-1.5 py-3 px-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-amber-500/30 text-[10px] font-bold text-amber-300 transition-all text-center uppercase tracking-wider"
+                                            >
+                                                <span>📖 Manual .PDF</span>
+                                            </a>
+                                        </div>
+
+                                        <Link href="/resultados" className="block pt-2">
+                                            <Button size="sm" fullWidth variant="outline" className="text-[10px] py-4 uppercase tracking-widest font-black border-white/10 text-white/70 hover:text-white hover:bg-white/5">
+                                                📊 Ver Backtests & Auditoría Completa
+                                            </Button>
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="p-4 rounded-xl border border-white/5 bg-white/[0.02] text-center">
+                                            <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider">Estado actual:</span>
+                                            <div className="text-sm font-black text-amber-400 uppercase tracking-wider mt-1">
+                                                🛠️ Revisión y Calibración en Curso
+                                            </div>
+                                        </div>
+                                        <Link href={`/bots/${GOLD_DEMO_BOT_ID}`} className="block">
+                                            <Button size="lg" fullWidth className="text-xs py-5 uppercase tracking-widest font-black bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 hover:from-amber-400 hover:to-yellow-300 text-slate-950 shadow-xl shadow-amber-500/25 border-none">
+                                                ⚡ Probar Versión Demo Gratis →
+                                            </Button>
+                                        </Link>
+                                        <Link href="/bots" className="block">
+                                            <Button size="sm" fullWidth variant="outline" className="text-xs py-4 uppercase tracking-widest font-black border-white/20 text-white hover:bg-white/5">
+                                                ← Volver al Catálogo
+                                            </Button>
+                                        </Link>
+                                    </>
+                                )}
                             </div>
 
                             <div className="mt-8 flex items-center justify-center gap-4 grayscale opacity-30">

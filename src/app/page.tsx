@@ -55,32 +55,38 @@ export default function Home() {
         <section className="px-4 mt-8">
           <div className="max-w-5xl mx-auto">
             <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 via-brand to-purple-600 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative bg-black/90 border border-amber-500/40 rounded-2xl p-6 sm:p-8 backdrop-blur-xl flex flex-col md:flex-row items-center gap-6 overflow-hidden shadow-2xl">
-                <div className="absolute top-0 right-0 p-4 opacity-10">
-                  <span className="text-8xl select-none">🔥</span>
+              <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 rounded-3xl blur opacity-40 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative bg-[#0c0904]/95 border-2 border-amber-500/50 rounded-2xl p-6 sm:p-8 backdrop-blur-xl flex flex-col md:flex-row items-center gap-6 overflow-hidden shadow-[0_0_50px_rgba(245,158,11,0.25)]">
+                <div className="absolute top-0 right-0 p-4 opacity-15 pointer-events-none">
+                  <span className="text-8xl select-none">⚡</span>
                 </div>
                 
-                <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500/30 to-purple-600/30 border border-amber-500/40 flex items-center justify-center text-3xl animate-pulse">
-                  🎁
+                <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500/30 via-yellow-500/20 to-amber-600/30 border border-amber-400/50 flex items-center justify-center text-3xl shadow-[0_0_25px_rgba(245,158,11,0.4)] animate-pulse">
+                  ⚡
                 </div>
                 
                 <div className="flex-1 text-center md:text-left z-10">
-                  <div className="inline-flex items-center gap-2 bg-brand/10 border border-brand/30 text-brand-light text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest mb-2">
-                    ⏳ PRÓXIMO LANZAMIENTO · SERIE MAIKO PRO
+                  <div className="inline-flex items-center gap-2 bg-amber-500/15 border border-amber-500/40 text-amber-300 text-[10px] font-black px-3.5 py-1 rounded-full uppercase tracking-widest mb-2 shadow-sm">
+                    <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                    <span>ACTUALIZACIÓN OFICIAL COMPLETADA · DESCARGA ABIERTA</span>
                   </div>
                   <div className="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tighter mb-2">
-                    NUEVA GENERACIÓN <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-light via-yellow-300 to-amber-400">INSTITUCIONAL M5</span>
+                    MAIKO PRO GOLD DEMO <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500">¡VUELVE A ESTAR 100% OPERATIVO!</span>
                   </div>
-                  <p className="text-text-muted leading-relaxed max-w-2xl text-sm">
-                    Estamos trabajando en una nueva actualización técnica integral de toda la serie de algoritmos MAIKO PRO (versiones Demo y Real). Muy pronto estará disponible la nueva versión optimizada para MetaTrader 5.
+                  <p className="text-slate-300 leading-relaxed max-w-2xl text-xs sm:text-sm font-light">
+                    Calibración de alta precisión M5 finalizada. La versión Demo con el preset institucional ganador (<strong className="text-amber-400 font-semibold">+7.764$ auditados con 10% Stop Loss y solo 12% Drawdown</strong>) ya está abierta al público para su descarga inmediata.
                   </p>
                 </div>
                 
                 <div className="flex-shrink-0 z-10 w-full md:w-auto flex flex-col sm:flex-row gap-3">
-                  <Link href="/bots">
-                    <Button variant="accent" className="w-full md:w-auto bg-gradient-to-r from-brand to-purple-600 hover:from-brand-light hover:to-brand text-white px-8 py-6 h-auto font-black uppercase tracking-widest text-xs shadow-xl shadow-brand/20 border-none">
-                      Ver Catálogo & Demo →
+                  <Link href="/bots/cmn9hf8yc0000vhbcq9hbxk0j">
+                    <Button variant="accent" className="w-full md:w-auto bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 hover:from-amber-400 hover:to-yellow-300 text-slate-950 px-7 py-5 h-auto font-black uppercase tracking-widest text-xs shadow-xl shadow-amber-500/30 border-none">
+                      ⬇️ Descargar Demo Gratis →
+                    </Button>
+                  </Link>
+                  <Link href="/resultados">
+                    <Button variant="outline" className="w-full md:w-auto border-amber-500/40 text-amber-300 hover:bg-amber-500/10 px-5 py-5 h-auto font-black uppercase tracking-widest text-xs">
+                      📊 Ver Backtest & Auditoría
                     </Button>
                   </Link>
                 </div>

@@ -1,0 +1,33 @@
+; Parametros de Configuracion Optimizada - MAIKO PRO GOLD DEMO FIX V11.36 TORINO EDITION
+; Diseñado para XAUUSD en M5 - Sesion Asiatica y principios de Londres (Sin New York)
+ModoEstrategia=0
+TimeframeOperativa=5
+RsiSobreVentaRebote=35.0
+RsiSobreCompraRebote=65.0
+MaxDistanciaEmaPips=45.0
+LoteAtaque=0.01
+RuedasAmetralladora=1
+MultiplicadorRefuerzo=1.5
+MaxLoteTotal=0.50
+MaxLoteIndividual=0.02
+DistanciaRefuerzoPips=30.0
+MaxPipsHueco=50.0
+MaxVelasHueco=5
+ProfitNetoFlush=3.0
+ProfitCosechaIndividual=0.75
+TargetDiario=100.0
+HoraInicioOperativa=1
+HoraFinOperativa=11
+BloquearNuevaYork=true
+OperarLunes=true
+OperarMartes=true
+OperarMiercoles=true
+OperarJueves=true
+OperarViernes=true
+LimitePosicionesSOS=2
+ProfitBreakEven=0.50
+UsarStopLossPorcentaje=true
+PorcentajeStopLoss=15.0
+UsarPausaTrasStopLoss=true
+MinutosPausaTrasStopLoss=240
+TradeComment=MAIKO_V11.36_TORINO
