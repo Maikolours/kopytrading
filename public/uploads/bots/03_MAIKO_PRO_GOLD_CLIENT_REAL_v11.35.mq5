@@ -25,6 +25,7 @@ const double   MinRsiVenta                = 30.0;        // RSI Minimo para Vent
 const bool     UsarFiltroRsiH1            = false;       // Activar Filtro Anti-Techos H1 (RSI Sobrecompra/Sobreventa)        // Activar Filtro Anti-Techos H1 (RSI Sobrecompra/Sobreventa)
 const double   MaxRsiH1Compra             = 68.0;        // Maximo RSI H1 para Compras (Si >= 68, BLOQUEAR COMPRAS)
 const double   MinRsiH1Venta              = 32.0;        // Minimo RSI H1 para Ventas (Si <= 32, BLOQUEAR VENTAS)
+const double   MinDistanciaEmaPips        = 3.0;         // Distancia Minima a EMA (Pips) para Confirmar Salida
 const double   MaxDistanciaEmaPips        = 60.0;        // Distancia Maxima a EMA (Pips) para Evitar Climax
 const bool     BloquearFinalVelaH1        = true;        // Evitar compras en minutos finales de H1 si RSI > 65        // Evitar compras en minutos finales de H1 si RSI > 65
 
@@ -138,7 +139,7 @@ const int      DiasDeTrial                = 30;
 const bool     EsCuentaCent               = false;
 
 
-string         HUD_Branding               = "MAIKO PRO GOLD MASTER V11.35";
+string         HUD_Branding               = "MAIKO PRO GOLD CLIENT REAL V11.35";
 const bool     ShowW1                     = true;
 const bool     ShowD1                     = true;
 const bool     ShowH4                     = true;
@@ -152,7 +153,7 @@ const bool     ShowM1                     = true;
 
 CTrade trade;
 
-input int ExpertMagic = 111336;
+input int ExpertMagic = 111337;
 
 struct PosInfo { ulong ticket; double p; double c; double s; int t; double v; datetime time; double pr; };
 
@@ -777,13 +778,15 @@ bool ValidarEstructuraScholar(string &decision) {
         }
     }
 
-    // --- FILTRO DE SOBREEXTENSION DE EMA (EVITAR COMPRAR EN EL PICO) ---
-    if(MaxDistanciaEmaPips > 0.0) {
-        double distEmaPips = MathAbs(precio - ema[0]) / (_Point * 10);
-        if(distEmaPips > MaxDistanciaEmaPips) {
-            txtVeredicto = StringFormat("SOBREEXTENSION EMA: %.1f pips > %.0f", distEmaPips, MaxDistanciaEmaPips);
-            return false;
-        }
+    // --- FILTRO DE DISTANCIA A EMA (CONFIRMACION DE SALIDA Y ANTI-CLIMAX) ---
+    double distEmaPips = MathAbs(precio - ema[0]) / (_Point * 10);
+    if(MinDistanciaEmaPips > 0.0 && distEmaPips < MinDistanciaEmaPips) {
+        txtVeredicto = StringFormat("ZONA DE CONTACTO EMA (%.1f < %.1f pips)", distEmaPips, MinDistanciaEmaPips);
+        return false;
+    }
+    if(MaxDistanciaEmaPips > 0.0 && distEmaPips > MaxDistanciaEmaPips) {
+        txtVeredicto = StringFormat("SOBREEXTENSION EMA: %.1f pips > %.0f", distEmaPips, MaxDistanciaEmaPips);
+        return false;
     }
 
 
@@ -1304,7 +1307,7 @@ void ActualizarInterfazMaster() {
 
       
 
-      ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "LICENCIA MASTER PRO | ILIMITADA (OFICIAL)");
+      ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "LICENCIA CLIENT REAL | ACTIVA");
       ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrSpringGreen);
 
     ObjectSetInteger(0, "MAIKO_Flot", OBJPROP_COLOR, flotante >= 0 ? clrSpringGreen : clrRed); 

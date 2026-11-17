@@ -25,6 +25,7 @@ input double   MinRsiVenta                = 30.0;        // RSI Minimo para Vent
 input bool     UsarFiltroRsiH1            = false;       // Activar Filtro Anti-Techos H1 (RSI Sobrecompra/Sobreventa)        // Activar Filtro Anti-Techos H1 (RSI Sobrecompra/Sobreventa)
 input double   MaxRsiH1Compra             = 68.0;        // Maximo RSI H1 para Compras (Si >= 68, BLOQUEAR COMPRAS)
 input double   MinRsiH1Venta              = 32.0;        // Minimo RSI H1 para Ventas (Si <= 32, BLOQUEAR VENTAS)
+input double   MinDistanciaEmaPips        = 3.0;         // Distancia Minima a EMA (Pips) para Confirmar Salida
 input double   MaxDistanciaEmaPips        = 60.0;        // Distancia Maxima a EMA (Pips) para Evitar Climax
 input bool     BloquearFinalVelaH1        = true;        // Evitar compras en minutos finales de H1 si RSI > 65        // Evitar compras en minutos finales de H1 si RSI > 65
 
@@ -152,7 +153,7 @@ const bool     ShowM1                     = true;
 
 CTrade trade;
 
-input int ExpertMagic = 111336;
+input int ExpertMagic = 111335;
 
 struct PosInfo { ulong ticket; double p; double c; double s; int t; double v; datetime time; double pr; };
 
@@ -777,13 +778,15 @@ bool ValidarEstructuraScholar(string &decision) {
         }
     }
 
-    // --- FILTRO DE SOBREEXTENSION DE EMA (EVITAR COMPRAR EN EL PICO) ---
-    if(MaxDistanciaEmaPips > 0.0) {
-        double distEmaPips = MathAbs(precio - ema[0]) / (_Point * 10);
-        if(distEmaPips > MaxDistanciaEmaPips) {
-            txtVeredicto = StringFormat("SOBREEXTENSION EMA: %.1f pips > %.0f", distEmaPips, MaxDistanciaEmaPips);
-            return false;
-        }
+    // --- FILTRO DE DISTANCIA A EMA (CONFIRMACION DE SALIDA Y ANTI-CLIMAX) ---
+    double distEmaPips = MathAbs(precio - ema[0]) / (_Point * 10);
+    if(MinDistanciaEmaPips > 0.0 && distEmaPips < MinDistanciaEmaPips) {
+        txtVeredicto = StringFormat("ZONA DE CONTACTO EMA (%.1f < %.1f pips)", distEmaPips, MinDistanciaEmaPips);
+        return false;
+    }
+    if(MaxDistanciaEmaPips > 0.0 && distEmaPips > MaxDistanciaEmaPips) {
+        txtVeredicto = StringFormat("SOBREEXTENSION EMA: %.1f pips > %.0f", distEmaPips, MaxDistanciaEmaPips);
+        return false;
     }
 
 

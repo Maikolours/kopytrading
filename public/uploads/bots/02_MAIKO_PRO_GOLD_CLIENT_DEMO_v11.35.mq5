@@ -25,6 +25,7 @@ const double   MinRsiVenta                = 30.0;        // RSI Minimo para Vent
 const bool     UsarFiltroRsiH1            = false;       // Activar Filtro Anti-Techos H1 (RSI Sobrecompra/Sobreventa)        // Activar Filtro Anti-Techos H1 (RSI Sobrecompra/Sobreventa)
 const double   MaxRsiH1Compra             = 68.0;        // Maximo RSI H1 para Compras (Si >= 68, BLOQUEAR COMPRAS)
 const double   MinRsiH1Venta              = 32.0;        // Minimo RSI H1 para Ventas (Si <= 32, BLOQUEAR VENTAS)
+const double   MinDistanciaEmaPips        = 3.0;         // Distancia Minima a EMA (Pips) para Confirmar Salida
 const double   MaxDistanciaEmaPips        = 60.0;        // Distancia Maxima a EMA (Pips) para Evitar Climax
 const bool     BloquearFinalVelaH1        = true;        // Evitar compras en minutos finales de H1 si RSI > 65        // Evitar compras en minutos finales de H1 si RSI > 65
 
@@ -134,11 +135,11 @@ int SyncIntervalSec = 2;
 datetime ultimoSync = 0;
 
 // Constantes internas del sistema
-const int      DiasDeTrial                = 30;
+const int      DiasDeTrial                = 7;
 const bool     EsCuentaCent               = false;
 
 
-string         HUD_Branding               = "MAIKO PRO GOLD MASTER V11.35";
+string         HUD_Branding               = "MAIKO PRO GOLD CLIENT DEMO V11.35";
 const bool     ShowW1                     = true;
 const bool     ShowD1                     = true;
 const bool     ShowH4                     = true;
@@ -300,9 +301,16 @@ int OnInit() {
 
     }
 
-      trialExpirado = false;
-      diasRestantes = 999;
-      BotActivo = true;
+    if(MQLInfoInteger(MQL_TESTER)) {
+        trialExpirado = false;
+        diasRestantes = 7;
+        BotActivo = true;
+    } else {
+        int maxDias = DiasDeTrial;
+        diasRestantes = maxDias - (int)((TimeCurrent() - trialStart) / 86400);
+        if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
+        else { trialExpirado = false; BotActivo = true; }
+    }
     
     ActualizarTextosEstado();
     ActualizarInterfazMaster();
@@ -422,8 +430,14 @@ bool EsHorarioPermitido(datetime serverTime, string &motivo) {
 }
 
 void ActualizarTextosEstado() {
-    trialExpirado = false;
-    diasRestantes = 999;
+    if(MQLInfoInteger(MQL_TESTER)) {
+        trialExpirado = false;
+        diasRestantes = 7;
+    } else {
+        int maxDias = DiasDeTrial;
+        diasRestantes = maxDias - (int)((TimeTradeServer() - trialStart) / 86400);
+        if(diasRestantes <= 0) { trialExpirado = true; BotActivo = false; }
+    }
 
 
 
@@ -777,13 +791,15 @@ bool ValidarEstructuraScholar(string &decision) {
         }
     }
 
-    // --- FILTRO DE SOBREEXTENSION DE EMA (EVITAR COMPRAR EN EL PICO) ---
-    if(MaxDistanciaEmaPips > 0.0) {
-        double distEmaPips = MathAbs(precio - ema[0]) / (_Point * 10);
-        if(distEmaPips > MaxDistanciaEmaPips) {
-            txtVeredicto = StringFormat("SOBREEXTENSION EMA: %.1f pips > %.0f", distEmaPips, MaxDistanciaEmaPips);
-            return false;
-        }
+    // --- FILTRO DE DISTANCIA A EMA (CONFIRMACION DE SALIDA Y ANTI-CLIMAX) ---
+    double distEmaPips = MathAbs(precio - ema[0]) / (_Point * 10);
+    if(MinDistanciaEmaPips > 0.0 && distEmaPips < MinDistanciaEmaPips) {
+        txtVeredicto = StringFormat("ZONA DE CONTACTO EMA (%.1f < %.1f pips)", distEmaPips, MinDistanciaEmaPips);
+        return false;
+    }
+    if(MaxDistanciaEmaPips > 0.0 && distEmaPips > MaxDistanciaEmaPips) {
+        txtVeredicto = StringFormat("SOBREEXTENSION EMA: %.1f pips > %.0f", distEmaPips, MaxDistanciaEmaPips);
+        return false;
     }
 
 
@@ -1304,8 +1320,16 @@ void ActualizarInterfazMaster() {
 
       
 
-      ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "LICENCIA MASTER PRO | ILIMITADA (OFICIAL)");
-      ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrSpringGreen);
+      if(trialExpirado) {
+          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, "CUENTA DEMO | TRIAL EXPIRADO (7 DIAS)");
+          ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrRed);
+      } else if(diasRestantes <= 2) {
+          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("CUENTA DEMO | EXPIRA EN %d DIAS [%dh %dm] | ADQUIERE REAL", diasRestantes, remHours, remMinutes));
+          ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, C'255,69,0');
+      } else {
+          ObjectSetString(0, "MAIKO_TrialUI", OBJPROP_TEXT, StringFormat("CUENTA DEMO | TRIAL DIA %d DE 7 [%dh %dm]", dOp, remHours, remMinutes));
+          ObjectSetInteger(0, "MAIKO_TrialUI", OBJPROP_COLOR, clrYellow);
+      }
 
     ObjectSetInteger(0, "MAIKO_Flot", OBJPROP_COLOR, flotante >= 0 ? clrSpringGreen : clrRed); 
 
