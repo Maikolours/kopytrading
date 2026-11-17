@@ -36,9 +36,9 @@ const COUNTRY_NAMES: Record<string, string> = {
 export async function POST(req: Request) {
     try {
         const body = await req.json().catch(() => ({}));
-        const { path = "/", referrer = "", clientTag = null, userEmail = null } = body;
+        const { path = "/", referrer = "", clientTag = null, userEmail = null, visitorId = null } = body;
 
-        // Si es el administrador navegando, no inflar las métricas
+        // 1. Si es el administrador navegando, no inflar las métricas
         if (userEmail === "viajaconsakura@gmail.com" || userEmail === "viajaconsakura") {
             return NextResponse.json({ success: true, ignored: "admin" });
         }
@@ -46,24 +46,42 @@ export async function POST(req: Request) {
         const userAgent = req.headers.get("user-agent") || "";
         const uaLower = userAgent.toLowerCase();
 
-        // Ignorar bots de rastreo automáticos (Googlebot, Bingbot, etc.)
-        if (/bot|crawler|spider|googlebot|bingbot|slurp|duckduckbot|baiduspider|yandex|sogou|exabot|facebot|ia_archiver|semrush|ahrefs/i.test(uaLower)) {
+        // 2. Ignorar bots de rastreo automáticos (Googlebot, Bingbot, scrapers, headless)
+        if (/bot|crawler|spider|googlebot|bingbot|slurp|duckduckbot|baiduspider|yandex|sogou|exabot|facebot|ia_archiver|semrush|ahrefs|headless|phantomjs/i.test(uaLower)) {
             return NextResponse.json({ success: true, ignored: "bot" });
         }
 
-        // Obtener IP (para hash anónimo)
-        const forwarded = req.headers.get("x-forwarded-for");
-        const ip = forwarded ? forwarded.split(",")[0].trim() : req.headers.get("x-real-ip") || "127.0.0.1";
-
-        // Hash anónimo y no reversible de IP + fecha (cumple 100% RGPD)
-        const todayStr = new Date().toISOString().split("T")[0];
-        const visitorHash = crypto.createHash("sha256").update(`${ip}_${todayStr}`).digest("hex").slice(0, 16);
-
-        // Geometría y ubicación (headers automáticos de Vercel)
+        // 3. Geometría y ubicación (headers automáticos de Vercel)
         const countryCode = (req.headers.get("x-vercel-ip-country") || "ES").toUpperCase();
         const countryName = COUNTRY_NAMES[countryCode] || countryCode;
         const rawCity = req.headers.get("x-vercel-ip-city");
         const city = rawCity ? decodeURIComponent(rawCity) : "Desconocida";
+
+        // 4. Ignorar robots automáticos de verificación y capturas de Vercel (San José, Linux, etc.)
+        const host = req.headers.get("host") || "";
+        const forwardedHost = req.headers.get("x-forwarded-host") || "";
+        if (
+            (city === "San Jose" || city === "San Francisco") &&
+            uaLower.includes("linux") &&
+            (!referrer || host.includes("vercel.app") || forwardedHost.includes("vercel.app"))
+        ) {
+            return NextResponse.json({ success: true, ignored: "vercel_internal_preview_bot" });
+        }
+
+        // Obtener IP (para hash de respaldo)
+        const forwarded = req.headers.get("x-forwarded-for");
+        const ip = forwarded ? forwarded.split(",")[0].trim() : req.headers.get("x-real-ip") || "127.0.0.1";
+
+        // 5. Identificador anónimo persistente por visitante:
+        // Si el navegador envió visitorId, lo convertimos en un hash seguro y consistente en el tiempo.
+        // Si no lo envió, usamos IP + UserAgent de forma estable (sin incluir la fecha) para que
+        // si la misma persona regresa mañana o la semana que viene, se reconozca que es el mismo visitante.
+        let visitorHash = "";
+        if (visitorId && typeof visitorId === "string" && visitorId.length >= 5) {
+            visitorHash = crypto.createHash("sha256").update(`kopy_${visitorId}`).digest("hex").slice(0, 16);
+        } else {
+            visitorHash = crypto.createHash("sha256").update(`${ip}_${userAgent}`).digest("hex").slice(0, 16);
+        }
 
         // Detección de Dispositivo
         let device = "desktop";
@@ -122,7 +140,6 @@ export async function POST(req: Request) {
             }
         }
 
-        // Si es navegación interna consecutiva en la misma sesión, podemos registrarla
         await prisma.visitorHit.create({
             data: {
                 path: path.slice(0, 255),

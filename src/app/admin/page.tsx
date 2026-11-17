@@ -12,6 +12,8 @@ export default function AdminPage() {
     const [activeTab, setActiveTab] = useState<"metrics" | "traffic" | "publish" | "update">("metrics");
     const [analyticsData, setAnalyticsData] = useState<any>(null);
     const [loadingAnalytics, setLoadingAnalytics] = useState(false);
+    const [expandedVisitor, setExpandedVisitor] = useState<string | null>(null);
+    const [resettingAnalytics, setResettingAnalytics] = useState(false);
     const [customClientTag, setCustomClientTag] = useState("");
     const [copiedCustomLink, setCopiedCustomLink] = useState(false);
     const [metrics, setMetrics] = useState<any>(null);
@@ -52,6 +54,34 @@ export default function AdminPage() {
             router.push("/dashboard");
         }
     }, [status, session, router]);
+
+    // Marcar automáticamente este dispositivo como Administrador para excluirlo de analíticas
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            try {
+                localStorage.setItem("kopy_admin_device", "true");
+            } catch (e) {
+                // Silencioso
+            }
+        }
+    }, []);
+
+    const handleResetAnalytics = async () => {
+        if (!confirm("¿Deseas reiniciar los datos de visitas de prueba? Las futuras visitas de clientes empezarán desde cero (y tus propios dispositivos ya no contarán).")) {
+            return;
+        }
+        setResettingAnalytics(true);
+        try {
+            const res = await fetch("/api/admin/analytics", { method: "DELETE" });
+            if (res.ok) {
+                await fetchAnalytics();
+            }
+        } catch (e) {
+            console.error("Error al reiniciar analítica:", e);
+        } finally {
+            setResettingAnalytics(false);
+        }
+    };
 
     // Cargar métricas y bots del servidor
     useEffect(() => {
@@ -555,6 +585,26 @@ export default function AdminPage() {
                                     Conteo independiente y privado de visitas, países, dispositivos y fuentes de tráfico (100% legal y anónimo).
                                 </p>
                             </div>
+
+                        {/* Banner de protección: Dispositivo Administrador */}
+                        <div className="bg-brand/10 border border-brand/30 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-brand-light">
+                            <div className="flex items-center gap-3">
+                                <span className="text-2xl">🛡️</span>
+                                <div>
+                                    <div className="font-bold text-white text-sm">Dispositivo Administrador Protegido</div>
+                                    <div className="text-text-muted text-xs">
+                                        Este ordenador / móvil está marcado automáticamente como Administrador: tus visitas no alterarán jamás las estadísticas.
+                                    </div>
+                                </div>
+                            </div>
+                            <button
+                                onClick={handleResetAnalytics}
+                                disabled={resettingAnalytics}
+                                className="px-3 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-semibold transition-all shrink-0"
+                            >
+                                🧹 {resettingAnalytics ? "Reiniciando..." : "Reiniciar visitas de prueba"}
+                            </button>
+                        </div>
                             <Button 
                                 onClick={fetchAnalytics}
                                 disabled={loadingAnalytics}
@@ -801,85 +851,148 @@ export default function AdminPage() {
                             </div>
                         </div>
 
-                        {/* Feed en Vivo de Últimas Visitas */}
+                        {/* Acordeón / Desplegable por Visitante Único e Interesado */}
                         <div className="glass-card p-6 border border-white/10 rounded-2xl space-y-4">
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
                                 <div>
                                     <h3 className="text-base font-bold text-white flex items-center gap-2">
-                                        <span>⚡</span> Feed en Vivo: Últimas Visitas Registradas
+                                        <span>👥</span> Historial de Visitantes y Recorrido de Navegación
                                     </h3>
-                                    <p className="text-xs text-text-muted">Monitoreo segundo a segundo de quién entra a la web.</p>
+                                    <p className="text-xs text-text-muted">
+                                        Cada tarjeta representa a una persona única. Haz clic para desplegar qué páginas ha visitado y cuándo volvió a entrar.
+                                    </p>
                                 </div>
-                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] bg-green-500/10 border border-green-500/20 text-green-400 font-semibold animate-pulse">
-                                    <span className="w-2 h-2 rounded-full bg-green-400"></span> Sensor Activo
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] bg-green-500/10 border border-green-500/20 text-green-400 font-semibold self-start sm:self-auto">
+                                    <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Sensor en Vivo Activo
                                 </span>
                             </div>
 
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-left text-xs">
-                                    <thead className="bg-surface-light border-b border-white/10 text-text-muted uppercase text-[10px]">
-                                        <tr>
-                                            <th className="p-3">Fecha y Hora</th>
-                                            <th className="p-3">Ubicación</th>
-                                            <th className="p-3">Dispositivo / Navegador</th>
-                                            <th className="p-3">Origen</th>
-                                            <th className="p-3">Página Visitada</th>
-                                            <th className="p-3">Identificación</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-white/5 font-mono text-[11px]">
-                                        {!analyticsData?.recentHits || analyticsData.recentHits.length === 0 ? (
-                                            <tr>
-                                                <td colSpan={6} className="p-8 text-center text-text-muted">
-                                                    No se han registrado visitas todavía. En cuanto entre un visitante desde tu enlace de Instagram o Google aparecerá aquí al segundo.
-                                                </td>
-                                            </tr>
-                                        ) : (
-                                            analyticsData.recentHits.map((hit: any) => {
-                                                const flag = (hit.countryCode === "ES" ? "🇪🇸" : hit.countryCode === "MX" ? "🇲🇽" : hit.countryCode === "CO" ? "🇨🇴" : hit.countryCode === "AR" ? "🇦🇷" : hit.countryCode === "CL" ? "🇨🇱" : hit.countryCode === "PE" ? "🇵🇪" : hit.countryCode === "US" ? "🇺🇸" : hit.countryCode === "VE" ? "🇻🇪" : hit.countryCode === "EC" ? "🇪🇨" : "🌐");
-                                                const dateStr = new Date(hit.createdAt).toLocaleString("es-ES", {
-                                                    day: "2-digit",
-                                                    month: "2-digit",
-                                                    hour: "2-digit",
-                                                    minute: "2-digit",
-                                                    second: "2-digit"
-                                                });
-                                                return (
-                                                    <tr key={hit.id} className="hover:bg-white/[0.02]">
-                                                        <td className="p-3 text-text-muted">{dateStr}</td>
-                                                        <td className="p-3 text-white">
-                                                            <span className="mr-1.5">{flag}</span>
-                                                            {hit.city && hit.city !== "Desconocida" ? `${hit.city}, ` : ""}{hit.country}
-                                                        </td>
-                                                        <td className="p-3 text-text-muted">
-                                                            {hit.device === "mobile" ? "📱 Móvil" : hit.device === "tablet" ? "📟 Tablet" : "💻 PC"} ({hit.os} / {hit.browser})
-                                                        </td>
-                                                        <td className="p-3">
-                                                            <span className="px-2 py-0.5 rounded bg-surface border border-white/10 text-white font-sans text-[11px]">
-                                                                {hit.source}
+                            {!analyticsData?.groupedVisitors || analyticsData.groupedVisitors.length === 0 ? (
+                                <div className="p-8 text-center text-text-muted bg-white/[0.02] rounded-xl border border-white/5 space-y-1">
+                                    <div className="text-lg mb-1">⏳</div>
+                                    <div className="font-semibold text-white">No hay visitas de clientes registradas todavía.</div>
+                                    <div className="text-xs">En cuanto entre un visitante desde Instagram, Google o enlace directo, aparecerá aquí con todo su recorrido.</div>
+                                </div>
+                            ) : (
+                                <div className="space-y-3">
+                                    {analyticsData.groupedVisitors.map((v: any, vIdx: number) => {
+                                        const isExpanded = expandedVisitor === v.visitorHash;
+                                        const flag = (v.countryCode === "ES" ? "🇪🇸" : v.countryCode === "MX" ? "🇲🇽" : v.countryCode === "CO" ? "🇨🇴" : v.countryCode === "AR" ? "🇦🇷" : v.countryCode === "CL" ? "🇨🇱" : v.countryCode === "PE" ? "🇵🇪" : v.countryCode === "US" ? "🇺🇸" : v.countryCode === "VE" ? "🇻🇪" : v.countryCode === "EC" ? "🇪🇨" : "🌐");
+                                        const lastSeenDate = new Date(v.lastVisit).toLocaleString("es-ES", {
+                                            day: "2-digit",
+                                            month: "2-digit",
+                                            hour: "2-digit",
+                                            minute: "2-digit"
+                                        });
+                                        const isMultiDay = v.distinctDays > 1;
+                                        const isHighInterest = v.totalHits >= 3 || isMultiDay;
+
+                                        return (
+                                            <div 
+                                                key={v.visitorHash || vIdx} 
+                                                className="rounded-xl border border-white/10 bg-surface overflow-hidden transition-all hover:border-brand/40 shadow-sm"
+                                            >
+                                                {/* Cabecera del Visitante */}
+                                                <div 
+                                                    onClick={() => setExpandedVisitor(isExpanded ? null : v.visitorHash)}
+                                                    className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 cursor-pointer hover:bg-white/[0.02] transition-colors"
+                                                >
+                                                    <div className="flex items-center gap-3">
+                                                        <span className="text-2xl">{flag}</span>
+                                                        <div>
+                                                            <div className="font-bold text-white text-sm flex items-center gap-2">
+                                                                <span>{v.city && v.city !== "Desconocida" ? `${v.city}, ` : ""}{v.country}</span>
+                                                                {v.clientTag && (
+                                                                    <span className="px-2 py-0.5 rounded bg-brand/20 border border-brand/40 text-brand-light font-bold text-[10px]">
+                                                                        🎯 {v.clientTag}
+                                                                    </span>
+                                                                )}
+                                                                {v.userEmail && (
+                                                                    <span className="px-2 py-0.5 rounded bg-green-500/10 border border-green-500/30 text-green-400 font-bold text-[10px]">
+                                                                        👤 {v.userEmail}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            <div className="text-xs text-text-muted flex items-center gap-2 mt-0.5">
+                                                                <span>{v.device === "mobile" ? "📱 Móvil" : v.device === "tablet" ? "📟 Tablet" : "💻 PC"} ({v.os} / {v.browser})</span>
+                                                                <span>&bull;</span>
+                                                                <span className="text-brand-light">Origen: {v.primarySource}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex items-center gap-3 self-end sm:self-auto">
+                                                        {isMultiDay ? (
+                                                            <span className="px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-1">
+                                                                <span>⭐</span> Recurrente ({v.distinctDays} días distintos &bull; {v.totalHits} vistas)
                                                             </span>
-                                                        </td>
-                                                        <td className="p-3 text-brand-light font-bold truncate max-w-xs">{hit.path}</td>
-                                                        <td className="p-3">
-                                                            {hit.clientTag ? (
-                                                                <span className="px-2 py-0.5 rounded bg-brand/20 border border-brand/40 text-brand-light font-bold">
-                                                                    🎯 {hit.clientTag}
-                                                                </span>
-                                                            ) : hit.userEmail ? (
-                                                                <span className="px-2 py-0.5 rounded bg-green-500/10 border border-green-500/30 text-green-400 font-bold">
-                                                                    👤 {hit.userEmail}
-                                                                </span>
-                                                            ) : (
-                                                                <span className="text-white/30 text-[10px]">Anónimo</span>
-                                                            )}
-                                                        </td>
-                                                    </tr>
-                                                );
-                                            })
-                                        )}
-                                    </tbody>
-                                </table>
-                            </div>
+                                                        ) : isHighInterest ? (
+                                                            <span className="px-2.5 py-1 rounded-full bg-green-500/20 border border-green-500/40 text-green-300 font-bold text-xs flex items-center gap-1">
+                                                                <span>🔥</span> Muy Interesado ({v.totalHits} páginas vistas)
+                                                            </span>
+                                                        ) : (
+                                                            <span className="px-2.5 py-1 rounded-full bg-white/10 text-white/70 text-xs">
+                                                                {v.totalHits} {v.totalHits === 1 ? "página vista" : "páginas vistas"}
+                                                            </span>
+                                                        )}
+                                                        <span className="text-[11px] text-text-muted hidden md:inline">{lastSeenDate}</span>
+                                                        <button 
+                                                            type="button"
+                                                            className="text-brand-light hover:text-white font-bold text-xs px-2.5 py-1 rounded bg-brand/10 border border-brand/20 transition-all"
+                                                        >
+                                                            {isExpanded ? "▲ Ocultar" : "▼ Ver recorrido"}
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                {/* Contenido desplegable: Cronología de navegación */}
+                                                {isExpanded && (
+                                                    <div className="p-4 bg-background/60 border-t border-white/5 space-y-2">
+                                                        <div className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-2 flex items-center justify-between">
+                                                            <span>Ruta recorrida por este visitante ({v.journey.length} páginas):</span>
+                                                            <span className="text-[10px] text-brand-light font-mono">ID anónimo: {v.visitorHash.slice(0, 8)}...</span>
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            {v.journey.map((item: any, jIdx: number) => {
+                                                                const itemDate = new Date(item.createdAt).toLocaleString("es-ES", {
+                                                                    day: "2-digit",
+                                                                    month: "2-digit",
+                                                                    hour: "2-digit",
+                                                                    minute: "2-digit",
+                                                                    second: "2-digit"
+                                                                });
+
+                                                                const pathLabel = 
+                                                                    item.path === "/" ? "🏠 Inicio (Home)" :
+                                                                    item.path.startsWith("/bots") ? "🤖 Catálogo de Bots" :
+                                                                    item.path.startsWith("/resultados") ? "📈 Auditoría y Resultados" :
+                                                                    item.path.startsWith("/como-funciona") ? "⚙️ Cómo Funciona" :
+                                                                    item.path.startsWith("/contacto") ? "📩 Contacto y Dudas" :
+                                                                    item.path.startsWith("/checkout") ? "💳 Pasarela de Pago" :
+                                                                    item.path.startsWith("/login") ? "🔑 Acceso / Login" : item.path;
+
+                                                                return (
+                                                                    <div key={item.id || jIdx} className="flex items-center justify-between text-xs py-2 px-3 rounded-lg bg-surface border border-white/5">
+                                                                        <div className="flex items-center gap-2.5 flex-wrap">
+                                                                            <span className="text-text-muted font-mono text-[10px]">{itemDate}</span>
+                                                                            <span className="text-white/30">➔</span>
+                                                                            <span className="font-semibold text-white">{pathLabel}</span>
+                                                                            <span className="font-mono text-brand-light text-[11px] bg-brand/10 px-1.5 py-0.5 rounded">{item.path}</span>
+                                                                        </div>
+                                                                        <span className="text-[11px] text-text-muted bg-white/[0.03] px-2 py-0.5 rounded border border-white/5">
+                                                                            {item.source}
+                                                                        </span>
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
                         </div>
 
                     </div>

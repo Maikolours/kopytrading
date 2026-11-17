@@ -33,7 +33,7 @@ export async function GET() {
             prisma.visitorHit.count({ where: { createdAt: { gte: startOfMonth } } }),
             prisma.visitorHit.findMany({
                 orderBy: { createdAt: "desc" },
-                take: 50,
+                take: 60,
                 select: {
                     id: true,
                     path: true,
@@ -46,16 +46,21 @@ export async function GET() {
                     source: true,
                     clientTag: true,
                     userEmail: true,
+                    visitorHash: true,
                     createdAt: true
                 }
             }),
             prisma.visitorHit.findMany({
                 where: { createdAt: { gte: startOfMonth } },
+                orderBy: { createdAt: "desc" },
                 select: {
+                    id: true,
                     country: true,
                     countryCode: true,
                     city: true,
                     device: true,
+                    browser: true,
+                    os: true,
                     source: true,
                     path: true,
                     visitorHash: true,
@@ -66,8 +71,7 @@ export async function GET() {
             })
         ]);
 
-        // Calcular Visitantes Únicos (por visitorHash)
-        const uniqueTotalSet = new Set<string>();
+        // Calcular Visitantes Únicos y Métricas
         const uniqueTodaySet = new Set<string>();
         const uniqueWeekSet = new Set<string>();
         const uniqueMonthSet = new Set<string>();
@@ -78,8 +82,28 @@ export async function GET() {
         const deviceMap = new Map<string, number>();
         const pathMap = new Map<string, number>();
 
+        // Agrupación por persona / visitante único (para el desplegable)
+        const visitorsMap = new Map<string, {
+            visitorHash: string;
+            country: string;
+            countryCode: string;
+            city: string;
+            device: string;
+            browser: string;
+            os: string;
+            clientTag: string | null;
+            userEmail: string | null;
+            firstVisit: Date;
+            lastVisit: Date;
+            totalHits: number;
+            distinctDaysSet: Set<string>;
+            distinctPagesSet: Set<string>;
+            sourcesSet: Set<string>;
+            journey: Array<{ id: string; path: string; createdAt: Date; source: string }>;
+        }>();
+
         for (const hit of allHitsLast30Days) {
-            const h = hit.visitorHash || "anon";
+            const h = hit.visitorHash || "anon_" + hit.id;
             uniqueMonthSet.add(h);
 
             if (hit.createdAt >= startOfWeek) uniqueWeekSet.add(h);
@@ -114,6 +138,45 @@ export async function GET() {
             // Páginas más vistas
             const p = hit.path || "/";
             pathMap.set(p, (pathMap.get(p) || 0) + 1);
+
+            // Agrupación por visitante
+            if (!visitorsMap.has(h)) {
+                visitorsMap.set(h, {
+                    visitorHash: h,
+                    country: cName,
+                    countryCode: cCode,
+                    city: cityName || "Ciudad Desconocida",
+                    device: dev,
+                    browser: hit.browser || "Chrome",
+                    os: hit.os || "Windows",
+                    clientTag: hit.clientTag || null,
+                    userEmail: hit.userEmail || null,
+                    firstVisit: hit.createdAt,
+                    lastVisit: hit.createdAt,
+                    totalHits: 0,
+                    distinctDaysSet: new Set<string>(),
+                    distinctPagesSet: new Set<string>(),
+                    sourcesSet: new Set<string>(),
+                    journey: []
+                });
+            }
+
+            const v = visitorsMap.get(h)!;
+            v.totalHits += 1;
+            if (hit.createdAt < v.firstVisit) v.firstVisit = hit.createdAt;
+            if (hit.createdAt > v.lastVisit) v.lastVisit = hit.createdAt;
+            v.distinctDaysSet.add(new Date(hit.createdAt).toISOString().split("T")[0]);
+            v.distinctPagesSet.add(hit.path);
+            if (hit.source) v.sourcesSet.add(hit.source);
+            if (hit.clientTag && !v.clientTag) v.clientTag = hit.clientTag;
+            if (hit.userEmail && !v.userEmail) v.userEmail = hit.userEmail;
+
+            v.journey.push({
+                id: hit.id,
+                path: hit.path,
+                createdAt: hit.createdAt,
+                source: hit.source || "Directo"
+            });
         }
 
         // Ordenar listas
@@ -137,6 +200,28 @@ export async function GET() {
             .sort((a, b) => b.count - a.count)
             .slice(0, 10);
 
+        // Convertir el mapa de visitantes agrupados en un array ordenado por última visita
+        const groupedVisitors = Array.from(visitorsMap.values())
+            .map(v => ({
+                visitorHash: v.visitorHash,
+                country: v.country,
+                countryCode: v.countryCode,
+                city: v.city,
+                device: v.device,
+                browser: v.browser,
+                os: v.os,
+                clientTag: v.clientTag,
+                userEmail: v.userEmail,
+                firstVisit: v.firstVisit,
+                lastVisit: v.lastVisit,
+                totalHits: v.totalHits,
+                distinctDays: v.distinctDaysSet.size,
+                distinctPages: v.distinctPagesSet.size,
+                primarySource: Array.from(v.sourcesSet)[0] || "Directo",
+                journey: v.journey.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+            }))
+            .sort((a, b) => new Date(b.lastVisit).getTime() - new Date(a.lastVisit).getTime());
+
         // Clientes identificados o con etiquetas personalizadas (?cliente= o usuario logueado)
         const identifiedVisits = recentHits.filter(h => h.clientTag || h.userEmail);
 
@@ -156,12 +241,30 @@ export async function GET() {
             topSources,
             devices,
             topPages,
+            groupedVisitors,
             recentHits,
             identifiedVisits
         });
 
     } catch (error: any) {
         console.error("Admin Analytics API Error:", error);
+        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    }
+}
+
+// DELETE: Reiniciar historial de visitas de prueba
+export async function DELETE() {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user || (session.user as any).role !== "ADMIN") {
+        return new NextResponse("Forbidden", { status: 403 });
+    }
+
+    try {
+        await prisma.visitorHit.deleteMany({});
+        return NextResponse.json({ success: true, message: "Historial de analítica reiniciado con éxito." });
+    } catch (error: any) {
+        console.error("Admin Analytics Delete Error:", error);
         return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 }
