@@ -716,7 +716,7 @@ export default function AdminPage() {
                                         {analyticsData.topCountries.map((c: any, idx: number) => {
                                             const totalHitsInPeriod = analyticsData.summary.monthHits || 1;
                                             const percentage = Math.round((c.count / totalHitsInPeriod) * 100);
-                                            const flag = (c.code === "ES" ? "🇪🇸" : c.code === "MX" ? "🇲🇽" : c.code === "CO" ? "🇨🇴" : c.code === "AR" ? "🇦🇷" : c.code === "CL" ? "🇨🇱" : c.code === "PE" ? "🇵🇪" : c.code === "US" ? "🇺🇸" : c.code === "VE" ? "🇻🇪" : c.code === "EC" ? "🇪🇨" : "🌐");
+                                            const flag = (c.code === "ES" ? "🇪🇸" : c.code === "MX" ? "🇲🇽" : c.code === "CO" ? "🇨🇴" : c.code === "AR" ? "🇦🇷" : c.code === "CL" ? "🇨🇱" : c.code === "PE" ? "🇵🇪" : c.code === "US" ? "🇺🇸" : c.code === "VE" ? "🇻🇪" : c.code === "EC" ? "🇪🇨" : c.code === "CN" ? "🇨🇳" : c.code === "IT" ? "🇮🇹" : "🌐");
                                             return (
                                                 <div key={idx} className="space-y-1">
                                                     <div className="flex justify-between items-center text-xs">
@@ -877,7 +877,7 @@ export default function AdminPage() {
                                 <div className="space-y-3">
                                     {analyticsData.groupedVisitors.map((v: any, vIdx: number) => {
                                         const isExpanded = expandedVisitor === v.visitorHash;
-                                        const flag = (v.countryCode === "ES" ? "🇪🇸" : v.countryCode === "MX" ? "🇲🇽" : v.countryCode === "CO" ? "🇨🇴" : v.countryCode === "AR" ? "🇦🇷" : v.countryCode === "CL" ? "🇨🇱" : v.countryCode === "PE" ? "🇵🇪" : v.countryCode === "US" ? "🇺🇸" : v.countryCode === "VE" ? "🇻🇪" : v.countryCode === "EC" ? "🇪🇨" : "🌐");
+                                        const flag = (v.countryCode === "ES" ? "🇪🇸" : v.countryCode === "MX" ? "🇲🇽" : v.countryCode === "CO" ? "🇨🇴" : v.countryCode === "AR" ? "🇦🇷" : v.countryCode === "CL" ? "🇨🇱" : v.countryCode === "PE" ? "🇵🇪" : v.countryCode === "US" ? "🇺🇸" : v.countryCode === "VE" ? "🇻🇪" : v.countryCode === "EC" ? "🇪🇨" : v.countryCode === "CN" ? "🇨🇳" : v.countryCode === "IT" ? "🇮🇹" : "🌐");
                                         const lastSeenDate = new Date(v.lastVisit).toLocaleString("es-ES", {
                                             day: "2-digit",
                                             month: "2-digit",
@@ -967,6 +967,8 @@ export default function AdminPage() {
                                                                     item.path.startsWith("/bots") ? "🤖 Catálogo de Bots" :
                                                                     item.path.startsWith("/resultados") ? "📈 Auditoría y Resultados" :
                                                                     item.path.startsWith("/como-funciona") ? "⚙️ Cómo Funciona" :
+                                                                    item.path.startsWith("/blog") ? "📰 Artículo de Blog" :
+                                                                    item.path.startsWith("/legal") ? "⚖️ Términos Legales" :
                                                                     item.path.startsWith("/contacto") ? "📩 Contacto y Dudas" :
                                                                     item.path.startsWith("/checkout") ? "💳 Pasarela de Pago" :
                                                                     item.path.startsWith("/login") ? "🔑 Acceso / Login" : item.path;

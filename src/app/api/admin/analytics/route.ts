@@ -82,8 +82,14 @@ export async function GET() {
         const deviceMap = new Map<string, number>();
         const pathMap = new Map<string, number>();
 
-        // Agrupación por persona / visitante único (para el desplegable)
-        const visitorsMap = new Map<string, {
+        // Agrupación inteligente por persona / sesión continua
+        // Ordenamos cronológicamente para asociar cada navegación a su sesión correspondiente
+        const sortedHitsForGrouping = [...allHitsLast30Days].sort(
+            (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+
+        interface VisitorSession {
+            id: string;
             visitorHash: string;
             country: string;
             countryCode: string;
@@ -95,30 +101,30 @@ export async function GET() {
             userEmail: string | null;
             firstVisit: Date;
             lastVisit: Date;
+            lastTimeMs: number;
             totalHits: number;
             distinctDaysSet: Set<string>;
             distinctPagesSet: Set<string>;
             sourcesSet: Set<string>;
             journey: Array<{ id: string; path: string; createdAt: Date; source: string }>;
-        }>();
+        }
 
-        for (const hit of allHitsLast30Days) {
-            const h = hit.visitorHash || "anon_" + hit.id;
-            uniqueMonthSet.add(h);
+        const sessionsList: VisitorSession[] = [];
 
-            if (hit.createdAt >= startOfWeek) uniqueWeekSet.add(h);
-            if (hit.createdAt >= startOfToday) uniqueTodaySet.add(h);
-
-            // Países
+        for (const hit of sortedHitsForGrouping) {
+            const hitTime = new Date(hit.createdAt).getTime();
+            const cityName = hit.city && hit.city !== "Desconocida" ? hit.city : "";
             const cCode = hit.countryCode || "ES";
             const cName = hit.country || "España";
+            const dev = hit.device || "desktop";
+
+            // Países
             if (!countryMap.has(cCode)) {
                 countryMap.set(cCode, { country: cName, code: cCode, count: 0 });
             }
             countryMap.get(cCode)!.count += 1;
 
             // Ciudades
-            const cityName = hit.city && hit.city !== "Desconocida" ? hit.city : "";
             if (cityName) {
                 const cityKey = `${cityName}_${cCode}`;
                 if (!cityMap.has(cityKey)) {
@@ -132,17 +138,48 @@ export async function GET() {
             sourceMap.set(src, (sourceMap.get(src) || 0) + 1);
 
             // Dispositivos
-            const dev = hit.device || "desktop";
             deviceMap.set(dev, (deviceMap.get(dev) || 0) + 1);
 
             // Páginas más vistas
             const p = hit.path || "/";
             pathMap.set(p, (pathMap.get(p) || 0) + 1);
 
-            // Agrupación por visitante
-            if (!visitorsMap.has(h)) {
-                visitorsMap.set(h, {
-                    visitorHash: h,
+            // Buscar si este hit pertenece a una sesión abierta del mismo visitante
+            const matchedSession = sessionsList.find(s => {
+                if (hit.userEmail && s.userEmail === hit.userEmail) return true;
+                if (hit.clientTag && s.clientTag === hit.clientTag) return true;
+                if (hit.visitorHash && s.visitorHash === hit.visitorHash) return true;
+                // Si proviene de la misma ciudad y país en una ventana continua de 45 minutos
+                if (
+                    cityName &&
+                    s.city === cityName &&
+                    s.countryCode === cCode &&
+                    Math.abs(hitTime - s.lastTimeMs) <= 45 * 60 * 1000
+                ) {
+                    return true;
+                }
+                return false;
+            });
+
+            if (matchedSession) {
+                matchedSession.totalHits += 1;
+                matchedSession.lastVisit = hit.createdAt;
+                matchedSession.lastTimeMs = hitTime;
+                matchedSession.distinctDaysSet.add(new Date(hit.createdAt).toISOString().split("T")[0]);
+                matchedSession.distinctPagesSet.add(hit.path);
+                if (hit.source) matchedSession.sourcesSet.add(hit.source);
+                if (hit.clientTag && !matchedSession.clientTag) matchedSession.clientTag = hit.clientTag;
+                if (hit.userEmail && !matchedSession.userEmail) matchedSession.userEmail = hit.userEmail;
+                matchedSession.journey.push({
+                    id: hit.id,
+                    path: hit.path,
+                    createdAt: hit.createdAt,
+                    source: hit.source || "Directo"
+                });
+            } else {
+                const newSession: VisitorSession = {
+                    id: hit.id,
+                    visitorHash: hit.visitorHash || "anon_" + hit.id,
                     country: cName,
                     countryCode: cCode,
                     city: cityName || "Ciudad Desconocida",
@@ -153,30 +190,20 @@ export async function GET() {
                     userEmail: hit.userEmail || null,
                     firstVisit: hit.createdAt,
                     lastVisit: hit.createdAt,
-                    totalHits: 0,
-                    distinctDaysSet: new Set<string>(),
-                    distinctPagesSet: new Set<string>(),
-                    sourcesSet: new Set<string>(),
-                    journey: []
-                });
+                    lastTimeMs: hitTime,
+                    totalHits: 1,
+                    distinctDaysSet: new Set([new Date(hit.createdAt).toISOString().split("T")[0]]),
+                    distinctPagesSet: new Set([hit.path]),
+                    sourcesSet: new Set(hit.source ? [hit.source] : ["Directo"]),
+                    journey: [{
+                        id: hit.id,
+                        path: hit.path,
+                        createdAt: hit.createdAt,
+                        source: hit.source || "Directo"
+                    }]
+                };
+                sessionsList.push(newSession);
             }
-
-            const v = visitorsMap.get(h)!;
-            v.totalHits += 1;
-            if (hit.createdAt < v.firstVisit) v.firstVisit = hit.createdAt;
-            if (hit.createdAt > v.lastVisit) v.lastVisit = hit.createdAt;
-            v.distinctDaysSet.add(new Date(hit.createdAt).toISOString().split("T")[0]);
-            v.distinctPagesSet.add(hit.path);
-            if (hit.source) v.sourcesSet.add(hit.source);
-            if (hit.clientTag && !v.clientTag) v.clientTag = hit.clientTag;
-            if (hit.userEmail && !v.userEmail) v.userEmail = hit.userEmail;
-
-            v.journey.push({
-                id: hit.id,
-                path: hit.path,
-                createdAt: hit.createdAt,
-                source: hit.source || "Directo"
-            });
         }
 
         // Ordenar listas
@@ -200,8 +227,8 @@ export async function GET() {
             .sort((a, b) => b.count - a.count)
             .slice(0, 10);
 
-        // Convertir el mapa de visitantes agrupados en un array ordenado por última visita
-        const groupedVisitors = Array.from(visitorsMap.values())
+        // Convertir sesiones en array ordenado por última visita
+        const groupedVisitors = sessionsList
             .map(v => ({
                 visitorHash: v.visitorHash,
                 country: v.country,
@@ -222,6 +249,11 @@ export async function GET() {
             }))
             .sort((a, b) => new Date(b.lastVisit).getTime() - new Date(a.lastVisit).getTime());
 
+        // Visitantes únicos por ventana de tiempo
+        const uniqueToday = sessionsList.filter(s => s.lastVisit >= startOfToday).length;
+        const uniqueWeek = sessionsList.filter(s => s.lastVisit >= startOfWeek).length;
+        const uniqueMonth = sessionsList.length;
+
         // Clientes identificados o con etiquetas personalizadas (?cliente= o usuario logueado)
         const identifiedVisits = recentHits.filter(h => h.clientTag || h.userEmail);
 
@@ -232,9 +264,9 @@ export async function GET() {
                 todayHits,
                 weekHits,
                 monthHits,
-                uniqueToday: uniqueTodaySet.size,
-                uniqueWeek: uniqueWeekSet.size,
-                uniqueMonth: uniqueMonthSet.size
+                uniqueToday,
+                uniqueWeek,
+                uniqueMonth
             },
             topCountries,
             topCities,

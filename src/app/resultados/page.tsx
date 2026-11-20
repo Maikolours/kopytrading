@@ -54,14 +54,14 @@ export default function ResultadosPage() {
 
                     <div className="glass-card p-6 border border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 via-black/40 to-transparent relative overflow-hidden group hover:border-emerald-400/60 transition-all shadow-xl shadow-emerald-500/5">
                         <div className="text-[10px] text-emerald-400 font-black uppercase tracking-widest mb-1">Tasa de Acierto (Win Rate)</div>
-                        <div className="text-2xl sm:text-4xl font-black text-white italic tracking-tight mb-1">93.18%</div>
-                        <div className="text-[11px] text-slate-300 font-light">4.410 ganadas / 4.733 órdenes</div>
+                        <div className="text-2xl sm:text-4xl font-black text-white italic tracking-tight mb-1">89.83%</div>
+                        <div className="text-[11px] text-slate-300 font-light">6.330 ganadas / 7.047 órdenes</div>
                     </div>
 
                     <div className="glass-card p-6 border border-blue-500/30 bg-gradient-to-br from-blue-500/10 via-black/40 to-transparent relative overflow-hidden group hover:border-blue-400/60 transition-all shadow-xl shadow-blue-500/5">
                         <div className="text-[10px] text-blue-400 font-black uppercase tracking-widest mb-1">Drawdown Máx Equidad</div>
-                        <div className="text-2xl sm:text-4xl font-black text-white italic tracking-tight mb-1">11.61%</div>
-                        <div className="text-[11px] text-slate-300 font-light">Escudo de seguridad con 10% SL</div>
+                        <div className="text-2xl sm:text-4xl font-black text-white italic tracking-tight mb-1">9.45%</div>
+                        <div className="text-[11px] text-slate-300 font-light">Máx .79 (SL 15% de serie)</div>
                     </div>
 
                     <div className="glass-card p-6 border border-purple-500/30 bg-gradient-to-br from-purple-500/10 via-black/40 to-transparent relative overflow-hidden group hover:border-purple-400/60 transition-all shadow-xl shadow-purple-500/5">
@@ -275,6 +275,15 @@ export default function ResultadosPage() {
                                 className="w-full h-auto rounded-xl object-contain hover:scale-[1.008] transition-transform duration-300"
                             />
                         </a>
+                    </div>
+
+                    {/* NOTA METODOLOGICA: CALIBRACION DE GANANCIA DIARIA */}
+                    <div className="mb-8 p-4 sm:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3.5">
+                        <span className="text-xl shrink-0">💡</span>
+                        <div className="text-xs text-slate-300 font-light leading-relaxed">
+                            <strong className="text-amber-400 font-semibold block mb-1 text-[13px]">Nota Metodológica sobre la Meta de Beneficio Diario:</strong>
+                            Para someter el algoritmo al máximo estrés volumétrico continuo, este backtest oficial y su simulación Monte Carlo se ejecutaron con una meta diaria exigente de <strong className="text-white">$60/día</strong>. Para la versión entregada a clientes, hemos fijado de serie un objetivo conservador y ultraseguro de <strong className="text-emerald-400">$20/día</strong> (<code className="text-amber-300 bg-black/40 px-1.5 py-0.5 rounded text-[11px]">TargetDiario = 20.0</code>), permitiendo cerrar la sesión antes y reducir drásticamente la exposición al mercado. Cada usuario mantiene el control total para ajustar este parámetro en cualquier momento desde los ajustes del robot según su propio plan de gestión de capital.
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-white/5">

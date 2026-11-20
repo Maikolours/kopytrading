@@ -38,8 +38,12 @@ export async function POST(req: Request) {
         const body = await req.json().catch(() => ({}));
         const { path = "/", referrer = "", clientTag = null, userEmail = null, visitorId = null } = body;
 
-        // 1. Si es el administrador navegando, no inflar las métricas
-        if (userEmail === "viajaconsakura@gmail.com" || userEmail === "viajaconsakura") {
+        // 1. Si es el administrador navegando o es la pantalla de login, no inflar métricas
+        if (
+            path === "/login" ||
+            userEmail === "viajaconsakura@gmail.com" ||
+            userEmail === "viajaconsakura"
+        ) {
             return NextResponse.json({ success: true, ignored: "admin" });
         }
 
@@ -108,7 +112,9 @@ export async function POST(req: Request) {
         else if (uaLower.includes("linux")) os = "Linux";
 
         // Detección de Origen del Tráfico
-        const refLower = (referrer || req.headers.get("referer") || "").toLowerCase();
+        // NOTA: Usamos exclusivamente body.referrer (el document.referrer del cliente).
+        // No usar req.headers.get("referer") como fallback porque siempre apunta a kopytrading.com en llamadas fetch.
+        const refLower = (referrer || "").toLowerCase();
         let source = "Directo";
 
         if (clientTag) {

@@ -11,8 +11,8 @@ function VisitorTrackerInternal() {
     const lastTrackedPath = useRef<string | null>(null);
 
     useEffect(() => {
-        // 1. No rastrear llamadas a la administración ni a la API interna
-        if (!pathname || pathname.startsWith("/admin") || pathname.startsWith("/api")) {
+        // 1. No rastrear llamadas a la administración, login ni a la API interna
+        if (!pathname || pathname.startsWith("/admin") || pathname.startsWith("/api") || pathname === "/login") {
             return;
         }
 
